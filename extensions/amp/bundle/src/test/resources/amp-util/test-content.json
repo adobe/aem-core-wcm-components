@@ -1,0 +1,33 @@
+{
+  "amp-only": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "jcr:title": "Amp Util Test",
+      "sling:resourceType": "core/wcm/components/page/v2/page",
+      "ampMode": "ampOnly"
+    }
+  },
+  "no-amp": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "jcr:title": "Amp Util Test",
+      "sling:resourceType": "core/wcm/components/page/v2/page"
+    }
+  },
+  "fake": {
+    "path": {
+      "for": {
+        "testing": {
+          "structure": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+              "jcr:primaryType": "cq:PageContent"
+            }
+          }
+        }
+      }
+    }
+  }
+}

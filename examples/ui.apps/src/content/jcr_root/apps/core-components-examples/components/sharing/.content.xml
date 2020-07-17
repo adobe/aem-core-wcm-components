@@ -18,5 +18,5 @@
     jcr:description="Sharing Component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="Social Media Sharing"
-    sling:resourceSuperType="core/wcm/components/sharing/v1/sharing"
+    sling:resourceSuperType="core/wcm/extensions/amp/components/sharing/v1/sharing"
     componentGroup="Core Components Examples"/>

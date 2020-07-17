@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -41,6 +42,7 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -57,7 +59,6 @@ import com.day.cq.wcm.api.designer.Design;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.jetbrains.annotations.Nullable;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { Page.class,
         ContainerExporter.class }, resourceType = PageImpl.RESOURCE_TYPE)
@@ -106,6 +107,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     protected static final String PN_CLIENTLIBS = "clientlibs";
     private Map<String, ComponentExporter> childModels = null;
     private String resourceType;
+    private Set<String> resourceTypes;
 
     @JsonIgnore
     protected Map<String, String> favicons = new HashMap<>();
@@ -199,6 +201,15 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @JsonIgnore
     public String[] getClientLibCategories() {
         return Arrays.copyOf(clientLibCategories, clientLibCategories.length);
+    }
+
+    @Override
+    @JsonIgnore
+    public Set<String> getComponentsResourceTypes() {
+        if (resourceTypes == null) {
+            resourceTypes = Utils.getPageResourceTypes(currentPage, request, modelFactory);
+        }
+        return resourceTypes;
     }
 
     @NotNull

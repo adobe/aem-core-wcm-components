@@ -1,0 +1,28 @@
+{
+    "amp-only": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "ampMode": "ampOnly"
+        }
+    },
+    "amp-selector": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page"
+        }
+    },
+    "amp-selector-with-amp-mode": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "ampMode": "ampOnly"
+        }
+    }
+}

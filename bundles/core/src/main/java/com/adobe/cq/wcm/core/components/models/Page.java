@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -314,6 +315,17 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 12.3.0
      */
     default boolean hasCloudconfigSupport() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns a set of resource types for components included in the page.
+     *
+     * @return Resource types for components included in the page
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    @NotNull
+    default Set<String> getComponentsResourceTypes() {
         throw new UnsupportedOperationException();
     }
 

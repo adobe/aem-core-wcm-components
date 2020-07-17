@@ -18,5 +18,5 @@
           jcr:description="Tabs Component for the Core Components Library"
           jcr:primaryType="cq:Component"
           jcr:title="Tabs"
-          sling:resourceSuperType="core/wcm/components/tabs/v1/tabs"
+          sling:resourceSuperType="core/wcm/extensions/amp/components/tabs/v1/tabs"
           componentGroup="Core Components Examples"/>

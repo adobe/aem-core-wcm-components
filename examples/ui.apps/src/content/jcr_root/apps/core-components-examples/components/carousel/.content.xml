@@ -18,5 +18,5 @@
     jcr:description="Carousel Component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="Carousel"
-    sling:resourceSuperType="core/wcm/components/carousel/v1/carousel"
+    sling:resourceSuperType="core/wcm/extensions/amp/components/carousel/v1/carousel"
     componentGroup="Core Components Examples"/>
