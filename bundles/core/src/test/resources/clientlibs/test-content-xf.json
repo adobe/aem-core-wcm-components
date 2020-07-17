@@ -1,0 +1,28 @@
+{
+    "simple-experience-fragment": {
+        "jcr:primaryType": "cq:Page",
+        "master": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType"   : "cq:PageContent",
+                "jcr:title"         : "Clientlibs with XF Test",
+                "sling:resourceType": "core/wcm/components/page/v2/page",
+                "jcr:description"   : "Accordion description",
+                "root"              : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "responsivegrid"    : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                        "teaser": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Teaser 1",
+                            "jcr:description"   : "Teaser 1 description",
+                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -3,5 +3,5 @@
     jcr:description="Page Component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="Page"
-    sling:resourceSuperType="core/wcm/components/page/v2/page"
+    sling:resourceSuperType="core/wcm/extensions/amp/components/page/v1/page"
     componentGroup=".hidden"/>

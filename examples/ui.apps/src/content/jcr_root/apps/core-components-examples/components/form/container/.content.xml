@@ -20,5 +20,5 @@
     jcr:description="Form Container component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="Form Container"
-    sling:resourceSuperType="core/wcm/components/form/container/v2/container"
+    sling:resourceSuperType="core/wcm/extensions/amp/components/form/container/v1/container"
     componentGroup="Core Components Examples - Form"/>

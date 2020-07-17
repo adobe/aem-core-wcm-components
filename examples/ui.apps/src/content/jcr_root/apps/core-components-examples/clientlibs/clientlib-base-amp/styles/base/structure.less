@@ -1,0 +1,150 @@
+/*
+ *  Copyright 2019 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+@cmp-examples-structure-header-height: 48*@px;
+@cmp-examples-structure-header-height-l: 118*@px;
+
+@cmp-examples-structure-main-grid-gap-s: @cmp-examples-spacing-4;
+@cmp-examples-structure-main-grid-gap-m: @cmp-examples-spacing-6;
+@cmp-examples-structure-main-grid-gap-l: @cmp-examples-spacing-7;
+
+@cmp-examples-structure-aside-content-width: 200*@px;
+@cmp-examples-structure-aside-width: @cmp-examples-structure-aside-content-width + (2 * @cmp-examples-spacing-5);
+@cmp-examples-structure-aside-width-l: @cmp-examples-structure-aside-content-width + (2 * @cmp-examples-spacing-8);
+
+.cmp-examples-structure {
+    > .aem-Grid {
+        .display-grid();
+        width: 100%;
+        margin: 0 auto;
+        grid-template-areas: 'header' 'main' 'footer';
+        .grid-template-columns(1fr);
+        .grid-template-rows(@cmp-examples-structure-header-height 1fr auto);
+    }
+}
+
+.cmp-examples-structure__header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
+    grid-area: header;
+    z-index: @cmp-examples-z-index-fixed;
+
+    width: 100vw;
+    height: @cmp-examples-structure-header-height;
+    margin: 0;
+    border-bottom: 1*@px solid @cmp-examples-color-gray-300;
+    padding: @cmp-examples-spacing-1 @cmp-examples-spacing-2;
+
+    background-color: @cmp-examples-color-background;
+}
+
+.cmp-examples-structure__main,
+.cmp-examples-structure__footer {
+    width: auto;
+    min-width: 0;
+    margin: @cmp-examples-spacing-8 0;
+    padding: 0 (@cmp-examples-structure-main-grid-gap-s / 2);
+
+    .aem-GridColumn {
+        padding: 0 (@cmp-examples-structure-main-grid-gap-s / 2);
+    }
+}
+
+.cmp-examples-structure__main {
+    -ms-grid-row: 2;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
+    grid-area: main;
+}
+
+.cmp-examples-structure__footer {
+    -ms-grid-row: 3;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
+    grid-area: footer;
+
+    font-size: @cmp-examples-font-size-s;
+    text-align: right;
+    color: @cmp-examples-color-gray-800;
+}
+
+.cmp-examples-teaser--document {
+
+    .cmp-teaser {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        width: 16.25rem;
+        height: 4rem;
+        margin-bottom: 1.25rem;
+        border: 0.0625rem solid #d3d3d3;
+        border-radius: 0.25rem;
+        background-color: #fafafa;
+    
+        &__image {
+            position: absolute;
+            top: -0.0625rem;
+            left: -0.0625rem;
+            bottom: -0.0625rem;
+            right: -0.0625rem;
+
+            .cmp-image {
+                display: block;
+
+                &__image {
+                    height: 50px;
+                    max-width: 30px;
+                    margin: 7px 0 0 17px;
+                }
+            }
+        }
+    
+        &__content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            margin-left: 4rem;
+            padding-left: 0.75rem;
+            border-top-right-radius: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
+            background-color: #ffffff;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        &__title {
+            margin: 0;
+            padding: 0;
+            font-size: 0.875rem;
+            font-weight: 700;
+
+            &-link {
+                color: #323232;
+            }
+        }
+
+        &__description {
+            font-size: 0.75rem;
+        }
+    }
+}
