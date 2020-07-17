@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -75,7 +78,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private boolean titleLinkHidden = false;
     private boolean titleFromPage = false;
     private boolean descriptionFromPage = false;
-    private List<ListItem> actions = new ArrayList<>();
+    private List<Action> actions;
     private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
@@ -113,54 +116,23 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         ValueMap properties = resource.getValueMap();
         actionsEnabled = properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled);
 
-        populateStyleProperties();
+        if (currentStyle != null) {
+            pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
+            titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
+            descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
+            titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
+            imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
+            titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
+            if (imageLinkHidden) {
+                hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
+            }
+            if (currentStyle.get(Teaser.PN_ACTIONS_DISABLED, false)) {
+                actionsEnabled = false;
+            }
+        }
 
         titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
-
-        if (actionsEnabled) {
-            hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
-            populateActions();
-            if (!actions.isEmpty()) {
-                ListItem firstAction = actions.get(0);
-                if (firstAction != null) {
-                    linkURL = firstAction.getURL();
-                    targetPage = pageManager.getPage(firstAction.getPath());
-                }
-            }
-        } else {
-            linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
-            targetPage = pageManager.getPage(linkURL);
-            if (targetPage != null) {
-                linkURL = Utils.getURL(request, targetPage);
-            }
-        }
-
-        if (!pretitleHidden) {
-            pretitle = properties.get("pretitle", String.class);
-        }
-
-        if (!titleHidden) {
-            if (titleFromPage) {
-                if (targetPage != null) {
-                    title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
-                } else if (actionsEnabled && !actions.isEmpty()) {
-                    title = actions.get(0).getTitle();
-                }
-            } else {
-                title = properties.get(JcrConstants.JCR_TITLE, String.class);
-            }
-        }
-
-        if (!descriptionHidden) {
-            if (descriptionFromPage) {
-                if (targetPage != null) {
-                    description = targetPage.getDescription();
-                }
-            } else {
-                description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
-            }
-        }
 
         if (this.hasImage()) {
             this.setImageResource(component, request.getResource(), hiddenImageResourceProperties);
@@ -181,44 +153,75 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             .orElseGet(() -> request.getResource().getChild(DownloadResource.NN_FILE)) != null;
     }
 
-    private void populateStyleProperties() {
-        if (currentStyle != null) {
-            pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
-            titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
-            descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
-            titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
-            imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
-            titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
-            if (imageLinkHidden) {
-                hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
-            }
-            if (currentStyle.get(Teaser.PN_ACTIONS_DISABLED, false)) {
-                actionsEnabled = false;
-            }
-        }
-    }
-
-    private void populateActions() {
-        Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
-        if (actionsNode != null) {
-            for (Resource actionRes : actionsNode.getChildren()) {
-                actions.add(new Action(actionRes, this.getId()));
-            }
-        }
-    }
-
     @Override
     public boolean isActionsEnabled() {
         return actionsEnabled;
     }
 
+
+    /**
+     * Get the target page.
+     *
+     * If actions are enabled then the target page is the first action's page.
+     * If actions are disabled then the target page is the page located at `{@value ImageResource#PN_LINK_URL}`.
+     *
+     * @return The target page if it exists, or empty if not.
+     */
+    @NotNull
+    private Optional<Page> getTargetPage() {
+        if (this.targetPage == null) {
+            if (this.isActionsEnabled()) {
+                this.targetPage = this.getTeaserActions().stream().findFirst().flatMap(Action::getCtaPage).orElse(null);
+            } else {
+                this.targetPage = Optional.ofNullable(this.resource.getValueMap().get(ImageResource.PN_LINK_URL, String.class))
+                    .map(this.pageManager::getPage)
+                    .orElse(null);
+            }
+        }
+        return Optional.ofNullable(this.targetPage);
+    }
+
+    /**
+     * Get the list of teaser actions.
+     *
+     * @return List of teaser actions.
+     */
+    @NotNull
+    private List<Action> getTeaserActions() {
+        if (this.actions == null) {
+            this.actions = Optional.ofNullable(this.isActionsEnabled() ? this.resource.getChild(Teaser.NN_ACTIONS) : null)
+                .map(Resource::getChildren)
+                .map(Iterable::spliterator)
+                .map(s -> StreamSupport.stream(s, false))
+                .orElseGet(Stream::empty)
+                .map(action -> new Action(action, this.getId()))
+                .collect(Collectors.toList());
+        }
+        return this.actions;
+    }
+
     @Override
     public List<ListItem> getActions() {
-        return Collections.unmodifiableList(actions);
+        return Collections.unmodifiableList(this.getTeaserActions());
     }
 
     @Override
     public String getLinkURL() {
+        if (this.linkURL == null) {
+            // use the target page url if it exists
+            this.linkURL = this.getTargetPage().map(page -> Utils.getURL(request, page))
+                .orElseGet(() -> {
+                    // target page doesn't exist
+                    if (this.isActionsEnabled()) {
+                        return this.getActions().stream().findFirst()
+                            .map(ListItem::getURL)
+                            .orElse(null);
+                    } else {
+                        // use the property value if actions are not enabled
+                        return this.resource.getValueMap().get(ImageResource.PN_LINK_URL, String.class);
+                    }
+                });
+        }
         return linkURL;
     }
 
@@ -230,6 +233,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      * @return The image src path if it exists, null if it does not.
      */
     @JsonProperty(value = "imagePath")
+    @Nullable
     public String getImagePath() {
         if (imageSrc == null) {
             this.imageSrc = Optional.ofNullable(this.getImageResource())
@@ -247,11 +251,25 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getTitle() {
+        if (this.title == null && !this.titleHidden) {
+            if (this.titleFromPage) {
+                this.title = this.getTargetPage()
+                    .map(tp -> StringUtils.defaultIfEmpty(tp.getPageTitle(), tp.getTitle()))
+                    .orElseGet(() -> this.getTeaserActions().stream().findFirst()
+                        .map(Action::getTitle)
+                        .orElse(null));
+            } else {
+                this.title = this.resource.getValueMap().get(JcrConstants.JCR_TITLE, String.class);
+            }
+        }
         return title;
     }
 
     @Override
     public String getPretitle() {
+        if (this.pretitle == null && !pretitleHidden) {
+            this.pretitle = this.resource.getValueMap().get("pretitle", String.class);
+        }
         return pretitle;
     }
 
@@ -262,7 +280,14 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getDescription() {
-        return description;
+        if (this.description == null && !this.descriptionHidden) {
+            if (this.descriptionFromPage) {
+                this.description = this.getTargetPage().map(Page::getDescription).orElse(null);
+            } else {
+                this.description = this.resource.getValueMap().get(JcrConstants.JCR_DESCRIPTION, String.class);
+            }
+        }
+        return this.description;
     }
 
     @Override
@@ -326,6 +351,16 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             } else {
                 ctaPage = null;
             }
+        }
+
+        /**
+         * Get the referenced page.
+         *
+         * @return The referenced page if this CTA references a page, empty if not.
+         */
+        @NotNull
+        protected Optional<Page> getCtaPage() {
+            return Optional.ofNullable(this.ctaPage);
         }
 
         @Nullable
