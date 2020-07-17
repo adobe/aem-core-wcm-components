@@ -24,13 +24,10 @@ import javax.annotation.PostConstruct;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
-import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = LayoutContainer.class, resourceType = LayoutContainerImpl.RESOURCE_TYPE_V1)
 public class LayoutContainerImpl extends AbstractContainerImpl implements LayoutContainer {
@@ -40,18 +37,17 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     @ScriptVariable
     private Resource resource;
 
-    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private Style currentStyle;
-    
     private LayoutType layout;
 
     @PostConstruct
     protected void initModel() {
-        String styleLayout = Optional.ofNullable(currentStyle)
-                .map(style -> currentStyle.get(LayoutContainer.PN_LAYOUT, String.class))
-                .orElse(null);
-        this.layout = Optional.ofNullable(resource.getValueMap().get(LayoutContainer.PN_LAYOUT, styleLayout))
+        // Note: this can be simplified using Optional.or() in JDK 11
+        this.layout = Optional.ofNullable(
+            Optional.ofNullable(resource.getValueMap().get(LayoutContainer.PN_LAYOUT, String.class))
+                .orElseGet(() -> Optional.ofNullable(currentStyle)
+                    .map(style -> currentStyle.get(LayoutContainer.PN_LAYOUT, String.class))
+                    .orElse(null)
+                ))
             .map(LayoutType::getLayoutType)
             .orElse(LayoutType.SIMPLE);
     }
