@@ -57,37 +57,121 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
+/**
+ * Teaser model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
+    /**
+     * The resource type.
+     */
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v1/teaser";
 
+    /**
+     * The pre-title text.
+     */
     private String pretitle;
+
+    /**
+     * The title.
+     */
     private String title;
+
+    /**
+     * The description.
+     */
     private String description;
+
+    /**
+     * The main teaser link.
+     */
     private String linkURL;
+
+    /**
+     * The title heading level.
+     */
     private String titleType;
+
+    /**
+     * The target page.
+     */
+    private Page targetPage;
+
+    /**
+     * The image src.
+     */
+    private String imageSrc;
+
+    /**
+     * Flag indicating if CTA actions are enabled.
+     */
     private boolean actionsEnabled = false;
+
+    /**
+     * Flag indicating if the title should be hidden.
+     */
     private boolean titleHidden = false;
+
+    /**
+     * Flag indicating if the description should be hidden.
+     */
     private boolean descriptionHidden = false;
+
+    /**
+     * Flag indicating if the image should not be linked.
+     */
     private boolean imageLinkHidden = false;
+
+    /**
+     * Flag indicating if the pre-title should be hidden.
+     */
     private boolean pretitleHidden = false;
+
+    /**
+     * Flag indicating if the title should not be linked.
+     */
     private boolean titleLinkHidden = false;
+
+    /**
+     * Flag indicating if the title should be inherited from the target page.
+     */
     private boolean titleFromPage = false;
+
+    /**
+     * Flag indicating if the description should be inherited from the target page.
+     */
     private boolean descriptionFromPage = false;
+
+    /**
+     * List of CTA actions.
+     */
     private List<Action> actions;
+
+    /**
+     * List of properties that should be suppressed on image delegation.
+     */
     private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
     }};
 
+    /**
+     * The current component.
+     */
     @ScriptVariable
     private Component component;
 
+    /**
+     * The current resource.
+     */
     @Inject
     private Resource resource;
 
+    /**
+     * The page manager.
+     */
     @ScriptVariable
     private PageManager pageManager;
 
@@ -97,19 +181,21 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @ScriptVariable
     protected Style currentStyle;
 
+    /**
+     * The current request.
+     */
     @Self
     private SlingHttpServletRequest request;
 
+    /**
+     * The model factory service.
+     */
     @OSGiService
     private ModelFactory modelFactory;
 
-    private Page targetPage;
-
     /**
-     * The image src.
+     * Initialize the model.
      */
-    private String imageSrc;
-
     @PostConstruct
     private void initModel() {
         ValueMap properties = resource.getValueMap();
@@ -151,7 +237,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     public boolean isActionsEnabled() {
         return actionsEnabled;
     }
-
 
     /**
      * Get the target page.
@@ -319,19 +404,54 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
 
+    /**
+     * Teaser CTA.
+     */
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
     public class Action extends AbstractListItemImpl implements ListItem {
 
+        /**
+         * ID prefix.
+         */
         private static final String CTA_ID_PREFIX = "cta";
 
+        /**
+         * The resource for this CTA.
+         */
         @NotNull
         private final Resource ctaResource;
+
+        /**
+         * The CTA title.
+         */
         private final String ctaTitle;
+
+        /**
+         * The CTA target URL.
+         */
         private final String ctaUrl;
+
+        /**
+         * The page referenced by the `ctaURL` if it is internal.
+         */
         private final Page ctaPage;
+
+        /**
+         * The ID of the teaser that contains this action.
+         */
         private final String ctaParentId;
+
+        /**
+         * The ID of this action.
+         */
         private String ctaId;
 
+        /**
+         * Create a CTA.
+         *
+         * @param actionRes The action resource.
+         * @param parentId The ID of the containing Teaser.
+         */
         private Action(@NotNull final Resource actionRes, final String parentId) {
             super(parentId, actionRes);
             ctaParentId = parentId;
