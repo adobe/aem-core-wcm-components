@@ -125,11 +125,15 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             if (!actions.isEmpty()) {
                 ListItem firstAction = actions.get(0);
                 if (firstAction != null) {
+                    linkURL = firstAction.getURL();
                     targetPage = pageManager.getPage(firstAction.getPath());
                 }
             }
         } else {
             targetPage = pageManager.getPage(linkURL);
+        }
+        if (targetPage != null) {
+            linkURL = Utils.getURL(request, targetPage);
         }
 
         if (pretitleHidden) {
@@ -146,7 +150,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                     title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
                 } else if (actionsEnabled && !actions.isEmpty()) {
                     title = actions.get(0).getTitle();
-                    linkURL = actions.get(0).getURL();
                 } else {
                     title = null;
                 }
@@ -184,9 +187,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
         if (hasImage) {
             setImageResource(component, request.getResource(), hiddenImageResourceProperties);
-        }
-        if (targetPage != null) {
-            linkURL = Utils.getURL(request, targetPage);
         }
     }
 
