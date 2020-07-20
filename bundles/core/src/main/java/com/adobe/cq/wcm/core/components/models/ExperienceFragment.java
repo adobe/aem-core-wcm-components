@@ -30,7 +30,7 @@ import java.util.Map;
  * @since com.adobe.cq.wcm.core.components.models 12.9.0
  */
 @ConsumerType
-public interface ExperienceFragment extends ContainerExporter {
+public interface ExperienceFragment extends Component, ContainerExporter {
 
     /**
      * Name of the configuration policy property that specifies the experience fragment variation path. The property
