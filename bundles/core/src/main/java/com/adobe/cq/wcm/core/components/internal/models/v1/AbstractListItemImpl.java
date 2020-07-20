@@ -21,7 +21,6 @@ import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilde
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.day.cq.wcm.api.components.Component;
@@ -74,11 +73,10 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl impleme
         this.resource = resource;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public String getId() {
-        String prefix = StringUtils.join(parentId, ID_SEPARATOR, ITEM_ID_PREFIX);
-        return Utils.generateId(prefix, path);
+        return Utils.generateId(StringUtils.join(parentId, ID_SEPARATOR, ITEM_ID_PREFIX), path);
     }
 
     @NotNull

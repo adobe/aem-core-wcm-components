@@ -494,7 +494,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
 
-        @Nullable
+        @NotNull
         @Override
         public String getId() {
             if (ctaId == null) {

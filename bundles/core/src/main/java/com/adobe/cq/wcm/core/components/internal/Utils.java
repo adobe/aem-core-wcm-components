@@ -123,7 +123,8 @@ public class Utils {
      * @param path   the resource path
      * @return the generated ID
      */
-    public static String generateId(String prefix, String path) {
+    @NotNull
+    public static String generateId(@NotNull final String prefix, @NotNull final String path) {
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
     }
 

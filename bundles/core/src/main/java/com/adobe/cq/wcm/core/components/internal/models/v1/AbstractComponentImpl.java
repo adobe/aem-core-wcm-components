@@ -38,26 +38,49 @@ import java.util.Optional;
  */
 public abstract class AbstractComponentImpl implements Component {
 
+    /**
+     * The current resource.
+     */
     @SlingObject
     protected Resource resource;
 
+    /**
+     * The component.
+     */
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected com.day.cq.wcm.api.components.Component component;
 
+    /**
+     * The component context.
+     */
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected ComponentContext componentContext;
 
+    /**
+     * The current page.
+     */
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private Page currentPage;
 
+    /**
+     * The ID for this component.
+     */
     private String id;
+
+    /**
+     * Flag indicating if the data layer is enabled.
+     */
     private Boolean dataLayerEnabled;
+
+    /**
+     * The data layer component data.
+     */
     private ComponentData componentData;
 
-    @Nullable
+    @NotNull
     @Override
     public String getId() {
         if (id == null) {
