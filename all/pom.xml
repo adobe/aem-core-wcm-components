@@ -56,6 +56,11 @@
                             <artifactId>core.wcm.components.extensions.amp</artifactId>
                             <target>/apps/core/wcm/install</target>
                         </embedded>
+                        <embedded>
+                            <groupId>org.apache.sling</groupId>
+                            <artifactId>org.apache.sling.models.impl</artifactId>
+                            <target>/apps/core/wcm/install</target>
+                        </embedded>
                     </embeddeds>
                     <subPackages>
                         <subPackage>
@@ -178,6 +183,11 @@
             <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.models.impl</artifactId>
+            <version>1.4.12</version>
         </dependency>
     </dependencies>
 </project>
