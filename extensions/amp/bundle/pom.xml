@@ -66,12 +66,18 @@
                 <configuration>
                     <exportScr>true</exportScr>
                     <instructions>
-                        <!-- Enable registration of Sling Models classes via bnd plugin -->
-                        <_plugin>org.apache.sling.bnd.models.ModelsScannerPlugin</_plugin>
+                        <_plugin>
+                            <!-- Enable registration of Sling Models classes via bnd plugin -->
+                            org.apache.sling.bnd.models.ModelsScannerPlugin
+                        </_plugin>
                         <!-- Enable processing of OSGI DS component annotations -->
                         <_dsannotations>*</_dsannotations>
                         <!-- Enable processing of OSGI metatype annotations -->
                         <_metatypeannotations>*</_metatypeannotations>
+                        <Import-Package>
+                            javax.annotation;version=0.0.0,
+                            *
+                        </Import-Package>
                     </instructions>
                 </configuration>
                 <dependencies>
