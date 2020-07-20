@@ -73,27 +73,30 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
     extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ExperienceFragmentImpl implements ExperienceFragment {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFragmentImpl.class);
-
+    
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/experiencefragment/v1/experiencefragment";
-
+    
     private static final String PATH_DELIMITER = "/";
     private static final char PATH_DELIMITER_CHAR = '/';
     private static final String CONTENT_ROOT = "/content";
     private static final String EXPERIENCE_FRAGMENTS_ROOT = "/content/experience-fragments";
     private static final String JCR_CONTENT_ROOT = "/jcr:content";
-
+    private static final String CSS_EMPTY_CLASS = "empty";
+    private static final String CSS_BASE_CLASS = "aem-xf";
+    
     @Self
     private SlingHttpServletRequest request;
-
+    
     @Inject
     protected Resource resource;
-
+    
     @SlingObject
     private ResourceResolver resolver;
-
-    @ScriptVariable @Nullable
+    
+    @ScriptVariable
+    @Nullable
     private Page currentPage;
     
     @ValueMapValue(name = ExperienceFragment.PN_FRAGMENT_VARIATION_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -119,7 +122,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     /**
      * Class names of the responsive grid
      */
-    private String classNames = "aem-xf";
+    private String classNames = CSS_BASE_CLASS;
     
     /**
      * Child columns of the responsive grid
@@ -140,7 +143,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
                 currentPage = pageManager.getContainingPage(resource);
             }
     
-            if (currentPage != null) {
+            if(currentPage != null) {
                 resolveLocalizedFragmentVariationPath();
                 resolveName(pageManager);
                 retrieveExperienceFragmentChildModels();
