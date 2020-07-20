@@ -17,42 +17,57 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 
+/**
+ * Resource-backed list item implementation.
+ */
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceListItemImpl.class);
-
-    protected String url;
+    /**
+     * The title.
+     */
     protected String title;
+
+    /**
+     * The description.
+     */
     protected String description;
+
+    /**
+     * The last modified date.
+     */
     protected Calendar lastModified;
+
+    /**
+     * The name.
+     */
     protected String name;
 
-    public ResourceListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource, String parentId) {
+    /**
+     * Construct a resource-backed list item.
+     *
+     * @param resource The resource.
+     * @param parentId The ID of the containing component.
+     */
+    public ResourceListItemImpl(@NotNull final Resource resource, final String parentId) {
         super(parentId, resource);
-        ValueMap valueMap = resource.adaptTo(ValueMap.class);
-        if (valueMap != null) {
-            title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
-            description = valueMap.get(JcrConstants.JCR_DESCRIPTION, String.class);
-            lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
-        }
+        ValueMap valueMap = resource.getValueMap();
+        title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
+        description = valueMap.get(JcrConstants.JCR_DESCRIPTION, String.class);
+        lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
         path = resource.getPath();
         name = resource.getName();
-        url = null;
     }
 
     @Override
     public String getURL() {
-        return url;
+        return null;
     }
 
     @Override
