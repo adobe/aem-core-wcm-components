@@ -18,5 +18,5 @@
     jcr:description="PDF Viewer Component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="PDF Viewer"
-    sling:resourceSuperType="core/wcm/components/pdfviewer/v1/pdfviewer"
+    sling:resourceSuperType="core/wcm/extensions/amp/components/pdfviewer/v1/pdfviewer"
     componentGroup="Core Components Examples"/>
