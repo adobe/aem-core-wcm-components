@@ -70,6 +70,10 @@ class ExperienceFragmentImplTest {
     void setUp() throws WCMException {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
         context.load().json(TEST_BASE + "/test-conf.json", "/conf/coretest/settings");
+       
+        context.addModelsForPackage("com.adobe.cq.wcm.core.components.internal.models.dummy");
+        context.addModelsForClasses("com.adobe.cq.wcm.core.components.internal.models.v1");
+        
         context.registerService(LanguageManager.class, new MockLanguageManager());
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
         when(relationshipManager.isSource(any(Resource.class))).then(
@@ -328,7 +332,7 @@ class ExperienceFragmentImplTest {
     void testEmptyXFInTemplateWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
                 PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-13a", EN_PAGE);
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf13"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf13a"));
     }
 
 
@@ -677,6 +681,34 @@ class ExperienceFragmentImplTest {
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-61a", LIVECOPY_PAGE);
         assertEquals(XF_NAME, experienceFragment.getName());
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf61a"));
+    }
+    
+    
+    /**
+     * Site with language localization
+     * XF component is defined in the page
+     * XF component points to the same language branch as the page
+     * Underlying XF has actual components present which will be exported.
+     */
+    @Test
+    void testValidXFInPageWithContent() {
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
+                + "/jcr:content/root/xf-component-70");
+        assertEquals("header", experienceFragment.getName());
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf70"));
+    }
+    
+    /*
+     * Site with language localization
+     * XF component is defined in the page
+     * XF component points to the same language branch as the page
+     */
+    @Test
+    void testValidXFInPageWithNoContent() {
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
+                + "/jcr:content/root/xf-component-71");
+        assertEquals("header_empty", experienceFragment.getName());
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf71"));
     }
 
 
