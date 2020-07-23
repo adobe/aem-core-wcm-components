@@ -16,25 +16,15 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ContainerExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
-import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
-import com.adobe.cq.xf.ExperienceFragmentsConstants;
-import com.day.cq.wcm.api.LanguageManager;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Template;
-import com.day.cq.wcm.api.WCMException;
-import com.day.cq.wcm.api.designer.ComponentStyle;
-import com.day.cq.wcm.msm.api.LiveCopy;
-import com.day.cq.wcm.msm.api.LiveRelationship;
-import com.day.cq.wcm.msm.api.LiveRelationshipManager;
-import com.day.text.Text;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.jcr.RangeIterator;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -56,28 +46,40 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.jcr.RangeIterator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
+import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.adobe.cq.xf.ExperienceFragmentsConstants;
+import com.day.cq.wcm.api.LanguageManager;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.WCMException;
+import com.day.cq.wcm.api.designer.ComponentStyle;
+import com.day.cq.wcm.msm.api.LiveCopy;
+import com.day.cq.wcm.msm.api.LiveRelationship;
+import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.day.text.Text;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL,
-    adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
-    resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
+       adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
+       resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
-    extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ExperienceFragmentImpl implements ExperienceFragment {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFragmentImpl.class);
-    
+
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/experiencefragment/v1/experiencefragment";
-    
+
     private static final String PATH_DELIMITER = "/";
     private static final char PATH_DELIMITER_CHAR = '/';
     private static final String CONTENT_ROOT = "/content";
@@ -85,20 +87,20 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private static final String JCR_CONTENT_ROOT = "/jcr:content";
     private static final String CSS_EMPTY_CLASS = "empty";
     private static final String CSS_BASE_CLASS = "aem-xf";
-    
+
     @Self
     private SlingHttpServletRequest request;
-    
+
     @Inject
     protected Resource resource;
-    
+
     @SlingObject
     private ResourceResolver resolver;
-    
+
     @ScriptVariable
     @Nullable
     private Page currentPage;
-    
+
     @ValueMapValue(name = ExperienceFragment.PN_FRAGMENT_VARIATION_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String fragmentVariationPath;
@@ -108,84 +110,84 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
     @OSGiService
     private LiveRelationshipManager relationshipManager;
-    
+
     @ValueMapValue(name = ComponentStyle.PN_CSS_CLASS)
     @Default(values = "")
     private String customCssClass;
-    
+
     @Inject
     private ModelFactory modelFactory;
-    
+
     private String localizedFragmentVariationPath;
     private String name;
-    
+
     /**
      * Class names of the responsive grid
      */
     private String classNames = CSS_BASE_CLASS;
-    
+
     /**
      * Child columns of the responsive grid
      */
     private final Map<String, ComponentExporter> children = new HashMap<>();
-    
-    
+
+
     @PostConstruct
     protected void initModel() {
-    
+
         final PageManager pageManager = resolver.adaptTo(PageManager.class);
-        
-        if(pageManager != null){
+
+        if (pageManager != null) {
             /**
              * CurrentPage is null when accessing the sling model exporter.
              */
-            if(currentPage == null){
+            if (currentPage == null) {
                 currentPage = pageManager.getContainingPage(resource);
             }
-    
-            if(currentPage != null) {
+
+            if (currentPage != null) {
                 resolveLocalizedFragmentVariationPath();
                 resolveName(pageManager);
                 retrieveExperienceFragmentChildModels();
-            }else{
+            } else {
                 LOGGER.error("Could not resolve currentPage!");
             }
         }
-        
+
         appendCssClassNames();
     }
-    
-  
-    
+
+
+
     @Override
     public String getLocalizedFragmentVariationPath() {
         return localizedFragmentVariationPath;
     }
-    
+
     @Override
     @JsonIgnore
     public String getName() {
         return name;
     }
-    
+
     @NotNull
     @Override public String getExportedType() {
         return request.getResource().getResourceType();
     }
-    
+
     @Nonnull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         return children;
     }
-    
+
     @Nonnull
     @Override
     public String[] getExportedItemsOrder() {
         return children.isEmpty() ?
                 new String[0] : children.keySet().toArray(new String[children.size()]);
     }
-    
+
     /**
      * @return The CSS class names to be applied to the current grid.
      * @deprecated Use {@link #getCssClassNames()}
@@ -195,13 +197,13 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     public String getCssClassNames() {
         return classNames;
     }
-    
+
     @Override
     @JsonInclude
     public boolean isConfigured() {
         return isNotEmpty(localizedFragmentVariationPath) && !children.isEmpty();
     }
-    
+
     private void resolveLocalizedFragmentVariationPath() {
         if (inTemplate()) {
             if (currentPage != null) {
@@ -216,7 +218,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
                 }
             }
         }
-    
+
         String xfContentPath = StringUtils.join(fragmentVariationPath, JCR_CONTENT_ROOT);
         if (!resourceExists(localizedFragmentVariationPath) && resourceExists(xfContentPath)) {
             localizedFragmentVariationPath = xfContentPath;
@@ -225,10 +227,10 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
             localizedFragmentVariationPath = null;
         }
     }
-    
-    
-    
-    
+
+
+
+
     /**
      * Returns the localization root of the resource defined at the given path.
      *
@@ -258,7 +260,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         }
         return root;
     }
-    
+
     /**
      * Returns the language root of the resource.
      *
@@ -272,7 +274,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         }
         return null;
     }
-    
+
     /**
      * Returns the path of the blueprint of the resource.
      *
@@ -297,7 +299,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         }
         return null;
     }
-    
+
     /**
      * Returns the path of the live copy of the resource.
      *
@@ -321,7 +323,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         }
         return null;
     }
-    
+
     /**
      * Returns the localization root of the experience fragment path based on the localization root of the current page.
      *
@@ -336,7 +338,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private String getXfLocalizationRoot(String xfPath, String currentPageRoot) {
         String xfRoot = null;
         if (isNotEmpty(xfPath) && isNotEmpty(currentPageRoot)
-            && resolver.getResource(xfPath) != null && resolver.getResource(currentPageRoot) != null) {
+                && resolver.getResource(xfPath) != null && resolver.getResource(currentPageRoot) != null) {
             String[] xfPathTokens = Text.explode(xfPath, PATH_DELIMITER_CHAR);
             String[] referenceRootTokens = Text.explode(currentPageRoot, PATH_DELIMITER_CHAR);
             int xfRootDepth = referenceRootTokens.length + 1;
@@ -348,7 +350,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         }
         return xfRoot;
     }
-    
+
     /**
      * Checks if the resource exists at the given path.
      *
@@ -358,7 +360,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private boolean resourceExists(String path) {
         return (isNotEmpty(path) && resolver.getResource(path) != null);
     }
-    
+
     /**
      * Checks if the resource is defined in the template.
      *
@@ -368,11 +370,11 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         if (currentPage == null) {
             return false;
         }
-    
+
         Template template = currentPage.getTemplate();
         return template != null && StringUtils.startsWith(resource.getPath(), template.getPath());
     }
-    
+
     /**
      * Checks if the resource at the given path is an Experience Fragment variation.
      *
@@ -389,7 +391,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         }
         return false;
     }
-    
+
     private void resolveName(PageManager pageManager) {
         Page xfVariationPage = pageManager.getPage(fragmentVariationPath);
         if (xfVariationPage != null) {
@@ -399,25 +401,26 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
             }
         }
     }
-    
+
     private void retrieveExperienceFragmentChildModels() {
-        if(isNotBlank(localizedFragmentVariationPath) && resourceExists(localizedFragmentVariationPath)){
+        if (isNotBlank(localizedFragmentVariationPath) && resourceExists(localizedFragmentVariationPath)) {
             final Resource experienceFragmentResource = resolver.getResource(localizedFragmentVariationPath);
-            
-            if(experienceFragmentResource != null){
+
+            if (experienceFragmentResource != null) {
                 Iterator<Resource> experienceFragmentVariantChildResources = experienceFragmentResource.listChildren();
-                Map<String, ComponentExporter> resolvedChildren = ContentFragmentUtils.getComponentExporters(experienceFragmentVariantChildResources, modelFactory, request);
+                Map<String, ComponentExporter> resolvedChildren =
+                        ContentFragmentUtils.getComponentExporters(experienceFragmentVariantChildResources, modelFactory, request);
                 children.putAll(resolvedChildren);
             }
         }
     }
-    
+
     private void appendCssClassNames() {
-        
-        if(children.isEmpty()){
+
+        if (children.isEmpty()) {
             classNames += " empty";
         }
-        
+
         classNames += isNotEmpty(customCssClass) ? " " + customCssClass : "";
     }
 
