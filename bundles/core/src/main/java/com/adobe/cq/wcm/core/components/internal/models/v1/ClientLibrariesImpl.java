@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -35,7 +36,9 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
@@ -61,6 +64,12 @@ import com.adobe.granite.ui.clientlibs.LibraryType;
 public class ClientLibrariesImpl implements ClientLibraries {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientLibrariesImpl.class);
+
+    /**
+     * Name of the subservice used to authenticate as in order to be able to read details about components and
+     * client libraries.
+     */
+    public static final String COMPONENTS_SERVICE = "components-service";
 
     private static final String CQ_CLIENTLIBRARY_FOLDER = "cq:ClientLibraryFolder";
 
@@ -272,36 +281,42 @@ public class ClientLibrariesImpl implements ClientLibraries {
      *
      * @return {@link Set<String>} of clientlib categories
      */
+    @NotNull
     protected Set<String> getCategoriesFromComponents() {
-        Set<String> categories = new HashSet<>();
+        try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE))) {
 
-        allLibraries = htmlLibraryManager.getLibraries();
-        Collection<ClientLibrary> libraries = new LinkedList<>();
+            Set<String> categories = new HashSet<>();
 
-        Set<String> allResourceTypes = new LinkedHashSet<>();
-        allResourceTypes.addAll(resourceTypeSet);
-        if (inherited) {
-            for (String resourceType : resourceTypeSet) {
-                allResourceTypes.addAll(Utils.getSuperTypes(resourceType, request, resolverFactory));
-            }
-        }
-        for (String resourceType : allResourceTypes) {
-            Resource componentResource = Utils.getResource(resourceType, request, resolverFactory);
-            addClientLibraries(componentResource, libraries);
-        }
+            allLibraries = htmlLibraryManager.getLibraries();
+            Collection<ClientLibrary> libraries = new LinkedList<>();
 
-        for (ClientLibrary library : libraries) {
-            for (String category : library.getCategories()) {
-                if (pattern != null) {
-                    if (pattern.matcher(category).matches()) {
-                        categories.add(category);
-                    }
-                } else {
-                    categories.add(category);
+            Set<String> allResourceTypes = new LinkedHashSet<>(resourceTypeSet);
+            if (inherited) {
+                for (String resourceType : resourceTypeSet) {
+                    allResourceTypes.addAll(Utils.getSuperTypes(resourceType, resourceResolver));
                 }
             }
+            for (String resourceType : allResourceTypes) {
+                Resource componentResource = resourceResolver.getResource(resourceType);
+                addClientLibraries(componentResource, libraries);
+            }
+
+            for (ClientLibrary library : libraries) {
+                for (String category : library.getCategories()) {
+                    if (pattern != null) {
+                        if (pattern.matcher(category).matches()) {
+                            categories.add(category);
+                        }
+                    } else {
+                        categories.add(category);
+                    }
+                }
+            }
+            return categories;
+        } catch (LoginException e) {
+            LOG.error("Cannot login as a service user", e);
+            return Collections.emptySet();
         }
-        return categories;
     }
 
     /**
