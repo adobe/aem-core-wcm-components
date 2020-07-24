@@ -85,9 +85,9 @@ public class ComponentFilesImpl implements ComponentFiles {
     @Override
     public List<String> getPaths() {
         if (paths == null) {
-            try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE))) {
-                paths = new LinkedList<>();
+            paths = new LinkedList<>();
 
+            try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE))) {
                 Set<String> seenResourceTypes = new HashSet<>();
                 for (String resourceType : resourceTypeSet) {
                     addPaths(resourceType, paths, seenResourceTypes, resourceResolver);
