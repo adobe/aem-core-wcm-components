@@ -126,5 +126,8 @@ class UtilsTest {
             add("test");
         }};
         assertEquals(reference, Utils.getStrings("test"));
+
+        // Test null
+        assertEquals(new LinkedHashSet<String>(), Utils.getStrings(null));
     }
 }
