@@ -136,7 +136,8 @@ public class Utils {
      * @param page the {@link Page}
      * @param request the current request
      * @param modelFactory the {@link ModelFactory}
-     * @return
+     *
+     * @return The set of resource types for components used to render a page.
      */
     @NotNull
     public static Set<String> getPageResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
@@ -182,12 +183,9 @@ public class Utils {
         if (experienceFragment != null) {
             String fragmentPath = experienceFragment.getLocalizedFragmentVariationPath();
             if (StringUtils.isNotEmpty(fragmentPath)) {
-                ResourceResolver resolver = resource.getResourceResolver();
-                if (resolver != null) {
-                    Resource fragmentResource = resolver.getResource(fragmentPath);
-                    if (fragmentResource != null) {
-                        return getResourceTypes(fragmentResource, request, modelFactory);
-                    }
+                Resource fragmentResource = resource.getResourceResolver().getResource(fragmentPath);
+                if (fragmentResource != null) {
+                    return getResourceTypes(fragmentResource, request, modelFactory);
                 }
             }
         }
@@ -208,12 +206,9 @@ public class Utils {
         Template template = page.getTemplate();
         if (template != null) {
             String templatePath = template.getPath() + AllowedComponentList.STRUCTURE_JCR_CONTENT;
-            ResourceResolver resolver = page.getContentResource().getResourceResolver();
-            if (resolver != null) {
-                Resource templateResource = resolver.getResource(templatePath);
-                if (templateResource != null) {
-                    return getResourceTypes(templateResource, request, modelFactory);
-                }
+            Resource templateResource = request.getResourceResolver().getResource(templatePath);
+            if (templateResource != null) {
+                return getResourceTypes(templateResource, request, modelFactory);
             }
         }
         return Collections.emptySet();
