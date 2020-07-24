@@ -36,6 +36,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
@@ -280,14 +281,16 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
         Set<String> allResourceTypes = new LinkedHashSet<>();
         allResourceTypes.addAll(resourceTypeSet);
-        if (inherited) {
-            for (String resourceType : resourceTypeSet) {
-                allResourceTypes.addAll(Utils.getSuperTypes(resourceType, request, resolverFactory));
+        try (ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory)) {
+            if (inherited) {
+                for (String resourceType : resourceTypeSet) {
+                    allResourceTypes.addAll(Utils.getSuperTypes(resourceType, resolver));
+                }
             }
-        }
-        for (String resourceType : allResourceTypes) {
-            Resource componentResource = Utils.getResource(resourceType, request, resolverFactory);
-            addClientLibraries(componentResource, libraries);
+            for (String resourceType : allResourceTypes) {
+                Resource componentResource = Utils.getResource(resourceType, resolver);
+                addClientLibraries(componentResource, libraries);
+            }
         }
 
         for (ClientLibrary library : libraries) {

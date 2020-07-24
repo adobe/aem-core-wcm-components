@@ -28,6 +28,7 @@ import javax.inject.Named;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
@@ -78,8 +79,10 @@ public class ComponentFilesImpl implements ComponentFiles {
             paths = new LinkedList<>();
 
             Set<String> seenResourceTypes = new HashSet<>();
-            for (String resourceType : resourceTypeSet) {
-                addPaths(resourceType, paths, seenResourceTypes);
+            try (ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory)) {
+                for (String resourceType : resourceTypeSet) {
+                    addPaths(resourceType, paths, seenResourceTypes, resolver);
+                }
             }
         }
         return paths;
@@ -91,10 +94,11 @@ public class ComponentFilesImpl implements ComponentFiles {
      * @param resourceType - the resource type of the component to look into for files matching the defined pattern
      * @param paths - the given collection of file paths
      * @param seenResourceTypes - a set of resource types that were previously searched into, to avoid inheritance loops
+     * @param resolver - a {@link ResourceResolver} that can read the files under the resource defined by the resource type
      */
-    private void addPaths(String resourceType, Collection<String> paths, Set<String> seenResourceTypes) {
+    private void addPaths(String resourceType, Collection<String> paths, Set<String> seenResourceTypes, ResourceResolver resolver) {
         if (!seenResourceTypes.contains(resourceType)) {
-            Resource resource = Utils.getResource(resourceType, request, resolverFactory);
+            Resource resource = Utils.getResource(resourceType, resolver);
             if (resource != null) {
                 boolean matched = false;
                 for (Resource child : resource.getChildren()) {
@@ -104,7 +108,7 @@ public class ComponentFilesImpl implements ComponentFiles {
                     }
                 }
                 if (inherited && !matched) {
-                    addPaths(resource.getResourceSuperType(), paths, seenResourceTypes);
+                    addPaths(resource.getResourceSuperType(), paths, seenResourceTypes, resolver);
                 }
             }
         }

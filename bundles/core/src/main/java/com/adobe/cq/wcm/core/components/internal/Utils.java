@@ -245,19 +245,14 @@ public class Utils {
      * Gets the component resource for a given path
      *
      * @param path - the path
-     * @param request - the request
-     * @param resolverFactory - the resolver factory
+     * @param resolver - the resource resolver
      *
      * @return the corresponding resource
      */
     @Nullable
-    public static Resource getResource(String path, @NotNull SlingHttpServletRequest request, @NotNull ResourceResolverFactory resolverFactory) {
-        if (path == null) {
+    public static Resource getResource(String path, ResourceResolver resolver) {
+        if (path == null || resolver == null) {
             return null;
-        }
-        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
-        if (resolver == null) {
-            resolver = request.getResourceResolver();
         }
         return resolver.getResource(path);
     }
@@ -266,25 +261,24 @@ public class Utils {
      * Returns all the super-types of a component defined by its resource type.
      *
      * @param resourceType the resource type of the component
-     * @param request the current request
-     * @param resolverFactory the {@link ResourceResolverFactory}
+     * @param resolver the {@link ResourceResolver}
      *
      * @return a set of the inherited resource types
      */
     @NotNull
-    public static Set<String> getSuperTypes(@NotNull String resourceType, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
+    public static Set<String> getSuperTypes(@NotNull String resourceType, ResourceResolver resolver) {
         Set<String> superTypes = new HashSet<>();
-        addSuperTypes(resourceType, superTypes, request, resolverFactory);
+        addSuperTypes(resourceType, superTypes, resolver);
         return superTypes;
     }
 
-    private static void addSuperTypes(@NotNull String resourceType, @NotNull Set<String> superTypes, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
-        Resource resource = getResource(resourceType, request, resolverFactory);
+    private static void addSuperTypes(@NotNull String resourceType, @NotNull Set<String> superTypes, ResourceResolver resolver) {
+        Resource resource = getResource(resourceType, resolver);
         if (resource != null) {
             String superType = resource.getResourceSuperType();
             if (StringUtils.isNotEmpty(superType) && !superTypes.contains(superType)) {
                 superTypes.add(superType);
-                addSuperTypes(superType, superTypes, request, resolverFactory);
+                addSuperTypes(superType, superTypes, resolver);
             }
         }
     }
