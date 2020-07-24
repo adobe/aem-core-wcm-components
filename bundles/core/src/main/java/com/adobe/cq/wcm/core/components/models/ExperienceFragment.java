@@ -15,10 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
 
 /**
  * Defines the {@code ExperienceFragment} Sling Model used for the
@@ -27,7 +32,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 12.9.0
  */
 @ConsumerType
-public interface ExperienceFragment extends Component {
+public interface ExperienceFragment extends Component, ContainerExporter {
 
     /**
      * Name of the configuration policy property that specifies the experience fragment variation path. The property
@@ -64,12 +69,50 @@ public interface ExperienceFragment extends Component {
     }
 
     /**
+     * Generates some container class names (needed for SPA framework)
+     * @return Css Class names
+     * @since com.adobe.cq.wcm.core.components.models 12.15.0
+     */
+    @Nullable
+    default String getCssClassNames()  {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * Simple boolean flag to check if the experience fragment variation and its underlying experience fragment is configured.
+     * If the localizedFragmentVariationPath path is not configured or the children are empty, this wis will return false.
+     * @return localizedFragmentVariationPath is configured and has entries
+     * @since com.adobe.cq.wcm.core.components.models 12.15.0
+     */
+    default boolean isConfigured()  {throw new UnsupportedOperationException(); }
+    
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
     @NotNull
     @Override
     default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * @see ContainerExporter#getExportedItemsOrder()
+     * @since com.adobe.cq.wcm.core.components.models 12.15.0
+     */
+    @NotNull
+    @Override
+    default String[] getExportedItemsOrder() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * @see ContainerExporter#getExportedItems()
+     * @since com.adobe.cq.wcm.core.components.models 12.15.0
+     */
+    @NotNull
+    @Override
+    default Map<String, ? extends ComponentExporter> getExportedItems() {
         throw new UnsupportedOperationException();
     }
 
