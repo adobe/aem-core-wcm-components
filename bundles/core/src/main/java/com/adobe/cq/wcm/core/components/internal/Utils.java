@@ -19,30 +19,27 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.foundation.AllowedComponentList;
+import org.jetbrains.annotations.Nullable;
 
 public class Utils {
-
-    private static final Logger LOG = LoggerFactory.getLogger(Utils.class);
 
     /**
      * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
@@ -223,70 +220,21 @@ public class Utils {
     }
 
     /**
-     * Returns a {@link ResourceResolver} that is able to read information from the components (scripts, client
-     * libraries).
-     *
-     * @param resolverFactory the {@link ResourceResolverFactory}
-     *
-     * @return a {@link ResourceResolver} that is able to read information from the components
-     */
-    @Nullable
-    public static ResourceResolver getComponentsResolver(@NotNull ResourceResolverFactory resolverFactory) {
-        try {
-            return resolverFactory.getServiceResourceResolver(
-                    Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE));
-        } catch (LoginException e) {
-            LOG.error("Cannot login as a service user", e);
-            return null;
-        }
-    }
-
-    /**
-     * Gets the component resource for a given path
-     *
-     * @param path - the path
-     * @param request - the request
-     * @param resolverFactory - the resolver factory
-     *
-     * @return the corresponding resource
-     */
-    @Nullable
-    public static Resource getResource(String path, @NotNull SlingHttpServletRequest request, @NotNull ResourceResolverFactory resolverFactory) {
-        if (path == null) {
-            return null;
-        }
-        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
-        if (resolver == null) {
-            resolver = request.getResourceResolver();
-        }
-        return resolver.getResource(path);
-    }
-
-    /**
      * Returns all the super-types of a component defined by its resource type.
      *
-     * @param resourceType the resource type of the component
-     * @param request the current request
-     * @param resolverFactory the {@link ResourceResolverFactory}
+     * @param resourceType the resource type of the component.
+     * @param resourceResolver the resource resolver.
      *
-     * @return a set of the inherited resource types
+     * @return a set of the inherited resource types.
      */
     @NotNull
-    public static Set<String> getSuperTypes(@NotNull String resourceType, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
-        Set<String> superTypes = new HashSet<>();
-        addSuperTypes(resourceType, superTypes, request, resolverFactory);
-        return superTypes;
-    }
-
-    private static void addSuperTypes(@NotNull String resourceType, @NotNull Set<String> superTypes, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
-        Resource resource = getResource(resourceType, request, resolverFactory);
-        if (resource != null) {
-            String superType = resource.getResourceSuperType();
-            if (StringUtils.isNotEmpty(superType) && !superTypes.contains(superType)) {
-                superTypes.add(superType);
-                addSuperTypes(superType, superTypes, request, resolverFactory);
-            }
-        }
+    public static Set<String> getSuperTypes(@NotNull String resourceType, @NotNull final ResourceResolver resourceResolver) {
+        return Optional.ofNullable(resourceResolver.getResource(resourceType))
+            .map(Resource::getResourceSuperType)
+            .filter(StringUtils::isNotEmpty)
+            .map(superType -> Stream.concat(Stream.of(superType), getSuperTypes(superType, resourceResolver).stream()))
+            .orElseGet(Stream::empty)
+            .collect(Collectors.toSet());
     }
 
     /**
@@ -297,7 +245,7 @@ public class Utils {
      * @return Set of strings from input
      */
     @NotNull
-    public static Set<String> getStrings(Object input) {
+    public static Set<String> getStrings(@Nullable final Object input) {
         Set<String> strings = new LinkedHashSet<>();
         if (input != null) {
             Class clazz = input.getClass();
