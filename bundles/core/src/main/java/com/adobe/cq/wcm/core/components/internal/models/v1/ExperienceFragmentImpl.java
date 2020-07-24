@@ -66,9 +66,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-
 @Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL,
        adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
        resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
@@ -131,7 +128,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      */
     private final Map<String, ComponentExporter> children = new HashMap<>();
 
-
     @PostConstruct
     protected void initModel() {
 
@@ -156,8 +152,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
         appendCssClassNames();
     }
-
-
 
     @Override
     public String getLocalizedFragmentVariationPath() {
@@ -201,7 +195,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Override
     @JsonInclude
     public boolean isConfigured() {
-        return isNotEmpty(localizedFragmentVariationPath) && !children.isEmpty();
+        return StringUtils.isNotEmpty(localizedFragmentVariationPath) && !children.isEmpty();
     }
 
     private void resolveLocalizedFragmentVariationPath() {
@@ -211,7 +205,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
                 final String currentPageRootPath = getLocalizationRoot(pagePath);
                 // we should use getLocalizationRoot instead of getXfLocalizationRoot once the XF UI supports creating Live and Language Copies
                 String xfRootPath = getXfLocalizationRoot(fragmentVariationPath, currentPageRootPath);
-                if (isNotEmpty(currentPageRootPath) && isNotEmpty(xfRootPath)) {
+                if (StringUtils.isNotEmpty(currentPageRootPath) && StringUtils.isNotEmpty(xfRootPath)) {
                     String xfRelativePath = StringUtils.substring(fragmentVariationPath, xfRootPath.length());
                     String localizedXfRootPath = StringUtils.replace(currentPageRootPath, CONTENT_ROOT, EXPERIENCE_FRAGMENTS_ROOT, 1);
                     localizedFragmentVariationPath = StringUtils.join(localizedXfRootPath, xfRelativePath, JCR_CONTENT_ROOT);
@@ -248,7 +242,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      */
     private String getLocalizationRoot(String path) {
         String root = null;
-        if (isNotEmpty(path)) {
+        if (StringUtils.isNotEmpty(path)) {
             Resource resource = resolver.getResource(path);
             root = getLanguageRoot(resource);
             if (StringUtils.isEmpty(root)) {
@@ -337,7 +331,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      */
     private String getXfLocalizationRoot(String xfPath, String currentPageRoot) {
         String xfRoot = null;
-        if (isNotEmpty(xfPath) && isNotEmpty(currentPageRoot)
+        if (StringUtils.isNotEmpty(xfPath) && StringUtils.isNotEmpty(currentPageRoot)
                 && resolver.getResource(xfPath) != null && resolver.getResource(currentPageRoot) != null) {
             String[] xfPathTokens = Text.explode(xfPath, PATH_DELIMITER_CHAR);
             String[] referenceRootTokens = Text.explode(currentPageRoot, PATH_DELIMITER_CHAR);
@@ -358,7 +352,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @return {@code true} if the resource exists, {@code false} otherwise
      */
     private boolean resourceExists(String path) {
-        return (isNotEmpty(path) && resolver.getResource(path) != null);
+        return (StringUtils.isNotEmpty(path) && resolver.getResource(path) != null);
     }
 
     /**
@@ -381,7 +375,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @return {@code true} if the resource is an XF variation, {@code false} otherwise
      */
     private boolean isExperienceFragmentVariation(String path) {
-        if (isNotEmpty(path)) {
+        if (StringUtils.isNotEmpty(path)) {
             Resource resource = resolver.getResource(path);
             if (resource != null) {
                 ValueMap properties = resource.getValueMap();
@@ -403,7 +397,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     }
 
     private void retrieveExperienceFragmentChildModels() {
-        if (isNotBlank(localizedFragmentVariationPath) && resourceExists(localizedFragmentVariationPath)) {
+        if (StringUtils.isNotBlank(localizedFragmentVariationPath) && resourceExists(localizedFragmentVariationPath)) {
             final Resource experienceFragmentResource = resolver.getResource(localizedFragmentVariationPath);
 
             if (experienceFragmentResource != null) {
@@ -421,7 +415,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
             classNames += " empty";
         }
 
-        classNames += isNotEmpty(customCssClass) ? " " + customCssClass : "";
+        classNames += StringUtils.isNotEmpty(customCssClass) ? " " + customCssClass : "";
     }
 
 }

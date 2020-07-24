@@ -15,13 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ContainerExporter;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import javax.annotation.Nullable;
-import java.util.Map;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
 
 /**
  * Defines the {@code ExperienceFragment} Sling Model used for the
@@ -66,12 +68,10 @@ public interface ExperienceFragment extends Component, ContainerExporter {
         throw new UnsupportedOperationException();
     }
 
-  
-    
     /**
      * Generates some container class names (needed for SPA framework)
      * @return Css Class names
-     * @since com.adobe.cq.wcm.core.components.models 12.13.0
+     * @since com.adobe.cq.wcm.core.components.models 12.15.0
      */
     @Nullable
     default String getCssClassNames()  {
@@ -82,7 +82,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
      * Simple boolean flag to check if the experience fragment variation and its underlying experience fragment is configured.
      * If the localizedFragmentVariationPath path is not configured or the children are empty, this wis will return false.
      * @return localizedFragmentVariationPath is configured and has entries
-     * @since com.adobe.cq.wcm.core.components.models 12.13.0
+     * @since com.adobe.cq.wcm.core.components.models 12.15.0
      */
     default boolean isConfigured()  {throw new UnsupportedOperationException(); }
     
@@ -98,7 +98,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
     
     /**
      * @see ContainerExporter#getExportedItemsOrder()
-     * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
+     * @since com.adobe.cq.wcm.core.components.models 12.15.0
      */
     @NotNull
     @Override
@@ -108,7 +108,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
     
     /**
      * @see ContainerExporter#getExportedItems()
-     * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
+     * @since com.adobe.cq.wcm.core.components.models 12.15.0
      */
     @NotNull
     @Override
