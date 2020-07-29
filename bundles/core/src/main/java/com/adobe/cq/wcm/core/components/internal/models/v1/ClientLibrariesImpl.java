@@ -22,13 +22,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -285,14 +285,15 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @NotNull
     protected Set<String> getCategoriesFromComponents() {
         try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE))) {
-            Map<String, ClientLibrary> allLibraries = htmlLibraryManager.getLibraries();
-            return this.getAllResourceTypes(resourceResolver)
-                .map(resourceResolver::getResource)
-                .flatMap(res -> ClientLibrariesImpl.getClientLibraries(res, allLibraries))
-                .map(ClientLibrary::getCategories)
-                .flatMap(Arrays::stream)
-                .filter(category -> pattern == null || pattern.matcher(category).matches())
-                .collect(Collectors.toSet());
+            Set<String> categories = new HashSet<>();
+            for (ClientLibrary library : this.getAllClientLibraries(resourceResolver)) {
+                for (String category : library.getCategories()) {
+                    if (pattern == null || pattern.matcher(category).matches()) {
+                        categories.add(category);
+                    }
+                }
+            }
+            return categories;
         } catch (LoginException e) {
             LOG.error("Cannot login as a service user", e);
             return Collections.emptySet();
@@ -300,44 +301,72 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Gets all resource types.
+     * Gets all of the client libraries.
      *
      * @param resourceResolver The resource resolver.
-     * @return Stream of all resource types under which to search for client libraries.
+     * @return Set of all client libraries.
      */
-    private Stream<String> getAllResourceTypes(@NotNull final ResourceResolver resourceResolver) {
-        return Stream.concat(resourceTypeSet.stream(),
-            inherited
-                ? resourceTypeSet.stream().flatMap(resourceType -> Utils.getSuperTypes(resourceType, resourceResolver).stream())
-                : Stream.empty())
-            .distinct();
+    @NotNull
+    private Set<ClientLibrary> getAllClientLibraries(@NotNull final ResourceResolver resourceResolver) {
+        Map<String, ClientLibrary> allLibraries = htmlLibraryManager.getLibraries();
+        Set<ClientLibrary> clientLibraries = new LinkedHashSet<>();
+        for (String resourceType : getAllResourceTypes(resourceResolver)) {
+            Resource resource = resourceResolver.getResource(resourceType);
+            if (resource != null) {
+                clientLibraries.addAll(getClientLibraries(resource, allLibraries));
+            }
+        }
+        return clientLibraries;
     }
 
     /**
-     * Gets a stream of client libraries, starting from the given resource
+     * Gets all resource types.
+     *
+     * @param resourceResolver The resource resolver.
+     * @return Set of all resource types under which to search for client libraries.
+     */
+    @NotNull
+    private Set<String> getAllResourceTypes(@NotNull final ResourceResolver resourceResolver) {
+        Set<String> allResourceTypes = new LinkedHashSet<>(resourceTypeSet);
+        if (inherited) {
+            for (String resourceType : resourceTypeSet) {
+                allResourceTypes.addAll(Utils.getSuperTypes(resourceType, resourceResolver));
+            }
+        }
+        return allResourceTypes;
+    }
+
+    /**
+     * Gets a list of client libraries, starting from the given resource
      * and diving into its descendants.
      *
      * @param resource - the given resource, which will be checked to see if it's a client library
      * @param allLibraries - Map of all client libraries.
+     * @return List of client libraries for the given resource.
      */
-    private static Stream<ClientLibrary> getClientLibraries(@org.jetbrains.annotations.Nullable final Resource resource,
-                                                            @NotNull final Map<String, ClientLibrary> allLibraries) {
-        // stream of client libraries for the current resource
-        Stream<ClientLibrary> current = Optional.ofNullable(resource)
-            .filter(r -> StringUtils.equals(r.getResourceType(), CQ_CLIENTLIBRARY_FOLDER))
-            .map(res -> allLibraries.get(res.getPath()))
-            .map(Stream::of)
-            .orElseGet(Stream::empty);
+    @NotNull
+    private static List<ClientLibrary> getClientLibraries(@org.jetbrains.annotations.Nullable final Resource resource,
+                                                          @NotNull final Map<String, ClientLibrary> allLibraries) {
+        if (resource == null) {
+            return new LinkedList<>();
+        }
 
-        // stream of client libraries for the children
-        Stream<ClientLibrary> children = Optional.ofNullable(resource)
-            .map(Resource::getChildren)
-            .map(Iterable::spliterator)
-            .map(it -> StreamSupport.stream(it, false))
-            .orElseGet(Stream::empty)
-            .flatMap(child -> ClientLibrariesImpl.getClientLibraries(child, allLibraries));
+        LinkedList<ClientLibrary> libraries = new LinkedList<>();
 
-        return Stream.concat(current, children);
+        // add this resource if it is a client library
+        String componentType = resource.getResourceType();
+        if (StringUtils.equals(componentType, CQ_CLIENTLIBRARY_FOLDER)) {
+            ClientLibrary library = allLibraries.get(resource.getPath());
+            if (library != null) {
+                libraries.add(library);
+            }
+        }
+
+        // add any children that are client libraries
+        for (Resource child : resource.getChildren()) {
+            libraries.addAll(getClientLibraries(child, allLibraries));
+        }
+        return libraries;
     }
 
 }
