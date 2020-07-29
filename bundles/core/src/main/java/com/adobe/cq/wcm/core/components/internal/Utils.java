@@ -21,8 +21,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -223,13 +221,19 @@ public class Utils {
      * @return a set of the inherited resource types.
      */
     @NotNull
-    public static Set<String> getSuperTypes(@NotNull String resourceType, @NotNull final ResourceResolver resourceResolver) {
-        return Optional.ofNullable(resourceResolver.getResource(resourceType))
-            .map(Resource::getResourceSuperType)
-            .filter(StringUtils::isNotEmpty)
-            .map(superType -> Stream.concat(Stream.of(superType), getSuperTypes(superType, resourceResolver).stream()))
-            .orElseGet(Stream::empty)
-            .collect(Collectors.toSet());
+    public static Set<String> getSuperTypes(@NotNull final String resourceType, @NotNull final ResourceResolver resourceResolver) {
+        Set<String> superTypes = new HashSet<>();
+        String superType = resourceType;
+        while (superType != null) {
+            superType = Optional.ofNullable(resourceResolver.getResource(superType))
+                .map(Resource::getResourceSuperType)
+                .filter(StringUtils::isNotEmpty)
+                .orElse(null);
+            if (superType != null) {
+                superTypes.add(superType);
+            }
+        }
+        return superTypes;
     }
 
     /**
