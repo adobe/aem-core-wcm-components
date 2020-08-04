@@ -15,20 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.factory.ModelFactory;
-import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.resourceresolver.MockValueMap;
 import org.hamcrest.MatcherAssert;
@@ -45,9 +44,13 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
+import javax.json.Json;
+import javax.json.JsonReader;
+
 import static com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils.PN_CFM_GRID_TYPE;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_TITLE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ContentFragmentUtilsTest {
 
@@ -183,10 +186,8 @@ public class ContentFragmentUtilsTest {
     }
 
     @Test
-    public void getEditorJsonOutputOfContentFragment() throws Exception {
+    public void getEditorJsonOutputOfContentFragment() {
         // GIVEN
-        InputStream expectedJsonResourceAsStream = this.getClass().getResourceAsStream("expectedJson.json");
-        String expectedJsonOutput = IOUtils.toString(expectedJsonResourceAsStream, StandardCharsets.UTF_8);
 
         Resource contentFragmentResource = Mockito.mock(Resource.class);
         ContentFragment contentFragment = Mockito.mock(ContentFragment.class);
@@ -209,7 +210,9 @@ public class ContentFragmentUtilsTest {
                 new String[]{"foo", "bar"});
 
         // THEN
-        Assertions.assertEquals(expectedJsonOutput.replaceAll("[\n\t ]", ""), json);
+        JsonReader expected = Json.createReader(this.getClass().getResourceAsStream("expectedJson.json"));
+        JsonReader actual = Json.createReader(new StringReader(json));
+        assertEquals(expected.read(), actual.read());
     }
 
     @Test
@@ -278,7 +281,7 @@ public class ContentFragmentUtilsTest {
     @Test
     public void getComponentExport() {
         // GIVEN
-        SlingContext slingContext = new SlingContext();
+        AemContext slingContext = CoreComponentTestContext.newAemContext();
         slingContext.load().json(this.getClass().getResourceAsStream("foo.json"), "/foo");
         MockSlingHttpServletRequest slingHttpServletRequest =
                 new MockSlingHttpServletRequest(slingContext.bundleContext());
