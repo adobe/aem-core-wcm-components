@@ -31,7 +31,7 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
 class LanguageNavigationImplTest {
@@ -112,7 +112,7 @@ class LanguageNavigationImplTest {
     void testLanguageNavigationItemsNoRoot() {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(
                 NAVIGATION_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-4");
-        assertEquals("Didn't expect any language navigation items.", 0, languageNavigation.getItems().size());
+        assertEquals(0, languageNavigation.getItems().size(), "Didn't expect any language navigation items.");
         Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(TEST_BASE, "languagenavigation4"));
 
     }
@@ -168,26 +168,19 @@ class LanguageNavigationImplTest {
     }
 
     private void verifyLanguageNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
-        assertEquals("The language navigation items contain a different number of pages than expected.", expectedPages.length,
-                items.size());
+        assertEquals(expectedPages.length, items.size(),
+            "The language navigation items contain a different number of pages than expected.");
         int index = 0;
         while (items.size() > index) {
             LanguageNavigationItem item = (LanguageNavigationItem) items.get(index);
-            assertEquals("The language navigation items don't seem to have the correct order.", expectedPages[index][0], item.getPath());
-            assertEquals("The language navigation item's title is not what was expected: " + item.getPath(), expectedPages[index][1],
-                    item.getTitle());
-            assertEquals("The language navigation item's active state is not what was expected: " + item.getPath(), expectedPages[index][2],
-                    item.isActive());
-            assertEquals("The language navigation item's level is not what was expected: " + item.getPath(), expectedPages[index][3],
-                    item.getLevel());
-            assertEquals("The language navigation item's country is not what was expected: " + item.getPath(), expectedPages[index][4],
-                    item.getCountry());
-            assertEquals("The language navigation item's language is not what was expected: " + item.getPath(), expectedPages[index][5],
-                    item.getLanguage());
-            assertEquals("The language navigation item's locale is not what was expected: " + item.getPath(), expectedPages[index][5],
-                    item.getLocale().toString().replace('_', '-'));
-            assertEquals("The language navigation item's URL is not what was expected: " + item.getPath(),
-                    CONTEXT_PATH + expectedPages[index][6], item.getURL());
+            assertEquals(expectedPages[index][0], item.getPath(), "The language navigation items don't seem to have the correct order.");
+            assertEquals(expectedPages[index][1], item.getTitle(), "The language navigation item's title is not what was expected: " + item.getPath());
+            assertEquals(expectedPages[index][2], item.isActive(), "The language navigation item's active state is not what was expected: " + item.getPath());
+            assertEquals(expectedPages[index][3], item.getLevel(), "The language navigation item's level is not what was expected: " + item.getPath());
+            assertEquals(expectedPages[index][4], item.getCountry(), "The language navigation item's country is not what was expected: " + item.getPath());
+            assertEquals(expectedPages[index][5], item.getLanguage(), "The language navigation item's language is not what was expected: " + item.getPath());
+            assertEquals(expectedPages[index][5], item.getLocale().toString().replace('_', '-'), "The language navigation item's locale is not what was expected: " + item.getPath());
+            assertEquals(CONTEXT_PATH + expectedPages[index][6], item.getURL(), "The language navigation item's URL is not what was expected: " + item.getPath());
             index++;
         }
     }

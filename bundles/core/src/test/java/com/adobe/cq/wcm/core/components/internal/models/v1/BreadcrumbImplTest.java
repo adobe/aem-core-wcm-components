@@ -28,7 +28,7 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
 class BreadcrumbImplTest {
@@ -96,8 +96,8 @@ class BreadcrumbImplTest {
     }
 
     private void checkBreadcrumbConsistency(Breadcrumb breadcrumb, String[] expectedPages) {
-        assertEquals("Expected that the returned breadcrumb will contain " + expectedPages.length + " items", breadcrumb.getItems().size(),
-                expectedPages.length);
+        assertEquals(breadcrumb.getItems().size(), expectedPages.length,
+            "Expected that the returned breadcrumb will contain " + expectedPages.length + " items");
         int index = 0;
         for (NavigationItem item : breadcrumb.getItems()) {
             assertEquals(expectedPages[index++], item.getTitle());

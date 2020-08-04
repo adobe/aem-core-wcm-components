@@ -36,8 +36,8 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(AemContextExtension.class)
 class EditorTest {
@@ -72,7 +72,7 @@ class EditorTest {
     void testGetItems() {
         Editor childrenEditor = getItemsEditor(CAROUSEL_PATH);
         List<Item> items = childrenEditor.getItems();
-        assertEquals("Number of items is not the same.", 5, items.size());
+        assertEquals(5, items.size(), "Number of items is not the same.");
         Object[][] expectedItems = {
             {"item_1", "Teaser 1", "Teaser (v1)", "image", null, null},
             {"item_2", "Teaser 2", "Teaser Icon Abbreviation", null, null, "Aa"},
@@ -82,12 +82,12 @@ class EditorTest {
         };
         int index = 0;
         for (Item item : items) {
-            assertEquals("Item name does not match the expected.", expectedItems[index][0], item.getName());
-            assertEquals("Item value does not match the expected.", expectedItems[index][1], item.getValue());
-            assertEquals("Item title does not match the expected.", expectedItems[index][2], item.getTitle());
-            assertEquals("Item icon name does not match the expected.", expectedItems[index][3], item.getIconName());
-            assertEquals("Item icon path does not match the expected.", expectedItems[index][4], item.getIconPath());
-            assertEquals("Item icon abbreviation does not match the expected.", expectedItems[index][5], item.getIconAbbreviation());
+            assertEquals(expectedItems[index][0], item.getName(), "Item name does not match the expected.");
+            assertEquals(expectedItems[index][1], item.getValue(), "Item value does not match the expected.");
+            assertEquals(expectedItems[index][2], item.getTitle(), "Item title does not match the expected.");
+            assertEquals(expectedItems[index][3], item.getIconName(), "Item icon name does not match the expected.");
+            assertEquals(expectedItems[index][4], item.getIconPath(), "Item icon path does not match the expected.");
+            assertEquals(expectedItems[index][5], item.getIconAbbreviation(), "Item icon abbreviation does not match the expected.");
             index++;
         }
     }
@@ -101,7 +101,7 @@ class EditorTest {
         Resource r = childrenEditor.getContainer();
         Iterator<String> it = Arrays.asList("item_1", "item_2", "item_3", "item_4", "item_5", "item_6").iterator();
         for (Resource child : r.getChildren()) {
-            assertEquals("Child not found.", child.getName(), it.next());
+            assertEquals(child.getName(), it.next(), "Child not found.");
         }
     }
 
@@ -112,7 +112,7 @@ class EditorTest {
     void testEmptySuffix() {
         Editor childrenEditor = getItemsEditor("");
         Resource resource = childrenEditor.getContainer();
-        assertNull("For an empty suffix, expected container resource to be null.", resource);
+        assertNull(resource, "For an empty suffix, expected container resource to be null.");
     }
 
     /**
@@ -122,7 +122,7 @@ class EditorTest {
     void testInvalidSuffix() {
         Editor childrenEditor = getItemsEditor("/asdf/adf/asdf");
         Resource resource = childrenEditor.getContainer();
-        assertNull("For an invalid suffix, expected container resource to be null.", resource);
+        assertNull(resource, "For an invalid suffix, expected container resource to be null.");
     }
 
     private Editor getItemsEditor(String suffix) {

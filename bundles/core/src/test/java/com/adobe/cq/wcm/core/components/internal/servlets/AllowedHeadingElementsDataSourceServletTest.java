@@ -25,10 +25,10 @@ import com.adobe.granite.ui.components.ds.DataSource;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 class AllowedHeadingElementsDataSourceServletTest {
@@ -57,10 +57,10 @@ class AllowedHeadingElementsDataSourceServletTest {
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         dataSource.iterator().forEachRemaining(resource -> {
-            assertTrue("Expected class", TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()));
+            assertTrue(TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()), "Expected class");
             TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
-            assertTrue("Expected type in (h3, h4)", textValueDataResourceSource.getText().matches("h[3|4]"));
-            assertTrue("Expected value in (h3, h4)", textValueDataResourceSource.getValue().matches("h[3|4]"));
+            assertTrue(textValueDataResourceSource.getText().matches("h[3|4]"), "Expected type in (h3, h4)");
+            assertTrue(textValueDataResourceSource.getValue().matches("h[3|4]"), "Expected value in (h3, h4)");
             if (textValueDataResourceSource.getValue().equals("h3")) {
                 assertTrue(textValueDataResourceSource.getSelected());
             } else {
@@ -77,10 +77,10 @@ class AllowedHeadingElementsDataSourceServletTest {
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         dataSource.iterator().forEachRemaining(resource -> {
-            assertTrue("Expected class", TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()));
+            assertTrue(TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()), "Expected class");
             TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
-            assertNull("Expected null type", textValueDataResourceSource.getText());
-            assertTrue("Expected value in (foo, h10)", textValueDataResourceSource.getValue().matches("foo|h10"));
+            assertNull(textValueDataResourceSource.getText(), "Expected null type");
+            assertTrue(textValueDataResourceSource.getValue().matches("foo|h10"), "Expected value in (foo, h10)");
         });
     }
 }
