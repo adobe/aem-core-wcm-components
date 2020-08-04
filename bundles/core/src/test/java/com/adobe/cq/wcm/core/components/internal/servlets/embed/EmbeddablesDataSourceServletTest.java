@@ -17,69 +17,67 @@ package com.adobe.cq.wcm.core.components.internal.servlets.embed;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource;
-import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet;
 import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet.EmbeddableDescription;
 import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet.EmbeddableDataResourceSource;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(AemContextExtension.class)
 public class EmbeddablesDataSourceServletTest {
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/embed/v1/datasources/embeddables",
-        "/apps");
+    private static final String TEST_BASE = "/embed/v1/datasources/embeddables";
+    private static final String APPS_ROOT = "/apps";
 
-    @Mock
+    public final AemContext context = CoreComponentTestContext.newAemContext();
+
     private SlingHttpServletRequest request;
-
-    @Mock
-    private ResourceResolver resolver;
-
-    private EmbeddablesDataSourceServlet dataSourceServlet;
 
     List<Resource> embeddableResources = new ArrayList<>();
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        Resource embeddable1 = context.resourceResolver().getResource("/apps/my-app/youtube");
-        Resource embeddable2 = context.resourceResolver().getResource("/apps/my-app/chatbot");
-        Resource embeddable3 = context.resourceResolver().getResource("/apps/my-app/social");
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, APPS_ROOT);
+
+        Resource embeddable1 = Objects.requireNonNull(context.resourceResolver().getResource("/apps/my-app/youtube"));
+        Resource embeddable2 = Objects.requireNonNull(context.resourceResolver().getResource("/apps/my-app/chatbot"));
+        Resource embeddable3 = Objects.requireNonNull(context.resourceResolver().getResource("/apps/my-app/social"));
         embeddableResources.add(embeddable1);
         embeddableResources.add(embeddable2);
         embeddableResources.add(embeddable3);
+        request = Mockito.spy(context.request());
+        ResourceResolver resolver = Mockito.spy(context.resourceResolver());
         when(request.getResourceResolver()).thenReturn(resolver);
         final String rt = embeddable1.getPath().substring("/apps".length() + 1);
+
         List<Resource> outputResources = new ArrayList<>();
-        Resource resource1 = new EmbeddableDataResourceSource(new EmbeddableDescription(rt, embeddable1.getName(),
-            ResourceUtil.getValueMap(embeddable1)), resolver);
-        Resource resource2 = new EmbeddableDataResourceSource(new EmbeddableDescription(rt, embeddable2.getName(),
-            ResourceUtil.getValueMap(embeddable2)), resolver);
-        outputResources.add(resource1);
-        outputResources.add(resource2);
-        when(request.getAttribute(DataSource.class.getName())).thenReturn(
-            new SimpleDataSource(outputResources.iterator()));
+        outputResources.add(new EmbeddableDataResourceSource(
+            new EmbeddableDescription(rt, embeddable1.getName(), embeddable1.getValueMap()), resolver));
+        outputResources.add(new EmbeddableDataResourceSource(
+            new EmbeddableDescription(rt, embeddable2.getName(), embeddable2.getValueMap()), resolver));
+        context.request().setAttribute(DataSource.class.getName(), new SimpleDataSource(outputResources.iterator()));
+
         when(resolver.findResources(any(), any())).thenReturn(embeddableResources.iterator());
         when(resolver.getSearchPath()).thenReturn(context.resourceResolver().getSearchPath());
     }
@@ -87,20 +85,20 @@ public class EmbeddablesDataSourceServletTest {
     @Test
     public void testEmbeddablesDataSourceServlet() {
         context.currentResource("/apps/embeddablesdatasource");
-        dataSourceServlet = new EmbeddablesDataSourceServlet();
+        EmbeddablesDataSourceServlet dataSourceServlet = new EmbeddablesDataSourceServlet();
         dataSourceServlet.doGet(request, context.response());
         DataSource dataSource = (com.adobe.granite.ui.components.ds.DataSource) request.getAttribute(DataSource.class
             .getName());
         assertNotNull(dataSource);
         Resource resource = dataSource.iterator().next();
-        ValueMap valueMap = resource.adaptTo(ValueMap.class);
+        ValueMap valueMap = resource.getValueMap();
         assertEquals("YouTube", valueMap.get(TextValueDataResourceSource.PN_TEXT, String.class));
         assertEquals("my-app/youtube", valueMap.get(TextValueDataResourceSource.PN_VALUE, String.class));
         EmbeddableDescription embed1 = new EmbeddableDescription(null, embeddableResources.get(1).getName(),
-            ResourceUtil.getValueMap(embeddableResources.get(1)));
+            embeddableResources.get(1).getValueMap());
         EmbeddableDescription embed2 = new EmbeddableDescription(null, embeddableResources.get(0).getName(),
-            ResourceUtil.getValueMap(embeddableResources.get(0)));
-        assertEquals(false, embed1.equals(embed2));
+            embeddableResources.get(0).getValueMap());
+        assertNotEquals(embed2, embed1);
         assertNotNull(embed1.hashCode());
     }
 }
