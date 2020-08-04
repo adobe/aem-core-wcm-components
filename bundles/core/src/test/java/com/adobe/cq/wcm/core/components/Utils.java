@@ -34,8 +34,8 @@ import com.adobe.cq.wcm.core.components.internal.jackson.PageModuleProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 /**
@@ -105,21 +105,6 @@ public class Utils {
      * @param enabled {@code true} to enable the data layer, {@code false} to disable it
      */
     public static void enableDataLayer(AemContext context, boolean enabled) {
-        ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
-        DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
-        when(dataLayerConfig.enabled()).thenReturn(enabled);
-        when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
-        context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
-    }
-
-    /**
-     * Sets the data layer context aware configuration of the AEM test context to enabled/disabled
-     * for older test context (before io.wcm.testing.mock.aem.junit5.AemContext was introduced)
-     *
-     * @param context The non-junit5 AEM test context
-     * @param enabled {@code true} to enable the data layer, {@code false} to disable it
-     */
-    public static void enableDataLayerForOldAemContext(io.wcm.testing.mock.aem.junit.AemContext context, boolean enabled) {
         ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
         DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
         when(dataLayerConfig.enabled()).thenReturn(enabled);
