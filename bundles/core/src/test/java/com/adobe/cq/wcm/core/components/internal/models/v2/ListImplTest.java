@@ -16,38 +16,34 @@
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
 
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.List;
-import com.day.cq.wcm.api.designer.Style;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(AemContextExtension.class)
 public class ListImplTest {
 
-    protected static final String TEST_BASE = "/list/v2";
+    private static final String TEST_BASE = "/list/v2";
+    private static final String CONTENT_ROOT = "/content";
     private static final String CURRENT_PAGE = "/content/list";
     private static final String CONTEXT_PATH = "/context";
-    private static final String LIST_1 = "/content/list/listTypes/staticListType";
+    private static final String LIST_1 = CURRENT_PAGE + "/jcr:content/root/staticListType";
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @BeforeClass
-    public static void setUp() {
-        CONTEXT.load().json("/list/test-tags.json", "/etc/tags/list");
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json("/list" + CoreComponentTestContext.TEST_TAGS_JSON, CONTENT_ROOT + "/cq:tags/list");
     }
 
     @Test
@@ -62,26 +58,14 @@ public class ListImplTest {
     }
 
     private List getListUnderTest(String resourcePath) {
-        Utils.enableDataLayerForOldAemContext(CONTEXT, true);
-        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
+        Utils.enableDataLayer(context, true);
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
         }
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
-        request.setResource(resource);
-        request.setContextPath(CONTEXT_PATH);
-        SlingBindings bindings = new SlingBindings();
-        bindings.put(SlingBindings.RESOURCE, resource);
-        bindings.put(SlingBindings.REQUEST, request);
-        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        Style style = mock(Style.class);
-        when(style.get(any(), any(Object.class))).thenAnswer(
-                invocation -> invocation.getArguments()[1]
-        );
-        bindings.put(WCMBindings.CURRENT_STYLE, style);
-        bindings.put(WCMBindings.CURRENT_PAGE, CONTEXT.pageManager().getPage(CURRENT_PAGE));
-        request.setAttribute(SlingBindings.class.getName(), bindings);
-        return request.adaptTo(List.class);
+        context.request().setContextPath(CONTEXT_PATH);
+        context.currentResource(resource);
+        return context.request().adaptTo(List.class);
     }
 
 }
