@@ -25,7 +25,10 @@ import com.adobe.granite.ui.components.ds.DataSource;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 class AllowedHeadingElementsDataSourceServletTest {
@@ -40,7 +43,7 @@ class AllowedHeadingElementsDataSourceServletTest {
 
     @BeforeEach
     void setUp() {
-        context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_PAGE);
         dataSourceServlet = new AllowedHeadingElementsDataSourceServlet();
         context.request().setAttribute(Value.CONTENTPATH_ATTRIBUTE,TITLE_RESOURCE_JCR_TITLE_TYPE);
     }
