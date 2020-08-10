@@ -15,9 +15,9 @@
             "xdm:template": "/conf/coretest/settings/wcm/templates/product-page",
             "repo:path": "/core/content/page/templated-page.html",
             "xdm:tags": [
-                "two",
                 "three",
-                "one"
+                "one",
+                "two"
             ]
         }
     },

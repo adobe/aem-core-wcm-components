@@ -15,9 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.extensions.amp.internal;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,50 +48,38 @@ public class AmpUtil {
 
         PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
 
-        if (pageManager == null) {
-            LOG.debug("Can't resolve page manager. Falling back to content policy AMP mode.");
-            return AMP_MODE.fromString(getPolicyProperty(AMP_MODE_PROP, "", slingRequest));
-        }
+        if (pageManager != null) {
+            Page page = pageManager.getContainingPage(slingRequest.getResource());
 
-        Page page = pageManager.getContainingPage(slingRequest.getResource());
-
-        if (page != null) {
-
-            String ampMode = page.getProperties().get(AMP_MODE_PROP, "");
-
-            if (!ampMode.isEmpty()) {
-                return AMP_MODE.fromString(ampMode);
+            if (page != null) {
+                String ampMode = page.getProperties().get(AMP_MODE_PROP, "");
+                if (!ampMode.isEmpty()) {
+                    return AMP_MODE.fromString(ampMode);
+                }
             }
         }
 
-        return AMP_MODE.fromString(getPolicyProperty(AMP_MODE_PROP, "", slingRequest));
+        return AMP_MODE.fromString(getAmpPropertyFromPolicy(slingRequest));
     }
 
     /**
-     * Retrieves the value of the given property from the request resource's content policy.
-     * @param property The name of the property to read.
-     * @param defaultValue The type hint and default value returned.
+     * Retrieves the value of the amp property from the request resource's content policy.
      * @param slingRequest The request used to get the resource and its content policy.
-     * @param <T> The type of the property value expected.
-     * @return The value of the property of the resource's content policy. Returns null if fails to read the content
+     * @return The value of the property of the resource's content policy. Returns empty String if fails to read the content
      * policy.
      */
-    private static <T> T getPolicyProperty(String property, T defaultValue,
-                                           @NotNull SlingHttpServletRequest slingRequest) {
+    @NotNull
+    private static String getAmpPropertyFromPolicy(@NotNull SlingHttpServletRequest slingRequest) {
 
+        String ampProperty = StringUtils.EMPTY;
         ContentPolicyManager policyManager = slingRequest.getResourceResolver().adaptTo(ContentPolicyManager.class);
-        if (policyManager == null) {
-            LOG.trace("Policy manager is null. Unable to read policy property.");
-            return defaultValue;
+        if (policyManager != null) {
+            ContentPolicy contentPolicy = policyManager.getPolicy(slingRequest.getResource());
+            if (contentPolicy != null) {
+                ampProperty = contentPolicy.getProperties().get(AMP_MODE_PROP, StringUtils.EMPTY);
+            }
         }
-
-        ContentPolicy contentPolicy = policyManager.getPolicy(slingRequest.getResource());
-        if (contentPolicy == null) {
-            LOG.trace("Content policy is null. Unable to read policy property.");
-            return defaultValue;
-        }
-
-        return contentPolicy.getProperties().get(property, defaultValue);
+        return ampProperty;
     }
 
     public enum AMP_MODE {
@@ -112,7 +99,7 @@ public class AmpUtil {
 
         public static AMP_MODE fromString(String ampMode) {
             for (AMP_MODE mode: AMP_MODE.values()) {
-                if (mode.text.equalsIgnoreCase(ampMode)) {
+                if (mode.getText().equalsIgnoreCase(ampMode)) {
                     return mode;
                 }
             }

@@ -47,7 +47,7 @@ public class ListImplTest {
 
     @BeforeClass
     public static void setUp() {
-        CONTEXT.load().json("/list/test-etc.json", "/etc/tags/list");
+        CONTEXT.load().json("/list/test-tags.json", "/etc/tags/list");
     }
 
     @Test

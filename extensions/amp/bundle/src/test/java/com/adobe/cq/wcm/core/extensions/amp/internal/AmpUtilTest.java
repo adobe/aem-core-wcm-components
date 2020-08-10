@@ -24,7 +24,6 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 
 @ExtendWith(AemContextExtension.class)
@@ -38,7 +37,6 @@ class AmpUtilTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + AmpTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
-        initMocks(this);
     }
 
     @Test
