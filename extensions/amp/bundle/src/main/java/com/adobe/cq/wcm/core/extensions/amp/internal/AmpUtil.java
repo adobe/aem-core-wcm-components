@@ -36,53 +36,22 @@ public class AmpUtil {
 
     private static final String AMP_MODE_PROP = "ampMode";
 
-    public static final String AMP_ONLY = "ampOnly";
-
-    static final String NO_AMP = "noAmp";
-
-    public static final String PAIRED_AMP = "pairedAmp";
-
     public static final String AMP_SELECTOR = "amp";
 
     public static final String DOT = ".";
-
-    /**
-     * Resolves the resource at the given path. Supports relative and absolute paths.
-     * @param resolver Provides search paths used to turn relative paths to full paths and resolves the resource.
-     * @param path The path of the resource to resolve.
-     * @return The resource of the given path.
-     */
-    public static Resource resolveResource(ResourceResolver resolver, String path) {
-
-        // Resolve absolute resource path.
-        if (path.startsWith("/")) {
-            return resolver.getResource(path);
-        }
-
-        // Resolve relative resource path.
-        for (String searchPath : resolver.getSearchPath()) {
-
-            Resource resource = resolver.getResource(searchPath + path);
-            if (resource != null) {
-                return resource;
-            }
-        }
-
-        return null;
-    }
 
     /**
      * Retrieves the AMP mode value of the requested resource.
      * @param slingRequest Request used to resolve the resource and AMP mode value from.
      * @return The AMP mode value.
      */
-    public static String getAmpMode(@NotNull SlingHttpServletRequest slingRequest) {
+    public static AMP_MODE getAmpMode(@NotNull SlingHttpServletRequest slingRequest) {
 
         PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
 
         if (pageManager == null) {
             LOG.debug("Can't resolve page manager. Falling back to content policy AMP mode.");
-            return getPolicyProperty(AMP_MODE_PROP, "", slingRequest);
+            return AMP_MODE.fromString(getPolicyProperty(AMP_MODE_PROP, "", slingRequest));
         }
 
         Page page = pageManager.getContainingPage(slingRequest.getResource());
@@ -92,11 +61,11 @@ public class AmpUtil {
             String ampMode = page.getProperties().get(AMP_MODE_PROP, "");
 
             if (!ampMode.isEmpty()) {
-                return ampMode;
+                return AMP_MODE.fromString(ampMode);
             }
         }
 
-        return getPolicyProperty(AMP_MODE_PROP, "", slingRequest);
+        return AMP_MODE.fromString(getPolicyProperty(AMP_MODE_PROP, "", slingRequest));
     }
 
     /**
@@ -124,5 +93,30 @@ public class AmpUtil {
         }
 
         return contentPolicy.getProperties().get(property, defaultValue);
+    }
+
+    public enum AMP_MODE {
+        AMP_ONLY("ampOnly"),
+        NO_AMP("noAmp"),
+        PAIRED_AMP("pairedAmp");
+
+        private String text;
+
+        AMP_MODE(String text) {
+            this.text = text;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public static AMP_MODE fromString(String ampMode) {
+            for (AMP_MODE mode: AMP_MODE.values()) {
+                if (mode.text.equalsIgnoreCase(ampMode)) {
+                    return mode;
+                }
+            }
+            return NO_AMP;
+        }
     }
 }
