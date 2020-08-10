@@ -16,6 +16,9 @@
 package com.adobe.cq.wcm.core.extensions.amp.internal;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -24,8 +27,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.servlets.HttpConstants;
@@ -34,6 +35,8 @@ import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Joiner;
 
 import static com.adobe.cq.wcm.core.extensions.amp.internal.AmpUtil.*;
 
@@ -63,52 +66,24 @@ public class AmpModeForwardFilter implements Filter {
             throws IOException, ServletException {
 
         SlingHttpServletRequest slingRequest = (SlingHttpServletRequest) request;
-
-        String[] selectorArray = slingRequest.getRequestPathInfo().getSelectors();
-        boolean hasAmpSelector = ArrayUtils.contains(selectorArray, AMP_SELECTOR);
-
         AMP_MODE ampMode = getAmpMode(slingRequest);
-        if (hasAmpSelector || ampMode == AMP_MODE.AMP_ONLY) {
 
-            String selectors = StringUtils.defaultIfEmpty(slingRequest.getRequestPathInfo().getSelectorString(), StringUtils.EMPTY);
-            if (hasAmpSelector && ampMode == AMP_MODE.NO_AMP) {
+        List<String> selectors = Arrays.asList(slingRequest.getRequestPathInfo().getSelectors());
 
-                // Remove the amp selector.
-                String newSelectors = selectors.replaceAll(".?amp", "");
+        if (selectors.contains(AMP_SELECTOR) || ampMode == AMP_MODE.AMP_ONLY) {
+            RequestDispatcherOptions options = new RequestDispatcherOptions();
+            selectors = selectors.stream().filter(e -> !e.equals(AMP_SELECTOR))
+                    .collect(Collectors.toList());
 
-                // Apply the updated selectors.
-                RequestDispatcherOptions options = new RequestDispatcherOptions();
-                options.setReplaceSelectors(newSelectors);
+            if (ampMode != AMP_MODE.NO_AMP) {
+                selectors.add(0, AMP_SELECTOR);
+            }
 
-                if (forward(slingRequest, response, options)) {
-                    return;
-                }
-            } else if (!hasAmpSelector) {
-
-                // Add the 'amp' selector to the dispatcher. Making sure to put it at the beginning of the selector list.
-                RequestDispatcherOptions options = new RequestDispatcherOptions();
-                if (!selectors.isEmpty()) {
-                    options.setReplaceSelectors(AMP_SELECTOR + DOT + selectors);
-                } else {
-                    options.setAddSelectors(AMP_SELECTOR);
-                }
-
-                if (forward(slingRequest, response, options)) {
-                    return;
-                }
-            } else {
-
-                // Move the amp selector to the front of the list of selectors.
-                RequestDispatcherOptions options = new RequestDispatcherOptions();
-                String newSelectors = selectors.replace(DOT + AMP_SELECTOR, "");
-                options.setReplaceSelectors(AMP_SELECTOR + DOT + newSelectors);
-
-                if (forward(slingRequest, response, options)) {
-                    return;
-                }
+            options.setReplaceSelectors(Joiner.on(DOT).join(selectors));
+            if (forward(slingRequest, response, options)) {
+                return;
             }
         }
-
         chain.doFilter(request, response);
     }
 
