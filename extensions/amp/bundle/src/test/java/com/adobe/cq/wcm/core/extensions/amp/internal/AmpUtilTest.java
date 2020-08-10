@@ -23,6 +23,7 @@ import com.adobe.cq.wcm.core.extensions.amp.AmpTestContext;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static com.adobe.cq.wcm.core.extensions.amp.internal.AmpUtil.AMP_MODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -44,13 +45,19 @@ class AmpUtilTest {
     @Test
     void isAmpModeWithDefaults() {
         context.currentResource("/content/no-amp");
-        assertEquals(AmpUtil.AMP_MODE.NO_AMP, AmpUtil.getAmpMode(context.request()));
+        assertEquals(AMP_MODE.NO_AMP, AmpUtil.getAmpMode(context.request()));
     }
 
     @Test
     void isAmpMode() {
         context.currentResource("/content/amp-only");
-        assertEquals(AmpUtil.AMP_MODE.AMP_ONLY, AmpUtil.getAmpMode(context.request()));
+        assertEquals(AMP_MODE.AMP_ONLY, AmpUtil.getAmpMode(context.request()));
+    }
+
+    @Test
+    void testAmpModeEnum() {
+        assertEquals(AMP_MODE.NO_AMP, AMP_MODE.fromString("test"));
+        assertEquals(AMP_MODE.PAIRED_AMP, AMP_MODE.fromString("pairedAmp"));
     }
 
 }

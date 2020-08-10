@@ -16,8 +16,6 @@
 package com.adobe.cq.wcm.core.extensions.amp.internal;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,22 +44,14 @@ public class AmpUtil {
      * @return The AMP mode value.
      */
     public static AMP_MODE getAmpMode(@NotNull SlingHttpServletRequest slingRequest) {
-
         PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
-
-        if (pageManager == null) {
-            LOG.debug("Can't resolve page manager. Falling back to content policy AMP mode.");
-            return AMP_MODE.fromString(getPolicyProperty(AMP_MODE_PROP, "", slingRequest));
-        }
-
-        Page page = pageManager.getContainingPage(slingRequest.getResource());
-
-        if (page != null) {
-
-            String ampMode = page.getProperties().get(AMP_MODE_PROP, "");
-
-            if (!ampMode.isEmpty()) {
-                return AMP_MODE.fromString(ampMode);
+        if (pageManager != null) {
+            Page page = pageManager.getContainingPage(slingRequest.getResource());
+            if (page != null) {
+                String ampMode = page.getProperties().get(AMP_MODE_PROP, "");
+                if (!ampMode.isEmpty()) {
+                    return AMP_MODE.fromString(ampMode);
+                }
             }
         }
 
@@ -79,20 +69,15 @@ public class AmpUtil {
      */
     private static <T> T getPolicyProperty(String property, T defaultValue,
                                            @NotNull SlingHttpServletRequest slingRequest) {
-
         ContentPolicyManager policyManager = slingRequest.getResourceResolver().adaptTo(ContentPolicyManager.class);
-        if (policyManager == null) {
-            LOG.trace("Policy manager is null. Unable to read policy property.");
-            return defaultValue;
+        if (policyManager != null) {
+            ContentPolicy contentPolicy = policyManager.getPolicy(slingRequest.getResource());
+            if (contentPolicy != null) {
+                return contentPolicy.getProperties().get(property, defaultValue);
+            }
         }
+        return defaultValue;
 
-        ContentPolicy contentPolicy = policyManager.getPolicy(slingRequest.getResource());
-        if (contentPolicy == null) {
-            LOG.trace("Content policy is null. Unable to read policy property.");
-            return defaultValue;
-        }
-
-        return contentPolicy.getProperties().get(property, defaultValue);
     }
 
     public enum AMP_MODE {
