@@ -16,9 +16,8 @@
 package com.adobe.cq.wcm.core.extensions.amp.internal;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -35,8 +34,6 @@ import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Joiner;
 
 import static com.adobe.cq.wcm.core.extensions.amp.internal.AmpUtil.*;
 
@@ -68,18 +65,17 @@ public class AmpModeForwardFilter implements Filter {
         SlingHttpServletRequest slingRequest = (SlingHttpServletRequest) request;
         AMP_MODE ampMode = getAmpMode(slingRequest);
 
-        List<String> selectors = Arrays.asList(slingRequest.getRequestPathInfo().getSelectors());
+        Stream<String> selectors = Stream.of(slingRequest.getRequestPathInfo().getSelectors());
 
-        if (selectors.contains(AMP_SELECTOR) || ampMode == AMP_MODE.AMP_ONLY) {
+        if (selectors.anyMatch(a -> a.equals(AMP_SELECTOR)) || ampMode == AMP_MODE.AMP_ONLY) {
             RequestDispatcherOptions options = new RequestDispatcherOptions();
-            selectors = selectors.stream().filter(e -> !e.equals(AMP_SELECTOR))
-                    .collect(Collectors.toList());
+             selectors = selectors.filter(e -> !e.equals(AMP_SELECTOR));
 
             if (ampMode != AMP_MODE.NO_AMP) {
-                selectors.add(0, AMP_SELECTOR);
+                selectors = Stream.concat(Stream.of(AMP_SELECTOR), selectors);
             }
 
-            options.setReplaceSelectors(Joiner.on(DOT).join(selectors));
+            options.setReplaceSelectors(selectors.collect(Collectors.joining(DOT)));
             if (forward(slingRequest, response, options)) {
                 return;
             }

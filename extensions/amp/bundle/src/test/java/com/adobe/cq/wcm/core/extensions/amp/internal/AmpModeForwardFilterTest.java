@@ -148,7 +148,7 @@ class AmpModeForwardFilterTest {
         }
 
         @Override
-        public void include(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+        public void include(ServletRequest request, ServletResponse response) {
             throw new UnsupportedOperationException();
         }
     }
