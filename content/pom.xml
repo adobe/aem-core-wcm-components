@@ -58,6 +58,9 @@
                 <extensions>true</extensions>
                 <configuration>
                     <packageType>application</packageType>
+                    <properties>
+                        <cloudManagerTarget>none</cloudManagerTarget>
+                    </properties>
                     <dependencies>
                         <dependency>
                             <group>day/cq60/product</group>

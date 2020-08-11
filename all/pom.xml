@@ -79,6 +79,9 @@
                             <filter>true</filter>
                         </subPackage>
                     </subPackages>
+                    <properties>
+                        <cloudManagerTarget>none</cloudManagerTarget>
+                    </properties>
                     <packageType>container</packageType>
                 </configuration>
             </plugin>

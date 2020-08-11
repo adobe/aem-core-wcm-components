@@ -58,6 +58,9 @@
                 <extensions>true</extensions>
                 <configuration>
                     <packageType>application</packageType>
+                    <properties>
+                        <cloudManagerTarget>none</cloudManagerTarget>
+                    </properties>
                     <acHandling>merge</acHandling>
                     <dependencies>
                         <dependency>
