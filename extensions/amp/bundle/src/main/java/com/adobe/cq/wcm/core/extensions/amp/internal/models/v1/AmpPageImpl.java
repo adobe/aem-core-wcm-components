@@ -53,7 +53,7 @@ public class AmpPageImpl implements AmpPage {
     private Page currentPage;
 
     private Map<String, String> pageLinkAttrs;
-    private String ampMode;
+    private AmpUtil.AMP_MODE ampMode;
 
     @PostConstruct
     protected void init() {
@@ -66,7 +66,7 @@ public class AmpPageImpl implements AmpPage {
             pageLinkAttrs = new HashMap<>();
             String relValue;
             String hrefValue;
-            if (!isAmpSelector() && ampMode.equals(AmpUtil.PAIRED_AMP)) {
+            if (!isAmpSelector() && ampMode == AmpUtil.AMP_MODE.PAIRED_AMP) {
                 relValue = "amphtml";
                 hrefValue = currentPage.getPath() + DOT + AMP_SELECTOR + URL_EXTENSION;
             } else {
@@ -87,6 +87,6 @@ public class AmpPageImpl implements AmpPage {
 
     @Override
     public boolean isAmpEnabled() {
-        return ampMode.equals(AmpUtil.PAIRED_AMP) || ampMode.equals(AmpUtil.AMP_ONLY);
+        return ampMode == AmpUtil.AMP_MODE.PAIRED_AMP || ampMode == AmpUtil.AMP_MODE.AMP_ONLY;
     }
 }
