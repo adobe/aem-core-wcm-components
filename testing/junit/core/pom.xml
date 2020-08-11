@@ -49,6 +49,15 @@
                             <supportIncrementalBuild>true</supportIncrementalBuild>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>baseline</id>
+                        <goals>
+                            <goal>baseline</goal>
+                        </goals>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
                 </executions>
                 <configuration>
                     <exportScr>true</exportScr>

@@ -79,7 +79,7 @@ public class PageImplTest {
     protected void internalSetup(String testBase) {
         this.context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         this.context.load().json(testBase + "/test-conf.json", "/conf/coretest/settings");
-        this.context.load().json(testBase + "/default-tags.json", "/etc/tags/default");
+        this.context.load().json(testBase + "/default-tags.json", "/content/cq:tags/default");
         this.context.load().binaryFile(TEST_BASE + "/" + FN_FAVICON_ICO, DESIGN_PATH + "/" + FN_FAVICON_ICO);
         this.context.load().binaryFile(TEST_BASE + "/" + FN_FAVICON_PNG, DESIGN_PATH + "/" + FN_FAVICON_PNG);
         this.context.load().binaryFile(TEST_BASE + "/" + FN_TOUCH_ICON_60, DESIGN_PATH + "/" + FN_TOUCH_ICON_60);
