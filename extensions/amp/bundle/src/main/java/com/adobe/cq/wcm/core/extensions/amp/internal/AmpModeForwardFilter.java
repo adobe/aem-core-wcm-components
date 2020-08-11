@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.extensions.amp.internal;
 
 import java.io.IOException;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.servlet.Filter;
@@ -65,17 +66,17 @@ public class AmpModeForwardFilter implements Filter {
         SlingHttpServletRequest slingRequest = (SlingHttpServletRequest) request;
         AMP_MODE ampMode = getAmpMode(slingRequest);
 
-        Stream<String> selectors = Stream.of(slingRequest.getRequestPathInfo().getSelectors());
+        Supplier<Stream<String>> selectors = () -> Stream.of(slingRequest.getRequestPathInfo().getSelectors());
 
-        if (selectors.anyMatch(a -> a.equals(AMP_SELECTOR)) || ampMode == AMP_MODE.AMP_ONLY) {
+        if (selectors.get().anyMatch(a -> a.equals(AMP_SELECTOR)) || ampMode == AMP_MODE.AMP_ONLY) {
             RequestDispatcherOptions options = new RequestDispatcherOptions();
-             selectors = selectors.filter(e -> !e.equals(AMP_SELECTOR));
+            Stream<String> newSelectors = selectors.get().filter(e -> !e.equals(AMP_SELECTOR));
 
             if (ampMode != AMP_MODE.NO_AMP) {
-                selectors = Stream.concat(Stream.of(AMP_SELECTOR), selectors);
+                newSelectors = Stream.concat(Stream.of(AMP_SELECTOR), newSelectors);
             }
 
-            options.setReplaceSelectors(selectors.collect(Collectors.joining(DOT)));
+            options.setReplaceSelectors(newSelectors.collect(Collectors.joining(DOT)));
             if (forward(slingRequest, response, options)) {
                 return;
             }
