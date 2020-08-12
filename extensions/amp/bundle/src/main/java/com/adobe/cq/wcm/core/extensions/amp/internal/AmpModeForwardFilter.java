@@ -45,10 +45,10 @@ import static com.adobe.cq.wcm.core.extensions.amp.internal.AmpUtil.*;
         service = {Filter.class},
         configurationPid = "com.adobe.cq.wcm.core.components.internal.services.amp.AmpModeForwardFilter",
         property = {
-                EngineConstants.SLING_FILTER_METHODS + "=" + HttpConstants.METHOD_GET,
+                "sling.filter.methods=" + HttpConstants.METHOD_GET,
                 EngineConstants.SLING_FILTER_SCOPE + "=" + EngineConstants.FILTER_SCOPE_REQUEST,
                 EngineConstants.SLING_FILTER_PATTERN + "=/content/.*",
-                EngineConstants.SLING_FILTER_EXTENSIONS + "=html",
+                "sling.filter.extensions=html",
                 Constants.SERVICE_RANKING + "Integer=1000"
         }
 )
