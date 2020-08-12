@@ -78,7 +78,11 @@ public class Item {
             ValueMap vm = resource.adaptTo(ValueMap.class);
             if (vm != null) {
                 String jcrTitle = vm.get(JcrConstants.JCR_TITLE, String.class);
-                value = vm.get(PN_PANEL_TITLE, jcrTitle);
+                if (jcrTitle != null) {
+                    value = vm.get(PN_PANEL_TITLE, jcrTitle);
+                } else {
+                    value = vm.get(PN_PANEL_TITLE, String.class);
+                }
             }
         }
         ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
