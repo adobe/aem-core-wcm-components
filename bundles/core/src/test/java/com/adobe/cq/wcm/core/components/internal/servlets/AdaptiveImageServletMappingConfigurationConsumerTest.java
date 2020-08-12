@@ -16,7 +16,9 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Objects;
 import javax.servlet.Servlet;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,14 +30,18 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.dam.api.handler.store.AssetStore;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -82,20 +88,23 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
 
     @Test
     public void testConfigurationConsumerWithPreviousAISConfig() throws Exception {
-        Configuration aisConfiguration = mock(Configuration.class);
-        when(aisConfiguration.getProperties()).thenReturn(new Hashtable<String, Object>(){{
-            put("defaultResizeWidth", 1000);
-        }});
-        ConfigurationAdmin configurationAdmin = mock(ConfigurationAdmin.class);
-        when(configurationAdmin.listConfigurations("(" + Constants.SERVICE_PID + "=" + AdaptiveImageServlet.class.getName() + ")"))
-                .thenReturn(new Configuration[]{aisConfiguration});
 
+        // Intercept calls to the ConfigurationAdmin to list configurations for AdaptiveImageServlet
+        ConfigurationAdmin configurationAdmin = spy(Objects.requireNonNull(this.context.getService(ConfigurationAdmin.class)));
+        doAnswer((invocationOnMock) -> {
+            Configuration aisConfiguration = mock(Configuration.class);
+            when(aisConfiguration.getProperties()).thenReturn(new Hashtable<String, Object>(){{
+                put("defaultResizeWidth", 1000);
+            }});
+            return new Configuration[]{aisConfiguration};
+        }).when(configurationAdmin).listConfigurations(eq("(" + Constants.SERVICE_PID + "=" + AdaptiveImageServlet.class.getName() + ")"));
+        this.context.registerService(ConfigurationAdmin.class, configurationAdmin, Constants.SERVICE_RANKING, Integer.MAX_VALUE);
 
-        AdaptiveImageServletMappingConfigurationConsumer configurationConsumer = new AdaptiveImageServletMappingConfigurationConsumer();
+        // register the servlet
+        context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationConsumer());
 
-        // override the default provided mock object, since it doesn't support #listConfigurations
-        Utils.setInternalState(configurationConsumer, "configurationAdmin", configurationAdmin);
-        context.registerInjectActivateService(configurationConsumer);
+        // verify that the configAdmin was called once (this is a sanity test to make sure the test is effective)
+        verify(configurationAdmin, times(1)).listConfigurations(eq("(" + Constants.SERVICE_PID + "=" + AdaptiveImageServlet.class.getName() + ")"));
 
         context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationFactory(), new Hashtable<String, Object>() {{
             put("resource.types", new String[]{"a/b/c"});
@@ -110,5 +119,34 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
         ServiceReference<Servlet> servletReference = servletServiceReferences.iterator().next();
         Servlet ais = context.bundleContext().getService(servletReference);
         assertTrue(ais instanceof AdaptiveImageServlet);
+    }
+
+    @Test
+    public void testUnbindAdaptiveImageServletConfigurationFactory() throws Exception {
+        AdaptiveImageServletMappingConfigurationConsumer configurationConsumer = new AdaptiveImageServletMappingConfigurationConsumer();
+        context.registerInjectActivateService(configurationConsumer);
+
+        AdaptiveImageServletMappingConfigurationFactory configurationFactory = context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationFactory(),
+            new Hashtable<String, Object>() {{
+                put(Constants.SERVICE_PID, "pid1");
+                put("resource.types", new String[]{"a/b/c"});
+                put("selectors", new String[]{"a"});
+                put("extensions", new String[]{"jpeg"});
+                put("defaultResizeWidth", AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH);
+            }});
+
+        Collection<ServiceReference<Servlet>> servletServiceReferences =
+            context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)");
+        assertEquals(1, servletServiceReferences.size());
+
+        // call the unbind method
+        String pid = (String) Objects.requireNonNull(context.bundleContext().getServiceReference(AdaptiveImageServletMappingConfigurationFactory.class))
+            .getProperty(Constants.SERVICE_PID);
+        configurationConsumer.unbindAdaptiveImageServletConfigurationFactory(configurationFactory, Collections.singletonMap(Constants.SERVICE_PID, pid));
+
+        // ensure the servlet is deactivated
+        servletServiceReferences =
+            context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)");
+        assertEquals(0, servletServiceReferences.size());
     }
 }
