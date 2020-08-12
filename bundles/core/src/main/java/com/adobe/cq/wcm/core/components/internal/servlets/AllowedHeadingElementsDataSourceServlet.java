@@ -74,7 +74,7 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
                 if (props != null) {
                     String[] headingElements = props.get(PN_ALLOWED_HEADING_ELEMENTS, String[].class);
                     String[] allowedTypes = props.get(PN_ALLOWED_TYPES, String[].class);
-                    String defaultHeadingElement = props.get(PN_DEFAULT_HEADING_ELEMENT, props.get(PN_DEFAULT_TYPE, String.class));
+                    String defaultHeadingElement = props.get(PN_DEFAULT_HEADING_ELEMENT, props.get(PN_DEFAULT_TYPE, StringUtils.EMPTY));
                     if (headingElements == null || headingElements.length == 0) {
                         headingElements = allowedTypes;
                     }
