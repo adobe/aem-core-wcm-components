@@ -24,11 +24,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -72,8 +73,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
      * client libraries.
      */
     public static final String COMPONENTS_SERVICE = "components-service";
-
-    private static final String CQ_CLIENTLIBRARY_FOLDER = "cq:ClientLibraryFolder";
 
     @Self
     private SlingHttpServletRequest request;
@@ -347,26 +346,13 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @NotNull
     private static List<ClientLibrary> getClientLibraries(@org.jetbrains.annotations.Nullable final Resource resource,
                                                           @NotNull final Map<String, ClientLibrary> allLibraries) {
-        if (resource == null) {
-            return new LinkedList<>();
-        }
-
-        LinkedList<ClientLibrary> libraries = new LinkedList<>();
-
-        // add this resource if it is a client library
-        String componentType = resource.getResourceType();
-        if (StringUtils.equals(componentType, CQ_CLIENTLIBRARY_FOLDER)) {
-            ClientLibrary library = allLibraries.get(resource.getPath());
-            if (library != null) {
-                libraries.add(library);
-            }
-        }
-
-        // add any children that are client libraries
-        for (Resource child : resource.getChildren()) {
-            libraries.addAll(getClientLibraries(child, allLibraries));
-        }
-        return libraries;
+        return Optional.ofNullable(resource)
+            .map(Resource::getPath)
+            .map(path -> allLibraries.entrySet().stream()
+                .filter(entry -> entry.getKey().equals(path) || entry.getKey().startsWith(path + "/"))
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList()))
+            .orElseGet(Collections::emptyList);
     }
 
 }
