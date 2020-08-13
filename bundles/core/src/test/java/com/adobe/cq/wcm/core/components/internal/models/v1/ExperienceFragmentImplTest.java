@@ -21,17 +21,13 @@ import java.util.Iterator;
 import javax.jcr.RangeIterator;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.msm.api.LiveCopy;
 import com.day.cq.wcm.msm.api.LiveRelationship;
@@ -696,17 +692,9 @@ class ExperienceFragmentImplTest {
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        final MockSlingHttpServletRequest request =
-            new MockSlingHttpServletRequest(context.resourceResolver(), context.bundleContext());
-        request.setContextPath(CONTEXT_PATH);
-        request.setResource(resource);
-        SlingBindings slingBindings = new SlingBindings();
-        Page currentPage = context.pageManager().getPage(currentPagePath);
-        slingBindings.put(SlingBindings.RESOURCE, resource);
-        slingBindings.put(WCMBindings.CURRENT_PAGE, currentPage);
-        slingBindings.put(WCMBindings.PAGE_MANAGER, context.pageManager());
-        slingBindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        request.setAttribute(SlingBindings.class.getName(), slingBindings);
-        return request.adaptTo(ExperienceFragment.class);
+        context.currentPage(currentPagePath);
+        context.currentResource(resource);
+        context.request().setContextPath(CONTEXT_PATH);
+        return context.request().adaptTo(ExperienceFragment.class);
     }
 }
