@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
@@ -107,8 +108,10 @@ public abstract class PanelContainerImpl extends AbstractContainerImpl implement
             return this.panelTitle;
         }
 
+
         @NotNull
         @Override
+        @JsonIgnore
         public String getExportedType() {
             return this.inner.getExportedType();
         }
