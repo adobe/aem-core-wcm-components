@@ -101,7 +101,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @OSGiService
     private LiveRelationshipManager relationshipManager;
 
-    @Inject
+    @OSGiService
     private ModelFactory modelFactory;
 
     /**
