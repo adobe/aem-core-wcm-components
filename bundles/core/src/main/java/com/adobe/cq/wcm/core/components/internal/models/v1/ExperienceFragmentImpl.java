@@ -62,34 +62,73 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static com.day.cq.wcm.api.NameConstants.NN_CONTENT;
 
+/**
+ * Experience Fragment model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class,
     adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
     resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ExperienceFragmentImpl implements ExperienceFragment {
 
+    /**
+     * Logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFragmentImpl.class);
 
+    /**
+     * The experience fragment component resource type.
+     */
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/experiencefragment/v1/experiencefragment";
 
+    /**
+     * Sling path delimiter.
+     */
     private static final char PATH_DELIMITER_CHAR = '/';
+
+    /**
+     * Content root.
+     */
     private static final String CONTENT_ROOT = "/content";
+
+    /**
+     * Class name to be applied if the XF is empty or not configured.
+     */
     private static final String CSS_EMPTY_CLASS = "empty";
+
+    /**
+     * Class name to be applied to all experience fragments.
+     */
     private static final String CSS_BASE_CLASS = "aem-xf";
 
+    /**
+     * The current request.
+     */
     @Self
     private SlingHttpServletRequest request;
 
+    /**
+     * The current page.
+     */
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private Page currentPage;
 
+    /**
+     * The language manager service.
+     */
     @OSGiService
     private LanguageManager languageManager;
 
+    /**
+     * The live relationship manager service.
+     */
     @OSGiService
     private LiveRelationshipManager relationshipManager;
 
+    /**
+     * The model factory service.
+     */
     @OSGiService
     private ModelFactory modelFactory;
 
@@ -113,8 +152,11 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      */
     private LinkedHashMap<String, ComponentExporter> children;
 
+    /**
+     * Initialize the model.
+     */
     @PostConstruct
-    protected void initModel() {
+    private void initModel() {
         // currentPage is null when accessing the sling model exporter.
         this.currentPage = Optional.ofNullable(this.currentPage)
             .orElseGet(() -> Optional.ofNullable(this.request.getResourceResolver().adaptTo(PageManager.class))
