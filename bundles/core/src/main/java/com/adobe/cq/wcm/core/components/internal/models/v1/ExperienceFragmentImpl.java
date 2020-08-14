@@ -29,9 +29,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -63,11 +63,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static com.day.cq.wcm.api.NameConstants.NN_CONTENT;
 
-@Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL,
-       adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
-       resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
-          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Model(adaptables = SlingHttpServletRequest.class,
+    adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
+    resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ExperienceFragmentImpl implements ExperienceFragment {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFragmentImpl.class);
@@ -82,7 +81,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Self
     private SlingHttpServletRequest request;
 
-    @ScriptVariable
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private Page currentPage;
 
