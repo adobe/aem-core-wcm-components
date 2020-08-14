@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -108,10 +110,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @OSGiService
     private LiveRelationshipManager relationshipManager;
 
-    @ValueMapValue(name = ComponentStyle.PN_CSS_CLASS)
-    @Default(values = "")
-    private String customCssClass;
-
     @Inject
     private ModelFactory modelFactory;
 
@@ -123,9 +121,9 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private String name;
 
     /**
-     * Class names of the responsive grid
+     * Class names of the responsive grid.
      */
-    private String classNames = CSS_BASE_CLASS;
+    private String classNames;
 
     /**
      * Child columns of the responsive grid
@@ -147,8 +145,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
             resolveLocalizedFragmentVariationPath();
             retrieveExperienceFragmentChildModels();
         }
-
-        appendCssClassNames();
     }
 
     @Override
@@ -190,7 +186,15 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
     @Override
     @JsonProperty("classNames")
+    @NotNull
     public String getCssClassNames() {
+        if (this.classNames == null) {
+            this.classNames = Stream.of(
+                CSS_BASE_CLASS,
+                this.getExportedItems().isEmpty() ? CSS_EMPTY_CLASS : "",
+                this.request.getResource().getValueMap().get(ComponentStyle.PN_CSS_CLASS, "")
+            ).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
+        }
         return classNames;
     }
 
@@ -396,15 +400,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
                 children.putAll(resolvedChildren);
             }
         }
-    }
-
-    private void appendCssClassNames() {
-
-        if (children.isEmpty()) {
-            classNames += " empty";
-        }
-
-        classNames += StringUtils.isNotEmpty(customCssClass) ? " " + customCssClass : "";
     }
 
 }
