@@ -19,6 +19,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -115,6 +116,10 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private ModelFactory modelFactory;
 
     private String localizedFragmentVariationPath;
+
+    /**
+     * Name of the experience fragment.
+     */
     private String name;
 
     /**
@@ -140,7 +145,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
             if (currentPage != null) {
                 resolveLocalizedFragmentVariationPath();
-                resolveName(pageManager);
                 retrieveExperienceFragmentChildModels();
             } else {
                 LOGGER.error("Could not resolve currentPage!");
@@ -157,8 +161,17 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
     @Override
     @JsonIgnore
+    @Nullable
     public String getName() {
-        return name;
+        if (this.name == null) {
+            this.name = Optional.ofNullable(this.request.getResourceResolver().adaptTo(PageManager.class))
+                .flatMap(pm -> Optional.ofNullable(this.getLocalizedFragmentVariationPath())
+                    .map(pm::getContainingPage))
+                .map(Page::getParent)
+                .map(Page::getName)
+                .orElse(null);
+        }
+        return this.name;
     }
 
     @NotNull
@@ -373,16 +386,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
             }
         }
         return false;
-    }
-
-    private void resolveName(PageManager pageManager) {
-        Page xfVariationPage = pageManager.getPage(fragmentVariationPath);
-        if (xfVariationPage != null) {
-            Page xfPage = xfVariationPage.getParent();
-            if (xfPage != null) {
-                name = xfPage.getName();
-            }
-        }
     }
 
     private void retrieveExperienceFragmentChildModels() {
