@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -126,9 +125,9 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private String classNames;
 
     /**
-     * Child columns of the responsive grid
+     * Child columns of the responsive grid.
      */
-    private final LinkedHashMap<String, ComponentExporter> children = new LinkedHashMap<>();
+    private LinkedHashMap<String, ComponentExporter> children;
 
     @PostConstruct
     protected void initModel() {
@@ -143,7 +142,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         }
         if (currentPage != null) {
             resolveLocalizedFragmentVariationPath();
-            retrieveExperienceFragmentChildModels();
         }
     }
 
@@ -175,13 +173,21 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
-        return children;
+        if (this.children == null) {
+            this.children = Optional.ofNullable(this.getLocalizedFragmentVariationPath())
+                .filter(StringUtils::isNotBlank)
+                .map(this.request.getResourceResolver()::getResource)
+                .map(Resource::listChildren)
+                .map(it -> ContentFragmentUtils.getComponentExporters(it, this.modelFactory, this.request))
+                .orElseGet(LinkedHashMap::new);
+        }
+        return this.children;
     }
 
     @NotNull
     @Override
     public String[] getExportedItemsOrder() {
-        return this.children.keySet().toArray(new String[0]);
+        return this.getExportedItems().keySet().toArray(new String[0]);
     }
 
     @Override
@@ -201,7 +207,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Override
     @JsonInclude
     public boolean isConfigured() {
-        return StringUtils.isNotEmpty(localizedFragmentVariationPath) && !children.isEmpty();
+        return StringUtils.isNotEmpty(localizedFragmentVariationPath) && !this.getExportedItems().isEmpty();
     }
 
     private void resolveLocalizedFragmentVariationPath() {
@@ -387,19 +393,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
             }
         }
         return false;
-    }
-
-    private void retrieveExperienceFragmentChildModels() {
-        if (StringUtils.isNotBlank(localizedFragmentVariationPath) && resourceExists(localizedFragmentVariationPath)) {
-            final Resource experienceFragmentResource = resolver.getResource(localizedFragmentVariationPath);
-
-            if (experienceFragmentResource != null) {
-                Iterator<Resource> experienceFragmentVariantChildResources = experienceFragmentResource.listChildren();
-                Map<String, ComponentExporter> resolvedChildren =
-                        ContentFragmentUtils.getComponentExporters(experienceFragmentVariantChildResources, modelFactory, request);
-                children.putAll(resolvedChildren);
-            }
-        }
     }
 
 }
