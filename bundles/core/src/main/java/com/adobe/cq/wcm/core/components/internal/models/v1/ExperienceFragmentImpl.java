@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.jcr.RangeIterator;
@@ -169,13 +168,13 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         return request.getResource().getResourceType();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         return children;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         return this.children.keySet().toArray(new String[0]);
