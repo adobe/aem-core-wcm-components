@@ -36,7 +36,11 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -159,6 +163,26 @@ class ExperienceFragmentImplTest {
             + "/jcr:content/root/xf-component-1");
         assertEquals(XF_NAME, experienceFragment.getName());
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf1"));
+    }
+
+    /**
+     * Tests that methods that cache results return the same object on subsequent calls.
+     */
+    @Test
+    void testCaching() {
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(NO_LOC_PAGE
+            + "/jcr:content/root/xf-component-1");
+        assertNotNull(experienceFragment.getName());
+        assertSame(experienceFragment.getName(), experienceFragment.getName());
+
+        assertNotNull(experienceFragment.getCssClassNames());
+        assertSame(experienceFragment.getCssClassNames(), experienceFragment.getCssClassNames());
+
+        assertNotNull(experienceFragment.getExportedItems());
+        assertSame(experienceFragment.getExportedItems(), experienceFragment.getExportedItems());
+
+        assertNotNull(experienceFragment.getLocalizedFragmentVariationPath());
+        assertSame(experienceFragment.getLocalizedFragmentVariationPath(), experienceFragment.getLocalizedFragmentVariationPath());
     }
 
     /**
