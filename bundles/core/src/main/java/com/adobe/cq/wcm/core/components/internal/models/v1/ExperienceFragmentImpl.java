@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.jcr.RangeIterator;
 
 import org.apache.commons.lang3.StringUtils;
@@ -82,9 +81,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
     @Self
     private SlingHttpServletRequest request;
-
-    @Inject
-    protected Resource resource;
 
     @ScriptVariable
     @Nullable
@@ -180,8 +176,9 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     }
 
     @NotNull
-    @Override public String getExportedType() {
-        return request.getResource().getResourceType();
+    @Override
+    public String getExportedType() {
+        return this.request.getResource().getResourceType();
     }
 
     @NotNull
@@ -367,7 +364,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         }
 
         Template template = currentPage.getTemplate();
-        return template != null && StringUtils.startsWith(resource.getPath(), template.getPath());
+        return template != null && StringUtils.startsWith(this.request.getResource().getPath(), template.getPath());
     }
 
     /**
