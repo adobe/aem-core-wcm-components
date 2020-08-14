@@ -16,8 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -126,7 +126,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     /**
      * Child columns of the responsive grid
      */
-    private final Map<String, ComponentExporter> children = new HashMap<>();
+    private final LinkedHashMap<String, ComponentExporter> children = new LinkedHashMap<>();
 
     @PostConstruct
     protected void initModel() {
@@ -178,8 +178,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Nonnull
     @Override
     public String[] getExportedItemsOrder() {
-        return children.isEmpty() ?
-                new String[0] : children.keySet().toArray(new String[children.size()]);
+        return this.children.keySet().toArray(new String[0]);
     }
 
     /**
