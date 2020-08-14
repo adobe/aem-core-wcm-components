@@ -31,16 +31,13 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,6 +64,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static com.day.cq.wcm.api.NameConstants.NN_CONTENT;
+
 @Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL,
        adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
        resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
@@ -78,11 +77,8 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/experiencefragment/v1/experiencefragment";
 
-    private static final String PATH_DELIMITER = "/";
     private static final char PATH_DELIMITER_CHAR = '/';
     private static final String CONTENT_ROOT = "/content";
-    private static final String EXPERIENCE_FRAGMENTS_ROOT = "/content/experience-fragments";
-    private static final String JCR_CONTENT_ROOT = "/jcr:content";
     private static final String CSS_EMPTY_CLASS = "empty";
     private static final String CSS_BASE_CLASS = "aem-xf";
 
@@ -99,10 +95,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Nullable
     private Page currentPage;
 
-    @ValueMapValue(name = ExperienceFragment.PN_FRAGMENT_VARIATION_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private String fragmentVariationPath;
-
     @OSGiService
     private LanguageManager languageManager;
 
@@ -112,6 +104,9 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Inject
     private ModelFactory modelFactory;
 
+    /**
+     * Path of the experience fragment variation.
+     */
     private String localizedFragmentVariationPath;
 
     /**
@@ -140,14 +135,38 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         if (this.currentPage == null) {
             LOGGER.error("Could not resolve currentPage!");
         }
-        if (currentPage != null) {
-            resolveLocalizedFragmentVariationPath();
-        }
     }
 
     @Override
+    @Nullable
     public String getLocalizedFragmentVariationPath() {
-        return localizedFragmentVariationPath;
+        if (this.localizedFragmentVariationPath == null) {
+
+            // get the configured fragment variation path
+            String fragmentVariationPath = request.getResource().getValueMap()
+                .get(ExperienceFragment.PN_FRAGMENT_VARIATION_PATH, String.class);
+
+            final Page page = this.currentPage;
+            if (page != null && inTemplate()) {
+                final String currentPageRootPath = getLocalizationRoot(page.getPath());
+                // we should use getLocalizationRoot instead of getXfLocalizationRoot once the XF UI supports creating Live and Language Copies
+                String xfRootPath = getXfLocalizationRoot(fragmentVariationPath, currentPageRootPath);
+                if (StringUtils.isNotEmpty(currentPageRootPath) && StringUtils.isNotEmpty(xfRootPath)) {
+                    String xfRelativePath = StringUtils.substring(fragmentVariationPath, xfRootPath.length());
+                    String localizedXfRootPath = StringUtils.replace(currentPageRootPath, CONTENT_ROOT, ExperienceFragmentsConstants.CONTENT_PATH, 1);
+                    this.localizedFragmentVariationPath = StringUtils.join(localizedXfRootPath, xfRelativePath, PATH_DELIMITER_CHAR, NN_CONTENT);
+                }
+            }
+
+            String xfContentPath = String.join(Character.toString(PATH_DELIMITER_CHAR), fragmentVariationPath, NN_CONTENT);
+            if (!resourceExists(localizedFragmentVariationPath) && resourceExists(xfContentPath)) {
+                this.localizedFragmentVariationPath = xfContentPath;
+            }
+            if (!isExperienceFragmentVariation(localizedFragmentVariationPath)) {
+                this.localizedFragmentVariationPath = null;
+            }
+        }
+        return this.localizedFragmentVariationPath;
     }
 
     @Override
@@ -207,31 +226,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Override
     @JsonInclude
     public boolean isConfigured() {
-        return StringUtils.isNotEmpty(localizedFragmentVariationPath) && !this.getExportedItems().isEmpty();
-    }
-
-    private void resolveLocalizedFragmentVariationPath() {
-        if (inTemplate()) {
-            if (currentPage != null) {
-                final String pagePath = currentPage.getPath();
-                final String currentPageRootPath = getLocalizationRoot(pagePath);
-                // we should use getLocalizationRoot instead of getXfLocalizationRoot once the XF UI supports creating Live and Language Copies
-                String xfRootPath = getXfLocalizationRoot(fragmentVariationPath, currentPageRootPath);
-                if (StringUtils.isNotEmpty(currentPageRootPath) && StringUtils.isNotEmpty(xfRootPath)) {
-                    String xfRelativePath = StringUtils.substring(fragmentVariationPath, xfRootPath.length());
-                    String localizedXfRootPath = StringUtils.replace(currentPageRootPath, CONTENT_ROOT, EXPERIENCE_FRAGMENTS_ROOT, 1);
-                    localizedFragmentVariationPath = StringUtils.join(localizedXfRootPath, xfRelativePath, JCR_CONTENT_ROOT);
-                }
-            }
-        }
-
-        String xfContentPath = StringUtils.join(fragmentVariationPath, JCR_CONTENT_ROOT);
-        if (!resourceExists(localizedFragmentVariationPath) && resourceExists(xfContentPath)) {
-            localizedFragmentVariationPath = xfContentPath;
-        }
-        if (!isExperienceFragmentVariation(localizedFragmentVariationPath)) {
-            localizedFragmentVariationPath = null;
-        }
+        return StringUtils.isNotEmpty(this.getLocalizedFragmentVariationPath()) && !this.getExportedItems().isEmpty();
     }
 
     /**
@@ -341,14 +336,16 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private String getXfLocalizationRoot(String xfPath, String currentPageRoot) {
         String xfRoot = null;
         if (StringUtils.isNotEmpty(xfPath) && StringUtils.isNotEmpty(currentPageRoot)
-                && resolver.getResource(xfPath) != null && resolver.getResource(currentPageRoot) != null) {
+                && this.resolver.getResource(xfPath) != null
+                && this.resolver.getResource(currentPageRoot) != null) {
             String[] xfPathTokens = Text.explode(xfPath, PATH_DELIMITER_CHAR);
             String[] referenceRootTokens = Text.explode(currentPageRoot, PATH_DELIMITER_CHAR);
             int xfRootDepth = referenceRootTokens.length + 1;
             if (xfPathTokens.length >= xfRootDepth) {
                 String[] xfRootTokens = new String[xfRootDepth];
                 System.arraycopy(xfPathTokens, 0, xfRootTokens, 0, xfRootDepth);
-                xfRoot = StringUtils.join(PATH_DELIMITER, Text.implode(xfRootTokens, PATH_DELIMITER));
+                xfRoot = StringUtils.join(PATH_DELIMITER_CHAR,
+                    Text.implode(xfRootTokens, Character.toString(PATH_DELIMITER_CHAR)));
             }
         }
         return xfRoot;
