@@ -134,21 +134,18 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
     @PostConstruct
     protected void initModel() {
+        // currentPage is null when accessing the sling model exporter.
+        this.currentPage = Optional.ofNullable(this.currentPage)
+            .orElseGet(() -> Optional.ofNullable(this.request.getResourceResolver().adaptTo(PageManager.class))
+                .map(pm -> pm.getContainingPage(this.request.getResource()))
+                .orElse(null));
 
-        final PageManager pageManager = resolver.adaptTo(PageManager.class);
-
-        if (pageManager != null) {
-            // currentPage is null when accessing the sling model exporter.
-            if (currentPage == null) {
-                currentPage = pageManager.getContainingPage(resource);
-            }
-
-            if (currentPage != null) {
-                resolveLocalizedFragmentVariationPath();
-                retrieveExperienceFragmentChildModels();
-            } else {
-                LOGGER.error("Could not resolve currentPage!");
-            }
+        if (this.currentPage == null) {
+            LOGGER.error("Could not resolve currentPage!");
+        }
+        if (currentPage != null) {
+            resolveLocalizedFragmentVariationPath();
+            retrieveExperienceFragmentChildModels();
         }
 
         appendCssClassNames();
