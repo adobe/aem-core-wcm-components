@@ -133,9 +133,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         final PageManager pageManager = resolver.adaptTo(PageManager.class);
 
         if (pageManager != null) {
-            /**
-             * CurrentPage is null when accessing the sling model exporter.
-             */
+            // currentPage is null when accessing the sling model exporter.
             if (currentPage == null) {
                 currentPage = pageManager.getContainingPage(resource);
             }
@@ -180,10 +178,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         return this.children.keySet().toArray(new String[0]);
     }
 
-    /**
-     * @return The CSS class names to be applied to the current grid.
-     * @deprecated Use {@link #getCssClassNames()}
-     */
     @Override
     @JsonProperty("classNames")
     public String getCssClassNames() {
@@ -219,9 +213,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
             localizedFragmentVariationPath = null;
         }
     }
-
-
-
 
     /**
      * Returns the localization root of the resource defined at the given path.
