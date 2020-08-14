@@ -29,7 +29,6 @@ import javax.jcr.RangeIterator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Exporter;
@@ -37,7 +36,6 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,9 +85,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
     @Inject
     protected Resource resource;
-
-    @SlingObject
-    private ResourceResolver resolver;
 
     @ScriptVariable
     @Nullable
@@ -247,7 +242,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private String getLocalizationRoot(String path) {
         String root = null;
         if (StringUtils.isNotEmpty(path)) {
-            Resource resource = resolver.getResource(path);
+            Resource resource = this.request.getResourceResolver().getResource(path);
             root = getLanguageRoot(resource);
             if (StringUtils.isEmpty(root)) {
                 root = getBlueprintPath(resource);
@@ -336,8 +331,8 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private String getXfLocalizationRoot(String xfPath, String currentPageRoot) {
         String xfRoot = null;
         if (StringUtils.isNotEmpty(xfPath) && StringUtils.isNotEmpty(currentPageRoot)
-                && this.resolver.getResource(xfPath) != null
-                && this.resolver.getResource(currentPageRoot) != null) {
+                && this.request.getResourceResolver().getResource(xfPath) != null
+                && this.request.getResourceResolver().getResource(currentPageRoot) != null) {
             String[] xfPathTokens = Text.explode(xfPath, PATH_DELIMITER_CHAR);
             String[] referenceRootTokens = Text.explode(currentPageRoot, PATH_DELIMITER_CHAR);
             int xfRootDepth = referenceRootTokens.length + 1;
@@ -358,7 +353,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @return {@code true} if the resource exists, {@code false} otherwise
      */
     private boolean resourceExists(String path) {
-        return (StringUtils.isNotEmpty(path) && resolver.getResource(path) != null);
+        return (StringUtils.isNotEmpty(path) && this.request.getResourceResolver().getResource(path) != null);
     }
 
     /**
@@ -382,7 +377,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      */
     private boolean isExperienceFragmentVariation(String path) {
         if (StringUtils.isNotEmpty(path)) {
-            Resource resource = resolver.getResource(path);
+            Resource resource = this.request.getResourceResolver().getResource(path);
             if (resource != null) {
                 ValueMap properties = resource.getValueMap();
                 String xfVariantType = properties.get(ExperienceFragmentsConstants.PN_XF_VARIANT_TYPE, String.class);
