@@ -248,7 +248,7 @@
                                 <configuration>
                                     <filters>
                                         <filter>
-                                            <root>/libs/wcm/core</root>
+                                            <root>/libs/core/wcm/components</root>
                                         </filter>
                                     </filters>
                                     <classifier>cloud</classifier>
@@ -262,6 +262,7 @@
                                 <configuration>
                                     <jcrRootSourceDirectory>${project.build.directory}/jcr_root</jcrRootSourceDirectory>
                                     <classifier>cloud</classifier>
+                                    <workDirectory>${project.build.directory}/vault-work-cloud</workDirectory>
                                 </configuration>
                             </execution>
                         </executions>

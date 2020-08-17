@@ -60,6 +60,11 @@
                     <properties>
                         <acHandling>merge_preserve</acHandling>
                     </properties>
+                    <validatorsSettings>
+                        <jackrabbit-nodetypes>
+                            <isDisabled>true</isDisabled>
+                        </jackrabbit-nodetypes>
+                    </validatorsSettings>
                     <dependencies>
                         <dependency>
                             <groupId>com.adobe.cq</groupId>
