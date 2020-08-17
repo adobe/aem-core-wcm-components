@@ -41,7 +41,7 @@ tools.gitImpersonate('CircleCi', 'noreply@circleci.com', () => {
         console.log("Checking out the master branch so we can commit and push");
         tools.sh("git checkout master");
         tools.prepareGPGKey();
-        tools.sh("mvn -B -s ci/settings.xml -Prelease,adobe-public clean release:prepare release:perform" + releaseVersion);
+        tools.sh("mvn -B -s ci/settings.xml -Prelease,adobe-public,cloud clean release:prepare release:perform" + releaseVersion);
         tools.stage("RELEASE DONE");
     } finally {
         tools.removeGitTag(gitTag);
