@@ -18,9 +18,9 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AdaptiveImageServletMappingConfigurationFactoryTest {
 

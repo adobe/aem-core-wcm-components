@@ -15,28 +15,26 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.factory.ModelFactory;
-import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.resourceresolver.MockValueMap;
-import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.collection.IsIterableContainingInOrder;
-import org.hamcrest.collection.IsMapContaining;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.adobe.cq.dam.cfm.ContentElement;
@@ -46,9 +44,13 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
+import javax.json.Json;
+import javax.json.JsonReader;
+
 import static com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils.PN_CFM_GRID_TYPE;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_TITLE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ContentFragmentUtilsTest {
 
@@ -60,7 +62,7 @@ public class ContentFragmentUtilsTest {
         String type = ContentFragmentUtils.getType(null);
 
         // THEN
-        Assert.assertThat(type, CoreMatchers.is(""));
+        Assertions.assertEquals(type, "");
     }
 
     @Test
@@ -75,7 +77,7 @@ public class ContentFragmentUtilsTest {
         String type = ContentFragmentUtils.getType(contentFragment);
 
         // THEN
-        Assert.assertThat(type, CoreMatchers.is("foobar"));
+        Assertions.assertEquals(type, "foobar");
     }
 
     @Test
@@ -95,7 +97,7 @@ public class ContentFragmentUtilsTest {
         String type = ContentFragmentUtils.getType(contentFragment);
 
         // THEN
-        Assert.assertThat(type, CoreMatchers.is("/foo/bar/qux"));
+        Assertions.assertEquals(type, "/foo/bar/qux");
     }
 
     @Test
@@ -118,7 +120,7 @@ public class ContentFragmentUtilsTest {
         String type = ContentFragmentUtils.getType(contentFragment);
 
         // THEN
-        Assert.assertThat(type, CoreMatchers.is("/foo/bar"));
+        Assertions.assertEquals(type, "/foo/bar");
     }
 
     @Test
@@ -144,7 +146,7 @@ public class ContentFragmentUtilsTest {
         String type = ContentFragmentUtils.getType(contentFragment);
 
         // THEN
-        Assert.assertThat(type, CoreMatchers.is("bar/models/waldo"));
+        Assertions.assertEquals(type, "bar/models/waldo");
     }
 
 
@@ -160,7 +162,7 @@ public class ContentFragmentUtilsTest {
         Iterator<ContentElement> elementIterator = ContentFragmentUtils.filterElements(contentFragment, null);
 
         // THEN
-        Assert.assertThat(elementIterator, CoreMatchers.is(contentElementIterator));
+        Assertions.assertEquals(elementIterator, contentElementIterator);
     }
 
     @Test
@@ -180,14 +182,12 @@ public class ContentFragmentUtilsTest {
                 new String[]{"foo", "bar", "qux"});
 
         // THEN
-        Assert.assertThat(() -> elementIterator, IsIterableContainingInOrder.contains(foo, qux));
+        MatcherAssert.assertThat(() -> elementIterator, IsIterableContainingInOrder.contains(foo, qux));
     }
 
     @Test
-    public void getEditorJsonOutputOfContentFragment() throws Exception {
+    public void getEditorJsonOutputOfContentFragment() {
         // GIVEN
-        InputStream expectedJsonResourceAsStream = this.getClass().getResourceAsStream("expectedJson.json");
-        String expectedJsonOutput = IOUtils.toString(expectedJsonResourceAsStream, StandardCharsets.UTF_8);
 
         Resource contentFragmentResource = Mockito.mock(Resource.class);
         ContentFragment contentFragment = Mockito.mock(ContentFragment.class);
@@ -210,7 +210,9 @@ public class ContentFragmentUtilsTest {
                 new String[]{"foo", "bar"});
 
         // THEN
-        Assert.assertThat(expectedJsonOutput.replaceAll("[\n\t ]", ""), CoreMatchers.is(json));
+        JsonReader expected = Json.createReader(this.getClass().getResourceAsStream("expectedJson.json"));
+        JsonReader actual = Json.createReader(new StringReader(json));
+        assertEquals(expected.read(), actual.read());
     }
 
     @Test
@@ -224,7 +226,7 @@ public class ContentFragmentUtilsTest {
         String defaultGridResourceType = ContentFragmentUtils.getGridResourceType(resource);
 
         // THEN
-        Assert.assertThat(defaultGridResourceType, CoreMatchers.is(ContentFragmentUtils.DEFAULT_GRID_TYPE));
+        Assertions.assertEquals(defaultGridResourceType, ContentFragmentUtils.DEFAULT_GRID_TYPE);
     }
 
     @Test
@@ -246,7 +248,7 @@ public class ContentFragmentUtilsTest {
         String defaultGridResourceType = ContentFragmentUtils.getGridResourceType(resource);
 
         // THEN
-        Assert.assertThat(defaultGridResourceType, CoreMatchers.is("foobar"));
+        Assertions.assertEquals(defaultGridResourceType, "foobar");
     }
 
     @Test
@@ -258,7 +260,7 @@ public class ContentFragmentUtilsTest {
         String[] itemsOrder = ContentFragmentUtils.getItemsOrder(items);
 
         // THEN
-        Assert.assertThat(itemsOrder, CoreMatchers.is(ArrayUtils.EMPTY_STRING_ARRAY));
+        Assertions.assertArrayEquals(itemsOrder, ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
     @Test
@@ -273,13 +275,13 @@ public class ContentFragmentUtilsTest {
         String[] itemsOrder = ContentFragmentUtils.getItemsOrder(items);
 
         // THEN
-        Assert.assertThat(itemsOrder, CoreMatchers.is(new String[]{"first", "second", "third"}));
+        Assertions.assertArrayEquals(itemsOrder, new String[]{"first", "second", "third"});
     }
 
     @Test
     public void getComponentExport() {
         // GIVEN
-        SlingContext slingContext = new SlingContext();
+        AemContext slingContext = CoreComponentTestContext.newAemContext();
         slingContext.load().json(this.getClass().getResourceAsStream("foo.json"), "/foo");
         MockSlingHttpServletRequest slingHttpServletRequest =
                 new MockSlingHttpServletRequest(slingContext.bundleContext());
@@ -297,8 +299,8 @@ public class ContentFragmentUtilsTest {
                         .getResource("/foo").listChildren(), modelFactory, slingHttpServletRequest);
 
         // THEN
-        Assert.assertThat(exporterMap, IsMapContaining.hasEntry("bar", componentExporter));
-        Assert.assertThat(exporterMap, IsMapContaining.hasEntry("qux", componentExporter));
+        Assertions.assertEquals(componentExporter, exporterMap.get("bar"));
+        Assertions.assertEquals(componentExporter, exporterMap.get("qux"));
     }
 
     /**

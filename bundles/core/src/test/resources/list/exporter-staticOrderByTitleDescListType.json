@@ -1,5 +1,5 @@
 {
-    "id": "list-10fef0cfcc",
+    "id": "list-e89abda5d8",
     "dateFormatString": "yyyy-MM-dd",
     "items": [
         {
@@ -18,7 +18,7 @@
         }
     ],
     "dataLayer": {
-        "list-10fef0cfcc": {
+        "list-e89abda5d8": {
             "@type": "core/wcm/components/list"
         }
     },

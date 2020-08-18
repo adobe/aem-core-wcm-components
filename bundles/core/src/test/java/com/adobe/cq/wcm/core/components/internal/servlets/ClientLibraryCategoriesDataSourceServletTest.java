@@ -17,57 +17,50 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
-import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.adobe.granite.ui.components.ds.DataSource;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(AemContextExtension.class)
 public class ClientLibraryCategoriesDataSourceServletTest {
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/commons/datasources/clientlibrarycategories/v1",
-        "/apps");
-
-    private static final String CLIENTLIB_A_PATH = "/apps/clientlibs/a-jsonly";
+    private static final String TEST_BASE = "/commons/datasources/clientlibrarycategories/v1";
+    private static final String TEST_APPS_ROOT = "/apps";
     private static final String[] CLIENTLIB_A_CATEGORIES = new String[] { "clientlib.a.jsonly" };
-    private static final Set<LibraryType> CLIENTLIB_A_TYPES = new HashSet<>(Arrays.asList(LibraryType.JS));
 
     private static final String CLIENTLIB_B_PATH = "/apps/clientlibs/b-cssonly";
     private static final String[] CLIENTLIB_B_CATEGORIES = new String[] { "clientlib.b.cssonly" };
-    private static final Set<LibraryType> CLIENTLIB_B_TYPES = new HashSet<>(Arrays.asList(LibraryType.CSS));
 
     private static final String CLIENTLIB_C_PATH = "/apps/clientlibs/c-jsandcss";
     private static final String[] CLIENTLIB_C_CATEGORIES = new String[] { "clientlib.c.jsandcss" };
-    private static final Set<LibraryType> CLIENTLIB_C_TYPES = new HashSet<>(Arrays.asList(LibraryType.JS, LibraryType.CSS));
+
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
     private ClientLibraryCategoriesDataSourceServlet dataSourceServlet;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_APPS_ROOT);
+
         dataSourceServlet = new ClientLibraryCategoriesDataSourceServlet();
 
         HtmlLibraryManager htmlLibraryManager = mock(HtmlLibraryManager.class);
 
-        Map<String, ClientLibrary> clientLibraries = new HashMap<String, ClientLibrary>();
+        Map<String, ClientLibrary> clientLibraries = new HashMap<>();
         when(htmlLibraryManager.getLibraries()).thenReturn(clientLibraries);
 
         // A. JavaScript only
@@ -97,12 +90,12 @@ public class ClientLibraryCategoriesDataSourceServletTest {
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         dataSource.iterator().forEachRemaining(resource -> {
-            assertTrue("Expected class", TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()));
+            assertTrue(TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()), "Expected class");
             TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
-            assertTrue("Expected type in (clientlib.a.jsonly, clientlib.b.cssonly, clientlib.c.jsandcss)",
-                Arrays.asList(CLIENTLIB_A_CATEGORIES[0], CLIENTLIB_B_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getText()));
-            assertTrue("Expected value in (clientlib.a.jsonly, clientlib.b.cssonly, clientlib.c.jsandcss)",
-                Arrays.asList(CLIENTLIB_A_CATEGORIES[0], CLIENTLIB_B_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getValue()));
+            assertTrue(Arrays.asList(CLIENTLIB_A_CATEGORIES[0], CLIENTLIB_B_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getText()),
+                "Expected type in (clientlib.a.jsonly, clientlib.b.cssonly, clientlib.c.jsandcss)");
+            assertTrue(Arrays.asList(CLIENTLIB_A_CATEGORIES[0], CLIENTLIB_B_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getValue()),
+                "Expected value in (clientlib.a.jsonly, clientlib.b.cssonly, clientlib.c.jsandcss)");
         });
     }
 
@@ -113,12 +106,12 @@ public class ClientLibraryCategoriesDataSourceServletTest {
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         dataSource.iterator().forEachRemaining(resource -> {
-            assertTrue("Expected class", TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()));
+            assertTrue(TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()), "Expected class");
             TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
-            assertTrue("Expected type in (clientlib.a.jsonly, clientlib.c.jsandcss)",
-                Arrays.asList(CLIENTLIB_A_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getText()));
-            assertTrue("Expected value in (clientlib.a.jsonly, clientlib.c.jsandcss)",
-                Arrays.asList(CLIENTLIB_A_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getValue()));
+            assertTrue(Arrays.asList(CLIENTLIB_A_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getText()),
+                "Expected type in (clientlib.a.jsonly, clientlib.c.jsandcss)");
+            assertTrue(Arrays.asList(CLIENTLIB_A_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getValue()),
+                "Expected value in (clientlib.a.jsonly, clientlib.c.jsandcss)");
         });
     }
 
@@ -129,12 +122,12 @@ public class ClientLibraryCategoriesDataSourceServletTest {
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         dataSource.iterator().forEachRemaining(resource -> {
-            assertTrue("Expected class", TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()));
+            assertTrue(TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()), "Expected class");
             TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
-            assertTrue("Expected type in (clientlib.b.cssonly, clientlib.c.jsandcss)",
-                Arrays.asList(CLIENTLIB_B_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getText()));
-            assertTrue("Expected value in (clientlib.b.cssonly, clientlib.c.jsandcss)",
-                Arrays.asList(CLIENTLIB_B_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getValue()));
+            assertTrue(Arrays.asList(CLIENTLIB_B_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getText()),
+                "Expected type in (clientlib.b.cssonly, clientlib.c.jsandcss)");
+            assertTrue(Arrays.asList(CLIENTLIB_B_CATEGORIES[0], CLIENTLIB_C_CATEGORIES[0]).contains(textValueDataResourceSource.getValue()),
+                "Expected value in (clientlib.b.cssonly, clientlib.c.jsandcss)");
         });
     }
 }

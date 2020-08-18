@@ -19,13 +19,12 @@ import javax.annotation.Nonnull;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.adobe.granite.ui.components.ExpressionResolver;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractDataSourceServletTest {
 
@@ -48,8 +47,8 @@ public class AbstractDataSourceServletTest {
         Resource resource = dataSource.createResource(resourceResolver, title, value);
 
         // THEN
-        assertThat(resource.getValueMap().get("text"), is(title));
-        assertThat(resource.getValueMap().get("value"), is(value));
-        assertThat(resource.getResourceType(), is(Resource.RESOURCE_TYPE_NON_EXISTING));
+        assertEquals(title, resource.getValueMap().get("text"));
+        assertEquals(value, resource.getValueMap().get("value"));
+        assertEquals(Resource.RESOURCE_TYPE_NON_EXISTING, resource.getResourceType());
     }
 }

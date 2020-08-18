@@ -19,35 +19,26 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.resourceresolver.MockValueMap;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 
-import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
-import com.adobe.cq.wcm.core.components.testing.MockStyle;
-import com.day.cq.wcm.api.components.ComponentContext;
-import com.day.cq.wcm.api.designer.Style;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+@ExtendWith(AemContextExtension.class)
 public class LayoutContainerImplTest {
 
     private static final String TEST_BASE = "/container";
     private static final String CONTENT_ROOT = "/content";
-    private static final String TEST_PAGE = "/content/container";
-    private static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT_PAGE = "/content/container";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String CONTAINER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-1";
@@ -55,110 +46,84 @@ public class LayoutContainerImplTest {
     private static final String CONTAINER_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-3";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
-    @Rule
-    public final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Before
+    @BeforeEach
     public void init() {
-        AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
-        AEM_CONTEXT.registerService(SlingModelFilter.class, new MockSlingModelFilter());
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
     }
 
     @Test
     public void testContainerWithPropertiesAndPolicy() {
-        Resource mockResource = mock(Resource.class);
-        LayoutContainer container = getContainerUnderTest(CONTAINER_1, new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+        context.contentPolicyMapping(LayoutContainerImpl.RESOURCE_TYPE_V1, new HashMap<String, Object>() {{
             put(Container.PN_BACKGROUND_IMAGE_ENABLED, true);
             put(Container.PN_BACKGROUND_COLOR_ENABLED, true);
             put(LayoutContainer.PN_LAYOUT, "simple");
-        }})));
-        assertEquals("Style mismatch",
-                "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
-                container.getBackgroundStyle());
+        }});
+        LayoutContainer container = getContainerUnderTest(CONTAINER_1);
+
+        assertEquals(
+            "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
+            container.getBackgroundStyle(),
+            "Style mismatch");
         // layout set in component properties
-        assertEquals("Layout type mismatch",
-                LayoutContainer.LayoutType.RESPONSIVE_GRID,
-                container.getLayout());
-        assertEquals("ID mismatch",
-                "test",
-                container.getId());
+        assertEquals(LayoutContainer.LayoutType.RESPONSIVE_GRID, container.getLayout(), "Layout type mismatch");
+        assertEquals("test", container.getId(), "ID mismatch");
         Object[][] expectedItems = {
                 {"item_1", "Teaser 1"},
                 {"item_2", "Teaser 2"}
         };
         verifyContainerItems(expectedItems, container.getItems());
-        assertEquals("Exported type mismatch",
-                "core/wcm/components/container/v1/container",
-                container.getExportedType());
+        assertEquals("core/wcm/components/container/v1/container", container.getExportedType(), "Exported type mismatch");
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, "container1"));
     }
 
     @Test
     public void testContainerWithPropertiesAndLayoutInPolicy() {
-        Resource mockResource = mock(Resource.class);
-        LayoutContainer container = getContainerUnderTest(CONTAINER_2, new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+        context.contentPolicyMapping(LayoutContainerImpl.RESOURCE_TYPE_V1, new HashMap<String, Object>() {{
             put(LayoutContainer.PN_LAYOUT, "responsiveGrid");
-        }})));
+        }});
+        LayoutContainer container = getContainerUnderTest(CONTAINER_2);
+
         // layout set in content policy
-        assertEquals("Layout type mismatch",
-                LayoutContainer.LayoutType.RESPONSIVE_GRID,
-                container.getLayout());
-        assertEquals("Exported type mismatch",
-                "core/wcm/components/container/v1/container",
-                container.getExportedType());
+        assertEquals(LayoutContainer.LayoutType.RESPONSIVE_GRID, container.getLayout(), "Layout type mismatch");
+        assertEquals("core/wcm/components/container/v1/container", container.getExportedType(), "Exported type mismatch");
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, "container2"));
     }
 
     @Test
     public void testContainerNoProperties() {
-        LayoutContainer container = getContainerUnderTest(CONTAINER_2, null);
-        assertEquals("ID mismatch", "container-2611f8dc62", container.getId());
-        assertNull("Style", container.getBackgroundStyle());
-        assertEquals("Layout type mismatch",
-                LayoutContainer.LayoutType.SIMPLE,
-                container.getLayout());
+        LayoutContainer container = getContainerUnderTest(CONTAINER_2);
+        assertEquals("container-2611f8dc62", container.getId(), "ID mismatch");
+        assertNull(container.getBackgroundStyle(), "Style");
+        assertEquals(LayoutContainer.LayoutType.SIMPLE, container.getLayout(), "Layout type mismatch");
     }
 
     @Test
     public void testContainerWithPropertiesAndNoPolicy() {
-        LayoutContainer container = getContainerUnderTest(CONTAINER_3, null);
-        assertEquals("ID mismatch", "container-d7eba9c61f", container.getId());
-        assertNull("Style", container.getBackgroundStyle());
+        LayoutContainer container = getContainerUnderTest(CONTAINER_3);
+        assertEquals("container-d7eba9c61f", container.getId(), "ID mismatch");
+        assertNull(container.getBackgroundStyle(), "Style");
     }
 
     private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {
-        assertEquals("Item number mismatch", expectedItems.length, items.size());
+        assertEquals(expectedItems.length, items.size(), "Item number mismatch");
         int index = 0;
         for (ListItem item : items) {
-            assertEquals("Item title mismatch", expectedItems[index][1], item.getTitle());
+            assertEquals(expectedItems[index][1], item.getTitle(), "Item title mismatch");
             index++;
         }
     }
 
-    private LayoutContainer getContainerUnderTest(String resourcePath, Style style) {
-        Utils.enableDataLayerForOldAemContext(AEM_CONTEXT, true);
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
+    private LayoutContainer getContainerUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
 
-        SlingBindings bindings = new SlingBindings();
-        ComponentContext componentContext = mock(ComponentContext.class);
-        bindings.put(SlingBindings.RESOURCE, resource);
-        bindings.put(SlingBindings.REQUEST, AEM_CONTEXT.request());
-        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        bindings.put(WCMBindings.CURRENT_PAGE, AEM_CONTEXT.pageManager().getPage(TEST_PAGE));
-        bindings.put(WCMBindings.COMPONENT_CONTEXT, componentContext);
-        bindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
-        if (style == null) {
-            Resource mockResource = mock(Resource.class);
-            style = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap()));
-        }
-        bindings.put(WCMBindings.CURRENT_STYLE, style);
-        AEM_CONTEXT.request().setAttribute(SlingBindings.class.getName(), bindings);
-
-        AEM_CONTEXT.currentResource(resource);
-        AEM_CONTEXT.request().setContextPath(CONTEXT_PATH);
-        return AEM_CONTEXT.request().adaptTo(LayoutContainer.class);
+        context.currentResource(resource);
+        return context.request().adaptTo(LayoutContainer.class);
     }
 }

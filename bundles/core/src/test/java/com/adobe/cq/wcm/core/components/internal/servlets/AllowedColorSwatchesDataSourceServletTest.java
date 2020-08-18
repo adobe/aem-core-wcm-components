@@ -17,88 +17,43 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.Arrays;
-import java.util.Iterator;
 
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
+import com.google.common.collect.ImmutableMap;
 import org.apache.sling.api.resource.ValueMap;
-import org.jetbrains.annotations.Nullable;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
-import com.google.common.base.Function;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(AemContextExtension.class)
 public class AllowedColorSwatchesDataSourceServletTest {
 
     private static final String COLOR_VALUE_1 = "#FF0000";
     private static final String COLOR_VALUE_2 = "#00FF00";
     private static final String COLOR_VALUE_3 = "#0000FF";
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext(null, "/apps");
-
-    @Mock
-    private ContentPolicyManager contentPolicyManager;
-
-    @Mock
-    private ContentPolicy contentPolicy;
-
-    @Mock
-    private ValueMap properties;
-
-    @Mock
-    private ResourceResolver resourceResolver;
-
-    @Mock
-    private SlingHttpServletRequest request;
-
-    private AllowedColorSwatchesDataSourceServlet dataSourceServlet;
-
-    @Before
-    public void setUp() throws Exception {
-        dataSourceServlet = new AllowedColorSwatchesDataSourceServlet();
-        registerContentPolicyManager();
-        when(contentPolicyManager.getPolicy(context.currentResource())).thenReturn(contentPolicy);
-        when(contentPolicy.getProperties()).thenReturn(properties);
-    }
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
     @Test
     public void testDataSource() throws Exception {
+        AllowedColorSwatchesDataSourceServlet dataSourceServlet = new AllowedColorSwatchesDataSourceServlet();
         String[] expected = new String[] {COLOR_VALUE_1, COLOR_VALUE_2, COLOR_VALUE_3};
-        when(properties.get(AllowedColorSwatchesDataSourceServlet.PN_ALLOWED_COLOR_SWATCHES, String[].class)).thenReturn(expected);
+        context.build().resource("/content", ImmutableMap.of("sling:resourceType", "/restype")).commit();
+        context.contentPolicyMapping("/restype", ImmutableMap.of(AllowedColorSwatchesDataSourceServlet.PN_ALLOWED_COLOR_SWATCHES, expected));
+        context.request().setAttribute(Value.CONTENTPATH_ATTRIBUTE, "/content");
+
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
-        assertNotNull(dataSource);
+        Assertions.assertNotNull(dataSource);
         dataSource.iterator().forEachRemaining(resource -> {
             ValueMap props = resource.getValueMap();
             String allowedColorSwatch = props.get(AllowedColorSwatchesDataSourceServlet.PN_COLOR_VALUE, String.class);
-            assertTrue("Allowed color swatches values are not as expected", Arrays.asList(expected).contains(allowedColorSwatch));
-        });
-    }
-
-    private void registerContentPolicyManager() {
-        context.registerAdapter(ResourceResolver.class, ContentPolicyManager.class, new Function<ResourceResolver, ContentPolicyManager>() {
-            @Nullable
-            @Override
-            public ContentPolicyManager apply(@Nullable ResourceResolver input) {
-                return contentPolicyManager;
-            }
+            Assertions.assertTrue(Arrays.asList(expected).contains(allowedColorSwatch), "Allowed color swatches values are not as expected");
         });
     }
 }

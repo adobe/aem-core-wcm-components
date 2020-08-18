@@ -15,22 +15,23 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.form.Text;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertEquals;
+import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@ExtendWith(AemContextExtension.class)
 public class TextImplTest {
 
     private static final String TEST_BASE = "/form/text";
@@ -40,12 +41,12 @@ public class TextImplTest {
     private static final String TEXTINPUT3_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text-v2";
 
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTAINING_PAGE);
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @BeforeClass
-    public static void setUp() {
-        CONTEXT.registerService(FormStructureHelperFactory.class, resource -> null);
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTAINING_PAGE);
+        context.registerService(FormStructureHelperFactory.class, resource -> null);
         FormsHelperStubber.createStub();
     }
 
@@ -54,15 +55,15 @@ public class TextImplTest {
         Text text = getTextUnderTest(TEXTINPUT1_PATH);
         assertEquals("text", text.getName());
         assertEquals("Text input field", text.getTitle());
-        assertEquals(false, text.isRequired());
+        assertFalse(text.isRequired());
         assertEquals("", text.getRequiredMessage());
-        assertEquals(false, text.isReadOnly());
+        assertFalse(text.isReadOnly());
         assertEquals("text", text.getType());
         assertEquals("", text.getConstraintMessage());
         assertEquals("", text.getValue());
         assertEquals(2, text.getRows());
         assertEquals("", text.getHelpMessage());
-        assertEquals(false, text.hideTitle());
+        assertFalse(text.hideTitle());
     }
 
     @Test
@@ -70,15 +71,15 @@ public class TextImplTest {
         Text text = getTextUnderTest(TEXTINPUT2_PATH);
         assertEquals("Custom Name", text.getName());
         assertEquals("Custom title", text.getTitle());
-        assertEquals(true, text.isRequired());
+        assertTrue(text.isRequired());
         assertEquals("please fill the field", text.getRequiredMessage());
-        assertEquals(true, text.isReadOnly());
+        assertTrue(text.isReadOnly());
         assertEquals("email", text.getType());
         assertEquals("The value should be a valid email address", text.getConstraintMessage());
         assertEquals("Prefilled Sample Input", text.getValue());
         assertEquals(3, text.getRows());
         assertEquals("Custom help/placeholder message", text.getHelpMessage());
-        assertEquals(true, text.hideTitle());
+        assertTrue(text.hideTitle());
         Utils.testJSONExport(text, Utils.getTestExporterJSONPath(TEST_BASE, TEXTINPUT2_PATH));
     }
 
@@ -89,13 +90,7 @@ public class TextImplTest {
     }
 
     private Text getTextUnderTest(String resourcePath) {
-        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
-        request.setResource(resource);
-        SlingBindings bindings = new SlingBindings();
-        bindings.put(SlingBindings.RESOURCE, resource);
-        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        request.setAttribute(SlingBindings.class.getName(), bindings);
-        return request.adaptTo(Text.class);
+        context.currentResource(Objects.requireNonNull(context.resourceResolver().getResource(resourcePath)));
+        return context.request().adaptTo(Text.class);
     }
 }

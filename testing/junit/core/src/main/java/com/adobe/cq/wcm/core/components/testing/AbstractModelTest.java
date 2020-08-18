@@ -29,9 +29,6 @@ import java.util.List;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
-import static org.junit.Assert.fail;
-
-
 public class AbstractModelTest {
 
     @SuppressWarnings("squid:S1181")
@@ -113,14 +110,12 @@ public class AbstractModelTest {
         }
         if (errors.length() > 0) {
             errors.insert(0, "\n");
-            fail(errors.toString());
+            throw new AssertionError(errors.toString());
         }
     }
 
     private static List<Class> getClasses(String packageName) {
-        List<Class> classes = new ArrayList<>();
         Reflections reflections = new Reflections(packageName,  new SubTypesScanner(false));
-        reflections.getSubTypesOf(Object.class).forEach(clazz -> classes.add(clazz));
-        return classes;
+        return new ArrayList<>(reflections.getSubTypesOf(Object.class));
     }
 }
