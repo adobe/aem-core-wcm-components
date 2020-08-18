@@ -25,6 +25,8 @@ import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.text.Text;
 
+import java.util.Optional;
+
 /**
  * Defines an {@code Item} class, used by the children editor {@code Editor} Sling Model.
  *
@@ -75,15 +77,9 @@ public class Item {
         I18n i18n = new I18n(request);
         if (resource != null) {
             name = resource.getName();
-            ValueMap vm = resource.adaptTo(ValueMap.class);
-            if (vm != null) {
-                String jcrTitle = vm.get(JcrConstants.JCR_TITLE, String.class);
-                if (jcrTitle != null) {
-                    value = vm.get(PN_PANEL_TITLE, jcrTitle);
-                } else {
-                    value = vm.get(PN_PANEL_TITLE, String.class);
-                }
-            }
+            ValueMap vm = resource.getValueMap();
+            value = Optional.ofNullable(vm.get(PN_PANEL_TITLE, String.class))
+                .orElseGet(() -> vm.get(JcrConstants.JCR_TITLE, String.class));
         }
         ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
         if (componentManager != null) {

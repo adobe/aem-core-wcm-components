@@ -15,172 +15,138 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Objects;
 import javax.servlet.Servlet;
 
-import org.apache.sling.testing.mock.osgi.MockOsgi;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.dam.api.handler.store.AssetStore;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(AemContextExtension.class)
 public class AdaptiveImageServletMappingConfigurationConsumerTest {
 
-    @Rule
-    public final AemContext slingContext = CoreComponentTestContext.createContext();
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         AssetStore assetStore = mock(AssetStore.class);
-        slingContext.registerService(AssetStore.class, assetStore);
+        context.registerService(AssetStore.class, assetStore);
     }
 
     @Test
     public void testConfigurationConsumer() throws Exception {
         AdaptiveImageServletMappingConfigurationConsumer configurationConsumer = new AdaptiveImageServletMappingConfigurationConsumer();
-        slingContext.registerInjectActivateService(configurationConsumer);
-        AdaptiveImageServletMappingConfigurationFactory config1 = new AdaptiveImageServletMappingConfigurationFactory();
-        config1.configure(new AdaptiveImageServletMappingConfigurationFactory.Config() {
-            @Override
-            public String[] resource_types() {
-                return new String[]{"a/b/c"};
-            }
+        context.registerInjectActivateService(configurationConsumer);
 
-            @Override
-            public String[] selectors() {
-                return new String[]{"a"};
-            }
+        context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationFactory(),
+            new Hashtable<String, Object>() {{
+                put(Constants.SERVICE_PID, "pid1");
+                put("resource.types", new String[]{"a/b/c"});
+                put("selectors", new String[]{"a"});
+                put("extensions", new String[]{"jpeg"});
+                put("defaultResizeWidth", AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH);
+        }});
 
-            @Override
-            public String[] extensions() {
-                return new String[]{"jpeg"};
-            }
+        context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationFactory(),
+            new Hashtable<String, Object>() {{
+                put(Constants.SERVICE_PID, "pid2");
+                put("resource.types", new String[]{"d/e/f"});
+                put("selectors", new String[]{"a"});
+                put("extensions", new String[]{"jpeg"});
+                put("defaultResizeWidth", AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH);
+        }});
 
-            @Override
-            public int defaultResizeWidth() {
-                return AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH;
-            }
-
-            @Override
-            public Class<? extends Annotation> annotationType() {
-                return null;
-            }
-        });
-
-        AdaptiveImageServletMappingConfigurationFactory config2 = new AdaptiveImageServletMappingConfigurationFactory();
-        config2.configure(new AdaptiveImageServletMappingConfigurationFactory.Config() {
-            @Override
-            public String[] resource_types() {
-                return new String[] {"d/e/f"};
-            }
-
-            @Override
-            public String[] selectors() {
-                return new String[]{"a"};
-            }
-
-            @Override
-            public String[] extensions() {
-                return new String[]{"jpeg"};
-            }
-
-            @Override
-            public int defaultResizeWidth() {
-                return 1280;
-            }
-
-            @Override
-            public Class<? extends Annotation> annotationType() {
-                return null;
-            }
-        });
-
-        ServiceRegistration<AdaptiveImageServletMappingConfigurationFactory> registration1 = slingContext.bundleContext().registerService
-                (AdaptiveImageServletMappingConfigurationFactory.class, config1, new Hashtable() {{
-                        put(Constants.SERVICE_PID, "pid1");
-                    }});
-        ServiceRegistration<AdaptiveImageServletMappingConfigurationFactory> registration2 = slingContext.bundleContext().registerService
-                (AdaptiveImageServletMappingConfigurationFactory.class, config2, new Hashtable() {{
-                    put(Constants.SERVICE_PID, "pid2");
-                }});
-        Collection<ServiceReference<Servlet>> servletServiceReferences = slingContext.bundleContext().getServiceReferences(Servlet.class,
-                "(sling.servlet.resourceTypes=a/b/c)");
+        Collection<ServiceReference<Servlet>> servletServiceReferences =
+            context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)");
         assertEquals(1, servletServiceReferences.size());
         ServiceReference<Servlet> servletReference = servletServiceReferences.iterator().next();
-        Servlet ais = slingContext.bundleContext().getService(servletReference);
+        Servlet ais = context.bundleContext().getService(servletReference);
         assertTrue(ais instanceof AdaptiveImageServlet);
     }
 
     @Test
     public void testConfigurationConsumerWithPreviousAISConfig() throws Exception {
-        Configuration aisConfiguration = mock(Configuration.class);
-        when(aisConfiguration.getProperties()).thenReturn(new Hashtable<String, Object>(){{
-            put("defaultResizeWidth", 1000);
+
+        // Intercept calls to the ConfigurationAdmin to list configurations for AdaptiveImageServlet
+        ConfigurationAdmin configurationAdmin = spy(Objects.requireNonNull(this.context.getService(ConfigurationAdmin.class)));
+        doAnswer((invocationOnMock) -> {
+            Configuration aisConfiguration = mock(Configuration.class);
+            when(aisConfiguration.getProperties()).thenReturn(new Hashtable<String, Object>(){{
+                put("defaultResizeWidth", 1000);
+            }});
+            return new Configuration[]{aisConfiguration};
+        }).when(configurationAdmin).listConfigurations(eq("(" + Constants.SERVICE_PID + "=" + AdaptiveImageServlet.class.getName() + ")"));
+        this.context.registerService(ConfigurationAdmin.class, configurationAdmin, Constants.SERVICE_RANKING, Integer.MAX_VALUE);
+
+        // register the servlet
+        context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationConsumer());
+
+        // verify that the configAdmin was called once (this is a sanity test to make sure the test is effective)
+        verify(configurationAdmin, times(1)).listConfigurations(eq("(" + Constants.SERVICE_PID + "=" + AdaptiveImageServlet.class.getName() + ")"));
+
+        context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationFactory(), new Hashtable<String, Object>() {{
+            put("resource.types", new String[]{"a/b/c"});
+            put("selectors", new String[]{"a/b/c"});
+            put("extensions", new String[]{"jpeg"});
+            put("defaultResizeWidth", AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH);
         }});
-        ConfigurationAdmin configurationAdmin = mock(ConfigurationAdmin.class);
-        when(configurationAdmin.listConfigurations("(" + Constants.SERVICE_PID + "=" + AdaptiveImageServlet.class.getName() + ")"))
-                .thenReturn(new Configuration[]{aisConfiguration});
 
-
-        AdaptiveImageServletMappingConfigurationConsumer configurationConsumer = new AdaptiveImageServletMappingConfigurationConsumer();
-
-        // override the default provided mock object, since it doesn't support #listConfigurations
-        Utils.setInternalState(configurationConsumer, "configurationAdmin", configurationAdmin);
-        slingContext.registerService(configurationConsumer);
-        MockOsgi.activate(configurationConsumer, slingContext.bundleContext());
-
-        AdaptiveImageServletMappingConfigurationFactory config1 = new AdaptiveImageServletMappingConfigurationFactory();
-        config1.configure(new AdaptiveImageServletMappingConfigurationFactory.Config() {
-            @Override
-            public String[] resource_types() {
-                return new String[]{"a/b/c"};
-            }
-
-            @Override
-            public String[] selectors() {
-                return new String[]{"a"};
-            }
-
-            @Override
-            public String[] extensions() {
-                return new String[]{"jpeg"};
-            }
-
-            @Override
-            public int defaultResizeWidth() {
-                return AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH;
-            }
-
-            @Override
-            public Class<? extends Annotation> annotationType() {
-                return null;
-            }
-        });
-
-
-        slingContext.bundleContext().registerService(AdaptiveImageServletMappingConfigurationFactory.class, config1, new Hashtable<>());
-
-        Collection<ServiceReference<Servlet>> servletServiceReferences = slingContext.bundleContext().getServiceReferences(Servlet.class,
-                "(sling.servlet.resourceTypes=a/b/c)");
+        Collection<ServiceReference<Servlet>> servletServiceReferences =
+            context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)");
         assertEquals(1, servletServiceReferences.size());
         ServiceReference<Servlet> servletReference = servletServiceReferences.iterator().next();
-        Servlet ais = slingContext.bundleContext().getService(servletReference);
+        Servlet ais = context.bundleContext().getService(servletReference);
         assertTrue(ais instanceof AdaptiveImageServlet);
+    }
+
+    @Test
+    public void testUnbindAdaptiveImageServletConfigurationFactory() throws Exception {
+        AdaptiveImageServletMappingConfigurationConsumer configurationConsumer = new AdaptiveImageServletMappingConfigurationConsumer();
+        context.registerInjectActivateService(configurationConsumer);
+
+        AdaptiveImageServletMappingConfigurationFactory configurationFactory = context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationFactory(),
+            new Hashtable<String, Object>() {{
+                put(Constants.SERVICE_PID, "pid1");
+                put("resource.types", new String[]{"a/b/c"});
+                put("selectors", new String[]{"a"});
+                put("extensions", new String[]{"jpeg"});
+                put("defaultResizeWidth", AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH);
+            }});
+
+        Collection<ServiceReference<Servlet>> servletServiceReferences =
+            context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)");
+        assertEquals(1, servletServiceReferences.size());
+
+        // call the unbind method
+        String pid = (String) Objects.requireNonNull(context.bundleContext().getServiceReference(AdaptiveImageServletMappingConfigurationFactory.class))
+            .getProperty(Constants.SERVICE_PID);
+        configurationConsumer.unbindAdaptiveImageServletConfigurationFactory(configurationFactory, Collections.singletonMap(Constants.SERVICE_PID, pid));
+
+        // ensure the servlet is deactivated
+        servletServiceReferences =
+            context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)");
+        assertEquals(0, servletServiceReferences.size());
     }
 }

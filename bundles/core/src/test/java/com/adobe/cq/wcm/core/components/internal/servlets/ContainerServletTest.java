@@ -22,129 +22,107 @@ import java.util.Iterator;
 import javax.servlet.ServletException;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+@ExtendWith(AemContextExtension.class)
 public class ContainerServletTest {
     // root folder in resources
     private static final String TEST_BASE = "/carousel";
     // root of content
     private static final String CONTENT_ROOT = "/content";
     // path to container node
-    private static final String CAROUSEL_PATH =
-        "/content/carousel/jcr:content/root/responsivegrid/carousel-1";
+    private static final String CAROUSEL_PATH = "/content/carousel/jcr:content/root/responsivegrid/carousel-1";
 
     // request parameter for deleting one or multiple children
     private static final String PARAM_DELETED_CHILDREN = "delete";
     // request parameter for ordering children
     private static final String PARAM_ORDERED_CHILDREN = "order";
     // servlet under test
-    private ContainerServlet servlet = new ContainerServlet();
+    private final ContainerServlet servlet = new ContainerServlet();
 
-    // mock request object
-    private MockSlingHttpServletRequest request;
-    // mock request response
-    private MockSlingHttpServletResponse response;
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Rule
-    public AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
-
-    @Before
+    @BeforeEach
     public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         // make the carousel component the current resource
-        AEM_CONTEXT.currentResource(CAROUSEL_PATH);
-        // prepare request and response
-        request = AEM_CONTEXT.request();
-        response = AEM_CONTEXT.response();
+        context.currentResource(CAROUSEL_PATH);
         // set http method
-        request.setMethod("POST");
+        context.request().setMethod("POST");
     }
 
     /**
      * Delete one child.
-     *
-     * @throws ServletException
-     * @throws IOException
      */
     @Test
     public void testDeleteOneChild() throws ServletException, IOException {
         // set param to delete one item
-        request.getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{"item_1"});
-        servlet.doPost(request, response);
-        assertNull("Deleted child 'item_1' still exists", AEM_CONTEXT.currentResource().getChild("item_1"));
+        context.request().getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{"item_1"});
+        servlet.doPost(context.request(), context.response());
+        assertNull(context.currentResource().getChild("item_1"), "Deleted child 'item_1' still exists");
     }
 
     /**
      * Delete multiple children.
-     *
-     * @throws ServletException
-     * @throws IOException
      */
     @Test
     public void testDeleteMultipleChildren() throws ServletException, IOException {
         // set param to delete 2 items
-        request.getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{"item_1","item_3"});
-        servlet.doPost(request, response);
-        assertNull("Deleted child 'item_1' still exists", AEM_CONTEXT.currentResource().getChild("item_1"));
-        assertNotNull("Child 'item_2' was deleted but should still exist", AEM_CONTEXT.currentResource().getChild("item_2"));
-        assertNull("Deleted child 'item_3' still exists", AEM_CONTEXT.currentResource().getChild("item_3"));
+        context.request().getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{"item_1","item_3"});
+        servlet.doPost(context.request(), context.response());
+        assertNull(context.currentResource().getChild("item_1"), "Deleted child 'item_1' still exists");
+        assertNotNull(context.currentResource().getChild("item_2"), "Child 'item_2' was deleted but should still exist");
+        assertNull(context.currentResource().getChild("item_3"), "Deleted child 'item_3' still exists");
     }
 
     /**
      * Edge Case : Delete a non-existing child.
-     *
-     * @throws ServletException
-     * @throws IOException
      */
-    @Test(expected = Test.None.class /* no exception expected */)
-    public void testDeleteUnkownChild() throws ServletException, IOException {
+    @Test
+    public void testDeleteUnknownChild() throws ServletException, IOException {
         // set param to non-existing child name
-        request.getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{"item_XXXX"});
-        servlet.doPost(request, response);
+        context.request().getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{"item_XXXX"});
+        servlet.doPost(context.request(), context.response());
     }
 
     /**
      * Edge Case : Send an empty list of deleted children.
-     *
-     * @throws ServletException
-     * @throws IOException
      */
-    @Test(expected = Test.None.class /* no exception expected */)
+    @Test
     public void testDeleteEmptyParam() throws ServletException, IOException {
         // send an empty list
-        request.getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{});
-        servlet.doPost(request, response);
+        context.request().getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{});
+        servlet.doPost(context.request(), context.response());
     }
 
     /**
      * Reorder children.
-     * @throws ServletException
-     * @throws IOException
      */
     @Test
     public void testOrderChildren() throws ServletException, IOException {
         // define the new order
         String[] reorderedChildren = new String[]{"item_3","item_2","item_1"};
         // set the param
-        request.getParameterMap().put(PARAM_ORDERED_CHILDREN, reorderedChildren);
+        context.request().getParameterMap().put(PARAM_ORDERED_CHILDREN, reorderedChildren);
         // make the request
-        servlet.doPost(request, response);
+        servlet.doPost(context.request(), context.response());
         // get iterators
-        Iterable<Resource> childrenIterator = AEM_CONTEXT.currentResource().getChildren();
+        Iterable<Resource> childrenIterator = context.currentResource().getChildren();
         Iterator<String> expectedIterator = Arrays.asList(reorderedChildren).iterator();
         // compare new order with wishlist :)
         for (Resource resource : childrenIterator) {
-            assertEquals("Reordering children failed", resource.getName(), expectedIterator.next());
+            assertEquals(resource.getName(), expectedIterator.next(), "Reordering children failed");
         }
     }
 }

@@ -38,9 +38,9 @@ import com.google.common.collect.Sets;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static junit.framework.TestCase.assertNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 public class PageImplTest {
@@ -54,7 +54,7 @@ public class PageImplTest {
 
     private static final String DESING_CACHE_KEY = "io.wcm.testing.mock.aem.context.MockAemSlingBindings_design_/content/page/templated" +
             "-page";
-    private static String TEST_BASE = "/page";
+    private static final String TEST_BASE = "/page";
     private static final String FN_FAVICON_ICO = "favicon.ico";
     private static final String FN_FAVICON_PNG = "favicon_32.png";
     private static final String FN_TOUCH_ICON_60 = "touch-icon_60.png";
@@ -117,7 +117,7 @@ public class PageImplTest {
     @SuppressWarnings("deprecation")
     void testFavicons() {
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH);
-        Map favicons = page.getFavicons();
+        Map<String, String> favicons = page.getFavicons();
         assertEquals(DESIGN_PATH + "/" + FN_FAVICON_ICO, favicons.get(PN_FAVICON_ICO));
         assertEquals(DESIGN_PATH + "/" + FN_FAVICON_PNG, favicons.get(PN_FAVICON_PNG));
         assertEquals(DESIGN_PATH + "/" + FN_TOUCH_ICON_60, favicons.get(PN_TOUCH_ICON_60));

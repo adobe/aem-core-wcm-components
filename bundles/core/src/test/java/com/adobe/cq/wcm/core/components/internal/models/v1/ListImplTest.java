@@ -22,55 +22,56 @@ import javax.jcr.Session;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
 
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.day.cq.search.SimpleSearch;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.designer.Style;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(AemContextExtension.class)
 public class ListImplTest {
 
     private static final String TEST_BASE = "/list";
+    private static final String CONTENT_ROOT = "/content";
     private static final String CURRENT_PAGE = "/content/list";
-    private static final String LIST_1 = "/content/list/listTypes/staticListType";
-    private static final String LIST_2 = "/content/list/listTypes/staticListType";
-    private static final String LIST_3 = "/content/list/listTypes/childrenListType";
-    private static final String LIST_4 = "/content/list/listTypes/childrenListTypeWithDepth";
-    private static final String LIST_5 = "/content/list/listTypes/tagsListType";
-    private static final String LIST_6 = "/content/list/listTypes/searchListType";
-    private static final String LIST_7 = "/content/list/listTypes/staticOrderByTitleListType";
-    private static final String LIST_8 = "/content/list/listTypes/staticOrderByTitleDescListType";
-    private static final String LIST_9 = "/content/list/listTypes/staticOrderByModificationDateListType";
-    private static final String LIST_10 = "/content/list/listTypes/staticOrderByModificationDateDescListType";
-    private static final String LIST_11 = "/content/list/listTypes/staticMaxItemsListType";
-    private static final String LIST_12 = "/content/list/listTypes/staticOrderByModificationDateListTypeWithNoModificationDate";
-    private static final String LIST_13 = "/content/list/listTypes/staticOrderByModificationDateListTypeWithNoModificationDateForOneItem";
-    private static final String LIST_14 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitle";
-    private static final String LIST_15 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitleForOneItem";
-    private static final String LIST_16 = "/content/list/listTypes/staticOrderByTitleListTypeWithAccent";
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
+    private static final String TEST_PAGE_CONTENT_ROOT = CURRENT_PAGE + "/jcr:content/root";
+    private static final String LIST_1 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
+    private static final String LIST_2 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
+    private static final String LIST_3 = TEST_PAGE_CONTENT_ROOT + "/childrenListType";
+    private static final String LIST_4 = TEST_PAGE_CONTENT_ROOT + "/childrenListTypeWithDepth";
+    private static final String LIST_5 = TEST_PAGE_CONTENT_ROOT + "/tagsListType";
+    private static final String LIST_6 = TEST_PAGE_CONTENT_ROOT + "/searchListType";
+    private static final String LIST_7 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListType";
+    private static final String LIST_8 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleDescListType";
+    private static final String LIST_9 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateListType";
+    private static final String LIST_10 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateDescListType";
+    private static final String LIST_11 = TEST_PAGE_CONTENT_ROOT + "/staticMaxItemsListType";
+    private static final String LIST_12 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateListTypeWithNoModificationDate";
+    private static final String LIST_13 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateListTypeWithNoModificationDateForOneItem";
+    private static final String LIST_14 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitle";
+    private static final String LIST_15 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitleForOneItem";
+    private static final String LIST_16 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithAccent";
 
-    @BeforeClass
-    public static void setUp() {
-        CONTEXT.load().json("/list/test-tags.json", "/content/cq:tags/list");
+    public final AemContext context = CoreComponentTestContext.newAemContext();
+
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_TAGS_JSON, CONTENT_ROOT + "/cq:tags/list");
     }
 
     @Test
@@ -127,14 +128,14 @@ public class ListImplTest {
     public void testSearchListType() throws Exception {
         Session mockSession = mock(Session.class);
         SimpleSearch mockSimpleSearch = mock(SimpleSearch.class);
-        CONTEXT.registerAdapter(ResourceResolver.class, Session.class, mockSession);
-        CONTEXT.registerAdapter(Resource.class, SimpleSearch.class, mockSimpleSearch);
+        context.registerAdapter(ResourceResolver.class, Session.class, mockSession);
+        context.registerAdapter(Resource.class, SimpleSearch.class, mockSimpleSearch);
         SearchResult searchResult = mock(SearchResult.class);
 
         when(mockSimpleSearch.getResult()).thenReturn(searchResult);
         when(searchResult.getResources()).thenReturn(
             Collections.singletonList(Objects.requireNonNull(
-                CONTEXT.resourceResolver().getResource("/content/list/pages/page_1/jcr:content")))
+                context.resourceResolver().getResource("/content/list/pages/page_1/jcr:content")))
                 .iterator());
 
         List list = getListUnderTest(LIST_6);
@@ -208,25 +209,13 @@ public class ListImplTest {
     }
 
     private List getListUnderTest(String resourcePath) {
-        Utils.enableDataLayerForOldAemContext(CONTEXT, true);
-        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
+        Utils.enableDataLayer(context, true);
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
         }
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
-        request.setResource(resource);
-        SlingBindings bindings = new SlingBindings();
-        bindings.put(SlingBindings.RESOURCE, resource);
-        bindings.put(SlingBindings.REQUEST, request);
-        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        Style style = mock(Style.class);
-        when(style.get(any(), any(Object.class))).thenAnswer(
-                invocation -> invocation.getArguments()[1]
-        );
-        bindings.put(WCMBindings.CURRENT_STYLE, style);
-        bindings.put(WCMBindings.CURRENT_PAGE, CONTEXT.pageManager().getPage(CURRENT_PAGE));
-        request.setAttribute(SlingBindings.class.getName(), bindings);
-        return request.adaptTo(List.class);
+        context.currentResource(resource);
+        return context.request().adaptTo(List.class);
     }
 
     private void checkListConsistencyByTitle(List list, String[] expectedPageTitles) {

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OEmbedXMLResponseImplTest {
 

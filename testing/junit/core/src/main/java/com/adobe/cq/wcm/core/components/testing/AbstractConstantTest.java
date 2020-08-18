@@ -15,10 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.testing;
 
-import java.lang.reflect.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 public class AbstractConstantTest {
 
@@ -26,7 +27,9 @@ public class AbstractConstantTest {
         InvocationTargetException, InstantiationException {
         assertTrue("Class should be final", Modifier.isFinal(constantsClass.getModifiers()));
         Constructor[] declaredConstructors = constantsClass.getDeclaredConstructors();
-        assertEquals("Only one constructor should be present", 1, declaredConstructors.length);
+        if (declaredConstructors.length != 1) {
+            throw new AssertionError("Only one constructor should be present");
+        }
         assertTrue("Constructor should be private", Modifier.isPrivate(declaredConstructors[0].getModifiers()));
 
         Field fields[] = constantsClass.getDeclaredFields();
@@ -55,5 +58,11 @@ public class AbstractConstantTest {
         Constructor constructor = declaredConstructors[0];
         constructor.setAccessible(true);
         constructor.newInstance();
+    }
+
+    private static void assertTrue(String message, boolean condition) {
+        if (!condition) {
+            throw new AssertionError(message);
+        }
     }
 }
