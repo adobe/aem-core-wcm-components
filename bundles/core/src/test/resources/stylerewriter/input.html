@@ -1,0 +1,74 @@
+<html><head>
+    <title>Hello</title>
+    <style type="text/css">
+        body {
+            font-family: 'Timmana', "Gill Sans", sans-serif;
+        }
+        h1 {
+            font-size: 20px;
+        }
+        h1, p {
+            color: #004488;
+            Margin: 0px;
+        }
+        p::before,
+        p::after {
+            content: '"';
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+        }
+        table {
+            text-align: center !important;
+            width: 100%;
+        }
+        table td {
+            background-color: #ccc;
+        }
+        @media screen and (max-width: 640px) {
+            table.layout {
+                width: 100% !important;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            td.layout-column {
+                display: block !important;
+                width: 100% !important;
+            }
+        }
+        .border {
+            border: 10px solid red;
+        }
+        .ExternalClass {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h1>Hello</h1>
+<p>World</p>
+<img src="favicon-128.png" height="128" width="128" class="border" />
+<table class="layout">
+    <tr>
+        <td class="layout-column">one</td>
+        <td class="layout-column">two</td>
+    </tr>
+    <tr>
+        <td class="layout-column">1</td>
+        <td class="layout-column">2</td>
+    </tr>
+</table>
+<center>
+    <table class="layout" width="640" border="0" cellpadding="0" cellspacing="0" role="presentation">
+        <tr>
+            <td width="33.33%" class="layout-column">
+                One Third
+            </td>
+            <td width="66.67%" class="layout-column">
+                Two Third
+            </td>
+        </tr>
+    </table>
+</center>
+</body>
+</html>
