@@ -389,8 +389,8 @@
                             <exclude>**/node_modules/**</exclude>
                             <!-- Ignore github templates -->
                             <exclude>**/.github/**</exclude>
-                            <!-- Ignore mockito extensions config -->
-                            <exclude>**/test/resources/mockito-extensions/*</exclude>
+                            <!-- Ignore test resources -->
+                            <exclude>**/test/resources/**/*</exclude>
                         </excludes>
                     </configuration>
                     <executions>
