@@ -96,7 +96,7 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
         int currentLevel = currentPage.getDepth();
         while (startLevel < currentLevel) {
             Page page = currentPage.getAbsoluteParent(startLevel);
-            if (page != null) {
+            if (page != null && page.getContentResource() != null) {
                 boolean isActivePage = page.equals(currentPage);
                 if (isActivePage && hideCurrent) {
                     break;

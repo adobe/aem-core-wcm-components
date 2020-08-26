@@ -37,7 +37,9 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl {
 
     protected AbstractListItemImpl(String parentId, Resource resource) {
         this.parentId = parentId;
-        this.path = resource.getPath();
+        if (resource != null) {
+            this.path = resource.getPath();
+        }
         this.resource = resource;
     }
 
