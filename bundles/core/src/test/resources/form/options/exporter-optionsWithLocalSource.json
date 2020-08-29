@@ -4,6 +4,8 @@
     "name"       : "local-name",
     "helpMessage": "local-helpMessage",
     "type"       : "CHECKBOX",
+    "required":true,
+    "requiredMessage":"Required",
     "items"      : [
         {
             "text"    : "local-item1-name",
