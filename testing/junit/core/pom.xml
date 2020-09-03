@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.10.1-SNAPSHOT</version>
+        <version>2.11.3-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.junit.core</artifactId>
-    <version>2.10.1-SNAPSHOT</version>
+    <version>2.11.3-SNAPSHOT</version>
     <name>Adobe Experience Manager Core WCM Components JUnit Testing</name>
 
     <description>Useful tools for testing HTL-based AEM components</description>
@@ -41,11 +41,13 @@
                 <extensions>true</extensions>
                 <executions>
                     <execution>
-                        <id>bundle-manifest</id>
-                        <phase>process-classes</phase>
+                        <id>scr-metadata</id>
                         <goals>
                             <goal>manifest</goal>
                         </goals>
+                        <configuration>
+                            <supportIncrementalBuild>true</supportIncrementalBuild>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>baseline</id>
@@ -59,7 +61,22 @@
                 </executions>
                 <configuration>
                     <exportScr>true</exportScr>
+                    <instructions>
+                        <!-- Enable registration of Sling Models classes via bnd plugin -->
+                        <_plugin>org.apache.sling.bnd.models.ModelsScannerPlugin</_plugin>
+                        <!-- Enable processing of OSGI DS component annotations -->
+                        <_dsannotations>*</_dsannotations>
+                        <!-- Enable processing of OSGI metatype annotations -->
+                        <_metatypeannotations>*</_metatypeannotations>
+                    </instructions>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.sling</groupId>
+                        <artifactId>org.apache.sling.bnd.models</artifactId>
+                        <version>1.0.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.rat</groupId>

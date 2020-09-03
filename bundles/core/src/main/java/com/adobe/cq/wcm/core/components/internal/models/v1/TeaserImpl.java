@@ -18,26 +18,27 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -52,168 +53,184 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
+/**
+ * Teaser model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TeaserImpl.class);
-
+    /**
+     * The resource type.
+     */
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v1/teaser";
 
+    /**
+     * The pre-title text.
+     */
     private String pretitle;
+
+    /**
+     * The title.
+     */
     private String title;
+
+    /**
+     * The description.
+     */
     private String description;
+
+    /**
+     * The main teaser link.
+     */
     private String linkURL;
+
+    /**
+     * The title heading level.
+     */
     private String titleType;
+
+    /**
+     * The target page.
+     */
+    private Page targetPage;
+
+    /**
+     * The image src.
+     */
+    private String imageSrc;
+
+    /**
+     * Flag indicating if CTA actions are enabled.
+     */
     private boolean actionsEnabled = false;
+
+    /**
+     * Flag indicating if the title should be hidden.
+     */
     private boolean titleHidden = false;
+
+    /**
+     * Flag indicating if the description should be hidden.
+     */
     private boolean descriptionHidden = false;
+
+    /**
+     * Flag indicating if the image should not be linked.
+     */
     private boolean imageLinkHidden = false;
+
+    /**
+     * Flag indicating if the pre-title should be hidden.
+     */
     private boolean pretitleHidden = false;
+
+    /**
+     * Flag indicating if the title should not be linked.
+     */
     private boolean titleLinkHidden = false;
+
+    /**
+     * Flag indicating if the title should be inherited from the target page.
+     */
     private boolean titleFromPage = false;
+
+    /**
+     * Flag indicating if the description should be inherited from the target page.
+     */
     private boolean descriptionFromPage = false;
-    private List<ListItem> actions = new ArrayList<>();
+
+    /**
+     * List of CTA actions.
+     */
+    private List<Action> actions;
+
+    /**
+     * List of properties that should be suppressed on image delegation.
+     */
     private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
     }};
 
+    /**
+     * The current component.
+     */
     @ScriptVariable
     private Component component;
 
+    /**
+     * The current resource.
+     */
     @Inject
     private Resource resource;
 
+    /**
+     * The page manager.
+     */
     @ScriptVariable
     private PageManager pageManager;
 
-    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @JsonIgnore
-    @Nullable
+    /**
+     * The current style.
+     */
+    @ScriptVariable
     protected Style currentStyle;
 
+    /**
+     * The current request.
+     */
     @Self
     private SlingHttpServletRequest request;
 
+    /**
+     * The model factory service.
+     */
     @OSGiService
     private ModelFactory modelFactory;
 
-    private Page targetPage;
-    private Image image;
-
+    /**
+     * Initialize the model.
+     */
     @PostConstruct
     private void initModel() {
         ValueMap properties = resource.getValueMap();
-        actionsEnabled = properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled);
 
-        populateStyleProperties();
+        pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
+        titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
+        descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
+        titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
+        imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
+        titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
+        if (imageLinkHidden) {
+            hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
+        }
+        actionsEnabled = !currentStyle.get(Teaser.PN_ACTIONS_DISABLED, !properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled));
 
         titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
-        linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
 
-        if (actionsEnabled) {
-            hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
-            linkURL = null;
-            populateActions();
-            if (!actions.isEmpty()) {
-                ListItem firstAction = actions.get(0);
-                if (firstAction != null) {
-                    targetPage = pageManager.getPage(firstAction.getPath());
-                }
-            }
-        } else {
-            targetPage = pageManager.getPage(linkURL);
-        }
-
-        if (pretitleHidden) {
-            pretitle = null;
-        } else {
-            pretitle = properties.get("pretitle", String.class);
-        }
-        if (titleHidden) {
-            title = null;
-        } else {
-            title = properties.get(JcrConstants.JCR_TITLE, String.class);
-            if (titleFromPage) {
-                if (targetPage != null) {
-                    title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
-                } else if (actionsEnabled && !actions.isEmpty()) {
-                    title = actions.get(0).getTitle();
-                    linkURL = actions.get(0).getURL();
-                } else {
-                    title = null;
-                }
-            }
-        }
-        if (descriptionHidden) {
-            description = null;
-        } else {
-            description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
-            if (descriptionFromPage) {
-                if (targetPage != null) {
-                    description = targetPage.getDescription();
-                } else {
-                    description = null;
-                }
-            }
-        }
-        String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
-        boolean hasImage = true;
-        if (StringUtils.isEmpty(linkURL)) {
-            LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not define a link.");
-        }
-        if (StringUtils.isEmpty(fileReference)) {
-            if (request.getResource().getChild(DownloadResource.NN_FILE) == null) {
-                LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not have an asset or an image file " +
-                        "configured.");
-                hasImage = false;
-            }
-        } else {
-            if (request.getResourceResolver().getResource(fileReference) == null) {
-                LOGGER.error("Asset " + fileReference + " configured for the teaser component from " + request.getResource().getPath() +
-                        " doesn't exist.");
-                hasImage = false;
-            }
-        }
-        if (hasImage) {
-            setImageResource(component, request.getResource(), hiddenImageResourceProperties);
-        }
-        if (targetPage != null) {
-            linkURL = Utils.getURL(request, targetPage);
+        if (this.hasImage()) {
+            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties);
         }
     }
 
-    private void populateStyleProperties() {
-        if (currentStyle != null) {
-            pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
-            titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
-            descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
-            titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
-            imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
-            titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
-            if (imageLinkHidden) {
-                hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
-            }
-            if (currentStyle.get(Teaser.PN_ACTIONS_DISABLED, false)) {
-                actionsEnabled = false;
-            }
-        }
-    }
-
-    private void populateActions() {
-        Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
-        if (actionsNode != null) {
-            for (Resource actionRes : actionsNode.getChildren()) {
-                actions.add(new Action(actionRes, this.getId()));
-            }
-        }
+    /**
+     * Check if the teaser has an image.
+     *
+     * The teaser has an image if the `{@value DownloadResource#PN_REFERENCE}` property is set and the value
+     * resolves to a resource; or if the `{@value DownloadResource#NN_FILE} child resource exists.
+     *
+     * @return True if the teaser has an image, false if it does not.
+     */
+    private boolean hasImage() {
+        return Optional.ofNullable(this.resource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
+            .map(request.getResourceResolver()::getResource)
+            .orElseGet(() -> request.getResource().getChild(DownloadResource.NN_FILE)) != null;
     }
 
     @Override
@@ -221,35 +238,89 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return actionsEnabled;
     }
 
+    /**
+     * Get the target page.
+     *
+     * If actions are enabled then the target page is the first action's page.
+     * If actions are disabled then the target page is the page located at `{@value ImageResource#PN_LINK_URL}`.
+     *
+     * @return The target page if it exists, or empty if not.
+     */
+    @NotNull
+    private Optional<Page> getTargetPage() {
+        if (this.targetPage == null) {
+            if (this.isActionsEnabled()) {
+                this.targetPage = this.getTeaserActions().stream().findFirst().flatMap(Action::getCtaPage).orElse(null);
+            } else {
+                this.targetPage = Optional.ofNullable(this.resource.getValueMap().get(ImageResource.PN_LINK_URL, String.class))
+                    .map(this.pageManager::getPage)
+                    .orElse(null);
+            }
+        }
+        return Optional.ofNullable(this.targetPage);
+    }
+
+    /**
+     * Get the list of teaser actions.
+     *
+     * @return List of teaser actions.
+     */
+    @NotNull
+    private List<Action> getTeaserActions() {
+        if (this.actions == null) {
+            this.actions = Optional.ofNullable(this.isActionsEnabled() ? this.resource.getChild(Teaser.NN_ACTIONS) : null)
+                .map(Resource::getChildren)
+                .map(Iterable::spliterator)
+                .map(s -> StreamSupport.stream(s, false))
+                .orElseGet(Stream::empty)
+                .map(action -> new Action(action, this.getId()))
+                .collect(Collectors.toList());
+        }
+        return this.actions;
+    }
+
     @Override
     public List<ListItem> getActions() {
-        return Collections.unmodifiableList(actions);
+        return Collections.unmodifiableList(this.getTeaserActions());
     }
 
     @Override
     public String getLinkURL() {
+        if (this.linkURL == null) {
+            // use the target page url if it exists
+            this.linkURL = this.getTargetPage().map(page -> Utils.getURL(request, page))
+                .orElseGet(() -> {
+                    // target page doesn't exist
+                    if (this.isActionsEnabled()) {
+                        return this.getActions().stream().findFirst()
+                            .map(ListItem::getURL)
+                            .orElse(null);
+                    } else {
+                        // use the property value if actions are not enabled
+                        return this.resource.getValueMap().get(ImageResource.PN_LINK_URL, String.class);
+                    }
+                });
+        }
         return linkURL;
     }
 
+    /**
+     * Get the image path.
+     *
+     * Note: This method exists only for JSON model.
+     *
+     * @return The image src path if it exists, null if it does not.
+     */
+    @JsonProperty(value = "imagePath")
+    @Nullable
     public String getImagePath() {
-        if (image != null) {
-            return image.getSrc();
+        if (imageSrc == null) {
+            this.imageSrc = Optional.ofNullable(this.getImageResource())
+                .map(imageResource -> this.modelFactory.getModelFromWrappedRequest(this.request, imageResource, Image.class))
+                .map(Image::getSrc)
+                .orElse(null);
         }
-        Resource imageResource = getImageResource();
-        if (imageResource != null) {
-            SlingHttpServletRequestWrapper wrappedRequest = new SlingHttpServletRequestWrapper(request) {
-                @NotNull
-                @Override
-                public Resource getResource() {
-                    return imageResource;
-                }
-            };
-            image = (Image) modelFactory.getModelFromRequest(wrappedRequest);
-            if (image != null) {
-                return image.getSrc();
-            }
-        }
-        return null;
+        return this.imageSrc;
     }
 
     @Override
@@ -259,11 +330,25 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getTitle() {
+        if (this.title == null && !this.titleHidden) {
+            if (this.titleFromPage) {
+                this.title = this.getTargetPage()
+                    .map(tp -> StringUtils.defaultIfEmpty(tp.getPageTitle(), tp.getTitle()))
+                    .orElseGet(() -> this.getTeaserActions().stream().findFirst()
+                        .map(Action::getTitle)
+                        .orElse(null));
+            } else {
+                this.title = this.resource.getValueMap().get(JcrConstants.JCR_TITLE, String.class);
+            }
+        }
         return title;
     }
 
     @Override
     public String getPretitle() {
+        if (this.pretitle == null && !pretitleHidden) {
+            this.pretitle = this.resource.getValueMap().get("pretitle", String.class);
+        }
         return pretitle;
     }
 
@@ -274,7 +359,14 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getDescription() {
-        return description;
+        if (this.description == null && !this.descriptionHidden) {
+            if (this.descriptionFromPage) {
+                this.description = this.getTargetPage().map(Page::getDescription).orElse(null);
+            } else {
+                this.description = this.resource.getValueMap().get(JcrConstants.JCR_DESCRIPTION, String.class);
+            }
+        }
+        return this.description;
     }
 
     @Override
@@ -312,30 +404,76 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
 
+    /**
+     * Teaser CTA.
+     */
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
     public class Action extends AbstractListItemImpl implements ListItem {
 
+        /**
+         * ID prefix.
+         */
         private static final String CTA_ID_PREFIX = "cta";
 
-        private Resource ctaResource;
-        private String ctaTitle;
-        private String ctaUrl;
-        private String ctaPath;
-        private Page ctaPage;
-        private String ctaParentId;
+        /**
+         * The resource for this CTA.
+         */
+        @NotNull
+        private final Resource ctaResource;
+
+        /**
+         * The CTA title.
+         */
+        private final String ctaTitle;
+
+        /**
+         * The CTA target URL.
+         */
+        private final String ctaUrl;
+
+        /**
+         * The page referenced by the `ctaURL` if it is internal.
+         */
+        private final Page ctaPage;
+
+        /**
+         * The ID of the teaser that contains this action.
+         */
+        private final String ctaParentId;
+
+        /**
+         * The ID of this action.
+         */
         private String ctaId;
 
-        private Action(Resource actionRes, String parentId) {
+        /**
+         * Create a CTA.
+         *
+         * @param actionRes The action resource.
+         * @param parentId The ID of the containing Teaser.
+         */
+        private Action(@NotNull final Resource actionRes, final String parentId) {
             super(parentId, actionRes);
             ctaParentId = parentId;
             ctaResource = actionRes;
             ValueMap ctaProperties = actionRes.getValueMap();
             ctaTitle = ctaProperties.get(PN_ACTION_TEXT, String.class);
             ctaUrl = ctaProperties.get(PN_ACTION_LINK, String.class);
-            ctaPath = actionRes.getPath();
             if (ctaUrl != null && ctaUrl.startsWith("/")) {
                 ctaPage = pageManager.getPage(ctaUrl);
+            } else {
+                ctaPage = null;
             }
+        }
+
+        /**
+         * Get the referenced page.
+         *
+         * @return The referenced page if this CTA references a page, empty if not.
+         */
+        @NotNull
+        protected Optional<Page> getCtaPage() {
+            return Optional.ofNullable(this.ctaPage);
         }
 
         @Nullable
@@ -364,16 +502,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Override
         public String getId() {
             if (ctaId == null) {
-                if (ctaResource != null) {
-                    ValueMap properties = ctaResource.getValueMap();
-                    ctaId = properties.get(com.adobe.cq.wcm.core.components.models.Component.PN_ID, String.class);
-                }
-                if (StringUtils.isEmpty(ctaId)) {
-                    String prefix = StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX);
-                    ctaId = Utils.generateId(prefix, ctaPath);
-                } else {
-                    ctaId = StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(ctaId)), " ", ID_SEPARATOR);
-                }
+                ctaId = Optional.ofNullable(ctaResource.getValueMap().get(com.adobe.cq.wcm.core.components.models.Component.PN_ID, String.class))
+                    .filter(StringUtils::isNotEmpty)
+                    .map(id -> StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(id)), " ", ID_SEPARATOR))
+                    .orElseGet(() ->
+                        Utils.generateId(StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX), this.ctaResource.getPath())
+                    );
             }
             return ctaId;
         }

@@ -1,0 +1,43 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div data-sly-use.text="com.adobe.cq.wcm.core.components.models.form.Text"
+     class="cmp-form-text">
+    <label for="${text.id}" data-sly-test="${text.title && !text.hideTitle}">${text.title}</label>
+    <p data-sly-test="${!text.placeholder && text.helpMessage}" class="cmp-form-text__help-block">${text.helpMessage}</p>
+    <textarea data-sly-test.useTextarea="${text.type == 'textarea'}"
+              id="${text.id}"
+              class="cmp-form-text__textarea"
+              name="${text.name}"
+              required="${text.required}"
+              readonly="${text.readOnly}"
+              rows="${text.rows}"
+              placeholder="${text.placeholder}"
+              aria-label="${text.hideTitle && text.title}">${text.value}</textarea>
+    <input data-sly-test="${!useTextarea}"
+           id="${text.id}"
+           class="cmp-form-text__text"
+           type="${text.type}"
+           name="${text.name}"
+           value="${text.value}"
+           required="${text.required}"
+           readonly="${text.readOnly}"
+           placeholder="${text.placeholder}"
+           aria-label="${text.hideTitle && text.title}"/>
+    <span visible-when-invalid="valueMissing"
+          validation-for="${text.id}">${text.requiredMessage}</span>
+    <span visible-when-invalid="typeMismatch"
+          validation-for="${text.id}">${text.constraintMessage}</span>
+</div>

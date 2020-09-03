@@ -78,18 +78,22 @@ See also:
 
 ### Custom embeddable fragment
 
-By creating a hidden component with `core/wcm/components/embed/v1/embed/embeddable` super-type, you can define an embeddable that also supports edit configuration options. 
+1. Create a hidden component with a supertype of `core/wcm/components/embed/v1/embed/embeddable`.
+2. Create a rendering HTL script suitable for what your want to render.
+3. Create a cq:dialog node with only the configuration options needed for your embeddable.
+4. Make sure to have the following properties added to a `granite:data` node under the `cq:dialog` node:
 
-To enable show/hide of the edit configuration options, the embeddable dialog snippet wrapper _must_ have the following data attributes applied:
 ```
 cmp-embed-dialog-edit-embeddableoptions="true"
-cmp-embed-dialog-edit-showhidetargetvalue="<embeddableResourceType>"/>
+cmp-embed-dialog-edit-showhidetargetvalue="<embeddableResourceType>"
 ```
+where `<embeddableResourceType>` is the resource type of your custom embeddable. See [YouTube embeddable options](./embeddable/youtube/_cq_dialog/.content.xml#L42) for an example!
 
-The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes. The following JCR properties are used for the provided YouTube embeddable:
-1. `./youtubeVideoId` - defines the YouTube video ID.
-2. `./youtubeWidth` - defines the YouTube video player width.
-3. `./youtubeHeight` - defines the YouTube video player height.
+
+5. The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes. The following JCR properties are used for the provided YouTube embeddable:
+* `./youtubeVideoId` - defines the YouTube video ID.
+* `./youtubeWidth` - defines the YouTube video player width.
+* `./youtubeHeight` - defines the YouTube video player height.
 
 Example:
 * [YouTube embeddable](embeddable/youtube)

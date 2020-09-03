@@ -15,6 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -25,23 +29,40 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+/**
+ * Layout container model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = LayoutContainer.class, resourceType = LayoutContainerImpl.RESOURCE_TYPE_V1)
 public class LayoutContainerImpl extends AbstractContainerImpl implements LayoutContainer {
 
+    /**
+     * The resource type.
+     */
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/container/v1/container";
 
+    /**
+     * The current resource.
+     */
     @ScriptVariable
     private Resource resource;
 
+    /**
+     * The layout type.
+     */
     private LayoutType layout;
 
+    /**
+     * Initialize the model.
+     */
     @PostConstruct
     protected void initModel() {
-        this.layout = Optional.ofNullable(resource.getValueMap().get(LayoutContainer.PN_LAYOUT, String.class))
+        // Note: this can be simplified using Optional.or() in JDK 11
+        this.layout = Optional.ofNullable(
+            Optional.ofNullable(resource.getValueMap().get(LayoutContainer.PN_LAYOUT, String.class))
+                .orElseGet(() -> Optional.ofNullable(currentStyle)
+                    .map(style -> currentStyle.get(LayoutContainer.PN_LAYOUT, String.class))
+                    .orElse(null)
+                ))
             .map(LayoutType::getLayoutType)
             .orElse(LayoutType.SIMPLE);
     }
@@ -50,7 +71,7 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     @NotNull
     protected List<ResourceListItemImpl> readItems() {
         return getChildren().stream()
-            .map(res -> new ResourceListItemImpl(request, res, getId()))
+            .map(res -> new ResourceListItemImpl(res, getId()))
             .collect(Collectors.toList());
     }
 

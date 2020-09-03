@@ -380,6 +380,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Core Components Examples - Page"
                     sling:resourceType="wcm/core/components/policy/policy"
+                    ampMode="pairedAmp"
                     appResourcesClientlib="cmp-examples.site"
                     clientlibs="cmp-examples.base">
                     <jcr:content jcr:primaryType="nt:unstructured"/>

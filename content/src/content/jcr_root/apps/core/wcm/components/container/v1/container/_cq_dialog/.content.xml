@@ -53,6 +53,10 @@
                                                 fieldLabel="Layout"
                                                 name="./layout">
                                                 <items jcr:primaryType="nt:unstructured">
+                                                    <default
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="(Default)"
+                                                        value=""/>
                                                     <simple
                                                         jcr:primaryType="nt:unstructured"
                                                         text="Simple"
@@ -62,6 +66,10 @@
                                                         text="Responsive Grid"
                                                         value="responsiveGrid"/>
                                                 </items>
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                                                    expression="${!cqDesign.layoutDisabled}"/>
                                             </layout>
                                             <backgroundColor
                                                 granite:hide="${!cqDesign.backgroundColorEnabled || cqDesign.backgroundColorSwatchesOnly}"

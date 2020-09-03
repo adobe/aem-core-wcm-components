@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -53,9 +54,11 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
         this.request = request;
         this.page = page;
         this.parentId = parentId;
-        Page redirectTarget = getRedirectTarget(page);
-        if (shouldSetRedirectTargetAsPage(page, redirectTarget, isShadowingDisabled)) {
-            this.page = redirectTarget;
+
+        if (!isShadowingDisabled) {
+            this.page = getRedirectTarget(page)
+                .filter(redirectTarget -> !redirectTarget.equals(page))
+                .orElse(page);
         }
     }
 
@@ -100,12 +103,15 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
         return page.getName();
     }
 
-    private boolean shouldSetRedirectTargetAsPage(@NotNull Page page, Page redirectTarget,
-                                                  boolean isShadowingDisabled) {
-        return !isShadowingDisabled && redirectTarget != null && !redirectTarget.equals(page);
-    }
-
-    private Page getRedirectTarget(@NotNull Page page) {
+    /**
+     * Get the redirect target for the specified page.
+     * This method will follow a chain or redirects to the final target.
+     *
+     * @param page The page for which to get the redirect target.
+     * @return The redirect target if found, empty if not.
+     */
+    @NotNull
+    static Optional<Page> getRedirectTarget(@NotNull final Page page) {
         Page result = page;
         String redirectTarget;
         PageManager pageManager = page.getPageManager();
@@ -121,7 +127,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
                 }
             }
         }
-        return result;
+        return Optional.ofNullable(result);
     }
 
     /*

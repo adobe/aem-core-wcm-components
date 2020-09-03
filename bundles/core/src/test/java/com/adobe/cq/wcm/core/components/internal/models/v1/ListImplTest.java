@@ -63,13 +63,14 @@ public class ListImplTest {
     private static final String LIST_13 = "/content/list/listTypes/staticOrderByModificationDateListTypeWithNoModificationDateForOneItem";
     private static final String LIST_14 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitle";
     private static final String LIST_15 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitleForOneItem";
+    private static final String LIST_16 = "/content/list/listTypes/staticOrderByTitleListTypeWithAccent";
 
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
 
     @BeforeClass
     public static void setUp() {
-        CONTEXT.load().json("/list/test-etc.json", "/etc/tags/list");
+        CONTEXT.load().json("/list/test-tags.json", "/content/cq:tags/list");
     }
 
     @Test
@@ -198,6 +199,12 @@ public class ListImplTest {
     public void testOrderByTitleWithNoTitleForOneItem() {
         List list = getListUnderTest(LIST_15);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1", "/content/list/pages/page_2", "/content/list/pages/page_4"});
+    }
+
+    @Test
+    public void testOrderByTitleWithAccent() {
+        List list = getListUnderTest(LIST_16);
+        checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1", "/content/list/pages/page_5", "/content/list/pages/page_2"});
     }
 
     private List getListUnderTest(String resourcePath) {

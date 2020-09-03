@@ -1,0 +1,68 @@
+/*
+ *  Copyright 2019 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+ .cmp-carousel {
+    &__content {
+        padding-bottom: 20px;
+
+        .cmp-teaser {
+            position: relative;
+
+            &__content {
+                bottom: 0;
+                color: #fff;
+                left: 0;
+                padding: 10px;
+                position: absolute;
+                right: 0;
+                width: 100%;
+
+                a {
+                    color: #fff;
+                }
+
+                p {
+                    margin-bottom: 0;
+                }
+            }
+
+            &__title {
+                font-family: 'Roboto Slab', serif;
+                font-size: 1.25rem;
+                line-height: 1.5;
+                margin: 0;
+            }
+        }
+    }
+
+    .cmp-image__image img {
+        object-fit: cover;
+    }
+
+    .amp-carousel-button {
+        bottom: 0;
+        margin: 0;
+        position: absolute;
+
+        &-prev {
+            right: 34px;
+        }
+
+        &-next {
+            right: 0;
+        }
+    }
+}

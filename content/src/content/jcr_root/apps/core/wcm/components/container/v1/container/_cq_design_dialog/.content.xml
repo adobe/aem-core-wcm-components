@@ -31,9 +31,9 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <background
+                    <containerSettings
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Background"
+                        jcr:title="Container Settings"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -41,6 +41,35 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <items jcr:primaryType="nt:unstructured">
+                                    <type
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        fieldLabel="Layout"
+                                        name="./layout">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <default
+                                                jcr:primaryType="nt:unstructured"
+                                                text="(Default)"
+                                                value=""/>
+                                            <simple
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Simple"
+                                                value="simple"/>
+                                            <responsive
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Responsive Grid"
+                                                value="responsiveGrid"/>
+                                        </items>
+                                    </type>
+                                    <disableLayout
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Check to disable layout selection in edit dialog."
+                                        name="./layoutDisabled"
+                                        text="Disable Layout"
+                                        checked="{Boolean}false"
+                                        uncheckedValue="false"
+                                        value="true"/>
                                     <backgroundImageLabel
                                         granite:class="coral-Form-fieldlabel"
                                         jcr:primaryType="nt:unstructured"
@@ -97,7 +126,7 @@
                                 </items>
                             </container>
                         </items>
-                    </background>
+                    </containerSettings>
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
