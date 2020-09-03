@@ -15,12 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
@@ -79,7 +80,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             Rendition rendition = invocation.getArgument(0);
             return ImageIO.read(rendition.getStream());
         });
-        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH);
+        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
         testLogger = TestLoggerFactory.getTestLogger(AdaptiveImageServlet.class);
     }
 
@@ -553,6 +554,18 @@ class AdaptiveImageServletTest extends AbstractImageTest {
                 prepareRequestResponsePair(IMAGE23_PATH, 1494867377756L, "img.2000", "png");
         testHorizontalAndVerticalFlip(requestResponsePair);
 
+    }
+
+    @Test
+    void testImageTooLarge() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE28_PATH,
+                "img", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        Assertions.assertThrows(
+                IOException.class,
+                () -> servlet.doGet(request, response),
+                "Expecting to throw an exception complaining that dimensions are too large");
     }
 
     private void testNegativeRequestedWidth(String imagePath) throws IOException {
