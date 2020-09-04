@@ -337,25 +337,25 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 appliedTransformation = true;
             }
             if (!appliedTransformation) {
-                Rendition rendition = asset.getRendition(String.format(DamConstants.PREFIX_ASSET_WEB + ".%d.%d.%s", resizeWidth,
-                        resizeWidth, extension));
-                if (rendition != null) {
-                    LOGGER.debug("Found rendition {} with a width equal to the resize width ({}px); rendering.", rendition.getPath(),
-                            resizeWidth);
-                    stream(response, rendition.getStream(), imageType, imageName);
-                } else {
+                EnhancedRendition rendition = getBestRendition(asset, resizeWidth);
+                Dimension dimension = rendition.getDimension();
+                if (dimension != null) {
+                    originalWidth = dimension.width;
+                    originalHeight = dimension.height;
+                }
+                if (originalHeight > resizeWidth) {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
-                        layer = new Layer(assetHandler.getImage(getOriginal(asset)));
+                        layer = new Layer(assetHandler.getImage(rendition));
                         layer.resize(resizeWidth, resizeHeight);
                         response.setContentType(imageType);
-                        LOGGER.debug("Resizing asset {} to requested width of {}px; rendering.", asset.getPath(), resizeWidth);
+                        LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
                         layer.write(imageType, quality, response.getOutputStream());
-                    } else {
-                        LOGGER.debug("Rendering the original asset {} since its width ({}px) is either smaller than the requested " +
-                                "width ({}px) or since no resize is needed.", asset.getPath(), originalWidth, resizeWidth);
-                        stream(response, getOriginal(asset).getStream(), imageType, imageName);
                     }
+                } else {
+                    LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
+                            asset.getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
+                    stream(response, rendition.getStream(), imageType, imageName);
                 }
             } else {
                 resizeAndStreamLayer(response, layer, imageType, resizeWidth, quality);
