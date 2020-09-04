@@ -76,7 +76,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
 
         @AttributeDefinition(
                 name = "Maximum processed image size",
-                description = "In case the source image is larger on either dimensions than this size, the servlet will refuse to process" +
+                description = "In case the source image is larger on either dimensions than this size, the servlet will refuse to process " +
                         "it and will throw an exception, to avoid running out of memory."
         )
         int maxSize() default AdaptiveImageServlet.DEFAULT_MAX_SIZE;

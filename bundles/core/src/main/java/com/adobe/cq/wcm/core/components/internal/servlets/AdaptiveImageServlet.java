@@ -281,9 +281,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             boolean appliedTransformation = false;
             if (rectangle != null) {
                 double scaling;
-                EnhancedRendition webRendition = getAWebRendition(asset);
+                EnhancedRendition wcmRendition = getWCMRendition(asset);
                 double renditionWidth;
-                Dimension renditionDimension = webRendition.getDimension();
+                Dimension renditionDimension = wcmRendition.getDimension();
                 if (renditionDimension != null) {
                     renditionWidth = renditionDimension.getWidth();
                 } else {
@@ -440,16 +440,25 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     /**
-     * Given an {@link Asset}, this method will return the first web {@link Rendition} it finds in the asset's renditions list.
+     * Given an {@link Asset}, this method will return the WCM rendition (cq5dam.web.*)
      *
      * @param asset the asset for which to retrieve the web rendition
-     * @return the rendition, if found, {@code null} otherwise
+     * @return the WCM rendition, if found the original
      */
     @NotNull
-    private EnhancedRendition getAWebRendition(@NotNull Asset asset) {
+    private EnhancedRendition getWCMRendition(@NotNull Asset asset) {
         return new EnhancedRendition(asset.getRendition(new WCMRenditionPicker()));
     }
 
+    /**
+     * Given an {@link Asset} and a specified width, this method will return the best rendition
+     * for that width (smallest rendition larger than the specified width) or the original.
+     *
+     * @param asset the asset for which to retrieve the best rendition
+     * @param width the width
+     * @return a rendition that is suitable for that width
+     * @throws IOException when the best suited rendition is too large for processing
+     */
     @NotNull
     private EnhancedRendition getBestRendition(@NotNull Asset asset, int width) throws IOException {
         // Sort renditions by file size
@@ -474,12 +483,26 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return filter(bestRendition);
     }
 
+    /**
+     * Given an {@link Asset} it returns the original rendition, if it's not too large for processing.
+     *
+     * @param asset the asset for which to retrieve the original
+     * @return the original asset
+     * @throws IOException when the original is too large for processing
+     */
     @NotNull
     private EnhancedRendition getOriginal(@NotNull Asset asset) throws IOException {
         EnhancedRendition original = new EnhancedRendition(asset.getOriginal());
         return filter(original);
     }
 
+    /**
+     * Given a {@link EnhancedRendition} it will check its size to see if it's too large for processing.
+     *
+     * @param rendition the rendition that needs to be checked
+     * @return the rendition if it's not too large
+     * @throws IOException when the rendition is too large for processing
+     */
     @NotNull
     private EnhancedRendition filter(@NotNull EnhancedRendition rendition) throws IOException {
         // Don't use too big renditions, to avoid running out of memory

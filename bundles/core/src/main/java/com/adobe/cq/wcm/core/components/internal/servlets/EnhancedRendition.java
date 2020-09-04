@@ -32,7 +32,9 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.api.Rendition;
 
-
+/**
+ * A {@link Rendition} wrapper that facilitates finding out the rendition's dimensions.
+ */
 public class EnhancedRendition extends ResourceWrapper implements Rendition {
 
     private static final Logger LOG = LoggerFactory.getLogger(EnhancedRendition.class);
@@ -49,6 +51,11 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
         this.rendition = rendition;
     }
 
+    /**
+     * Getter for the rendition's dimension.
+     *
+     * @return rendition's dimension if possible to determine, {@code null} otherwise
+     */
     @Nullable
     public Dimension getDimension() {
         if (!dimensionProcessed) {
@@ -96,26 +103,41 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
         return dimension;
     }
 
+    /**
+     * See {@link Rendition#getMimeType()}
+     */
     @Override
     public String getMimeType() {
         return rendition.getMimeType();
     }
 
+    /**
+     * See {@link Rendition#getProperties()}
+     */
     @Override
     public ValueMap getProperties() {
         return rendition.getProperties();
     }
 
+    /**
+     * See {@link Rendition#getSize()}
+     */
     @Override
     public long getSize() {
         return rendition.getSize();
     }
 
+    /**
+     * See {@link Rendition#getStream()}
+     */
     @Override
     public InputStream getStream() {
         return rendition.getStream();
     }
 
+    /**
+     * See {@link Rendition#getAsset()}
+     */
     @Override
     public Asset getAsset() {
         return rendition.getAsset();
