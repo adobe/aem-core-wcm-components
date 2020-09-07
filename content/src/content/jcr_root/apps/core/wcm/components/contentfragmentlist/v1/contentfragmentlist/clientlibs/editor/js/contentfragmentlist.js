@@ -176,8 +176,8 @@
             }
             // compare the items of the current and new element names fields
             var currentElementNamesItems = this.elementNames.template.content.querySelectorAll("coral-select-item");
-            var newElementNamesItems = this.fetchedState.elementNames.template.content.querySelectorAll("coral-select-item");
-            var newOrderByItems = this.fetchedState.orderBy.items.getAll();
+            var newElementNamesItems = $(this.fetchedState.elementNamesContainerHTML).find("coral-select-item").toArray();
+            var newOrderByItems = $(this.fetchedState.orderBy).find("coral-select-item").toArray();
             if (!itemsAreEqual(currentElementNamesItems, newElementNamesItems) ||
                 !itemsAreEqual(this.orderBy.items.getAll(), newOrderByItems)) {
                 return false;
