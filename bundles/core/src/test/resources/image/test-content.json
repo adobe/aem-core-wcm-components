@@ -368,6 +368,14 @@
                             "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
                         }
                     }
+                },
+                "image28"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "fileReference"     : "/content/dam/core/images/20000x20000.png",
+                    "alt"               : "Large Image",
+                    "jcr:title"         : "Large Image"
                 }
             },
             "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
