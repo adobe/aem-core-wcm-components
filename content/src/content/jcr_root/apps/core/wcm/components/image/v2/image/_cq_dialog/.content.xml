@@ -82,6 +82,20 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
+                                            <dynamicmediaGroup
+                                                granite:hide="${!cqDesign.enableDmFeatures}"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/well"
+                                                granite:class="cmp-image__editor-dynamicmedia">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <imageModifiers
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        fieldDescription="Image Modifiers for DynamicMedia Image."
+                                                        fieldLabel="Image Modifiers"
+                                                        name="./imageModifiers"/>
+                                                </items>
+                                            </dynamicmediaGroup>
                                             <decorative
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

@@ -74,6 +74,19 @@
             }
         },
         /**
+         * Indicates image is DynamicMedia image.
+         *
+         * @memberof Image
+         * @type {Boolean}
+         * @default false
+         */        
+        "dmimage": {
+            "default": false,
+            "transform": function(value) {
+                return !(value === null || typeof value === "undefined");
+            }
+        },        
+        /**
          * The lazy threshold.
          * This is the number of pixels, in advance of becoming visible, when an lazy-loading image should begin
          * to load.
@@ -145,10 +158,10 @@
 
             setupProperties(config.options);
             cacheElements(config.element);
-            //check image sorce contains "is/image" (DM asset); if true try to make req=set
-            if (that._elements.image.src.indexOf("is/image") !== -1) {
+            //check image is DM asset; if true try to make req=set
+            if (config.options.src && config.options.hasOwnProperty("dmimage")) {
                 var request = new XMLHttpRequest();
-                var url = that._elements.image.src + "?req=set,json";
+                var url = config.options.src.split("?")[0] + "?req=set,json";
 
                 request.open("GET", url, true);
                 request.onload = function() {
@@ -208,7 +221,7 @@
 
         function loadImage() {
             var hasWidths = that._properties.widths && that._properties.widths.length > 0;
-            var replacement = hasWidths ? "." + getOptimalWidth() : "";
+            var replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth() : "";
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
 
             if (that._elements.image.getAttribute("src") !== url) {

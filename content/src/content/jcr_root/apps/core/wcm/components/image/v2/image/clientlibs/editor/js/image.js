@@ -27,6 +27,7 @@
     var $linkURLField;
     var $cqFileUpload;
     var $cqFileUploadEdit;
+    var $dynamicMediaGroup;    
     var fileReference;
 
     $(document).on("dialog-loaded", function(e) {
@@ -44,6 +45,7 @@
                 new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload     = $dialog.find(".cq-FileUpload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
+            $dynamicMediaGroup= $dialogContent.find(".cmp-image__editor-dynamicmedia");
             if ($cqFileUpload) {
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
@@ -146,6 +148,14 @@
                     var title = data["dc:title"];
                     captionTuple.seedTextValue(title);
                     captionTuple.update();
+                }
+                //show or hide "DynamicMedia section" depending on whether the file is DM
+                var isFileDM = data["dam:scene7File"];
+                if (isFileDM === undefined || isFileDM.trim() === "") {
+                    $dynamicMediaGroup.hide();
+                }
+                else{
+                    $dynamicMediaGroup.show();
                 }
             }
         });

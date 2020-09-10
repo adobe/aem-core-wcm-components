@@ -29,7 +29,10 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +43,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.day.cq.commons.ImageResource;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
@@ -54,6 +58,9 @@ import com.day.cq.dam.api.s7dam.utils.PublishUtils;
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl implements Image {
 
+    @ValueMapValue(name = "imageModifiers", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String imageModifiers;
     /**
      * The resource type.
      */
@@ -90,6 +97,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private int lazyThreshold;
 
     /**
+     * Placeholder for the SRC URI template.
+     */
+    private boolean dmImage = false;
+    
+    /**
      * Placeholder for the referenced assed ID.
      */
     protected String uuid;
@@ -114,8 +126,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         super.initModel();
         boolean altValueFromDAM = properties.get(PN_ALT_VALUE_FROM_DAM, currentStyle.get(PN_ALT_VALUE_FROM_DAM, true));
         boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
+        boolean isDmFeaturesEnabled = currentStyle.get(PN_DESIGN_DYNAMIC_MEDIA_ENABLED, false);
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
         boolean uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
+        String dmImageUrl = null;
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
@@ -142,31 +156,28 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             title = damTitle;
                         }
                     }
+                    
+                    //check "Enable DM features" checkbox 
                     //check DM asset - check for "dam:scene7File" metadata value 
-                    if(!StringUtils.isEmpty(asset.getMetadataValue(Scene7Constants.PN_S7_FILE))){
-                    	String productionImageUrl = "";
-                    	String[] productionImageUrls = {};
+                    if(isDmFeaturesEnabled && (!StringUtils.isEmpty(asset.getMetadataValue(Scene7Constants.PN_S7_FILE)))){
+                        //image is DM
+                        dmImage = true;
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
-                        
                         try {
-                        	productionImageUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
+                        	String[] productionImageUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
+                            if (!isWCMDisabled){
+                                //for Author
+                                dmImageUrl = "/is/image/" + productionImageUrls[1];
+                            }
+                            else {
+                                //for Publish
+                                dmImageUrl =  productionImageUrls[0] + "/is/image/" + productionImageUrls[1];
+                            }
                         }
     	                catch (RepositoryException e) {
-    						LOGGER.error("Unable to get DM URL for asset resource '{}'", fileReference);
+    						LOGGER.error("Unable to get DM URL for asset resource '{}'", fileReference, e);
     					}   
-                        if(productionImageUrls.length > 1) {
-	                        if (!isWCMDisabled){
-	                        	//for Author
-	                        	productionImageUrl = "/is/image/" + productionImageUrls[1];
-	                        }
-	                        else {
-	                        	//for Publish
-	                        	productionImageUrl =  productionImageUrls[0] + "/is/image/" + productionImageUrls[1];
-	                        }
-                        }
-                        src = productionImageUrl; 
-                        return;                        
                     }                    
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
@@ -183,17 +194,32 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if (smartSizes.length > 0) {
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
+                if(dmImageUrl != null) {
+                	dmImageUrl += "?qlt=" + jpegQuality;
+                    dmImageUrl += "&wid=" + ((smartSizes.length == 1) ? smartSizes[0] : "%7B.width%7D");
+                }
             }
-            srcUriTemplate = baseResourcePath + DOT + staticSelectors +
-                SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-                (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
-                (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension): "");
-
-            // if content policy delegate path is provided pass it to the image Uri
-            String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
-            if (StringUtils.isNotBlank(policyDelegatePath)) {
-                srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
-                src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+            if(dmImageUrl == null){
+	            srcUriTemplate = baseResourcePath + DOT + staticSelectors +
+	                SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
+	                (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
+	                (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension): "");
+	
+	            // if content policy delegate path is provided pass it to the image Uri
+	            String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
+	            if (StringUtils.isNotBlank(policyDelegatePath)) {
+	                srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+	                src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+	            }
+            }
+            else {
+            	if (lastModifiedDate > 0){
+            		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "ts=" + lastModifiedDate;
+            	}
+            	if (StringUtils.isNotBlank(this.imageModifiers)){
+            		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + this.imageModifiers;
+            	}            	
+            	src = dmImageUrl;
             }
             buildJson();
         }
@@ -215,6 +241,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     public boolean isLazyEnabled() {
         return !disableLazyLoading;
+    }
+
+    public boolean isDmImage() {
+        return dmImage;
     }
 
     @Override
