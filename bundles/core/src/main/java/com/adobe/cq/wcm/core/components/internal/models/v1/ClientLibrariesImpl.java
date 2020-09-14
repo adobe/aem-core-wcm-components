@@ -19,13 +19,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -35,7 +39,9 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
@@ -62,7 +68,11 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientLibrariesImpl.class);
 
-    private static final String CQ_CLIENTLIBRARY_FOLDER = "cq:ClientLibraryFolder";
+    /**
+     * Name of the subservice used to authenticate as in order to be able to read details about components and
+     * client libraries.
+     */
+    public static final String COMPONENTS_SERVICE = "components-service";
 
     @Self
     private SlingHttpServletRequest request;
@@ -115,7 +125,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @OSGiService
     ResourceResolverFactory resolverFactory;
 
-    Map<String, ClientLibrary> allLibraries;
     private Set<String> resourceTypeSet;
     private Pattern pattern;
     private String[] categoriesArray;
@@ -185,7 +194,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
                 }
             }
         } catch (IOException e) {
-            LOG.error("Failed to include client libraries {}", categoriesArray);
+            LOG.error("Failed to include client libraries {}", Arrays.toString(categoriesArray));
         }
 
         String html = sw.toString();
@@ -272,59 +281,78 @@ public class ClientLibrariesImpl implements ClientLibraries {
      *
      * @return {@link Set<String>} of clientlib categories
      */
+    @NotNull
     protected Set<String> getCategoriesFromComponents() {
-        Set<String> categories = new HashSet<>();
-
-        allLibraries = htmlLibraryManager.getLibraries();
-        Collection<ClientLibrary> libraries = new LinkedList<>();
-
-        Set<String> allResourceTypes = new LinkedHashSet<>();
-        allResourceTypes.addAll(resourceTypeSet);
-        if (inherited) {
-            for (String resourceType : resourceTypeSet) {
-                allResourceTypes.addAll(Utils.getSuperTypes(resourceType, request, resolverFactory));
-            }
-        }
-        for (String resourceType : allResourceTypes) {
-            Resource componentResource = Utils.getResource(resourceType, request, resolverFactory);
-            addClientLibraries(componentResource, libraries);
-        }
-
-        for (ClientLibrary library : libraries) {
-            for (String category : library.getCategories()) {
-                if (pattern != null) {
-                    if (pattern.matcher(category).matches()) {
+        try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE))) {
+            Set<String> categories = new HashSet<>();
+            for (ClientLibrary library : this.getAllClientLibraries(resourceResolver)) {
+                for (String category : library.getCategories()) {
+                    if (pattern == null || pattern.matcher(category).matches()) {
                         categories.add(category);
                     }
-                } else {
-                    categories.add(category);
                 }
             }
+            return categories;
+        } catch (LoginException e) {
+            LOG.error("Cannot login as a service user", e);
+            return Collections.emptySet();
         }
-        return categories;
     }
 
     /**
-     * Adds client libraries to the provided collection, starting from the given resource
+     * Gets all of the client libraries.
+     *
+     * @param resourceResolver The resource resolver.
+     * @return Set of all client libraries.
+     */
+    @NotNull
+    private Set<ClientLibrary> getAllClientLibraries(@NotNull final ResourceResolver resourceResolver) {
+        Map<String, ClientLibrary> allLibraries = htmlLibraryManager.getLibraries();
+        Set<ClientLibrary> clientLibraries = new LinkedHashSet<>();
+        for (String resourceType : getAllResourceTypes(resourceResolver)) {
+            Resource resource = resourceResolver.getResource(resourceType);
+            if (resource != null) {
+                clientLibraries.addAll(getClientLibraries(resource, allLibraries));
+            }
+        }
+        return clientLibraries;
+    }
+
+    /**
+     * Gets all resource types.
+     *
+     * @param resourceResolver The resource resolver.
+     * @return Set of all resource types under which to search for client libraries.
+     */
+    @NotNull
+    private Set<String> getAllResourceTypes(@NotNull final ResourceResolver resourceResolver) {
+        Set<String> allResourceTypes = new LinkedHashSet<>(resourceTypeSet);
+        if (inherited) {
+            for (String resourceType : resourceTypeSet) {
+                allResourceTypes.addAll(Utils.getSuperTypes(resourceType, resourceResolver));
+            }
+        }
+        return allResourceTypes;
+    }
+
+    /**
+     * Gets a list of client libraries, starting from the given resource
      * and diving into its descendants.
      *
      * @param resource - the given resource, which will be checked to see if it's a client library
-     * @param libraries - the provided collection of libraries to add to
+     * @param allLibraries - Map of all client libraries.
+     * @return List of client libraries for the given resource.
      */
-    private void addClientLibraries(Resource resource, Collection<ClientLibrary> libraries) {
-        if (resource == null) {
-            return;
-        }
-        String componentType = resource.getResourceType();
-        if (StringUtils.equals(componentType, CQ_CLIENTLIBRARY_FOLDER)) {
-            ClientLibrary library = allLibraries.get(resource.getPath());
-            if (library != null) {
-                libraries.add(library);
-            }
-        }
-        for (Resource child : resource.getChildren()) {
-            addClientLibraries(child, libraries);
-        }
+    @NotNull
+    private static List<ClientLibrary> getClientLibraries(@org.jetbrains.annotations.Nullable final Resource resource,
+                                                          @NotNull final Map<String, ClientLibrary> allLibraries) {
+        return Optional.ofNullable(resource)
+            .map(Resource::getPath)
+            .map(path -> allLibraries.entrySet().stream()
+                .filter(entry -> entry.getKey().equals(path) || entry.getKey().startsWith(path + "/"))
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList()))
+            .orElseGet(Collections::emptyList);
     }
 
 }
