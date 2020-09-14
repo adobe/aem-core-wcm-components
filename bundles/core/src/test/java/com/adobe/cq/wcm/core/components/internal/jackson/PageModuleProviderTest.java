@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.jackson;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import com.fasterxml.jackson.databind.type.ClassKey;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PageModuleProviderTest {
 

@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -31,10 +32,13 @@ import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
 class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragment> {
@@ -60,7 +64,7 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     @Test
     void textOnlyInvalidPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_INVALID_PATH);
-        assertNotNull("Model shouldn't be null when the path is not a content fragment", fragment);
+        assertNotNull(fragment, "Model shouldn't be null when the path is not a content fragment");
     }
 
     @Test
@@ -102,13 +106,13 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     @Test
     void structuredNoPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NO_PATH);
-        assertNotNull("Model shouldn't be null when no path is set", fragment);
+        assertNotNull(fragment, "Model shouldn't be null when no path is set");
     }
 
     @Test
     void structuredNonExistingPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_PATH);
-        assertNotNull("Model shouldn't be null when the path does not exist", fragment);
+        assertNotNull(fragment, "Model shouldn't be null when the path does not exist");
         assertNull(fragment.getTitle());
         assertNull(fragment.getDescription());
         assertNull(fragment.getType());
@@ -121,7 +125,7 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     @Test
     void structuredOnlyInvalidPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_INVALID_PATH);
-        assertNotNull("Model shouldn't be null when the path is not a content fragment", fragment);
+        assertNotNull(fragment, "Model shouldn't be null when the path is not a content fragment");
     }
 
     @Test
@@ -245,7 +249,7 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     void getParagraphsOfMultiDisplayModeIsNull() {
         // Structure CF has displayMode=multi which should not return paragraphs
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED);
-        assertThat(fragment.getParagraphs(), is(nullValue()));
+        assertNull(fragment.getParagraphs());
     }
 
     @Test
@@ -254,7 +258,7 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
 
         ContentFragment contentFragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT_MAIN);
 
-        assertThat(contentFragment.getParagraphs(), is(new String[]{MAIN_CONTENT}));
+        assertArrayEquals(new String[]{MAIN_CONTENT}, contentFragment.getParagraphs());
     }
 
     /**
@@ -275,25 +279,25 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     private void assertContentFragment(ContentFragment fragment, String variationName, String expectedTitle,
                                        String expectedDescription, String expectedType, String expectedName,
                                        String[] expectedAssociatedContent, MockElement... expectedElements) {
-        assertEquals("Content fragment has wrong title", expectedTitle, fragment.getTitle());
-        assertEquals("Content fragment has wrong description", expectedDescription, fragment.getDescription());
-        assertEquals("Content fragment has wrong type", expectedType, fragment.getType());
-        assertEquals("Content fragment has wrong name", expectedName, fragment.getName());
-        List<Resource> associatedContent = fragment.getAssociatedContent();
-        assertEquals("Content fragment has wrong number of associated content", expectedAssociatedContent.length, associatedContent.size());
+        assertEquals(expectedTitle, fragment.getTitle(), "Content fragment has wrong title");
+        assertEquals(expectedDescription, fragment.getDescription(), "Content fragment has wrong description");
+        assertEquals(expectedType, fragment.getType(), "Content fragment has wrong type");
+        assertEquals(expectedName, fragment.getName(), "Content fragment has wrong name");
+        List<Resource> associatedContent = Objects.requireNonNull(fragment.getAssociatedContent());
+        assertEquals(expectedAssociatedContent.length, associatedContent.size(), "Content fragment has wrong number of associated content");
         for (int i = 0; i < expectedAssociatedContent.length; i++) {
             Resource resource = associatedContent.get(i);
-            assertEquals("Element has wrong associated content", expectedAssociatedContent[i], resource.getPath());
+            assertEquals(expectedAssociatedContent[i], resource.getPath(), "Element has wrong associated content");
         }
         Map<String, DAMContentFragment.DAMContentElement> elementsMap = fragment.getExportedElements();
         assertNotNull(elementsMap);
         List<DAMContentFragment.DAMContentElement> elements = new ArrayList<>(elementsMap.values());
-        assertEquals("Content fragment has wrong number of elements", expectedElements.length, elements.size());
+        assertEquals(expectedElements.length, elements.size(), "Content fragment has wrong number of elements");
         for (int i = 0; i < expectedElements.length; i++) {
             DAMContentFragment.DAMContentElement element = elements.get(i);
             MockElement expected = expectedElements[i];
-            assertEquals("Element has wrong name", expected.name, element.getName());
-            assertEquals("Element has wrong title", expected.title, element.getTitle());
+            assertEquals(expected.name, element.getName(), "Element has wrong name");
+            assertEquals(expected.title, element.getTitle(), "Element has wrong title");
             String contentType = expected.contentType;
             boolean isMultiLine = expected.isMultiLine;
             String htmlValue = expected.htmlValue;
@@ -306,14 +310,14 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
             }
             Object elementValue = element.getValue();
             if (elementValue != null && elementValue.getClass().isArray()) {
-                assertArrayEquals("Element's values didn't match", expectedValues, (String[]) elementValue);
+                assertArrayEquals(expectedValues, (String[]) elementValue, "Element's values didn't match");
             } else {
-                assertEquals("Element is not single valued", expectedValues.length, 1);
-                assertEquals("Element's value didn't match", expectedValues[0], elementValue);
+                assertEquals(expectedValues.length, 1, "Element is not single valued");
+                assertEquals(expectedValues[0], elementValue, "Element's value didn't match");
             }
-            assertEquals("Element has wrong content type", contentType, element.getExportedType());
-            assertEquals("Element has wrong isMultiLine flag", isMultiLine, element.isMultiLine());
-            assertEquals("Element has wrong html", htmlValue, element.getHtml());
+            assertEquals(contentType, element.getExportedType(), "Element has wrong content type");
+            assertEquals(isMultiLine, element.isMultiLine(), "Element has wrong isMultiLine flag");
+            assertEquals(htmlValue, element.getHtml(), "Element has wrong html");
         }
     }
 }

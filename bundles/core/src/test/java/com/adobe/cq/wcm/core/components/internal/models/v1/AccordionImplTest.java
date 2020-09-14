@@ -29,7 +29,10 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 class AccordionImplTest {
@@ -99,13 +102,11 @@ class AccordionImplTest {
     }
 
     private void verifyAccordionItems(Object[][] expectedItems, List<ListItem> items) {
-        assertEquals("The accordion contains a different number of items than expected.", expectedItems.length, items.size());
+        assertEquals(expectedItems.length, items.size(), "The accordion contains a different number of items than expected.");
         int index = 0;
         for (ListItem item : items) {
-            assertEquals("The accordion item's name is not what was expected.",
-                    expectedItems[index][0], item.getName());
-            assertEquals("The accordion item's title is not what was expected: " + item.getTitle(),
-                    expectedItems[index][1], item.getTitle());
+            assertEquals(expectedItems[index][0], item.getName(), "The accordion item's name is not what was expected.");
+            assertEquals(expectedItems[index][1], item.getTitle(), "The accordion item's title is not what was expected: " + item.getTitle());
             index++;
         }
     }

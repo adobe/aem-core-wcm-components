@@ -467,5 +467,51 @@
                 "dam:size": 4668
             }
         }
+    },
+    "20000x20000.png": {
+        "jcr:mixinTypes":"[mix:referenceable]",
+        "jcr:primaryType":"dam:Asset",
+        "jcr:uuid":"b46d02c9-a10b-46f6-8fca-347f4d1927ff",
+        "jcr:content": {
+            "dam:assetState"    : "processed",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:primaryType"   : "dam:AssetContent",
+            "metadata"          : {
+                "dam:Bitsperpixel"           : "{Long}1",
+                "dam:extracted"              : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                "dam:Fileformat"             : "PNG",
+                "dam:MIMEtype"               : "image/png",
+                "dam:Numberofimages"         : "1",
+                "dam:Numberoftextualcomments": "0",
+                "dam:Physicalheightindpi"    : "-1",
+                "dam:Physicalheightininches" : "-1.0",
+                "dam:Physicalwidthindpi"     : "-1",
+                "dam:Physicalwidthininches"  : "-1.0",
+                "dam:Progressive"            : "no",
+                "dam:sha1"                   : "f52be6e2d7e479e0ff5bce4112893825453554e2",
+                "dam:size"                   : "48727",
+                "dc:format"                  : "image/png",
+                "jcr:mixinTypes"             : "[cq:Taggable]",
+                "jcr:primaryType"            : "nt:unstructured",
+                "tiff:ImageLength"           : "20000",
+                "tiff:ImageWidth"            : "20000"
+            },
+            "related"           : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "renditions": {
+                "original"                : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "image/png"
+                    }
+                }
+            }
+        }
     }
 }

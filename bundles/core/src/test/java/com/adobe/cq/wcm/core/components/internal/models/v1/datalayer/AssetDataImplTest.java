@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import com.day.cq.dam.api.Asset;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -32,12 +32,11 @@ public class AssetDataImplTest {
     @Test
     void testGetLastModifiedDate() {
         Asset asset = mock(Asset.class);
-        when(asset.getLastModified()).thenReturn(0l);
+        when(asset.getLastModified()).thenReturn(0L);
         ValueMap valueMap = mock(ValueMap.class);
         when(asset.adaptTo(ValueMap.class)).thenReturn(valueMap);
         Calendar now = Calendar.getInstance();
         when(valueMap.get(JcrConstants.JCR_CREATED, Calendar.class)).thenReturn(now);
         assertEquals(now.getTime(), new AssetDataImpl(asset).getLastModifiedDate());
-
     }
 }

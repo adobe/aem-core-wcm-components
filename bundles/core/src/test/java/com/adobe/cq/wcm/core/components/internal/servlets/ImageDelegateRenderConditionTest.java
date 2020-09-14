@@ -15,53 +15,46 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.granite.ui.components.ExpressionCustomizer;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(AemContextExtension.class)
 public class ImageDelegateRenderConditionTest {
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext("/image-delegate-render-condition",
-            "/apps/core/wcm/components");
-
+    private static final String TEST_BASE = "/image-delegate-render-condition";
+    private static final String APPS_ROOT = "/apps/core/wcm/components";
+    private static final String CONF_ROOT = "/conf";
     private static final String SUFFIX = "/conf/coretest/settings/wcm/policies/core/wcm/components/teaser/policy_1505736393478";
 
-    @BeforeClass
-    public static void setUp() {
-        CONTEXT.load().json("/image-delegate-render-condition/test-conf.json", "/conf");
+    public final AemContext context = CoreComponentTestContext.newAemContext();
+
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, APPS_ROOT);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONF_JSON, CONF_ROOT);
     }
 
     @Test
     public void testDoGet() throws Exception {
         ImageDelegateRenderCondition imageDelegateRenderCondition = new ImageDelegateRenderCondition();
-        SlingHttpServletRequest request = prepareRequest();
-        imageDelegateRenderCondition.doGet(request, CONTEXT.response());
-        RenderCondition renderCondition = (RenderCondition) request.getAttribute(RenderCondition.class.getName());
+        context.requestPathInfo().setSuffix(SUFFIX);
+        imageDelegateRenderCondition.doGet(context.request(), context.response());
+        RenderCondition renderCondition = (RenderCondition) context.request().getAttribute(RenderCondition.class.getName());
         assertNotNull(renderCondition);
         assertTrue(renderCondition.check());
-        ExpressionCustomizer expressionCustomizer = (ExpressionCustomizer) request.getAttribute(ExpressionCustomizer.class.getName());
+        ExpressionCustomizer expressionCustomizer = (ExpressionCustomizer) context.request().getAttribute(ExpressionCustomizer.class.getName());
         assertNotNull(expressionCustomizer);
         assertTrue(expressionCustomizer.hasVariable(AbstractImageDelegatingModel.IMAGE_DELEGATE));
-    }
-
-    public SlingHttpServletRequest prepareRequest() {
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
-        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
-        requestPathInfo.setSuffix(SUFFIX);
-        return request;
     }
 
 }

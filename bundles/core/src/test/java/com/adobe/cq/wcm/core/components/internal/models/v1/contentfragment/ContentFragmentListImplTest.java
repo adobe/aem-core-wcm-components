@@ -37,9 +37,8 @@ import com.day.cq.search.result.SearchResult;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -95,10 +94,9 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
     @Test
     void testListWithNoModel() {
         ContentFragmentList contentFragmentList = getModelInstanceUnderTest(NO_MODEL);
-        assertThat(contentFragmentList, not(nullValue()));
+        assertNotNull(contentFragmentList);
         assertEquals(contentFragmentList.getListItems().size(), 0);
-        assertThat(contentFragmentList.getExportedType(),
-                is(ContentFragmentListImpl.RESOURCE_TYPE));
+        assertEquals(ContentFragmentListImpl.RESOURCE_TYPE, contentFragmentList.getExportedType());
         Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, NO_MODEL));
     }
 
@@ -131,8 +129,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
             when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class))).thenReturn(query);
 
             ContentFragmentList contentFragmentList = getModelInstanceUnderTest(listName);
-            assertThat(contentFragmentList.getExportedType(),
-                    is(ContentFragmentListImpl.RESOURCE_TYPE));
+            assertEquals(ContentFragmentListImpl.RESOURCE_TYPE, contentFragmentList.getExportedType());
             assertEquals(contentFragmentList.getListItems().size(), 1);
             Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, listName));
 

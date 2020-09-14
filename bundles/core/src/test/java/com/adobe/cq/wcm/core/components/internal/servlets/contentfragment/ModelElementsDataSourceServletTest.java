@@ -18,18 +18,17 @@ package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 import java.io.InputStream;
 import java.util.List;
 
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.testing.mock.sling.ResourceResolverType;
-import org.apache.sling.testing.mock.sling.junit.SlingContext;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import com.adobe.granite.ui.components.ds.DataSource;
@@ -39,56 +38,48 @@ import com.google.common.collect.ImmutableMap;
 
 import static com.adobe.cq.wcm.core.components.internal.servlets.contentfragment.ModelElementsDataSourceServlet.PARAMETER_AND_PN_MODEL_PATH;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(AemContextExtension.class)
 public class ModelElementsDataSourceServletTest {
 
-    @Rule
-    public SlingContext slingContext = new SlingContext(ResourceResolverType.RESOURCERESOLVER_MOCK);
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private ModelElementsDataSourceServlet modelElementsDataSourceServlet;
-
-    @Before
-    public void setUp() {
-        modelElementsDataSourceServlet = new ModelElementsDataSourceServlet();
-    }
+    private final ModelElementsDataSourceServlet modelElementsDataSourceServlet = new ModelElementsDataSourceServlet();
 
     @Test
     public void verifyDataSourceWhenNoParameterIsGiven() {
         // GIVEN
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.bundleContext());
-        request.setResource(Mockito.mock(Resource.class));
+        context.request().setResource(Mockito.mock(Resource.class));
 
         // WHEN
-        modelElementsDataSourceServlet.doGet(request, slingContext.response());
+        modelElementsDataSourceServlet.doGet(context.request(), context.response());
 
         // THEN
-        assertThat(request.getAttribute(DataSource.class.getName()), instanceOf(EmptyDataSource.class));
+        assertThat(context.request().getAttribute(DataSource.class.getName()), instanceOf(EmptyDataSource.class));
     }
 
     @Test
     public void verifyDataSourceWhenOrderByIsGiven() {
         // GIVEN
         InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
-        slingContext.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.resourceResolver(),
-                slingContext.bundleContext());
+        context.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
         Resource mockResource = Mockito.mock(Resource.class);
         when(mockResource.isResourceType(ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY)).thenReturn(true);
-        request.setResource(mockResource);
-        request.setParameterMap(ImmutableMap.of(
+        context.request().setResource(mockResource);
+        context.request().setParameterMap(ImmutableMap.of(
                 PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
 
         // WHEN
-        modelElementsDataSourceServlet.doGet(request, slingContext.response());
+        modelElementsDataSourceServlet.doGet(context.request(), context.response());
 
         // THEN
-        SimpleDataSource simpleDataSource = (SimpleDataSource) request.getAttribute(DataSource.class.getName());
+        SimpleDataSource simpleDataSource = (SimpleDataSource) context.request().getAttribute(DataSource.class.getName());
         List<Resource> resourceList = IteratorUtils.toList(simpleDataSource.iterator());
         assertThat(resourceList, not(empty()));
         assertThat(resourceList, allOf(
@@ -102,18 +93,16 @@ public class ModelElementsDataSourceServletTest {
     public void verifyDataSourceWhenModelParameterIsGiven() {
         // GIVEN
         InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
-        slingContext.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.resourceResolver(),
-                slingContext.bundleContext());
-        request.setResource(Mockito.mock(Resource.class));
-        request.setParameterMap(ImmutableMap.of(
+        context.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
+        context.currentResource(Mockito.mock(Resource.class));
+        context.request().setParameterMap(ImmutableMap.of(
                 PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
 
         // WHEN
-        modelElementsDataSourceServlet.doGet(request, slingContext.response());
+        modelElementsDataSourceServlet.doGet(context.request(), context.response());
 
         // THEN
-        SimpleDataSource simpleDataSource = (SimpleDataSource) request.getAttribute(DataSource.class.getName());
+        SimpleDataSource simpleDataSource = (SimpleDataSource) context.request().getAttribute(DataSource.class.getName());
         List<Resource> resourceList = IteratorUtils.toList(simpleDataSource.iterator());
         assertThat(resourceList, not(empty()));
         assertThat(resourceList, allOf(

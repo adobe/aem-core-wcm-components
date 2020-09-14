@@ -17,33 +17,39 @@ package com.adobe.cq.wcm.core.components.internal.form;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.scripting.api.resource.ScriptingResourceResolverProvider;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class FormStructureHelperImplTest {
 
+    private static final String TEST_BASE = "/form/form-structure-helper";
+    private static final String CONTENT_ROOT = "/content";
+    private static final String APPS_ROOT = "/apps";
     private static final String CONTAINING_PAGE = "/content/we-retail/demo-page";
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/form/form-structure-helper", "/content");
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
     @Mock
     ScriptingResourceResolverProvider scriptingResourceResolverProvider;
@@ -51,24 +57,23 @@ public class FormStructureHelperImplTest {
     @InjectMocks
     private FormStructureHelperImpl formStructureHelper;
 
-    private ResourceResolver resourceResolver;
 
-    @Before
-    public void setUp() throws Exception {
-        resourceResolver = context.resourceResolver();
-        context.load().json("/form/form-structure-helper/test-apps.json", "/apps");
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, APPS_ROOT);
         context.registerService(ScriptingResourceResolverProvider.class, scriptingResourceResolverProvider);
     }
 
     @Test
-    public void testcanManage() {
-        Resource resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/start");
+    public void testCanManage() {
+        Resource resource = context.resourceResolver().getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/start");
         assertFalse(formStructureHelper.canManage(resource));
 
-        resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text");
+        resource = context.resourceResolver().getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text");
         assertTrue(formStructureHelper.canManage(resource));
 
-        resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container");
+        resource = context.resourceResolver().getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container");
         assertTrue(formStructureHelper.canManage(resource));
     }
 
@@ -78,15 +83,15 @@ public class FormStructureHelperImplTest {
         Resource formResource = formStructureHelper.getFormResource(resource);
         assertNull(formResource);
 
-        resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/title");
+        resource = context.resourceResolver().getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/title");
         formResource = formStructureHelper.getFormResource(resource);
         assertNull(formResource);
 
-        resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container");
+        resource = context.resourceResolver().getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container");
         formResource = formStructureHelper.getFormResource(resource);
         assertEquals(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container", formResource.getPath());
 
-        resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text");
+        resource = context.resourceResolver().getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text");
         formResource = formStructureHelper.getFormResource(resource);
         assertEquals(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container", formResource.getPath());
     }
@@ -94,10 +99,10 @@ public class FormStructureHelperImplTest {
 
     @Test
     public void testGetFormElements() {
-        Resource resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid");
+        Resource resource = context.resourceResolver().getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid");
         Iterator<Resource> formFields = formStructureHelper.getFormElements(resource).iterator();
         assertFalse(formFields.hasNext());
-        when(scriptingResourceResolverProvider.getRequestScopedResourceResolver()).thenReturn(resourceResolver);
+        when(scriptingResourceResolverProvider.getRequestScopedResourceResolver()).thenReturn(context.resourceResolver());
         Set<String> allowedFields = new HashSet<>();
         allowedFields.add("text");
         allowedFields.add("hidden");
@@ -107,7 +112,7 @@ public class FormStructureHelperImplTest {
 
         Set<String> returnedFormFields = new HashSet<>();
 
-        resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container");
+        resource = context.resourceResolver().getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container");
         formFields = formStructureHelper.getFormElements(resource).iterator();
         //test only the allowed fields should be returned
         while (formFields.hasNext()) {
@@ -123,11 +128,11 @@ public class FormStructureHelperImplTest {
     }
 
     @Test
-    public void testUpdateformStructure() {
-        Resource resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container");
+    public void testUpdateFormStructure() {
+        Resource resource = Objects.requireNonNull(context.resourceResolver().getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container"));
         formStructureHelper.updateFormStructure(resource);
 
-        ValueMap properties = resource.adaptTo(ValueMap.class);
+        ValueMap properties = resource.getValueMap();
         assertEquals("foundation/components/form/actions/store", properties.get("actionType", String.class));
         String action = properties.get("action", String.class);
         assertNotNull(action);

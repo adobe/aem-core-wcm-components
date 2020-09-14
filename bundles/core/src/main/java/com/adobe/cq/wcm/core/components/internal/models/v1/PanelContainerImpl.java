@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
@@ -109,6 +110,7 @@ public abstract class PanelContainerImpl extends AbstractContainerImpl implement
 
         @NotNull
         @Override
+        @JsonIgnore
         public String getExportedType() {
             return this.inner.getExportedType();
         }
