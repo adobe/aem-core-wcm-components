@@ -34,7 +34,7 @@ jobs:
       # Checkout the main project
       - name: Checkout main project
         run:
-          git clone https://${USER_NAME}:${{ secrets.LIBRARY_PASSWORD }}@${{ secrets.LIBRARY_REPOSITORY }}.git main 
+          git clone -b ${{ secrets.LIBRARY_BRANCH_DEV }} https://${USER_NAME}:${{ secrets.LIBRARY_PASSWORD }}@${{ secrets.LIBRARY_REPOSITORY }} main 
       # Move sub project
       - name: Move project to main
         run: |
