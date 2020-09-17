@@ -2,6 +2,12 @@ name: SYNC
 env:
   # Username/email used to commit to the Core Components Library
   PROJECT_DIR: core-components
+  # Components Library
+  TARGET_REPO: ${{ secrets.LIBRARY_REPOSITORY }}
+  TARGET_BRANCH: ${{ secrets.LIBRARY_BRANCH_DEV }}
+  USER_EMAIL: ${{ secrets.LIBRARY_USER_EMAIL }}
+  USER_NAME: ${{ secrets.LIBRARY_USER_NAME }}
+  USER_PWD: ${{ secrets.LIBRARY_PASSWORD }}
  
 # Only run on a push to this branch
 on:
@@ -27,12 +33,12 @@ jobs:
       - name: Set git config
         run: |
           git config --global credential.helper cache
-          git config --global user.email ${{ secrets.LIBRARY_USER_EMAIL }}
-          git config --global user.name ${{ secrets.LIBRARY_USER_NAME }}
+          git config --global user.email ${USER_EMAIL}
+          git config --global user.name ${USER_NAME}
       # Checkout the main project
       - name: Checkout main project
         run:
-          git clone -b ${{ secrets.LIBRARY_BRANCH_DEV }} https://${{ secrets.LIBRARY_USER_EMAIL }}:${{ secrets.LIBRARY_PASSWORD }}@${{ secrets.LIBRARY_REPOSITORY }} main 
+          git clone -b ${TARGET_BRANCH} https://${USER_EMAIL}:${USER_PWD}@${TARGET_REPO} main 
       # Move sub project
       - name: Move project to main
         run: |
