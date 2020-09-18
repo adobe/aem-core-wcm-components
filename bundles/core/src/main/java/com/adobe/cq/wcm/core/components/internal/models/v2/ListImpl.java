@@ -15,11 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -36,26 +40,74 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ListImpl implements List {
 
-    protected static final String RESOURCE_TYPE = "core/wcm/components/list/v2/list";
+	protected static final String RESOURCE_TYPE = "core/wcm/components/list/v2/list";
 
-    @Self
-    private SlingHttpServletRequest request;
+	@Self
+	private SlingHttpServletRequest request;
 
-    /**
-     * Result list.
-     */
-    private Collection<ListItem> listItems;
+	/**
+	 * Result list.
+	 */
+	private Collection<ListItem> listItems;
+	protected Collection<ListItem> links;
 
-    @Override
-    @NotNull
-    @JsonProperty("items")
-    public Collection<ListItem> getListItems() {
-        if (this.listItems == null) {
-            this.listItems = super.getPages().stream()
-                .filter(Objects::nonNull)
-                .map(page -> new PageListItemImpl(request, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT))
-                .collect(Collectors.toList());
-        }
-        return this.listItems;
-    }
+	@Override
+	@NotNull
+	@JsonProperty("items")
+	public Collection<ListItem> getListItems() {
+		Resource listRes = request.getResource();
+		ValueMap listvm = listRes.getValueMap();
+		if(listvm.containsKey("pages")) {
+			if (this.listItems == null) {
+				this.listItems = super.getPages().stream()
+						.filter(Objects::nonNull)
+						.map(page -> new PageListItemImpl(request, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT))
+						.collect(Collectors.toList());
+				return this.listItems;
+			}
+		}
+		Collection<ListItem> externalListItems = new ArrayList<>();
+		if (this.listItems == null) {
+			externalListItems = getLinks();
+		}
+		return externalListItems;
+
+
+	}
+
+	public Collection<ListItem> getLinks() {
+		Resource listRes = request.getResource();
+		Resource childResource = listRes.getChild("external-links");
+		if (childResource != null) {
+			this.links = populateModel(childResource);
+		}
+		return this.links;
+	}
+
+	public Collection<ListItem> populateModel(Resource resource) {
+		links = new ArrayList<>();
+		String URL = "";
+		String title = "";
+		if (resource != null) {
+			Iterator<Resource> linkResources = resource.listChildren();
+			while (linkResources.hasNext()) {
+				Resource childResource = linkResources.next();
+				ExternalLinkImpl link = childResource.adaptTo(ExternalLinkImpl.class);
+				if(null!=link) {
+					URL = link.getURL();
+					title = link.getTitle();
+					if((null!=URL)&&(null!=title)){
+						if(URL.startsWith("/content")){
+							link.setURL(URL+".html");
+							this.links.add(link);
+						}
+						else {
+							this.links.add(link);
+						}
+					}
+				}
+			}
+		}
+		return this.links;
+	}
 }

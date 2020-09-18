@@ -2,35 +2,15 @@
     "id": "list-a0852f8ca1",
     "dateFormatString": "yyyy-MM-dd",
     "items": [
+    ],
+    "links": [
         {
-            "id": "list-a0852f8ca1-item-c1a450dfb3",
-            "path": "/content/list/pages/page_1",
-            "url": "/context/content/list/pages/page_1.html",
-            "lastModified": 1474672365000,
-            "title": "Page 1",
-            "dataLayer": {
-                "list-a0852f8ca1-item-c1a450dfb3": {
-                    "xdm:linkURL": "/context/content/list/pages/page_1.html",
-                    "@type": "cq:PageContent",
-                    "dc:title": "Page 1"
-                }
-            },
-            ":type": "cq:PageContent"
+            "title": "Contact",
+            "url": "/content/aig/america-canada/Contact.html"
         },
         {
-            "id": "list-a0852f8ca1-item-a11dd78c1e",
-            "path": "/content/list/pages/page_2",
-            "url": "/context/content/list/pages/page_2.html",
-            "lastModified": 1474499565000,
-            "title": "Page 2",
-            "dataLayer": {
-                "list-a0852f8ca1-item-a11dd78c1e": {
-                    "xdm:linkURL": "/context/content/list/pages/page_2.html",
-                    "@type": "cq:PageContent",
-                    "dc:title": "Page 2"
-                }
-            },
-            ":type": "cq:PageContent"
+            "title": "AIG",
+            "url": "https://www.aig.com"
         }
     ],
     "dataLayer": {

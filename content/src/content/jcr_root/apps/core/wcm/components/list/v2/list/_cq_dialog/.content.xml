@@ -78,6 +78,11 @@
                                                         jcr:primaryType="nt:unstructured"
                                                         text="Tags"
                                                         value="tags"/>
+                                                    <elink 
+                                                    	granite:hide="${cqDesign.disableElink}" 
+                                                    	jcr:primaryType="nt:unstructured" 
+                                                    	text="Fixed list with External link" 
+                                                    	value="elink" />
                                                 </items>
                                             </listFrom>
                                             <setChildren
@@ -243,6 +248,62 @@
                                                     </well>
                                                 </items>
                                             </setTags>
+                                            <setElink
+                                                granite:class="hide list-option-listfrom-showhide-target foundation-layout-util-vmargin"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    showhidetargetvalue="elink"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <heading
+                                                        granite:class="coral-Heading coral-Heading--4"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/heading"
+                                                        level="{Long}4"
+                                                        text="Options for Fixed External List"/>
+                                                    <externallinks
+                                                        granite:class="foundation-toggleable cmp-list__editor-multifield_actions"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                        composite="{Boolean}true">
+                                                        <field
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                                                            acs-commons-nested="NODE_STORE"
+                                                            name="./external-links">
+                                                            <items jcr:primaryType="nt:unstructured">
+                                                                <column
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                                    <items jcr:primaryType="nt:unstructured">
+                                                                        <linkUrl
+                                                                            jcr:primaryType="nt:unstructured"
+                                                                            sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                                            fieldLabel="Link"
+                                                                            name="./linkUrl"
+                                                                            required="{Boolean}true"
+                                                                            rootPath="/content">
+                                                                            <granite:data
+                                                                                jcr:primaryType="nt:unstructured"
+                                                                                cmp-list-v2-dialog-edit-hook="actionLink"/>
+                                                                        </linkUrl>
+                                                                        <linkText
+                                                                            jcr:primaryType="nt:unstructured"
+                                                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                                            fieldLabel="External Link Label"
+                                                                            name="./linkText">
+                                                                            <granite:data
+                                                                                jcr:primaryType="nt:unstructured"
+                                                                                cmp-list-v2-dialog-edit-hook="actionTitle"/>
+                                                                        </linkText>
+                                                                    </items>
+                                                                </column>
+                                                            </items>
+                                                        </field>
+                                                    </externallinks>
+                                                </items>
+                                            </setElink>
                                             <orderBy
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"

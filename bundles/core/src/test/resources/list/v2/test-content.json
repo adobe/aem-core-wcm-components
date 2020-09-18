@@ -20,6 +20,19 @@
                     "linkItems": "true",
                     "showDescription": "true",
                     "showModificationDate": "true",
+                    "external-links": {
+			            "jcr:primaryType": "nt:unstructured",
+			            "item0": {
+			              "jcr:primaryType": "nt:unstructured",
+			              "linkUrl": "/content/aig/america-canada/Contact",
+			              "linkText": "Contact"
+			            },
+			            "item1": {
+			              "jcr:primaryType": "nt:unstructured",
+			              "linkUrl": "https://www.aig.com",
+			              "linkText": "AIG"
+			            }
+			          },
                     "pages": [
                         "/content/list/pages/page_1",
                         "/content/list/pages/page_2"
