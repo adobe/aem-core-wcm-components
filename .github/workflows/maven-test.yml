@@ -30,6 +30,10 @@ jobs:
         java: [8, 11]
 
     steps:
+      - # Support long paths on Windows
+      - name: Support longpaths
+        run: git config --system core.longpaths true
+
       # Check out Git repository
       - name: Checkout code
         uses: actions/checkout@v2
