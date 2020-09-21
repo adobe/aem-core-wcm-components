@@ -32,7 +32,7 @@ jobs:
     steps:
       # Support long paths on Windows
       - name: Support longpaths
-        run: git config --system core.longpaths true
+        run: git config core.longpaths true
 
       # Check out Git repository
       - name: Checkout code
