@@ -26,14 +26,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        os: [ ubuntu-latest ]
         java: [8, 11]
 
     steps:
-      # Support long paths on Windows
-      - name: Support longpaths
-        run: git config core.longpaths true
-
       # Check out Git repository
       - name: Checkout code
         uses: actions/checkout@v2
