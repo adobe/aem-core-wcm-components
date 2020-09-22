@@ -141,7 +141,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         super.initModel();
         this.appResourcesPath = Optional.ofNullable(currentStyle)
             .map(style -> style.get(PN_APP_RESOURCES_CLIENTLIB, String.class))
-            .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, true))
+            .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, false))
             .map(Collection::stream)
             .orElse(Stream.empty())
             .findFirst()
