@@ -1,4 +1,4 @@
-name: SYNC
+name: Deploy to Components Library
 env:
   # Username/email used to commit to the Core Components Library
   PROJECT_DIR: core-components
