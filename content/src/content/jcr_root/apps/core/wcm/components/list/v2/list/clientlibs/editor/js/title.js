@@ -32,26 +32,10 @@
 				if ($target.is("foundation-autocomplete")) {
                     updateText($target);
                 }
-                retrievePageInfo($dialogContent);
             });
         }
     });
 
-    function retrievePageInfo(dialogContent) {
-        var url = dialogContent.find('.cmp-list__editor-multifield_actions [data-cmp-list-v2-dialog-edit-hook="actionLink"]').val();
-        if (url && url.startsWith("/")) {
-            return $.ajax({
-                url: url + "/_jcr_content.json"
-            }).done(function(data) {
-                if (data) {
-                    titleTuple.seedTextValue(data["jcr:title"]);
-                    titleTuple.update();
-                }
-            });
-        } else {
-            titleTuple.update();
-        }
-    }
 
     function updateText(target) {
         var url = target.val();
