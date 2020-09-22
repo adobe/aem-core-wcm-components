@@ -18,7 +18,6 @@
 
     var dialogContentSelector = ".cmp-list__editor";
     var actionsMultifieldSelector = ".cmp-list__editor-multifield_actions";
-    var titleTuple;
 
     $(document).on("dialog-loaded", function(e) {
         var $dialog = e.dialog;
