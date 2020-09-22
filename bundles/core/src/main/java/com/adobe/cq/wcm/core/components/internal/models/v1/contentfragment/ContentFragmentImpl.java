@@ -128,7 +128,7 @@ public class ContentFragmentImpl implements ContentFragment {
         return damContentFragment.getType();
     }
 
-    @Nullable
+    @NotNull
     @Override
     public String getName() {
         return damContentFragment.getName();
@@ -236,8 +236,8 @@ public class ContentFragmentImpl implements ContentFragment {
         }
 
         @Override
-        public @Nullable String getName() {
-            return null;
+        public @NotNull String getName() {
+            return "";
         }
 
         @Override
