@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.components.Component;
 
 /**
  * Panel container item implementation.
@@ -39,8 +40,8 @@ public class PanelContainerItemImpl extends ResourceListItemImpl implements List
      * @param resource The resource.
      * @param parentId The ID of the containing component.
      */
-    public PanelContainerItemImpl(@NotNull final Resource resource, final String parentId) {
-        super(resource, parentId);
+    public PanelContainerItemImpl(@NotNull final Resource resource, final String parentId, Component component) {
+        super(resource, parentId, component);
         title = Optional.ofNullable(resource.getValueMap().get(PN_PANEL_TITLE, String.class))
             .orElseGet(() -> resource.getValueMap().get(JcrConstants.JCR_TITLE, String.class));
     }
