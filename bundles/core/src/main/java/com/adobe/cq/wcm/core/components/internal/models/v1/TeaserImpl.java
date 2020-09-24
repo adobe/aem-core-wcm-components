@@ -464,6 +464,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             } else {
                 ctaPage = null;
             }
+            if (component != null) {
+                this.dataLayerType = component.getResourceType() + "/" + CTA_ID_PREFIX;
+            }
         }
 
         /**

@@ -33,7 +33,7 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl {
 
     protected String parentId;
     protected String path;
-    private Component component;
+    protected String dataLayerType;
 
     private static final String ITEM_ID_PREFIX = "item";
 
@@ -42,8 +42,10 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl {
         if (resource != null) {
             this.path = resource.getPath();
         }
+        if (component != null) {
+            this.dataLayerType = component.getResourceType() + "/" + ITEM_ID_PREFIX;
+        }
         this.resource = resource;
-        this.component = component;
     }
 
     @Nullable
@@ -55,13 +57,7 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl {
 
     @Override
     public String getDataLayerType() {
-        String type;
-        if (component != null) {
-            type = component.getResourceType() + "/" + ITEM_ID_PREFIX;
-        } else {
-            type = super.getDataLayerType();
-        }
-        return type;
+        return StringUtils.defaultString(dataLayerType, super.getDataLayerType());
     }
 
 }
