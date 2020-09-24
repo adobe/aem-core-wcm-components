@@ -18,22 +18,26 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Carousel;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(AemContextExtension.class)
@@ -64,11 +68,11 @@ class CarouselImplTest {
     void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
         Object[][] expectedItems = {
-                { "item_1", "Teaser 1", "core/wcm/components/teaser/v1/teaser",
+                { "item_1", "Teaser 1", "cq:Component/item",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1" },
-                { "item_2", "Teaser 2", "core/wcm/components/teaser/v1/teaser",
+                { "item_2", "Teaser 2", "cq:Component/item",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2" },
-                { "item_3", "Carousel Panel 3", "core/wcm/components/teaser/v1/teaser",
+                { "item_3", "Carousel Panel 3", "cq:Component/item",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" }, };
         verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
@@ -85,6 +89,12 @@ class CarouselImplTest {
     private Carousel getCarouselUnderTest(@NotNull final String resourcePath) {
         Utils.enableDataLayer(context, true);
         context.currentResource(Objects.requireNonNull(context.resourceResolver().getResource(resourcePath)));
+        Component component = mock(Component.class);
+        when(component.getResourceType()).thenReturn(CarouselImpl.RESOURCE_TYPE);
+        MockSlingHttpServletRequest request = context.request();
+        SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
+        slingBindings.put(WCMBindings.COMPONENT, component);
+        request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return context.request().adaptTo(Carousel.class);
     }
 

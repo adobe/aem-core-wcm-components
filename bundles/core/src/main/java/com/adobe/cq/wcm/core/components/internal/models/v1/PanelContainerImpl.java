@@ -41,7 +41,7 @@ public abstract class PanelContainerImpl extends AbstractContainerImpl implement
     @NotNull
     protected List<PanelContainerItemImpl> readItems() {
         return getChildren().stream()
-            .map(res -> new PanelContainerItemImpl(res, getId(), null))
+            .map(res -> new PanelContainerItemImpl(res, getId(), component))
             .collect(Collectors.toList());
     }
 
