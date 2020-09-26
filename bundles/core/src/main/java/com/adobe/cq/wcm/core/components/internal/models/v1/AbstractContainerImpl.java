@@ -265,7 +265,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
         if (this.resource instanceof TemplatedResource) {
             return this.resource;
         }
-        return Optional.ofNullable((Resource)this.request.adaptTo(TemplatedResource.class)).orElse(this.resource);
+        return Optional.ofNullable((Resource)this.resource.adaptTo(TemplatedResource.class)).orElse(this.resource);
     }
 
     /*
