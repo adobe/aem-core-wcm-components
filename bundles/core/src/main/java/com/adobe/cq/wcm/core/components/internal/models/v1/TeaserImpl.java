@@ -273,7 +273,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 .map(Iterable::spliterator)
                 .map(s -> StreamSupport.stream(s, false))
                 .orElseGet(Stream::empty)
-                .map(action -> new Action(action, this.getId()))
+                .map(action -> new Action(action, this.getId(), component))
                 .collect(Collectors.toList());
         }
         return this.actions;
@@ -452,8 +452,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          * @param actionRes The action resource.
          * @param parentId The ID of the containing Teaser.
          */
-        private Action(@NotNull final Resource actionRes, final String parentId) {
-            super(parentId, actionRes);
+        private Action(@NotNull final Resource actionRes, final String parentId, Component component) {
+            super(parentId, actionRes, component);
             ctaParentId = parentId;
             ctaResource = actionRes;
             ValueMap ctaProperties = actionRes.getValueMap();
@@ -463,6 +463,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 ctaPage = pageManager.getPage(ctaUrl);
             } else {
                 ctaPage = null;
+            }
+            if (component != null) {
+                this.dataLayerType = component.getResourceType() + "/" + CTA_ID_PREFIX;
             }
         }
 

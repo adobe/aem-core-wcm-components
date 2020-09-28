@@ -20,6 +20,7 @@ import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.day.cq.wcm.api.components.Component;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
@@ -32,13 +33,17 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl {
 
     protected String parentId;
     protected String path;
+    protected String dataLayerType;
 
     private static final String ITEM_ID_PREFIX = "item";
 
-    protected AbstractListItemImpl(String parentId, Resource resource) {
+    protected AbstractListItemImpl(String parentId, Resource resource, Component component) {
         this.parentId = parentId;
         if (resource != null) {
             this.path = resource.getPath();
+        }
+        if (component != null) {
+            this.dataLayerType = component.getResourceType() + "/" + ITEM_ID_PREFIX;
         }
         this.resource = resource;
     }
@@ -48,6 +53,11 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl {
     public String getId() {
         String prefix = StringUtils.join(parentId, ID_SEPARATOR, ITEM_ID_PREFIX);
         return Utils.generateId(prefix, path);
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return StringUtils.defaultString(dataLayerType, super.getDataLayerType());
     }
 
 }

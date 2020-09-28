@@ -52,6 +52,10 @@ public abstract class AbstractComponentImpl implements Component {
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
+    protected com.day.cq.wcm.api.components.Component component;
+
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     protected ComponentContext componentContext;
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -235,5 +239,10 @@ public abstract class AbstractComponentImpl implements Component {
     @JsonIgnore
     public String[] getDataLayerShownItems() {
         return null;
+    }
+
+    @JsonIgnore
+    public String getDataLayerType() {
+        return resource.getResourceType();
     }
 }

@@ -33,6 +33,7 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
@@ -49,8 +50,9 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     protected SlingHttpServletRequest request;
     protected Page page;
 
-    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page, String parentId, boolean isShadowingDisabled) {
-        super(parentId, page.getContentResource());
+    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page, String parentId, boolean isShadowingDisabled,
+                            Component component) {
+        super(parentId, page.getContentResource(), component);
         this.request = request;
         this.page = page;
         this.parentId = parentId;

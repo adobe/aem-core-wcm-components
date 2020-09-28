@@ -24,7 +24,7 @@
                   "dataLayer": {
                     "navigation-c07c8768dd-item-b11a580818": {
                       "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-1.html",
-                      "@type": "cq:PageContent",
+                      "@type": "core/wcm/components/navigation/v1/navigation/item",
                       "dc:title": "Navigation 1.1.1"
                     }
                   },
@@ -45,7 +45,7 @@
                       "dataLayer": {
                         "navigation-c07c8768dd-item-aeb4fe9af3": {
                           "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1.html",
-                          "@type": "cq:PageContent",
+                          "@type": "core/wcm/components/navigation/v1/navigation/item",
                           "dc:title": "Navigation 1.1.2.1"
                         }
                       },
@@ -62,7 +62,7 @@
                       "dataLayer": {
                         "navigation-c07c8768dd-item-2be095a6e4": {
                           "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
-                          "@type": "cq:PageContent",
+                          "@type": "core/wcm/components/navigation/v1/navigation/item",
                           "dc:title": "Navigation 1.1.2.3"
                         }
                       },
@@ -76,7 +76,7 @@
                   "dataLayer": {
                     "navigation-c07c8768dd-item-954ef7fd94": {
                       "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2.html",
-                      "@type": "cq:PageContent",
+                      "@type": "core/wcm/components/navigation/v1/navigation/item",
                       "dc:title": "Navigation 1.1.2"
                     }
                   },
@@ -90,7 +90,7 @@
               "dataLayer": {
                 "navigation-c07c8768dd-item-ac16cd4d84": {
                   "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1.html",
-                  "@type": "cq:PageContent",
+                  "@type": "core/wcm/components/navigation/v1/navigation/item",
                   "dc:title": "Navigation 1.1"
                 }
               },
@@ -104,7 +104,7 @@
           "dataLayer": {
             "navigation-c07c8768dd-item-b318e48feb": {
               "xdm:linkURL": "/core/navigation-1-vanity",
-              "@type": "cq:PageContent",
+              "@type": "core/wcm/components/navigation/v1/navigation/item",
               "dc:title": "Navigation 1"
             }
           },
@@ -121,7 +121,7 @@
           "dataLayer": {
             "navigation-c07c8768dd-item-531a950bc2": {
               "xdm:linkURL": "/core/content/navigation-redirect/navigation-2.html",
-              "@type": "cq:PageContent",
+              "@type": "core/wcm/components/navigation/v1/navigation/item",
               "dc:title": "Navigation 2"
             }
           },
@@ -135,7 +135,7 @@
       "dataLayer": {
         "navigation-c07c8768dd-item-2edead38ee": {
           "xdm:linkURL": "/core/content/navigation-redirect.html",
-          "@type": "cq:PageContent",
+          "@type": "core/wcm/components/navigation/v1/navigation/item",
           "dc:title": "Navigation"
         }
       },
