@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.components.Component;
 
 public class LanguageNavigationItemImpl extends NavigationItemImpl implements LanguageNavigationItem {
 
@@ -35,8 +36,9 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
     protected String country;
     protected String language;
 
-    public LanguageNavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, String title, String parentId) {
-        super(page, active, request, level, children, parentId);
+    public LanguageNavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level,
+                                      List<NavigationItem> children, String title, String parentId, Component component) {
+        super(page, active, request, level, children, parentId, component);
         this.title = title;
     }
 

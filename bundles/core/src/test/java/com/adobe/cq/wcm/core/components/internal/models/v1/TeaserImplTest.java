@@ -261,6 +261,7 @@ class TeaserImplTest {
         when(component.getProperties()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>() {{
             put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/components/image/v2/image");
         }}));
+        when(component.getResourceType()).thenReturn(TeaserImpl.RESOURCE_TYPE);
         SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);

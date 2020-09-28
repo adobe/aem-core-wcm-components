@@ -71,7 +71,7 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     @NotNull
     protected List<ResourceListItemImpl> readItems() {
         return getChildren().stream()
-            .map(res -> new ResourceListItemImpl(res, getId()))
+            .map(res -> new ResourceListItemImpl(res, getId(), component))
             .collect(Collectors.toList());
     }
 

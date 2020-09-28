@@ -13,7 +13,7 @@
       "dataLayer": {
         "teaser-84f85e5d32-cta-4a426bc86e": {
           "xdm:linkURL": "/core/content/teasers.html",
-          "@type": "nt:unstructured",
+          "@type": "core/wcm/components/teaser/v1/teaser/cta",
           "dc:title": "Teasers"
         }
       },
@@ -26,7 +26,7 @@
       "dataLayer": {
         "teaser-84f85e5d32-cta-ed27c8e4b7": {
           "xdm:linkURL": "http://www.adobe.com",
-          "@type": "nt:unstructured",
+          "@type": "core/wcm/components/teaser/v1/teaser/cta",
           "dc:title": "Adobe"
         }
       },

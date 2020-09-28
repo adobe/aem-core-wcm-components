@@ -267,7 +267,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     private NavigationItemImpl createNavigationItem(@NotNull final Page page, @NotNull final List<NavigationItem> children) {
         int level = page.getDepth() - (this.getNavigationRoot().getDepth() + structureStart);
         boolean selected = checkSelected(page);
-        return new NavigationItemImpl(page, selected, request, level, children, getId(), isShadowingDisabled);
+        return new NavigationItemImpl(page, selected, request, level, children, getId(), isShadowingDisabled, component);
     }
 
     /**

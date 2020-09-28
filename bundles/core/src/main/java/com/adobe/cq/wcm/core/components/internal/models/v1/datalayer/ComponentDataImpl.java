@@ -58,7 +58,7 @@ public class ComponentDataImpl implements ComponentData {
 
     @Override
     public String getType() {
-        return resource.getResourceType();
+        return component.getDataLayerType();
     }
 
     @Override

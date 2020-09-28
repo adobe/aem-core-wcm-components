@@ -19,7 +19,7 @@
                             "title": "Navigation",
                             "dataLayer": {
                                 "navigation-87ad2f6ddb-item-f4917f2146": {
-                                    "@type": "cq:PageContent",
+                                    "@type": "core/wcm/components/navigation/v1/navigation/item",
                                     "xdm:linkURL": "/core/content/navigation-redirect-chain.html",
                                     "dc:title": "Navigation"
                                 }
@@ -33,7 +33,7 @@
                     "title": "Navigation",
                     "dataLayer": {
                         "navigation-87ad2f6ddb-item-0dcd59a74a": {
-                            "@type": "cq:PageContent",
+                            "@type": "core/wcm/components/navigation/v1/navigation/item",
                             "xdm:linkURL": "/core/content/navigation-redirect-chain.html",
                             "dc:title": "Navigation"
                         }
@@ -50,7 +50,7 @@
                     "title": "Navigation",
                     "dataLayer": {
                         "navigation-87ad2f6ddb-item-f767ff6915": {
-                            "@type": "cq:PageContent",
+                            "@type": "core/wcm/components/navigation/v1/navigation/item",
                             "xdm:linkURL": "/core/content/navigation-redirect-chain.html",
                             "dc:title": "Navigation"
                         }
@@ -67,7 +67,7 @@
                     "title": "Navigation",
                     "dataLayer": {
                         "navigation-87ad2f6ddb-item-810ae9b516": {
-                            "@type": "cq:PageContent",
+                            "@type": "core/wcm/components/navigation/v1/navigation/item",
                             "xdm:linkURL": "/core/content/navigation-redirect-chain.html",
                             "dc:title": "Navigation"
                         }
@@ -81,7 +81,7 @@
             "title": "Navigation",
             "dataLayer": {
                 "navigation-87ad2f6ddb-item-71ce9edd7d": {
-                    "@type": "cq:PageContent",
+                    "@type": "core/wcm/components/navigation/v1/navigation/item",
                     "xdm:linkURL": "/core/content/navigation-redirect-chain.html",
                     "dc:title": "Navigation"
                 }
