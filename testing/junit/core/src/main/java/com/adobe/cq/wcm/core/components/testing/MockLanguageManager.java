@@ -29,6 +29,7 @@ import com.day.cq.commons.LanguageUtil;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
 
+@Deprecated
 public class MockLanguageManager implements LanguageManager {
 
     @Override
