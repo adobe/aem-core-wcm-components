@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets.embed;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.function.Function;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -30,7 +31,6 @@ import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.day.cq.wcm.api.designer.Designer;
-import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 

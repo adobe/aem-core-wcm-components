@@ -33,8 +33,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.testing.MockLanguageManager;
-import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
@@ -85,13 +83,12 @@ public class SearchResultServletTest {
     public void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(TEST_BASE + "/test-conf.json", "/conf/test/settings/wcm/templates");
-        underTest = new SearchResultServlet();
         when(mockQueryBuilder.createQuery(any(), any())).thenReturn(mockQuery);
         when(mockQuery.getResult()).thenReturn(mockSearchResult);
         when(mockSearchResult.getHits()).thenReturn(Collections.singletonList(mockHit));
-        Utils.setInternalState(underTest, "queryBuilder", mockQueryBuilder);
-        Utils.setInternalState(underTest, "languageManager", new MockLanguageManager());
-        Utils.setInternalState(underTest, "relationshipManager", mockLiveRelationshipManager);
+        context.registerService(QueryBuilder.class, mockQueryBuilder);
+        context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
+        underTest = context.registerInjectActivateService(new SearchResultServlet());
     }
 
     @Test
