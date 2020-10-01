@@ -37,7 +37,7 @@ import com.adobe.granite.ui.components.rendercondition.RenderCondition;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.AbstractContentFragmentTest.ADAPTER;
+import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.AbstractContentFragmentTest.CONTENT_FRAGMENT_ADAPTER;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -71,7 +71,7 @@ class ElementNamesRenderConditionTest {
         // load the content fragment models
         context.load().json(TEST_BASE + "/test-content-conf.json", "/conf/global/settings/dam/cfm/models");
         // register an adapter that adapts resources to (mocks of) content fragments
-        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, ADAPTER);
+        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, CONTENT_FRAGMENT_ADAPTER);
         // mock services
         context.registerService(FragmentRenderService.class, mock(FragmentRenderService.class));
         context.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
