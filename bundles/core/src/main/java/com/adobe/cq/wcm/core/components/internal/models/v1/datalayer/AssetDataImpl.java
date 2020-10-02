@@ -19,9 +19,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
+import com.day.cq.dam.api.DamConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.JcrConstants;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 
@@ -79,5 +83,29 @@ public class AssetDataImpl implements AssetData {
             }
         }
         return assetTags.toArray(new String[assetTags.size()]);
+    }
+
+    @Override
+    public Map<String, Object> getSmartTags() {
+        Resource assetResource = asset.adaptTo(Resource.class);
+        if (assetResource == null) {
+            return null;
+        }
+
+        Resource predictedTagsResource = assetResource.getChild(DamConstants.PREDICTED_TAGS);
+        if (predictedTagsResource == null) {
+            return null;
+        }
+
+        Map<String, Object> smartTags = new HashMap<>();
+        for (Resource smartTagResource : predictedTagsResource.getChildren()) {
+            ValueMap props = smartTagResource.adaptTo(ValueMap.class);
+            String tagName = props != null ? (String)props.get("name") : null;
+            if (tagName != null) {
+                smartTags.put(tagName, props.get("confidence"));
+            }
+        }
+
+        return smartTags;
     }
 }
