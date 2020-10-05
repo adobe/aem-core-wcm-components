@@ -86,6 +86,7 @@
                                                         name="./jcr:title"
                                                         value="${cqDesign._jcr_description}"/>
                                                     <titleType
+                                                        granite:hide="${cqDesign.titleTypeHidden}"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                         fieldLabel="Title Type"
