@@ -26,7 +26,6 @@ import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -54,6 +53,7 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
@@ -203,7 +203,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
         titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
         descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
-        titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
+        titleType = properties.get(Teaser.PN_TITLE_TYPE, currentStyle.get(Teaser.PN_TITLE_TYPE, titleType));
         imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
         titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
         if (imageLinkHidden) {
