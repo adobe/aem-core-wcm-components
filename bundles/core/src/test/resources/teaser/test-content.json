@@ -150,6 +150,16 @@
                                 "text": "Adobe"
                             }
                         }
+                    },
+                    "teaser-13"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "pretitle"          : "Teaser's Pretitle",
+                        "jcr:title"         : "Teaser",
+                        "jcr:description"   : "Description",
+                        "linkURL"           : "https://www.adobe.com",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser",
+                        "titleType"         : "h4"
                     }
                 }
             }
