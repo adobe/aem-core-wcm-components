@@ -223,9 +223,16 @@ class TeaserImplTest {
     @Test
     void testTeaserWithTitleTypeOverride() {
         Teaser teaser = getTeaserUnderTest(TEASER_13,
-            Teaser.PN_TITLE_TYPE, "h5");
+            Teaser.PN_TITLE_TYPE, "h5", Teaser.PN_TITLE_TYPE_HIDDEN, false);
         assertEquals("h4", teaser.getTitleType(), "Expected title type is not correct");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser13"));
+    }
+
+    @Test
+    void testTeaserWithTitleTypeOverrideHidden() {
+        Teaser teaser = getTeaserUnderTest(TEASER_13,
+            Teaser.PN_TITLE_TYPE, "h5", Teaser.PN_TITLE_TYPE_HIDDEN, true);
+        assertEquals("h5", teaser.getTitleType(), "Expected title type is not correct");
     }
 
     @Test
