@@ -41,16 +41,12 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
 
 @ExtendWith(AemContextExtension.class)
 class TeaserImplTest {
@@ -78,6 +74,7 @@ class TeaserImplTest {
     private static final String TEASER_10 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-10";
     private static final String TEASER_11 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-11";
     private static final String TEASER_12 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-12";
+    private static final String TEASER_13 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-13";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
     private TestLogger testLogger;
@@ -221,6 +218,14 @@ class TeaserImplTest {
         Teaser teaser = getTeaserUnderTest(TEASER_1);
         assertNull(teaser.getTitleType(), "Expected the default title type is not correct");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
+    }
+
+    @Test
+    void testTeaserWithTitleTypeOverride() {
+        Teaser teaser = getTeaserUnderTest(TEASER_13,
+            Teaser.PN_TITLE_TYPE, "h5");
+        assertEquals("h4", teaser.getTitleType(), "Expected title type is not correct");
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser13"));
     }
 
     @Test
