@@ -117,7 +117,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * Flag indicating if the title type should be hidden.
      */
-    private boolean titleTypeHidden = false;
+    private boolean showTitleType = false;
 
     /**
      * Flag indicating if the description should be hidden.
@@ -209,7 +209,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
         descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
         titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
-        titleTypeHidden = currentStyle.get(Teaser.PN_TITLE_TYPE_HIDDEN, titleTypeHidden);
+        showTitleType = currentStyle.get(Teaser.PN_SHOW_TITLE_TYPE, showTitleType);
         imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
         titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
         if (imageLinkHidden) {
@@ -377,7 +377,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getTitleType() {
-        if (!titleTypeHidden) {
+        if (showTitleType) {
             titleType = resource.getValueMap().get(Teaser.PN_TITLE_TYPE, titleType);
         }
 

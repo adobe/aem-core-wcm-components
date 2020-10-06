@@ -120,11 +120,11 @@ public interface Teaser extends Component {
     String PN_TITLE_TYPE = "titleType";
 
     /**
-     * Name of the policy property that defines whether or not the title type is hidden.
+     * Name of the policy property that defines whether or not the title type is shown.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
      */
-    String PN_TITLE_TYPE_HIDDEN = "titleTypeHidden";
+    String PN_SHOW_TITLE_TYPE = "showTitleType";
 
     /**
      * Checks if the teaser has Call-to-Action elements

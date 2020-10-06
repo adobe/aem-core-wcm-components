@@ -65,8 +65,9 @@
                                     <titleType
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        text="Hide title type"
-                                        name="./titleTypeHidden"
+                                        text="Show title type"
+                                        name="./showTitleType"
+                                        uncheckedValue="false"
                                         value="{Boolean}true"/>
                                     <description
                                         jcr:primaryType="nt:unstructured"
