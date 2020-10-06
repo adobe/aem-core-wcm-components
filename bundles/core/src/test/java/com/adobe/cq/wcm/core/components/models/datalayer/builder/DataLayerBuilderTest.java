@@ -127,6 +127,21 @@ public final class DataLayerBuilderTest {
             Assertions.assertEquals(TEST_PARENT_ID, componentData.getParentId());
             Assertions.assertEquals(TEST_TITLE, componentData.getTitle());
             Assertions.assertEquals(TEST_TYPE, componentData.getType());
+
+            // test that sequential calls return the same cached response
+            Assertions.assertSame(componentData.getId(), componentData.getId());
+            Assertions.assertSame(componentData.getDescription(), componentData.getDescription());
+            Assertions.assertSame(componentData.getLinkUrl(), componentData.getLinkUrl());
+            Assertions.assertSame(componentData.getText(), componentData.getText());
+            Assertions.assertSame(componentData.getParentId(), componentData.getParentId());
+            Assertions.assertSame(componentData.getTitle(), componentData.getTitle());
+            Assertions.assertSame(componentData.getType(), componentData.getType());
+
+            // check that dates and arrays have been defensively copied
+            Assertions.assertEquals(componentData.getLastModifiedDate(), componentData.getLastModifiedDate());
+            Assertions.assertNotSame(componentData.getLastModifiedDate(), componentData.getLastModifiedDate());
+
+
             Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "component"));
         }
 
@@ -240,6 +255,22 @@ public final class DataLayerBuilderTest {
             Assertions.assertEquals(TEST_TITLE, componentData.getTitle());
             Assertions.assertEquals(TEST_TYPE, componentData.getType());
             Assertions.assertArrayEquals(TEST_SHOWN_ITEMS, componentData.getShownItems());
+
+            // test that sequential calls return the same cached response
+            Assertions.assertSame(componentData.getId(), componentData.getId());
+            Assertions.assertSame(componentData.getDescription(), componentData.getDescription());
+            Assertions.assertSame(componentData.getLinkUrl(), componentData.getLinkUrl());
+            Assertions.assertSame(componentData.getText(), componentData.getText());
+            Assertions.assertSame(componentData.getParentId(), componentData.getParentId());
+            Assertions.assertSame(componentData.getTitle(), componentData.getTitle());
+            Assertions.assertSame(componentData.getType(), componentData.getType());
+
+            // check that dates and arrays have been defensively copied
+            Assertions.assertEquals(componentData.getLastModifiedDate(), componentData.getLastModifiedDate());
+            Assertions.assertNotSame(componentData.getLastModifiedDate(), componentData.getLastModifiedDate());
+            Assertions.assertArrayEquals(componentData.getShownItems(), componentData.getShownItems());
+            Assertions.assertNotSame(componentData.getShownItems(), componentData.getShownItems());
+
             Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "container"));
         }
 
@@ -365,6 +396,21 @@ public final class DataLayerBuilderTest {
             Assertions.assertEquals(TEST_TITLE, imageData.getTitle());
             Assertions.assertEquals(TEST_TYPE, imageData.getType());
             Assertions.assertNotNull(imageData.getAssetData());
+
+            // test that sequential calls return the same cached response
+            Assertions.assertSame(imageData.getId(), imageData.getId());
+            Assertions.assertSame(imageData.getDescription(), imageData.getDescription());
+            Assertions.assertSame(imageData.getLinkUrl(), imageData.getLinkUrl());
+            Assertions.assertSame(imageData.getText(), imageData.getText());
+            Assertions.assertSame(imageData.getParentId(), imageData.getParentId());
+            Assertions.assertSame(imageData.getTitle(), imageData.getTitle());
+            Assertions.assertSame(imageData.getType(), imageData.getType());
+            Assertions.assertSame(imageData.getAssetData(), imageData.getAssetData());
+
+            // check that dates and arrays have been defensively copied
+            Assertions.assertEquals(imageData.getLastModifiedDate(), imageData.getLastModifiedDate());
+            Assertions.assertNotSame(imageData.getLastModifiedDate(), imageData.getLastModifiedDate());
+
             Utils.testJSONDataLayer(imageData, Utils.getTestDataModelJSONPath(TEST_BASE, "image"));
         }
 
@@ -500,6 +546,24 @@ public final class DataLayerBuilderTest {
             Assertions.assertEquals(TEST_URL, pageData.getUrl());
             Assertions.assertEquals(TEST_TEMPLATE_PATH, pageData.getTemplatePath());
             Utils.testJSONDataLayer(pageData, Utils.getTestDataModelJSONPath(TEST_BASE, "page"));
+
+            // test that sequential calls return the same cached response
+            Assertions.assertSame(pageData.getId(), pageData.getId());
+            Assertions.assertSame(pageData.getDescription(), pageData.getDescription());
+            Assertions.assertSame(pageData.getLinkUrl(), pageData.getLinkUrl());
+            Assertions.assertSame(pageData.getText(), pageData.getText());
+            Assertions.assertSame(pageData.getParentId(), pageData.getParentId());
+            Assertions.assertSame(pageData.getTitle(), pageData.getTitle());
+            Assertions.assertSame(pageData.getType(), pageData.getType());
+            Assertions.assertSame(pageData.getLanguage(), pageData.getLanguage());
+            Assertions.assertSame(pageData.getUrl(), pageData.getUrl());
+            Assertions.assertSame(pageData.getTemplatePath(), pageData.getTemplatePath());
+
+            // check that dates and arrays have been defensively copied
+            Assertions.assertEquals(pageData.getLastModifiedDate(), pageData.getLastModifiedDate());
+            Assertions.assertNotSame(pageData.getLastModifiedDate(), pageData.getLastModifiedDate());
+            Assertions.assertArrayEquals(pageData.getTags(), pageData.getTags());
+            Assertions.assertNotSame(pageData.getTags(), pageData.getTags());
         }
 
 
@@ -607,6 +671,17 @@ public final class DataLayerBuilderTest {
             Assertions.assertEquals(LAST_MODIFIED_DATE, assetData.getLastModifiedDate());
             Assertions.assertEquals(TEST_URL, assetData.getUrl());
             Assertions.assertArrayEquals(TEST_TAGS, assetData.getTags());
+
+            // test that sequential calls return the same cached response
+            Assertions.assertSame(assetData.getId(), assetData.getId());
+            Assertions.assertSame(assetData.getFormat(), assetData.getFormat());
+            Assertions.assertSame(assetData.getUrl(), assetData.getUrl());
+
+            // check that dates and arrays have been defensively copied
+            Assertions.assertEquals(assetData.getLastModifiedDate(), assetData.getLastModifiedDate());
+            Assertions.assertNotSame(assetData.getLastModifiedDate(), assetData.getLastModifiedDate());
+            Assertions.assertArrayEquals(assetData.getTags(), assetData.getTags());
+            Assertions.assertNotSame(assetData.getTags(), assetData.getTags());
         }
 
         @Test
@@ -641,6 +716,17 @@ public final class DataLayerBuilderTest {
             Assertions.assertEquals(LAST_MODIFIED_DATE, assetData.getLastModifiedDate());
             Assertions.assertEquals(TEST_URL, assetData.getUrl());
             Assertions.assertArrayEquals(TEST_TAGS, assetData.getTags());
+
+            // test that sequential calls return the same cached response
+            Assertions.assertSame(assetData.getId(), assetData.getId());
+            Assertions.assertSame(assetData.getFormat(), assetData.getFormat());
+            Assertions.assertSame(assetData.getUrl(), assetData.getUrl());
+
+            // check that dates and arrays have been defensively copied
+            Assertions.assertEquals(assetData.getLastModifiedDate(), assetData.getLastModifiedDate());
+            Assertions.assertNotSame(assetData.getLastModifiedDate(), assetData.getLastModifiedDate());
+            Assertions.assertArrayEquals(assetData.getTags(), assetData.getTags());
+            Assertions.assertNotSame(assetData.getTags(), assetData.getTags());
         }
 
         @Test

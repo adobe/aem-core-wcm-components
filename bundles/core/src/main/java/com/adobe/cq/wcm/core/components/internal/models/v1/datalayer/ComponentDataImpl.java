@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.function.Supplier;
 
@@ -56,6 +57,76 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
     private final DataLayerSupplier dataLayerSupplier;
 
     /**
+     * The ID field value.
+     */
+    private String id;
+
+    /**
+     * The type field value.
+     */
+    private String type;
+
+    /**
+     * The last modified date field value.
+     */
+    private Date lastModifiedDate;
+
+    /**
+     * The parent ID field value.
+     */
+    private String parentId;
+
+    /**
+     * The title field value.
+     */
+    private String title;
+
+    /**
+     * The description field value.
+     */
+    private String description;
+
+    /**
+     * The text field value.
+     */
+    private String text;
+
+    /**
+     * The link URL field value.
+     */
+    private String linkUrl;
+
+    /**
+     * The shown items field value.
+     */
+    private String[] shownItems;
+
+    /**
+     * The asset field value.
+     */
+    private AssetData assetData;
+
+    /**
+     * The template path field value.
+     */
+    private String templatePath;
+
+    /**
+     * The language field value.
+     */
+    private String language;
+
+    /**
+     * The tags field value.
+     */
+    private String[] tags;
+
+    /**
+     * The URL field value.
+     */
+    private String url;
+
+    /**
      * Construct the data layer model.
      *
      * @param supplier The data layer supplier.
@@ -67,124 +138,175 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
     @Override
     @NotNull
     public String getId() {
-        return this.getDataLayerSupplier().getId().get();
+        if (this.id == null) {
+            this.id = this.getDataLayerSupplier().getId().get();
+        }
+        return this.id;
     }
 
     @Override
     @Nullable
     public String getType() {
-        return this.getDataLayerSupplier()
-            .getType()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.type == null) {
+            this.type = this.getDataLayerSupplier()
+                .getType()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.type;
     }
 
     @Override
     @Nullable
     public Date getLastModifiedDate() {
-        return this.getDataLayerSupplier()
-            .getLastModifiedDate()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.lastModifiedDate == null) {
+            this.lastModifiedDate = this.getDataLayerSupplier()
+                .getLastModifiedDate()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        if (this.lastModifiedDate != null) {
+            return new Date(this.lastModifiedDate.getTime());
+        }
+        return null;
     }
 
     @Override
     @Nullable
     public String getParentId() {
-        return this.getDataLayerSupplier()
-            .getParentId()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.parentId == null) {
+            this.parentId = this.getDataLayerSupplier()
+                .getParentId()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.parentId;
     }
 
     @Override
     @Nullable
     public String getTitle() {
-        return this.getDataLayerSupplier()
-            .getTitle()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.title == null) {
+            this.title = this.getDataLayerSupplier()
+                .getTitle()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.title;
     }
 
     @Override
     @Nullable
     public String getDescription() {
-        return this.getDataLayerSupplier()
-            .getDescription()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.description == null) {
+            this.description = this.getDataLayerSupplier()
+                .getDescription()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.description;
     }
 
     @Override
     @Nullable
     public String getText() {
-        return this.getDataLayerSupplier()
-            .getText()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.text == null) {
+            this.text = this.getDataLayerSupplier()
+                .getText()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.text;
     }
 
     @Override
     @Nullable
     public String getLinkUrl() {
-        return this.getDataLayerSupplier()
-            .getLinkUrl()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.linkUrl == null) {
+            this.linkUrl = this.getDataLayerSupplier()
+                .getLinkUrl()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.linkUrl;
     }
 
     @Override
     @Nullable
     public String[] getShownItems() {
-        return this.getDataLayerSupplier()
-            .getShownItems()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.shownItems == null) {
+            this.shownItems = this.getDataLayerSupplier()
+                .getShownItems()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        if (this.shownItems != null) {
+            return Arrays.copyOf(this.shownItems, this.shownItems.length);
+        }
+        return null;
     }
 
     @Override
     @Nullable
     public AssetData getAssetData() {
-        return this.getDataLayerSupplier()
-            .getAssetData()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.assetData == null) {
+            this.assetData = this.getDataLayerSupplier()
+                .getAssetData()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.assetData;
     }
 
     @Override
     @Nullable
     public String getTemplatePath() {
-        return this.getDataLayerSupplier()
-            .getTemplatePath()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.templatePath == null) {
+            this.templatePath = this.getDataLayerSupplier()
+                .getTemplatePath()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.templatePath;
     }
 
     @Override
     @Nullable
     public String getLanguage() {
-        return this.getDataLayerSupplier()
-            .getLanguage()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.language == null) {
+            this.language = this.getDataLayerSupplier()
+                .getLanguage()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.language;
     }
 
     @Override
     @Nullable
     public String[] getTags() {
-        return this.getDataLayerSupplier()
-            .getTags()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.tags == null) {
+            this.tags = this.getDataLayerSupplier()
+                .getTags()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        if (this.tags != null) {
+            return Arrays.copyOf(this.tags, this.tags.length);
+        }
+        return null;
     }
 
     @Override
     @Nullable
     public String getUrl() {
-        return this.getDataLayerSupplier()
-            .getUrl()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.url == null) {
+            this.url = this.getDataLayerSupplier()
+                .getUrl()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.url;
     }
 
     @Override

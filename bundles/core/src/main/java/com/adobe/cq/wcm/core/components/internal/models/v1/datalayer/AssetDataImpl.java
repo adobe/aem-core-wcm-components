@@ -19,6 +19,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.Dat
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.function.Supplier;
 
@@ -36,6 +37,31 @@ public final class AssetDataImpl implements AssetData {
     private final DataLayerSupplier dataLayerSupplier;
 
     /**
+     * The ID field value.
+     */
+    private String id;
+
+    /**
+     * The last modified date field value.
+     */
+    private Date lastModifiedDate;
+
+    /**
+     * The format field value.
+     */
+    private String format;
+
+    /**
+     * The URL field value.
+     */
+    private String url;
+
+    /**
+     * The tags field value.
+     */
+    private String[] tags;
+
+    /**
      * Construct an AssetData model.
      *
      * @param supplier The data layer supplier.
@@ -47,38 +73,59 @@ public final class AssetDataImpl implements AssetData {
     @Override
     @NotNull
     public String getId() {
-        return this.dataLayerSupplier.getId().get();
+        if (this.id == null) {
+            this.id = this.dataLayerSupplier.getId().get();
+        }
+        return this.id;
     }
 
     @Override
     public Date getLastModifiedDate() {
-        return this.dataLayerSupplier
-            .getLastModifiedDate()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.lastModifiedDate == null) {
+            this.lastModifiedDate = this.dataLayerSupplier
+                .getLastModifiedDate()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        if (this.lastModifiedDate != null) {
+            return new Date(this.lastModifiedDate.getTime());
+        }
+        return null;
     }
 
     @Override
     public String getFormat() {
-        return this.dataLayerSupplier
-            .getFormat()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.format == null) {
+            this.format = this.dataLayerSupplier
+                .getFormat()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.format;
     }
 
     @Override
     public String getUrl() {
-        return this.dataLayerSupplier
-            .getUrl()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.url == null) {
+            this.url = this.dataLayerSupplier
+                .getUrl()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.url;
     }
 
     @Override
     public String[] getTags() {
-        return this.dataLayerSupplier
-            .getTags()
-            .map(Supplier::get)
-            .orElse(null);
+        if (this.tags == null) {
+            this.tags = this.dataLayerSupplier
+                .getTags()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        if (this.tags != null) {
+            return Arrays.copyOf(this.tags, this.tags.length);
+        }
+        return null;
     }
 }
