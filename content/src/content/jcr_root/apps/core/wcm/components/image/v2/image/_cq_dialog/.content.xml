@@ -88,10 +88,60 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/well"
                                                 granite:class="cmp-image__editor-dynamicmedia">
                                                 <items jcr:primaryType="nt:unstructured">
+                                                    <dms7presettypecontainer
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                        <items jcr:primaryType="nt:unstructured">
+                                                            <presettype
+                                                                wrapperClass="cmp-image__editor-dynamicmedia-presettype"
+                                                                jcr:primaryType="nt:unstructured"
+                                                                sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
+																deleteHint="{Boolean}true"
+                                                                fieldLabel="Preset Type"
+																fieldDescription="You need to choose the option to use when rendering image. These options are mutually exclusive; therefore, you cannot select several; only one."
+                                                                name="./dmPresetType"
+                                                                text="Preset Type">
+                                                                <items jcr:primaryType="nt:unstructured">
+                                                                    <option1
+                                                                        jcr:primaryType="nt:unstructured"
+                                                                        checked="{Boolean}true"
+                                                                        text="Image Preset"
+                                                                        value="image"/>
+                                                                    <option2
+                                                                        jcr:primaryType="nt:unstructured"
+                                                                        text="Smart Crop Rendition"
+                                                                        value="smartCropPreset"/>
+                                                                    <option3
+																		jcr:primaryType="nt:unstructured"
+																		text="Smart Crop"
+																		value="smartCrop"/>
+                                                                </items>
+                                                            </presettype>
+                                                        </items>
+                                                    </dms7presettypecontainer>
+                                                    <imagepreset
+                                                        wrapperClass="cmp-image__editor-dynamicmedia-imagepreset"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                        fieldDescription="Image Preset to use when rendering image. It cannot be set when Smart Crop Preset or Smart Crop is set."
+                                                        fieldLabel="Image Preset"
+                                                        name="./imagePreset">
+                                                        <datasource
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="dam/components/scene7/common/imagepresetdatasource"/>
+                                                    </imagepreset>
+													<smartcroprenditions 
+														granite:class="cmp-image__editor-dynamicmedia-smartcroprenditions"
+														jcr:primaryType="nt:unstructured"
+														sling:resourceType="granite/ui/components/coral/foundation/form/select"
+														fieldDescription="Smart Crop Rendition to use when rendering image."
+														fieldLabel="Smart Crop Rendition"
+														name="./smartcroppreset">
+													</smartcroprenditions>													
                                                     <imageModifiers
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                        fieldDescription="Image Modifiers for DynamicMedia Image."
+                                                        fieldDescription="Additional S7 image commands separated by '&amp;'.Field gives complete flexibility to change image effects."
                                                         fieldLabel="Image Modifiers"
                                                         name="./imageModifiers"/>
                                                 </items>

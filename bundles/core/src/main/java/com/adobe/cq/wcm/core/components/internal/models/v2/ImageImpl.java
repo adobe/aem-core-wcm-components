@@ -61,6 +61,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @ValueMapValue(name = "imageModifiers", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected String imageModifiers;
+    
+    @ValueMapValue(name = "imagePreset", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String imagePreset;    
+	
+    @ValueMapValue(name = "smartcroppreset", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String smartcroppreset;    	
     /**
      * The resource type.
      */
@@ -190,13 +198,16 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
+			if (StringUtils.isNotBlank(smartcroppreset) && (dmImageUrl != null)) {
+				dmImageUrl += ":" + smartcroppreset;
+			}
             String staticSelectors = selector;
             if (smartSizes.length > 0) {
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
-                if(dmImageUrl != null) {
+                if(dmImageUrl != null && !StringUtils.isNotBlank(smartcroppreset)) {
                 	dmImageUrl += "?qlt=" + jpegQuality;
-                    dmImageUrl += "&wid=" + ((smartSizes.length == 1) ? smartSizes[0] : "%7B.width%7D");
+					dmImageUrl += "&wid=" + ((smartSizes.length == 1) ? smartSizes[0] : "%7B.width%7D");
                 }
             }
             if(dmImageUrl == null){
@@ -216,6 +227,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             	if (lastModifiedDate > 0){
             		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "ts=" + lastModifiedDate;
             	}
+            	if (StringUtils.isNotBlank(this.imagePreset) && !StringUtils.isNotBlank(smartcroppreset)){
+            		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "$" + this.imagePreset + "$";
+            	}                
             	if (StringUtils.isNotBlank(this.imageModifiers)){
             		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + this.imageModifiers;
             	}            	

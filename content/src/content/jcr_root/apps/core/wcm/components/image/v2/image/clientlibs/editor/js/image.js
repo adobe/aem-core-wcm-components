@@ -29,6 +29,12 @@
     var $cqFileUploadEdit;
     var $dynamicMediaGroup;    
     var fileReference;
+    var presetTypeRadioGroup = ".cmp-image__editor-dynamicmedia-presettype";
+    var imagePresetDropDownList = ".cmp-image__editor-dynamicmedia-imagepreset";
+	var smartCropRenditionsDropDownList = ".cmp-image__editor-dynamicmedia-smartcroprenditions";
+	var imagePresetRequest;
+	var imagePath;
+	var smartCropPresetFromJcr;
 
     $(document).on("dialog-loaded", function(e) {
         var $dialog        = e.dialog;
@@ -46,7 +52,10 @@
             $cqFileUpload     = $dialog.find(".cq-FileUpload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
             $dynamicMediaGroup= $dialogContent.find(".cmp-image__editor-dynamicmedia");
+
             if ($cqFileUpload) {
+				imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
+				retrieveInstanceInfo(imagePath);
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
                     retrieveDAMInfo(fileReference).then(
@@ -111,6 +120,25 @@
         toggleAlternativeFieldsAndLink(e.target);
     });
 
+    $(document).on("change", dialogContentSelector + " " + presetTypeRadioGroup, function(e) {
+        if ((e.target).value == "image"){
+            $dynamicMediaGroup.find(imagePresetDropDownList).show();
+			$dynamicMediaGroup.find(smartCropRenditionsDropDownList).parent().hide();
+			resetSelectField($dynamicMediaGroup.find(smartCropRenditionsDropDownList));
+        }
+        if ((e.target).value == "smartCropPreset"){
+            $dynamicMediaGroup.find(imagePresetDropDownList).hide();
+			$dynamicMediaGroup.find(smartCropRenditionsDropDownList).parent().show();
+			resetSelectField($dynamicMediaGroup.find(imagePresetDropDownList));
+        }		
+        if ((e.target).value == "smartCrop"){
+            $dynamicMediaGroup.find(imagePresetDropDownList).hide();
+			$dynamicMediaGroup.find(smartCropRenditionsDropDownList).parent().hide();
+			resetSelectField($dynamicMediaGroup.find(imagePresetDropDownList));
+			resetSelectField($dynamicMediaGroup.find(smartCropRenditionsDropDownList));
+        }
+    });
+
     function toggleAlternativeFieldsAndLink(checkbox) {
         if (checkbox) {
             if (checkbox.checked) {
@@ -156,9 +184,153 @@
                 }
                 else{
                     $dynamicMediaGroup.show();
+					getImagePresetList(data["dam:scene7File"]);
                 }
             }
         });
     }
+
+    /**
+     * Helper function to get core image instance 'smartcroppreset' property
+     * @param filePath 
+     */
+    function retrieveInstanceInfo(filePath) {
+        return $.ajax({
+            url: filePath + ".json"
+        }).done(function(data) {
+            if (data) {
+                //we need to get saved value of 'smartcroppreset' of Core Image component
+               smartCropPresetFromJcr = data["smartcroppreset"];
+            }
+        });
+    }	
+	
+    /**
+     * Get the list of available image's smart crop renditions and fill drop-down list
+     * @param imageUrl The link to image asset
+     */	
+	function getSmartCropRenditions(imageUrl){
+		var smartCropRenditionsDropDownItemsList = $dynamicMediaGroup.find(smartCropRenditionsDropDownList).get(0);
+		if (imagePresetRequest){
+			imagePresetRequest.abort();
+		}
+		imagePresetRequest = new XMLHttpRequest();
+		var url = window.location.origin + "/is/image/" + imageUrl + "?req=set,json";
+		imagePresetRequest.open("GET", url, true);
+		imagePresetRequest.onload = function() {
+			if (imagePresetRequest.status >= 200 && imagePresetRequest.status < 400) {
+				// success status
+				var responseText = imagePresetRequest.responseText;
+				var rePayload = new RegExp(/^(?:\/\*jsonp\*\/)?\s*([^()]+)\(([\s\S]+),\s*"[0-9]*"\);?$/gmi);
+				var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
+				var resPayload = rePayload.exec(responseText);
+				if (resPayload) {
+					var payload;
+					var payloadStr = resPayload[2];
+					if (rePayloadJSON.test(payloadStr)) {
+						payload = JSON.parse(payloadStr);
+					}
+
+				}
+				//check "relation" - only in case of smartcrop renditions
+				if (payload.set.relation && payload.set.relation.length > 0) {
+					if (smartCropRenditionsDropDownItemsList.items) {
+						smartCropRenditionsDropDownItemsList.items.clear();
+					}
+					//we need to add "NONE" item first in the list
+					smartCropRenditionsDropDownItemsList.items.add({
+					  content: {
+						innerHTML: "NONE",
+						value: ""
+					  },
+					  disabled: false,
+					  selected: true
+					});			
+					for(var i=0; i < payload.set.relation.length ; i++) {
+						smartCropRenditionsDropDownItemsList.items.add({
+						  content: {
+							innerHTML: payload.set.relation[i].userdata.SmartCropDef
+						  },
+						  disabled: false,
+                          selected: (smartCropPresetFromJcr == payload.set.relation[i].userdata.SmartCropDef)
+						});
+					}
+					prepareSmartCropPanel();
+				}
+				else {
+					$dynamicMediaGroup.find(presetTypeRadioGroup).parent().hide();
+					$dynamicMediaGroup.find(smartCropRenditionsDropDownList).parent().hide();
+				}
+			} else {
+				// error status
+			}
+		};
+		imagePresetRequest.send();   
+	}
+	
+    /**
+     * Helper function to show/hide UI-elements of dialog depending on the chosen radio button
+     */	
+	function prepareSmartCropPanel() {
+		var presetType = getSelectedRadio($(presetTypeRadioGroup));
+		switch (presetType){
+			case undefined:
+				selectRadio($(presetTypeRadioGroup), "image");
+				break;
+			case "image":
+				$dynamicMediaGroup.find(imagePresetDropDownList).show();
+				$dynamicMediaGroup.find(smartCropRenditionsDropDownList).parent().hide();
+				break;
+			case "smartCropPreset":
+				$dynamicMediaGroup.find(imagePresetDropDownList).hide();
+				$dynamicMediaGroup.find(smartCropRenditionsDropDownList).parent().show();
+				break;
+			case "smartCrop":
+				$dynamicMediaGroup.find(imagePresetDropDownList).hide();
+				$dynamicMediaGroup.find(smartCropRenditionsDropDownList).parent().hide();
+				break;
+			default:
+				break;
+		}
+	}
+
+    /**
+     * Get selected radio option helper
+     * @param component The radio option component
+     * @returns {String} Value of the selected radio option
+     */
+    function getSelectedRadio(component) {
+        var radioComp = component.find('[type="radio"]');
+        var val;
+
+        radioComp.each( function(){
+            if ($(this).prop('checked')) {
+                val = $(this).val();
+            }
+        });
+
+        return val;
+    }
+
+    /**
+     * Select radio option helper
+     * @param component
+     * @param val
+     */
+    function selectRadio(component, val) {
+        var radioComp = component.find('[type="radio"]');
+        radioComp.each( function(){
+            $(this).prop('checked', ($(this).val() == val));
+        });
+    }
+	
+    /**
+     * Reset selection field
+     * @param field
+     */
+    function resetSelectField(field) {
+        field.find('coral-select-item[selected]').removeAttr('selected');
+        field.find('button').find('span').html('NONE');
+    }	
 
 })(jQuery);
