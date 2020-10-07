@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ComponentDataImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplier;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplierImpl;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
@@ -95,6 +95,6 @@ public final class PageDataBuilder extends GenericComponentDataBuilder<PageDataB
     @NotNull
     @Override
     public PageData build() {
-        return new ComponentDataImpl(this.getDataLayerSupplier());
+        return new PageDataImpl(this.getDataLayerSupplier());
     }
 }

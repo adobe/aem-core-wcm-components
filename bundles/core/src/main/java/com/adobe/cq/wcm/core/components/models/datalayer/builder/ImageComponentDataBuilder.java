@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ComponentDataImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ImageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplier;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplierImpl;
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
@@ -58,6 +58,6 @@ public final class ImageComponentDataBuilder extends GenericComponentDataBuilder
     @NotNull
     @Override
     public ImageData build() {
-        return new ComponentDataImpl(this.getDataLayerSupplier());
+        return new ImageDataImpl(this.getDataLayerSupplier());
     }
 }

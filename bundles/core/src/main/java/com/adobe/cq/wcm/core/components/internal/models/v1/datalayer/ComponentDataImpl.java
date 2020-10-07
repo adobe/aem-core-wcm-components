@@ -16,11 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplier;
-import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
-import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
-import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
-import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
@@ -28,22 +24,13 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.function.Supplier;
 
 /**
  * {@link DataLayerSupplier} backed component data implementation.
- *
- * This implementation supports:
- * <ul>
- *     <li>{@link ComponentData}</li>
- *     <li>{@link ImageData}</li>
- *     <li>{@link ContainerData}</li>
- *     <li>{@link PageData}</li>
- * </ul>
  */
-public final class ComponentDataImpl implements ComponentData, ImageData, ContainerData, PageData {
+public class ComponentDataImpl implements ComponentData {
 
     /**
      * Logger.
@@ -97,36 +84,6 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
     private String linkUrl;
 
     /**
-     * The shown items field value.
-     */
-    private String[] shownItems;
-
-    /**
-     * The asset field value.
-     */
-    private AssetData assetData;
-
-    /**
-     * The template path field value.
-     */
-    private String templatePath;
-
-    /**
-     * The language field value.
-     */
-    private String language;
-
-    /**
-     * The tags field value.
-     */
-    private String[] tags;
-
-    /**
-     * The URL field value.
-     */
-    private String url;
-
-    /**
      * Construct the data layer model.
      *
      * @param supplier The data layer supplier.
@@ -137,7 +94,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
 
     @Override
     @NotNull
-    public String getId() {
+    public final String getId() {
         if (this.id == null) {
             this.id = this.getDataLayerSupplier().getId().get();
         }
@@ -146,7 +103,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
 
     @Override
     @Nullable
-    public String getType() {
+    public final String getType() {
         if (this.type == null) {
             this.type = this.getDataLayerSupplier()
                 .getType()
@@ -158,7 +115,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
 
     @Override
     @Nullable
-    public Date getLastModifiedDate() {
+    public final Date getLastModifiedDate() {
         if (this.lastModifiedDate == null) {
             this.lastModifiedDate = this.getDataLayerSupplier()
                 .getLastModifiedDate()
@@ -173,7 +130,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
 
     @Override
     @Nullable
-    public String getParentId() {
+    public final String getParentId() {
         if (this.parentId == null) {
             this.parentId = this.getDataLayerSupplier()
                 .getParentId()
@@ -185,7 +142,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
 
     @Override
     @Nullable
-    public String getTitle() {
+    public final String getTitle() {
         if (this.title == null) {
             this.title = this.getDataLayerSupplier()
                 .getTitle()
@@ -197,7 +154,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
 
     @Override
     @Nullable
-    public String getDescription() {
+    public final String getDescription() {
         if (this.description == null) {
             this.description = this.getDataLayerSupplier()
                 .getDescription()
@@ -209,7 +166,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
 
     @Override
     @Nullable
-    public String getText() {
+    public final String getText() {
         if (this.text == null) {
             this.text = this.getDataLayerSupplier()
                 .getText()
@@ -221,7 +178,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
 
     @Override
     @Nullable
-    public String getLinkUrl() {
+    public final String getLinkUrl() {
         if (this.linkUrl == null) {
             this.linkUrl = this.getDataLayerSupplier()
                 .getLinkUrl()
@@ -233,85 +190,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
 
     @Override
     @Nullable
-    public String[] getShownItems() {
-        if (this.shownItems == null) {
-            this.shownItems = this.getDataLayerSupplier()
-                .getShownItems()
-                .map(Supplier::get)
-                .orElse(null);
-        }
-        if (this.shownItems != null) {
-            return Arrays.copyOf(this.shownItems, this.shownItems.length);
-        }
-        return null;
-    }
-
-    @Override
-    @Nullable
-    public AssetData getAssetData() {
-        if (this.assetData == null) {
-            this.assetData = this.getDataLayerSupplier()
-                .getAssetData()
-                .map(Supplier::get)
-                .orElse(null);
-        }
-        return this.assetData;
-    }
-
-    @Override
-    @Nullable
-    public String getTemplatePath() {
-        if (this.templatePath == null) {
-            this.templatePath = this.getDataLayerSupplier()
-                .getTemplatePath()
-                .map(Supplier::get)
-                .orElse(null);
-        }
-        return this.templatePath;
-    }
-
-    @Override
-    @Nullable
-    public String getLanguage() {
-        if (this.language == null) {
-            this.language = this.getDataLayerSupplier()
-                .getLanguage()
-                .map(Supplier::get)
-                .orElse(null);
-        }
-        return this.language;
-    }
-
-    @Override
-    @Nullable
-    public String[] getTags() {
-        if (this.tags == null) {
-            this.tags = this.getDataLayerSupplier()
-                .getTags()
-                .map(Supplier::get)
-                .orElse(null);
-        }
-        if (this.tags != null) {
-            return Arrays.copyOf(this.tags, this.tags.length);
-        }
-        return null;
-    }
-
-    @Override
-    @Nullable
-    public String getUrl() {
-        if (this.url == null) {
-            this.url = this.getDataLayerSupplier()
-                .getUrl()
-                .map(Supplier::get)
-                .orElse(null);
-        }
-        return this.url;
-    }
-
-    @Override
-    @Nullable
-    public String getJson() {
+    public final String getJson() {
         return ComponentDataImpl.getJson(this);
     }
 
@@ -339,7 +218,7 @@ public final class ComponentDataImpl implements ComponentData, ImageData, Contai
      * @return The data layer supplier.
      */
     @NotNull
-    protected DataLayerSupplier getDataLayerSupplier() {
+    protected final DataLayerSupplier getDataLayerSupplier() {
         return this.dataLayerSupplier;
     }
 }
