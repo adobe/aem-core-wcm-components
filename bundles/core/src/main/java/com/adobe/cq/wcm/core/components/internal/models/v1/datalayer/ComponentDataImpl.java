@@ -191,21 +191,10 @@ public class ComponentDataImpl implements ComponentData {
     @Override
     @Nullable
     public final String getJson() {
-        return ComponentDataImpl.getJson(this);
-    }
-
-    /**
-     * Get the JSOn for component data.
-     *
-     * @param data The component data.
-     * @return The JSON.
-     */
-    @Nullable
-    static String getJson(@NotNull final ComponentData data) {
         try {
             return String.format("{\"%s\":%s}",
-                data.getId(),
-                new ObjectMapper().writeValueAsString(data));
+                this.getId(),
+                new ObjectMapper().writeValueAsString(this));
         } catch (JsonProcessingException e) {
             LOGGER.error("Unable to generate dataLayer JSON string", e);
         }
