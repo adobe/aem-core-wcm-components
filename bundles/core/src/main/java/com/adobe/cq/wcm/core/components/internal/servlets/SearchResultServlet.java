@@ -43,11 +43,11 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Search;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.search.PredicateConverter;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
@@ -218,7 +218,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         if (resource == null) {
             return null;
         }
-        return Utils.generateId("search", resource.getPath());
+        return ComponentUtils.generateId("search", resource.getPath());
     }
 
     private String getSearchRootPagePath(String searchRoot, Page currentPage) {

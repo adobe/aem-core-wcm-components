@@ -16,12 +16,12 @@
 package com.adobe.cq.wcm.core.components.util;
 
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
-import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Component;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.caconfig.ConfigurationBuilder;
@@ -30,12 +30,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
-
 /**
  * Utility helper functions for components.
  */
 public final class ComponentUtils {
+
+    /**
+     * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
+     */
+    public static final String ID_SEPARATOR = "-";
 
     /**
      * Private constructor to prevent instantiation of utility class.
@@ -143,6 +146,18 @@ public final class ComponentUtils {
 
         }
 
-        return Utils.generateId(prefix, path);
+        return ComponentUtils.generateId(prefix, path);
+    }
+
+    /**
+     * Returns an ID based on the prefix, the ID_SEPARATOR and a hash of the path, e.g. image-5c7e0ef90d
+     *
+     * @param prefix the prefix for the ID
+     * @param path   the resource path
+     * @return the generated ID
+     */
+    @NotNull
+    public static String generateId(@NotNull final String prefix, @NotNull final String path) {
+        return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
     }
 }

@@ -40,11 +40,6 @@ import org.jetbrains.annotations.Nullable;
 public class Utils {
 
     /**
-     * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
-     */
-    public static final String ID_SEPARATOR = "-";
-
-    /**
      * Name of the subservice used to authenticate as in order to be able to read details about components and
      * client libraries.
      */
@@ -114,18 +109,6 @@ public class Utils {
         public String getElement() {
             return element;
         }
-    }
-
-    /**
-     * Returns an ID based on the prefix, the ID_SEPARATOR and a hash of the path, e.g. image-5c7e0ef90d
-     *
-     * @param prefix the prefix for the ID
-     * @param path   the resource path
-     * @return the generated ID
-     */
-    @NotNull
-    public static String generateId(@NotNull final String prefix, @NotNull final String path) {
-        return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
     }
 
     /**

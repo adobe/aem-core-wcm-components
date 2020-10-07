@@ -48,6 +48,7 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -57,7 +58,7 @@ import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
+import static com.adobe.cq.wcm.core.components.util.ComponentUtils.ID_SEPARATOR;
 
 /**
  * Teaser model implementation.
@@ -502,7 +503,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                     .filter(StringUtils::isNotEmpty)
                     .map(id -> StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(id)), " ", ID_SEPARATOR))
                     .orElseGet(() ->
-                        Utils.generateId(StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX), this.ctaResource.getPath())
+                        ComponentUtils.generateId(StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX), this.ctaResource.getPath())
                     );
             }
             return ctaId;

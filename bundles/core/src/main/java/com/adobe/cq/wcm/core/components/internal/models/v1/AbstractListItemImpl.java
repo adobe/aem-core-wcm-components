@@ -18,16 +18,14 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.day.cq.wcm.api.components.Component;
 
 import java.util.Optional;
-
-import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
 /**
  * Abstract helper class for ListItem implementations.
@@ -76,7 +74,7 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl impleme
     @NotNull
     @Override
     public String getId() {
-        return Utils.generateId(StringUtils.join(parentId, ID_SEPARATOR, ITEM_ID_PREFIX), path);
+        return ComponentUtils.generateId(StringUtils.join(parentId, ComponentUtils.ID_SEPARATOR, ITEM_ID_PREFIX), path);
     }
 
     @NotNull
