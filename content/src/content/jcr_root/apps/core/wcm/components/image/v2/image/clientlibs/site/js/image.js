@@ -161,14 +161,7 @@
             //check image is DM asset; if true try to make req=set
             if (config.options.src && config.options.hasOwnProperty("dmimage")) {
                 var request = new XMLHttpRequest();
-                var url;
-				if (config.options.src.indexOf(":") > 0) { 
-					//in the case image src contains smart crop preset
-					url = config.options.src.split(":")[0] + "?req=set,json";
-				}
-				else {
-					url = config.options.src.split("?")[0] + "?req=set,json";
-				}
+                var url = config.options.src.split("?")[0] + "?req=set,json";
 
                 request.open("GET", url, true);
                 request.onload = function() {
@@ -179,7 +172,6 @@
                         var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
 						var resPayload = rePayload.exec(responseText);
                         var smartcropList = "";
-						var smartCrops = [];
                         if (resPayload) {
                             var payload;
                             var payloadStr = resPayload[2];
@@ -192,7 +184,6 @@
                         if (payload.set.relation && payload.set.relation.length > 0) {
                             for(var i=0; i < payload.set.relation.length ; i++) {
                                 smartcropList += payload.set.relation[i].n +"\n";
-								smartCrops.push(payload.set.relation[0].userdata.SmartCropDef);
                             }
                             alert (smartcropList);
                         }
