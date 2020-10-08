@@ -36,6 +36,7 @@ The following configuration properties are used:
 5. `./imageLinkHidden` - defines whether or not the image link is hidden
 6. `./titleLinkHidden` - defines whether or not the title link is hidden
 7. `./titleType` - stores the value for this title's HTML element type
+8. `./showTitleType` - defines whether or not the title tab dropdown menu is shown
 
 The following configuration properties are inherited from the image component:
 
