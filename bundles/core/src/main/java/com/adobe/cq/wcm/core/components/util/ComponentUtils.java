@@ -41,6 +41,11 @@ public final class ComponentUtils {
     public static final String ID_SEPARATOR = "-";
 
     /**
+     * Length of the ID hash.
+     */
+    private static final int ID_HASH_LENGTH = 10;
+
+    /**
      * Private constructor to prevent instantiation of utility class.
      */
     private ComponentUtils() {
@@ -83,7 +88,7 @@ public final class ComponentUtils {
      * @param resource The resource for which to get the ID property value.
      * @return The ID property value if set, empty optional if not.
      */
-    public static Optional<String> getPropertyId(@NotNull final Resource resource) {
+    private static Optional<String> getPropertyId(@NotNull final Resource resource) {
         return Optional.ofNullable(resource.getValueMap().get(Component.PN_ID, String.class))
             .filter(StringUtils::isNotEmpty)
             .map(StringUtils::trim)
@@ -94,7 +99,7 @@ public final class ComponentUtils {
     /**
      * Returns an auto generated component ID.
      *
-     * The ID is the first 10 characters of an SHA-1 hexadecimal hash of the component path,
+     * The ID is the first {@value ComponentUtils#ID_HASH_LENGTH} characters of an SHA-1 hexadecimal hash of the component path,
      * prefixed with the component name. Example: title-810f3af321
      *
      * If the component is referenced, the path is taken to be a concatenation of the component path,
@@ -115,7 +120,7 @@ public final class ComponentUtils {
      * @return the auto generated component ID
      */
     @NotNull
-    public static String generateId(@NotNull final Resource resource,
+    private static String generateId(@NotNull final Resource resource,
                                     @Nullable final Page currentPage,
                                     @Nullable final ComponentContext componentContext) {
         String resourceType = resource.getResourceType();
@@ -158,6 +163,6 @@ public final class ComponentUtils {
      */
     @NotNull
     public static String generateId(@NotNull final String prefix, @NotNull final String path) {
-        return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
+        return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, ID_HASH_LENGTH));
     }
 }
