@@ -75,7 +75,7 @@ public final class ComponentUtils {
      * @return The ID property value for the specified resource, or a generated ID if not set.
      */
     @NotNull
-    public static String getPropertyOrGeneratedId(@NotNull final Resource resource,
+    public static String getId(@NotNull final Resource resource,
                                                   @Nullable final Page currentPage,
                                                   @Nullable final ComponentContext componentContext) {
         return ComponentUtils.getPropertyId(resource)

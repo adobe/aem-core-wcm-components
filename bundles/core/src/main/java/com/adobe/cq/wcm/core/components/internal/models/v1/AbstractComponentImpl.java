@@ -84,7 +84,7 @@ public abstract class AbstractComponentImpl implements Component {
     @Override
     public String getId() {
         if (id == null) {
-            this.id = ComponentUtils.getPropertyOrGeneratedId(this.resource, this.currentPage, this.componentContext);
+            this.id = ComponentUtils.getId(this.resource, this.currentPage, this.componentContext);
         }
         return id;
     }
