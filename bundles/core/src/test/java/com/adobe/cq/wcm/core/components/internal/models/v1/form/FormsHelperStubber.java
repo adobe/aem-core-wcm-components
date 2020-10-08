@@ -32,7 +32,7 @@ public class FormsHelperStubber {
     private FormsHelperStubber() {
     }
 
-    protected static void createStub() {
+    public static void createStub() {
         ClassPool classPool = ClassPool.getDefault();
         CtClass ctClass;
         try {
