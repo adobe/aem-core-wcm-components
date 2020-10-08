@@ -31,6 +31,7 @@ import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
+import com.adobe.cq.wcm.core.components.testing.MockConfigurationResourceResolver;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import com.adobe.cq.wcm.core.components.testing.Utils;
@@ -60,11 +61,14 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     @BeforeEach
     protected void setUp() {
         internalSetup(TEST_BASE);
+        this.context.load().json(TEST_BASE + "/test-sling-configs.json", "/conf/sling:configs");
         ClientLibrary mockClientLibrary = Mockito.mock(ClientLibrary.class);
         when(mockClientLibrary.getPath()).thenReturn("/apps/wcm/core/page/clientlibs/favicon");
         when(mockClientLibrary.allowProxy()).thenReturn(true);
         context.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
         context.registerInjectActivateService(mockProductInfoProvider);
+        MockConfigurationResourceResolver mockConfigurationResourceResolver = new MockConfigurationResourceResolver(context.resourceResolver().getResource("/conf/sling:configs"));
+        context.registerInjectActivateService(mockConfigurationResourceResolver);
     }
 
     @Test
