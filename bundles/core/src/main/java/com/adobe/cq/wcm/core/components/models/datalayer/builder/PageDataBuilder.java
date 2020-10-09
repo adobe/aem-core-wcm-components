@@ -46,7 +46,7 @@ public final class PageDataBuilder extends GenericComponentDataBuilder<PageDataB
      * @see PageData#getTags()
      */
     @NotNull
-    public PageDataBuilder withTags(@NotNull Supplier<String[]> supplier) {
+    public PageDataBuilder withTags(@NotNull final Supplier<String[]> supplier) {
         return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setTags(supplier));
     }
 
@@ -58,7 +58,7 @@ public final class PageDataBuilder extends GenericComponentDataBuilder<PageDataB
      * @see PageData#getUrl()
      */
     @NotNull
-    public PageDataBuilder withUrl(@NotNull Supplier<String> supplier) {
+    public PageDataBuilder withUrl(@NotNull final Supplier<String> supplier) {
         return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setUrl(supplier));
     }
 
@@ -70,7 +70,7 @@ public final class PageDataBuilder extends GenericComponentDataBuilder<PageDataB
      * @see PageData#getTemplatePath()
      */
     @NotNull
-    public PageDataBuilder withTemplatePath(@NotNull Supplier<String> supplier) {
+    public PageDataBuilder withTemplatePath(@NotNull final Supplier<String> supplier) {
         return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setTemplatePath(supplier));
     }
 
@@ -82,7 +82,7 @@ public final class PageDataBuilder extends GenericComponentDataBuilder<PageDataB
      * @see PageData#getLanguage()
      */
     @NotNull
-    public PageDataBuilder withLanguage(@NotNull Supplier<String> supplier) {
+    public PageDataBuilder withLanguage(@NotNull final Supplier<String> supplier) {
         return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setLanguage(supplier));
     }
 
