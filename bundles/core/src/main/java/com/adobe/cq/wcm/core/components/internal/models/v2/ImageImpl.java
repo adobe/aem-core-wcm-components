@@ -61,6 +61,18 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @ValueMapValue(name = "imageModifiers", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected String imageModifiers;
+    
+    @ValueMapValue(name = "imagePreset", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String imagePreset;    
+	
+    @ValueMapValue(name = "smartCropRendition", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String smartCropRendition;  
+    
+    @ValueMapValue(name = "dmPresetType", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String dmPresetType;    	
     /**
      * The resource type.
      */
@@ -190,13 +202,16 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
+			if (StringUtils.isNotBlank(smartCropRendition) && (dmImageUrl != null)) {
+				dmImageUrl += "%3A" + smartCropRendition;
+			}
             String staticSelectors = selector;
             if (smartSizes.length > 0) {
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
-                if(dmImageUrl != null) {
+                if(dmImageUrl != null && StringUtils.isBlank(smartCropRendition)) {
                 	dmImageUrl += "?qlt=" + jpegQuality;
-                    dmImageUrl += "&wid=" + ((smartSizes.length == 1) ? smartSizes[0] : "%7B.width%7D");
+					dmImageUrl += "&wid=" + ((smartSizes.length == 1) ? smartSizes[0] : "%7B.width%7D");
                 }
             }
             if(dmImageUrl == null){
@@ -216,6 +231,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             	if (lastModifiedDate > 0){
             		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "ts=" + lastModifiedDate;
             	}
+            	if (StringUtils.isNotBlank(this.imagePreset) && StringUtils.isBlank(smartCropRendition)){
+            		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "$" + this.imagePreset + "$";
+            	}                
             	if (StringUtils.isNotBlank(this.imageModifiers)){
             		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + this.imageModifiers;
             	}            	
@@ -245,6 +263,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     public boolean isDmImage() {
         return dmImage;
+    }
+
+    public String getDmPresetType() {
+        return dmPresetType;
     }
 
     @Override
