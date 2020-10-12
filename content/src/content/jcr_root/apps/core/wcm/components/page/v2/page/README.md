@@ -45,13 +45,15 @@ The page component also supports loading developer-defined context-aware CSS, Ja
 
 ```
 com.adobe.cq.wcm.core.components.config.PageItemsConfig
-    + prefixPath="/some/path"
-    - item01
-        + element=["link"|"script"|"meta"]
-        + location=["header"|"footer"]
-        + attributeName="attributeValue"
+    - prefixPath="/some/path"
+    + item01
+        - element=["link"|"script"|"meta"]
+        - location=["header"|"footer"]
+        - attributeName01="attributeValue01"
+        - attributeName02="attributeValue02"
         ...
-    - item02
+    + item02
+        ...
     ...
 ```
 These items will be loaded in the header or footer of the page, depending on the configured `location`. The attribute names should match supported HTML attributes for [link](https://www.w3schools.com/tags/tag_link.asp), [script](https://www.w3schools.com/tags/tag_script.asp) and [meta](https://www.w3schools.com/tags/tag_meta.asp).

@@ -30,13 +30,16 @@ import org.apache.sling.caconfig.annotation.Property;
  *
  *  <pre>
  *      com.adobe.cq.wcm.core.components.config.PageItemsConfig
- *          + prefixPath="/some/path"
- *          - item01
- *              + element=["link"|"script"|"meta"]
- *              + location=["header"|"footer"]
- *              + attributeName="attributeValue"
- *          - item02
+ *          - prefixPath="/some/path"
+ *          + item01
+ *              - element=["link"|"script"|"meta"]
+ *              - location=["header"|"footer"]
+ *              - attributeName01="attributeValue01"
+ *              - attributeName02="attributeValue02"
  *              ...
+ *          + item02
+ *              ...
+ *          ...
  *  </pre>
  */
 @Configuration(label = "Page Items", description = "Context-Aware Configuration for items that will be included in the page")
