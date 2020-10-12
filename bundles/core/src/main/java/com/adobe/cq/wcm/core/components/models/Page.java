@@ -378,7 +378,7 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
      */
     @Nullable
-    default List<PageItem> getPageItems() {
+    default List<HtmlPageItem> getHtmlPageItems() {
         return null;
     }
 }

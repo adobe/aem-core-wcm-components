@@ -23,25 +23,76 @@ import org.jetbrains.annotations.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public interface PageItem {
+/**
+ * This interface defines items that can be included on a page.
+ * @since com.adobe.cq.wcm.core.components.models 12.16.0
+ */
+public interface HtmlPageItem {
 
+    /**
+     * Property name that defines the type of the HTML element rendered by the page item
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
     String PROP_ELEMENT = "element";
+
+    /**
+     * Property that defines the location (header or footer) where the page item should be inserted
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
     String PROP_LOCATION = "location";
+
+    /**
+     * Sub-node that holds the page item's attributes
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
+    String NODE_ATTRIBUTES = "attributes";
+
+    /**
+     * HREF attribute for {@link Element#LINK} page items
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
     String PROP_HREF = "href";
+
+    /**
+     * SRC attribute for {@link Element#SCRIPT} page items
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
     String PROP_SRC = "src";
 
+    /**
+     * Returns the {@link Element} type for the page item.
+     *
+     * @return {@link Element} type
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
     default Element getElement() {
         return null;
     }
 
+    /**
+     * Returns the {@link Location} where the page item should be inserted.
+     *
+     * @return {@link Location} where item should be inserted
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
     default Location getLocation() {
         return null;
     }
 
+    /**
+     * Returns the HTML attributes and values for the page item element.
+     *
+     * @return HTML attributes and values
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
     default Map<String, String> getAttributes() {
         return null;
     }
 
+    /**
+     * {@code enum} that defines possible insert positions for a page item.
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
     enum Location {
         HEADER("header"),
         FOOTER("footer");
@@ -73,6 +124,9 @@ public interface PageItem {
         }
     }
 
+    /**
+     * {@code enum} that defines the possible HTML elements for a page item
+     */
     enum Element {
         SCRIPT("script"),
         LINK("link"),

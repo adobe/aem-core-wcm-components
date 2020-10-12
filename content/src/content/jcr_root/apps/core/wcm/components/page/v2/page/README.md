@@ -41,17 +41,18 @@ libsScript from all referenced [cloud service configurations](https://docs.adobe
 `<clientlibs>` being set in component policy | only if `<clientlibs>` is set. Categories duplicated in `<clientlibsJsHead>` are only loaded in the page head. | JS | Body
 
 ### Loading of Context-Aware CSS/JS
-The page component also supports loading developer-defined context-aware CSS, Javascript or `meta` tags. This is done by creating a [context-aware resource](https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html#context-aware-resources) for `com.adobe.cq.wcm.core.components.config.PageItemsConfig` with the following structure:
+The page component also supports loading developer-defined context-aware CSS, Javascript or `meta` tags. This is done by creating a [context-aware resource](https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html#context-aware-resources) for `com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig` with the following structure:
 
 ```
-com.adobe.cq.wcm.core.components.config.PageItemsConfig
+com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
     - prefixPath="/some/path"
     + item01
         - element=["link"|"script"|"meta"]
         - location=["header"|"footer"]
-        - attributeName01="attributeValue01"
-        - attributeName02="attributeValue02"
-        ...
+        + attributes
+            - attributeName01="attributeValue01"
+            - attributeName02="attributeValue02"
+            ...
     + item02
         ...
     ...

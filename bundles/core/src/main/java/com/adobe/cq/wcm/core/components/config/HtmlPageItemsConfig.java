@@ -29,13 +29,14 @@ import org.apache.sling.caconfig.annotation.Property;
  *  Assumed structure:
  *
  *  <pre>
- *      com.adobe.cq.wcm.core.components.config.PageItemsConfig
+ *      com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
  *          - prefixPath="/some/path"
  *          + item01
  *              - element=["link"|"script"|"meta"]
  *              - location=["header"|"footer"]
- *              - attributeName01="attributeValue01"
- *              - attributeName02="attributeValue02"
+ *              + attributes
+ *                  - attributeName01="attributeValue01"
+ *                  - attributeName02="attributeValue02"
  *              ...
  *          + item02
  *              ...
@@ -43,7 +44,7 @@ import org.apache.sling.caconfig.annotation.Property;
  *  </pre>
  */
 @Configuration(label = "Page Items", description = "Context-Aware Configuration for items that will be included in the page")
-public @interface PageItemsConfig {
+public @interface HtmlPageItemsConfig {
 
     /**
      * Name of the property that store the prefix path

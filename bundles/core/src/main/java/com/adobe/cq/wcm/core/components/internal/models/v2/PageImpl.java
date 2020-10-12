@@ -45,11 +45,11 @@ import org.osgi.framework.Version;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.config.PageItemsConfig;
+import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.models.PageItem;
+import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
@@ -101,6 +101,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @OSGiService
     private ProductInfoProvider productInfoProvider;
 
+    /**
+     * The @{@link ConfigurationResourceResolver} service.
+     */
     @OSGiService
     private ConfigurationResourceResolver configurationResourceResolver;
 
@@ -144,7 +147,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     private String[] clientLibCategoriesJsHead;
 
-    private List<PageItem> pageItems;
+    private List<HtmlPageItem> htmlPageItems;
 
     @PostConstruct
     protected void initModel() {
@@ -270,17 +273,17 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     @Override
-    public @NotNull List<PageItem> getPageItems() {
-        if (pageItems == null) {
-            pageItems = new LinkedList<>();
-            Resource configResource = configurationResourceResolver.getResource(resource, "sling:configs", PageItemsConfig.class.getName());
+    public @NotNull List<HtmlPageItem> getHtmlPageItems() {
+        if (htmlPageItems == null) {
+            htmlPageItems = new LinkedList<>();
+            Resource configResource = configurationResourceResolver.getResource(resource, "sling:configs", HtmlPageItemsConfig.class.getName());
             if (configResource != null) {
                 ValueMap properties = configResource.getValueMap();
                 for (Resource child : configResource.getChildren()) {
-                    pageItems.add(new PageItemImpl(properties.get(PageItemsConfig.PROP_PREFIX_PATH, StringUtils.EMPTY), child));
+                    htmlPageItems.add(new PageItemImpl(properties.get(HtmlPageItemsConfig.PROP_PREFIX_PATH, StringUtils.EMPTY), child));
                 }
             }
         }
-        return pageItems;
+        return htmlPageItems;
     }
 }
