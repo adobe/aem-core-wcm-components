@@ -1,0 +1,18 @@
+{
+    "TEST_ID": {
+        "parentId": "TEST_PARENT_ID",
+        "xdm:tags": [
+            "TEST_TAG_1",
+            "TEST_TAG_2"
+        ],
+        "dc:description": "TEST DESCRIPTION",
+        "repo:modifyDate": "2020-06-16T19:23:57Z",
+        "xdm:linkURL": "https://www.adobe.com/",
+        "xdm:text": "TEST TEXT",
+        "dc:title": "TEST TITLE",
+        "xdm:template": "TEST TEMPLATE PATH",
+        "repo:path": "https://www.aemcomponents.dev/",
+        "xdm:language": "TEST LANGUAGE",
+        "@type": "TEST TYPE"
+    }
+}

@@ -14,10 +14,11 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
- * This packages defines models for integration with
- * <a href="https://github.com/adobe/adobe-client-data-layer">Adobe Client Data Layer</a>
+ * <p>
+ *      This package defines utility classes exposed by the Adobe Experience Manager Core WCM Components Bundle.
+ * </p>
  */
-@Version("1.1.0")
-package com.adobe.cq.wcm.core.components.models.datalayer;
+@Version("1.0.0")
+package com.adobe.cq.wcm.core.components.util;
 
 import org.osgi.annotation.versioning.Version;

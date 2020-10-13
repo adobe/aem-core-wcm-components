@@ -31,6 +31,8 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Button;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -109,17 +111,12 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
         return request.getResource().getResourceType();
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
     @Override
-    public String getDataLayerTitle() {
-        return getText();
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getLink();
+    @NotNull
+    protected ComponentData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asComponent()
+            .withTitle(this::getText)
+            .withLinkUrl(this::getLink)
+            .build();
     }
 }

@@ -14,10 +14,12 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
- * This packages defines models for integration with
- * <a href="https://github.com/adobe/adobe-client-data-layer">Adobe Client Data Layer</a>
+ * This packages defines a helper utility for building data layer models for integration with
+ * <a href="https://github.com/adobe/adobe-client-data-layer">Adobe Client Data Layer</a>.
+ *
+ * All models can be built from {@link com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder}.
  */
-@Version("1.1.0")
-package com.adobe.cq.wcm.core.components.models.datalayer;
+@Version("1.0.0")
+package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
 import org.osgi.annotation.versioning.Version;
