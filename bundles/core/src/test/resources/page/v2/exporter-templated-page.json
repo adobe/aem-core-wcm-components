@@ -7,6 +7,27 @@
     "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
     "cssClassNames": "class1 class2",
     "language": "en-GB",
+    "htmlPageItems": [
+        {
+            "element"   : "link",
+            "location"  : "header",
+            "attributes": {
+                "href": "/_theme/theme.css"
+            }
+        },
+        {
+            "element"   : "script",
+            "location"  : "footer",
+            "attributes": {
+                "src": "/_theme/theme.js"
+            }
+        },
+        {
+            "element"   : "meta",
+            "location"  : "header",
+            "attributes": {}
+        }
+    ],
     "dataLayer": {
         "page-bb590de134": {
             "dc:description": "Description",
