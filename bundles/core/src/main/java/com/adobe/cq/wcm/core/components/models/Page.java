@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -367,6 +368,17 @@ public interface Page extends ContainerExporter, Component {
      */
     @Nullable
     default String getMainContentSelector() {
+        return null;
+    }
+
+    /**
+     * Returns a list of HTML items that should be included in the page
+     *
+     * @return list of page items
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
+    @Nullable
+    default List<HtmlPageItem> getHtmlPageItems() {
         return null;
     }
 }
