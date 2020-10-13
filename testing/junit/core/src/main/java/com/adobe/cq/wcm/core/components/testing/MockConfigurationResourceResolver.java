@@ -21,6 +21,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.caconfig.resource.ConfigurationResourceResolver;
 import org.osgi.service.component.annotations.Component;
 
@@ -29,16 +30,25 @@ import org.osgi.service.component.annotations.Component;
 )
 public class MockConfigurationResourceResolver implements ConfigurationResourceResolver {
 
-    private Resource configsRoot;
+    private ResourceResolver resourceResolver;
+    private String configRoot;
 
-    public MockConfigurationResourceResolver(Resource configsRoot) {
-        this.configsRoot = configsRoot;
+    public MockConfigurationResourceResolver(ResourceResolver resourceResolver, String configRoot) {
+        this.resourceResolver = resourceResolver;
+        this.configRoot = configRoot;
     }
 
     @CheckForNull
     @Override
     public Resource getResource(@Nonnull Resource resource, @Nonnull String bucketName, @Nonnull String configName) {
-        return configsRoot.getChild(configName);
+        if (configRoot == null && resourceResolver == null) {
+            return null;
+        }
+        Resource configRootResource = resourceResolver.getResource(configRoot);
+        if (configRootResource == null) {
+            return null;
+        }
+        return configRootResource.getChild(configName);
     }
 
     @Nonnull

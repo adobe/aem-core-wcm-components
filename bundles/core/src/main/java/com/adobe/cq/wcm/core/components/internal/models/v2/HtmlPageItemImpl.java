@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 
-public class PageItemImpl implements HtmlPageItem {
+public class HtmlPageItemImpl implements HtmlPageItem {
 
     String prefixPath;
     Resource resource;
@@ -33,7 +33,7 @@ public class PageItemImpl implements HtmlPageItem {
     Location location;
     Map<String, String> attributes;
 
-    public PageItemImpl(@NotNull String prefixPath, @NotNull Resource resource) {
+    public HtmlPageItemImpl(@NotNull String prefixPath, @NotNull Resource resource) {
         this.prefixPath = prefixPath;
         this.resource = resource;
         this.properties = resource.getValueMap();

@@ -23,6 +23,9 @@
         "meta"           : {
             "jcr:primaryType": "nt:unstructured",
             "element"        : "meta"
+        },
+        "invalid"        : {
+            "jcr:primaryType": "nt:unstructured"
         }
     }
 }
