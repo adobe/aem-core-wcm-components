@@ -372,7 +372,7 @@ public interface Page extends ContainerExporter, Component {
     }
 
     /**
-     * Returns a list of items that should be included in the page
+     * Returns a list of HTML items that should be included in the page
      *
      * @return list of page items
      * @since com.adobe.cq.wcm.core.components.models 12.16.0

@@ -280,7 +280,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             if (configResource != null) {
                 ValueMap properties = configResource.getValueMap();
                 for (Resource child : configResource.getChildren()) {
-                    htmlPageItems.add(new PageItemImpl(properties.get(HtmlPageItemsConfig.PROP_PREFIX_PATH, StringUtils.EMPTY), child));
+                    htmlPageItems.add(new PageItemImpl(properties.get(HtmlPageItemsConfig.PN_PREFIX_PATH, StringUtils.EMPTY), child));
                 }
             }
         }

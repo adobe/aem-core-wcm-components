@@ -47,11 +47,11 @@ import org.apache.sling.caconfig.annotation.Property;
 public @interface HtmlPageItemsConfig {
 
     /**
-     * Name of the property that store the prefix path
+     * Name of the property that stores the path that will be prefixed to all href's and src's
      *
      * @since com.adobe.cq.wcm.core.components.config 1.0.0
      */
-    String PROP_PREFIX_PATH = "prefixPath";
+    String PN_PREFIX_PATH = "prefixPath";
 
     /**
      * Returns the path that will be prefixed to all href's and src's

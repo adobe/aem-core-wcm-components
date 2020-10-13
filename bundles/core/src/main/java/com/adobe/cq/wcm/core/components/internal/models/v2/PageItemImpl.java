@@ -42,7 +42,7 @@ public class PageItemImpl implements HtmlPageItem {
     @Override
     public Element getElement() {
         if (element == null) {
-            element = Element.fromString(properties.get(HtmlPageItem.PROP_ELEMENT, String.class));
+            element = Element.fromString(properties.get(HtmlPageItem.PN_ELEMENT, String.class));
         }
         return element;
     }
@@ -50,7 +50,7 @@ public class PageItemImpl implements HtmlPageItem {
     @Override
     public Location getLocation() {
         if (location == null) {
-            location = Location.fromString(properties.get(HtmlPageItem.PROP_LOCATION, String.class));
+            location = Location.fromString(properties.get(HtmlPageItem.PN_LOCATION, String.class));
         }
         return location;
     }
@@ -59,14 +59,14 @@ public class PageItemImpl implements HtmlPageItem {
     public Map<String, String> getAttributes() {
         if (attributes == null) {
             attributes = new LinkedHashMap<>();
-            Resource attributesNode = resource.getChild(HtmlPageItem.NODE_ATTRIBUTES);
+            Resource attributesNode = resource.getChild(HtmlPageItem.NN_ATTRIBUTES);
             if (attributesNode != null) {
                 ValueMap attributesProperties = attributesNode.getValueMap();
                 for (String attrName : getElement().getAttributeNames()) {
                     String attrValue = attributesProperties.get(attrName, String.class);
                     if (attrValue != null) {
-                        if ((getElement() == Element.LINK && HtmlPageItem.PROP_HREF.equals(attrName)) ||
-                                (getElement() == Element.SCRIPT && HtmlPageItem.PROP_SRC.equals(attrName))) {
+                        if ((getElement() == Element.LINK && HtmlPageItem.PN_HREF.equals(attrName)) ||
+                                (getElement() == Element.SCRIPT && HtmlPageItem.PN_SRC.equals(attrName))) {
                             attrValue = prefixPath + attrValue;
                         }
                         attributes.put(attrName, attrValue);

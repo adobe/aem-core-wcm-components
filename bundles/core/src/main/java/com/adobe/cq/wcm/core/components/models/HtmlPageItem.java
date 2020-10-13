@@ -33,31 +33,31 @@ public interface HtmlPageItem {
      * Property name that defines the type of the HTML element rendered by the page item
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
      */
-    String PROP_ELEMENT = "element";
+    String PN_ELEMENT = "element";
 
     /**
      * Property that defines the location (header or footer) where the page item should be inserted
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
      */
-    String PROP_LOCATION = "location";
+    String PN_LOCATION = "location";
 
     /**
      * Sub-node that holds the page item's attributes
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
      */
-    String NODE_ATTRIBUTES = "attributes";
+    String NN_ATTRIBUTES = "attributes";
 
     /**
      * HREF attribute for {@link Element#LINK} page items
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
      */
-    String PROP_HREF = "href";
+    String PN_HREF = "href";
 
     /**
      * SRC attribute for {@link Element#SCRIPT} page items
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
      */
-    String PROP_SRC = "src";
+    String PN_SRC = "src";
 
     /**
      * Returns the {@link Element} type for the page item.
@@ -155,9 +155,9 @@ public interface HtmlPageItem {
         public String[] getAttributeNames() {
             switch(this) {
                 case LINK:
-                    return new String[] {"crossorigin", PROP_HREF, "hreflang", "media", "referrerpolicy", "rel", "sizes", "title", "type"};
+                    return new String[] {"crossorigin", PN_HREF, "hreflang", "media", "referrerpolicy", "rel", "sizes", "title", "type"};
                 case SCRIPT:
-                    return new String[] {"async", "charset", "defer", PROP_SRC, "type"};
+                    return new String[] {"async", "charset", "defer", PN_SRC, "type"};
                 case META:
                     return new String[] {"charset", "content", "http-equiv", "name"};
             }
