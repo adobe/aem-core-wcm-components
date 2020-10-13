@@ -95,18 +95,4 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
     public String getName() {
         return name;
     }
-
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
-    @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getURL();
-    }
 }

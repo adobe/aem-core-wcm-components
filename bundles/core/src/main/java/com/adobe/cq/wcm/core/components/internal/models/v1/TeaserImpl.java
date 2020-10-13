@@ -45,6 +45,9 @@ import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -55,7 +58,7 @@ import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
+import static com.adobe.cq.wcm.core.components.util.ComponentUtils.ID_SEPARATOR;
 
 /**
  * Teaser model implementation.
@@ -394,23 +397,14 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return request.getResource().getResourceType();
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
+    @NotNull
     @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getLinkURL();
-    }
-
-    @Override
-    public String getDataLayerDescription() {
-        return getDescription();
+    protected ComponentData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asComponent()
+            .withTitle(this::getTitle)
+            .withLinkUrl(this::getLinkURL)
+            .withDescription(this::getDescription)
+            .build();
     }
 
 
@@ -511,7 +505,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
 
-        @Nullable
+        @NotNull
         @Override
         public String getId() {
             if (ctaId == null) {
@@ -519,24 +513,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                     .filter(StringUtils::isNotEmpty)
                     .map(id -> StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(id)), " ", ID_SEPARATOR))
                     .orElseGet(() ->
-                        Utils.generateId(StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX), this.ctaResource.getPath())
+                        ComponentUtils.generateId(StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX), this.ctaResource.getPath())
                     );
             }
             return ctaId;
-        }
-
-        /*
-         * DataLayerProvider implementation of field getters
-         */
-
-        @Override
-        public String getDataLayerLinkUrl() {
-            return getURL();
-        }
-
-        @Override
-        public String getDataLayerTitle() {
-            return getTitle();
         }
     }
 }

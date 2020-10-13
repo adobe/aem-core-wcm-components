@@ -27,10 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
@@ -132,22 +132,12 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
         return Optional.ofNullable(result);
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
     @Override
-    protected @NotNull ComponentData getComponentData() {
-        return new PageDataImpl(this, resource);
-    }
-
-    @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getURL();
+    @NotNull
+    protected PageData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asPage()
+            .withTitle(this::getTitle)
+            .withLinkUrl(this::getURL)
+            .build();
     }
 }

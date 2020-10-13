@@ -53,10 +53,11 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ImageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -381,25 +382,18 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
 
     @Override
-    protected @NotNull ComponentData getComponentData() {
-        return new ImageDataImpl(this, resource);
+    @NotNull
+    protected ImageData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
+            .withTitle(this::getTitle)
+            .withLinkUrl(this::getLink)
+            .withAssetData(() ->
+                Optional.ofNullable(this.fileReference)
+                    .map(reference -> this.request.getResourceResolver().getResource(reference))
+                    .map(assetResource -> assetResource.adaptTo(Asset.class))
+                    .map(DataLayerBuilder::forAsset)
+                    .map(AssetDataBuilder::build)
+                    .orElse(null))
+            .build();
     }
-
-    @Override
-    public Resource getDataLayerAssetResource() {
-        return Optional.ofNullable(this.fileReference)
-            .map(reference -> request.getResourceResolver().getResource(reference))
-            .orElse(null);
-    }
-
-    @Override
-    public String getDataLayerTitle() {
-        return title;
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getLink();
-    }
-
 }
