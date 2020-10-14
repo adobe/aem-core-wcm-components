@@ -139,7 +139,7 @@ Language Navigation | x
 List | x
 Navigation | x
 Page | x
-Progress Bar | 
+Progress Bar | x
 Quick Search | 
 Separator | 
 Sharing | 
