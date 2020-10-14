@@ -28,6 +28,6 @@
         "stylelint-selector-bem-pattern": "^2.0.0"
     },
     "dependencies": {
-        "@adobe/adobe-client-data-layer": "1.1.0"
+        "@adobe/adobe-client-data-layer": "1.1.1"
     }
 }
