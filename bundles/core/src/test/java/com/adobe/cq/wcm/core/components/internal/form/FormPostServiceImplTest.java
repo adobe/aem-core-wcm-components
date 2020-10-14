@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.form;
 
+import java.lang.annotation.Annotation;
+
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.sling.api.resource.ModifiableValueMap;
@@ -59,6 +61,22 @@ public class FormPostServiceImplTest {
         setupStub();
         context.registerService(HttpClientBuilderFactory.class, HttpClientBuilder::create);
         underTest = context.registerInjectActivateService(new FormPostServiceImpl());
+        ((FormPostServiceImpl) underTest).activate(new FormPostServiceImpl.Config() {
+            @Override
+            public int connectionTimeout() {
+                return 6000;
+            }
+
+            @Override
+            public int socketTimeout() {
+                return 6000;
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return null;
+            }
+        });
     }
 
     private void setupStub() {
