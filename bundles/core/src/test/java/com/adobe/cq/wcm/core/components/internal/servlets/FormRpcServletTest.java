@@ -20,6 +20,8 @@ import javax.servlet.ServletException;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
+import org.apache.sling.api.resource.ModifiableValueMap;
+import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +35,7 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
@@ -41,6 +44,7 @@ class FormRpcServletTest {
     private FormRpcServlet underTest;
 
     private WireMockServer wireMockServer;
+    private int wireMockPort;
 
     public final AemContext context = CoreComponentTestContext.newAemContext();
     private static final String TEST_BASE = "/form/form-post-service";
@@ -49,8 +53,9 @@ class FormRpcServletTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
-        wireMockServer = new WireMockServer(8090);
+        wireMockServer = new WireMockServer(wireMockConfig().dynamicPort());
         wireMockServer.start();
+        wireMockPort = wireMockServer.port();
         setupStub();
         context.registerService(HttpClientBuilderFactory.class, HttpClientBuilder::create);
         context.registerInjectActivateService(new FormPostServiceImpl());
@@ -60,7 +65,9 @@ class FormRpcServletTest {
 
     @Test
     void testDoPost() throws ServletException, IOException {
-        context.currentResource("/content/container");
+        Resource resource = context.currentResource("/content/container");
+        ModifiableValueMap modifiableValueMap = resource.adaptTo(ModifiableValueMap.class);
+        modifiableValueMap.put("formEndPointUrl", "http://localhost:" + wireMockPort + "/form/endpoint");
         underTest.doPost(context.request(), context.response());
         assertEquals(302 , context.response().getStatus());
     }

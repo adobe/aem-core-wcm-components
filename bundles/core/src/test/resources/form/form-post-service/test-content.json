@@ -2,7 +2,6 @@
   "container": {
     "jcr:primaryType": "nt:unstructured",
     "actionType": "foundation/components/form/actions/rpc",
-    "formEndPointUrl": "http://localhost:8090/form/endpoint",
     "redirect" : "/content"
   }
 }

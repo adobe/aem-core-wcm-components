@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.internal.form;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
+import org.apache.sling.api.resource.ModifiableValueMap;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
@@ -32,6 +34,7 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -44,13 +47,15 @@ public class FormPostServiceImplTest {
     public final AemContext context = CoreComponentTestContext.newAemContext();
 
     private WireMockServer wireMockServer;
+    private int wireMockPort;
     private FormPostService underTest;
 
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
-        wireMockServer = new WireMockServer(8090);
+        wireMockServer = new WireMockServer(wireMockConfig().dynamicPort());
         wireMockServer.start();
+        wireMockPort = wireMockServer.port();
         setupStub();
         context.registerService(HttpClientBuilderFactory.class, HttpClientBuilder::create);
         underTest = context.registerInjectActivateService(new FormPostServiceImpl());
@@ -70,6 +75,9 @@ public class FormPostServiceImplTest {
     @Test
     void testSendFormData() throws JSONException {
         MockSlingHttpServletRequest request = context.request();
+        Resource resource = context.currentResource("/content/container");
+        ModifiableValueMap modifiableValueMap = resource.adaptTo(ModifiableValueMap.class);
+        modifiableValueMap.put("formEndPointUrl", "http://localhost:" + wireMockPort + "/form/endpoint");
         context.currentResource("/content/container");
         request.setParameterMap(ImmutableMap.of("text", "hello"));
         assertTrue(underTest.sendFormData(request, context.response()));
