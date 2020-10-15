@@ -15,5 +15,6 @@
     </items>
     <granite:data
         jcr:primaryType="nt:unstructured"
-        showhidetargetvalue="core/wcm/components/form/actions/rpc"/>
+        showhidetargetvalue="core/wcm/components/form/actions/rpc"
+        usesRedirect="true"/>
 </jcr:root>
