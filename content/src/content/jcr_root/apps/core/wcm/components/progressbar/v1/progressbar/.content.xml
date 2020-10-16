@@ -4,4 +4,4 @@
     jcr:description="Displays a progress bar."
     jcr:primaryType="cq:Component"
     jcr:title="Progress Bar (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

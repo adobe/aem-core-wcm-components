@@ -4,4 +4,4 @@
     jcr:description="Allows visitors to select available options"
     jcr:primaryType="cq:Component"
     jcr:title="Form Options (v1)"
-    componentGroup=".core-wcm-form"/>
+    componentGroup="${componentGroupForm}"/>

@@ -5,4 +5,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="PDF Viewer (AMP v1)"
     sling:resourceSuperType="core/wcm/components/pdfviewer/v1/pdfviewer"
-    componentGroup=".core-wcm-ext-amp"/>
+    componentGroup="${componentGroup}"/>

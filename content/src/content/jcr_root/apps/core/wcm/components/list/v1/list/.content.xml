@@ -4,4 +4,4 @@
     jcr:description="Configurable collection of items or content"
     jcr:primaryType="cq:Component"
     jcr:title="List (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

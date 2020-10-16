@@ -20,4 +20,4 @@
     jcr:description="Displays content as an accordion"
     jcr:primaryType="cq:Component"
     jcr:title="Accordion (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>
