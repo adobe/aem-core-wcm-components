@@ -127,16 +127,10 @@
 				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().hide();
 				resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownList));
 				break;
-			case "smartCropRendition":
+			case "smartCrop":
 				$dynamicMediaGroup.find(imagePresetDropDownList).hide();
 				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().show();
 				resetSelectField($dynamicMediaGroup.find(imagePresetDropDownList));
-				break;
-            case "smartCrop":
-                $dynamicMediaGroup.find(imagePresetDropDownList).hide();
-                $dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().hide();
-                resetSelectField($dynamicMediaGroup.find(imagePresetDropDownList));
-                resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownList));
 				break;
 			default:
 				break;                
@@ -249,7 +243,16 @@
 					  },
 					  disabled: false,
 					  selected: true
-					});			
+					});	
+                    //"AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
+					smartCropRenditionsDropDownItemsList.items.add({
+					  content: {
+						innerHTML: "AUTO",
+						value: "AUTO"
+					  },
+					  disabled: false,
+					  selected: (smartCropRenditionFromJcr == "AUTO")
+					});	
 					for(var i=0; i < payload.set.relation.length ; i++) {
 						smartCropRenditionsDropDownItemsList.items.add({
 						  content: {
@@ -286,13 +289,9 @@
 				$dynamicMediaGroup.find(imagePresetDropDownList).show();
 				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().hide();
 				break;
-			case "smartCropRendition":
-				$dynamicMediaGroup.find(imagePresetDropDownList).hide();
-				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().show();
-				break;
 			case "smartCrop":
 				$dynamicMediaGroup.find(imagePresetDropDownList).hide();
-				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().hide();
+				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().show();
 				break;
 			default:
 				break;
