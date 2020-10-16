@@ -220,8 +220,8 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <componentGroup>Core WCM - AMP Extension</componentGroup>
-                <componentGroupForm>Core WCM - AMP Form Extension</componentGroupForm>
+                <componentGroup>WCM Core - AMP Extension</componentGroup>
+                <componentGroupForm>WCM Core - AMP Form Extension</componentGroupForm>
             </properties>
             <build>
                 <plugins>
