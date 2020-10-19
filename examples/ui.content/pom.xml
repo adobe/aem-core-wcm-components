@@ -224,10 +224,8 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <properties>
-                    <componentGroup>WCM Core</componentGroup>
-                    <componentGroupForm>WCM Core Form</componentGroupForm>
-                </properties>
+                <componentGroup>WCM Core</componentGroup>
+                <componentGroupForm>WCM Core Form</componentGroupForm>
             </properties>
         </profile>
     </profiles>
