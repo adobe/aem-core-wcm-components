@@ -37,6 +37,7 @@
 
     <properties>
         <componentGroup>.core-wcm-ext-amp</componentGroup>
+        <componentGroupForm>.core-wcm-ext-amp-form</componentGroupForm>
     </properties>
 
     <!-- ====================================================================== -->
