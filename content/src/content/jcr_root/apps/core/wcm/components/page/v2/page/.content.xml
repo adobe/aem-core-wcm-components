@@ -4,5 +4,5 @@
     jcr:primaryType="cq:Component"
     jcr:title="Page (v2)"
     sling:resourceSuperType="wcm/foundation/components/basicpage/v1/basicpage"
-    componentGroup=".core-wcm"
+    componentGroup="${componentGroup}"
     designDialogPath="core/wcm/components/page/v2/page/cq:design_dialog"/>

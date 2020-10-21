@@ -57,6 +57,7 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <enableJcrRootFiltering>true</enableJcrRootFiltering>
                     <filters>
                         <filter>
                             <root>/apps/core/wcm/components</root>
@@ -213,6 +214,10 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <properties>
+                <componentGroup>WCM Core</componentGroup>
+                <componentGroupForm>WCM Core Form</componentGroupForm>
+            </properties>
             <build>
                 <plugins>
                     <plugin>

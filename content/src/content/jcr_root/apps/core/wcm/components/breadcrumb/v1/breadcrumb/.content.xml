@@ -4,4 +4,4 @@
     jcr:description="Displays the position of the current page within the site hierarchy"
     jcr:primaryType="cq:Component"
     jcr:title="Breadcrumb (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

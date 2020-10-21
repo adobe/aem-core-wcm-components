@@ -35,6 +35,11 @@
     <packaging>content-package</packaging>
     <name>Adobe Experience Manager Core WCM Components AMP Extension Content Package</name>
 
+    <properties>
+        <componentGroup>.core-wcm-ext-amp</componentGroup>
+        <componentGroupForm>.core-wcm-ext-amp-form</componentGroupForm>
+    </properties>
+
     <!-- ====================================================================== -->
     <!-- B U I L D   D E F I N I T I O N                                        -->
     <!-- ====================================================================== -->
@@ -57,6 +62,7 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <enableJcrRootFiltering>true</enableJcrRootFiltering>
                     <packageType>application</packageType>
                     <acHandling>merge</acHandling>
                     <dependencies>
@@ -214,6 +220,10 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <properties>
+                <componentGroup>WCM Core - AMP Extension</componentGroup>
+                <componentGroupForm>WCM Core - AMP Form Extension</componentGroupForm>
+            </properties>
             <build>
                 <plugins>
                     <plugin>

@@ -4,4 +4,4 @@
     jcr:description="Rich Text Section"
     jcr:primaryType="cq:Component"
     jcr:title="Text (v2)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>
