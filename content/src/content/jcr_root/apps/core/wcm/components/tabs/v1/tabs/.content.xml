@@ -5,4 +5,4 @@
     jcr:description="Displays content as a list of tabs"
     jcr:primaryType="cq:Component"
     jcr:title="Tabs (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

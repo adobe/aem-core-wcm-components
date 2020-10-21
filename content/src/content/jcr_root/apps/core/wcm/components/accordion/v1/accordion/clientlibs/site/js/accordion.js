@@ -16,8 +16,8 @@
 (function() {
     "use strict";
 
-    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+    var dataLayerEnabled;
+    var dataLayer;
 
     var NS = "cmp";
     var IS = "accordion";
@@ -541,7 +541,10 @@
      * @private
      */
     function onDocumentReady() {
-        var elements = document.querySelectorAll(selectors.self);
+      dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+      dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+
+      var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new Accordion({ element: elements[i], options: readData(elements[i]) });
         }

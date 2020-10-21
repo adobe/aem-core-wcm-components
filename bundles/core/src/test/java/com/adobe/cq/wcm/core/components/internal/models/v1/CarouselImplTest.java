@@ -31,6 +31,7 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Carousel;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -110,7 +111,7 @@ class CarouselImplTest {
                 assertNotEquals(item.getData().getJson(), "{}", "The carousel item's data layer string is empty");
                 assertEquals(expectedItems[index][1], item.getData().getTitle(), "The carousel item's data layer title is not what was expected: " + item.getData().getTitle());
                 assertEquals(expectedItems[index][2], item.getData().getType(), "The carousel item's data layer type is not what was expected: " + item.getData().getType());
-                assertEquals(com.adobe.cq.wcm.core.components.internal.Utils.generateId(carouselId + "-item", (String) expectedItems[index][3]),
+                assertEquals(ComponentUtils.generateId(carouselId + "-item", (String) expectedItems[index][3]),
                         item.getData().getId(), "The carousel item's data layer id is not what was expected: " + item.getData().getId());
             }
             index++;

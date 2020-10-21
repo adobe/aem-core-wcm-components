@@ -31,6 +31,7 @@ import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
+import com.adobe.cq.wcm.core.components.testing.MockConfigurationResourceResolver;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import com.adobe.cq.wcm.core.components.testing.Utils;
@@ -54,6 +55,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     private static final String TEST_BASE = "/page/v2";
     private static final String REDIRECT_PAGE = CONTENT_ROOT + "/redirect-page";
     private static final String PN_CLIENT_LIBS = "clientlibs";
+    private static final String SLING_CONFIGS_ROOT = "/conf/sling:configs";
 
     private static final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
 
@@ -65,10 +67,17 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         when(mockClientLibrary.allowProxy()).thenReturn(true);
         context.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
         context.registerInjectActivateService(mockProductInfoProvider);
+        MockConfigurationResourceResolver mockConfigurationResourceResolver = new MockConfigurationResourceResolver(context.resourceResolver(), SLING_CONFIGS_ROOT);
+        context.registerInjectActivateService(mockConfigurationResourceResolver);
+    }
+
+    protected void loadHtmlPageItemsConfig() {
+        context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
     }
 
     @Test
     void testPage() throws ParseException {
+        loadHtmlPageItemsConfig();
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH, PageImpl.PN_CLIENTLIBS_JS_HEAD,
                 new String[]{"coretest.product-page-js-head"}, PN_CLIENT_LIBS,
                 new String[]{"coretest.product-page","coretest.product-page-js-head"}, Page.PN_APP_RESOURCES_CLIENTLIB,
@@ -97,7 +106,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     @Test
     void testFavicons() {
         Page page = getPageUnderTest(PAGE);
-            assertThrows(UnsupportedOperationException.class, page::getFavicons);
+        assertThrows(UnsupportedOperationException.class, page::getFavicons);
     }
 
     @Test
@@ -139,4 +148,17 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         assertTrue(page.hasCloudconfigSupport(), "Expected cloudconfig support if product version >= 6.4.0");
     }
 
+    @Test
+    void testNoHtmlPageItemsConfig() {
+        Page page = getPageUnderTest(PAGE);
+        assertEquals(0, page.getHtmlPageItems().size(), "Expected no HTML page items");
+    }
+
+    @Test
+    void testHtmlPageItemsConfig() {
+        loadHtmlPageItemsConfig();
+        Page page = getPageUnderTest(PAGE);
+        assertNotNull(page.getHtmlPageItems());
+        assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
+    }
 }

@@ -1,0 +1,11 @@
+{
+    "!BAD_VALUE!": {
+        "parentId": "!BAD_VALUE!",
+        "dc:description": "!BAD_VALUE!",
+        "xdm:linkURL": "!BAD_VALUE!",
+        "xdm:text": "!BAD_VALUE!",
+        "dc:title": "!BAD_VALUE!",
+        "repo:modifyDate": "1970-01-01T00:00:00Z",
+        "@type": "!BAD_VALUE!"
+    }
+}

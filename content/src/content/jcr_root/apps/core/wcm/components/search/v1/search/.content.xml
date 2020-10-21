@@ -19,4 +19,4 @@
     jcr:description="Full-text search"
     jcr:primaryType="cq:Component"
     jcr:title="Quick Search (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

@@ -22,4 +22,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Accordion (AMP v1)"
     sling:resourceSuperType="core/wcm/components/accordion/v1/accordion"
-    componentGroup=".core-wcm-ext-amp"/>
+    componentGroup="${componentGroup}"/>

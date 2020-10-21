@@ -36,6 +36,7 @@ The following configuration properties are used:
 5. `./imageLinkHidden` - defines whether or not the image link is hidden
 6. `./titleLinkHidden` - defines whether or not the title link is hidden
 7. `./titleType` - stores the value for this title's HTML element type
+8. `./showTitleType` - defines whether or not the title tab dropdown menu is shown
 
 The following configuration properties are inherited from the image component:
 
@@ -59,6 +60,7 @@ The following properties are written to JCR for this Teaser component and are ex
 8. `./jcr:description` - defines the value of the teaser description
 9. `./descriptionFromPage` - defines whether or not the description value is taken from the linked page
 10. `./id` - defines the component HTML ID attribute.
+11. `./titleType` - stores the value for this title's HTML element type
 
 ### Extending the Teaser Component
 When extending the Teaser component by using `sling:resourceSuperType`, developers need to define the `imageDelegate` property for

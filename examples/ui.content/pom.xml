@@ -57,6 +57,7 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <enableJcrRootFiltering>true</enableJcrRootFiltering>
                     <properties>
                         <acHandling>merge_preserve</acHandling>
                     </properties>
@@ -216,6 +217,16 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>cloud</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <componentGroup>WCM Core</componentGroup>
+                <componentGroupForm>WCM Core Form</componentGroupForm>
+            </properties>
         </profile>
     </profiles>
 
