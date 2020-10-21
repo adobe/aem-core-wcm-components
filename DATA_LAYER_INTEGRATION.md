@@ -278,7 +278,7 @@ The `data-cmp-data-layer-enabled` attribute can be queried client side to check 
 
 ### Examples
 
-This section provides a few examples how to make a custom component write data to the data layer.
+This section shows how to add some data from a `HelloWorld` component to the data layer.
 
 #### Pre-requisite: create a HelloWorld component
 
@@ -287,14 +287,19 @@ Create a `HelloWorld` model and HTL script that prints "Hello World!" to the pag
 `HelloWorld` model:
 
 ```
+package mymodels;
 ...
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 ...
 
 @Model(adaptables = SlingHttpServletRequest.class)
-public class HelloWorld extends AbstractComponentImpl {
+public class HelloWorld {
+
+    @SlingObject
+    protected Resource resource;
 
     public String getMessage() {
         return "Hello World!";
@@ -304,7 +309,7 @@ public class HelloWorld extends AbstractComponentImpl {
 
 `HelloWorld` HTL script:
 ```
-<div data-sly-use.hello="com.adobe.cq.wcm.core.components.models.HelloWorld">
+<div data-sly-use.hello="mymodels.HelloWorld">
     ${hello.message}
 </div>
 
@@ -317,84 +322,40 @@ adobeDataLayer.getState()
 ```
 The `HelloWorld` component does not yet write to the data layer.
 
-#### Example 1: add some HelloWorld data to the data layer
+#### Add HelloWorld data to the data layer
 
-Add the `data-cmp-data-layer` attribute to the component HTL:
-```
-<div data-sly-use.hello="com.adobe.cq.wcm.core.components.models.HelloWorld"
-     data-cmp-data-layer="${hello.data.json}">
-    ${hello.message}
-</div>
-```
-
-Deploy the change to AEM. Refresh the page and in your browser console, get the state of the data layer:
-```
-adobeDataLayer.getState()
-```
-
-It displays something like:
-```
-helloworld-223851b702:
-    @type: "core/wcm/components/helloworld"
-    parentId: "page-611486886f"
-```
-
-#### Example 2: override the implementation of a few data properties
-
-In this example, the data of the `HelloWorld` component will inherit all its properties and implementations from the `AbstractComponentImpl`
-except for the text and the title properties which are supplied by custom implementations as follows:
-- the text property gets its value from the `getMessage()` method of the `HelloWorld` model
-- the title property gets its value from the "my title" string
-This is achieved by using the `DataLayerBuilder.extending()` API.
+Let's add custom properties (ID, description and parent ID) based on custom implementations to the data layer.
 
 Add following code to the `HelloWorld` model:
 ```
 ...
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 ...
 
-    @Override
-    @NotNull
-    protected ComponentData getComponentData() {
-        return DataLayerBuilder.extending(super.getComponentData()).asComponent()
-                .withText(this::getMessage)
-                .withTitle(() -> "my title")
-                .build();
+    public ComponentData getData() {
+        if (ComponentUtils.isDataLayerEnabled(this.resource)) {
+            return DataLayerBuilder.forComponent()
+                    .withId(() -> "hello-123")
+                    .withDescription(this::getMessage)
+                    .withParentId(() -> "parent-12")
+                    .build();
+
+        }
+        return null;
     }
 ```
 
-Build, deploy the change to AEM. Refresh the page and in your browser console, get the state of the data layer:
+Add the `data-cmp-data-layer` attribute to the component HTL:
 ```
-adobeDataLayer.getState()
-```
-
-It displays something like:
-```
-helloworld-223851b702:
-    @type: "core/wcm/components/helloworld"
-    dc:title: "my title"
-    parentId: "page-611486886f"
-    xdm:text: "Hello World!"
+<div data-sly-use.hello="mymodels.HelloWorld"
+     data-cmp-data-layer="${hello.data.json}">
+    ${hello.message}
+</div>
 ```
 
-#### Example 3: add only specific data properties
-
-In this example, the data of the `HelloWorld` component will not inherit its properties from the `AbstractComponentImpl` class
-but will only use custom properties (ID, description and parent ID) and custom implementations.
-This is achieved by using the `DataLayerBuilder.forComponent()` API.
-
-Update the `getComponentData()` method of the `HelloWorld` model as follows:
-```
-    protected ComponentData getComponentData() {
-        return DataLayerBuilder.forComponent()
-                .withId(() -> "hello-123")
-                .withDescription(this::getMessage)
-                .withParentId(() -> "parent-12")
-                .build();
-    }
-```
-Build, deploy the change to AEM. Refresh the page and in your browser console, get the state of the data layer:
+Deploy the changes to AEM (model and HTL script). Refresh the page and in your browser console, get the state of the data layer:
 ```
 adobeDataLayer.getState()
 ```
@@ -405,6 +366,4 @@ hello-123:
     dc:description: "Hello World!"
     parentId: "parent-12"
 ```
-
-
 
