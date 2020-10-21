@@ -32,10 +32,12 @@
     function getComponentObject(element) {
         var component = getComponentData(element);
         var componentID = Object.keys(component)[0];
-        var parentElement = element.parentNode.closest("[data-cmp-data-layer], body");
-
-        if (parentElement) {
-            component[componentID].parentId = parentElement.id;
+        // if the component does not have a parent ID property, use the ID of the parent element
+        if (component && component[componentID] && !component[componentID].parentId) {
+            var parentElement = element.parentNode.closest("[data-cmp-data-layer], body");
+            if (parentElement) {
+                component[componentID].parentId = parentElement.id;
+            }
         }
 
         return component;
