@@ -4,4 +4,4 @@
     jcr:description="Allows visitors to interact with the form"
     jcr:primaryType="cq:Component"
     jcr:title="Form Button (v2)"
-    componentGroup=".core-wcm-form"/>
+    componentGroup="${componentGroupForm}"/>

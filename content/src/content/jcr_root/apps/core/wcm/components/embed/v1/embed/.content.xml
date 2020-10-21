@@ -4,4 +4,4 @@
     jcr:description="Embed a third-party widget or safe free-form HTML."
     jcr:primaryType="cq:Component"
     jcr:title="Embed (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

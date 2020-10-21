@@ -19,4 +19,4 @@
     jcr:description="Button"
     jcr:primaryType="cq:Component"
     jcr:title="Button (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

@@ -21,4 +21,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Form Container (AMP v1)"
     sling:resourceSuperType="core/wcm/components/form/container/v2/container"
-    componentGroup=".core-wcm-ext-amp-form"/>
+    componentGroup="${componentGroupForm}"/>

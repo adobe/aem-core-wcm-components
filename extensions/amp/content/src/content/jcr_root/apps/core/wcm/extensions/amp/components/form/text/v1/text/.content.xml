@@ -5,4 +5,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Form Text (AMP v1)"
     sling:resourceSuperType="core/wcm/components/form/text/v2/text"
-    componentGroup=".core-wcm-ext-amp-form"/>
+    componentGroup="${componentGroupForm}"/>

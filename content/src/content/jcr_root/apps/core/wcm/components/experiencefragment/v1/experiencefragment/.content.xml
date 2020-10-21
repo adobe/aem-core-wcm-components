@@ -19,4 +19,4 @@
     jcr:description="Displays an experience fragment variation"
     jcr:primaryType="cq:Component"
     jcr:title="Experience Fragment (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

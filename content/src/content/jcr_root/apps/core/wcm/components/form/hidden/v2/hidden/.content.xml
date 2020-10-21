@@ -4,4 +4,4 @@
     jcr:description="Allows form owner to add hidden data to the form"
     jcr:primaryType="cq:Component"
     jcr:title="Form Hidden (v2)"
-    componentGroup=".core-wcm-form"/>
+    componentGroup="${componentGroupForm}"/>

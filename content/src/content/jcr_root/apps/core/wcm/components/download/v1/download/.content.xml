@@ -4,4 +4,4 @@
     jcr:description="Displays a downloadable DAM asset with optional title, description, metadata and action text."
     jcr:primaryType="cq:Component"
     jcr:title="Download (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

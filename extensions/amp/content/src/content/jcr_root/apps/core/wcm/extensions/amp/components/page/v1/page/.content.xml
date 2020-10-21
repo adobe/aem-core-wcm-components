@@ -18,6 +18,6 @@
     cq:icon="page"
     jcr:primaryType="cq:Component"
     jcr:title="Page (AMP v1)"
-    componentGroup=".core-wcm-ext-amp"
+    componentGroup="${componentGroup}"
     sling:resourceSuperType="core/wcm/components/page/v2/page"
     designDialogPath="core/wcm/components/page/v2/page/cq:design_dialog"/>
