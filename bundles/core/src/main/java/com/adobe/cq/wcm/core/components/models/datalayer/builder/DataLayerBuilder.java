@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplier.EMPTY_SUPPLIER;
+import static com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier.EMPTY_SUPPLIER;
 
 /**
  * Data layer builder utility.
