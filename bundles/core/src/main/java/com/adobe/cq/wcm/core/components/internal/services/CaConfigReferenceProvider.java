@@ -25,9 +25,13 @@ import org.apache.sling.caconfig.resource.ConfigurationResourceResolver;
 import org.osgi.service.component.annotations.Component;
 
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
+import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.reference.Reference;
 import com.day.cq.wcm.api.reference.ReferenceProvider;
+
+import static com.adobe.cq.wcm.core.components.util.ComponentUtils.NN_SLING_CONFIGS;
 
 /**
  * Provides Context Aware Configuration references for a given resource.
@@ -37,7 +41,6 @@ import com.day.cq.wcm.api.reference.ReferenceProvider;
 )
 public class CaConfigReferenceProvider implements ReferenceProvider {
 
-    private static final String NN_SLING_CONFIGS = "sling:configs";
     private static final String CA_CONFIG_REFERENCE_TYPE = "caconfig";
 
     /**
@@ -49,12 +52,18 @@ public class CaConfigReferenceProvider implements ReferenceProvider {
     @Override
     public List<Reference> findReferences(Resource resource) {
         List<Reference> references = new ArrayList<>();
-        Resource configResource = configurationResourceResolver.getResource(resource, NN_SLING_CONFIGS, HtmlPageItemsConfig.class.getName());
+        addCaConfigReference(HtmlPageItemsConfig.class.getName(), resource, references);
+        addCaConfigReference(DataLayerConfig.class.getName(), resource, references);
+        addCaConfigReference(PdfViewerCaConfig.class.getName(), resource, references);
+        return references;
+    }
+
+    private void addCaConfigReference(String configName, Resource resource, List<Reference> references) {
+        Resource configResource = configurationResourceResolver.getResource(resource, NN_SLING_CONFIGS, configName);
         if (configResource != null) {
             ValueMap properties = configResource.getValueMap();
             Calendar lastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
-            references.add(new Reference(CA_CONFIG_REFERENCE_TYPE, HtmlPageItemsConfig.class.getName(), configResource, (lastModified != null) ? lastModified.getTimeInMillis() : -1));
+            references.add(new Reference(CA_CONFIG_REFERENCE_TYPE, configName, configResource, (lastModified != null) ? lastModified.getTimeInMillis() : -1));
         }
-        return references;
     }
 }
