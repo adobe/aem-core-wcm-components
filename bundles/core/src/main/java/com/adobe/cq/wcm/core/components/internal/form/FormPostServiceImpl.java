@@ -16,9 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.form;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpStatus;
@@ -47,8 +48,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.services.form.FormPostService;
-import com.day.cq.wcm.foundation.forms.FormsHelper;
-import com.google.common.collect.ImmutableMap;
+import com.day.cq.wcm.foundation.forms.FormsHandlingRequest;
+import com.day.cq.wcm.foundation.forms.FormsHandlingServletHelper;
+import com.day.cq.wcm.foundation.forms.ValidationInfo;
 import com.google.common.collect.ImmutableSet;
 
 @Component(
@@ -61,6 +63,7 @@ public class FormPostServiceImpl implements FormPostService {
 
     private static final int DEFAULT_CONNECTION_TIMEOUT = 6000;
     private static final int DEFAULT_SOCKET_TIMEOUT = 6000;
+    private static final String ATTR_RESOURCE = FormsHandlingServletHelper.class.getName() + "/resource";
     private static final Logger LOG = LoggerFactory.getLogger(FormPostServiceImpl.class);
     private static final Set<String> INTERNAL_PARAMETER = ImmutableSet.of(
             ":formstart",
@@ -79,7 +82,7 @@ public class FormPostServiceImpl implements FormPostService {
     private HttpClientBuilderFactory clientBuilderFactory;
 
     @Override
-    public boolean sendFormData(SlingHttpServletRequest request, SlingHttpServletResponse response) {
+    public boolean sendFormData(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException {
         try {
             JSONObject jsonRequest = requestParamsToJSON(request);
             return processFormApi(request, response, jsonRequest);
@@ -89,7 +92,8 @@ public class FormPostServiceImpl implements FormPostService {
         return false;
     }
 
-    private boolean processFormApi(SlingHttpServletRequest request, SlingHttpServletResponse response, JSONObject jsonRequest) {
+    private boolean processFormApi(SlingHttpServletRequest request, SlingHttpServletResponse response, JSONObject jsonRequest)
+            throws ServletException {
         boolean processFormApiSuccess = false;
         Resource formContainerResource = request.getResource();
         ValueMap valueMap = formContainerResource.adaptTo(ValueMap.class);
@@ -103,8 +107,10 @@ public class FormPostServiceImpl implements FormPostService {
         return processFormApiSuccess;
     }
 
-    private void sendRedirect(ValueMap valueMap, SlingHttpServletRequest request, SlingHttpServletResponse response, boolean processFormApiSuccess) {
+    private void sendRedirect(ValueMap valueMap, SlingHttpServletRequest request, SlingHttpServletResponse response, boolean processFormApiSuccess)
+            throws ServletException {
         String redirect = valueMap.get("redirect", String.class);
+        FormsHandlingRequest formRequest = new FormsHandlingRequest(request);
         try {
             if (!StringUtils.isEmpty(redirect) && processFormApiSuccess) {
                 if (!redirect.contains(".")) {
@@ -112,7 +118,18 @@ public class FormPostServiceImpl implements FormPostService {
                 }
                 response.sendRedirect(request.getResourceResolver().map(request, redirect));
             } else {
-                FormsHelper.redirectToReferrer(request, response, new HashMap<>());
+                if (!processFormApiSuccess) {
+                    ValidationInfo validationInfo = ValidationInfo.createValidationInfo(request);
+                    validationInfo.addErrorMessage(null, "Ups!");
+                }
+                final Resource formResource = (Resource) request.getAttribute(ATTR_RESOURCE);
+                request.removeAttribute(ATTR_RESOURCE);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher(formResource);
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(formRequest, response);
+                } else {
+                    throw new IOException("can't get request dispatcher to forward the response");
+                }
             }
         } catch (IOException var13) {
             LOG.error("Error redirecting to {}", redirect);

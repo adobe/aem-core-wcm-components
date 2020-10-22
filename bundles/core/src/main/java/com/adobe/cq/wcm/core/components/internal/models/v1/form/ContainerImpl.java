@@ -45,11 +45,13 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.models.form.Container;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHelper;
+import com.day.cq.wcm.foundation.forms.ValidationInfo;
 
 import static com.day.cq.wcm.foundation.forms.FormsConstants.SCRIPT_FORM_SERVER_VALIDATION;
 
@@ -57,7 +59,7 @@ import static com.day.cq.wcm.foundation.forms.FormsConstants.SCRIPT_FORM_SERVER_
        adapters = {Container.class, ContainerExporter.class, ComponentExporter.class},
        resourceType = {FormConstants.RT_CORE_FORM_CONTAINER_V1, FormConstants.RT_CORE_FORM_CONTAINER_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ContainerImpl implements Container {
+public class ContainerImpl extends AbstractComponentImpl implements Container {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContainerImpl.class);
     private static final String PROP_METHOD_DEFAULT = "POST";
@@ -101,6 +103,7 @@ public class ContainerImpl implements Container {
     private String action;
     private Map<String, ? extends ComponentExporter> childrenModels;
     private String[] exportedItemsOrder;
+    private String[] errorMessages;
 
     @ScriptVariable
     private Resource resource;
@@ -118,10 +121,8 @@ public class ContainerImpl implements Container {
     private void initModel() {
         FormStructureHelper formStructureHelper = formStructureHelperFactory.getFormStructureHelper(resource);
         request.setAttribute(FormsHelper.REQ_ATTR_FORM_STRUCTURE_HELPER, formStructureHelper);
+        request.setAttribute(FormsHelper.REQ_ATTR_FORMID, getId());
         this.action = Utils.getURL(request, currentPage);
-        if (StringUtils.isBlank(id)) {
-            id = FormsHelper.getFormId(request);
-        }
         this.name = id;
         this.dropAreaResourceType = "wcm/foundation/components/responsivegrid/new";
         if (redirect != null) {
@@ -133,6 +134,10 @@ public class ContainerImpl implements Container {
 
         if (!StringUtils.equals(request.getRequestPathInfo().getExtension(), ExporterConstants.SLING_MODEL_EXTENSION)) {
             runActionTypeInit(formStructureHelper);
+        }
+        final ValidationInfo info = ValidationInfo.getValidationInfo(request);
+        if (info != null) {
+            this.errorMessages = info.getErrorMessages(null);
         }
     }
 
@@ -164,11 +169,6 @@ public class ContainerImpl implements Container {
     }
 
     @Override
-    public String getId() {
-        return this.id;
-    }
-
-    @Override
     public String getName() {
         return this.name;
     }
@@ -186,6 +186,15 @@ public class ContainerImpl implements Container {
     @Override
     public String getRedirect() {
         return redirect;
+    }
+
+    @Override
+    @Nullable
+    public String[] getErrorMessages() {
+        if (errorMessages != null && errorMessages.length > 0) {
+            return Arrays.copyOf(errorMessages,errorMessages.length);
+        }
+        return null;
     }
 
     @NotNull

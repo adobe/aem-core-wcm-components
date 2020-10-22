@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.services.form;
 
+import javax.servlet.ServletException;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 
@@ -34,5 +36,5 @@ public interface FormPostService {
      *
      * @since com.adobe.cq.wcm.core.components.services.form 1.0.0
      */
-    boolean sendFormData(SlingHttpServletRequest request, SlingHttpServletResponse response);
+    boolean sendFormData(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException;
 }

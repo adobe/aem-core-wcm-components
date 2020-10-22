@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.models.form;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -102,6 +103,17 @@ public interface Container extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getRedirect() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * This method returns a general error messages which should be displayed inside of the form if the submit action fails.
+     *
+     * @return The general error message
+     * @since com.adobe.cq.wcm.core.components.models.form 14.3.0
+     */
+    @Nullable
+    default String[] getErrorMessages() {
         throw new UnsupportedOperationException();
     }
 
