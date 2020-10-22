@@ -28,6 +28,8 @@ import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.reference.Reference;
 import com.day.cq.wcm.api.reference.ReferenceProvider;
 
@@ -52,6 +54,15 @@ public class CaConfigReferenceProvider implements ReferenceProvider {
     @Override
     public List<Reference> findReferences(Resource resource) {
         List<Reference> references = new ArrayList<>();
+        // If the resource is not part of a page: stop the processing
+        PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
+        if (pageManager == null) {
+            return references;
+        }
+        Page page = pageManager.getContainingPage(resource);
+        if (page == null) {
+            return references;
+        }
         addCaConfigReference(HtmlPageItemsConfig.class.getName(), resource, references);
         addCaConfigReference(DataLayerConfig.class.getName(), resource, references);
         addCaConfigReference(PdfViewerCaConfig.class.getName(), resource, references);
