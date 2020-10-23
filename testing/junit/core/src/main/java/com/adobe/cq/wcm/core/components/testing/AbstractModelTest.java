@@ -25,6 +25,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -96,14 +97,14 @@ public class AbstractModelTest {
                     } catch (InvocationTargetException e) {
                         t = e.getCause();
                     }
-                    if ((t == null || !(t instanceof UnsupportedOperationException)) && ret != null) {
+                    if ((t == null || !(t instanceof UnsupportedOperationException)) && (ret != null && !(ret instanceof Optional))) {
                         errors.append("Expected method ")
                                 .append(m.toString())
                                 .append("in class ")
                                 .append(clazz.getName())
                                 .append(" to throw an ")
                                 .append(UnsupportedOperationException.class.getName())
-                                .append(" or return null.\n");
+                                .append(" or return either an instance of Optional or null.\n");
                     }
                 }
             }
