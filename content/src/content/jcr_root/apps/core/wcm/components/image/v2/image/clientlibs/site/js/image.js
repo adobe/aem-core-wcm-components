@@ -123,7 +123,8 @@
     };
 
     var devicePixelRatio = window.devicePixelRatio || 1;
-
+    var smartCrops = {};
+    
     function readData(element) {
         var data = element.dataset;
         var options = [];
@@ -159,18 +160,12 @@
             setupProperties(config.options);
             cacheElements(config.element);
             //check image is DM asset; if true try to make req=set
-            if (config.options.src && config.options.hasOwnProperty("dmimage") && (config.options["dmpresettype"] == "smartCrop")) {
+            if (config.options.src && config.options.hasOwnProperty("dmimage") && (config.options["smartcroprendition"] == "SmartCrop:Auto")) {
                 var request = new XMLHttpRequest();
-                var url;
-		        if (config.options.src.indexOf(":") > 0) { 
-         	        //in the case image src contains smart crop preset
-		            url = config.options.src.split(":")[0] + "?req=set,json";
-                }
-                else {
-                   url = config.options.src.split("?")[0] + "?req=set,json";
-                }
+                var url = decodeURIComponent(config.options.src).split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
 
-                request.open("GET", url, true);
+
+                request.open("GET", url, false);
                 request.onload = function() {
                     if (request.status >= 200 && request.status < 400) {
                         // success status
@@ -179,7 +174,6 @@
                         var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
 						var resPayload = rePayload.exec(responseText);
                         var smartcropList = "";
-			            var smartCrops = [];
                         if (resPayload) {
                             var payload;
                             var payloadStr = resPayload[2];
@@ -190,11 +184,10 @@
                         }
                         //check "relation" - only in case of smartcrop preset
                         if (payload.set.relation && payload.set.relation.length > 0) {
-                            for(var i=0; i < payload.set.relation.length ; i++) {
+                            for(var i = 0; i < payload.set.relation.length ; i++) {
                                 smartcropList += payload.set.relation[i].n +"\n";
-			                    smartCrops.push(payload.set.relation[0].userdata.SmartCropDef);
+			                    smartCrops[parseInt(payload.set.relation[i].userdata.SmartCropWidth)] = ":" + payload.set.relation[i].userdata.SmartCropDef;
                             }
-                            alert (smartcropList);
                         }
                     } else {
                         // error status
@@ -229,8 +222,14 @@
         }
 
         function loadImage() {
-            var hasWidths = that._properties.widths && that._properties.widths.length > 0;
-            var replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth() : "";
+            var hasWidths = (that._properties.widths && that._properties.widths.length > 0) || Object.keys(smartCrops).length > 0;
+            var replacement;
+            if (Object.keys(smartCrops).length > 0) {
+                var optimalWidth = getOptimalWidth(Object.keys(smartCrops));
+                replacement = smartCrops[optimalWidth];
+            } else {
+                replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths) : "";
+            }
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
 
             if (that._elements.image.getAttribute("src") !== url) {
@@ -245,7 +244,7 @@
             }
         }
 
-        function getOptimalWidth() {
+        function getOptimalWidth(widths) {
             var container = that._elements.self;
             var containerWidth = container.clientWidth;
             while (containerWidth === 0 && container.parentNode) {
@@ -253,14 +252,14 @@
                 containerWidth = container.clientWidth;
             }
             var optimalWidth = containerWidth * devicePixelRatio;
-            var len = that._properties.widths.length;
+            var len = widths.length;
             var key = 0;
 
-            while ((key < len - 1) && (that._properties.widths[key] < optimalWidth)) {
+            while ((key < len - 1) && (widths[key] < optimalWidth)) {
                 key++;
             }
 
-            return that._properties.widths[key].toString();
+            return widths[key].toString();
         }
 
         function addLazyLoader() {

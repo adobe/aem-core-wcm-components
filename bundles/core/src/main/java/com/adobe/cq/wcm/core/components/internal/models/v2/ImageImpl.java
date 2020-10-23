@@ -70,9 +70,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     protected String smartCropRendition;  
     
-    @ValueMapValue(name = "dmPresetType", injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    protected String dmPresetType;    	
     /**
      * The resource type.
      */
@@ -88,6 +85,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      */
     private static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
 
+    /**
+     * The smartcrop "auto" constant.
+     */
+    private static final String SMART_CROP_AUTO = "SmartCrop:Auto";
+    
     /**
      * The path of the delegated content policy.
      */
@@ -202,42 +204,45 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
-			if (StringUtils.isNotBlank(smartCropRendition) && (dmImageUrl != null)) {
-				dmImageUrl += "%3A" + smartCropRendition;
-			}
-            String staticSelectors = selector;
-            if (smartSizes.length > 0) {
-                // only include the quality selector in the URL, if there are sizes configured
-                staticSelectors += DOT + jpegQuality;
-                if(dmImageUrl != null && StringUtils.isBlank(smartCropRendition)) {
-                	dmImageUrl += "?qlt=" + jpegQuality;
-					dmImageUrl += "&wid=" + ((smartSizes.length == 1) ? smartSizes[0] : "%7B.width%7D");
-                }
-            }
             if(dmImageUrl == null){
-	            srcUriTemplate = baseResourcePath + DOT + staticSelectors +
-	                SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-	                (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
-	                (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension): "");
-	
-	            // if content policy delegate path is provided pass it to the image Uri
-	            String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
-	            if (StringUtils.isNotBlank(policyDelegatePath)) {
-	                srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
-	                src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
-	            }
-            }
-            else {
-            	if (lastModifiedDate > 0){
-            		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "ts=" + lastModifiedDate;
-            	}
-            	if (StringUtils.isNotBlank(this.imagePreset) && StringUtils.isBlank(smartCropRendition)){
-            		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "$" + this.imagePreset + "$";
-            	}                
-            	if (StringUtils.isNotBlank(this.imageModifiers)){
-            		dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + this.imageModifiers;
-            	}            	
-            	src = dmImageUrl;
+                String staticSelectors = selector;
+                if (smartSizes.length > 0) {
+                    // only include the quality selector in the URL, if there are sizes configured
+                    staticSelectors += DOT + jpegQuality;
+                }
+                srcUriTemplate = baseResourcePath + DOT + staticSelectors +
+                    SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
+                    (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
+                    (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension): "");
+
+                // if content policy delegate path is provided pass it to the image Uri
+                String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
+                if (StringUtils.isNotBlank(policyDelegatePath)) {
+                    srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+                    src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+                }
+            } else {
+                if (StringUtils.isNotBlank(smartCropRendition)) {
+                    if(smartCropRendition.equals(SMART_CROP_AUTO)) {
+                        dmImageUrl += SRC_URI_TEMPLATE_WIDTH_VAR;
+                    } else {
+                        dmImageUrl += "%3A" + smartCropRendition;
+                    }
+                }
+                if (smartSizes.length > 0 && StringUtils.isBlank(smartCropRendition)) {
+                    dmImageUrl += "?qlt=" + jpegQuality;
+                    dmImageUrl += "&wid=" + ((smartSizes.length == 1) ? smartSizes[0] : "%7B.width%7D");
+                }
+                if (lastModifiedDate > 0){
+                    dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "ts=" + lastModifiedDate;
+                }
+                if (StringUtils.isNotBlank(this.imagePreset) && StringUtils.isBlank(smartCropRendition)){
+                    dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "$" + this.imagePreset + "$";
+                }
+                if (StringUtils.isNotBlank(this.imageModifiers)){
+                    dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + this.imageModifiers;
+                }
+                src = dmImageUrl;
             }
             buildJson();
         }
@@ -265,8 +270,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return dmImage;
     }
 
-    public String getDmPresetType() {
-        return dmPresetType;
+    public String getSmartCropRendition() {
+        return smartCropRendition;
     }
 
     @Override

@@ -27,14 +27,16 @@
     var $linkURLField;
     var $cqFileUpload;
     var $cqFileUploadEdit;
-    var $dynamicMediaGroup;    
+    var $dynamicMediaGroup;
+    var areDMFeaturesEnabled;    
     var fileReference;
-    var presetTypeRadioGroup = ".cmp-image__editor-dynamicmedia-presettype";
-    var imagePresetDropDownList = ".cmp-image__editor-dynamicmedia-imagepreset";
-    var smartCropRenditionDropDownList = ".cmp-image__editor-dynamicmedia-smartcroprendition";
+    var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
+    var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
+    var smartCropRenditionDropDownSelector = ".cmp-image__editor-dynamicmedia-smartcroprendition";
     var imagePropertiesRequest;
     var imagePath;
     var smartCropRenditionFromJcr;
+    var smartCropRenditionsDropDown;
 
     $(document).on("dialog-loaded", function(e) {
         var $dialog        = e.dialog;
@@ -52,6 +54,10 @@
             $cqFileUpload     = $dialog.find(".cq-FileUpload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
             $dynamicMediaGroup= $dialogContent.find(".cmp-image__editor-dynamicmedia");
+            areDMFeaturesEnabled = ($dynamicMediaGroup.length == 1);
+            if (areDMFeaturesEnabled) {
+                smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
+            }            
 
             if ($cqFileUpload) {
 		        imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
@@ -120,17 +126,17 @@
         toggleAlternativeFieldsAndLink(e.target);
     });
 
-    $(document).on("change", dialogContentSelector + " " + presetTypeRadioGroup, function(e) {
+    $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
 		switch(e.target.value) {
 			case "imagePreset":
-				$dynamicMediaGroup.find(imagePresetDropDownList).show();
-				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().hide();
-				resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownList));
+				$dynamicMediaGroup.find(imagePresetDropDownSelector).show();
+				$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().hide();
+				resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
 				break;
 			case "smartCrop":
-				$dynamicMediaGroup.find(imagePresetDropDownList).hide();
-				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().show();
-				resetSelectField($dynamicMediaGroup.find(imagePresetDropDownList));
+				$dynamicMediaGroup.find(imagePresetDropDownSelector).hide();
+				$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().show();
+				resetSelectField($dynamicMediaGroup.find(imagePresetDropDownSelector));
 				break;
 			default:
 				break;                
@@ -177,7 +183,7 @@
                 }
                 //show or hide "DynamicMedia section" depending on whether the file is DM
                 var isFileDM = data["dam:scene7File"];
-                if (isFileDM === undefined || isFileDM.trim() === "") {
+                if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
                     $dynamicMediaGroup.hide();
                 }
                 else{
@@ -208,7 +214,6 @@
      * @param imageUrl The link to image asset
      */	
 	function getSmartCropRenditions(imageUrl){
-		var smartCropRenditionsDropDownItemsList = $dynamicMediaGroup.find(smartCropRenditionDropDownList).get(0);
 		if (imagePropertiesRequest){
 			imagePropertiesRequest.abort();
 		}
@@ -232,29 +237,15 @@
 				}
 				//check "relation" - only in case of smartcrop renditions
 				if (payload.set.relation && payload.set.relation.length > 0) {
-					if (smartCropRenditionsDropDownItemsList.items) {
-						smartCropRenditionsDropDownItemsList.items.clear();
+					if (smartCropRenditionsDropDown.items) {
+						smartCropRenditionsDropDown.items.clear();
 					}
 					//we need to add "NONE" item first in the list
-					smartCropRenditionsDropDownItemsList.items.add({
-					  content: {
-						innerHTML: "NONE",
-						value: ""
-					  },
-					  disabled: false,
-					  selected: true
-					});	
+                    addSmartCropDropDownItem("NONE", "", true);
                     //"AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
-					smartCropRenditionsDropDownItemsList.items.add({
-					  content: {
-						innerHTML: "AUTO",
-						value: "AUTO"
-					  },
-					  disabled: false,
-					  selected: (smartCropRenditionFromJcr == "AUTO")
-					});	
-					for(var i=0; i < payload.set.relation.length ; i++) {
-						smartCropRenditionsDropDownItemsList.items.add({
+                    addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr == "SmartCrop:Auto"));
+					for(var i = 0; i < payload.set.relation.length ; i++) {
+						smartCropRenditionsDropDown.items.add({
 						  content: {
 							innerHTML: payload.set.relation[i].userdata.SmartCropDef
 						  },
@@ -265,8 +256,8 @@
 					prepareSmartCropPanel();
 				}
 				else {
-					$dynamicMediaGroup.find(presetTypeRadioGroup).parent().hide();
-					$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().hide();
+					$dynamicMediaGroup.find(presetTypeSelector).parent().hide();
+					$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().hide();
 				}
 			} else {
 				// error status
@@ -274,24 +265,37 @@
 		};
 		imagePropertiesRequest.send();   
 	}
+ 
+    /**
+     * Helper function for populating dropdown list
+     */	 
+    function addSmartCropDropDownItem(label, value, selected) {
+        smartCropRenditionsDropDown.items.add({
+          content: {
+            innerHTML: label,
+            value: value
+          },
+          disabled: false,
+          selected: selected
+    })};	 
 	
     /**
      * Helper function to show/hide UI-elements of dialog depending on the chosen radio button
      */	
 	function prepareSmartCropPanel() {
-		var presetType = getSelectedPresetType($(presetTypeRadioGroup));
+		var presetType = getSelectedPresetType($(presetTypeSelector));
 		switch (presetType){
 			case undefined:
-				selectPresetType($(presetTypeRadioGroup), "imagePreset");
-                $dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().hide();
+				selectPresetType($(presetTypeSelector), "imagePreset");
+                $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().hide();
 				break;
 			case "imagePreset":
-				$dynamicMediaGroup.find(imagePresetDropDownList).show();
-				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().hide();
+				$dynamicMediaGroup.find(imagePresetDropDownSelector).show();
+				$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().hide();
 				break;
 			case "smartCrop":
-				$dynamicMediaGroup.find(imagePresetDropDownList).hide();
-				$dynamicMediaGroup.find(smartCropRenditionDropDownList).parent().show();
+				$dynamicMediaGroup.find(imagePresetDropDownSelector).hide();
+				$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().show();
 				break;
 			default:
 				break;
@@ -305,7 +309,7 @@
      */
     function getSelectedPresetType(component) {
         var radioComp = component.find('[type="radio"]');
-        for(var i=0; i < radioComp.length ; i++) {
+        for(var i = 0; i < radioComp.length ; i++) {
             if ($(radioComp[i]).prop('checked')) {
                 return $(radioComp[i]).val();
             }
