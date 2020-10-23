@@ -36,6 +36,11 @@ import java.util.Optional;
 public final class ComponentUtils {
 
     /**
+     * Name of the node holding the context aware configurations below /conf/{site-name};
+     */
+    public static final String NN_SLING_CONFIGS = "sling:configs";
+
+    /**
      * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
      */
     public static final String ID_SEPARATOR = "-";
