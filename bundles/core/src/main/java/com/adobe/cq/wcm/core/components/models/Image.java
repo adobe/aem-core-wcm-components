@@ -137,6 +137,12 @@ public interface Image extends Component {
     String PN_FLIP_VERTICAL = "imageFlipVertical";
 
     /**
+     * Name of the resource property that will indicate if the current image should has Image Modifiers settings.
+     *
+     */
+    String PN_IMAGE_MODIFIERS = "imageModifers";
+
+    /**
      * Name of the resource property that defines areas of an image map.
      *
      * The property stores map areas as follows:
@@ -151,6 +157,11 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     String PN_MAP = "imageMap";
+
+    /**
+     * Name of the configuration policy property that controls whether Dynamic Media features are used by Core component.
+     */
+    String PN_DESIGN_DYNAMIC_MEDIA_ENABLED = "enableDmFeatures";
 
     /**
      * Returns the value for the {@code src} attribute of the image.

@@ -42,6 +42,14 @@
                                 sling:resourceType="granite/ui/components/coral/foundation/container"
                                 margin="{Boolean}false">
                                 <items jcr:primaryType="nt:unstructured">
+                                    <enableDmFeatures
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, Dynamic Media features are enabled."
+                                        name="./enableDmFeatures"
+                                        text="Enable DM features"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
                                     <enableLazyLoading
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
