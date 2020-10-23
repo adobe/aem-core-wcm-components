@@ -236,7 +236,7 @@
 
 				}
 				//check "relation" - only in case of smartcrop renditions
-				if (payload.set.relation && payload.set.relation.length > 0) {
+				if (payload && payload.set.relation && payload.set.relation.length > 0) {
 					if (smartCropRenditionsDropDown.items) {
 						smartCropRenditionsDropDown.items.clear();
 					}
