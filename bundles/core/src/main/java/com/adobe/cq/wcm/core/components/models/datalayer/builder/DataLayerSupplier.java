@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder;
+package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import org.jetbrains.annotations.NotNull;
