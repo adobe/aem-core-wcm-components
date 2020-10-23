@@ -227,8 +227,8 @@
 				var rePayload = new RegExp(/^(?:\/\*jsonp\*\/)?\s*([^()]+)\(([\s\S]+),\s*"[0-9]*"\);?$/gmi);
 				var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
 				var resPayload = rePayload.exec(responseText);
+                var payload;
 				if (resPayload) {
-					var payload;
 					var payloadStr = resPayload[2];
 					if (rePayloadJSON.test(payloadStr)) {
 						payload = JSON.parse(payloadStr);
