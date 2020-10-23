@@ -2,6 +2,7 @@
   "container": {
     "jcr:primaryType": "nt:unstructured",
     "actionType": "foundation/components/form/actions/rpc",
-    "redirect" : "/content"
+    "redirect" : "/content",
+    "errorMessage": "Ups"
   }
 }

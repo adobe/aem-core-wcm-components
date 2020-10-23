@@ -10,8 +10,14 @@
             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
             fieldLabel="Endpoint"
             fieldDescription="Endpoint URL of the RESTful service"
-            name="./formEndPointUrl"
+            name="./externalServiceEndPointUrl"
             required="{Boolean}true"/>
+        <errorMessage
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+            fieldLabel="Error Message"
+            fieldDescription="Error Message to display if form data couldn't post successfully to remote endpoint"
+            name="./errorMessage"/>
     </items>
     <granite:data
         jcr:primaryType="nt:unstructured"

@@ -19,49 +19,43 @@ import java.lang.annotation.Annotation;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
-import org.apache.sling.api.resource.ModifiableValueMap;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.services.form.FormPostService;
+import com.adobe.cq.wcm.core.components.services.form.FormHandler;
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @ExtendWith({AemContextExtension.class})
-public class FormPostServiceImplTest {
-
-    private static final String TEST_BASE = "/form/form-post-service";
-    private static final String CONTENT_ROOT = "/content";
+public class FormHandlerImplTest {
 
     public final AemContext context = CoreComponentTestContext.newAemContext();
 
     private WireMockServer wireMockServer;
     private int wireMockPort;
-    private FormPostService underTest;
+    private FormHandler underTest;
 
     @BeforeEach
     void setUp() {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         wireMockServer = new WireMockServer(wireMockConfig().dynamicPort());
         wireMockServer.start();
         wireMockPort = wireMockServer.port();
         setupStub();
         context.registerService(HttpClientBuilderFactory.class, HttpClientBuilder::create);
-        underTest = context.registerInjectActivateService(new FormPostServiceImpl());
-        ((FormPostServiceImpl) underTest).activate(new FormPostServiceImpl.Config() {
+        underTest = context.registerInjectActivateService(new FormHandlerImpl());
+        ((FormHandlerImpl) underTest).activate(new FormHandlerImpl.Config() {
             @Override
             public int connectionTimeout() {
                 return 6000;
@@ -91,17 +85,18 @@ public class FormPostServiceImplTest {
     }
 
     @Test
-    void testSendFormData() throws JSONException {
-        MockSlingHttpServletRequest request = context.request();
-        Resource resource = context.currentResource("/content/container");
-        ModifiableValueMap modifiableValueMap = resource.adaptTo(ModifiableValueMap.class);
-        modifiableValueMap.put("formEndPointUrl", "http://localhost:" + wireMockPort + "/form/endpoint");
-        context.currentResource("/content/container");
-        request.setParameterMap(ImmutableMap.of("text", "hello"));
-        assertTrue(underTest.sendFormData(request, context.response()));
-
+    void testSendFormDataWithSuccess() throws JSONException {
+        String endPointUrl = "http://localhost:" + wireMockPort + "/form/endpoint";
+        JSONObject formData = new JSONObject();
+        formData.append("text", "Hello World!");
+        assertTrue(underTest.forwardFormData(formData, endPointUrl));
     }
 
-
-
+    @Test
+    void testSendFormDataWithError() throws JSONException {
+        String endPointUrl = "http://localhost:" + wireMockPort + "/form/nonExistingEndpoint";
+        JSONObject formData = new JSONObject();
+        formData.append("text", "Hello World!");
+        assertFalse(underTest.forwardFormData(formData, endPointUrl));
+    }
 }

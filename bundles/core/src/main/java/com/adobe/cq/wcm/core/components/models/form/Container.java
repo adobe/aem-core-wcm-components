@@ -98,7 +98,7 @@ public interface Container extends ContainerExporter {
      * This method returns the redirect url property of this form. If the current sling request has a non-blank context path, the context
      * path is prepended to the redirect url if the redirect is an absolute path starting with '/'. This method also appends ".html" to the
      * redirect path.
-     * 
+     *
      * @return The form redirect url (used in the :redirect hidden input field of the form)
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
@@ -114,7 +114,7 @@ public interface Container extends ContainerExporter {
      */
     @Nullable
     default String[] getErrorMessages() {
-        throw new UnsupportedOperationException();
+        return new String[]{};
     }
 
     /**

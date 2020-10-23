@@ -3,5 +3,5 @@
     jcr:primaryType="sling:Folder"
     jcr:title="Post form data"
     sling:resourceType="foundation/components/form/action"
-    hint="Post form data as JSON to a REST endpoint"
+    hint="Posts form data as JSON to a REST endpoint"
 />

@@ -19,22 +19,22 @@ import javax.servlet.ServletException;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.json.JSONObject;
 
 /**
- * A service that posting form data to a remote service.
+ * A service that posts form data as JSON to a remote service.
  *
  * @since com.adobe.cq.wcm.core.components.services.form 1.0.0
  */
-public interface FormPostService {
+public interface FormHandler {
 
     /**
-     * Send form data to a remote servcie.
+     * Forward form data to a remote service.
      *
-     * @param request the {@link SlingHttpServletRequest}
-     * @param response the {@link SlingHttpServletResponse}
+     * @param formData    the form data JSON object
+     * @param endPointUrl the URL of the remote service
      * @return true if the remote request was successful, otherwise false
-     *
      * @since com.adobe.cq.wcm.core.components.services.form 1.0.0
      */
-    boolean sendFormData(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException;
+    boolean forwardFormData(JSONObject formData, String endPointUrl);
 }
