@@ -92,7 +92,19 @@ class FormActionRpcServletTest {
         request.setAttribute("cq.form.id", "new_form");
         Resource resource = context.currentResource("/content/container");
         ModifiableValueMap modifiableValueMap = resource.adaptTo(ModifiableValueMap.class);
-        modifiableValueMap.put("formEndPointUrl", "http://localhost:" + wireMockPort + "/form/endpoint");
+        modifiableValueMap.put("externalServiceEndPointUrl", "http://localhost:" + wireMockPort + "/form/endpoint");
+        underTest.doPost(request, context.response());
+        assertEquals(302 , context.response().getStatus());
+    }
+
+    @Test
+    void testDoPostWithMappedRedirect() throws ServletException {
+        MockSlingHttpServletRequest request = context.request();
+        request.setParameterMap(ImmutableMap.of("text", "hello"));
+        request.setAttribute("cq.form.id", "new_form");
+        Resource resource = context.currentResource("/content/containerWithMappedRedirect");
+        ModifiableValueMap modifiableValueMap = resource.adaptTo(ModifiableValueMap.class);
+        modifiableValueMap.put("externalServiceEndPointUrl", "http://localhost:" + wireMockPort + "/form/endpoint");
         underTest.doPost(request, context.response());
         assertEquals(302 , context.response().getStatus());
     }

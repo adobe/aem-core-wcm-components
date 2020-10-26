@@ -24,7 +24,9 @@ import javax.servlet.ServletException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.resource.NonExistingResource;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
@@ -60,6 +62,7 @@ public class FormActionRpcServlet extends SlingAllMethodsServlet {
     private static final String ATTR_RESOURCE = FormsHandlingServletHelper.class.getName() + "/resource";
     private static final String PN_FORM_ENDPOINT_URL = "externalServiceEndPointUrl";
     private static final Logger LOG = LoggerFactory.getLogger(FormActionRpcServlet.class);
+    public static final String HTML_SUFFIX = ".html";
 
     @Reference
     private FormHandler formHandler;
@@ -85,18 +88,16 @@ public class FormActionRpcServlet extends SlingAllMethodsServlet {
         }
     }
 
-    private void sendRedirect(ValueMap valueMap, SlingHttpServletRequest request, SlingHttpServletResponse response, boolean processFormApiSuccess)
+    private void sendRedirect(ValueMap valueMap, SlingHttpServletRequest request, SlingHttpServletResponse response,
+                              boolean processFormApiSuccess)
             throws ServletException {
-        String redirect = valueMap.get("redirect", String.class);
+        String redirect = getMappedRedirect(valueMap.get("redirect", String.class), request.getResourceResolver());
 
         String errorMessage = valueMap.get("errorMessage", String.class);
         FormsHandlingRequest formRequest = new FormsHandlingRequest(request);
         try {
-            if (!StringUtils.isEmpty(redirect) && processFormApiSuccess) {
-                if (!redirect.contains(".")) {
-                    redirect = redirect + ".html";
-                }
-                response.sendRedirect(request.getResourceResolver().map(request, redirect));
+            if (StringUtils.isNotEmpty(redirect) && processFormApiSuccess) {
+                response.sendRedirect(redirect);
             } else {
                 if (!processFormApiSuccess && StringUtils.isNotEmpty(errorMessage)) {
                     ValidationInfo validationInfo = ValidationInfo.createValidationInfo(request);
@@ -115,5 +116,24 @@ public class FormActionRpcServlet extends SlingAllMethodsServlet {
         } catch (IOException var13) {
             LOG.error("Error redirecting to {}", redirect);
         }
+    }
+
+    private String getMappedRedirect(String redirect, ResourceResolver resourceResolver) {
+        String mappedRedirect = null;
+        if (StringUtils.isNotEmpty(redirect)) {
+            if (StringUtils.endsWith(redirect, HTML_SUFFIX)) {
+                Resource resource = resourceResolver.resolve(redirect);
+                if (!(resource instanceof NonExistingResource)) {
+                    mappedRedirect = redirect;
+                }
+            } else {
+                Resource resource = resourceResolver.getResource(redirect);
+                if (resource != null) {
+                    redirect += HTML_SUFFIX;
+                    mappedRedirect = resourceResolver.map(redirect);
+                }
+            }
+        }
+        return mappedRedirect;
     }
 }

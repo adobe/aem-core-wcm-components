@@ -114,7 +114,7 @@ public interface Container extends ContainerExporter {
      */
     @Nullable
     default String[] getErrorMessages() {
-        return new String[]{};
+        return null;
     }
 
     /**
