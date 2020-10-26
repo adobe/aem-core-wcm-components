@@ -141,7 +141,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Built with &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.11.0&quot;>Core Components 2.11.0&lt;/a>.&lt;/p>&#xa;"
+                    text="&lt;p>Built with &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.12.0&quot;>Core Components 2.12.0&lt;/a>.&lt;/p>&#xa;"
                     textIsRich="true"/>
             </responsivegrid_2176569853>
         </root>
