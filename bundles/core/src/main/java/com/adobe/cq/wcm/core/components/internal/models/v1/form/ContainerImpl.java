@@ -50,6 +50,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHelper;
+import com.day.cq.wcm.foundation.forms.ValidationInfo;
 
 import static com.day.cq.wcm.foundation.forms.FormsConstants.SCRIPT_FORM_SERVER_VALIDATION;
 
@@ -101,6 +102,7 @@ public class ContainerImpl implements Container {
     private String action;
     private Map<String, ? extends ComponentExporter> childrenModels;
     private String[] exportedItemsOrder;
+    private String[] errorMessages;
 
     @ScriptVariable
     private Resource resource;
@@ -122,6 +124,7 @@ public class ContainerImpl implements Container {
         if (StringUtils.isBlank(id)) {
             id = FormsHelper.getFormId(request);
         }
+        request.setAttribute(FormsHelper.REQ_ATTR_FORMID, getId());
         this.name = id;
         this.dropAreaResourceType = "wcm/foundation/components/responsivegrid/new";
         if (redirect != null) {
@@ -133,6 +136,10 @@ public class ContainerImpl implements Container {
 
         if (!StringUtils.equals(request.getRequestPathInfo().getExtension(), ExporterConstants.SLING_MODEL_EXTENSION)) {
             runActionTypeInit(formStructureHelper);
+        }
+        final ValidationInfo info = ValidationInfo.getValidationInfo(request);
+        if (info != null) {
+            this.errorMessages = info.getErrorMessages(null);
         }
     }
 
@@ -186,6 +193,15 @@ public class ContainerImpl implements Container {
     @Override
     public String getRedirect() {
         return redirect;
+    }
+
+    @Override
+    @Nullable
+    public String[] getErrorMessages() {
+        if (errorMessages != null && errorMessages.length > 0) {
+            return Arrays.copyOf(errorMessages,errorMessages.length);
+        }
+        return new String[]{};
     }
 
     @NotNull

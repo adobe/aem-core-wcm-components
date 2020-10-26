@@ -500,6 +500,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>2.27.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-core</artifactId>
             <version>2.2.11</version>
