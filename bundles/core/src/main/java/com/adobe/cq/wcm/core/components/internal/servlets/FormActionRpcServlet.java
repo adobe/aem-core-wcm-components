@@ -80,7 +80,7 @@ public class FormActionRpcServlet extends SlingAllMethodsServlet {
                 try {
                     formData = Utils.getJsonOfRequestParameters(request);
                 } catch (JSONException e) {
-                    LOG.error("Unable to get JSON form request parameter", e.getMessage());
+                    LOG.error("Unable to get JSON form request parameter", e);
                 }
                 processFormApiSuccess = formHandler.forwardFormData(formData, endPointUrl);
             }
