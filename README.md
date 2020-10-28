@@ -130,3 +130,6 @@ For convenience, the following deployment profiles are provided when running the
 The hostname and port of the instance can be changed with the following user defined properties:
 * `aem.host` and `aem.port` for the author instance.
 * `aem.publish.host` and `aem.publish.port` for the publish instance.
+
+### Known Issues
+- The provided oEmbed URL Processor configuration for Facebook and Instagram is not working at the moment as a new version of the endpoint was released by Facebook and now an access token needs to be passed in the request. A possible workaround is described in https://github.com/adobe/aem-core-wcm-components/issues/1225
