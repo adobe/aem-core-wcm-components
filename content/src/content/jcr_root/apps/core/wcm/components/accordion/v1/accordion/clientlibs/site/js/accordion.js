@@ -154,7 +154,8 @@
                      * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
                      * - if so, route the "navigate" operation to enact a navigation of the Accordion based on index data
                      */
-                    new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                    CQ.CoreComponents.MESSAGE_CHANNEL = CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
+                    CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
                         if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
                             if (message.data.operation === "navigate") {
                                 // switch to single expansion mode when navigating in edit mode.
