@@ -124,6 +124,7 @@
                 refreshPlayPauseActions();
             }
 
+            // TODO: This section is only relevant in edit mode and should move to the editor clientLib
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
                 /*
                  * Editor message handling:
@@ -131,6 +132,8 @@
                  * - check that the message data panel container type is correct and that the id (path) matches this specific Carousel component
                  * - if so, route the "navigate" operation to enact a navigation of the Carousel based on index data
                  */
+                window.CQ = window.CQ || {};
+                window.CQ.CoreComponents = window.CQ.CoreComponents || {};
                 CQ.CoreComponents.MESSAGE_CHANNEL = CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
                 CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
                     if (message.data && message.data.type === "cmp-carousel" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
