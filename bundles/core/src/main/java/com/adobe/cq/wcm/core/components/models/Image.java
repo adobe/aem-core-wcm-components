@@ -143,6 +143,11 @@ public interface Image extends Component {
     String PN_IMAGE_MODIFIERS = "imageModifers";
 
     /**
+     *  Name of the resource property that will indicate imageServerUrl.
+     */
+    String PN_IMAGE_SERVER_URL = "imageServerUrl";
+
+    /**
      * Name of the resource property that defines areas of an image map.
      *
      * The property stores map areas as follows:

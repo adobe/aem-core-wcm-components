@@ -22,10 +22,12 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.jcr.RepositoryException;
-import javax.inject.Inject;                           
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ModifiableValueMap;
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -43,7 +45,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
-import com.day.cq.commons.ImageResource;
+                                        
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
@@ -61,15 +63,15 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @ValueMapValue(name = "imageModifiers", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected String imageModifiers;
-    
+
     @ValueMapValue(name = "imagePreset", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    protected String imagePreset;    
-	
+    protected String imagePreset;
+
     @ValueMapValue(name = "smartCropRendition", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    protected String smartCropRendition;  
-    
+    protected String smartCropRendition;
+
     /**
      * The resource type.
      */
@@ -89,7 +91,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * The smartcrop "auto" constant.
      */
     private static final String SMART_CROP_AUTO = "SmartCrop:Auto";
-    
+
     /**
      * The path of the delegated content policy.
      */
@@ -114,7 +116,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * Placeholder for the SRC URI template.
      */
     private boolean dmImage = false;
-    
+
     /**
      * Placeholder for the referenced assed ID.
      */
@@ -170,29 +172,40 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             title = damTitle;
                         }
                     }
-                    
-                    //check "Enable DM features" checkbox 
-                    //check DM asset - check for "dam:scene7File" metadata value 
-                    if(isDmFeaturesEnabled && (!StringUtils.isEmpty(asset.getMetadataValue(Scene7Constants.PN_S7_FILE)))){
+
+                    //check "Enable DM features" checkbox
+                    //check DM asset - check for "dam:scene7File" metadata value
+                    String dmAssetName = asset.getMetadataValue(Scene7Constants.PN_S7_FILE);
+                    if(isDmFeaturesEnabled && (!StringUtils.isEmpty(dmAssetName))){
                         //image is DM
                         dmImage = true;
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         try {
-                        	String[] productionImageUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
-                            if (!isWCMDisabled){
+                            String dmServerUrl;
+                            if (!isWCMDisabled) {
                                 //for Author
-                                dmImageUrl = "/is/image/" + productionImageUrls[1];
-                            }
-                            else {
+                                dmServerUrl = "/is/image/";
+                                String[] productionImageUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
+                                try {
+                                    ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
+                                    if (map != null) {
+                                        map.put(PN_IMAGE_SERVER_URL, productionImageUrls[0] + "/is/image/");
+                                        resource.getResourceResolver().commit();
+                                    }
+                                } catch (PersistenceException e) {
+                                    LOGGER.error("Unable to save 'imageServerUrl' property '{}'", productionImageUrls[0] + "/is/image/", e);
+                                }                                
+                            } else {
                                 //for Publish
-                                dmImageUrl =  productionImageUrls[0] + "/is/image/" + productionImageUrls[1];
+                                dmServerUrl = (String) properties.get(PN_IMAGE_SERVER_URL);
                             }
+                            dmImageUrl = dmServerUrl + dmAssetName;
                         }
     	                catch (RepositoryException e) {
     						LOGGER.error("Unable to get DM URL for asset resource '{}'", fileReference, e);
-    					}   
-                    }                    
+    					}
+                    }
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
                             request.getResource().getPath());
