@@ -16,18 +16,14 @@
 package com.adobe.cq.wcm.core.components.internal.servlets.embed;
 
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.function.Function;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceUtil;
-import org.apache.sling.api.resource.ValueMap;
-import org.jetbrains.annotations.Nullable;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource;
@@ -35,50 +31,39 @@ import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.day.cq.wcm.api.designer.Designer;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
-import com.google.common.base.Function;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(AemContextExtension.class)
 public class AllowedEmbeddablesDataSourceServletTest {
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/embed/v1/datasources/allowedembeddables",
-        "/apps");
+    private static final String TEST_BASE = "/embed/v1/datasources/allowedembeddables";
+    private static final String APPS_ROOT = "/apps";
 
-    private AllowedEmbeddablesDataSourceServlet dataSourceServlet;
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Mock
-    private ContentPolicyManager contentPolicyManager;
-
-    @Mock
-    private Designer designer;
-
-    @Mock
-    private ContentPolicy contentPolicy;
+    private final AllowedEmbeddablesDataSourceServlet dataSourceServlet = new AllowedEmbeddablesDataSourceServlet();
 
     private static final String CURRENT_PATH = "/apps/content/embed";
 
-    private ValueMap properties;
-
-    @Before
+    @BeforeEach
     public void setUp() {
-        dataSourceServlet = new AllowedEmbeddablesDataSourceServlet();
-        registerAdapter();
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, APPS_ROOT);
         context.currentResource(CURRENT_PATH);
     }
 
     @Test
     public void testAllowedEmbeddablesDataSourceServlet() {
-        Resource policyResource = context.resourceResolver().getResource("/apps/conf/policy_1558011912823");
-        properties = ResourceUtil.getValueMap(policyResource);
-        when(contentPolicyManager.getPolicy(any(Resource.class))).thenReturn(contentPolicy);
-        when(contentPolicy.getProperties()).thenReturn(properties);
+        context.contentPolicyMapping("my-app/components/embed",
+            Objects.requireNonNull(context.resourceResolver().getResource("/apps/conf/policy_1558011912823"))
+                .getValueMap());
+
         context.request().setAttribute(Value.CONTENTPATH_ATTRIBUTE, CURRENT_PATH);
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
@@ -92,6 +77,9 @@ public class AllowedEmbeddablesDataSourceServletTest {
 
     @Test
     public void testAllowedEmbeddablesDesignDataSourceServlet() {
+        Designer designer = mock(Designer.class);
+        context.registerAdapter(ResourceResolver.class, Designer.class,
+            (Function<ResourceResolver, Designer>) input -> designer);
         Resource styleResource = context.resourceResolver().getResource("/apps/etc/designs/embed");
         MockStyle mockStyle = new MockStyle(styleResource, styleResource.getValueMap());
         when(designer.getStyle(any(Resource.class))).thenReturn(mockStyle);
@@ -135,22 +123,5 @@ public class AllowedEmbeddablesDataSourceServletTest {
             items++;
         }
         assertEquals(textValueDataResourceSources.length, items);
-    }
-
-    private void registerAdapter() {
-        context.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
-            new Function<ResourceResolver, ContentPolicyManager>() {
-                @Nullable
-                @Override
-                public ContentPolicyManager apply(@Nullable ResourceResolver input) {
-                    return contentPolicyManager;
-                }
-            });
-        context.registerAdapter(ResourceResolver.class, Designer.class,
-            new Function<ResourceResolver, Designer>() {
-                @Nullable
-                @Override
-                public Designer apply(@Nullable ResourceResolver input) { return designer; }
-            });
     }
 }

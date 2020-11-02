@@ -16,7 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -25,17 +25,14 @@ import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.jetbrains.annotations.Nullable;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.testing.MockLanguageManager;
-import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
@@ -47,16 +44,18 @@ import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class SearchResultServletTest {
 
     private static final String TEST_BASE = "/search";
+    private static final String CONTENT_ROOT = "/content";
 
     private SearchResultServlet underTest;
 
@@ -75,28 +74,26 @@ public class SearchResultServletTest {
     @Mock
     private Hit mockHit;
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content");
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
     private static final String TEST_ROOT_EN = "/content/en/search/page";
     private static final String TEST_TEMPLATE_EN = "/content/en/search/page-template";
-    private static final String TEST_ROOT_DE = "/content/de";
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(TEST_BASE + "/test-conf.json", "/conf/test/settings/wcm/templates");
-        underTest = new SearchResultServlet();
         when(mockQueryBuilder.createQuery(any(), any())).thenReturn(mockQuery);
         when(mockQuery.getResult()).thenReturn(mockSearchResult);
-        when(mockSearchResult.getHits()).thenReturn(Arrays.asList(new Hit[] { mockHit }));
-        Utils.setInternalState(underTest, "queryBuilder", mockQueryBuilder);
-        Utils.setInternalState(underTest, "languageManager", new MockLanguageManager());
-        Utils.setInternalState(underTest, "relationshipManager", mockLiveRelationshipManager);
+        when(mockSearchResult.getHits()).thenReturn(Collections.singletonList(mockHit));
+        context.registerService(QueryBuilder.class, mockQueryBuilder);
+        context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
+        underTest = context.registerInjectActivateService(new SearchResultServlet());
     }
 
     @Test
     public void testSimpleSearch() throws Exception {
-        com.adobe.cq.wcm.core.components.Utils.enableDataLayerForOldAemContext(context, true);
+        com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(TEST_ROOT_EN);
         when(mockHit.getResource()).thenReturn(resource);
         MockSlingHttpServletRequest request = context.request();
@@ -112,7 +109,7 @@ public class SearchResultServletTest {
 
     @Test
     public void testTemplateBasedSearch() throws Exception {
-        com.adobe.cq.wcm.core.components.Utils.enableDataLayerForOldAemContext(context, true);
+        com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(TEST_TEMPLATE_EN);
         when(mockHit.getResource()).thenReturn(resource);
         MockSlingHttpServletRequest request = context.request();

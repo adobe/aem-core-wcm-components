@@ -15,35 +15,96 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import org.apache.sling.api.resource.Resource;
-import org.jetbrains.annotations.NotNull;
-
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class PageDataImpl extends ContainerDataImpl implements PageData {
+import java.util.Arrays;
+import java.util.function.Supplier;
 
-    public PageDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
-        super(component, resource);
+/**
+ * {@link DataLayerSupplier} backed page component data implementation.
+ */
+public final class PageDataImpl extends ComponentDataImpl implements PageData {
+
+    /**
+     * The template path field value.
+     */
+    private String templatePath;
+
+    /**
+     * The language field value.
+     */
+    private String language;
+
+    /**
+     * The tags field value.
+     */
+    private String[] tags;
+
+    /**
+     * The URL field value.
+     */
+    private String url;
+
+    /**
+     * Construct the data layer model.
+     *
+     * @param supplier The data layer supplier.
+     */
+    public PageDataImpl(@NotNull final DataLayerSupplier supplier) {
+        super(supplier);
     }
 
     @Override
+    @Nullable
     public String getTemplatePath() {
-        return component.getDataLayerTemplatePath();
+        if (this.templatePath == null) {
+            this.templatePath = this.getDataLayerSupplier()
+                .getTemplatePath()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.templatePath;
     }
 
     @Override
+    @Nullable
     public String getLanguage() {
-        return component.getDataLayerLanguage();
+        if (this.language == null) {
+            this.language = this.getDataLayerSupplier()
+                .getLanguage()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.language;
     }
 
     @Override
+    @Nullable
     public String[] getTags() {
-        return component.getDataLayerTags();
+        if (this.tags == null) {
+            this.tags = this.getDataLayerSupplier()
+                .getTags()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        if (this.tags != null) {
+            return Arrays.copyOf(this.tags, this.tags.length);
+        }
+        return null;
     }
 
     @Override
+    @Nullable
     public String getUrl() {
-        return component.getDataLayerUrl();
+        if (this.url == null) {
+            this.url = this.getDataLayerSupplier()
+                .getUrl()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.url;
     }
 }

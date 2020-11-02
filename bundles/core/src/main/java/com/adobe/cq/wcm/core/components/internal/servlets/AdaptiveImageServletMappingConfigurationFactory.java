@@ -74,6 +74,12 @@ public class AdaptiveImageServletMappingConfigurationFactory {
         )
         int defaultResizeWidth() default AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH;
 
+        @AttributeDefinition(
+                name = "Maximum processed image size",
+                description = "In case the source image is larger on either dimensions than this size, the servlet will refuse to process " +
+                        "it and will throw an exception, to avoid running out of memory."
+        )
+        int maxSize() default AdaptiveImageServlet.DEFAULT_MAX_SIZE;
 
     }
 
@@ -84,6 +90,8 @@ public class AdaptiveImageServletMappingConfigurationFactory {
     private List<String> extensions;
 
     private int defaultResizeWidth;
+
+    private int maxSize;
 
     /**
      * Invoked when a configuration is created or modified.
@@ -97,6 +105,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
         selectors = getValues(config.selectors());
         extensions = getValues(config.extensions());
         defaultResizeWidth = config.defaultResizeWidth();
+        maxSize = config.maxSize();
     }
 
     /**
@@ -136,6 +145,14 @@ public class AdaptiveImageServletMappingConfigurationFactory {
      */
     public int getDefaultResizeWidth() {
         return defaultResizeWidth;
+    }
+
+    /**
+     * Returns the maximum image width that the {@link AdaptiveImageServlet} will process.
+     * @return
+     */
+    public int getMaxSize() {
+        return maxSize;
     }
 
     /**

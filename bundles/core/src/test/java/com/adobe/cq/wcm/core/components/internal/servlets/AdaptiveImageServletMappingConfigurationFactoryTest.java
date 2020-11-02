@@ -18,9 +18,9 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AdaptiveImageServletMappingConfigurationFactoryTest {
 
@@ -52,6 +52,11 @@ public class AdaptiveImageServletMappingConfigurationFactoryTest {
             @Override
             public int defaultResizeWidth() {
                 return AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH;
+            }
+
+            @Override
+            public int maxSize() {
+                return AdaptiveImageServlet.DEFAULT_MAX_SIZE;
             }
         });
         testValues(new String[] {"core/image"}, configurationFactory.getResourceTypes());

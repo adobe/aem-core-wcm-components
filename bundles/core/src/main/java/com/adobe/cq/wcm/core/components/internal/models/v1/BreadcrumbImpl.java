@@ -96,13 +96,14 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
         int currentLevel = currentPage.getDepth();
         while (startLevel < currentLevel) {
             Page page = currentPage.getAbsoluteParent(startLevel);
-            if (page != null) {
+            if (page != null && page.getContentResource() != null) {
                 boolean isActivePage = page.equals(currentPage);
                 if (isActivePage && hideCurrent) {
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel, Collections.emptyList(), getId(), isShadowingDisabled);
+                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel,
+                            Collections.emptyList(), getId(), isShadowingDisabled, component);
                     items.add(navigationItem);
                 }
             }

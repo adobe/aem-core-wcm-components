@@ -79,7 +79,9 @@
                     index: index
                 };
 
-                ns.ContentFrame.postMessage(MESSAGE_ID, data);
+                CQ.CoreComponents.MESSAGE_CHANNEL = CQ.CoreComponents.MESSAGE_CHANNEL || new ns.MessageChannel("cqauthor", ns.ContentFrame.contentWindow);
+                // timeout of -1 as we do not expect a response
+                CQ.CoreComponents.MESSAGE_CHANNEL.postMessage(MESSAGE_ID, data, -1);
 
                 setTimeout(function() {
                     channel.trigger({

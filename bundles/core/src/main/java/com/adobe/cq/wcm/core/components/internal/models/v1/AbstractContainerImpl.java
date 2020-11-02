@@ -40,10 +40,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContainerDataImpl;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.designer.Style;
@@ -192,12 +192,8 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     public String getBackgroundStyle() {
         if (this.backgroundStyle == null) {
             StringBuilder styleBuilder = new StringBuilder();
-            getBackgroundImage().ifPresent(image -> {
-                styleBuilder.append("background-image:url(").append(image).append(");background-size:cover;background-repeat:no-repeat;");
-            });
-            getBackgroundColor().ifPresent(color -> {
-                styleBuilder.append("background-color:").append(color).append(";");
-            });
+            getBackgroundImage().ifPresent(image -> styleBuilder.append("background-image:url(").append(image).append(");background-size:cover;background-repeat:no-repeat;"));
+            getBackgroundColor().ifPresent(color -> styleBuilder.append("background-color:").append(color).append(";"));
             this.backgroundStyle = styleBuilder.toString();
         }
 
@@ -265,7 +261,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
         if (this.resource instanceof TemplatedResource) {
             return this.resource;
         }
-        return Optional.ofNullable((Resource)this.request.adaptTo(TemplatedResource.class)).orElse(this.resource);
+        return Optional.ofNullable((Resource)this.resource.adaptTo(TemplatedResource.class)).orElse(this.resource);
     }
 
     /*
@@ -273,7 +269,14 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
      */
 
     @Override
-    protected @NotNull ComponentData getComponentData() {
-        return new ContainerDataImpl(this, resource);
+    @NotNull
+    protected ContainerData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asContainer()
+            .withShownItems(this::getDataLayerShownItems)
+            .build();
     }
+
+    @JsonIgnore
+    public abstract String[] getDataLayerShownItems();
+
 }

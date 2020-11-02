@@ -5,4 +5,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Image (v2)"
     sling:resourceSuperType="core/wcm/components/image"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

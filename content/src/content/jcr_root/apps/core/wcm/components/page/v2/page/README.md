@@ -40,6 +40,25 @@ libsScript from all referenced [cloud service configurations](https://docs.adobe
 `<designpath>.css` | only if design is set for current page | CSS | Head
 `<clientlibs>` being set in component policy | only if `<clientlibs>` is set. Categories duplicated in `<clientlibsJsHead>` are only loaded in the page head. | JS | Body
 
+### Loading of Context-Aware CSS/JS
+The page component also supports loading developer-defined context-aware CSS, Javascript or `meta` tags. This is done by creating a [context-aware resource](https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html#context-aware-resources) for `com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig` with the following structure:
+
+```
+com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
+    - prefixPath="/some/path"
+    + item01
+        - element=["link"|"script"|"meta"]
+        - location=["header"|"footer"]
+        + attributes
+            - attributeName01="attributeValue01"
+            - attributeName02="attributeValue02"
+            ...
+    + item02
+        ...
+    ...
+```
+These items will be loaded in the header or footer of the page, depending on the configured `location`. The attribute names should match supported HTML attributes for [link](https://www.w3schools.com/tags/tag_link.asp), [script](https://www.w3schools.com/tags/tag_script.asp) and [meta](https://www.w3schools.com/tags/tag_meta.asp).
+
 ## Use Object
 The Page component uses the following use objects:
 * `com.adobe.cq.wcm.core.components.models.Page`

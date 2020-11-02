@@ -24,11 +24,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletResponse;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
@@ -67,10 +69,12 @@ import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
+import com.day.cq.wcm.foundation.WCMRenditionPicker;
 import com.day.image.Layer;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Servlet for adaptive images, can render images with different widths based on policies and requested width.
@@ -91,11 +95,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String IMAGE_RESOURCE_TYPE = "core/wcm/components/image";
     static final int DEFAULT_RESIZE_WIDTH = 1280;
     public static final int DEFAULT_JPEG_QUALITY = 82; // similar to what is the default in com.day.image.Layer#write(...)
+    public static final int DEFAULT_MAX_SIZE = 3840; // 4K UHD width
     private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveImageServlet.class);
     private static final String DEFAULT_MIME = "image/jpeg";
     private static final String SELECTOR_QUALITY_KEY = "quality";
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
+    private int maxInputWidth;
 
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient MimeTypeService mimeTypeService;
@@ -103,10 +109,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
-    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, int defaultResizeWidth) {
+    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, int defaultResizeWidth, int maxInputWidth) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
         this.defaultResizeWidth = defaultResizeWidth > 0 ? defaultResizeWidth : DEFAULT_RESIZE_WIDTH;
+        this.maxInputWidth = maxInputWidth > 0 ? maxInputWidth : DEFAULT_MAX_SIZE;
     }
 
     @Override
@@ -274,15 +281,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             boolean appliedTransformation = false;
             if (rectangle != null) {
                 double scaling;
-                Rendition webRendition = getAWebRendition(asset);
+                EnhancedRendition wcmRendition = getWCMRendition(asset);
                 double renditionWidth;
-                if (webRendition != null) {
-                    try (InputStream renditionStream = webRendition.getStream()) {
-                        Layer rendition = new Layer(renditionStream);
-                        renditionWidth = rendition.getWidth();
-                        LOGGER.debug("Found rendition {} with width {}px; assuming the cropping rectangle was calculated using this " +
-                                "rendition.", webRendition.getPath(), renditionWidth);
-                    }
+                Dimension renditionDimension = wcmRendition.getDimension();
+                if (renditionDimension != null) {
+                    renditionWidth = renditionDimension.getWidth();
                 } else {
                     renditionWidth = originalWidth;
                 }
@@ -295,7 +298,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         scaling = 1.0;
                     }
                 }
-                layer = new Layer(assetHandler.getImage(asset.getOriginal()));
+                layer = new Layer(assetHandler.getImage(getOriginal(asset)));
                 if (Math.abs(scaling - 1.0D) != 0) {
                     Rectangle scaledRectangle = new Rectangle(
                             (int) (rectangle.x * scaling),
@@ -311,7 +314,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             if (rotationAngle != 0) {
                 if (layer == null) {
-                    layer = new Layer(assetHandler.getImage(asset.getOriginal()));
+                    layer = new Layer(assetHandler.getImage(getBestRendition(asset, resizeWidth)));
                 }
                 layer.rotate(rotationAngle);
                 LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
@@ -319,7 +322,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             if (flipHorizontally) {
                 if (layer == null) {
-                    layer = new Layer(assetHandler.getImage(asset.getOriginal()));
+                    layer = new Layer(assetHandler.getImage(getBestRendition(asset, resizeWidth)));
                 }
                 layer.flipHorizontally();
                 LOGGER.debug("Flipped image horizontally.");
@@ -327,39 +330,39 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             if (flipVertically) {
                 if (layer == null) {
-                    layer = new Layer(assetHandler.getImage(asset.getOriginal()));
+                    layer = new Layer(assetHandler.getImage(getBestRendition(asset, resizeWidth)));
                 }
                 layer.flipVertically();
                 LOGGER.debug("Flipped image vertically.");
                 appliedTransformation = true;
             }
             if (!appliedTransformation) {
-                Rendition rendition = asset.getRendition(String.format(DamConstants.PREFIX_ASSET_WEB + ".%d.%d.%s", resizeWidth,
-                        resizeWidth, extension));
-                if (rendition != null) {
-                    LOGGER.debug("Found rendition {} with a width equal to the resize width ({}px); rendering.", rendition.getPath(),
-                            resizeWidth);
-                    stream(response, rendition.getStream(), imageType, imageName);
-                } else {
+                EnhancedRendition rendition = getBestRendition(asset, resizeWidth);
+                Dimension dimension = rendition.getDimension();
+                if (dimension != null) {
+                    originalWidth = dimension.width;
+                    originalHeight = dimension.height;
+                }
+                if (originalHeight > resizeWidth) {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
-                        layer = new Layer(assetHandler.getImage(asset.getOriginal()));
+                        layer = new Layer(assetHandler.getImage(rendition));
                         layer.resize(resizeWidth, resizeHeight);
                         response.setContentType(imageType);
-                        LOGGER.debug("Resizing asset {} to requested width of {}px; rendering.", asset.getPath(), resizeWidth);
+                        LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
                         layer.write(imageType, quality, response.getOutputStream());
-                    } else {
-                        LOGGER.debug("Rendering the original asset {} since its width ({}px) is either smaller than the requested " +
-                                "width ({}px) or since no resize is needed.", asset.getPath(), originalWidth, resizeWidth);
-                        stream(response, asset.getOriginal().getStream(), imageType, imageName);
                     }
+                } else {
+                    LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
+                            asset.getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
+                    stream(response, rendition.getStream(), imageType, imageName);
                 }
             } else {
                 resizeAndStreamLayer(response, layer, imageType, resizeWidth, quality);
             }
         } else {
             LOGGER.debug("No need to perform any processing on asset {}; rendering.", asset.getPath());
-            stream(response, asset.getOriginal().getStream(), imageType, imageName);
+            stream(response, getOriginal(asset).getStream(), imageType, imageName);
         }
     }
 
@@ -437,19 +440,77 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     /**
-     * Given an {@link Asset}, this method will return the first web {@link Rendition} it finds in the asset's renditions list.
+     * Given an {@link Asset}, this method will return the WCM rendition (cq5dam.web.*)
      *
      * @param asset the asset for which to retrieve the web rendition
-     * @return the rendition, if found, {@code null} otherwise
+     * @return the WCM rendition, if found the original
      */
-    private Rendition getAWebRendition(Asset asset) {
-        List<Rendition> renditions = asset.getRenditions();
+    @NotNull
+    private EnhancedRendition getWCMRendition(@NotNull Asset asset) {
+        return new EnhancedRendition(asset.getRendition(new WCMRenditionPicker()));
+    }
+
+    /**
+     * Given an {@link Asset} and a specified width, this method will return the best rendition
+     * for that width (smallest rendition larger than the specified width) or the original.
+     *
+     * @param asset the asset for which to retrieve the best rendition
+     * @param width the width
+     * @return a rendition that is suitable for that width
+     * @throws IOException when the best suited rendition is too large for processing
+     */
+    @NotNull
+    private EnhancedRendition getBestRendition(@NotNull Asset asset, int width) throws IOException {
+        // Sort renditions by file size
+        SortedSet<Rendition> renditions = new TreeSet<>((o1, o2) -> Long.valueOf(o1.getSize() - o2.getSize()).intValue());
+        renditions.addAll(asset.getRenditions());
+        EnhancedRendition bestRendition = null;
+        // Find first rendition that has a width larger or equal than wanted
         for (Rendition rendition : renditions) {
-            if (rendition.getName().startsWith(DamConstants.PREFIX_ASSET_WEB)) {
-                return rendition;
+            EnhancedRendition enhancedRendition = new EnhancedRendition(rendition);
+            Dimension dimension = enhancedRendition.getDimension();
+            if (dimension != null) {
+                if (dimension.getWidth() >= width) {
+                    bestRendition = enhancedRendition;
+                    break;
+                }
             }
         }
-        return null;
+        // If no rendition was found, attempt to use original
+        if (bestRendition == null) {
+            bestRendition = new EnhancedRendition(asset.getOriginal());
+        }
+        return filter(bestRendition);
+    }
+
+    /**
+     * Given an {@link Asset} it returns the original rendition, if it's not too large for processing.
+     *
+     * @param asset the asset for which to retrieve the original
+     * @return the original asset
+     * @throws IOException when the original is too large for processing
+     */
+    @NotNull
+    private EnhancedRendition getOriginal(@NotNull Asset asset) throws IOException {
+        EnhancedRendition original = new EnhancedRendition(asset.getOriginal());
+        return filter(original);
+    }
+
+    /**
+     * Given a {@link EnhancedRendition} it will check its size to see if it's too large for processing.
+     *
+     * @param rendition the rendition that needs to be checked
+     * @return the rendition if it's not too large
+     * @throws IOException when the rendition is too large for processing
+     */
+    @NotNull
+    private EnhancedRendition filter(@NotNull EnhancedRendition rendition) throws IOException {
+        // Don't use too big renditions, to avoid running out of memory
+        Dimension dimension = rendition.getDimension();
+        if (dimension != null && dimension.getWidth() <= maxInputWidth) {
+            return rendition;
+        }
+        throw new IOException(String.format("Cannot process rendition %s due to size %s", rendition.getName(), rendition.getDimension()));
     }
 
     private void stream(@NotNull SlingHttpServletResponse response, @NotNull InputStream inputStream, @NotNull String contentType,

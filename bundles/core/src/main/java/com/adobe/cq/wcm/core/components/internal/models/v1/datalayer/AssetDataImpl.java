@@ -15,69 +15,117 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.jackrabbit.JcrConstants;
-import org.apache.sling.api.resource.ValueMap;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
+import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import org.jetbrains.annotations.NotNull;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
-import com.day.cq.dam.api.Asset;
-import com.day.cq.tagging.TagConstants;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.function.Supplier;
 
-public class AssetDataImpl implements AssetData {
+/**
+ * {@link DataLayerSupplier} backed asset data model implementation.
+ *
+ * @see AssetData
+ */
+public final class AssetDataImpl implements AssetData {
 
-    private final Asset asset;
+    /**
+     * The current data layer supplier.
+     */
+    @NotNull
+    private final DataLayerSupplier dataLayerSupplier;
 
-    public AssetDataImpl(@NotNull Asset asset) {
-        this.asset= asset;
+    /**
+     * The ID field value.
+     */
+    private String id;
+
+    /**
+     * The last modified date field value.
+     */
+    private Date lastModifiedDate;
+
+    /**
+     * The format field value.
+     */
+    private String format;
+
+    /**
+     * The URL field value.
+     */
+    private String url;
+
+    /**
+     * The tags field value.
+     */
+    private String[] tags;
+
+    /**
+     * Construct an AssetData model.
+     *
+     * @param supplier The data layer supplier.
+     */
+    public AssetDataImpl(@NotNull final DataLayerSupplier supplier) {
+        this.dataLayerSupplier = supplier;
     }
 
     @Override
+    @NotNull
     public String getId() {
-        return asset.getID();
+        if (this.id == null) {
+            this.id = this.dataLayerSupplier.getId().get();
+        }
+        return this.id;
     }
 
     @Override
     public Date getLastModifiedDate() {
-        long assetLastModification = asset.getLastModified();
-        Calendar created = null;
-        if (assetLastModification == 0) {
-            ValueMap resourceMap = asset.adaptTo(ValueMap.class);
-            if (resourceMap != null) {
-                created = resourceMap.get(JcrConstants.JCR_CREATED, Calendar.class);
-            }
-            assetLastModification = (null != created) ? created.getTimeInMillis() : 0;
+        if (this.lastModifiedDate == null) {
+            this.lastModifiedDate = this.dataLayerSupplier
+                .getLastModifiedDate()
+                .map(Supplier::get)
+                .orElse(null);
         }
-        return new Date(assetLastModification);
+        if (this.lastModifiedDate != null) {
+            return new Date(this.lastModifiedDate.getTime());
+        }
+        return null;
     }
 
     @Override
     public String getFormat() {
-        return asset.getMimeType();
+        if (this.format == null) {
+            this.format = this.dataLayerSupplier
+                .getFormat()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.format;
     }
 
     @Override
     public String getUrl() {
-        return asset.getPath();
+        if (this.url == null) {
+            this.url = this.dataLayerSupplier
+                .getUrl()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.url;
     }
 
     @Override
     public String[] getTags() {
-        List<String> assetTags = new LinkedList<>();
-        String tagsValue = asset.getMetadataValueFromJcr(TagConstants.PN_TAGS);
-        if (StringUtils.isNotEmpty(tagsValue)) {
-            String[] tags = tagsValue.split(",");
-            for (String tag : tags) {
-                if (StringUtils.isNotEmpty(tag)) {
-                    assetTags.add(tag);
-                }
-            }
+        if (this.tags == null) {
+            this.tags = this.dataLayerSupplier
+                .getTags()
+                .map(Supplier::get)
+                .orElse(null);
         }
-        return assetTags.toArray(new String[assetTags.size()]);
+        if (this.tags != null) {
+            return Arrays.copyOf(this.tags, this.tags.length);
+        }
+        return null;
     }
 }

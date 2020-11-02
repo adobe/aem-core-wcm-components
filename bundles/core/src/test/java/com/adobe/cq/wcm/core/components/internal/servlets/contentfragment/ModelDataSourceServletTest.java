@@ -21,17 +21,17 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.testing.mock.sling.ResourceResolverType;
-import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.IsInstanceOf;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.EmptyDataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
@@ -39,14 +39,17 @@ import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.SearchResult;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
+@ExtendWith(AemContextExtension.class)
 public class ModelDataSourceServletTest {
 
     private ModelDataSourceServlet modelDatasourceServlet;
 
-    @Rule
-    public SlingContext slingContext = new SlingContext(ResourceResolverType.RESOURCERESOLVER_MOCK);
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Before
+
+    @BeforeEach
     public void setUp() {
         modelDatasourceServlet = new ModelDataSourceServlet();
     }
@@ -54,20 +57,20 @@ public class ModelDataSourceServletTest {
     @Test
     public void verifyDataSourceWhenSessionIsNull() throws Exception {
         // GIVEN
-        SlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.bundleContext());
+        SlingHttpServletRequest request = new MockSlingHttpServletRequest(context.bundleContext());
 
         // WHEN
-        modelDatasourceServlet.doGet(request, slingContext.response());
+        modelDatasourceServlet.doGet(request, context.response());
 
         // THEN
-        Assert.assertThat(request.getAttribute(DataSource.class.getName()), IsInstanceOf.instanceOf(EmptyDataSource.class));
+        assertThat(request.getAttribute(DataSource.class.getName()), IsInstanceOf.instanceOf(EmptyDataSource.class));
     }
 
     @Test
     public void verifyDataSource() throws Exception {
         // GIVEN
-        slingContext.load().json(getClass().getResourceAsStream("test-content.json"), "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
-        ResourceResolver resourceResolver = Mockito.spy(slingContext.resourceResolver());
+        context.load().json(getClass().getResourceAsStream("test-content.json"), "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
+        ResourceResolver resourceResolver = Mockito.spy(context.resourceResolver());
         Resource resource = resourceResolver.getResource("/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
         Resource leakingResource = Mockito.spy(resource);
 
@@ -85,16 +88,16 @@ public class ModelDataSourceServletTest {
         Mockito.when(iterator.hasNext()).thenReturn(true, false);
         Mockito.when(iterator.next()).thenReturn(leakingResource);
 
-        SlingHttpServletRequest request = new MockSlingHttpServletRequest(resourceResolver, slingContext.bundleContext());
+        SlingHttpServletRequest request = new MockSlingHttpServletRequest(resourceResolver, context.bundleContext());
 
         // WHEN
-        modelDatasourceServlet.doGet(request, slingContext.response());
+        modelDatasourceServlet.doGet(request, context.response());
 
         // THEN
         SimpleDataSource simpleDataSource = (SimpleDataSource) request.getAttribute(DataSource.class.getName());
-        Assert.assertThat(simpleDataSource.iterator().hasNext(), CoreMatchers.is(true));
+        assertThat(simpleDataSource.iterator().hasNext(), CoreMatchers.is(true));
         ValueMap valueMap = simpleDataSource.iterator().next().getValueMap();
-        Assert.assertThat(valueMap.get("text"), CoreMatchers.is("YetAnotherCFModel"));
-        Assert.assertThat(valueMap.get("value"), CoreMatchers.is("/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
+        assertThat(valueMap.get("text"), CoreMatchers.is("YetAnotherCFModel"));
+        assertThat(valueMap.get("value"), CoreMatchers.is("/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
     }
 }

@@ -15,37 +15,77 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.day.cq.wcm.api.components.Component;
 
-import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
+import java.util.Optional;
 
 /**
  * Abstract helper class for ListItem implementations.
  * Generates an ID for the item, using the ID of its parent as a prefix
- *
  */
-public abstract class AbstractListItemImpl extends AbstractComponentImpl {
+public abstract class AbstractListItemImpl extends AbstractComponentImpl implements ListItem {
 
-    protected String parentId;
-    protected String path;
-
+    /**
+     * Prefix prepended to the item ID.
+     */
     private static final String ITEM_ID_PREFIX = "item";
 
-    protected AbstractListItemImpl(String parentId, Resource resource) {
+    /**
+     * The ID of the component that contains this list item.
+     */
+    protected String parentId;
+
+    /**
+     * The path of this list item.
+     */
+    protected String path;
+
+    /**
+     * Data layer type.
+     */
+    protected String dataLayerType;
+
+    /**
+     * Construct a list item.
+     *
+     * @param parentId The ID of the containing component.
+     * @param resource The resource of the list item.
+     * @param component The component that contains this list item.
+     */
+    protected AbstractListItemImpl(String parentId, Resource resource, Component component) {
         this.parentId = parentId;
-        this.path = resource.getPath();
+        if (resource != null) {
+            this.path = resource.getPath();
+        }
+        if (component != null) {
+            this.dataLayerType = component.getResourceType() + "/" + ITEM_ID_PREFIX;
+        }
         this.resource = resource;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public String getId() {
-        String prefix = StringUtils.join(parentId, ID_SEPARATOR, ITEM_ID_PREFIX);
-        return Utils.generateId(prefix, path);
+        return ComponentUtils.generateId(StringUtils.join(parentId, ComponentUtils.ID_SEPARATOR, ITEM_ID_PREFIX), path);
+    }
+
+    @NotNull
+    @Override
+    protected ComponentData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData())
+            .asComponent()
+            .withType(() -> Optional.ofNullable(this.dataLayerType).orElseGet(() -> super.getComponentData().getType()))
+            .withTitle(this::getTitle)
+            .withLinkUrl(this::getURL)
+            .build();
     }
 
 }

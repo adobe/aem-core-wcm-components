@@ -4,4 +4,4 @@
     jcr:description="Section Heading"
     jcr:primaryType="cq:Component"
     jcr:title="Title (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

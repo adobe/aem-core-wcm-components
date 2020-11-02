@@ -42,10 +42,15 @@ import com.adobe.granite.ui.components.ds.DataSource;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 @ExtendWith(AemContextExtension.class)
 abstract class AbstractContentFragmentDataSourceServletTest {
@@ -60,17 +65,16 @@ abstract class AbstractContentFragmentDataSourceServletTest {
     private static final RootResourceBundle RESOURCE_BUNDLE = new RootResourceBundle();
 
     @BeforeEach
-    @SuppressWarnings("unchecked")
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
         // load the content fragments
-        context.load().json("/contentfragment/test-content-dam-contentfragments.json", CONTENT_FRAGMENTS_PATH);
+        context.load().json(TEST_BASE + "/test-content-dam-contentfragments.json", CONTENT_FRAGMENTS_PATH);
         // load the data sources
-        context.load().json("/contentfragment/test-content-datasources.json", DATASOURCES_PATH);
+        context.load().json(TEST_BASE + "/test-content-datasources.json", DATASOURCES_PATH);
         // load the content fragment models
-        context.load().json("/contentfragment/test-content-conf.json", "/conf/global/settings/dam/cfm/models");
+        context.load().json(TEST_BASE + "/test-content-conf.json", "/conf/global/settings/dam/cfm/models");
         // register an adapter that adapts resources to (mocks of) content fragments
-        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, AbstractContentFragmentTest.ADAPTER);
+        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, AbstractContentFragmentTest.CONTENT_FRAGMENT_ADAPTER);
 
         // mock resource bundle provider to enable constructing i18n instances
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class, withSettings().lenient());
@@ -82,8 +86,8 @@ abstract class AbstractContentFragmentDataSourceServletTest {
 
         // mock the expression resolver
         expressionResolver = mock(ExpressionResolver.class);
-        when(expressionResolver.resolve(any(String.class), any(Locale.class), any(Class.class),
-                any(SlingHttpServletRequest.class))).then(returnsFirstArg());
+        when(expressionResolver.resolve(any(String.class), any(Locale.class), any(), any(SlingHttpServletRequest.class)))
+            .then(returnsFirstArg());
     }
 
     ExpressionResolver expressionResolver;
@@ -115,19 +119,15 @@ abstract class AbstractContentFragmentDataSourceServletTest {
      * Asserts that the specified {@code dataSource} contains the expected items.
      */
     void assertDataSource(DataSource dataSource, String[] names, String[] titles) {
-        assertNotNull("Datasource was null", dataSource);
+        assertNotNull(dataSource, "Datasource was null");
         Iterator<Resource> iterator = dataSource.iterator();
         for (int i = 0; i < names.length; i++) {
-            if (!iterator.hasNext()) {
-                fail("Datasource returned " + i + " items, expected " + names.length);
-            }
+            assertTrue(iterator.hasNext(), "Datasource returned " + i + " items, expected " + names.length);
             ValueMap properties = iterator.next().getValueMap();
             assertEquals(names[i], properties.get("value", String.class));
             assertEquals(titles[i], properties.get("text", String.class));
         }
-        if (iterator.hasNext()) {
-            fail("Datasource returned too many items, expected " + names.length);
-        }
+        assertFalse(iterator.hasNext(), "Datasource returned too many items, expected " + names.length);
     }
 
 }

@@ -166,7 +166,8 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
                                 new AdaptiveImageServlet(
                                         mimeTypeService,
                                         assetStore,
-                                        oldAISDefaultResizeWidth > 0 ? oldAISDefaultResizeWidth : config.getDefaultResizeWidth()),
+                                        oldAISDefaultResizeWidth > 0 ? oldAISDefaultResizeWidth : config.getDefaultResizeWidth(),
+                                        config.getMaxSize()),
                                 properties
                         )
                 );

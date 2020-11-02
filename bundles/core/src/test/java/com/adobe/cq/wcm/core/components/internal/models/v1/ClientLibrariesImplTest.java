@@ -25,10 +25,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.models.factory.ModelFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,11 +52,13 @@ import com.day.cq.wcm.api.PageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -270,16 +275,35 @@ class ClientLibrariesImplTest {
 
     @Test
     void testGetCategories() {
-        PageManager pageManager = context.resourceResolver().adaptTo(PageManager.class);
+        PageManager pageManager = context.pageManager();
         Page page = pageManager.getPage(ROOT_PAGE);
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, Utils.getPageResourceTypes(page, context.request(), mock(ModelFactory.class)));
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
+        ClientLibrariesImpl clientlibs = Objects.requireNonNull((ClientLibrariesImpl) getClientLibrariesUnderTest(ROOT_PAGE, attributes));
+
         Set<String> categories = new HashSet<>();
         categories.add(TEASER_CATEGORY);
         categories.add(ACCORDION_CATEGORY);
         categories.add(CAROUSEL_CATEGORY);
-        assertEquals(categories, ((ClientLibrariesImpl)clientlibs).getCategoriesFromComponents());
+        assertEquals(categories, clientlibs.getCategoriesFromComponents());
+    }
+
+    /**
+     * Same as {@link #testGetCategories()} however a login exception will occur when fetching the
+     * resource resolver.
+     */
+    @Test
+    void testGetCategoriesWithLoginException() throws Exception {
+        PageManager pageManager = context.pageManager();
+        Page page = pageManager.getPage(ROOT_PAGE);
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, Utils.getPageResourceTypes(page, context.request(), mock(ModelFactory.class)));
+        ClientLibrariesImpl clientlibs = Objects.requireNonNull((ClientLibrariesImpl) getClientLibrariesUnderTest(ROOT_PAGE, attributes));
+
+        ResourceResolverFactory factory = mock(ResourceResolverFactory.class);
+        doThrow(new LoginException()).when(factory).getServiceResourceResolver(anyMap());
+        clientlibs.resolverFactory = factory;
+        assertEquals(new HashSet<>(), clientlibs.getCategoriesFromComponents());
     }
 
     @Test

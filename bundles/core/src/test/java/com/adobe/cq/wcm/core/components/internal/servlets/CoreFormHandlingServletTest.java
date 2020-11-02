@@ -18,37 +18,29 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.lang.annotation.Annotation;
 import javax.servlet.FilterChain;
 
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
-import org.apache.sling.servlethelpers.MockSlingHttpServletResponse;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.testing.Utils;
-import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHandlingServletHelper;
-import com.day.cq.wcm.foundation.security.SaferSlingPostValidator;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class CoreFormHandlingServletTest {
 
-    @Mock
-    FormStructureHelperFactory formStructureHelperFactory;
-
-    @Mock
-    SaferSlingPostValidator saferSlingPostValidator;
+    private static final String[] NAME_WHITELIST = {"param-text", "param-button"};
+    private static final boolean ALLOW_EXPRESSIONS = false;
+    private static final String SELECTOR = "form";
+    private static final String EXTENSION = "html";
 
     @Mock
     FormsHandlingServletHelper formsHandlingServletHelper;
@@ -56,21 +48,11 @@ public class CoreFormHandlingServletTest {
     @InjectMocks
     CoreFormHandlingServlet servlet;
 
-    @ClassRule
-    public static final AemContext context = CoreComponentTestContext.createContext();
+    public static AemContext context = CoreComponentTestContext.newAemContext();
 
-    private static final String[] NAME_WHITELIST = {"param-text", "param-button"};
-
-    private static final boolean ALLOW_EXPRESSIONS = false;
-
-    private static final String SELECTOR = "form";
-
-    private static final String EXTENSION = "html";
-
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() {
         servlet = new CoreFormHandlingServlet();
-        MockitoAnnotations.initMocks(this);
         servlet.activate(new CoreFormHandlingServlet.Configuration() {
 
             @Override
@@ -93,18 +75,14 @@ public class CoreFormHandlingServletTest {
 
     @Test
     public void testDoPost() throws Exception {
-        SlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver());
-        SlingHttpServletResponse response = new MockSlingHttpServletResponse();
-        servlet.doPost(request, response);
-        verify(formsHandlingServletHelper).doPost(request, response);
+        servlet.doPost(context.request(), context.response());
+        verify(formsHandlingServletHelper).doPost(context.request(), context.response());
     }
 
     @Test
     public void testDoFilter() throws Exception {
-        SlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver());
-        SlingHttpServletResponse response = new MockSlingHttpServletResponse();
         FilterChain filterChain = mock(FilterChain.class);
-        servlet.doFilter(request, response, filterChain);
-        verify(formsHandlingServletHelper).handleFilter(request, response, filterChain, EXTENSION, SELECTOR);
+        servlet.doFilter(context.request(), context.response(), filterChain);
+        verify(formsHandlingServletHelper).handleFilter(context.request(), context.response(), filterChain, EXTENSION, SELECTOR);
     }
 }

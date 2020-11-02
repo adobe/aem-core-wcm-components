@@ -17,17 +17,20 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.caconfig.resource.ConfigurationResourceResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -42,9 +45,11 @@ import org.osgi.framework.Version;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
+import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
@@ -97,6 +102,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private ProductInfoProvider productInfoProvider;
 
     /**
+     * The @{@link ConfigurationResourceResolver} service.
+     */
+    @OSGiService
+    private ConfigurationResourceResolver configurationResourceResolver;
+
+    /**
      * The current request.
      */
     @Self
@@ -136,12 +147,14 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     private String[] clientLibCategoriesJsHead;
 
+    private List<HtmlPageItem> htmlPageItems;
+
     @PostConstruct
     protected void initModel() {
         super.initModel();
         this.appResourcesPath = Optional.ofNullable(currentStyle)
             .map(style -> style.get(PN_APP_RESOURCES_CLIENTLIB, String.class))
-            .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, true))
+            .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, false))
             .map(Collection::stream)
             .orElse(Stream.empty())
             .findFirst()
@@ -257,5 +270,23 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             return currentStyle.get(PN_MAIN_CONTENT_SELECTOR_PROP, String.class);
         }
         return null;
+    }
+
+    @Override
+    public @NotNull List<HtmlPageItem> getHtmlPageItems() {
+        if (htmlPageItems == null) {
+            htmlPageItems = new LinkedList<>();
+            Resource configResource = configurationResourceResolver.getResource(resource, "sling:configs", HtmlPageItemsConfig.class.getName());
+            if (configResource != null) {
+                ValueMap properties = configResource.getValueMap();
+                for (Resource child : configResource.getChildren()) {
+                    HtmlPageItem item = new HtmlPageItemImpl(properties.get(HtmlPageItemsConfig.PN_PREFIX_PATH, StringUtils.EMPTY), child);
+                    if (item.getElement() != null) {
+                        htmlPageItems.add(item);
+                    }
+                }
+            }
+        }
+        return htmlPageItems;
     }
 }

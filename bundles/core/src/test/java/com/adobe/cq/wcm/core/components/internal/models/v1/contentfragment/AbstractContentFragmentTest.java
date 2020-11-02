@@ -19,20 +19,13 @@ import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
-import javax.annotation.Nullable;
-import javax.jcr.Session;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.jcr.MockJcr;
-import org.apache.sling.testing.mock.sling.servlet.MockHttpSession;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 
@@ -42,7 +35,6 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.search.QueryBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContext;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.mockito.Mockito.mock;
 
@@ -133,7 +125,7 @@ public abstract class AbstractContentFragmentTest<T> {
             path + "subassets/second/jcr:content/renditions/" + VARIATION_NAME, secondVariation.contentType);
 
         // register an adapter that adapts resources to mocks of content fragments
-        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, ADAPTER);
+        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, CONTENT_FRAGMENT_ADAPTER);
 
         // register dummy services to be injected into the model
         fragmentRenderService = mock(FragmentRenderService.class);
@@ -189,19 +181,8 @@ public abstract class AbstractContentFragmentTest<T> {
     /**
      * Adapter using "new" {@link java.util.function.Function}s.
      */
-    private static final java.util.function.Function<Resource, com.adobe.cq.dam.cfm.ContentFragment> CONTENT_FRAGMENT_ADAPTER =
+    public static final java.util.function.Function<Resource, com.adobe.cq.dam.cfm.ContentFragment> CONTENT_FRAGMENT_ADAPTER =
         new ContentFragmentMockAdapter();
 
-    /**
-     * Adapts resources to {@link com.adobe.cq.dam.cfm.ContentFragment} objects by mocking parts of their API.
-     */
-    public static final com.google.common.base.Function<Resource, com.adobe.cq.dam.cfm.ContentFragment> ADAPTER =
-        new com.google.common.base.Function<Resource, com.adobe.cq.dam.cfm.ContentFragment>() {
-            @Nullable
-            @Override
-            public com.adobe.cq.dam.cfm.ContentFragment apply(@Nullable Resource resource) {
-                return CONTENT_FRAGMENT_ADAPTER.apply(resource);
-            }
-        };
 
 }

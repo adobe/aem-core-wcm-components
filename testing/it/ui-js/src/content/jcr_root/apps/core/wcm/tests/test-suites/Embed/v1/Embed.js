@@ -72,34 +72,11 @@
         ]
     };
     urlProcessors.oEmbed = {
-        facebookPost: {
-            name: "Facebook Post",
-            selector: selectors.embed.facebookPost,
-            urls: [
-                "https://www.facebook.com/Adobe/posts/10156804081233871",
-                "https://www.facebook.com/Adobe/photos/rpp.305115773870/10156804081143871"
-            ]
-        },
-        facebookVideo: {
-            name: "Facebook Video",
-            selector: selectors.embed.facebookVideo,
-            urls: [
-                "https://www.facebook.com/Adobe/videos/vl.382839442232684/10155892252998871"
-            ]
-        },
         flickr: {
             name: "Flickr",
             selector: selectors.embed.flickr,
             urls: [
                 "https://www.flickr.com/photos/adobe/6951486964/in/album-72157629498635308/"
-            ]
-        },
-        instagram: {
-            name: "Instagram",
-            selector: selectors.embed.instagram,
-            urls: [
-                "https://www.instagram.com/p/B1wkr19Jq3H/",
-                "https://www.instagr.am/p/B1wkr19Jq3H/"
             ]
         },
         soundcloud: {
@@ -136,11 +113,7 @@
         execInNewWindow: false
     })
         // .addTestCase(embed.tcUrlValidation(tcExecuteBeforeTest, tcExecuteAfterTest, urlValidation, selectors))
-        .addTestCase(embed.tcUrlPinterest(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.pinterest, selectors))
-        .addTestCase(embed.tcUrlOEmbedFacebookPost(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.facebookPost, selectors))
-        .addTestCase(embed.tcUrlOEmbedFacebookVideo(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.facebookVideo, selectors))
         .addTestCase(embed.tcUrlOEmbedFlickr(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.flickr, selectors))
-        .addTestCase(embed.tcUrlOEmbedInstagram(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.instagram, selectors))
         .addTestCase(embed.tcUrlOEmbedSoundcloud(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.soundcloud, selectors))
         .addTestCase(embed.tcUrlOEmbedTwitter(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.twitter, selectors))
         .addTestCase(embed.tcUrlOEmbedYoutube(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.youtube, selectors))

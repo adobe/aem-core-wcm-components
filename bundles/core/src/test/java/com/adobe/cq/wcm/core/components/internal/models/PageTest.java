@@ -19,29 +19,30 @@ import java.util.Calendar;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.wcm.core.components.models.Page;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class PageTest {
 
-    private Page underTest = new MockPage();
+    private final Page underTest = new MockPage();
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testGetFavicons() throws Exception {
-        underTest.getFavicons();
+    @Test
+    public void testGetFavicons() {
+        Assertions.assertThrows(UnsupportedOperationException.class, underTest::getFavicons);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testGetFaviconClientLibPath() throws Exception {
-        underTest.getAppResourcesPath();
+    @Test
+    public void testGetFaviconClientLibPath() {
+        Assertions.assertThrows(UnsupportedOperationException.class, underTest::getAppResourcesPath);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testGetRedirectTarget() throws Exception {
-        underTest.getRedirectTarget();
+    @Test
+    public void testGetRedirectTarget() {
+        Assertions.assertThrows(UnsupportedOperationException.class, underTest::getRedirectTarget);
     }
 
     private static class MockPage implements Page, ContainerExporter {

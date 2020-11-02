@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,24 +28,33 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.Self;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ComponentFiles;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
         adapters = ComponentFiles.class
 )
 public class ComponentFilesImpl implements ComponentFiles {
+    private static final Logger LOG = LoggerFactory.getLogger(ComponentFilesImpl.class);
 
-    @Self
-    SlingHttpServletRequest request;
+    /**
+     * Name of the subservice used to authenticate as in order to be able to read details about components and
+     * client libraries.
+     */
+    public static final String COMPONENTS_SERVICE = "components-service";
 
     @Inject
     @Named(OPTION_RESOURCE_TYPES)
@@ -77,9 +87,13 @@ public class ComponentFilesImpl implements ComponentFiles {
         if (paths == null) {
             paths = new LinkedList<>();
 
-            Set<String> seenResourceTypes = new HashSet<>();
-            for (String resourceType : resourceTypeSet) {
-                addPaths(resourceType, paths, seenResourceTypes);
+            try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE))) {
+                Set<String> seenResourceTypes = new HashSet<>();
+                for (String resourceType : resourceTypeSet) {
+                    addPaths(resourceType, paths, seenResourceTypes, resourceResolver);
+                }
+            } catch (LoginException e) {
+                LOG.error("Cannot login as a service user", e);
             }
         }
         return paths;
@@ -91,10 +105,14 @@ public class ComponentFilesImpl implements ComponentFiles {
      * @param resourceType - the resource type of the component to look into for files matching the defined pattern
      * @param paths - the given collection of file paths
      * @param seenResourceTypes - a set of resource types that were previously searched into, to avoid inheritance loops
+     * @param resourceResolver - The resource resolver.
      */
-    private void addPaths(String resourceType, Collection<String> paths, Set<String> seenResourceTypes) {
-        if (!seenResourceTypes.contains(resourceType)) {
-            Resource resource = Utils.getResource(resourceType, request, resolverFactory);
+    private void addPaths(@Nullable final String resourceType,
+                          @NotNull final Collection<String> paths,
+                          @NotNull final Set<String> seenResourceTypes,
+                          @NotNull final ResourceResolver resourceResolver) {
+        if (resourceType != null && !seenResourceTypes.contains(resourceType)) {
+            Resource resource = resourceResolver.getResource(resourceType);
             if (resource != null) {
                 boolean matched = false;
                 for (Resource child : resource.getChildren()) {
@@ -104,7 +122,7 @@ public class ComponentFilesImpl implements ComponentFiles {
                     }
                 }
                 if (inherited && !matched) {
-                    addPaths(resource.getResourceSuperType(), paths, seenResourceTypes);
+                    addPaths(resource.getResourceSuperType(), paths, seenResourceTypes, resourceResolver);
                 }
             }
         }

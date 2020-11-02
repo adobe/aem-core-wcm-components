@@ -139,7 +139,7 @@ Language Navigation | x
 List | x
 Navigation | x
 Page | x
-Progress Bar | 
+Progress Bar | x
 Quick Search | 
 Separator | 
 Sharing | 
@@ -269,13 +269,101 @@ The JSON rendering of a Core Component exposes a `dataLayer` property that is po
 
 To automatically add a custom component to the data layer:
 1. Define the properties of the custom component model that needs to be tracked.
-1. Add a component ID to the the custom component HTL.
 1. Add the `data-cmp-data-layer` attribute to the custom component HTL. E.g. `data-cmp-data-layer="${mycomponent.data.json}"`.
 
 To automatically make the data layer trigger a `cmp:click` event each time a specific element of the custom component is clicked:
-1. In the custom component HTL add the `data-cmp-clickable` attribute to the element to be tracked.
+in the custom component HTL add the `data-cmp-clickable` attribute to the element to be tracked.
 
 The `data-cmp-data-layer-enabled` attribute can be queried client side to check if the data layer is enabled.
 
+### Examples
 
+This section shows how to add some data from a `HelloWorld` component to the data layer.
+
+#### Pre-requisite: create a HelloWorld component
+
+Create a `HelloWorld` model and HTL script that prints "Hello World!" to the page:
+
+`HelloWorld` model:
+
+```
+package mymodels;
+...
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+...
+
+@Model(adaptables = SlingHttpServletRequest.class)
+public class HelloWorld {
+
+    @SlingObject
+    protected Resource resource;
+
+    public String getMessage() {
+        return "Hello World!";
+    }
+}
+```
+
+`HelloWorld` HTL script:
+```
+<div data-sly-use.hello="mymodels.HelloWorld">
+    ${hello.message}
+</div>
+
+```
+
+Deploy the model and the HTL script to a running AEM instance and add this component to a page.
+Run the following code in your browser console:
+```
+adobeDataLayer.getState()
+```
+The `HelloWorld` component does not yet write to the data layer.
+
+#### Add HelloWorld data to the data layer
+
+Let's add custom properties (ID, description and parent ID) based on custom implementations to the data layer.
+
+Add following code to the `HelloWorld` model:
+```
+...
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+...
+
+    public ComponentData getData() {
+        if (ComponentUtils.isDataLayerEnabled(this.resource)) {
+            return DataLayerBuilder.forComponent()
+                    .withId(() -> "hello-123")
+                    .withDescription(this::getMessage)
+                    .withParentId(() -> "parent-12")
+                    .build();
+
+        }
+        return null;
+    }
+```
+
+Add the `data-cmp-data-layer` attribute to the component HTL:
+```
+<div data-sly-use.hello="mymodels.HelloWorld"
+     data-cmp-data-layer="${hello.data.json}">
+    ${hello.message}
+</div>
+```
+
+Deploy the changes to AEM (model and HTL script). Refresh the page and in your browser console, get the state of the data layer:
+```
+adobeDataLayer.getState()
+```
+
+It displays something like:
+```
+hello-123:
+    dc:description: "Hello World!"
+    parentId: "parent-12"
+```
 

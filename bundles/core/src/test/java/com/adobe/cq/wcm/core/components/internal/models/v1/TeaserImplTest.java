@@ -41,13 +41,12 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
-
 
 @ExtendWith(AemContextExtension.class)
 class TeaserImplTest {
@@ -75,6 +74,7 @@ class TeaserImplTest {
     private static final String TEASER_10 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-10";
     private static final String TEASER_11 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-11";
     private static final String TEASER_12 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-12";
+    private static final String TEASER_13 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-13";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
     private TestLogger testLogger;
@@ -180,11 +180,11 @@ class TeaserImplTest {
     @Test
     void testTeaserWithActions() {
         Teaser teaser = getTeaserUnderTest(TEASER_7);
-        assertTrue("Expected teaser with actions", teaser.isActionsEnabled());
-        assertEquals("Expected to find two actions", 2, teaser.getActions().size());
+        assertTrue(teaser.isActionsEnabled(), "Expected teaser with actions");
+        assertEquals(2, teaser.getActions().size(), "Expected to find two actions");
         ListItem action = teaser.getActions().get(0);
-        assertEquals("Action link does not match", "http://www.adobe.com", action.getPath());
-        assertEquals("Action text does not match", "Adobe", action.getTitle());
+        assertEquals("http://www.adobe.com", action.getPath(), "Action link does not match");
+        assertEquals("Adobe", action.getTitle(), "Action text does not match");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser9"));
     }
 
@@ -198,8 +198,8 @@ class TeaserImplTest {
     @Test
     void testTeaserWithTitleAndDescriptionFromActions() {
         Teaser teaser = getTeaserUnderTest(TEASER_8);
-        assertTrue("Expected teaser with actions", teaser.isActionsEnabled());
-        assertEquals("Expected to find two Actions", 2, teaser.getActions().size());
+        assertTrue(teaser.isActionsEnabled(), "Expected teaser with actions");
+        assertEquals(2, teaser.getActions().size(), "Expected to find two Actions");
         assertEquals("Teasers Test", teaser.getTitle());
         assertEquals("Teasers description", teaser.getDescription());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser11"));
@@ -209,15 +209,30 @@ class TeaserImplTest {
     void testTeaserWithTitleType() {
         Teaser teaser = getTeaserUnderTest(TEASER_1,
             Teaser.PN_TITLE_TYPE, "h5");
-        assertEquals("Expected title type is not correct", "h5", teaser.getTitleType());
+        assertEquals("h5", teaser.getTitleType(), "Expected title type is not correct");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser2"));
     }
 
     @Test
     void testTeaserWithDefaultTitleType() {
         Teaser teaser = getTeaserUnderTest(TEASER_1);
-        assertNull("Expected the default title type is not correct", teaser.getTitleType());
+        assertNull(teaser.getTitleType(), "Expected the default title type is not correct");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
+    }
+
+    @Test
+    void testTeaserWithTitleTypeOverride() {
+        Teaser teaser = getTeaserUnderTest(TEASER_13,
+            Teaser.PN_TITLE_TYPE, "h5", Teaser.PN_SHOW_TITLE_TYPE, true);
+        assertEquals("h4", teaser.getTitleType(), "Expected title type is not correct");
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser13"));
+    }
+
+    @Test
+    void testTeaserWithTitleTypeOverrideHidden() {
+        Teaser teaser = getTeaserUnderTest(TEASER_13,
+            Teaser.PN_TITLE_TYPE, "h5", Teaser.PN_SHOW_TITLE_TYPE, false);
+        assertEquals("h5", teaser.getTitleType(), "Expected title type is not correct");
     }
 
     @Test
@@ -258,6 +273,7 @@ class TeaserImplTest {
         when(component.getProperties()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>() {{
             put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/components/image/v2/image");
         }}));
+        when(component.getResourceType()).thenReturn(TeaserImpl.RESOURCE_TYPE);
         SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);

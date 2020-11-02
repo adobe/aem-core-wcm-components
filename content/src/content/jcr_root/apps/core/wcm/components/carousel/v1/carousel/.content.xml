@@ -5,4 +5,4 @@
     jcr:description="Cycles through a list of generic content items"
     jcr:primaryType="cq:Component"
     jcr:title="Carousel (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

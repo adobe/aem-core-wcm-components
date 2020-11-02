@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.components.Component;
 
 /**
  * Resource-backed list item implementation.
@@ -55,8 +56,8 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
      * @param resource The resource.
      * @param parentId The ID of the containing component.
      */
-    public ResourceListItemImpl(@NotNull final Resource resource, final String parentId) {
-        super(parentId, resource);
+    public ResourceListItemImpl(@NotNull final Resource resource, final String parentId, final Component component) {
+        super(parentId, resource, component);
         ValueMap valueMap = resource.getValueMap();
         title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
         description = valueMap.get(JcrConstants.JCR_DESCRIPTION, String.class);
@@ -93,19 +94,5 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
     @Override
     public String getName() {
         return name;
-    }
-
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
-    @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getURL();
     }
 }

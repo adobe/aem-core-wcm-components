@@ -23,24 +23,25 @@ import java.util.List;
 import javax.jcr.RangeIterator;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
-import com.adobe.cq.wcm.core.components.testing.MockLanguageManager;
-import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.WCMException;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
@@ -86,7 +87,6 @@ class NavigationImplTest {
     void setUp() throws WCMException {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
         context.load().json("/navigation/test-conf.json", "/conf");
-        context.registerService(LanguageManager.class, new MockLanguageManager());
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
         when(relationshipManager.getLiveRelationships(any(Resource.class), isNull(), isNull())).then(
                 invocation -> {
@@ -97,7 +97,7 @@ class NavigationImplTest {
                         when(liveRelationship.getTargetPath()).thenReturn("/content/navigation-livecopy");
                         final ArrayList<LiveRelationship> relationships = new ArrayList<>();
                         relationships.add(liveRelationship);
-                        final Iterator iterator = relationships.iterator();
+                        final Iterator<LiveRelationship> iterator = relationships.iterator();
                         return new RangeIterator() {
 
                             int index = 0;
@@ -159,7 +159,7 @@ class NavigationImplTest {
     @Test
     void testNavigationNoRoot() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_2);
-        assertEquals("Didn't expect any navigation items.", 0, navigation.getItems().size());
+        assertEquals(0, navigation.getItems().size(), "Didn't expect any navigation items.");
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation4"));
     }
 
@@ -458,6 +458,11 @@ class NavigationImplTest {
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath("/core");
+        Component component = mock(Component.class);
+        when(component.getResourceType()).thenReturn(NavigationImpl.RESOURCE_TYPE);
+        SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
+        slingBindings.put(WCMBindings.COMPONENT, component);
+        request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Navigation.class);
     }
 
@@ -477,16 +482,13 @@ class NavigationImplTest {
     }
 
     private void verifyNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
-        assertEquals("The navigation tree contains a different number of pages than expected.", expectedPages.length, items.size());
+        assertEquals(expectedPages.length, items.size(), "The navigation tree contains a different number of pages than expected.");
         int index = 0;
         for (NavigationItem item : items) {
-            assertEquals("The navigation tree doesn't seem to have the correct order.", expectedPages[index][0], item.getPath());
-            assertEquals("The navigation item's level is not what was expected: " + item.getPath(),
-                    expectedPages[index][1], item.getLevel());
-            assertEquals("The navigation item's active state is not what was expected: " + item.getPath(),
-                    expectedPages[index][2], item.isActive());
-            assertEquals("The navigation item's URL is not what was expected: " + item.getPath(),
-                    CONTEXT_PATH + expectedPages[index][3], item.getURL());
+            assertEquals(expectedPages[index][0], item.getPath(), "The navigation tree doesn't seem to have the correct order.");
+            assertEquals(expectedPages[index][1], item.getLevel(), "The navigation item's level is not what was expected: " + item.getPath());
+            assertEquals(expectedPages[index][2], item.isActive(), "The navigation item's active state is not what was expected: " + item.getPath());
+            assertEquals(CONTEXT_PATH + expectedPages[index][3], item.getURL(), "The navigation item's URL is not what was expected: " + item.getPath());
             index++;
         }
     }
