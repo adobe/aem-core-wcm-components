@@ -128,7 +128,6 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         assertEquals("Adobe Systems Logo and Wordmark", image.getAlt());
     }
 
-    /*
     @Test
     void testGetDataLayerJson() throws Exception {
         Image image = getImageUnderTest(IMAGE6_PATH);
@@ -138,8 +137,6 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         assertEquals(Json.createReader(new StringReader(expected)).read(),
             Json.createReader(new StringReader(image.getData().getJson())).read());
     }
-
-     */
 
     @Test
     @SuppressWarnings("deprecation")

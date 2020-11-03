@@ -63,6 +63,11 @@ public final class AssetDataImpl implements AssetData {
     private String[] tags;
 
     /**
+     * The smart tags field value.
+     */
+    private Map<String, Object> smartTags;
+
+    /**
      * Construct an AssetData model.
      *
      * @param supplier The data layer supplier.
@@ -132,6 +137,12 @@ public final class AssetDataImpl implements AssetData {
 
     @Override
     public Map<String, Object> getSmartTags() {
-        return null;
+        if (this.smartTags == null) {
+            this.smartTags = this.dataLayerSupplier
+                .getSmartTags()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.smartTags;
     }
 }

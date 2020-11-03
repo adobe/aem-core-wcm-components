@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.dam.api.DamConstants;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.resource.Resource;
@@ -35,7 +37,6 @@ import static org.mockito.Mockito.when;
 
 public class AssetDataImplTest {
 
-    /*
     @Test
     void testGetLastModifiedDate() {
         Asset asset = mock(Asset.class);
@@ -44,7 +45,8 @@ public class AssetDataImplTest {
         when(asset.adaptTo(ValueMap.class)).thenReturn(valueMap);
         Calendar now = Calendar.getInstance();
         when(valueMap.get(JcrConstants.JCR_CREATED, Calendar.class)).thenReturn(now);
-        assertEquals(now.getTime(), new AssetDataImpl(asset).getLastModifiedDate());
+        AssetData assetData = DataLayerBuilder.forAsset(asset).build();
+        assertEquals(now.getTime(), assetData.getLastModifiedDate());
     }
 
     @Test
@@ -72,8 +74,7 @@ public class AssetDataImplTest {
             put("tag2", 0.78);
         }};
 
-        assertEquals(expectedSmartTags, new AssetDataImpl(asset).getSmartTags());
+        AssetData assetData = DataLayerBuilder.forAsset(asset).build();
+        assertEquals(expectedSmartTags, assetData.getSmartTags());
     }
-
-     */
 }
