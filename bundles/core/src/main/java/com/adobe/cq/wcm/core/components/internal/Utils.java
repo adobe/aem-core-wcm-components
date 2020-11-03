@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,14 +36,20 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.foundation.AllowedComponentList;
+import com.google.common.collect.ImmutableSet;
+
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Utils {
 
-    /**
-     * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
-     */
-    public static final String ID_SEPARATOR = "-";
+    private static final Set<String> INTERNAL_PARAMETER = ImmutableSet.of(
+            ":formstart",
+            "_charset_",
+            ":redirect",
+            ":cq_csrf_token"
+    );
 
     /**
      * Name of the subservice used to authenticate as in order to be able to read details about components and
@@ -114,17 +121,6 @@ public class Utils {
         public String getElement() {
             return element;
         }
-    }
-
-    /**
-     * Returns an ID based on the prefix, the ID_SEPARATOR and a hash of the path, e.g. image-5c7e0ef90d
-     *
-     * @param prefix the prefix for the ID
-     * @param path   the resource path
-     * @return the generated ID
-     */
-    public static String generateId(String prefix, String path) {
-        return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
     }
 
     /**
@@ -272,5 +268,25 @@ public class Utils {
             }
         }
         return strings;
+    }
+
+    /**
+     * Converts request parameters to a JSON object and filter AEM specific parameters out.
+     *
+     * @param request - the current {@link SlingHttpServletRequest}
+     * @return JSON object of the request parameters
+     */
+    public static JSONObject getJsonOfRequestParameters(SlingHttpServletRequest request) throws JSONException {
+        org.json.JSONObject jsonObj = new org.json.JSONObject();
+        Map<String, String[]> params = request.getParameterMap();
+
+        for (Map.Entry<String, String[]> entry : params.entrySet()) {
+            if (!INTERNAL_PARAMETER.contains(entry.getKey())) {
+                String[] v = entry.getValue();
+                Object o = (v.length == 1) ? v[0] : v;
+                jsonObj.put(entry.getKey(), o);
+            }
+        }
+        return jsonObj;
     }
 }

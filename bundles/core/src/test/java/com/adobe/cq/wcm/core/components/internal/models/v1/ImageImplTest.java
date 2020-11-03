@@ -193,6 +193,7 @@ public class ImageImplTest extends AbstractImageTest {
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE27_PATH));
     }
 
+    /*
     @Test
     void testGetDataLayerJson() throws Exception {
         Image image = getImageUnderTest(IMAGE6_PATH);
@@ -202,6 +203,8 @@ public class ImageImplTest extends AbstractImageTest {
         assertEquals(Json.createReader(new StringReader(expected)).read(),
             Json.createReader(new StringReader(image.getData().getJson())).read());
     }
+
+     */
 
     protected void compareJSON(String expectedJson, String json) {
         JsonReader expected = Json.createReader(new StringReader(expectedJson));

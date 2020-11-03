@@ -4,4 +4,4 @@
     jcr:description="Displays the elements of a Content Fragment or a selection thereof"
     jcr:primaryType="cq:Component"
     jcr:title="Content Fragment (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

@@ -6,4 +6,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Form Container (v1)"
     sling:resourceSuperType="wcm/foundation/components/responsivegrid"
-    componentGroup=".core-wcm-form"/>
+    componentGroup="${componentGroupForm}"/>

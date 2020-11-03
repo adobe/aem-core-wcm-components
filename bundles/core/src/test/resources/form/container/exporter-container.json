@@ -5,6 +5,7 @@
     "redirect"               : "/core/content/coretest/home",
     "name"                   : "my-id",
     "action"                 : "/core/content/coretest/demo-page.html",
+    "errorMessages"          : [],
     "resourceTypeForDropArea": "wcm/foundation/components/responsivegrid/new",
     ":itemsOrder"            : [
         "text",

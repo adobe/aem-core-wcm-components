@@ -16,8 +16,8 @@
 (function() {
     "use strict";
 
-    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+    var dataLayerEnabled;
+    var dataLayer;
 
     var NS = "cmp";
     var IS = "tabs";
@@ -97,7 +97,8 @@
                  * - check that the message data panel container type is correct and that the id (path) matches this specific Tabs component
                  * - if so, route the "navigate" operation to enact a navigation of the Tabs based on index data
                  */
-                new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                CQ.CoreComponents.MESSAGE_CHANNEL = CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
+                CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
                     if (message.data && message.data.type === "cmp-tabs" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
                         if (message.data.operation === "navigate") {
                             navigate(message.data.index);
@@ -362,7 +363,10 @@
      * @private
      */
     function onDocumentReady() {
-        var elements = document.querySelectorAll(selectors.self);
+      dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+      dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+
+      var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new Tabs({ element: elements[i], options: readData(elements[i]) });
         }

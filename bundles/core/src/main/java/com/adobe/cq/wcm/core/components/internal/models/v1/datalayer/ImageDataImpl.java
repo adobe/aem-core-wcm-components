@@ -15,29 +15,42 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import org.apache.sling.api.resource.Resource;
-import org.jetbrains.annotations.NotNull;
-
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
-import com.day.cq.dam.api.Asset;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class ImageDataImpl extends ComponentDataImpl implements ImageData {
+import java.util.function.Supplier;
 
-    public ImageDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
-        super(component, resource);
+/**
+ * {@link DataLayerSupplier} backed image component data implementation.
+ */
+public final class ImageDataImpl extends ComponentDataImpl implements ImageData {
+
+    /**
+     * The asset field value.
+     */
+    private AssetData assetData;
+
+    /**
+     * Construct the data layer model.
+     *
+     * @param supplier The data layer supplier.
+     */
+    public ImageDataImpl(@NotNull final DataLayerSupplier supplier) {
+        super(supplier);
     }
 
     @Override
+    @Nullable
     public AssetData getAssetData() {
-        Resource assetResource = component.getDataLayerAssetResource();
-        if (assetResource != null) {
-            Asset asset = assetResource.adaptTo(Asset.class);
-            if (asset != null) {
-                return new AssetDataImpl(asset);
-            }
+        if (this.assetData == null) {
+            this.assetData = this.getDataLayerSupplier()
+                .getAssetData()
+                .map(Supplier::get)
+                .orElse(null);
         }
-        return null;
+        return this.assetData;
     }
 }

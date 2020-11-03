@@ -4,4 +4,4 @@
     jcr:description="Embed PDF Viewer for Document Cloud."
     jcr:primaryType="cq:Component"
     jcr:title="PDF Viewer (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

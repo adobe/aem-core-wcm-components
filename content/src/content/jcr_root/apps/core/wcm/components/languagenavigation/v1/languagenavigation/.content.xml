@@ -19,4 +19,4 @@
     jcr:description="Global language structure navigation"
     jcr:primaryType="cq:Component"
     jcr:title="Language Navigation (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

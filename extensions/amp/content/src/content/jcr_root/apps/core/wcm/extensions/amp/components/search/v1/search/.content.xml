@@ -20,4 +20,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Quick Search (AMP v1)"
     sling:resourceSuperType="core/wcm/components/search/v1/search"
-    componentGroup=".core-wcm-ext-amp"/>
+    componentGroup="${componentGroup}"/>

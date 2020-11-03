@@ -19,4 +19,4 @@
     jcr:description="Collects a list of pages to display in a navigation tree."
     jcr:primaryType="cq:Component"
     jcr:title="Navigation (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

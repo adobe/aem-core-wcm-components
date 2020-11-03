@@ -4,4 +4,4 @@
     jcr:description="Core WCM Social Media Sharing Component (v1)"
     jcr:primaryType="cq:Component"
     jcr:title="Social Media Sharing (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

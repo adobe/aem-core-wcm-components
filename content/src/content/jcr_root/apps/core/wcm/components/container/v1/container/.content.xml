@@ -21,4 +21,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Container (v1)"
     sling:resourceSuperType="wcm/foundation/components/responsivegrid"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

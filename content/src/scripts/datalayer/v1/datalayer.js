@@ -16,8 +16,8 @@
 (function() {
     "use strict";
 
-    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+    var dataLayerEnabled;
+    var dataLayer;
 
     function addComponentToDataLayer(component) {
         dataLayer.push({
@@ -32,10 +32,12 @@
     function getComponentObject(element) {
         var component = getComponentData(element);
         var componentID = Object.keys(component)[0];
-        var parentElement = element.parentNode.closest("[data-cmp-data-layer], body");
-
-        if (parentElement) {
-            component[componentID].parentId = parentElement.id;
+        // if the component does not have a parent ID property, use the ID of the parent element
+        if (component && component[componentID] && !component[componentID].parentId) {
+            var parentElement = element.parentNode.closest("[data-cmp-data-layer], body");
+            if (parentElement) {
+                component[componentID].parentId = parentElement.id;
+            }
         }
 
         return component;
@@ -69,28 +71,32 @@
     }
 
     function onDocumentReady() {
+      dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+      dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+
+      if (dataLayerEnabled) {
+
         var components = document.querySelectorAll("[data-cmp-data-layer]");
         var clickableElements = document.querySelectorAll("[data-cmp-clickable]");
 
-        components.forEach(function(component) {
-            addComponentToDataLayer(component);
+        components.forEach(function (component) {
+          addComponentToDataLayer(component);
         });
 
-        clickableElements.forEach(function(element) {
-            attachClickEventListener(element);
+        clickableElements.forEach(function (element) {
+          attachClickEventListener(element);
         });
 
         dataLayer.push({
-            event: "cmp:loaded"
+          event: "cmp:loaded"
         });
+      }
     }
 
-    if (dataLayerEnabled) {
-        if (document.readyState !== "loading") {
-            onDocumentReady();
-        } else {
-            document.addEventListener("DOMContentLoaded", onDocumentReady);
-        }
-    }
+  if (document.readyState !== "loading") {
+    onDocumentReady();
+  } else {
+    document.addEventListener("DOMContentLoaded", onDocumentReady);
+  }
 
 }());

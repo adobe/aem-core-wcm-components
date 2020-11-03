@@ -35,6 +35,7 @@ import static org.mockito.Mockito.when;
 
 public class AssetDataImplTest {
 
+    /*
     @Test
     void testGetLastModifiedDate() {
         Asset asset = mock(Asset.class);
@@ -73,4 +74,6 @@ public class AssetDataImplTest {
 
         assertEquals(expectedSmartTags, new AssetDataImpl(asset).getSmartTags());
     }
+
+     */
 }

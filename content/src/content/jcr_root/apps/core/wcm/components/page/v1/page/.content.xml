@@ -4,4 +4,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Page (v1)"
     sling:resourceSuperType="wcm/foundation/components/basicpage/v1/basicpage"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>

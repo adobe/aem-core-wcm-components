@@ -4,4 +4,4 @@
     jcr:description="Displays a horizontal rule for separating content"
     jcr:primaryType="cq:Component"
     jcr:title="Separator (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup="${componentGroup}"/>
