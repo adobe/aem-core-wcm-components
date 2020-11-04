@@ -253,4 +253,18 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         assertEquals(100, image.getLazyThreshold());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, AbstractImageTest.IMAGE3_PATH + "-with-lazy-threshold"));
     }
+
+    @Test
+    void testSmartCropRendition() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
+        Image image = getImageUnderTest(IMAGE29_PATH);
+        assertEquals("SmartCrop:Auto", image.getSmartCropRendition());
+    }
+
+    @Test
+    void testIsImageDm() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
+        Image image = getImageUnderTest(IMAGE30_PATH);
+        assertFalse(image.isDmImage());
+    }
 }

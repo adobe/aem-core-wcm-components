@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.testing.MockPublishUtils;
+import com.day.cq.dam.api.s7dam.utils.PublishUtils;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.commons.mime.MimeTypeService;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,6 +73,8 @@ public class AbstractImageTest {
     protected static final String IMAGE26_PATH = PAGE + "/jcr:content/root/image26";
     protected static final String IMAGE27_PATH = PAGE + "/jcr:content/root/image27";
     protected static final String IMAGE28_PATH = PAGE + "/jcr:content/root/image28";
+    protected static final String IMAGE29_PATH = PAGE + "/jcr:content/root/image29";
+    protected static final String IMAGE30_PATH = PAGE + "/jcr:content/root/image30";
     protected static final String TEMPLATE_PATH = "/conf/coretest/settings/wcm/templates/testtemplate";
     protected static final String TEMPLATE_STRUCTURE_PATH = TEMPLATE_PATH + "/structure";
     protected static final String TEMPLATE_IMAGE_PATH = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template";
@@ -103,6 +107,7 @@ public class AbstractImageTest {
     protected void internalSetUp(String testBase) {
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_CONTENT_ROOT);
         context.load().json(testBase + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+        context.registerService(PublishUtils.class, new MockPublishUtils());
         mockedMimeTypeService = mock(MimeTypeService.class);
         when(mockedMimeTypeService.getMimeType("tif")).thenReturn(StandardImageHandler.TIFF_MIMETYPE);
         when(mockedMimeTypeService.getMimeType("tiff")).thenReturn(StandardImageHandler.TIFF_MIMETYPE);
