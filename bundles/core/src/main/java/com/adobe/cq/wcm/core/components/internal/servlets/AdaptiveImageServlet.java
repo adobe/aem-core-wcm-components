@@ -339,11 +339,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             if (!appliedTransformation) {
                 EnhancedRendition rendition = getBestRendition(asset, resizeWidth);
                 Dimension dimension = rendition.getDimension();
-                if (dimension != null) {
-                    originalWidth = dimension.width;
-                    originalHeight = dimension.height;
-                }
-                if (originalHeight > resizeWidth) {
+                if ((dimension != null && dimension.width > resizeWidth) ||
+                    (dimension == null && originalHeight > resizeWidth)) {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
                         layer = new Layer(assetHandler.getImage(rendition));

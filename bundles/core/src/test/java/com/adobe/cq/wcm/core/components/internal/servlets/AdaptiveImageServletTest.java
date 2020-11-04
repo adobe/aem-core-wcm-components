@@ -67,11 +67,17 @@ class AdaptiveImageServletTest extends AbstractImageTest {
 
     private AdaptiveImageServlet servlet;
     private static final int ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH = 1280;
+    protected static final String IMAGE0_RECTANGLE_PATH = PAGE + "/jcr:content/root/image0r";
+    protected static final String PNG_IMAGE_RECTANGLE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark_rectangle.png";
+    protected static final String PNG_RECTANGLE_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_RECTANGLE_BINARY_NAME;
     private TestLogger testLogger;
 
     @BeforeEach
     void setUp() throws IOException {
         internalSetUp(TEST_BASE);
+        context.load().binaryFile("/image/" + PNG_IMAGE_RECTANGLE_BINARY_NAME, PNG_RECTANGLE_ASSET_PATH + "/jcr:content/renditions/original");
+        context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_RECTANGLE_ASSET_PATH +
+            "/jcr:content/renditions/cq5dam.web.1280.1280.png");
         resourceResolver = context.resourceResolver();
         AssetHandler assetHandler = mock(AssetHandler.class);
         AssetStore assetStore = mock(AssetStore.class);
@@ -103,6 +109,42 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
         BufferedImage image = ImageIO.read(byteArrayInputStream);
         Dimension expectedDimension = new Dimension(800, 800);
+        Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
+        Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
+        Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
+    }
+
+    @Test
+    void testRequestWithWidthDesignAllowedRectangleSmall() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE0_RECTANGLE_PATH,
+            "img.82.500", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
+            "allowedRenditionWidths", new String[] {"500", "1000", "1500"},
+            "jpegQuality", 82);
+        servlet.doGet(request, response);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
+        BufferedImage image = ImageIO.read(byteArrayInputStream);
+        Dimension expectedDimension = new Dimension(500, 400);
+        Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
+        Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
+        Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
+    }
+
+    @Test
+    void testRequestWithWidthDesignAllowedRectangleLarge() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE0_RECTANGLE_PATH,
+            "img.82.1500", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
+            "allowedRenditionWidths", new String[] {"500", "1000", "1500"},
+            "jpegQuality", 82);
+        servlet.doGet(request, response);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
+        BufferedImage image = ImageIO.read(byteArrayInputStream);
+        Dimension expectedDimension = new Dimension(1500, 1200);
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
