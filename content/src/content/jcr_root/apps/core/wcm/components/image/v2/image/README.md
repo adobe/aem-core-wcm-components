@@ -24,6 +24,7 @@ Image component written in HTL that renders an adaptive image.
 * Image title, description, accessibility text and link
 * SVG support
 * Styles
+* Dynamic Media images support, including Image Presets and Smart Crop
 
 ### Use Object
 The Image component uses the `com.adobe.cq.wcm.core.components.models.Image` Sling Model as its Use-object.
@@ -37,7 +38,8 @@ component; the actual size will be requested by the client device;
 3. `./disableLazyLoading` - if `true`, the lazy loading of images (loading only when the image is visible on the client
 device) is disabled.
 4. `./lazyThreshold` - defines the number of pixel an image is getting loaded before it gets visible and lazy loading is enabled. 
-Default is set to 0. 
+Default is set to 0.
+5.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Image component and are expected to be available as `Resource` properties:
@@ -51,6 +53,11 @@ The following properties are written to JCR for this Image component and are exp
 6. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,
 otherwise a caption will be rendered
 7. `./id` - defines the component HTML ID attribute.
+8. `./dmPresetType` - defines the type of Dynamic Media image rendering, possible values are `imagePreset`, `smartCrop`.
+9. `./imagePreset` - defines the name for the Dynamic Media Image Preset to apply to the Dynamic Media image URL.
+10. `./smartCropRendition` - defines how Dynamic Media Smart Crop image renders. `SmartCrop:Auto` means that the component will automatically select Smart Crop rendition which fits the container size better; the name of specific Smart Crop rendition will force the component to render that image rendition only.
+11. `./imageModifiers` - defines additional Dynamic Media Image Serving commands separated by '&amp;'. Field gives complete flexibility to change Dynamic Media image rendering.
+
 
 ## Extending from This Component
 1. In case you overwrite the image's HTL script, make sure the necessary attributes for the JavaScript loading script are contained in the markup at the right position (see section below).
@@ -61,7 +68,7 @@ otherwise a caption will be rendered
   4. You component's dialog should overwrite the dialog fully from the image component via `sling:hideResource="true"` on the node `cq:dialog/content/items/image`
 
 ## URL Formats
-The images are loaded through the `com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet`, therefore their URLs have the following patterns:
+In case Dynamic Media features are not used the images are loaded through the `com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet`, therefore their URLs have the following patterns:
 
 ```
 Author:
@@ -69,6 +76,22 @@ Author:
 
 Publish:
 /content/<project_path>/<page_path>/<component_path>/<component_name>.coreimg.<quality>.<width>.<extension>/<timestamp>/<filename>.<extension>
+```
+When an image is a Dynamic Media asset and Dynamic Media features are enabled in component's policy the images are loaded from Dynamic Media Image Serving, the URL format differs depending on image rendering type chosen. In the case of 'Smart Crop':
+```
+Author:
+/is/image/<company>/<assetId><:smart crop rendition>?ts=<timestamp>&<image modifiers>
+
+Publish:
+<DM publish server>/is/image/<company>/<assetId><:smart crop rendition>?ts=<timestamp>&<image modifiers>
+```
+In the case of 'Image preset':
+```
+Author:
+/is/image/<company>/<assetId>?qlt=<quality>&wid=<width>&ts=<timestamp>&$<image_preset>$&<image_modifiers>
+
+Publish:
+<dm_publish_server>/is/image/<company>/<assetId>?qlt=<quality>&wid=<width>&ts=<timestamp>&$<image_preset>$&<image_modifiers>
 ```
 
 ## Client Libraries
@@ -97,6 +120,7 @@ useful for building an image configuration with an alternative width. Should con
 e.g. '/path/to/image.coreimg{.width}.jpeg'
 3. `data-cmp-widths` - a comma-separated string of alternative image widths (in pixels).
 Populated with `allowedRenditionWidths` from the component's edit dialog.
+4. `data-cmp-dmimage` - if not `false`, indicates that the image is DM image.
 
 A hook attribute from the following should be added to the corresponding element so that the JavaScript is able to target it:
 
