@@ -174,8 +174,8 @@
                         var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
 						var resPayload = rePayload.exec(responseText);
                         var smartcropList = "";
+                        var payload;
                         if (resPayload) {
-                            var payload;
                             var payloadStr = resPayload[2];
                             if (rePayloadJSON.test(payloadStr)) {
                                 payload = JSON.parse(payloadStr);
@@ -183,7 +183,7 @@
 
                         }
                         //check "relation" - only in case of smartcrop preset
-                        if (payload.set.relation && payload.set.relation.length > 0) {
+                        if (payload && payload.set.relation && payload.set.relation.length > 0) {
                             for(var i = 0; i < payload.set.relation.length ; i++) {
                                 smartcropList += payload.set.relation[i].n +"\n";
 			                    smartCrops[parseInt(payload.set.relation[i].userdata.SmartCropWidth)] = ":" + payload.set.relation[i].userdata.SmartCropDef;
