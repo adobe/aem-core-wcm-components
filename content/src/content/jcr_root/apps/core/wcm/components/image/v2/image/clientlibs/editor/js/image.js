@@ -196,7 +196,7 @@
 
     /**
      * Helper function to get core image instance 'smartCropRendition' property
-     * @param filePath 
+     * @param filePath
      */
     function retrieveInstanceInfo(filePath) {
         return $.ajax({
@@ -250,7 +250,7 @@
 							innerHTML: payload.set.relation[i].userdata.SmartCropDef
 						  },
 						  disabled: false,
-                          selected: (smartCropRenditionFromJcr == payload.set.relation[i].userdata.SmartCropDef)
+                          selected: (smartCropRenditionFromJcr === payload.set.relation[i].userdata.SmartCropDef)
 						});
 					}
 					prepareSmartCropPanel();
@@ -265,7 +265,7 @@
 		};
 		imagePropertiesRequest.send();
 	}
- 
+
     /**
      * Helper function for populating dropdown list
      */
@@ -277,7 +277,7 @@
           },
           disabled: false,
           selected: selected
-    })};
+    })}
 
     /**
      * Helper function to show/hide UI-elements of dialog depending on the chosen radio button
