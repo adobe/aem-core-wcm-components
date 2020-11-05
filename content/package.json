@@ -1,6 +1,6 @@
 {
     "name": "com.adobe.cq.core.wcm.components.content",
-    "version": "2.11.1-SNAPSHOT",
+    "version": "2.12.1-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components Content Package",
     "license": "Apache-2.0",
     "private": false,
@@ -28,6 +28,6 @@
         "stylelint-selector-bem-pattern": "^2.0.0"
     },
     "dependencies": {
-        "@adobe/adobe-client-data-layer": "1.1.1"
+        "@adobe/adobe-client-data-layer": "1.1.3"
     }
 }
