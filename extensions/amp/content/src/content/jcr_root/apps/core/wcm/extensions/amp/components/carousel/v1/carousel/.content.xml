@@ -21,4 +21,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Carousel (AMP v1)"
     sling:resourceSuperType="core/wcm/components/carousel/v1/carousel"
-    componentGroup="${componentGroup}"/>
+    componentGroup=".core-wcm-ext-amp"/>
