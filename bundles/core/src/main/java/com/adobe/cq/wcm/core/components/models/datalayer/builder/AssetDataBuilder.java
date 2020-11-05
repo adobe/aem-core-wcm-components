@@ -77,11 +77,11 @@ public final class AssetDataBuilder extends GenericDataBuilder<AssetDataBuilder,
     }
 
     /**
-     * Sets the supplier that supplies the Asset's tags.
+     * Sets the supplier that supplies the Asset's smart tags.
      *
-     * @param supplier The tags value supplier.
+     * @param supplier The smart tags value supplier.
      * @return A new {@link AssetDataBuilder}.
-     * @see AssetData#getTags()
+     * @see AssetData#getSmartTags()
      */
     @NotNull
     public AssetDataBuilder withSmartTags(@NotNull final Supplier<Map<String, Object>> supplier) {
