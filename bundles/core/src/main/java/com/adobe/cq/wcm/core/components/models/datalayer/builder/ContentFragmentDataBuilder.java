@@ -15,48 +15,46 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ImageDataImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplierImpl;
-import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
-import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.function.Supplier;
 
 /**
- * Data builder for image components.
+ * Data builder for content fragment components.
  */
-public final class ImageComponentDataBuilder extends GenericComponentDataBuilder<ImageComponentDataBuilder, ImageData> {
+public final class ContentFragmentDataBuilder extends GenericComponentDataBuilder<ContentFragmentDataBuilder, ContentFragmentData> {
 
     /**
-     * Construct a data layer builder for an image component.
+     * Construct a data layer builder for a content fragment component.
      *
      * @param supplier The data layer supplier.
      */
-    ImageComponentDataBuilder(@NotNull final DataLayerSupplier supplier) {
+    ContentFragmentDataBuilder(@NotNull final DataLayerSupplier supplier) {
         super(supplier);
     }
 
     /**
-     * Set the supplier that supplies the component's asset data.
+     * Set the supplier that supplies the content fragment data.
      *
-     * @param supplier The asset data value supplier.
-     * @return A new {@link ImageComponentDataBuilder}.
+     * @param supplier The content fragment data value supplier.
+     * @return A new {@link ContentFragmentDataBuilder}.
      */
     @NotNull
-    public ImageComponentDataBuilder withAssetData(@NotNull final Supplier<AssetData> supplier) {
-        return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setAssetData(supplier));
+    public ContentFragmentDataBuilder withElementsData(@NotNull final Supplier<ContentFragmentData.ElementData[]> supplier) {
+        return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setContentFragmentElements(supplier));
     }
 
     @Override
     @NotNull
-    ImageComponentDataBuilder createInstance(@NotNull final DataLayerSupplier supplier) {
-        return new ImageComponentDataBuilder(supplier);
+    ContentFragmentDataBuilder createInstance(@NotNull final DataLayerSupplier supplier) {
+        return new ContentFragmentDataBuilder(supplier);
     }
 
     @NotNull
     @Override
-    public ImageData build() {
-        return new ImageDataImpl(this.getDataLayerSupplier());
+    public ContentFragmentData build() {
+        return new ContentFragmentDataImpl(this.getDataLayerSupplier());
     }
 }

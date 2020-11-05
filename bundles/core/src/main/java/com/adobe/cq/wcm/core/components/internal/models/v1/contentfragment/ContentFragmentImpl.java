@@ -18,12 +18,16 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -220,13 +224,22 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     }
 
     @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
     @NotNull
     protected ComponentData getComponentData() {
-        return new ContentFragmentDataImpl(this, resource);
+        return DataLayerBuilder.extending(super.getComponentData()).asContentFragment()
+            .withTitle(this::getTitle)
+            .withElementsData(() -> {
+                List<ContentFragmentData.ElementData> elementsData = new ArrayList<>();
+                Optional.ofNullable(this.getElements())
+                    .map(elements -> {
+                        for (DAMContentFragment.DAMContentElement contentElement : elements) {
+                            elementsData.add(new ContentFragmentDataImpl.ElementDataImpl(contentElement));
+                        }
+                        return Optional.empty();
+                    });
+                return elementsData.toArray(new ContentFragmentData.ElementData[0]);
+            })
+            .build();
     }
 
     /**

@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
@@ -181,6 +182,16 @@ public interface DataLayerSupplier {
      */
     @NotNull
     default Optional<Supplier<String>> getLanguage() {
+        return Optional.empty();
+    }
+
+    /**
+     * Get the content fragment elements field value supplier.
+     *
+     * @return The content fragment elements field value supplier, or empty if not set.
+     */
+    @NotNull
+    default Optional<Supplier<ContentFragmentData.ElementData[]>> getContentFragmentElements() {
         return Optional.empty();
     }
 }

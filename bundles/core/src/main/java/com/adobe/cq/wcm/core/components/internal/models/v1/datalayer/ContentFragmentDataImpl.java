@@ -15,37 +15,27 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
-import com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.ContentFragmentImpl;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
-import org.apache.sling.api.resource.Resource;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Supplier;
 
 public class ContentFragmentDataImpl extends ComponentDataImpl implements ContentFragmentData {
 
-    public ContentFragmentDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
-        super(component, resource);
+    public ContentFragmentDataImpl(@NotNull final DataLayerSupplier supplier) {
+        super(supplier);
     }
 
     @Override
     public ElementData[] getElementsData() {
-        List<DAMContentFragment.DAMContentElement> elements = ((ContentFragmentImpl)component).getElements();
-        if (elements == null) {
-            return null;
-        }
-
-        List<ElementData> elementsData = new ArrayList<>();
-        for (DAMContentFragment.DAMContentElement contentElement : elements) {
-            elementsData.add(new ElementDataImpl(contentElement));
-        }
-        return elementsData.toArray(new ElementData[0]);
+        return this.getDataLayerSupplier()
+            .getContentFragmentElements()
+            .map(Supplier::get)
+            .orElse(null);
     }
 
-    static class ElementDataImpl implements ElementData {
+    public static class ElementDataImpl implements ElementData {
 
         @NotNull
         private final DAMContentFragment.DAMContentElement contentElement;
@@ -61,8 +51,7 @@ public class ContentFragmentDataImpl extends ComponentDataImpl implements Conten
 
         @Override
         public String getText() {
-            String value = contentElement.getValue(String.class);
-            return value != null ? value.toString() : null;
+            return contentElement.getValue(String.class);
         }
     }
 }
