@@ -79,13 +79,13 @@
          * @memberof Image
          * @type {Boolean}
          * @default false
-         */        
+         */
         "dmimage": {
             "default": false,
             "transform": function(value) {
                 return !(value === null || typeof value === "undefined");
             }
-        },        
+        },
         /**
          * The lazy threshold.
          * This is the number of pixels, in advance of becoming visible, when an lazy-loading image should begin
@@ -124,7 +124,7 @@
 
     var devicePixelRatio = window.devicePixelRatio || 1;
     var smartCrops = {};
-    
+
     function readData(element) {
         var data = element.dataset;
         var options = [];
@@ -160,7 +160,7 @@
             setupProperties(config.options);
             cacheElements(config.element);
             //check image is DM asset; if true try to make req=set
-            if (config.options.src && config.options.hasOwnProperty("dmimage") && (config.options["smartcroprendition"] == "SmartCrop:Auto")) {
+            if (config.options.src && config.options.hasOwnProperty("dmimage") && (config.options["smartcroprendition"] === "SmartCrop:Auto")) {
                 var request = new XMLHttpRequest();
                 var url = decodeURIComponent(config.options.src).split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
 
@@ -193,7 +193,7 @@
                         // error status
                     }
                 };
-                request.send();                
+                request.send();
             }
 
             if (!that._elements.noscript) {
