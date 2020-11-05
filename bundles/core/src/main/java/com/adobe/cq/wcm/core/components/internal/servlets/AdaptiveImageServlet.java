@@ -339,8 +339,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             if (!appliedTransformation) {
                 EnhancedRendition rendition = getBestRendition(asset, resizeWidth);
                 Dimension dimension = rendition.getDimension();
-                if ((dimension != null && dimension.width > resizeWidth) ||
-                    (dimension == null && originalWidth > resizeWidth)) {
+                if (dimension != null) {
+                    // keeping aspect ratio
+                    originalHeight = Math.round(originalHeight * (dimension.width / (float)originalWidth));
+                    originalWidth = dimension.width;
+                }
+                if (originalWidth > resizeWidth) {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
                         layer = new Layer(assetHandler.getImage(rendition));
@@ -348,6 +352,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         response.setContentType(imageType);
                         LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
                         layer.write(imageType, quality, response.getOutputStream());
+                    } else {
+                        LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
+                            asset.getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
+                        stream(response, rendition.getStream(), imageType, imageName);
                     }
                 } else {
                     LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
