@@ -81,7 +81,7 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
             } else {
                 Matcher matcher = pattern.matcher(getName());
                 if (matcher.matches()) {
-                    // Try to load image to determine size, if not too large
+                    // Try to infer dimensions from rendition name
                     try {
                         int width = Integer.parseInt(matcher.group(WIDTH_GROUP));
                         int height = Integer.parseInt(matcher.group(HEIGHT_GROUP));
@@ -90,7 +90,7 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
                         LOG.error("Cannot parse rendition dimensions from name", nfex);
                     }
                 } else if (rendition.getSize() < (AdaptiveImageServlet.DEFAULT_MAX_SIZE ^ 2)) {
-                    // Try to load image to determine size, if not too large
+                    // Try to load image to determine dimensions, if not too large
                     try {
                         dimension = Imaging.getImageSize(getStream(), getName());
                     } catch (Exception e) {
