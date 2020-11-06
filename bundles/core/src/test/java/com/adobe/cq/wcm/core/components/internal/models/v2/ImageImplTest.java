@@ -267,4 +267,11 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         Image image = getImageUnderTest(IMAGE30_PATH);
         assertFalse(image.isDmImage());
     }
+
+    @Test
+    void testImageSrc() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new int[]{2500});
+        Image image = getImageUnderTest(IMAGE30_PATH);
+        assertEquals("/core/content/test/_jcr_content/root/image30.coreimg.82.2500.png/1490005239000/adobe-systems-logo-and-wordmark.png", image.getSrc());
+    }
 }

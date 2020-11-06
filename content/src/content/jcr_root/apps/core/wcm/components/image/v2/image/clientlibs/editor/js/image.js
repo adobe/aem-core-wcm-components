@@ -28,7 +28,7 @@
     var $cqFileUpload;
     var $cqFileUploadEdit;
     var $dynamicMediaGroup;
-    var areDMFeaturesEnabled;    
+    var areDMFeaturesEnabled;
     var fileReference;
     var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
     var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
@@ -54,10 +54,10 @@
             $cqFileUpload     = $dialog.find(".cq-FileUpload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
             $dynamicMediaGroup= $dialogContent.find(".cmp-image__editor-dynamicmedia");
-            areDMFeaturesEnabled = ($dynamicMediaGroup.length == 1);
+            areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
             if (areDMFeaturesEnabled) {
                 smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
-            }            
+            }
 
             if ($cqFileUpload) {
 		        imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
@@ -139,7 +139,7 @@
 				resetSelectField($dynamicMediaGroup.find(imagePresetDropDownSelector));
 				break;
 			default:
-				break;                
+				break;
         }
     });
 
@@ -196,7 +196,7 @@
 
     /**
      * Helper function to get core image instance 'smartCropRendition' property
-     * @param filePath 
+     * @param filePath
      */
     function retrieveInstanceInfo(filePath) {
         return $.ajax({
@@ -207,12 +207,12 @@
                smartCropRenditionFromJcr = data["smartCropRendition"];
             }
         });
-    }	
-	
+    }
+
     /**
      * Get the list of available image's smart crop renditions and fill drop-down list
      * @param imageUrl The link to image asset
-     */	
+     */
 	function getSmartCropRenditions(imageUrl){
 		if (imagePropertiesRequest){
 			imagePropertiesRequest.abort();
@@ -227,8 +227,8 @@
 				var rePayload = new RegExp(/^(?:\/\*jsonp\*\/)?\s*([^()]+)\(([\s\S]+),\s*"[0-9]*"\);?$/gmi);
 				var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
 				var resPayload = rePayload.exec(responseText);
+                var payload;
 				if (resPayload) {
-					var payload;
 					var payloadStr = resPayload[2];
 					if (rePayloadJSON.test(payloadStr)) {
 						payload = JSON.parse(payloadStr);
@@ -236,21 +236,21 @@
 
 				}
 				//check "relation" - only in case of smartcrop renditions
-				if (payload.set.relation && payload.set.relation.length > 0) {
+				if (payload !== undefined && payload.set.relation && payload.set.relation.length > 0) {
 					if (smartCropRenditionsDropDown.items) {
 						smartCropRenditionsDropDown.items.clear();
 					}
 					//we need to add "NONE" item first in the list
                     addSmartCropDropDownItem("NONE", "", true);
                     //"AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
-                    addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr == "SmartCrop:Auto"));
+                    addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
 					for(var i = 0; i < payload.set.relation.length ; i++) {
 						smartCropRenditionsDropDown.items.add({
 						  content: {
 							innerHTML: payload.set.relation[i].userdata.SmartCropDef
 						  },
 						  disabled: false,
-                          selected: (smartCropRenditionFromJcr == payload.set.relation[i].userdata.SmartCropDef)
+                          selected: (smartCropRenditionFromJcr === payload.set.relation[i].userdata.SmartCropDef)
 						});
 					}
 					prepareSmartCropPanel();
@@ -263,12 +263,12 @@
 				// error status
 			}
 		};
-		imagePropertiesRequest.send();   
+		imagePropertiesRequest.send();
 	}
- 
+
     /**
      * Helper function for populating dropdown list
-     */	 
+     */
     function addSmartCropDropDownItem(label, value, selected) {
         smartCropRenditionsDropDown.items.add({
           content: {
@@ -277,11 +277,11 @@
           },
           disabled: false,
           selected: selected
-    })};	 
-	
+    })}
+
     /**
      * Helper function to show/hide UI-elements of dialog depending on the chosen radio button
-     */	
+     */
 	function prepareSmartCropPanel() {
 		var presetType = getSelectedPresetType($(presetTypeSelector));
 		switch (presetType){
@@ -325,10 +325,10 @@
     function selectPresetType(component, val) {
         var radioComp = component.find('[type="radio"]');
         radioComp.each( function(){
-            $(this).prop('checked', ($(this).val() == val));
+            $(this).prop('checked', ($(this).val() === val));
         });
     }
-	
+
     /**
      * Reset selection field
      * @param field
@@ -336,6 +336,6 @@
     function resetSelectField(field) {
         field.find('coral-select-item[selected]').removeAttr('selected');
         field.find('button').find('span').html('NONE');
-    }	
+    }
 
 })(jQuery);
