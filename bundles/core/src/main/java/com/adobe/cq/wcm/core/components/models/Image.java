@@ -331,4 +331,12 @@ public interface Image extends Component {
     default boolean isDecorative() {
         throw new UnsupportedOperationException();
     }
+
+    default String getSmartCropRendition() {
+        throw new UnsupportedOperationException();
+    }
+
+    default boolean isDmImage() {
+        throw new UnsupportedOperationException();
+    }
 }
