@@ -54,6 +54,7 @@
             $cqFileUpload     = $dialog.find(".cq-FileUpload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
             $dynamicMediaGroup= $dialogContent.find(".cmp-image__editor-dynamicmedia");
+            $dynamicMediaGroup.hide();            
             areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
             if (areDMFeaturesEnabled) {
                 smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
