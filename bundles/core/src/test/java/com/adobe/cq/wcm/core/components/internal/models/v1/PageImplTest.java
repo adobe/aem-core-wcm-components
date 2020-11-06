@@ -89,7 +89,7 @@ public class PageImplTest {
     }
 
     @Test
-    void testPage() throws ParseException {
+    protected void testPage() throws ParseException {
         context.load().binaryFile(TEST_BASE + "/static.css", DESIGN_PATH + "/static.css");
 
         Page page = getPageUnderTest(PAGE,
@@ -115,7 +115,7 @@ public class PageImplTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    void testFavicons() {
+    protected void testFavicons() {
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH);
         Map<String, String> favicons = page.getFavicons();
         assertEquals(DESIGN_PATH + "/" + FN_FAVICON_ICO, favicons.get(PN_FAVICON_ICO));

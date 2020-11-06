@@ -12,6 +12,8 @@
         "xdm:text": "!BAD_VALUE!",
         "dc:title": "!BAD_VALUE!",
         "xdm:template": "!BAD_VALUE!",
+        "aem:wcmMode":"ANALYTICS",
+        "aem:runModes":["!BAD_VALUE!"],
         "repo:path": "!BAD_VALUE!"
     }
 }

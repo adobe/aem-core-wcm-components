@@ -40,9 +40,11 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
+import org.apache.sling.settings.SlingSettingsService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +57,7 @@ import com.adobe.cq.wcm.core.components.models.Page;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.designer.Design;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
@@ -91,6 +94,9 @@ public class PageImpl extends AbstractComponentImpl implements Page {
 
     @Inject
     private SlingModelFilter slingModelFilter;
+
+    @OSGiService
+    private SlingSettingsService slingSettings;
 
     @Self
     private SlingHttpServletRequest request;
@@ -320,6 +326,8 @@ public class PageImpl extends AbstractComponentImpl implements Page {
             .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
             .withUrl(() -> Utils.getURL(request, currentPage))
             .withLanguage(this::getLanguage)
+            .withWcmMode(() -> WCMMode.fromRequest(request))
+            .withRunModes(() -> slingSettings.getRunModes())
             .build();
     }
 

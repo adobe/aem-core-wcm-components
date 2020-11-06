@@ -16,10 +16,13 @@
 package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
+import com.day.cq.wcm.api.WCMMode;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -181,6 +184,26 @@ public interface DataLayerSupplier {
      */
     @NotNull
     default Optional<Supplier<String>> getLanguage() {
+        return Optional.empty();
+    }
+
+    /**
+     * Get AEM's {@link WCMMode} value supplier.
+     *
+     * @return AEM's {@link WCMMode}, or empty if not set.
+     */
+    @NotNull
+    default Optional<Supplier<WCMMode>> getWcmMode() {
+        return Optional.empty();
+    }
+
+    /**
+     * Get AEM's run modes value supplier.
+     *
+     * @return AEM's run modes, or empty if not set.
+     */
+    @NotNull
+    default Optional<Supplier<Set<String>>> getRunModes() {
         return Optional.empty();
     }
 }

@@ -15,6 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
+import java.util.Set;
+
+import com.day.cq.wcm.api.WCMMode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -72,4 +75,13 @@ public interface PageData extends ComponentData {
         throw new UnsupportedOperationException();
     }
 
+    @JsonProperty("aem:runModes")
+    default Set<String> getRunModes() {
+        throw new UnsupportedOperationException();
+    }
+
+    @JsonProperty("aem:wcmMode")
+    default WCMMode getWcmMode() {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -21,12 +21,14 @@ import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
+import com.day.cq.wcm.api.WCMMode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -130,6 +132,12 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
     @Nullable
     private Supplier<String> languageSupplier;
 
+    @Nullable
+    private Supplier<WCMMode> wcmMode;
+
+    @Nullable
+    private Supplier<Set<String>> runModes;
+
     /**
      * Construct a wrapper for a {@link DataLayerSupplier}.
      *
@@ -163,7 +171,9 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
             supplier.setUrl(pageData::getUrl)
                 .setTags(pageData::getTags)
                 .setTemplatePath(pageData::getTemplatePath)
-                .setLanguage(pageData::getLanguage);
+                .setLanguage(pageData::getLanguage)
+                .setWcmMode(pageData::getWcmMode)
+                .setRunModes(pageData::getRunModes);
         }
 
         // set container field value suppliers
@@ -446,6 +456,7 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      * @param supplier The tags field value supplier.
      * @return This.
      */
+    @NotNull
     public DataLayerSupplierImpl setTags(@NotNull final Supplier<String[]> supplier) {
         this.tagsSupplier = supplier;
         return this;
@@ -488,6 +499,36 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     public DataLayerSupplierImpl setLanguage(@NotNull final Supplier<String> supplier) {
         this.languageSupplier = supplier;
+        return this;
+    }
+
+    @Override
+    @NotNull
+    public Optional<Supplier<WCMMode>> getWcmMode() {
+        if (this.wcmMode != null) {
+            return Optional.of(this.wcmMode);
+        }
+        return this.wrappedSupplier.getWcmMode();
+    }
+
+    @NotNull 
+    public DataLayerSupplierImpl setWcmMode(@NotNull Supplier<WCMMode> supplier) {
+        this.wcmMode = supplier;
+        return this;
+    }
+
+    @Override
+    @NotNull
+    public Optional<Supplier<Set<String>>> getRunModes() {
+        if (this.runModes != null) {
+            return Optional.of(this.runModes);
+        }
+        return this.wrappedSupplier.getRunModes();
+    }
+
+    @NotNull
+    public DataLayerSupplierImpl setRunModes(@NotNull Supplier<Set<String>> supplier) {
+        this.runModes = supplier;
         return this;
     }
 }

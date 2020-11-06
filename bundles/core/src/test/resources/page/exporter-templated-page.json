@@ -14,6 +14,10 @@
             "dc:title": "Templated Page",
             "xdm:template": "/conf/coretest/settings/wcm/templates/product-page",
             "repo:path": "/core/content/page/templated-page.html",
+            "aem:wcmMode": "DISABLED",
+            "aem:runModes": [
+                "publish"
+            ],
             "xdm:tags": [
                 "three",
                 "one",
