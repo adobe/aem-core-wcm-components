@@ -75,7 +75,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
                 "sling.servlet.methods=GET"
         }
 )
-public class SearchResultServlet extends SlingSafeMethodsServlet {
+public final class SearchResultServlet extends SlingSafeMethodsServlet {
 
     protected static final String DEFAULT_SELECTOR = "searchresults";
     protected static final String PARAM_FULLTEXT = "fulltext";
@@ -98,8 +98,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     private transient LiveRelationshipManager relationshipManager;
 
     @Override
-    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
-            throws IOException {
+    protected void doGet(@NotNull final SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response) {
         Page currentPage = getCurrentPage(request);
         if (currentPage != null) {
             Resource searchResource = getSearchContentResource(request, currentPage);
@@ -108,7 +107,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         }
     }
 
-    private Page getCurrentPage(SlingHttpServletRequest request) {
+    @Nullable
+    private Page getCurrentPage(@NotNull final SlingHttpServletRequest request) {
         Page currentPage = null;
         Resource currentResource = request.getResource();
         ResourceResolver resourceResolver = currentResource.getResourceResolver();
@@ -119,7 +119,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return currentPage;
     }
 
-    private void writeJson(List<ListItem> results, SlingHttpServletResponse response) {
+    private void writeJson(@NotNull final List<ListItem> results, @NotNull final SlingHttpServletResponse response) {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         ObjectMapper mapper = new ObjectMapper();
@@ -130,7 +130,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         }
     }
 
-    private Resource getSearchContentResource(SlingHttpServletRequest request, Page currentPage) {
+    @Nullable
+    private Resource getSearchContentResource(@NotNull final SlingHttpServletRequest request, @NotNull final Page currentPage) {
         Resource searchContentResource = null;
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();
         Resource resource = request.getResource();
@@ -157,13 +158,14 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     }
 
 
-    private List<ListItem> getResults(SlingHttpServletRequest request, Resource searchResource, Page currentPage) {
+    @NotNull
+    private List<ListItem> getResults(@NotNull final SlingHttpServletRequest request, @Nullable final Resource searchResource, @NotNull final Page currentPage) {
         int searchTermMinimumLength = SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT;
         int resultsSize = SearchImpl.PROP_RESULTS_SIZE_DEFAULT;
         String searchRootPagePath;
         if (searchResource != null) {
             ValueMap valueMap = searchResource.getValueMap();
-            ValueMap contentPolicyMap = getContentPolicyProperties(searchResource, request.getResource());
+            ValueMap contentPolicyMap = getContentPolicyProperties(searchResource);
             searchTermMinimumLength = valueMap.get(Search.PN_SEARCH_TERM_MINIMUM_LENGTH, contentPolicyMap.get(Search
                         .PN_SEARCH_TERM_MINIMUM_LENGTH, SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT));
             resultsSize = valueMap.get(Search.PN_RESULTS_SIZE, contentPolicyMap.get(Search.PN_RESULTS_SIZE,
@@ -228,6 +230,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return results;
     }
 
+    @Nullable
     private String getId(Resource resource) {
         if (resource == null) {
             return null;
@@ -235,7 +238,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return ComponentUtils.generateId("search", resource.getPath());
     }
 
-    private String getSearchRootPagePath(String searchRoot, Page currentPage) {
+    @Nullable
+    private String getSearchRootPagePath(@Nullable final String searchRoot, @NotNull final Page currentPage) {
         String searchRootPagePath = null;
         PageManager pageManager = currentPage.getPageManager();
         if (StringUtils.isNotEmpty(searchRoot) && pageManager != null) {
@@ -275,7 +279,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return searchRootPagePath;
     }
 
-    private ValueMap getContentPolicyProperties(Resource searchResource, Resource requestedResource) {
+    @NotNull
+    private ValueMap getContentPolicyProperties(@NotNull final Resource searchResource) {
         ValueMap contentPolicyProperties = new ValueMapDecorator(new HashMap<>());
         ResourceResolver resourceResolver = searchResource.getResourceResolver();
         ContentPolicyManager contentPolicyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
@@ -289,7 +294,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     }
 
     @Nullable
-    private String getRelativePath(@NotNull Page root, @NotNull Page child) {
+    private String getRelativePath(@NotNull final Page root, @NotNull final Page child) {
         if (child.equals(root)) {
             return ".";
         } else if ((child.getPath() + "/").startsWith(root.getPath())) {
