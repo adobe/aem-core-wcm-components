@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.jcr.RangeIterator;
 import javax.jcr.Session;
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletResponse;
@@ -32,15 +31,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceUtil;
-import org.apache.sling.api.resource.ValueMap;
+
+import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
+import org.apache.sling.models.factory.ModelFactory;
+import org.apache.sling.scripting.core.ScriptHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -48,7 +49,6 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Search;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.search.PredicateConverter;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
@@ -59,10 +59,6 @@ import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
-import com.day.cq.wcm.api.WCMException;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
-import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -95,6 +91,27 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
     @Reference
     private transient LiveRelationshipManager relationshipManager;
 
+    /**
+     * Model factory service.
+     */
+    @Reference
+    private transient ModelFactory modelFactory;
+
+    /**
+     * Bundle context.
+     */
+    private BundleContext bundleContext;
+
+    /**
+     * Activate the service.
+     *
+     * @param bundleContext The bundle context.
+     */
+    @Activate
+    protected void activate(final BundleContext bundleContext) {
+        this.bundleContext = bundleContext;
+    }
+
     @Override
     protected void doGet(@NotNull final SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response)
         throws IOException {
@@ -102,8 +119,12 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
             .map(pm -> pm.getContainingPage(request.getResource()))
             .orElse(null);
         if (currentPage != null) {
-            Resource searchResource = getSearchContentResource(request, currentPage);
-            List<ListItem> results = getResults(request, searchResource, currentPage);
+            SlingBindings bindings = new SlingBindings();
+            bindings.setSling(new ScriptHelper(bundleContext, null, request, response));
+            request.setAttribute(SlingBindings.class.getName(), bindings);
+
+            Search searchComponent = getSearchComponent(request, currentPage);
+            List<ListItem> results = getResults(request, searchComponent, currentPage.getPageManager());
             response.setContentType("application/json");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             new ObjectMapper().writeValue(response.getWriter(), results);
@@ -112,76 +133,61 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
         }
     }
 
-    @Nullable
-    private Resource getSearchContentResource(@NotNull final SlingHttpServletRequest request, @NotNull final Page currentPage) {
-        Resource searchContentResource = null;
-        RequestPathInfo requestPathInfo = request.getRequestPathInfo();
-        Resource resource = request.getResource();
-        String relativeContentResource = requestPathInfo.getSuffix();
-        if (StringUtils.startsWith(relativeContentResource, "/")) {
-            relativeContentResource = StringUtils.substring(relativeContentResource, 1);
-        }
-        if (StringUtils.isNotEmpty(relativeContentResource)) {
-            searchContentResource = resource.getChild(relativeContentResource);
-            if (searchContentResource == null) {
-                PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
-                if (pageManager != null) {
-                    Template template = currentPage.getTemplate();
-                    if (template != null) {
-                        Resource templateResource = request.getResourceResolver().getResource(template.getPath());
-                        if (templateResource != null) {
-                            searchContentResource = templateResource.getChild(NN_STRUCTURE + "/" + relativeContentResource);
-                        }
-                    }
-                }
-            }
-        }
-        return searchContentResource;
+    /**
+     * Gets the search component for the given request.
+     *
+     * @param request The search request.
+     * @param currentPage The current page.
+     * @return The search component.
+     */
+    @NotNull
+    private Search getSearchComponent(@NotNull final SlingHttpServletRequest request, @NotNull final Page currentPage) {
+        String suffix = request.getRequestPathInfo().getSuffix();
+        String relativeContentResource = Optional.ofNullable(suffix)
+            .filter(path -> StringUtils.startsWith(path, "/"))
+            .map(path -> StringUtils.substring(path, 1))
+            .orElse(suffix);
+
+        return Optional.ofNullable(relativeContentResource)
+            .filter(StringUtils::isNotEmpty)
+            .map(rcr -> Optional.ofNullable(request.getResource().getChild(rcr)).orElseGet(() ->
+                Optional.ofNullable(currentPage.getTemplate())
+                    .map(Template::getPath)
+                    .map(request.getResourceResolver()::getResource)
+                    .map(templateResource -> templateResource.getChild(NN_STRUCTURE + "/" + rcr))
+                    .orElse(null)))
+            .map(resource -> modelFactory.getModelFromWrappedRequest(request, resource, Search.class))
+            .orElseGet(() -> new DefaultSearch(currentPage, request.getResourceResolver()));
     }
 
-
+    /**
+     * Gets the search results.
+     *
+     * @param request The search request.
+     * @param searchComponent The search component.
+     * @param pageManager A PageManager.
+     * @return List of search results.
+     */
     @NotNull
-    private List<ListItem> getResults(@NotNull final SlingHttpServletRequest request, @Nullable final Resource searchResource, @NotNull final Page currentPage) {
-        int searchTermMinimumLength = SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT;
-        int resultsSize = SearchImpl.PROP_RESULTS_SIZE_DEFAULT;
-        String searchRootPagePath;
-        if (searchResource != null) {
-            ValueMap valueMap = searchResource.getValueMap();
-            ValueMap contentPolicyMap = getContentPolicyProperties(searchResource);
-            searchTermMinimumLength = valueMap.get(Search.PN_SEARCH_TERM_MINIMUM_LENGTH, contentPolicyMap.get(Search
-                        .PN_SEARCH_TERM_MINIMUM_LENGTH, SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT));
-            resultsSize = valueMap.get(Search.PN_RESULTS_SIZE, contentPolicyMap.get(Search.PN_RESULTS_SIZE,
-                        SearchImpl.PROP_RESULTS_SIZE_DEFAULT));
-            String searchRoot = valueMap.get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, SearchImpl.PROP_SEARCH_ROOT_DEFAULT));
-            searchRootPagePath = getSearchRootPagePath(searchRoot, currentPage);
-        } else {
-            searchRootPagePath = Optional.ofNullable(currentPage.getContentResource())
-                .map(languageManager::getLanguageRoot)
-                .map(Page::getPath)
-                .map(languageRoot -> getSearchRootPagePath(languageRoot, currentPage))
-                .orElse(null);
-        }
-        if (StringUtils.isEmpty(searchRootPagePath)) {
-            searchRootPagePath = currentPage.getPath();
-        }
+    private List<ListItem> getResults(@NotNull final SlingHttpServletRequest request,
+                                      @NotNull final Search searchComponent,
+                                      @NotNull final PageManager pageManager) {
+
         List<ListItem> results = new ArrayList<>();
         String fulltext = request.getParameter(PARAM_FULLTEXT);
-        if (fulltext == null || fulltext.length() < searchTermMinimumLength) {
+        if (fulltext == null || fulltext.length() < searchComponent.getSearchTermMinimumLength()) {
             return results;
         }
-        long resultsOffset = 0;
-        if (request.getParameter(PARAM_RESULTS_OFFSET) != null) {
-            resultsOffset = Long.parseLong(request.getParameter(PARAM_RESULTS_OFFSET));
-        }
+        long resultsOffset = Optional.ofNullable(request.getParameter(PARAM_RESULTS_OFFSET)).map(Long::parseLong).orElse(0L);
         Map<String, String> predicatesMap = new HashMap<>();
         predicatesMap.put(PREDICATE_FULLTEXT, fulltext);
-        predicatesMap.put(PREDICATE_PATH, searchRootPagePath);
+        predicatesMap.put(PREDICATE_PATH, searchComponent.getSearchRootPagePath());
         predicatesMap.put(PREDICATE_TYPE, NameConstants.NT_PAGE);
         PredicateGroup predicates = PredicateConverter.createPredicates(predicatesMap);
         ResourceResolver resourceResolver = request.getResource().getResourceResolver();
         Query query = queryBuilder.createQuery(predicates, resourceResolver.adaptTo(Session.class));
-        if (resultsSize != 0) {
-            query.setHitsPerPage(resultsSize);
+        if (searchComponent.getResultsSize() != 0) {
+            query.setHitsPerPage(searchComponent.getResultsSize());
         }
         if (resultsOffset != 0) {
             query.setStart(resultsOffset);
@@ -202,8 +208,8 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
 
                 Optional.of(resource)
                     .map(res -> resourceResolver.getResource(res.getPath()))
-                    .map(currentPage.getPageManager()::getContainingPage)
-                    .map(page -> new PageListItemImpl(request, page, getId(searchResource),
+                    .map(pageManager::getContainingPage)
+                    .map(page -> new PageListItemImpl(request, page, searchComponent.getId(),
                         PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, null))
                     .ifPresent(results::add);
             }
@@ -215,77 +221,52 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
         return results;
     }
 
-    @Nullable
-    private String getId(Resource resource) {
-        if (resource == null) {
+    /**
+     * A fall-back implementation of the Search model.
+     */
+    private final class DefaultSearch implements Search {
+
+        /**
+         * The search root page path.
+         */
+        @NotNull
+        private final String searchRootPagePath;
+
+        /**
+         * Construct the default search.
+         *
+         * @param currentPage The current page.
+         * @param resourceResolver The resource resolver.
+         */
+        public DefaultSearch(@NotNull final Page currentPage, @NotNull final ResourceResolver resourceResolver) {
+            this.searchRootPagePath = Optional.ofNullable(currentPage.getContentResource())
+                .map(languageManager::getLanguageRoot)
+                .map(Page::getPath)
+                .map(languageRoot -> SearchImpl.getSearchRootPagePath(languageManager, relationshipManager, languageRoot, currentPage))
+                .orElseGet(currentPage::getPath);
+        }
+
+        @Override
+        @Nullable
+        public String getId() {
             return null;
         }
-        return ComponentUtils.generateId("search", resource.getPath());
-    }
 
-    @Nullable
-    private String getSearchRootPagePath(@Nullable final String searchRoot, @NotNull final Page currentPage) {
-        String searchRootPagePath = null;
-        if (StringUtils.isNotEmpty(searchRoot)) {
-            PageManager pageManager = currentPage.getPageManager();
-            Page rootPage = pageManager.getPage(searchRoot);
-            if (rootPage != null) {
-                Page searchRootLanguageRoot = languageManager.getLanguageRoot(rootPage.getContentResource());
-                Page currentPageLanguageRoot = languageManager.getLanguageRoot(currentPage.getContentResource());
-                RangeIterator liveCopiesIterator = null;
-                try {
-                    liveCopiesIterator = relationshipManager.getLiveRelationships(currentPage.adaptTo(Resource.class), null, null);
-                } catch (WCMException e) {
-                    // ignore it
-                }
-                if (searchRootLanguageRoot != null && currentPageLanguageRoot != null && !searchRootLanguageRoot.equals
-                        (currentPageLanguageRoot)) {
-                    // check if there's a language copy of the search root
-                    Page languageCopySearchRoot = pageManager.getPage(ResourceUtil.normalize(currentPageLanguageRoot.getPath() + "/" +
-                            getRelativePath(searchRootLanguageRoot, rootPage)));
-                    if (languageCopySearchRoot != null) {
-                        rootPage = languageCopySearchRoot;
-                    }
-                } else if (liveCopiesIterator != null) {
-                    while (liveCopiesIterator.hasNext()) {
-                        LiveRelationship relationship = (LiveRelationship) liveCopiesIterator.next();
-                        if (currentPage.getPath().startsWith(relationship.getTargetPath() + "/")) {
-                            Page liveCopySearchRoot = pageManager.getPage(relationship.getTargetPath());
-                            if (liveCopySearchRoot != null) {
-                                rootPage = liveCopySearchRoot;
-                                break;
-                            }
-                        }
-                    }
-                }
-                searchRootPagePath = rootPage.getPath();
-            }
+        @Override
+        public int getResultsSize() {
+            return SearchImpl.PROP_RESULTS_SIZE_DEFAULT;
         }
-        return searchRootPagePath;
-    }
 
-    @NotNull
-    private ValueMap getContentPolicyProperties(@NotNull final Resource searchResource) {
-        ValueMap contentPolicyProperties = new ValueMapDecorator(new HashMap<>());
-        ResourceResolver resourceResolver = searchResource.getResourceResolver();
-        ContentPolicyManager contentPolicyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
-        if (contentPolicyManager != null) {
-            ContentPolicy policy = contentPolicyManager.getPolicy(searchResource);
-            if (policy != null) {
-                contentPolicyProperties = policy.getProperties();
-            }
+        @Override
+        public int getSearchTermMinimumLength() {
+            return SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT;
         }
-        return contentPolicyProperties;
-    }
 
-    @Nullable
-    private String getRelativePath(@NotNull final Page root, @NotNull final Page child) {
-        if (child.equals(root)) {
-            return ".";
-        } else if ((child.getPath() + "/").startsWith(root.getPath())) {
-            return child.getPath().substring(root.getPath().length() + 1);
+        @NotNull
+        @Override
+        public String getSearchRootPagePath() {
+            return this.searchRootPagePath;
         }
-        return null;
-    }
 
+    }
 }
