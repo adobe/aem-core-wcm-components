@@ -173,8 +173,11 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
             String searchRoot = valueMap.get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, SearchImpl.PROP_SEARCH_ROOT_DEFAULT));
             searchRootPagePath = getSearchRootPagePath(searchRoot, currentPage);
         } else {
-            String languageRoot = languageManager.getLanguageRoot(currentPage.getContentResource()).getPath();
-            searchRootPagePath = getSearchRootPagePath(languageRoot, currentPage);
+            searchRootPagePath = Optional.ofNullable(currentPage.getContentResource())
+                .map(languageManager::getLanguageRoot)
+                .map(Page::getPath)
+                .map(languageRoot -> getSearchRootPagePath(languageRoot, currentPage))
+                .orElse(null);
         }
         if (StringUtils.isEmpty(searchRootPagePath)) {
             searchRootPagePath = currentPage.getPath();
