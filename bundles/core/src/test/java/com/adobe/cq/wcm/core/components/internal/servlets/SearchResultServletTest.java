@@ -16,11 +16,13 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import org.apache.commons.collections4.IteratorUtils;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
@@ -29,13 +31,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
-import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -49,6 +51,10 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
@@ -71,8 +77,7 @@ public class SearchResultServletTest {
     @Mock
     private Query mockQuery;
 
-    @Mock
-    private Hit mockHit;
+    private ResourceResolver spyResolver;
 
     public final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -85,7 +90,17 @@ public class SearchResultServletTest {
         context.load().json(TEST_BASE + "/test-conf.json", "/conf/test/settings/wcm/templates");
         when(mockQueryBuilder.createQuery(any(), any())).thenReturn(mockQuery);
         when(mockQuery.getResult()).thenReturn(mockSearchResult);
-        when(mockSearchResult.getHits()).thenReturn(Collections.singletonList(mockHit));
+
+        // ensures that an attempt to close the QB's leaking resource resolver does not close the real resource resolver
+        // the spyResolver can be used to verify that the `close` method was called
+        this.spyResolver = Mockito.spy(this.context.resourceResolver());
+        doNothing().when(spyResolver).close();
+        doAnswer(invocationOnMock -> {
+            Resource r = Mockito.spy(Objects.requireNonNull(this.context.currentResource()));
+            doAnswer(invocationOnMock1 -> spyResolver).when(r).getResourceResolver();
+            return IteratorUtils.singletonIterator(r);
+        }).when(mockSearchResult).getResources();
+
         context.registerService(QueryBuilder.class, mockQueryBuilder);
         context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
         underTest = context.registerInjectActivateService(new SearchResultServlet());
@@ -94,8 +109,7 @@ public class SearchResultServletTest {
     @Test
     public void testSimpleSearch() throws Exception {
         com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
-        Resource resource = context.currentResource(TEST_ROOT_EN);
-        when(mockHit.getResource()).thenReturn(resource);
+        context.currentResource(TEST_ROOT_EN);
         MockSlingHttpServletRequest request = context.request();
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
@@ -105,13 +119,13 @@ public class SearchResultServletTest {
                 .of(ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page"));
 
         validateResponse(context.response(), expected);
+        verify(this.spyResolver, atLeastOnce()).close();
     }
 
     @Test
     public void testTemplateBasedSearch() throws Exception {
         com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
-        Resource resource = context.currentResource(TEST_TEMPLATE_EN);
-        when(mockHit.getResource()).thenReturn(resource);
+        context.currentResource(TEST_TEMPLATE_EN);
         MockSlingHttpServletRequest request = context.request();
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
@@ -121,6 +135,7 @@ public class SearchResultServletTest {
                 .of(ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page"));
 
         validateResponse(context.response(), expected);
+        verify(this.spyResolver, atLeastOnce()).close();
     }
 
     private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> expected)

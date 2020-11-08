@@ -18,11 +18,12 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.jcr.RangeIterator;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.Servlet;
 
@@ -52,9 +53,13 @@ import com.day.cq.search.PredicateConverter;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
-import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
-import com.day.cq.wcm.api.*;
+import com.day.cq.wcm.api.LanguageManager;
+import com.day.cq.wcm.api.NameConstants;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.msm.api.LiveRelationship;
@@ -196,19 +201,28 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         }
         SearchResult searchResult = query.getResult();
 
-        List<Hit> hits = searchResult.getHits();
-        if (hits != null) {
-            for (Hit hit : hits) {
-                try {
-                    Resource hitRes = hit.getResource();
-                    Page page = getPage(hitRes);
-                    if (page != null) {
-                        results.add(new PageListItemImpl(request, page, getId(searchResource),
-                                PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, null));
-                    }
-                } catch (RepositoryException e) {
-                    LOGGER.error("Unable to retrieve search results for query.", e);
+        // Query builder has a leaking resource resolver, so the following work around is required.
+        ResourceResolver leakingResourceResolver = null;
+        try {
+            Iterator<Resource> resourceIterator = searchResult.getResources();
+            while (resourceIterator.hasNext()) {
+                Resource resource = resourceIterator.next();
+
+                // Get a reference to QB's leaking resource resolver
+                if (leakingResourceResolver == null) {
+                    leakingResourceResolver = resource.getResourceResolver();
                 }
+
+                Optional.of(resource)
+                    .map(res -> resourceResolver.getResource(res.getPath()))
+                    .map(currentPage.getPageManager()::getContainingPage)
+                    .map(page -> new PageListItemImpl(request, page, getId(searchResource),
+                        PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, null))
+                    .ifPresent(results::add);
+            }
+        } finally {
+            if (leakingResourceResolver != null) {
+                leakingResourceResolver.close();
             }
         }
         return results;
@@ -284,14 +298,4 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return null;
     }
 
-    private Page getPage(Resource resource) {
-        if (resource != null) {
-            ResourceResolver resourceResolver = resource.getResourceResolver();
-            PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-            if (pageManager != null) {
-                return pageManager.getContainingPage(resource);
-            }
-        }
-        return null;
-    }
 }
