@@ -241,8 +241,8 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
     @Nullable
     private String getSearchRootPagePath(@Nullable final String searchRoot, @NotNull final Page currentPage) {
         String searchRootPagePath = null;
-        PageManager pageManager = currentPage.getPageManager();
-        if (StringUtils.isNotEmpty(searchRoot) && pageManager != null) {
+        if (StringUtils.isNotEmpty(searchRoot)) {
+            PageManager pageManager = currentPage.getPageManager();
             Page rootPage = pageManager.getPage(searchRoot);
             if (rootPage != null) {
                 Page searchRootLanguageRoot = languageManager.getLanguageRoot(rootPage.getContentResource());
