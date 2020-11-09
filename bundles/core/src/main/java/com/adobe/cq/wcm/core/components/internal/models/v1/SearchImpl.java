@@ -34,7 +34,6 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.LocalizationUtils;
 import com.adobe.cq.wcm.core.components.models.Search;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
 
 import java.util.Optional;
@@ -50,7 +49,6 @@ public class SearchImpl extends AbstractComponentImpl implements Search {
 
     public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
     public static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
-    public static final String PROP_SEARCH_ROOT_DEFAULT = "/content";
 
     @Self
     private SlingHttpServletRequest request;
@@ -76,14 +74,11 @@ public class SearchImpl extends AbstractComponentImpl implements Search {
     private void initModel() {
         resultsSize = currentStyle.get(PN_RESULTS_SIZE, PROP_RESULTS_SIZE_DEFAULT);
         searchTermMinimumLength = currentStyle.get(PN_SEARCH_TERM_MINIMUM_LENGTH, PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT);
-        PageManager pageManager = currentPage.getPageManager();
         Resource currentResource = request.getResource();
-        if (pageManager != null) {
-            Page containingPage = pageManager.getContainingPage(currentResource);
-            if(containingPage != null) {
-                relativePath = StringUtils.substringAfter(currentResource.getPath(), containingPage.getPath());
-            }
-        }
+        this.relativePath = Optional.ofNullable(currentPage.getPageManager().getContainingPage(currentResource))
+            .map(Page::getPath)
+            .map(path -> StringUtils.substringAfter(currentResource.getPath(), path))
+            .orElse(null);
     }
 
     @Override
@@ -109,7 +104,7 @@ public class SearchImpl extends AbstractComponentImpl implements Search {
             this.searchRootPagePath = Optional.ofNullable(this.request.getResource().getValueMap().get(Search.PN_SEARCH_ROOT, String.class))
                 .flatMap(searchRoot -> LocalizationUtils.getLocalPage(searchRoot, currentPage, this.request.getResourceResolver(), languageManager, relationshipManager))
                 .map(Page::getPath)
-                .orElse(SearchImpl.PROP_SEARCH_ROOT_DEFAULT);
+                .orElseGet(currentPage::getPath);
         }
         return this.searchRootPagePath;
     }
