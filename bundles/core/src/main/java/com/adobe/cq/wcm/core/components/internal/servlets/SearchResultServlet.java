@@ -54,6 +54,9 @@ import com.day.cq.search.PredicateConverter;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
+import com.day.cq.search.eval.FulltextPredicateEvaluator;
+import com.day.cq.search.eval.PathPredicateEvaluator;
+import com.day.cq.search.eval.TypePredicateEvaluator;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.NameConstants;
@@ -63,32 +66,55 @@ import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Search servlet.
+ */
 @Component(
-        service = Servlet.class,
-        property = {
-                "sling.servlet.selectors=" + SearchResultServlet.DEFAULT_SELECTOR,
-                "sling.servlet.resourceTypes=cq/Page",
-                "sling.servlet.extensions=json",
-                "sling.servlet.methods=GET"
-        }
+    service = Servlet.class,
+    property = {
+        "sling.servlet.selectors=" + SearchResultServlet.DEFAULT_SELECTOR,
+        "sling.servlet.resourceTypes=cq/Page",
+        "sling.servlet.extensions=json",
+        "sling.servlet.methods=GET"
+    }
 )
 public final class SearchResultServlet extends SlingSafeMethodsServlet {
 
+    /**
+     * Selector to trigger the search servlet.
+     */
     protected static final String DEFAULT_SELECTOR = "searchresults";
+
+    /**
+     * Name of the query parameter containing the user query.
+     */
     protected static final String PARAM_FULLTEXT = "fulltext";
 
+    /**
+     * Name of the query parameter indicating the search result offset.
+     */
     protected static final String PARAM_RESULTS_OFFSET = "resultsOffset";
-    private static final String PREDICATE_FULLTEXT = "fulltext";
-    private static final String PREDICATE_TYPE = "type";
-    private static final String PREDICATE_PATH = "path";
+
+    /**
+     * Name of the template structure node.
+     */
     private static final String NN_STRUCTURE = "structure";
 
+    /**
+     * Query builder service.
+     */
     @Reference
     private transient QueryBuilder queryBuilder;
 
+    /**
+     * Language manager service.
+     */
     @Reference
     private transient LanguageManager languageManager;
 
+    /**
+     * Relationship manager service.
+     */
     @Reference
     private transient LiveRelationshipManager relationshipManager;
 
@@ -185,9 +211,9 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
         }
         long resultsOffset = Optional.ofNullable(request.getParameter(PARAM_RESULTS_OFFSET)).map(Long::parseLong).orElse(0L);
         Map<String, String> predicatesMap = new HashMap<>();
-        predicatesMap.put(PREDICATE_FULLTEXT, fulltext);
-        predicatesMap.put(PREDICATE_PATH, searchComponent.getSearchRootPagePath());
-        predicatesMap.put(PREDICATE_TYPE, NameConstants.NT_PAGE);
+        predicatesMap.put(FulltextPredicateEvaluator.FULLTEXT, fulltext);
+        predicatesMap.put(PathPredicateEvaluator.PATH, searchComponent.getSearchRootPagePath());
+        predicatesMap.put(TypePredicateEvaluator.TYPE, NameConstants.NT_PAGE);
         PredicateGroup predicates = PredicateConverter.createPredicates(predicatesMap);
         ResourceResolver resourceResolver = request.getResource().getResourceResolver();
         Query query = queryBuilder.createQuery(predicates, resourceResolver.adaptTo(Session.class));
