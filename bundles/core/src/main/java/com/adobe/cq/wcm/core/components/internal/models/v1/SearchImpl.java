@@ -38,38 +38,83 @@ import com.day.cq.wcm.api.designer.Style;
 
 import java.util.Optional;
 
+/**
+ * Search model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Search.class, ComponentExporter.class},
-       resourceType = {SearchImpl.RESOURCE_TYPE})
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME ,
-          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+    adapters = {Search.class, ComponentExporter.class},
+    resourceType = SearchImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class SearchImpl extends AbstractComponentImpl implements Search {
 
+    /**
+     * The resource type.
+     */
     protected static final String RESOURCE_TYPE = "core/wcm/components/search/v1/search";
 
+    /**
+     * Default number of results to show.
+     */
     public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
+
+    /**
+     * Default minimum search term length.
+     */
     public static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
 
+    /**
+     * The current request.
+     */
     @Self
     private SlingHttpServletRequest request;
 
+    /**
+     * The current page.
+     */
     @ScriptVariable
     private Page currentPage;
 
+    /**
+     * The current style.
+     */
     @ScriptVariable
     private Style currentStyle;
 
+    /**
+     * The language manager service.
+     */
     @OSGiService
     private LanguageManager languageManager;
 
+    /**
+     * The live relationship manager service.
+     */
     @OSGiService
     private LiveRelationshipManager relationshipManager;
 
+    /**
+     * The relative path between this component and the containing page.
+     */
     private String relativePath;
+
+    /**
+     * The number of results to return.
+     */
     private int resultsSize;
+
+    /**
+     * The minimum search term length.
+     */
     private int searchTermMinimumLength;
+
+    /**
+     * The path of the search root page.
+     */
     private String searchRootPagePath;
 
+    /**
+     * Initialize the model.
+     */
     @PostConstruct
     private void initModel() {
         resultsSize = currentStyle.get(PN_RESULTS_SIZE, PROP_RESULTS_SIZE_DEFAULT);
