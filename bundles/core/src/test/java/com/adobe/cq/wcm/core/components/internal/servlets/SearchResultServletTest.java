@@ -16,11 +16,18 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import org.apache.commons.collections4.IteratorUtils;
+import com.day.cq.search.PredicateGroup;
+import com.day.cq.search.eval.PathPredicateEvaluator;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
@@ -55,7 +62,6 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class SearchResultServletTest {
@@ -71,43 +77,63 @@ public class SearchResultServletTest {
     @Mock
     private LiveRelationshipManager mockLiveRelationshipManager;
 
-    @Mock
-    private SearchResult mockSearchResult;
-
-    @Mock
-    private Query mockQuery;
-
     private ResourceResolver spyResolver;
 
     public final AemContext context = CoreComponentTestContext.newAemContext();
 
     private static final String TEST_ROOT_EN = "/content/en/search/page";
+    private static final String TEST_ROOT_DE = "/content/de/search/page";
     private static final String TEST_TEMPLATE_EN = "/content/en/search/page-template";
 
     @BeforeEach
     public void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(TEST_BASE + "/test-conf.json", "/conf/test/settings/wcm/templates");
-        when(mockQueryBuilder.createQuery(any(), any())).thenReturn(mockQuery);
-        when(mockQuery.getResult()).thenReturn(mockSearchResult);
-
-        // ensures that an attempt to close the QB's leaking resource resolver does not close the real resource resolver
-        // the spyResolver can be used to verify that the `close` method was called
-        this.spyResolver = Mockito.spy(this.context.resourceResolver());
-        doNothing().when(spyResolver).close();
-        doAnswer(invocationOnMock -> {
-            Resource r = Mockito.spy(Objects.requireNonNull(this.context.currentResource()));
-            doAnswer(invocationOnMock1 -> spyResolver).when(r).getResourceResolver();
-            return IteratorUtils.singletonIterator(r);
-        }).when(mockSearchResult).getResources();
 
         context.registerService(QueryBuilder.class, mockQueryBuilder);
         context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
         underTest = context.registerInjectActivateService(new SearchResultServlet());
     }
 
+    /**
+     * Sets up a mock query builder.
+     * If there are any results then `this.spyResolver` will be set to a non-null value.
+     *
+     * Note: any query executed on the query builder configured by calling this method will simply list all of the
+     * child pages of the search path. No actual search, or other predicates on the query will be honoured. Therefore,
+     * the results from the query builder cannot be trusted for testing purposes beyond testing the search root and
+     * the handling / transformation of results.
+     */
+    public void setUpQueryBuilder() {
+        doAnswer(invocationOnQueryBuilder -> {
+            PredicateGroup predicateGroup = invocationOnQueryBuilder.getArgument(0);
+            Query query = Mockito.mock(Query.class);
+            doAnswer(invocationOnQuery -> {
+                SearchResult result = Mockito.mock(SearchResult.class);
+                doAnswer(invocationOnResult -> {
+                    String searchPath = predicateGroup.getByName(PathPredicateEvaluator.PATH).get(PathPredicateEvaluator.PATH);
+                    Iterator<Resource> res = Objects.requireNonNull(this.context.resourceResolver().getResource(searchPath)).listChildren();
+                    List<Resource> resources = StreamSupport.stream(Spliterators.spliteratorUnknownSize(res, Spliterator.ORDERED), false)
+                        .filter(r -> r.isResourceType("cq:Page"))
+                        .collect(Collectors.toList());
+                    if (resources.size() > 0) {
+                        this.spyResolver = Mockito.spy(this.context.resourceResolver());
+                        doNothing().when(spyResolver).close();
+                        Resource spyResource = Mockito.spy(resources.get(0));
+                        doAnswer(invocationOnMock3 -> spyResolver).when(spyResource).getResourceResolver();
+                        resources.set(0, spyResource);
+                    }
+                    return resources.iterator();
+                }).when(result).getResources();
+                return result;
+            }).when(query).getResult();
+            return query;
+        }).when(mockQueryBuilder).createQuery(any(), any());
+    }
+
     @Test
     public void testSimpleSearch() throws Exception {
+        setUpQueryBuilder();
         com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
         context.currentResource(TEST_ROOT_EN);
         MockSlingHttpServletRequest request = context.request();
@@ -115,15 +141,32 @@ public class SearchResultServletTest {
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> expected = ImmutableList
-                .of(ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page"));
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page"),
+            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2"),
+            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3")
+        );
 
         validateResponse(context.response(), expected);
         verify(this.spyResolver, atLeastOnce()).close();
     }
 
     @Test
+    public void testSimpleSearch_noPath() throws Exception {
+        setUpQueryBuilder();
+        context.currentResource(TEST_ROOT_DE);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+
+        validateResponse(context.response(), new ArrayList<>());
+    }
+
+    @Test
     public void testTemplateBasedSearch() throws Exception {
+        setUpQueryBuilder();
         com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
         context.currentResource(TEST_TEMPLATE_EN);
         MockSlingHttpServletRequest request = context.request();
@@ -131,8 +174,11 @@ public class SearchResultServletTest {
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> expected = ImmutableList
-                .of(ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page"));
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page"),
+            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2"),
+            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3")
+        );
 
         validateResponse(context.response(), expected);
         verify(this.spyResolver, atLeastOnce()).close();
