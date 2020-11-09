@@ -65,8 +65,6 @@
         <mockitio.version>2.24.5</mockitio.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <componentGroup>.core-wcm</componentGroup>
-        <componentGroupForm>.core-wcm-form</componentGroupForm>
     </properties>
 
     <!-- ======================================================================= -->

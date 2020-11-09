@@ -21,4 +21,4 @@
     jcr:primaryType="cq:Component"
     jcr:title="Tabs (AMP v1)"
     sling:resourceSuperType="core/wcm/components/tabs/v1/tabs"
-    componentGroup="${componentGroup}"/>
+    componentGroup=".core-wcm-ext-amp"/>
