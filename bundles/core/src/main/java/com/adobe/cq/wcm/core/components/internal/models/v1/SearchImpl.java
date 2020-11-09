@@ -16,16 +16,12 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
-import javax.jcr.RangeIterator;
 
 import com.day.cq.wcm.api.LanguageManager;
-import com.day.cq.wcm.api.WCMException;
-import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
@@ -35,11 +31,11 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.LocalizationUtils;
 import com.adobe.cq.wcm.core.components.models.Search;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -74,6 +70,7 @@ public class SearchImpl extends AbstractComponentImpl implements Search {
     private String relativePath;
     private int resultsSize;
     private int searchTermMinimumLength;
+    private String searchRootPagePath;
 
     @PostConstruct
     private void initModel() {
@@ -108,70 +105,13 @@ public class SearchImpl extends AbstractComponentImpl implements Search {
     @NotNull
     @Override
     public String getSearchRootPagePath() {
-        String searchRoot = Optional.ofNullable(this.request.getResource().getValueMap().get(Search.PN_SEARCH_ROOT, String.class))
-            .orElseGet(() -> this.currentStyle.get(Search.PN_SEARCH_ROOT, SearchImpl.PROP_SEARCH_ROOT_DEFAULT));
-        return getSearchRootPagePath(languageManager, relationshipManager, searchRoot, currentPage);
-    }
-
-    @Nullable
-    public static String getSearchRootPagePath(@NotNull final LanguageManager languageManager,
-                                        @NotNull final LiveRelationshipManager relationshipManager,
-                                        @Nullable final String searchRoot,
-                                        @NotNull final Page currentPage) {
-        String searchRootPagePath = null;
-        if (StringUtils.isNotEmpty(searchRoot)) {
-            PageManager pageManager = currentPage.getPageManager();
-            Page rootPage = pageManager.getPage(searchRoot);
-            if (rootPage != null) {
-                Page searchRootLanguageRoot = languageManager.getLanguageRoot(rootPage.getContentResource());
-                Page currentPageLanguageRoot = languageManager.getLanguageRoot(currentPage.getContentResource());
-                RangeIterator liveCopiesIterator = null;
-                try {
-                    liveCopiesIterator = relationshipManager.getLiveRelationships(currentPage.adaptTo(Resource.class), null, null);
-                } catch (WCMException e) {
-                    // ignore it
-                }
-                if (searchRootLanguageRoot != null && currentPageLanguageRoot != null && !searchRootLanguageRoot.equals
-                    (currentPageLanguageRoot)) {
-                    // check if there's a language copy of the search root
-                    Page languageCopySearchRoot = pageManager.getPage(ResourceUtil.normalize(currentPageLanguageRoot.getPath() + "/" +
-                        getRelativePath(searchRootLanguageRoot, rootPage)));
-                    if (languageCopySearchRoot != null) {
-                        rootPage = languageCopySearchRoot;
-                    }
-                } else if (liveCopiesIterator != null) {
-                    while (liveCopiesIterator.hasNext()) {
-                        LiveRelationship relationship = (LiveRelationship) liveCopiesIterator.next();
-                        if (currentPage.getPath().startsWith(relationship.getTargetPath() + "/")) {
-                            Page liveCopySearchRoot = pageManager.getPage(relationship.getTargetPath());
-                            if (liveCopySearchRoot != null) {
-                                rootPage = liveCopySearchRoot;
-                                break;
-                            }
-                        }
-                    }
-                }
-                searchRootPagePath = rootPage.getPath();
-            }
+        if (this.searchRootPagePath == null) {
+            this.searchRootPagePath = Optional.ofNullable(this.request.getResource().getValueMap().get(Search.PN_SEARCH_ROOT, String.class))
+                .flatMap(searchRoot -> LocalizationUtils.getLocalPage(searchRoot, currentPage, this.request.getResourceResolver(), languageManager, relationshipManager))
+                .map(Page::getPath)
+                .orElse(SearchImpl.PROP_SEARCH_ROOT_DEFAULT);
         }
-        return searchRootPagePath;
-    }
-
-    /**
-     * Get the relative path between the two pages.
-     *
-     * @param root The root page.
-     * @param child The child page.
-     * @return The relative path between root and child page, null if child is not a child of root.
-     */
-    @Nullable
-    private static String getRelativePath(@NotNull final Page root, @NotNull final Page child) {
-        if (child.equals(root)) {
-            return ".";
-        } else if ((child.getPath() + "/").startsWith(root.getPath())) {
-            return child.getPath().substring(root.getPath().length() + 1);
-        }
-        return null;
+        return this.searchRootPagePath;
     }
 
     @NotNull
