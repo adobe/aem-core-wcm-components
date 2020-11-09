@@ -18,6 +18,26 @@
                     "jcr:title"         : "Adobe Logo",
                     "linkURL"           : "/content/test"
                 },
+                "image0r"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_rectangle.png",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "/content/test"
+                },
+                "image0s"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_small.png",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "/content/test"
+                },
                 "image1"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
