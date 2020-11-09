@@ -152,6 +152,18 @@ public class SearchResultServletTest {
     }
 
     @Test
+    public void testSimpleSearch_tooShortQuery() throws Exception {
+        context.currentResource(TEST_ROOT_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yo");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+
+        validateResponse(context.response(), new ArrayList<>());
+    }
+
+    @Test
     public void testSimpleSearch_noPath() throws Exception {
         setUpQueryBuilder();
         context.currentResource(TEST_ROOT_DE);
