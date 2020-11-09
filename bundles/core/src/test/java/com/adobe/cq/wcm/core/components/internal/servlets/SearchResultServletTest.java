@@ -164,6 +164,20 @@ public class SearchResultServletTest {
     }
 
     @Test
+    public void testSimpleSearch_default() throws Exception {
+        setUpQueryBuilder();
+        context.currentResource(TEST_ROOT_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
+        underTest.doGet(request, context.response());
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search.html", "title", "Search", "id", "-item-277e64839a")
+        );
+
+        validateResponse(context.response(), expected);
+    }
+
+    @Test
     public void testSimpleSearch_noPath() throws Exception {
         setUpQueryBuilder();
         context.currentResource(TEST_ROOT_DE);
