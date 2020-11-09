@@ -142,9 +142,9 @@ public class SearchResultServletTest {
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
-            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page"),
-            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2"),
-            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3")
+            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page", "id", "search-0dc87a6d22-item-2290228025"),
+            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2", "id", "search-0dc87a6d22-item-ad3d190367"),
+            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-0dc87a6d22-item-1abc47fffe")
         );
 
         validateResponse(context.response(), expected);
@@ -175,9 +175,9 @@ public class SearchResultServletTest {
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
-            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page"),
-            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2"),
-            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3")
+            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page", "id", "search-ea349504cd-item-2290228025"),
+            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2", "id", "search-ea349504cd-item-ad3d190367"),
+            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-ea349504cd-item-1abc47fffe")
         );
 
         validateResponse(context.response(), expected);
@@ -198,6 +198,7 @@ public class SearchResultServletTest {
         for (int i = 0; i < expected.size(); i++) {
             Map<String, String> expectedMap = expected.get(i);
             ListItem listItem = listItems[i];
+            assertEquals(expectedMap.get("id"), listItem.getId());
             assertEquals(expectedMap.get("url"), listItem.getURL());
             assertEquals(expectedMap.get("title"), listItem.getTitle());
 
