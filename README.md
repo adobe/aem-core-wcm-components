@@ -97,7 +97,7 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 Core Components | AEM as a Cloud Service | AEM 6.5 | AEM 6.4 | Java SE | Maven
 ----------------|------------------------|---------|---------|---------|---------
-[2.12.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.12.0) | Continual | 6.5.5.0+ (*) | 6.4.8.1+ (*) | 8, 11 | 3.3.9+
+[2.12.1](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.12.1) | Continual | 6.5.5.0+ (*) | 6.4.8.1+ (*) | 8, 11 | 3.3.9+
 
 (*) - Since version 2.11.0 `org.apache.sling.models.impl` version 1.4.12 or higher is required (due to [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
 
@@ -130,3 +130,6 @@ For convenience, the following deployment profiles are provided when running the
 The hostname and port of the instance can be changed with the following user defined properties:
 * `aem.host` and `aem.port` for the author instance.
 * `aem.publish.host` and `aem.publish.port` for the publish instance.
+
+### Known Issues
+- The provided oEmbed URL Processor configuration for Facebook and Instagram is not working at the moment as a new version of the endpoint was released by Facebook and now an access token needs to be passed in the request. A possible workaround is described in https://github.com/adobe/aem-core-wcm-components/issues/1225

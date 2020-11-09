@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.11.3-SNAPSHOT</version>
+    <version>2.12.3-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
@@ -65,8 +65,6 @@
         <mockitio.version>2.24.5</mockitio.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <componentGroup>.core-wcm</componentGroup>
-        <componentGroupForm>.core-wcm-form</componentGroupForm>
     </properties>
 
     <!-- ======================================================================= -->
@@ -779,7 +777,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.12</version>
+                <version>4.13.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
