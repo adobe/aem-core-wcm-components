@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import javax.jcr.RangeIterator;
 import javax.jcr.Session;
 import javax.servlet.Servlet;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -41,8 +43,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
@@ -86,8 +86,6 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
     private static final String PREDICATE_PATH = "path";
     private static final String NN_STRUCTURE = "structure";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SearchResultServlet.class);
-
     @Reference
     private transient QueryBuilder queryBuilder;
 
@@ -98,35 +96,19 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
     private transient LiveRelationshipManager relationshipManager;
 
     @Override
-    protected void doGet(@NotNull final SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response) {
-        Page currentPage = getCurrentPage(request);
+    protected void doGet(@NotNull final SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response)
+        throws IOException {
+        Page currentPage = Optional.ofNullable(request.getResourceResolver().adaptTo(PageManager.class))
+            .map(pm -> pm.getContainingPage(request.getResource()))
+            .orElse(null);
         if (currentPage != null) {
             Resource searchResource = getSearchContentResource(request, currentPage);
             List<ListItem> results = getResults(request, searchResource, currentPage);
-            writeJson(results, response);
-        }
-    }
-
-    @Nullable
-    private Page getCurrentPage(@NotNull final SlingHttpServletRequest request) {
-        Page currentPage = null;
-        Resource currentResource = request.getResource();
-        ResourceResolver resourceResolver = currentResource.getResourceResolver();
-        PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-        if (pageManager != null) {
-            currentPage = pageManager.getContainingPage(currentResource.getPath());
-        }
-        return currentPage;
-    }
-
-    private void writeJson(@NotNull final List<ListItem> results, @NotNull final SlingHttpServletResponse response) {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(response.getWriter(), results);
-        } catch (IOException e) {
-            LOGGER.error("cannot serialize to JSON",e);
+            response.setContentType("application/json");
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            new ObjectMapper().writeValue(response.getWriter(), results);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
