@@ -56,6 +56,8 @@ import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import javax.servlet.http.HttpServletResponse;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
@@ -149,6 +151,23 @@ public class SearchResultServletTest {
 
         validateResponse(context.response(), expected);
         verify(this.spyResolver, atLeastOnce()).close();
+    }
+
+    /**
+     * Confirms that the servlet returns 404 status if the result offset is not a long.
+     *
+     * @throws Exception any exception.
+     */
+    @Test
+    public void testSimpleSearch_badOffset() throws Exception {
+        context.currentResource(TEST_ROOT_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod&"
+            + SearchResultServlet.PARAM_RESULTS_OFFSET + "=3x");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+        assertEquals(HttpServletResponse.SC_BAD_REQUEST, context.response().getStatus());
     }
 
     @Test

@@ -77,7 +77,7 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
     protected static final String DEFAULT_SELECTOR = "searchresults";
     protected static final String PARAM_FULLTEXT = "fulltext";
 
-    private static final String PARAM_RESULTS_OFFSET = "resultsOffset";
+    protected static final String PARAM_RESULTS_OFFSET = "resultsOffset";
     private static final String PREDICATE_FULLTEXT = "fulltext";
     private static final String PREDICATE_TYPE = "type";
     private static final String PREDICATE_PATH = "path";
@@ -125,10 +125,14 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
             request.setAttribute(SlingBindings.class.getName(), bindings);
 
             Search searchComponent = getSearchComponent(request, currentPage);
-            List<ListItem> results = getResults(request, searchComponent, currentPage.getPageManager());
-            response.setContentType("application/json");
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            new ObjectMapper().writeValue(response.getWriter(), results);
+            try {
+                List<ListItem> results = getResults(request, searchComponent, currentPage.getPageManager());
+                response.setContentType("application/json");
+                response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+                new ObjectMapper().writeValue(response.getWriter(), results);
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
