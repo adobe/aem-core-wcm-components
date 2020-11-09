@@ -39,7 +39,7 @@ import com.day.cq.wcm.api.designer.Style;
        resourceType = {SearchImpl.RESOURCE_TYPE})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME ,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class SearchImpl implements Search {
+public class SearchImpl extends AbstractComponentImpl implements Search {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/search/v1/search";
 
