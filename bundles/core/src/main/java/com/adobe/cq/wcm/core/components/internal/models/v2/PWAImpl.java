@@ -51,10 +51,10 @@ public class PWAImpl implements PWA {
 
         if (project != null) {
             ValueMap valueMap = project.getValueMap();
-            Boolean isPWAEnabled = valueMap.get("enablePWA", Boolean.class);
+            Boolean isPWAEnabled = valueMap.get(PROP_PWA_ENABLEPWA, Boolean.class);
             this.isPWAEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
-            this.themecolor = colorToHex(valueMap.get("themecolor", ""));
-            this.iconPath = valueMap.get("pwaicon", "");
+            this.themecolor = colorToHex(valueMap.get(PROP_PWA_THEMECOLOR, ""));
+            this.iconPath = valueMap.get(PROP_PWA_ICON, "");
         }
 
         String[] levels = projectPath.split("/");

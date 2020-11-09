@@ -20,6 +20,11 @@ package com.adobe.cq.wcm.core.components.models;
  * Interface for reading progressive web apps configuration
  */
 public interface PWA {
+
+    String PROP_PWA_ENABLEPWA = "enablePWA";
+    String PROP_PWA_THEMECOLOR = "themecolor";
+    String PROP_PWA_ICON = "pwaicon";
+
     /**
      * Returns true if PWA features are enabled false otherwise
      *
