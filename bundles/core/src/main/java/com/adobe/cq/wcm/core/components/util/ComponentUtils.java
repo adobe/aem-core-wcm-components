@@ -15,20 +15,32 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.util;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.models.Component;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.api.components.ComponentContext;
+import com.day.cq.wcm.api.components.ComponentManager;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.caconfig.ConfigurationBuilder;
+import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Utility helper functions for components.
@@ -169,5 +181,78 @@ public final class ComponentUtils {
     @NotNull
     public static String generateId(@NotNull final String prefix, @NotNull final String path) {
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, ID_HASH_LENGTH));
+    }
+
+    /**
+     * Gets the effective {@link TemplatedResource} for the specified resource.
+     *
+     * @param resource The resource for which to get the TemplateResource.
+     * @return The TemplatedResource, or the current resource if it cannot be adapted to a TemplatedResource.
+     */
+    @NotNull
+    public static Resource getEffectiveResource(@NotNull final Resource resource) {
+        if (resource instanceof TemplatedResource) {
+            return resource;
+        }
+        return Optional.ofNullable((Resource) resource.adaptTo(TemplatedResource.class)).orElse(resource);
+    }
+
+    /**
+     * Gets a list of all child resources that are components.
+     *
+     * @param resource The resource for which to get the children.
+     * @return The list of child resources that are components.
+     */
+    @NotNull
+    public static List<Resource> getChildComponents(@NotNull final Resource resource) {
+        return Optional.ofNullable(resource.getResourceResolver().adaptTo(ComponentManager.class))
+            .map(componentManager ->
+                StreamSupport.stream(ComponentUtils.getEffectiveResource(resource).getChildren().spliterator(), false)
+                    .filter(res -> Objects.nonNull(componentManager.getComponentOfResource(res))))
+            .orElseGet(Stream::empty)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Gets the models for the child resources that are components, filtered by the Sling Model Filter.
+     * This should only be used for JSON export, for other usages refer to {@link com.adobe.cq.wcm.core.components.models.Container#getChildren}.
+     *
+     * @param request The current request.
+     * @param modelClass The child model class.
+     * @return Map of models wherein the key is the child name, and the value is it's model.
+     */
+    public static LinkedHashMap<String, ComponentExporter> getComponentModels(@NotNull final SlingModelFilter slingModelFilter,
+                                                                    @NotNull final ModelFactory modelFactory,
+                                                                    @NotNull final SlingHttpServletRequest request,
+                                                                    @NotNull final Class<ComponentExporter> modelClass) {
+        return ComponentUtils.getComponentModels(
+            slingModelFilter,
+            modelFactory,
+            ComponentUtils.getChildComponents(request.getResource()),
+            request,
+            modelClass);
+    }
+
+    /**
+     * Gets the models for the child resources that are components, filtered by the Sling Model Filter.
+     * This should only be used for JSON export, for other usages refer to {@link com.adobe.cq.wcm.core.components.models.Container#getChildren}
+     *
+     * @param request The current request.
+     * @param modelClass The child model class.
+     * @return Map of models wherein the key is the child name, and the value is it's model.
+     */
+    public static LinkedHashMap<String, ComponentExporter> getComponentModels(@NotNull final SlingModelFilter slingModelFilter,
+                                                                    @NotNull final ModelFactory modelFactory,
+                                                                    @NotNull final List<Resource> childComponents,
+                                                                    @NotNull final SlingHttpServletRequest request,
+                                                                    @NotNull final Class<ComponentExporter> modelClass) {
+        LinkedHashMap<String, ComponentExporter> models = new LinkedHashMap<>();
+        slingModelFilter.filterChildResources(childComponents).forEach(child -> {
+            ComponentExporter model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
+            if (model != null) {
+                models.put(child.getName(), model);
+            }
+        });
+        return models;
     }
 }
