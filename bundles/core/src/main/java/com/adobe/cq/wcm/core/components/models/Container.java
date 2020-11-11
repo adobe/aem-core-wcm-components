@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -73,8 +74,11 @@ public interface Container extends Component, ContainerExporter {
      *
      * @return List of container items
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @deprecated since 12.17.0 - use {@link #getChildren()}
      */
     @NotNull
+    @Deprecated
+    @JsonIgnore
     default List<ListItem> getItems() {
         throw new UnsupportedOperationException();
     }

@@ -94,6 +94,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
      * @return The list of items in the container.
      */
     @NotNull
+    @Deprecated
     protected abstract List<? extends ListItem> readItems();
 
     /**
@@ -123,6 +124,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     @Override
     @JsonIgnore
     @NotNull
+    @Deprecated
     public List<ListItem> getItems() {
         if (items == null) {
             items = readItems().stream().map(i -> (ListItem) i).collect(Collectors.toList());

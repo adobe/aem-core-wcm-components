@@ -65,7 +65,8 @@ public class AbstractContainerImplTest {
 
         @Override
         @NotNull
-        protected List<ListItem> readItems() {
+        @Deprecated
+        protected final List<ListItem> readItems() {
             return new ArrayList<>();
         }
 
