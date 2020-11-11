@@ -15,18 +15,18 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,6 +37,11 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
  */
 public abstract class AbstractPanelContainerImpl extends AbstractContainerImpl implements Container {
 
+    /**
+     * Map of the child items to be exported wherein the key is the child name, and the value is the child model.
+     */
+    protected LinkedHashMap<String, ComponentExporter> itemModels;
+
     @Override
     @NotNull
     protected List<PanelContainerListItemImpl> readItems() {
@@ -46,17 +51,23 @@ public abstract class AbstractPanelContainerImpl extends AbstractContainerImpl i
     }
 
     @Override
-    protected Map<String, ComponentExporter> getItemModels(@NotNull final SlingHttpServletRequest request,
-                                                           @NotNull final Class<ComponentExporter> modelClass) {
-        Map<String, ComponentExporter> models = super.getItemModels(request, modelClass);
-        models.entrySet().forEach(entry ->
-            getItems().stream()
-                .filter(Objects::nonNull)
-                .filter(item -> StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), entry.getKey()))
-                .findFirst()
-                .ifPresent(match -> entry.setValue(new JsonWrapper(entry.getValue(), match)))
-        );
-        return models;
+    @NotNull
+    public final LinkedHashMap<String, ? extends ComponentExporter> getExportedItems() {
+        if (this.itemModels == null) {
+            this.itemModels = ComponentUtils.getComponentModels(this.slingModelFilter,
+                this.modelFactory,
+                this.getChildren(),
+                this.request,
+                ComponentExporter.class);
+            this.itemModels.entrySet().forEach(entry ->
+                getItems().stream()
+                    .filter(Objects::nonNull)
+                    .filter(item -> StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), entry.getKey()))
+                    .findFirst()
+                    .ifPresent(match -> entry.setValue(new JsonWrapper(entry.getValue(), match)))
+            );
+        }
+        return this.itemModels;
     }
 
     /**

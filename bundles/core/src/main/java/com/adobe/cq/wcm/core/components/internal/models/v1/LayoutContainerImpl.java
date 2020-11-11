@@ -15,16 +15,17 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
@@ -41,15 +42,14 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/container/v1/container";
 
     /**
-     * The current resource.
-     */
-    @ScriptVariable
-    private Resource resource;
-
-    /**
      * The layout type.
      */
     private LayoutType layout;
+
+    /**
+     * Map of the child items to be exported wherein the key is the child name, and the value is the child model.
+     */
+    private LinkedHashMap<String, ComponentExporter> itemModels;
 
     /**
      * Initialize the model.
@@ -73,6 +73,19 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
         return getChildren().stream()
             .map(res -> new ResourceListItemImpl(res, getId(), component))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    @NotNull
+    public final LinkedHashMap<String, ? extends ComponentExporter> getExportedItems() {
+        if (this.itemModels == null) {
+            this.itemModels = ComponentUtils.getComponentModels(this.slingModelFilter,
+                this.modelFactory,
+                this.getChildren(),
+                this.request,
+                ComponentExporter.class);
+        }
+        return this.itemModels;
     }
 
     @Override

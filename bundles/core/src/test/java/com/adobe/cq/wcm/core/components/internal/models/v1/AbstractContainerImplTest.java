@@ -16,8 +16,11 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
@@ -59,10 +62,17 @@ public class AbstractContainerImplTest {
 
 
     private static class ContainerImpl extends AbstractContainerImpl {
+
         @Override
         @NotNull
         protected List<ListItem> readItems() {
             return new ArrayList<>();
+        }
+
+        @Override
+        @NotNull
+        public LinkedHashMap<String, ? extends ComponentExporter> getExportedItems() {
+            return new LinkedHashMap<>();
         }
 
         @Override

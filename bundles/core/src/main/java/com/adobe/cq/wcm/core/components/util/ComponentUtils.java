@@ -29,6 +29,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
@@ -187,27 +188,41 @@ public final class ComponentUtils {
      * Gets the effective {@link TemplatedResource} for the specified resource.
      *
      * @param resource The resource for which to get the TemplateResource.
+     * @param request The current request. This is needed if the resource is potentially part of the template structure.
      * @return The TemplatedResource, or the current resource if it cannot be adapted to a TemplatedResource.
      */
     @NotNull
-    public static Resource getEffectiveResource(@NotNull final Resource resource) {
+    public static Resource getEffectiveResource(@NotNull final Resource resource, @Nullable final SlingHttpServletRequest request) {
         if (resource instanceof TemplatedResource) {
             return resource;
         }
-        return Optional.ofNullable((Resource) resource.adaptTo(TemplatedResource.class)).orElse(resource);
+
+        Resource res = resource;
+        while (res instanceof ResourceWrapper) {
+            res = ((ResourceWrapper) res).getResource();
+            if (res instanceof TemplatedResource) {
+                return resource;
+            }
+        }
+
+        return Optional.ofNullable((Resource) resource.adaptTo(TemplatedResource.class))
+            .orElseGet(() -> Optional.ofNullable(request)
+                .map(r -> (Resource) r.adaptTo(TemplatedResource.class))
+                .orElse(resource));
     }
 
     /**
      * Gets a list of all child resources that are components.
      *
      * @param resource The resource for which to get the children.
+     * @param request The current request. This is needed if the resource is potentially part of the template structure.
      * @return The list of child resources that are components.
      */
     @NotNull
-    public static List<Resource> getChildComponents(@NotNull final Resource resource) {
+    public static List<Resource> getChildComponents(@NotNull final Resource resource, @Nullable final SlingHttpServletRequest request) {
         return Optional.ofNullable(resource.getResourceResolver().adaptTo(ComponentManager.class))
             .map(componentManager ->
-                StreamSupport.stream(ComponentUtils.getEffectiveResource(resource).getChildren().spliterator(), false)
+                StreamSupport.stream(ComponentUtils.getEffectiveResource(resource, request).getChildren().spliterator(), false)
                     .filter(res -> Objects.nonNull(componentManager.getComponentOfResource(res))))
             .orElseGet(Stream::empty)
             .collect(Collectors.toList());
@@ -228,7 +243,7 @@ public final class ComponentUtils {
         return ComponentUtils.getComponentModels(
             slingModelFilter,
             modelFactory,
-            ComponentUtils.getChildComponents(request.getResource()),
+            ComponentUtils.getChildComponents(request.getResource(), request),
             request,
             modelClass);
     }
