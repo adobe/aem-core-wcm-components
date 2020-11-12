@@ -50,7 +50,7 @@ import com.day.cq.wcm.api.designer.Style;
     name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
     extensions = ExporterConstants.SLING_MODEL_EXTENSION
 )
-public class AccordionImpl extends PanelContainerImpl implements Accordion {
+public class AccordionImpl extends AbstractPanelContainerImpl implements Accordion {
 
     /**
      * Resource type.

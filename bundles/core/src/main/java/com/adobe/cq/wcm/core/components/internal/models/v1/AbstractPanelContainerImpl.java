@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 /**
  * Abstract panel container model.
  */
-public abstract class PanelContainerImpl extends AbstractContainerImpl implements Container {
+public abstract class AbstractPanelContainerImpl extends AbstractContainerImpl implements Container {
 
     @Override
     @NotNull

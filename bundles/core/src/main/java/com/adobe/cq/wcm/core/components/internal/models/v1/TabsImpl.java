@@ -47,7 +47,7 @@ import com.day.cq.wcm.api.components.ComponentManager;
        resourceType = TabsImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TabsImpl extends PanelContainerImpl implements Tabs {
+public class TabsImpl extends AbstractPanelContainerImpl implements Tabs {
 
     /**
      * The resource type.
