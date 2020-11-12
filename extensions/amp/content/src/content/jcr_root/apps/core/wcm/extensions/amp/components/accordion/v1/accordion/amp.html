@@ -14,18 +14,18 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <amp-accordion data-sly-use.accordion="com.adobe.cq.wcm.core.components.models.Accordion"
-               data-sly-test="${accordion.items && accordion.items.size > 0}"
+               data-sly-test="${accordion.children && accordion.children.size > 0}"
                class="cmp-accordion"
                expand-single-section="${accordion.singleExpansion}">
-    <section data-sly-repeat.item="${accordion.items}"
+    <section data-sly-repeat.item="${accordion.children}"
              class="cmp-accordion__item"
-             expanded="${item.name in accordion.expandedItems}">
+             expanded="${item.resource.name in accordion.expandedItems}">
         <h3 data-sly-element="${accordion.headingElement @ context='elementName'}"
             class="cmp-accordion__header">
             <span class="cmp-accordion__title">${item.title}</span>
             <span class="cmp-accordion__icon"></span>
         </h3>
-        <div data-sly-resource="${item.name @ decorationTagName='div'}"
+        <div data-sly-resource="${item.resource @ decorationTagName='div'}"
              class="cmp-accordion__panel"
              role="region"></div>
     </section>

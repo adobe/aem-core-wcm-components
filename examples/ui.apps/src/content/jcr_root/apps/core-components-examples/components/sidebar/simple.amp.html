@@ -18,7 +18,7 @@
     <button on="tap:${container.id @ context = 'attribute'}.toggle" class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}">
         <i class="cmp-examples-show-menu--mid-line"></i>
     </button>
-    <amp-sidebar data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+    <amp-sidebar
         layout="nodisplay"
         id="${container.id}"
         class="cmp-container${wcmmode.edit ? ' {0}': '' @ format=[allowed.cssClass]}"
@@ -28,7 +28,7 @@
              data-sly-use.allowedTemplate="allowedcomponents.html"
              data-sly-call="${allowedTemplate.allowedcomponents @ title=allowed.title, components=allowed.components}"></sly>
         <sly data-sly-test="${!isAllowedApplicable}"
-             data-sly-repeat="${container.items}" data-sly-resource="${item.path @ decoration=true}"></sly>
+             data-sly-repeat="${container.children}" data-sly-resource="${item.resource @ decoration=true}"></sly>
         <sly data-sly-test="${!isAllowedApplicable && !wcmmode.disabled}"
              data-sly-resource="${resource.path @ resourceType='core/wcm/components/container/v1/container/new', appendPath='/*', decorationTagName='div', cssClassName='new section'}" />
     </amp-sidebar>

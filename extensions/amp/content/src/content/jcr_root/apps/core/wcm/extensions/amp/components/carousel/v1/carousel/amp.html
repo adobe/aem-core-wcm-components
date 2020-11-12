@@ -14,8 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <amp-carousel data-sly-use.carousel="com.adobe.cq.wcm.core.components.models.Carousel"
-              data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-              data-sly-test="${carousel.items && carousel.items.size > 0}"
+              data-sly-test="${carousel.children && carousel.children.size > 0}"
               class="cmp-carousel"
               role="group"
               aria-label="${carousel.accessibilityLabel}"
@@ -26,9 +25,9 @@
               layout="responsive"
               width="350"
               height="200">
-    <div data-sly-repeat.item="${carousel.items}"
-         data-sly-resource="${item.name @ decorationTagName='div', selectors='amp'}"
+    <div data-sly-repeat.item="${carousel.children}"
+         data-sly-resource="${item.resource @ decorationTagName='div', selectors='amp'}"
          class="cmp-carousel__item"
          role="tabpanel"
-         aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"></div>
+         aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.children.size], i18n}"></div>
 </amp-carousel>
