@@ -22,11 +22,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -78,12 +76,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     /**
      * The list of child items.
      */
-    protected List<ListItem> items;
-
-    /**
-     * The list of child resources that are components.
-     */
-    protected List<Resource> childComponents;
+    private List<ListItem> items;
 
     /**
      * The name of the child resources in the order they are to be exported.
@@ -94,19 +87,6 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
      * The background style string for this container component.
      */
     private String backgroundStyle;
-
-    /**
-     * Return (and cache) the list of children resources that are components
-     *
-     * @return List of all children resources that are components.
-     */
-    @NotNull
-    protected List<Resource> getChildren() {
-        if (childComponents == null) {
-            this.childComponents = ComponentUtils.getChildComponents(this.resource, this.request);
-        }
-        return childComponents;
-    }
 
     /**
      * Get the list of items in the container.

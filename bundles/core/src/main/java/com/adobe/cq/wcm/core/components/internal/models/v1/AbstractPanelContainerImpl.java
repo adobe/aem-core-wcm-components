@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -42,12 +43,30 @@ public abstract class AbstractPanelContainerImpl extends AbstractContainerImpl i
      */
     protected LinkedHashMap<String, ComponentExporter> itemModels;
 
+    /**
+     * List of child panels in this panel container.
+     */
+    private List<Resource> panelItems;
+
     @Override
     @NotNull
     protected List<PanelContainerListItemImpl> readItems() {
         return getChildren().stream()
             .map(res -> new PanelContainerListItemImpl(res, getId(), component, getCurrentPage()))
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Return (and cache) the list of children resources that are components
+     *
+     * @return List of all children resources that are components.
+     */
+    @NotNull
+    protected List<Resource> getChildren() {
+        if (this.panelItems == null) {
+            this.panelItems = ComponentUtils.getChildComponents(this.resource, this.request);
+        }
+        return this.panelItems;
     }
 
     @Override

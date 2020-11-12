@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,6 +53,11 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     private LinkedHashMap<String, ComponentExporter> itemModels;
 
     /**
+     * List of items in this container.
+     */
+    private List<Resource> items;
+
+    /**
      * Initialize the model.
      */
     @PostConstruct
@@ -73,6 +79,19 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
         return getChildren().stream()
             .map(res -> new ResourceListItemImpl(res, getId(), component))
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Return (and cache) the list of children resources that are components
+     *
+     * @return List of all children resources that are components.
+     */
+    @NotNull
+    protected List<Resource> getChildren() {
+        if (this.items == null) {
+            this.items = ComponentUtils.getChildComponents(this.resource, this.request);
+        }
+        return this.items;
     }
 
     @Override
