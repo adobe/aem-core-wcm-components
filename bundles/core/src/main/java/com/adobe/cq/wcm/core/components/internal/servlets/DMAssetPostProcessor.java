@@ -22,9 +22,7 @@ import com.day.cq.dam.api.s7dam.utils.PublishUtils;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.ModifiableValueMap;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.resource.*;
 import org.apache.sling.servlets.post.Modification;
 import org.apache.sling.servlets.post.ModificationType;
 import org.apache.sling.servlets.post.SlingPostProcessor;
@@ -37,7 +35,7 @@ import java.util.List;
 
 /**
  * This post processor monitors changes made to component's {@link DownloadResource#PN_REFERENCE} property. In case
- * modification of type {@link ModificationType#CREATE} or {@link ModificationType#MODIFY} is detected the post
+ * modification of type {@link ModificationType#CREATE}, {@link ModificationType#MODIFY} or {@link ModificationType#DELETE} is detected the post
  * processor updates {@link Image#PN_IMAGE_SERVER_URL} property for future use on the publish node.
  */
 @Component(
@@ -55,43 +53,60 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
     public void process(SlingHttpServletRequest request, List<Modification> list) throws Exception {
         Modification lastFileReferenceModification = getLastFileReferenceModification(request, list);
         if (lastFileReferenceModification != null) {
-            if ((ModificationType.MODIFY == lastFileReferenceModification.getType()) || (ModificationType.CREATE == lastFileReferenceModification.getType())) {
-                ValueMap valueMap = request.getResource().getValueMap();
-                String fileReference = valueMap.get(DownloadResource.PN_REFERENCE, String.class);
-                if (fileReference != null) {
-                    Resource assetResource = request.getResourceResolver().getResource(fileReference);
-                    if (assetResource != null) {
-                        Asset asset = assetResource.adaptTo(Asset.class);
-                        if (asset != null) {
-                            if(isDmAsset(asset)) {
-                                String[] productionAssetUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
-                                String productionServerUrl = productionAssetUrls[0] + IMAGE_SERVER_PATH;
-                                if (!productionServerUrl.equals(valueMap.get(Image.PN_IMAGE_SERVER_URL, String.class))) {
-                                    ModifiableValueMap map = request.getResource().adaptTo(ModifiableValueMap.class);
-                                    if (map != null) {
-                                        map.put(Image.PN_IMAGE_SERVER_URL, productionServerUrl);
-                                        request.getResource().getResourceResolver().commit();
-                                    }
+            switch (lastFileReferenceModification.getType()) {
+                case CREATE:
+                case MODIFY:
+                    ValueMap valueMap = request.getResource().getValueMap();
+                    String fileReference = valueMap.get(DownloadResource.PN_REFERENCE, String.class);
+                    if (fileReference != null) {
+                        Resource assetResource = request.getResourceResolver().getResource(fileReference);
+                        if (assetResource != null) {
+                            Asset asset = assetResource.adaptTo(Asset.class);
+                            if (asset != null) {
+                                if(isDmAsset(asset)) {
+                                    String[] productionAssetUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
+                                    String imageServerUrl = productionAssetUrls[0] + IMAGE_SERVER_PATH;
+                                    checkSetImageServerUrl(request.getResource(), imageServerUrl, list);
+                                } else {
+                                    checkSetImageServerUrl(request.getResource(), null, list);
                                 }
                             } else {
-                                if (valueMap.containsKey(Image.PN_IMAGE_SERVER_URL)) {
-                                    ModifiableValueMap map = request.getResource().adaptTo(ModifiableValueMap.class);
-                                    if (map != null) {
-                                        map.remove(Image.PN_IMAGE_SERVER_URL);
-                                        request.getResource().getResourceResolver().commit();
-                                    }
-                                }
+                                LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, request.getResource().getPath());
                             }
                         } else {
-                            LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, request.getResource().getPath());
+                            LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
                         }
                     } else {
-                        LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
+                        LOGGER.warn("File reference was null despite '{}' modification type.", lastFileReferenceModification.getType());
                     }
-                } else {
-                    LOGGER.warn("File reference was null despite '{}' modification type.", lastFileReferenceModification.getType());
+                    break;
+                case DELETE:
+                    checkSetImageServerUrl(request.getResource(), null, list);
+                    break;
+                default:
+                    //noop
+            }
+        }
+    }
+
+    private static void checkSetImageServerUrl(Resource resource, String imageServerUrl, List<Modification> list) {
+        ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
+        if (map != null) {
+            ValueMap valueMap = resource.getValueMap();
+            if (imageServerUrl != null) {
+                String oldImageServerUrl = valueMap.get(Image.PN_IMAGE_SERVER_URL, String.class);
+                if (!imageServerUrl.equals(oldImageServerUrl)) {
+                    list.add(new Modification(oldImageServerUrl != null ? ModificationType.MODIFY : ModificationType.CREATE, getModificationSource(resource.getPath()), null));
+                    map.put(Image.PN_IMAGE_SERVER_URL, imageServerUrl);
+                }
+            } else {
+                if (valueMap.containsKey(Image.PN_IMAGE_SERVER_URL)) {
+                    list.add(new Modification(ModificationType.DELETE, getModificationSource(resource.getPath()), null));
+                    map.remove(Image.PN_IMAGE_SERVER_URL);
                 }
             }
+        } else {
+            LOGGER.warn("Cannot adapt resource '{}' to ModifiableValueMap.", resource);
         }
     }
 
@@ -110,5 +125,9 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
             }
         }
         return lastFileReferenceModification;
+    }
+
+    private static String getModificationSource(String path) {
+        return path + "/" + Image.PN_IMAGE_SERVER_URL;
     }
 }

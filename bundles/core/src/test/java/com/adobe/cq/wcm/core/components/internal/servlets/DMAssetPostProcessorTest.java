@@ -15,6 +15,8 @@ import org.apache.sling.servlets.post.ModificationType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,9 +33,6 @@ public class DMAssetPostProcessorTest {
     private static final String PAGE = CONTENT_ROOT + "/test";
     private static final String CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET = PAGE + "/jcr:content/root/image31";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET = PAGE + "/jcr:content/root/image32";
-
-    private static final EnumSet<ModificationType> SUPPORTED_MODIFICATION_TYPES = EnumSet.of(ModificationType.CREATE, ModificationType.MODIFY);
-    private static final Set<ModificationType> NOT_SUPPORTED_MODIFICATION_TYPES = EnumSet.complementOf(SUPPORTED_MODIFICATION_TYPES);
 
     private static final String EXPECTED_IMAGE_SERVER_URL = "https://s7d9.scene7.com/is/image/";
 
@@ -55,122 +54,139 @@ public class DMAssetPostProcessorTest {
     The case when component with non DM asset gets assigned a DM asset.
     Post processor should write image server url property
      */
-    @Test
-    public void fromNonDMtoDMAsset() throws Exception {
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void fromNonDMtoDMAsset(ModificationType modificationType) throws Exception {
         String existingComponent = CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET;
         prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET));
-
-        for (ModificationType modificationType : SUPPORTED_MODIFICATION_TYPES) {
-            servlet.process(context.request(), Collections.singletonList(new Modification(
-                modificationType,
-                getFileReferencePath(existingComponent),
-                null
-            )));
-            Resource resource = context.currentResource();
-            assertNotNull(resource);
-            assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        }
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNewModification(existingComponent, modifications, ModificationType.CREATE);
     }
 
     /*
     The case when component with DM asset gets assigned a non DM asset.
     Post processor should clear image server url property
      */
-    @Test
-    public void fromDMtoNonDMAsset() throws Exception {
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void fromDMtoNonDMAsset(ModificationType modificationType) throws Exception {
         String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
         prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNewModification(existingComponent, modifications, ModificationType.DELETE);
+    }
 
-        for (ModificationType modificationType : SUPPORTED_MODIFICATION_TYPES) {
-            servlet.process(context.request(), Collections.singletonList(new Modification(
-                modificationType,
-                getFileReferencePath(existingComponent),
-                null
-            )));
-            Resource resource = context.currentResource();
-            assertNotNull(resource);
-            assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        }
+    @Test
+    public void fromDMtoEmptyAsset() throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
+        prepareResource(existingComponent, null);
+
+        List<Modification> modifications = prepareModifications(ModificationType.DELETE, existingComponent);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNewModification(existingComponent, modifications, ModificationType.DELETE);
     }
 
     /*
     The case when modification type does not match CREATE or MODIFY.
     In the case post processor should not modify IS URL
      */
-    @Test
-    public void fromNonDMtoDMAssetNotSupportedModification() throws Exception {
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY", "DELETE"},
+        mode = EnumSource.Mode.EXCLUDE
+    )
+    public void fromNonDMtoDMAssetNotSupportedModification(ModificationType modificationType) throws Exception {
         String existingComponent = CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET;
         prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET));
-
-        for (ModificationType modificationType : NOT_SUPPORTED_MODIFICATION_TYPES) {
-            servlet.process(context.request(), Collections.singletonList(new Modification(
-                modificationType,
-                getFileReferencePath(existingComponent),
-                null
-            )));
-            Resource resource = context.currentResource();
-            assertNotNull(resource);
-            assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        }
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(1, modifications.size());
     }
 
     /*
     The case when modification type does not match CREATE or MODIFY.
     In the case post processor should not modify IS URL
      */
-    @Test
-    public void fromDMtoNonDMAssetNotSupportedModification() throws Exception {
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY", "DELETE"},
+        mode = EnumSource.Mode.EXCLUDE
+    )
+    public void fromDMtoNonDMAssetNotSupportedModification(ModificationType modificationType) throws Exception {
         String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
         prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
-
-        for (ModificationType modificationType : NOT_SUPPORTED_MODIFICATION_TYPES) {
-            servlet.process(context.request(), Collections.singletonList(new Modification(
-                modificationType,
-                getFileReferencePath(existingComponent),
-                null
-            )));
-            Resource resource = context.currentResource();
-            assertNotNull(resource);
-            assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        }
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(1, modifications.size());
     }
 
     /*
     The case when modification path does not match to request's resource path.
     In the case post processor should not modify IS URL
      */
-    @Test
-    public void fromNonDMtoDMAssetUnexpectedModification() throws Exception {
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void fromNonDMtoDMAssetUnexpectedModification(ModificationType modificationType) throws Exception {
         prepareResource(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET));
-        for (ModificationType modificationType : SUPPORTED_MODIFICATION_TYPES) {
-            servlet.process(context.request(), Collections.singletonList(new Modification(
-                modificationType,
-                "//content/test/jcr:content/root/unexpected_path/" + DownloadResource.PN_REFERENCE,
-                null
-            )));
-            Resource resource = context.currentResource();
-            assertNotNull(resource);
-            assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        }
+        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/unexpected_path");
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(1, modifications.size());
     }
 
     /*
     The case when modification path does not match to request's resource path.
     In the case post processor should not modify IS URL
      */
-    @Test
-    public void fromDMtoNonDMAssetUnexpectedModification() throws Exception {
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void fromDMtoNonDMAssetUnexpectedModification(ModificationType modificationType) throws Exception {
         prepareResource(CORE_IMAGE__DM_POLICY_ON__DM_ASSET, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
-        for (ModificationType modificationType : SUPPORTED_MODIFICATION_TYPES) {
-            servlet.process(context.request(), Collections.singletonList(new Modification(
-                modificationType,
-                "//content/test/jcr:content/root/unexpected_path/" + DownloadResource.PN_REFERENCE,
-                null
-            )));
-            Resource resource = context.currentResource();
-            assertNotNull(resource);
-            assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        }
+        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/unexpected_path");
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(1, modifications.size());
+    }
+
+    private void assertNewModification(String component, List<Modification> modifications, ModificationType modificationType) {
+        assertEquals(2, modifications.size());
+        assertEquals(component + "/" + Image.PN_IMAGE_SERVER_URL, modifications.get(modifications.size() - 1).getSource());
+        assertNull(modifications.get(modifications.size() - 1).getDestination());
+        assertEquals(modificationType, modifications.get(modifications.size() - 1).getType());
     }
 
     /**
@@ -181,10 +197,22 @@ public class DMAssetPostProcessorTest {
     private void prepareResource(String existingComponent, String newAssetPath) {
         Resource resource = context.currentResource(existingComponent);
         assertNotNull(resource);
-        ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
-        if (map != null) {
-            map.put(DownloadResource.PN_REFERENCE, newAssetPath);
+        if (newAssetPath != null) {
+            ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
+            if (map != null) {
+                map.put(DownloadResource.PN_REFERENCE, newAssetPath);
+            }
         }
+    }
+
+    private List<Modification> prepareModifications(ModificationType modificationType, String component) {
+        List<Modification> modifications = new ArrayList<>();
+        modifications.add(new Modification(
+            modificationType,
+            component + "/" + DownloadResource.PN_REFERENCE,
+            null
+        ));
+        return modifications;
     }
 
     /**
