@@ -25,7 +25,6 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.servlets.post.Modification;
 import org.apache.sling.servlets.post.ModificationType;
 import org.apache.sling.servlets.post.SlingPostProcessor;
@@ -44,7 +43,7 @@ import java.util.List;
 @Component(
     service = SlingPostProcessor.class
 )
-public final class DMAssetPostProcessor extends SlingAllMethodsServlet implements SlingPostProcessor {
+public final class DMAssetPostProcessor implements SlingPostProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContainerServlet.class);
 
     private static final String IMAGE_SERVER_PATH = "/is/image/";
