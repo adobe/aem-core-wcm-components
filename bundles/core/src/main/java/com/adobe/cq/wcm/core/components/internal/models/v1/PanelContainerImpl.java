@@ -39,9 +39,9 @@ public abstract class PanelContainerImpl extends AbstractContainerImpl implement
 
     @Override
     @NotNull
-    protected List<PanelContainerItemImpl> readItems() {
+    protected List<PanelContainerListItemImpl> readItems() {
         return getChildren().stream()
-            .map(res -> new PanelContainerItemImpl(res, getId(), component, getCurrentPage()))
+            .map(res -> new PanelContainerListItemImpl(res, getId(), component, getCurrentPage()))
             .collect(Collectors.toList());
     }
 
@@ -102,7 +102,7 @@ public abstract class PanelContainerImpl extends AbstractContainerImpl implement
          *
          * @return the container item title
          */
-        @JsonProperty(PanelContainerItemImpl.PN_PANEL_TITLE)
+        @JsonProperty(PanelContainerListItemImpl.PN_PANEL_TITLE)
         @JsonInclude()
         public String getPanelTitle() {
             return this.panelTitle;
