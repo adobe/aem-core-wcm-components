@@ -28,6 +28,7 @@ import com.day.cq.wcm.api.components.Component;
 /**
  * Resource-backed list item implementation.
  */
+@Deprecated
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
     /**
@@ -56,6 +57,7 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
      * @param resource The resource.
      * @param parentId The ID of the containing component.
      */
+    @Deprecated
     public ResourceListItemImpl(@NotNull final Resource resource, final String parentId, final Component component) {
         super(parentId, resource, component);
         ValueMap valueMap = resource.getValueMap();
