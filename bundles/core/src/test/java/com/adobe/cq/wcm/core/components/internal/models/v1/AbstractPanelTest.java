@@ -16,8 +16,9 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.wcm.core.components.Utils;
-import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.PanelContainer;
+import com.adobe.cq.wcm.core.components.models.PanelContainerItem;
 
 import java.util.List;
 
@@ -35,10 +36,28 @@ public class AbstractPanelTest {
      * @param testBase The test base.
      * @param containerName The container name.
      */
-    protected void verifyPanelDataLayer(Container container, String testBase, String containerName) {
+    protected void verifyPanelDataLayer(PanelContainer container, String testBase, String containerName) {
         Utils.testJSONDataLayer(container.getData(), Utils.getTestDataModelJSONPath(testBase, containerName));
-        for (ListItem item : container.getItems()) {
-            Utils.testJSONDataLayer(item.getData(), Utils.getTestDataModelJSONPath(testBase, containerName + "-" + item.getName()));
+        for (PanelContainerItem item : container.getChildren()) {
+            Utils.testJSONDataLayer(item.getData(), Utils.getTestDataModelJSONPath(testBase, containerName + "-" + item.getResource().getName()));
+        }
+    }
+
+    /**
+     * Verify the panel container items items for the specified container.
+     *
+     * @param expectedItems The expected items.
+     * @param items The actual items.
+     */
+    protected void verifyContainerItems(Object[][] expectedItems, List<? extends PanelContainerItem> items) {
+        assertEquals(expectedItems.length, items.size(), "The tabs contains a different number of items than expected.");
+        int index = 0;
+        for (PanelContainerItem item : items) {
+            assertEquals(expectedItems[index][0], item.getResource().getName(), "The panel item's name is not what was expected.");
+            assertEquals(expectedItems[index][1], item.getTitle(), "The panel item's title is not what was expected: " + item.getTitle());
+            assertEquals(expectedItems[index][2], item.getId(), "The panel item's id is not what was expected: " + item.getId());
+            assertEquals(expectedItems[index][3], item.getResource().getPath(), "The panel item's path is not what was expected: " + item.getResource().getPath());
+            index++;
         }
     }
 

@@ -72,6 +72,7 @@ class CarouselImplTest extends AbstractPanelTest {
                 { "item_3", "Carousel Panel 3", "carousel-c39ba25916-item-aeaad4f462", CAROUSEL_1 + "/item_3" },
         };
         verifyContainerListItems(expectedItems, carousel.getItems());
+        verifyContainerItems(expectedItems, carousel.getChildren());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
         verifyPanelDataLayer(carousel, TEST_BASE, "carousel1");
     }

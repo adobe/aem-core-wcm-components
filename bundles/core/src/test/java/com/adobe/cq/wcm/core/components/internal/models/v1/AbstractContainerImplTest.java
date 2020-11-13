@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -25,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Container;
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -56,7 +56,7 @@ public class AbstractContainerImplTest {
     @Test
     public void testEmptyContainer() {
         Container container = new ContainerImpl();
-        List<ListItem> items = container.getItems();
+        List<? extends ContainerItem> items = container.getChildren();
         assertEquals(0, items.size());
     }
 
@@ -67,6 +67,12 @@ public class AbstractContainerImplTest {
         @NotNull
         @Deprecated
         protected final List<ListItem> readItems() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        @NotNull
+        public List<? extends ContainerItem> getChildren() {
             return new ArrayList<>();
         }
 

@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -134,7 +133,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
 
     @Nullable
     @Override
-    public String getBackgroundStyle() {
+    public final String getBackgroundStyle() {
         if (this.backgroundStyle == null) {
             StringBuilder styleBuilder = new StringBuilder();
             getBackgroundImage().ifPresent(image -> styleBuilder.append("background-image:url(").append(image).append(");background-size:cover;background-repeat:no-repeat;"));
@@ -150,7 +149,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
 
     @NotNull
     @Override
-    public String getExportedType() {
+    public final String getExportedType() {
         return resource.getResourceType();
     }
 
@@ -160,14 +159,9 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
 
     @NotNull
     @Override
-    public String[] getExportedItemsOrder() {
+    public final String[] getExportedItemsOrder() {
         if (exportedItemsOrder == null) {
-            Map<String, ? extends ComponentExporter> models = getExportedItems();
-            if (!models.isEmpty()) {
-                exportedItemsOrder = models.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
-            } else {
-                exportedItemsOrder = ArrayUtils.EMPTY_STRING_ARRAY;
-            }
+            this.exportedItemsOrder = this.getExportedItems().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
         }
         return Arrays.copyOf(exportedItemsOrder, exportedItemsOrder.length);
     }

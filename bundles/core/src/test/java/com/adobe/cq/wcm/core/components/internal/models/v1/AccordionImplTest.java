@@ -65,6 +65,7 @@ class AccordionImplTest extends AbstractPanelTest {
                 {"item_2", "Accordion Panel 2", "accordion-dbb1cb7797-item-2761bc217f", ACCORDION_1 + "/item_2"},
         };
         verifyContainerListItems(expectedItems, accordion.getItems());
+        verifyContainerItems(expectedItems, accordion.getChildren());
         assertArrayEquals(new String[]{"item_2"}, accordion.getExpandedItems());
         assertFalse(accordion.isSingleExpansion());
         Utils.testJSONExport(accordion, Utils.getTestExporterJSONPath(TEST_BASE, "accordion1"));

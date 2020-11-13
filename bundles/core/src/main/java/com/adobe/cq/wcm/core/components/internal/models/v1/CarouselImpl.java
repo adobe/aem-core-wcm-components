@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -33,8 +32,6 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Carousel;
-import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -129,20 +126,11 @@ public class CarouselImpl extends AbstractPanelContainerImpl implements Carousel
         return accessibilityLabel;
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
     @Override
     public String[] getDataLayerShownItems() {
-        String[] shownItems = new String[0];
-        List<ListItem> items = getItems();
-        if (!items.isEmpty()) {
-            ComponentData componentData = items.get(0).getData();
-            if (componentData != null) {
-                shownItems = new String[] {componentData.getId()};
-            }
-        }
-        return shownItems;
+        return this.getChildren().stream().findFirst()
+            .map(PanelContainerItemImpl::getId)
+            .map(id -> new String[] {id})
+            .orElse(null);
     }
 }

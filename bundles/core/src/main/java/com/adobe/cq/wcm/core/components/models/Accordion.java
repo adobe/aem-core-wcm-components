@@ -23,7 +23,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
 @ConsumerType
-public interface Accordion extends Container {
+public interface Accordion extends PanelContainer {
 
     /**
      * Name of the configuration policy property that stores the default value for the accordion heading's HTML element.

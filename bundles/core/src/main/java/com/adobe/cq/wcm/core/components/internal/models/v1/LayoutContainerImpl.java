@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +55,7 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     /**
      * List of items in this container.
      */
-    private List<Resource> items;
+    private List<ContainerItem> items;
 
     /**
      * Initialize the model.
@@ -78,19 +78,17 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     @Deprecated
     protected final List<ResourceListItemImpl> readItems() {
         return getChildren().stream()
-            .map(res -> new ResourceListItemImpl(res, getId(), component))
+            .map(res -> new ResourceListItemImpl(res.getResource(), getId(), component))
             .collect(Collectors.toList());
     }
 
-    /**
-     * Return (and cache) the list of children resources that are components
-     *
-     * @return List of all children resources that are components.
-     */
     @NotNull
-    protected List<Resource> getChildren() {
+    @Override
+    public final List<ContainerItem> getChildren() {
         if (this.items == null) {
-            this.items = ComponentUtils.getChildComponents(this.resource, this.request);
+            this.items = ComponentUtils.getChildComponents(this.resource, this.request).stream()
+                .map(ContainerItemImpl::new)
+                .collect(Collectors.toList());
         }
         return this.items;
     }
@@ -101,7 +99,7 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
         if (this.itemModels == null) {
             this.itemModels = ComponentUtils.getComponentModels(this.slingModelFilter,
                 this.modelFactory,
-                this.getChildren(),
+                this.getChildren().stream().map(ContainerItem::getResource).collect(Collectors.toList()),
                 this.request,
                 ComponentExporter.class);
         }

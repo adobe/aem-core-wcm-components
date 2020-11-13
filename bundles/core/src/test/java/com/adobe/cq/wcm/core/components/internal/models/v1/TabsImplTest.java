@@ -75,6 +75,7 @@ class TabsImplTest extends AbstractPanelTest {
             {"item_2", "Tab Panel 2", "tabs-3dc934841b-item-7fea3384a5", TABS_1 + "/item_2"},
         };
         verifyContainerListItems(expectedItems, tabs.getItems());
+        verifyContainerItems(expectedItems, tabs.getChildren());
         assertEquals("item_2", tabs.getActiveItem());
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs1"));
         verifyPanelDataLayer(tabs, TEST_BASE, "tabs1");
@@ -95,6 +96,7 @@ class TabsImplTest extends AbstractPanelTest {
             {"item_2", "Tab Panel 2", "tabs-73c57b3627-item-e7df981a47", TABS_3 + "/item_2"},
         };
         verifyContainerListItems(expectedItems, tabs.getItems());
+        verifyContainerItems(expectedItems, tabs.getChildren());
         assertEquals("item_1", tabs.getActiveItem());
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs3"));
         verifyPanelDataLayer(tabs, TEST_BASE, "tabs3");
