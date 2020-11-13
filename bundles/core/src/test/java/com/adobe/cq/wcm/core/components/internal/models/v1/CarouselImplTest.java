@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.apache.sling.api.scripting.SlingBindings;
@@ -30,19 +29,18 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Carousel;
-import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(AemContextExtension.class)
-class CarouselImplTest {
+class CarouselImplTest extends AbstractPanelTest {
 
     private static final String TEST_BASE = "/carousel";
     private static final String CONTENT_ROOT = "/content";
@@ -69,14 +67,13 @@ class CarouselImplTest {
     void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
         Object[][] expectedItems = {
-                { "item_1", "Teaser 1", "cq:Component/item",
-                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1" },
-                { "item_2", "Teaser 2", "cq:Component/item",
-                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2" },
-                { "item_3", "Carousel Panel 3", "cq:Component/item",
-                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" }, };
-        verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
+                { "item_1", "Teaser 1", "carousel-c39ba25916-item-6204f971ea", CAROUSEL_1 + "/item_1" },
+                { "item_2", "Teaser 2", "carousel-c39ba25916-item-7d7da28085", CAROUSEL_1 + "/item_2" },
+                { "item_3", "Carousel Panel 3", "carousel-c39ba25916-item-aeaad4f462", CAROUSEL_1 + "/item_3" },
+        };
+        verifyContainerListItems(expectedItems, carousel.getItems());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
+        verifyPanelDataLayer(carousel, TEST_BASE, "carousel1");
     }
 
     @Test
@@ -97,24 +94,5 @@ class CarouselImplTest {
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return context.request().adaptTo(Carousel.class);
-    }
-
-    private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items, String carouselId) {
-        assertEquals(expectedItems.length, items.size(), "The carousel contains a different number of items than expected.");
-        int index = 0;
-        for (ListItem item : items) {
-            assertEquals(expectedItems[index][0], item.getName(), "The carousel item's name is not what was expected.");
-            assertEquals(expectedItems[index][1], item.getTitle(), "The carousel item's title is not what was expected: " + item.getTitle());
-            assertEquals(expectedItems[index][3], item.getPath(), "The carousel item's path is not what was expected: " + item.getPath());
-
-            if (item.getData() != null) {
-                assertNotEquals(item.getData().getJson(), "{}", "The carousel item's data layer string is empty");
-                assertEquals(expectedItems[index][1], item.getData().getTitle(), "The carousel item's data layer title is not what was expected: " + item.getData().getTitle());
-                assertEquals(expectedItems[index][2], item.getData().getType(), "The carousel item's data layer type is not what was expected: " + item.getData().getType());
-                assertEquals(ComponentUtils.generateId(carouselId + "-item", (String) expectedItems[index][3]),
-                        item.getData().getId(), "The carousel item's data layer id is not what was expected: " + item.getData().getId());
-            }
-            index++;
-        }
     }
 }
