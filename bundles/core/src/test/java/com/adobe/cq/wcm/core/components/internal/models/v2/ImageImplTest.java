@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import java.util.HashMap;
 import java.util.List;
 
+import com.day.cq.wcm.api.WCMMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,7 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static com.day.cq.wcm.api.WCMMode.REQUEST_ATTRIBUTE_NAME;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -269,6 +271,15 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         Image image = getImageUnderTest(IMAGE32_PATH);
         assertTrue(image.isDmImage());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE32_PATH));
+    }
+
+    @Test
+    void testDMImageOnAuthor() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        context.request().setAttribute(REQUEST_ATTRIBUTE_NAME, WCMMode.EDIT);
+        Image image = getImageUnderTest(IMAGE32_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE32_PATH + "-on-author"));
     }
 
     @Test

@@ -46,6 +46,7 @@ public class DMAssetPostProcessorTest {
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     private static final String PAGE = CONTENT_ROOT + "/test";
+    private static final String CORE_IMAGE__EMPTY = PAGE + "/jcr:content/root/image2";
     private static final String CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET = PAGE + "/jcr:content/root/image31";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET = PAGE + "/jcr:content/root/image32";
 
@@ -194,6 +195,51 @@ public class DMAssetPostProcessorTest {
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(1, modifications.size());
+    }
+
+    /*
+    The case when fileReference is broken and points to missing resource
+     */
+    @Test
+    public void corruptedFileReference() throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
+        prepareResource(existingComponent, "/content/dam/test/corrupted-asset.png");
+        List<Modification> modifications = prepareModifications(ModificationType.CREATE, existingComponent);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(1, modifications.size());
+    }
+
+    /*
+    The case when fileReference is broken and points to non-image resource
+     */
+    @Test
+    public void nonImageFileReference() throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
+        prepareResource(existingComponent, existingComponent);
+        List<Modification> modifications = prepareModifications(ModificationType.CREATE, existingComponent);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(1, modifications.size());
+    }
+
+    /*
+    Unlikely case when modifications report fileReferene setting but no fileReference is found in request
+     */
+    @Test
+    public void lostFileReferenceModification() throws Exception {
+        String existingComponent = CORE_IMAGE__EMPTY;
+        prepareResource(existingComponent, null);
+        List<Modification> modifications = prepareModifications(ModificationType.CREATE, existingComponent);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
         assertEquals(1, modifications.size());
     }
 
