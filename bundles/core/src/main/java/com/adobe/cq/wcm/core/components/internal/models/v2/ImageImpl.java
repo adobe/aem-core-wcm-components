@@ -212,27 +212,49 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
                 }
             } else {
+                srcUriTemplate = dmImageUrl;
+                src = dmImageUrl;
                 if (StringUtils.isNotBlank(smartCropRendition)) {
                     if(smartCropRendition.equals(SMART_CROP_AUTO)) {
-                        dmImageUrl += SRC_URI_TEMPLATE_WIDTH_VAR;
+                        srcUriTemplate += SRC_URI_TEMPLATE_WIDTH_VAR;
                     } else {
-                        dmImageUrl += "%3A" + smartCropRendition;
+                        srcUriTemplate += "%3A" + smartCropRendition;
+                        src += "%3A" + smartCropRendition;
                     }
                 }
                 if (smartSizes.length > 0 && StringUtils.isBlank(smartCropRendition)) {
-                    dmImageUrl += "?qlt=" + jpegQuality;
-                    dmImageUrl += "&wid=" + ((smartSizes.length == 1) ? smartSizes[0] : "%7B.width%7D");
+                    String qualityCommand = "?qlt=" + jpegQuality;
+                    srcUriTemplate += qualityCommand;
+                    src += qualityCommand;
+                    String widCommand;
+                    if (smartSizes.length == 1) {
+                        widCommand = "&wid=" + smartSizes[0];
+                        srcUriTemplate += widCommand;
+                        src += widCommand;
+                    } else {
+                        widCommand = "&wid=%7B.width%7D";
+                        srcUriTemplate += widCommand;
+                    }
                 }
+                String suffix = "";
                 if (lastModifiedDate > 0){
-                    dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "ts=" + lastModifiedDate;
+                    String timeStampCommand = (srcUriTemplate.contains("?") ? '&':'?') + "ts=" + lastModifiedDate;
+                    srcUriTemplate += timeStampCommand;
+                    src += timeStampCommand;
                 }
-                if (StringUtils.isNotBlank(this.imagePreset) && StringUtils.isBlank(smartCropRendition)){
-                    dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + "$" + this.imagePreset + "$";
+                if (StringUtils.isNotBlank(imagePreset) && StringUtils.isBlank(smartCropRendition)){
+                    String imagePresetCommand = (srcUriTemplate.contains("?") ? '&':'?') + "$" + imagePreset + "$";
+                    srcUriTemplate += imagePresetCommand;
+                    src += imagePresetCommand;
                 }
-                if (StringUtils.isNotBlank(this.imageModifiers)){
-                    dmImageUrl += (dmImageUrl.contains("?") ? '&':'?') + this.imageModifiers;
+                if (StringUtils.isNotBlank(imageModifiers)){
+                    String imageModifiersCommand = (srcUriTemplate.contains("?") ? '&':'?') + imageModifiers;
+                    srcUriTemplate += imageModifiersCommand;
+                    src += imageModifiersCommand;
                 }
-                src = dmImageUrl;
+                if (srcUriTemplate.equals(src)) {
+                    srcUriTemplate = null;
+                }
             }
             buildJson();
         }
