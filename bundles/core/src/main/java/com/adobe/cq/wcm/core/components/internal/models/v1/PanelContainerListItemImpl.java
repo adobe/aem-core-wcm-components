@@ -28,6 +28,7 @@ import com.day.cq.wcm.api.components.Component;
 /**
  * Panel container item implementation.
  */
+@Deprecated
 public class PanelContainerListItemImpl extends ResourceListItemImpl implements ListItem {
 
     /**
@@ -43,6 +44,7 @@ public class PanelContainerListItemImpl extends ResourceListItemImpl implements 
      * @param component The component.
      * @param currentPage The current page.
      */
+    @Deprecated
     public PanelContainerListItemImpl(@NotNull final Resource resource, final String parentId, final Component component,
                                   final Page currentPage) {
         super(resource, parentId, component);
