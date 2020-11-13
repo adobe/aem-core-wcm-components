@@ -30,15 +30,13 @@
          *
          * @type {String}
          */
-        constraintMessage: {
-        },
+        constraintMessage: "",
         /**
          * A validation message to display if no input is supplied, but input is expected for the field.
          *
          * @type {String}
          */
-        requiredMessage: {
-        }
+        requiredMessage: ""
     };
 
     function readData(element) {
