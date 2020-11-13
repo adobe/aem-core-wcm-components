@@ -34,8 +34,8 @@ public class MockPublishUtils implements PublishUtils {
     @Override
     public String[] externalizeImageDeliveryAsset(Resource resource) throws RepositoryException {
         return new String[] {
-            "https://s7d1.scene7.com/is/image/",
-            "dmtestcompany/dmtestasset"
+            "https://s7d9.scene7.com",
+            "dmtestcompany/Adobe_Systems_logo_and_wordmark_DM"
         };
     }
 
