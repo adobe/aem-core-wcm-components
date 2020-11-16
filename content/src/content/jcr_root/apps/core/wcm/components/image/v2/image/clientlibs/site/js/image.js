@@ -123,7 +123,6 @@
     };
 
     var devicePixelRatio = window.devicePixelRatio || 1;
-    var smartCrops = {};
 
     function readData(element) {
         var data = element.dataset;
@@ -152,6 +151,8 @@
 
     function Image(config) {
         var that = this;
+
+        var smartCrops = {};
 
         function init(config) {
             // prevents multiple initialization
