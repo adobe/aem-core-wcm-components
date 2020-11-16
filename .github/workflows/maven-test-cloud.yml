@@ -41,9 +41,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: ubuntu-latest-maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ubuntu-latest-maven-
+              ${{ runner.os }}-maven-
 
       # Build & Test
       - name: Build & Test with Maven
