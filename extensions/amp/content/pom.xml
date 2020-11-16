@@ -176,6 +176,7 @@
                                 <configuration>
                                     <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                                     <failOnError>true</failOnError>
+                                    <packageFile>${contentPackageFile}</packageFile>
                                 </configuration>
                             </execution>
                         </executions>
@@ -202,6 +203,7 @@
                                 <configuration>
                                     <targetURL>http://${aem.publish.host}:${aem.publish.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                                     <failOnError>true</failOnError>
+                                    <packageFile>${contentPackageFile}</packageFile>
                                 </configuration>
                             </execution>
                         </executions>
@@ -214,6 +216,9 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <properties>
+                <contentPackageFile>${project.build.directory}/${project.build.finalName}-cloud.zip</contentPackageFile>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
