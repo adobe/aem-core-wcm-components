@@ -75,7 +75,7 @@
                                 <subPackage>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>core.wcm.components.content</artifactId>
-                                    <classifier></classifier>
+                                    <classifier>~cloud</classifier>
                                     <filter>true</filter>
                                 </subPackage>
                                 <subPackage>
@@ -86,7 +86,7 @@
                                 <subPackage>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>core.wcm.components.extensions.amp.content</artifactId>
-                                    <classifier></classifier>
+                                    <classifier>~cloud</classifier>
                                     <filter>true</filter>
                                 </subPackage>
                             </subPackages>
@@ -251,6 +251,24 @@
                     </plugin>
                 </plugins>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>core.wcm.components.content</artifactId>
+                    <version>${project.version}</version>
+                    <classifier>cloud</classifier>
+                    <type>zip</type>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>core.wcm.components.extensions.amp.content</artifactId>
+                    <classifier>cloud</classifier>
+                    <type>zip</type>
+                    <version>${project.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 
@@ -262,14 +280,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.core</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.content</artifactId>
-            <version>${project.version}</version>
-            <classifier>cloud</classifier>
-            <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -289,14 +299,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.extensions.amp</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.extensions.amp.content</artifactId>
-            <classifier>cloud</classifier>
-            <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
