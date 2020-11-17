@@ -124,7 +124,7 @@
                                                 variant="sm">
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
-                                                    cq-msm-lockable="fragmentPath"/>
+                                                    cq-msm-lockable="variantPath"/>
                                             </variantpath>
                                             <socialmedia_type
                                                 cq:showOnCreate="{Boolean}true"
