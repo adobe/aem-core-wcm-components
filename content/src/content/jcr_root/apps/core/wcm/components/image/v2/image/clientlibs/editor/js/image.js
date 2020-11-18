@@ -257,12 +257,12 @@
                           selected: (smartCropRenditionFromJcr === payload.set.relation[i].userdata.SmartCropDef)
 						});
 					}
-					prepareSmartCropPanel();
-				}
-				else {
+					$dynamicMediaGroup.find(presetTypeSelector).parent().show();
+				} else {
 					$dynamicMediaGroup.find(presetTypeSelector).parent().hide();
-					$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().hide();
+					selectPresetType($(presetTypeSelector), "imagePreset");
 				}
+                prepareSmartCropPanel();
 			} else {
 				// error status
 			}
