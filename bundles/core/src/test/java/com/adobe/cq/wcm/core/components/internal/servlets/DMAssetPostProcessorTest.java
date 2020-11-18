@@ -48,11 +48,13 @@ public class DMAssetPostProcessorTest {
     private static final String PAGE = CONTENT_ROOT + "/test";
     private static final String CORE_IMAGE__EMPTY = PAGE + "/jcr:content/root/image2";
     private static final String CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET = PAGE + "/jcr:content/root/image31";
-    private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET = PAGE + "/jcr:content/root/image32";
+    private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET = PAGE + "/jcr:content/root/image32";
+    private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_IMAGE_PRESET = PAGE + "/jcr:content/root/image33";
+    private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_SMART_CROP_RENDITION = PAGE + "/jcr:content/root/image36";
 
     private static final String EXPECTED_IMAGE_SERVER_URL = "https://s7d9.scene7.com/is/image/";
 
-    private DMAssetPostProcessor servlet = null;;
+    private DMAssetPostProcessor servlet = null;
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -75,15 +77,15 @@ public class DMAssetPostProcessorTest {
         value = ModificationType.class,
         names = {"CREATE", "MODIFY"}
     )
-    public void fromNonDMtoDMAsset(ModificationType modificationType) throws Exception {
+    public void fromNonDMtoDMAssetNoPreset(ModificationType modificationType) throws Exception {
         String existingComponent = CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET;
-        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET));
-        List<Modification> modifications = prepareModifications(modificationType, existingComponent);
+        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET));
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent, true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertNewModification(existingComponent, modifications, ModificationType.CREATE);
+        assertNewModification(existingComponent, modifications, 2, Collections.singletonList(new ExpectedModification(ModificationType.CREATE, Image.PN_IMAGE_SERVER_URL)));
     }
 
     /*
@@ -95,28 +97,133 @@ public class DMAssetPostProcessorTest {
         value = ModificationType.class,
         names = {"CREATE", "MODIFY"}
     )
-    public void fromDMtoNonDMAsset(ModificationType modificationType) throws Exception {
-        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
+    public void fromDMNoPresetToNonDMAsset(ModificationType modificationType) throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET;
         prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
-        List<Modification> modifications = prepareModifications(modificationType, existingComponent);
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent, true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertNewModification(existingComponent, modifications, ModificationType.DELETE);
+        assertNewModification(existingComponent, modifications, 2, Collections.singletonList(new ExpectedModification(ModificationType.DELETE, Image.PN_IMAGE_SERVER_URL)));
     }
 
-    @Test
-    public void fromDMtoEmptyAsset() throws Exception {
-        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
-        prepareResource(existingComponent, null);
-
-        List<Modification> modifications = prepareModifications(ModificationType.DELETE, existingComponent);
+    /*
+    The case when component with DM asset gets assigned a non DM asset.
+    Post processor should clear image server url property
+     */
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void fromDMImagePresetToNonDMAsset(ModificationType modificationType) throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_IMAGE_PRESET;
+        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent, true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertNewModification(existingComponent, modifications, ModificationType.DELETE);
+        assertNewModification(existingComponent, modifications, 2, Collections.singletonList(new ExpectedModification(ModificationType.DELETE, Image.PN_IMAGE_SERVER_URL)));
+    }
+
+    /*
+    The case when component with DM asset gets assigned a non DM asset.
+    Post processor should clear image server url property
+     */
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void fromDMSmartCropRenditionToNonDMAsset(ModificationType modificationType) throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_SMART_CROP_RENDITION;
+        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent, true);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNewModification(existingComponent, modifications, 2, Arrays.asList(
+            new ExpectedModification(ModificationType.DELETE, Image.PN_IMAGE_SERVER_URL),
+            new ExpectedModification(ModificationType.DELETE, "smartCropRendition")
+        ));
+    }
+
+    /*
+    The case when component with DM asset gets assigned a non DM asset.
+    Post processor should clear image server url property
+     */
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void editModificationDMSmartCropAsset(ModificationType modificationType) throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_SMART_CROP_RENDITION;
+        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent, false);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNewModification(existingComponent, modifications, 1, Collections.singletonList(new ExpectedModification(ModificationType.DELETE, Image.PN_IMAGE_SERVER_URL)));
+    }
+
+    /*
+    Current component hols plain DM image and the asset gets cleared
+    Post processor should remove image server url
+     */
+    @Test
+    public void fromDMNoPresetToEmptyAsset() throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET;
+        prepareResource(existingComponent, null);
+
+        List<Modification> modifications = prepareModifications(ModificationType.DELETE, existingComponent, true);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNewModification(existingComponent, modifications, 2, Collections.singletonList(new ExpectedModification(ModificationType.DELETE, Image.PN_IMAGE_SERVER_URL)));
+    }
+
+    /*
+    Current component hols DM image with image preset and the asset gets cleared
+    Post processor should remove image server url
+     */
+    @Test
+    public void fromDMImagePresetToEmptyAsset() throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_IMAGE_PRESET;
+        prepareResource(existingComponent, null);
+
+        List<Modification> modifications = prepareModifications(ModificationType.DELETE, existingComponent, true);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNewModification(existingComponent, modifications, 2, Collections.singletonList(new ExpectedModification(ModificationType.DELETE, Image.PN_IMAGE_SERVER_URL)));
+    }
+
+    /*
+    Current component hols DM image with smart crop rendition and the asset gets cleared
+    Post processor should remove image server url and smart crop rendition
+     */
+    @Test
+    public void fromDMSmartCropRenditionToEmptyAsset() throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_SMART_CROP_RENDITION;
+        prepareResource(existingComponent, null);
+
+        List<Modification> modifications = prepareModifications(ModificationType.DELETE, existingComponent, true);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNull(resource.getValueMap().get("smartCropRendition", String.class));
+        assertNewModification(existingComponent, modifications, 2, Arrays.asList(
+            new ExpectedModification(ModificationType.DELETE, Image.PN_IMAGE_SERVER_URL),
+            new ExpectedModification(ModificationType.DELETE, "smartCropRendition")
+        ));
     }
 
     /*
@@ -131,33 +238,34 @@ public class DMAssetPostProcessorTest {
     )
     public void fromNonDMtoDMAssetNotSupportedModification(ModificationType modificationType) throws Exception {
         String existingComponent = CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET;
-        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET));
-        List<Modification> modifications = prepareModifications(modificationType, existingComponent);
+        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET));
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent, true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertEquals(1, modifications.size());
+        assertEquals(2, modifications.size());
     }
 
     /*
     The case when modification type does not match CREATE or MODIFY.
     In the case post processor should not modify IS URL
      */
+    @ParameterizedTest
     @EnumSource(
         value = ModificationType.class,
         names = {"CREATE", "MODIFY", "DELETE"},
         mode = EnumSource.Mode.EXCLUDE
     )
     public void fromDMtoNonDMAssetNotSupportedModification(ModificationType modificationType) throws Exception {
-        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET;
         prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
-        List<Modification> modifications = prepareModifications(modificationType, existingComponent);
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent, true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertEquals(1, modifications.size());
+        assertEquals(2, modifications.size());
     }
 
     /*
@@ -170,13 +278,13 @@ public class DMAssetPostProcessorTest {
         names = {"CREATE", "MODIFY"}
     )
     public void fromNonDMtoDMAssetUnexpectedModification(ModificationType modificationType) throws Exception {
-        prepareResource(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET));
-        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/unexpected_path");
+        prepareResource(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET));
+        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/unexpected_path", true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertEquals(1, modifications.size());
+        assertEquals(2, modifications.size());
     }
 
     /*
@@ -189,13 +297,13 @@ public class DMAssetPostProcessorTest {
         names = {"CREATE", "MODIFY"}
     )
     public void fromDMtoNonDMAssetUnexpectedModification(ModificationType modificationType) throws Exception {
-        prepareResource(CORE_IMAGE__DM_POLICY_ON__DM_ASSET, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
-        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/unexpected_path");
+        prepareResource(CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET, getFileReference(CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET));
+        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/unexpected_path", true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertEquals(1, modifications.size());
+        assertEquals(2, modifications.size());
     }
 
     /*
@@ -203,14 +311,14 @@ public class DMAssetPostProcessorTest {
      */
     @Test
     public void corruptedFileReference() throws Exception {
-        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET;
         prepareResource(existingComponent, "/content/dam/test/corrupted-asset.png");
-        List<Modification> modifications = prepareModifications(ModificationType.CREATE, existingComponent);
+        List<Modification> modifications = prepareModifications(ModificationType.CREATE, existingComponent, true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertEquals(1, modifications.size());
+        assertEquals(2, modifications.size());
     }
 
     /*
@@ -218,14 +326,14 @@ public class DMAssetPostProcessorTest {
      */
     @Test
     public void nonImageFileReference() throws Exception {
-        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET;
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET;
         prepareResource(existingComponent, existingComponent);
-        List<Modification> modifications = prepareModifications(ModificationType.CREATE, existingComponent);
+        List<Modification> modifications = prepareModifications(ModificationType.CREATE, existingComponent, true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertEquals(1, modifications.size());
+        assertEquals(2, modifications.size());
     }
 
     /*
@@ -235,19 +343,23 @@ public class DMAssetPostProcessorTest {
     public void lostFileReferenceModification() throws Exception {
         String existingComponent = CORE_IMAGE__EMPTY;
         prepareResource(existingComponent, null);
-        List<Modification> modifications = prepareModifications(ModificationType.CREATE, existingComponent);
+        List<Modification> modifications = prepareModifications(ModificationType.CREATE, existingComponent, true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertNull(resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertEquals(1, modifications.size());
+        assertEquals(2, modifications.size());
     }
 
-    private void assertNewModification(String component, List<Modification> modifications, ModificationType modificationType) {
-        assertEquals(2, modifications.size());
-        assertEquals(component + "/" + Image.PN_IMAGE_SERVER_URL, modifications.get(modifications.size() - 1).getSource());
-        assertNull(modifications.get(modifications.size() - 1).getDestination());
-        assertEquals(modificationType, modifications.get(modifications.size() - 1).getType());
+    private void assertNewModification(String component, List<Modification> modifications, int skipCount, List<ExpectedModification> expectedModifications) {
+        assertEquals(expectedModifications.size() + skipCount, modifications.size());
+        for (int i = 0; i < expectedModifications.size(); i ++) {
+            Modification actualModification = modifications.get(i + skipCount);
+            ExpectedModification expectedModification = expectedModifications.get(i);
+            assertEquals(component + "/" + expectedModification.name, actualModification.getSource());
+            assertNull(actualModification.getDestination());
+            assertEquals(actualModification.getType(), expectedModification.type);
+        }
     }
 
     /**
@@ -266,13 +378,20 @@ public class DMAssetPostProcessorTest {
         }
     }
 
-    private List<Modification> prepareModifications(ModificationType modificationType, String component) {
+    private List<Modification> prepareModifications(ModificationType modificationType, String component, boolean includeFileDelete) {
         List<Modification> modifications = new ArrayList<>();
         modifications.add(new Modification(
             modificationType,
             component + "/" + DownloadResource.PN_REFERENCE,
             null
         ));
+        if (includeFileDelete) {
+            modifications.add(new Modification(
+                ModificationType.DELETE,
+                component + "/file",
+                null
+            ));
+        }
         return modifications;
     }
 
@@ -296,5 +415,15 @@ public class DMAssetPostProcessorTest {
      */
     private static String getFileReferencePath(String componentPath) {
         return componentPath + "/" + DownloadResource.PN_REFERENCE;
+    }
+
+    private static class ExpectedModification {
+        final ModificationType type;
+        final String name;
+
+        public ExpectedModification(ModificationType type, String name) {
+            this.type = type;
+            this.name = name;
+        }
     }
 }

@@ -39,6 +39,8 @@ import java.util.List;
  * This post processor monitors changes made to component's {@link DownloadResource#PN_REFERENCE} property. In case
  * modification of type {@link ModificationType#CREATE}, {@link ModificationType#MODIFY} or {@link ModificationType#DELETE} is detected the post
  * processor updates {@link Image#PN_IMAGE_SERVER_URL} property for future use on the publish node.
+ * Additionally this post processor monitors drag and drop actions by checking if fileReference update is accompanied by file@Delete update. In these cases it resets
+ * the value of smartCropRendition.
  */
 @Component(
     service = SlingPostProcessor.class
@@ -53,7 +55,7 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
 
     @Override
     public void process(SlingHttpServletRequest request, List<Modification> list) throws Exception {
-        Modification lastFileReferenceModification = getLastFileReferenceModification(request, list);
+        Modification lastFileReferenceModification = getLastPropertyModification(request, list, DownloadResource.PN_REFERENCE);
         if (lastFileReferenceModification != null) {
             switch (lastFileReferenceModification.getType()) {
                 case CREATE:
@@ -68,9 +70,14 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
                                 if(isDmAsset(asset)) {
                                     String[] productionAssetUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
                                     String imageServerUrl = productionAssetUrls[0] + IMAGE_SERVER_PATH;
-                                    checkSetImageServerUrl(request.getResource(), imageServerUrl, list);
+                                    checkSetProperty(request.getResource(), Image.PN_IMAGE_SERVER_URL, imageServerUrl, list);
                                 } else {
-                                    checkSetImageServerUrl(request.getResource(), null, list);
+                                    checkSetProperty(request.getResource(), Image.PN_IMAGE_SERVER_URL, null, list);
+                                }
+
+                                Modification lastFileModification = getLastPropertyModification(request, list, "file");
+                                if ((lastFileModification != null) && (lastFileModification.getType() == ModificationType.DELETE)) {
+                                    checkSetProperty(request.getResource(), "smartCropRendition", null, list);
                                 }
                             } else {
                                 LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, request.getResource().getPath());
@@ -83,7 +90,8 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
                     }
                     break;
                 case DELETE:
-                    checkSetImageServerUrl(request.getResource(), null, list);
+                    checkSetProperty(request.getResource(), Image.PN_IMAGE_SERVER_URL, null, list);
+                    checkSetProperty(request.getResource(), "smartCropRendition", null, list);
                     break;
                 default:
                     //noop
@@ -91,20 +99,20 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
         }
     }
 
-    private static void checkSetImageServerUrl(Resource resource, String imageServerUrl, List<Modification> list) {
+    private static void checkSetProperty(Resource resource, String name, String value, List<Modification> list) {
         ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
         if (map != null) {
             ValueMap valueMap = resource.getValueMap();
-            if (imageServerUrl != null) {
-                String oldImageServerUrl = valueMap.get(Image.PN_IMAGE_SERVER_URL, String.class);
-                if (!imageServerUrl.equals(oldImageServerUrl)) {
-                    list.add(new Modification(oldImageServerUrl != null ? ModificationType.MODIFY : ModificationType.CREATE, getModificationSource(resource.getPath()), null));
-                    map.put(Image.PN_IMAGE_SERVER_URL, imageServerUrl);
+            if (value != null) {
+                String oldValue = valueMap.get(name, String.class);
+                if (!value.equals(oldValue)) {
+                    list.add(new Modification(oldValue != null ? ModificationType.MODIFY : ModificationType.CREATE, getModificationSource(resource.getPath(), name), null));
+                    map.put(name, value);
                 }
             } else {
-                if (valueMap.containsKey(Image.PN_IMAGE_SERVER_URL)) {
-                    list.add(new Modification(ModificationType.DELETE, getModificationSource(resource.getPath()), null));
-                    map.remove(Image.PN_IMAGE_SERVER_URL);
+                if (valueMap.containsKey(name)) {
+                    list.add(new Modification(ModificationType.DELETE, getModificationSource(resource.getPath(), name), null));
+                    map.remove(name);
                 }
             }
         } else {
@@ -118,18 +126,18 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
         return !StringUtils.isEmpty(dmAssetName);
     }
 
-    private static Modification getLastFileReferenceModification(SlingHttpServletRequest request, List<Modification> list) {
-        String expectedModificationSource = request.getResource().getPath() + "/" + DownloadResource.PN_REFERENCE;
-        Modification lastFileReferenceModification = null;
+    private static Modification getLastPropertyModification(SlingHttpServletRequest request, List<Modification> list, String propertyName) {
+        String expectedModificationSource = request.getResource().getPath() + "/" + propertyName;
+        Modification lastPropertyModification = null;
         for (Modification modification : list) {
             if (expectedModificationSource.equals(modification.getSource())) {
-                lastFileReferenceModification = modification;
+                lastPropertyModification = modification;
             }
         }
-        return lastFileReferenceModification;
+        return lastPropertyModification;
     }
 
-    private static String getModificationSource(String path) {
-        return path + "/" + Image.PN_IMAGE_SERVER_URL;
+    private static String getModificationSource(String path, String name) {
+        return path + "/" + name;
     }
 }
