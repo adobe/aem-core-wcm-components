@@ -54,7 +54,7 @@
             $cqFileUpload     = $dialog.find(".cq-FileUpload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
             $dynamicMediaGroup= $dialogContent.find(".cmp-image__editor-dynamicmedia");
-            $dynamicMediaGroup.hide();            
+            $dynamicMediaGroup.hide();
             areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
             if (areDMFeaturesEnabled) {
                 smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
@@ -74,6 +74,10 @@
                             altTuple.reinitCheckbox();
                             captionTuple.reinitCheckbox();
                             toggleAlternativeFieldsAndLink(isDecorative);
+                            if (areDMFeaturesEnabled) {
+                                selectPresetType($(presetTypeSelector), "imagePreset");
+                                resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
+                            }
                         }
                     );
                 });
@@ -130,12 +134,12 @@
     $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
 		switch(e.target.value) {
 			case "imagePreset":
-				$dynamicMediaGroup.find(imagePresetDropDownSelector).show();
+				$dynamicMediaGroup.find(imagePresetDropDownSelector).parent().show();
 				$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().hide();
 				resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
 				break;
 			case "smartCrop":
-				$dynamicMediaGroup.find(imagePresetDropDownSelector).hide();
+				$dynamicMediaGroup.find(imagePresetDropDownSelector).parent().hide();
 				$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().show();
 				resetSelectField($dynamicMediaGroup.find(imagePresetDropDownSelector));
 				break;
@@ -186,8 +190,7 @@
                 var isFileDM = data["dam:scene7File"];
                 if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
                     $dynamicMediaGroup.hide();
-                }
-                else{
+                } else{
                     $dynamicMediaGroup.show();
 					getSmartCropRenditions(data["dam:scene7File"]);
                 }
@@ -291,11 +294,11 @@
                 $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().hide();
 				break;
 			case "imagePreset":
-				$dynamicMediaGroup.find(imagePresetDropDownSelector).show();
+				$dynamicMediaGroup.find(imagePresetDropDownSelector).parent().show();
 				$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().hide();
 				break;
 			case "smartCrop":
-				$dynamicMediaGroup.find(imagePresetDropDownSelector).hide();
+				$dynamicMediaGroup.find(imagePresetDropDownSelector).parent().hide();
 				$dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().show();
 				break;
 			default:
@@ -335,8 +338,9 @@
      * @param field
      */
     function resetSelectField(field) {
-        field.find('coral-select-item[selected]').removeAttr('selected');
-        field.find('button').find('span').html('NONE');
+        if (field[0]) {
+            field[0].clear();
+        }
     }
 
 })(jQuery);

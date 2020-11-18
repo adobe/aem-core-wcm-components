@@ -116,7 +116,7 @@
                                                         </items>
                                                     </dmpresettypecontainer>
                                                     <imagepreset
-                                                        wrapperClass="cmp-image__editor-dynamicmedia-imagepreset"
+                                                        granite:class="cmp-image__editor-dynamicmedia-imagepreset"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                         fieldDescription="Image Preset to use when rendering image."
@@ -126,14 +126,14 @@
                                                             jcr:primaryType="nt:unstructured"
                                                             sling:resourceType="dam/components/scene7/common/imagepresetdatasource"/>
                                                     </imagepreset>
-													<smartcroprenditions 
+													<smartcroprenditions
 														granite:class="cmp-image__editor-dynamicmedia-smartcroprendition"
 														jcr:primaryType="nt:unstructured"
 														sling:resourceType="granite/ui/components/coral/foundation/form/select"
 														fieldDescription="Select Auto for Dynamic Media to decide the best rendition. Else select a specific smart crop rendition."
 														fieldLabel="Rendition"
 														name="./smartCropRendition">
-													</smartcroprenditions>													
+													</smartcroprenditions>
                                                     <imageModifiers
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
