@@ -13,12 +13,26 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
- * <p>
- *      This package defines the context-aware configurations used by the WCM Core Components
- * </p>
- */
-@Version("2.0.0")
 package com.adobe.cq.wcm.core.components.config;
 
-import org.osgi.annotation.versioning.Version;
+import org.apache.sling.caconfig.annotation.Property;
+
+public @interface AttributeConfig {
+    /**
+     * Returns the name of the attribute.
+     *
+     * @return The name of the attribute - if left empty the attribute won't be rendered out
+     * @since com.adobe.cq.wcm.core.components.config 2.0.0
+     */
+    @Property(label = "Name")
+    String name() default "";
+
+    /**
+     * Returns the value of the attribute.
+     *
+     * @return The value of the attribute
+     * @since com.adobe.cq.wcm.core.components.config 2.0.0
+     */
+    @Property(label = "Value")
+    String value() default "";
+}
