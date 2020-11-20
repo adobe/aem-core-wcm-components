@@ -21,14 +21,12 @@ import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
-import com.day.cq.wcm.api.WCMMode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -133,10 +131,7 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
     private Supplier<String> languageSupplier;
 
     @Nullable
-    private Supplier<WCMMode> wcmMode;
-
-    @Nullable
-    private Supplier<Set<String>> runModes;
+    private Supplier<String> mode;
 
     /**
      * Construct a wrapper for a {@link DataLayerSupplier}.
@@ -172,8 +167,7 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
                 .setTags(pageData::getTags)
                 .setTemplatePath(pageData::getTemplatePath)
                 .setLanguage(pageData::getLanguage)
-                .setWcmMode(pageData::getWcmMode)
-                .setRunModes(pageData::getRunModes);
+                .setMode(pageData::getMode);
         }
 
         // set container field value suppliers
@@ -504,31 +498,16 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
 
     @Override
     @NotNull
-    public Optional<Supplier<WCMMode>> getWcmMode() {
-        if (this.wcmMode != null) {
-            return Optional.of(this.wcmMode);
+    public Optional<Supplier<String>> getMode() {
+        if (this.mode != null) {
+            return Optional.of(this.mode);
         }
-        return this.wrappedSupplier.getWcmMode();
+        return this.wrappedSupplier.getMode();
     }
 
     @NotNull 
-    public DataLayerSupplierImpl setWcmMode(@NotNull Supplier<WCMMode> supplier) {
-        this.wcmMode = supplier;
-        return this;
-    }
-
-    @Override
-    @NotNull
-    public Optional<Supplier<Set<String>>> getRunModes() {
-        if (this.runModes != null) {
-            return Optional.of(this.runModes);
-        }
-        return this.wrappedSupplier.getRunModes();
-    }
-
-    @NotNull
-    public DataLayerSupplierImpl setRunModes(@NotNull Supplier<Set<String>> supplier) {
-        this.runModes = supplier;
+    public DataLayerSupplierImpl setMode(@NotNull Supplier<String> supplier) {
+        this.mode = supplier;
         return this;
     }
 }

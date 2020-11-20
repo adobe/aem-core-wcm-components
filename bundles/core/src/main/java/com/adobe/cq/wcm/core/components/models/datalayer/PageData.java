@@ -15,9 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
-import java.util.Set;
-
-import com.day.cq.wcm.api.WCMMode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -75,13 +72,13 @@ public interface PageData extends ComponentData {
         throw new UnsupportedOperationException();
     }
 
-    @JsonProperty("aem:runModes")
-    default Set<String> getRunModes() {
-        throw new UnsupportedOperationException();
-    }
-
-    @JsonProperty("aem:wcmMode")
-    default WCMMode getWcmMode() {
+    /**
+     * Returns the mode of the current page rendering. 
+     * May be one of "preview", "edit" and "live". While the latter is only active on publish, the former two modes are relevant for author.
+     * @return mode
+     */
+    @JsonProperty("mode")
+    default String getMode() {
         throw new UnsupportedOperationException();
     }
 }

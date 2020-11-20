@@ -319,6 +319,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @Override
     @NotNull
     protected final PageData getComponentData() {
+        boolean isAuthor = slingSettings.getRunModes().contains("author");
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
             .withTitle(this::getTitle)
             .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
@@ -326,9 +327,19 @@ public class PageImpl extends AbstractComponentImpl implements Page {
             .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
             .withUrl(() -> Utils.getURL(request, currentPage))
             .withLanguage(this::getLanguage)
-            .withWcmMode(() -> WCMMode.fromRequest(request))
-            .withRunModes(() -> slingSettings.getRunModes())
+            .withMode(() -> getModeFromWcmModeAndServiceType(WCMMode.fromRequest(request), isAuthor))
             .build();
     }
 
+    static String getModeFromWcmModeAndServiceType(WCMMode wcmMode, boolean isAuthor) {
+        if (!isAuthor) {
+            return "live";
+        } else {
+            if (wcmMode.equals(WCMMode.DISABLED)) {
+                return "preview";
+            } else {
+                return "edit";
+            }
+        }
+    }
 }

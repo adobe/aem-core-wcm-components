@@ -13,8 +13,7 @@
         "xdm:template": "TEST TEMPLATE PATH",
         "repo:path": "https://www.aemcomponents.dev/",
         "xdm:language": "TEST LANGUAGE",
-        "aem:wcmMode":"EDIT",
-        "aem:runModes":["stage","publish"],
+        "mode":"edit",
         "@type": "TEST TYPE"
     }
 }

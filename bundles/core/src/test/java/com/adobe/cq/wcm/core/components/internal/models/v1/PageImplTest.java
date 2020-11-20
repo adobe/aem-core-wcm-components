@@ -31,6 +31,7 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.designer.Design;
 import com.day.cq.wcm.api.designer.Designer;
@@ -131,6 +132,16 @@ public class PageImplTest {
         Page page = getPageUnderTest(PAGE);
         assertNull(page.getDesignPath());
         assertNull(page.getStaticDesignPath());
+    }
+
+    @Test
+    void testGetModeFromWcmModeAndServiceType() {
+        assertEquals("live", PageImpl.getModeFromWcmModeAndServiceType(WCMMode.DISABLED, false));
+        assertEquals("live", PageImpl.getModeFromWcmModeAndServiceType(WCMMode.EDIT, false));
+        assertEquals("preview", PageImpl.getModeFromWcmModeAndServiceType(WCMMode.DISABLED, true));
+        assertEquals("edit", PageImpl.getModeFromWcmModeAndServiceType(WCMMode.EDIT, true));
+        assertEquals("edit", PageImpl.getModeFromWcmModeAndServiceType(WCMMode.PREVIEW, true));
+        assertEquals("edit", PageImpl.getModeFromWcmModeAndServiceType(WCMMode.READ_ONLY, true));
     }
 
     protected Page getPageUnderTest(String pagePath, Object... properties) {

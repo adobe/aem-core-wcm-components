@@ -15,16 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
-import com.day.cq.wcm.api.WCMMode;
-import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import java.util.Arrays;
+import java.util.function.Supplier;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Supplier;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 
 /**
  * {@link DataLayerSupplier} backed page component data implementation.
@@ -51,9 +49,10 @@ public final class PageDataImpl extends ComponentDataImpl implements PageData {
      */
     private String url;
 
-    private WCMMode wcmMode;
-
-    private Set<String> runModes;
+    /**
+     * The mode field value.
+     */
+    private String mode;
 
     /**
      * Construct the data layer model.
@@ -117,28 +116,13 @@ public final class PageDataImpl extends ComponentDataImpl implements PageData {
 
     @Override
     @Nullable
-    public Set<String> getRunModes() {
-        if (this.runModes == null) {
-            this.runModes = this.getDataLayerSupplier()
-                .getRunModes()
+    public String getMode() {
+        if (this.mode == null) {
+            this.mode = this.getDataLayerSupplier()
+                .getMode()
                 .map(Supplier::get)
                 .orElse(null);
         }
-        if (this.runModes != null) {
-            return new HashSet<String>(runModes);
-        }
-        return runModes;
-    }
-
-    @Override
-    @Nullable
-    public WCMMode getWcmMode() {
-        if (this.wcmMode == null) {
-            this.wcmMode = this.getDataLayerSupplier()
-                .getWcmMode()
-                .map(Supplier::get)
-                .orElse(null);
-        }
-        return wcmMode;
+        return mode;
     }
 }

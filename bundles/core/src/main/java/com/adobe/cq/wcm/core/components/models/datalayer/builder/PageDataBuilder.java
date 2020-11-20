@@ -18,11 +18,9 @@ package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplierImpl;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
-import com.day.cq.wcm.api.WCMMode;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -89,13 +87,8 @@ public final class PageDataBuilder extends GenericComponentDataBuilder<PageDataB
     }
 
     @NotNull
-    public PageDataBuilder withWcmMode(@NotNull final Supplier<WCMMode> supplier) {
-        return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setWcmMode(supplier));
-    }
-
-    @NotNull 
-    public PageDataBuilder withRunModes(@NotNull final Supplier<Set<String>> supplier) {
-        return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setRunModes(supplier));
+    public PageDataBuilder withMode(@NotNull final Supplier<String> supplier) {
+        return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setMode(supplier));
     }
 
     @Override

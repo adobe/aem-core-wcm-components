@@ -23,7 +23,6 @@ import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.tagging.TagConstants;
-import com.day.cq.wcm.api.WCMMode;
 
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.resource.ValueMap;
@@ -34,9 +33,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -54,8 +50,6 @@ public final class DataLayerBuilderTest {
     private static final String BAD_STRING_VALUE = "!BAD_VALUE!";
     private static final Date BAD_DATE = new Date(0L);
     private static final String[] BAD_STRING_VALUE_ARRAY = new String[] { BAD_STRING_VALUE };
-    private static final Set<String> BAD_STRING_VALUE_SET = Stream.of(BAD_STRING_VALUE).collect(Collectors.toSet());
-    private static final WCMMode BAD_WCM_MODE = WCMMode.ANALYTICS;
 
     /*
      * Expected values.
@@ -74,8 +68,7 @@ public final class DataLayerBuilderTest {
     private static final String[] TEST_TAGS = {"TEST_TAG_1", "TEST_TAG_2"};
     private static final String[] TEST_SHOWN_ITEMS = {"TEST_SHOWN_ITEM_1", "TEST_SHOWN_ITEM_2"};
     private static final Date LAST_MODIFIED_DATE = new Date(1592335437174L);
-    private static final WCMMode TEST_WCM_MODE = WCMMode.EDIT;
-    private static final Set<String> TEST_RUN_MODES = Stream.of("publish", "stage").collect(Collectors.toSet());
+    private static final String TEST_MODE = "edit";
 
     /**
      * Tests for building ComponentData that is not a sub-type of ComponentData.
@@ -502,8 +495,7 @@ public final class DataLayerBuilderTest {
                 .withTemplatePath(() -> BAD_STRING_VALUE)
                 .withLanguage(() -> BAD_STRING_VALUE)
                 .withUrl(() -> BAD_STRING_VALUE)
-                .withRunModes(() -> BAD_STRING_VALUE_SET)
-                .withWcmMode(() -> BAD_WCM_MODE);
+                .withMode(() -> BAD_STRING_VALUE);
         }
 
         @Test
@@ -520,8 +512,7 @@ public final class DataLayerBuilderTest {
             Assertions.assertNull(componentData.getTags());
             Assertions.assertNull(componentData.getTemplatePath());
             Assertions.assertNull(componentData.getLanguage());
-            Assertions.assertNull(componentData.getRunModes());
-            Assertions.assertNull(componentData.getWcmMode());
+            Assertions.assertNull(componentData.getMode());
             Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "default"));
         }
 
@@ -540,8 +531,7 @@ public final class DataLayerBuilderTest {
                 .withLanguage(() -> TEST_LANGUAGE)
                 .withUrl(() -> TEST_URL)
                 .withTemplatePath(() -> TEST_TEMPLATE_PATH)
-                .withRunModes(() -> TEST_RUN_MODES)
-                .withWcmMode(() -> TEST_WCM_MODE)
+                .withMode(() -> TEST_MODE)
                 .build();
 
             Assertions.assertEquals(TEST_ID, pageData.getId());
@@ -569,14 +559,13 @@ public final class DataLayerBuilderTest {
             Assertions.assertSame(pageData.getLanguage(), pageData.getLanguage());
             Assertions.assertSame(pageData.getUrl(), pageData.getUrl());
             Assertions.assertSame(pageData.getTemplatePath(), pageData.getTemplatePath());
-            Assertions.assertSame(pageData.getWcmMode(), pageData.getWcmMode());
+            Assertions.assertSame(pageData.getMode(), pageData.getMode());
 
             // check that dates and arrays have been defensively copied
             Assertions.assertEquals(pageData.getLastModifiedDate(), pageData.getLastModifiedDate());
             Assertions.assertNotSame(pageData.getLastModifiedDate(), pageData.getLastModifiedDate());
             Assertions.assertArrayEquals(pageData.getTags(), pageData.getTags());
             Assertions.assertNotSame(pageData.getTags(), pageData.getTags());
-            Assertions.assertNotSame(pageData.getRunModes(), pageData.getRunModes());
         }
 
 
@@ -603,8 +592,7 @@ public final class DataLayerBuilderTest {
             Assertions.assertEquals(BAD_STRING_VALUE, extendedDataNoOverlay.getLanguage());
             Assertions.assertEquals(BAD_STRING_VALUE, extendedDataNoOverlay.getUrl());
             Assertions.assertEquals(BAD_STRING_VALUE, extendedDataNoOverlay.getTemplatePath());
-            Assertions.assertEquals(BAD_WCM_MODE, extendedDataNoOverlay.getWcmMode());
-            Assertions.assertEquals(BAD_STRING_VALUE_SET, extendedDataNoOverlay.getRunModes());
+            Assertions.assertEquals(BAD_STRING_VALUE, extendedDataNoOverlay.getMode());
             Utils.testJSONDataLayer(extendedDataNoOverlay, Utils.getTestDataModelJSONPath(TEST_BASE, "bad-page"));
 
             // wrap the component data and change every value
@@ -623,8 +611,7 @@ public final class DataLayerBuilderTest {
                 .withLanguage(() -> TEST_LANGUAGE)
                 .withUrl(() -> TEST_URL)
                 .withTemplatePath(() -> TEST_TEMPLATE_PATH)
-                .withWcmMode(() -> TEST_WCM_MODE)
-                .withRunModes(() -> TEST_RUN_MODES)
+                .withMode(() -> TEST_MODE)
                 .build();
 
             // assert proper values returned
@@ -640,8 +627,7 @@ public final class DataLayerBuilderTest {
             Assertions.assertEquals(TEST_LANGUAGE, componentData.getLanguage());
             Assertions.assertEquals(TEST_URL, componentData.getUrl());
             Assertions.assertEquals(TEST_TEMPLATE_PATH, componentData.getTemplatePath());
-            Assertions.assertEquals(TEST_WCM_MODE, componentData.getWcmMode());
-            Assertions.assertEquals(TEST_RUN_MODES, componentData.getRunModes());
+            Assertions.assertEquals(TEST_MODE, componentData.getMode());
             Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "page"));
         }
     }
