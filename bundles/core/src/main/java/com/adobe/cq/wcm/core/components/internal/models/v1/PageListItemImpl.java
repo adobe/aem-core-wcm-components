@@ -71,6 +71,24 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     @Override
     public String getTitle() {
+        return PageListItemImpl.getTitle(this.page);
+    }
+
+    /**
+     * Gets the title of a page list item from a given page.
+     * The list item title is derived from the page by selecting the first non-null value from the
+     * following:
+     * <ul>
+     *     <li>{@link Page#getNavigationTitle()}</li>
+     *     <li>{@link Page#getPageTitle()}</li>
+     *     <li>{@link Page#getTitle()}</li>
+     *     <li>{@link Page#getName()}</li>
+     * </ul>
+     *
+     * @param page The page for which to get the title.
+     * @return The list item title.
+     */
+    public static String getTitle(@NotNull final Page page) {
         String title = page.getNavigationTitle();
         if (title == null) {
             title = page.getPageTitle();
