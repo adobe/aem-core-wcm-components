@@ -96,7 +96,7 @@ public interface AssetData {
      *
      * @return Asset smart tags
      *
-     * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.datalayer 1.1.0
      */
     @JsonProperty("xdm:smartTags")
     default Map<String, Object> getSmartTags() {

@@ -31,6 +31,16 @@ import java.util.function.Supplier;
 public final class AssetDataBuilder extends GenericDataBuilder<AssetDataBuilder, AssetData> {
 
     /**
+     * Name of the property holding the name of smart tag;
+     */
+    public final static String SMARTTAG_NAME_PROP = "name";
+
+    /**
+     * Name of the property holding the confidence of smart tag;
+     */
+    public final static String SMARTTAG_CONFIDENCE_PROP = "confidence";
+
+    /**
      * Construct an Asset Data Builder.
      *
      * @param supplier The data layer supplier.

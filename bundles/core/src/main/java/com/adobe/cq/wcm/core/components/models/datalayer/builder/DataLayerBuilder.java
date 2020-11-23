@@ -134,8 +134,8 @@ public final class DataLayerBuilder {
                     .map(predictedTagsResource -> {
                         for (Resource smartTagResource : predictedTagsResource.getChildren()) {
                             Optional.ofNullable(smartTagResource.adaptTo(ValueMap.class))
-                                .map(props -> Optional.ofNullable(props.get("name"))
-                                    .map(tagName -> Optional.ofNullable(smartTags.put((String)tagName, props.get("confidence")))
+                                .map(props -> Optional.ofNullable(props.get(AssetDataBuilder.SMARTTAG_NAME_PROP))
+                                    .map(tagName -> Optional.ofNullable(smartTags.put((String)tagName, props.get(AssetDataBuilder.SMARTTAG_CONFIDENCE_PROP)))
                                     ));
                         }
                         return Optional.empty();
