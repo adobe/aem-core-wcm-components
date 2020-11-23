@@ -676,10 +676,38 @@ class AdaptiveImageServletTest extends AbstractImageTest {
 
     @Test
     void testHorizontalAndVerticalFlipWithImageFile() throws IOException {
-        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
-                prepareRequestResponsePair(IMAGE23_PATH, 1494867377756L, "img.2000", "png");
-        testHorizontalAndVerticalFlip(requestResponsePair);
+            Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(
+                            IMAGE23_PATH, 1494867377756L, "img.2000", "png");
+            testHorizontalAndVerticalFlip(requestResponsePair);
 
+    }
+    
+    @Test
+    void testDAMAssetDirectlyPNG() throws Exception {
+            Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(
+                            PNG_ASSET_PATH, "img.85.1280", "png");
+            MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+            MockSlingHttpServletResponse response = requestResponsePair.getRight();
+            servlet.doGet(request, response);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
+            BufferedImage image = ImageIO.read(byteArrayInputStream);
+            Dimension expectedDimension = new Dimension(1280, 1280);
+            Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
+            Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
+            Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
+    }
+
+    @Test
+    void testDAMAssetDirectlySVG() throws Exception {
+            Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(
+                            SVG_ASSET_PATH, "img", "svg");
+            MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+            MockSlingHttpServletResponse response = requestResponsePair.getRight();
+            servlet.doGet(request, response);
+            ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+            InputStream directStream = this.getClass().getClassLoader()
+                            .getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
+            Assertions.assertTrue(IOUtils.contentEquals(stream, directStream));
     }
 
     @Test

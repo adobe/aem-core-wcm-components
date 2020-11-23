@@ -135,6 +135,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected boolean disableLazyLoading;
     protected int jpegQuality;
     protected String imageName;
+    protected boolean isDirectDAMSrc;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
@@ -150,6 +151,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
+        isDirectDAMSrc = currentStyle.get(PN_DIRECT_DAM_SRC, false);
         Asset asset = null;
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
@@ -197,7 +199,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             }
             if (asset != null) {
                 long assetLastModifiedDate = asset.getLastModified();
-                if (assetLastModifiedDate > lastModifiedDate) {
+                if (assetLastModifiedDate > lastModifiedDate || isDirectDAMSrc) {
                     lastModifiedDate = assetLastModifiedDate;
                 }
             }
@@ -233,7 +235,12 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 smartImages = new String[0];
                 smartSizes = new int[0];
             }
-            src = baseResourcePath + DOT + selector + DOT;
+            if (isDirectDAMSrc && asset != null) {
+                src = asset.getPath();
+            } else {
+                src = baseResourcePath;
+            }
+            src += DOT + selector + DOT;
             if (smartSizes.length == 1) {
                 src += jpegQuality + DOT + smartSizes[0] + DOT + extension;
             } else {

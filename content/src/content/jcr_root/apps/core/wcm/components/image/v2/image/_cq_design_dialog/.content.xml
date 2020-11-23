@@ -87,6 +87,14 @@
                                         checked="{Boolean}true"
                                         uncheckedValue="false"
                                         value="{Boolean}true"/>
+                                    <directLoadFromDAM jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, DAM assets will be addressed with the DAM asset URL and not indirect via the component."
+                                        name="./directLoadFromDAM"
+                                        text="Enable direct addressing for DAM assets."
+                                        checked="{Boolean}true"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true" />
                                     <displayCaptionPopup
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

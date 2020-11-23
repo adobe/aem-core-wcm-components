@@ -62,6 +62,7 @@ import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.api.handler.AssetHandler;
 import com.day.cq.dam.api.handler.store.AssetStore;
+import com.day.cq.dam.commons.util.DamUtil;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -140,7 +141,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             Resource component = request.getResource();
             ResourceResolver resourceResolver = request.getResourceResolver();
-            if (!component.isResourceType(IMAGE_RESOURCE_TYPE)) {
+            if (!component.isResourceType(IMAGE_RESOURCE_TYPE) && !DamUtil.isAsset(component)) {
                 // image coming from template; need to switch resource
                 Resource componentCandidate = null;
                 PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
@@ -171,7 +172,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 }
                 component = componentCandidate;
             }
-
 
             ImageComponent imageComponent = new ImageComponent(component);
             if (imageComponent.source == Source.NONEXISTING) {
@@ -247,6 +247,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     requestPathInfo.getSelectorString(), requestPathInfo.getExtension() + "/" + lastModifiedEpoch,
                     requestPathInfo.getExtension());
         }
+        if (DamUtil.isAsset(request.getResource())) {
+            return Joiner.on('.').join(Text.escapePath(request.getContextPath() + requestPathInfo.getResourcePath()),
+                    requestPathInfo.getSelectorString(), requestPathInfo.getExtension() + "/" + lastModifiedEpoch + "/" + request.getResource().getName());
+        }
+
         long lastModifiedSuffix = getRequestLastModifiedSuffix(request.getPathInfo());
         String resourcePath = lastModifiedSuffix > 0 ? ResourceUtil.getParent(request.getPathInfo()) : request.getPathInfo();
         String extension = FilenameUtils.getExtension(resourcePath);
@@ -714,6 +719,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component) throws IllegalArgumentException {
         Map<String, Integer> selectorParameterMap = new HashMap<>();
         int width = this.defaultResizeWidth;
+        boolean isAsset = DamUtil.isAsset(component);
         if (selectorList.size() > 1) {
             String widthString = (selectorList.size() > 2 ? selectorList.get(2) : selectorList.get(1));
             try {
@@ -721,9 +727,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (width <= 0) {
                     throw new IllegalArgumentException();
                 }
-                List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(component);
-                if (!allowedRenditionWidths.contains(width)) {
-                    throw new IllegalArgumentException("The requested width is not allowed in the content policy or no default");
+                if (!isAsset) {
+                    List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(component);
+                    if (!allowedRenditionWidths.contains(width)) {
+                        throw new IllegalArgumentException("The requested width is not allowed in the content policy or no default");
+                    }
                 }
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Third selector must contain a valid width information (selector > 0)");
@@ -739,11 +747,14 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (qualityPercentage <= 0 || qualityPercentage > 100) {
                     throw new IllegalArgumentException();
                 }
-                Integer allowedJpegQuality = getAllowedJpegQuality(component);
-                if (qualityPercentage != allowedJpegQuality) {
-                    throw new IllegalArgumentException("The requested quality is not allowed in the content policy or no default");
+                if (!isAsset) {
+                    Integer allowedJpegQuality = getAllowedJpegQuality(component);
+                    if (qualityPercentage != allowedJpegQuality) {
+                        throw new IllegalArgumentException(
+                                "The requested quality is not allowed in the content policy or no default");
+                    }
+                    quality = qualityPercentage;
                 }
-                quality = qualityPercentage;
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Second selector must be a valid quality in percentage (100 <= selector > 0)");
             }
@@ -828,19 +839,24 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         Resource imageResource;
 
         ImageComponent(@NotNull Resource component) {
-            String fileReference = component.getValueMap().get(DownloadResource.PN_REFERENCE, String.class);
-            if (StringUtils.isNotEmpty(fileReference)) {
-                imageResource = component.getResourceResolver().getResource(fileReference);
+            if (DamUtil.isAsset(component)) {
+                imageResource = component;
                 source = Source.ASSET;
             } else {
-                Resource childFileNode = component.getChild(DownloadResource.NN_FILE);
-                if (childFileNode != null) {
-                    if (JcrConstants.NT_FILE.equals(childFileNode.getResourceType())) {
-                        Resource jcrContent = childFileNode.getChild(JcrConstants.JCR_CONTENT);
-                        if (jcrContent != null) {
-                            if (jcrContent.getValueMap().containsKey(JcrConstants.JCR_DATA)) {
-                                imageResource = childFileNode;
-                                source = Source.FILE;
+                String fileReference = component.getValueMap().get(DownloadResource.PN_REFERENCE, String.class);
+                if (StringUtils.isNotEmpty(fileReference)) {
+                    imageResource = component.getResourceResolver().getResource(fileReference);
+                    source = Source.ASSET;
+                } else {
+                    Resource childFileNode = component.getChild(DownloadResource.NN_FILE);
+                    if (childFileNode != null) {
+                        if (JcrConstants.NT_FILE.equals(childFileNode.getResourceType())) {
+                            Resource jcrContent = childFileNode.getChild(JcrConstants.JCR_CONTENT);
+                            if (jcrContent != null) {
+                                if (jcrContent.getValueMap().containsKey(JcrConstants.JCR_DATA)) {
+                                    imageResource = childFileNode;
+                                    source = Source.FILE;
+                                }
                             }
                         }
                     }

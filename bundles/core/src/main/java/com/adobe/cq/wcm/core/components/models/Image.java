@@ -153,6 +153,13 @@ public interface Image extends Component {
     String PN_MAP = "imageMap";
 
     /**
+     * Name of the resource property that will indicate if the DAM assets are loaded directly.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
+    String PN_DIRECT_DAM_SRC = "directLoadFromDAM";
+
+    /**
      * Returns the value for the {@code src} attribute of the image.
      *
      * @return the image's URL

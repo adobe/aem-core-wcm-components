@@ -110,11 +110,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
         boolean uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
+        Asset asset = null;
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
             if (assetResource != null) {
-                Asset asset = assetResource.adaptTo(Asset.class);
+                asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
                     if (!uuidDisabled) {
                         uuid = asset.getID();
@@ -152,7 +153,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
             }
-            srcUriTemplate = baseResourcePath + DOT + staticSelectors +
+
+            if (isDirectDAMSrc && asset != null) {
+                srcUriTemplate = asset.getPath();
+            } else {
+                srcUriTemplate = baseResourcePath;
+            }
+            srcUriTemplate += DOT + staticSelectors +
                 SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                 (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
                 (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension): "");
