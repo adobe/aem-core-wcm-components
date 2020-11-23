@@ -273,8 +273,9 @@
                                         <replace file="target/jcr_root/libs/core/wcm/components/text/v2/text/.content.xml" token=".core-wcm" value="Core Content"/>
                                         <replace file="target/jcr_root/libs/core/wcm/components/title/v2/title/.content.xml" token=".core-wcm" value="Core Content"/>
 
+                                        <replace file="target/jcr_root/libs/core/wcm/components/form/container/v2/container/.content.xml" token=".core-wcm-form" value="Core Content"/>
+
                                         <replace file="target/jcr_root/libs/core/wcm/components/form/button/v2/button/.content.xml" token=".core-wcm-form" value="Core Form"/>
-                                        <replace file="target/jcr_root/libs/core/wcm/components/form/container/v2/container/.content.xml" token=".core-wcm-form" value="Core Form"/>
                                         <replace file="target/jcr_root/libs/core/wcm/components/form/hidden/v2/hidden/.content.xml" token=".core-wcm-form" value="Core Form"/>
                                         <replace file="target/jcr_root/libs/core/wcm/components/form/options/v2/options/.content.xml" token=".core-wcm-form" value="Core Form"/>
                                         <replace file="target/jcr_root/libs/core/wcm/components/form/text/v2/text/.content.xml" token=".core-wcm-form" value="Core Form"/>
