@@ -92,7 +92,6 @@
                                         fieldDescription="When checked, DAM assets will be addressed with the DAM asset URL and not indirect via the component."
                                         name="./directLoadFromDAM"
                                         text="Enable direct addressing for DAM assets."
-                                        checked="{Boolean}true"
                                         uncheckedValue="false"
                                         value="{Boolean}true" />
                                     <displayCaptionPopup

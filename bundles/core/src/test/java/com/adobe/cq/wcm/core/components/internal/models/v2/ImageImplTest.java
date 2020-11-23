@@ -122,6 +122,16 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt());
     }
+    
+    @Test
+    void testImageDirectFromDAM() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, ImageImpl.PN_DIRECT_DAM_SRC, "true");
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(IMAGE_FILE_REFERENCE + "." + selector + "{.width}.png/1490005239000/" + ASSET_NAME + ".png",
+                image.getSrcUriTemplate());
+        assertEquals(IMAGE_FILE_REFERENCE + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png",
+                image.getSrc());
+    }
 
     @Test
     void testImageWithAltAndFallbackIfDescriptionIsEmpty() {
