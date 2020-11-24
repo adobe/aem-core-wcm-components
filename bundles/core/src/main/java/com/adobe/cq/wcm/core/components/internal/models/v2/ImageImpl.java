@@ -27,7 +27,10 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +43,7 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
+import com.day.cq.dam.scene7.api.constants.Scene7Constants;
 
 /**
  * V2 Image model implementation.
@@ -49,6 +53,18 @@ import com.day.cq.dam.api.DamConstants;
     resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl implements Image {
+
+    @ValueMapValue(name = "imageModifiers", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String imageModifiers;
+
+    @ValueMapValue(name = "imagePreset", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String imagePreset;
+
+    @ValueMapValue(name = "smartCropRendition", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String smartCropRendition;
 
     /**
      * The resource type.
@@ -64,6 +80,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * The width variable to use when building {@link #srcUriTemplate}.
      */
     private static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+
+    /**
+     * The smartcrop "auto" constant.
+     */
+    private static final String SMART_CROP_AUTO = "SmartCrop:Auto";
 
     /**
      * The path of the delegated content policy.
@@ -84,6 +105,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * Placeholder for the number of pixels, in advance of becoming visible, at which point this image should load.
      */
     private int lazyThreshold;
+
+    /**
+     * Placeholder for the SRC URI template.
+     */
+    private boolean dmImage = false;
 
     /**
      * Placeholder for the referenced assed ID.
@@ -108,8 +134,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         super.initModel();
         boolean altValueFromDAM = properties.get(PN_ALT_VALUE_FROM_DAM, currentStyle.get(PN_ALT_VALUE_FROM_DAM, true));
         boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
+        boolean isDmFeaturesEnabled = currentStyle.get(PN_DESIGN_DYNAMIC_MEDIA_ENABLED, false);
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
         boolean uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
+        String dmImageUrl = null;
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
@@ -136,6 +164,25 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             title = damTitle;
                         }
                     }
+
+                    //check "Enable DM features" checkbox
+                    //check DM asset - check for "dam:scene7File" metadata value
+                    String dmAssetName = asset.getMetadataValue(Scene7Constants.PN_S7_FILE);
+                    if(isDmFeaturesEnabled && (!StringUtils.isEmpty(dmAssetName))){
+                        //image is DM
+                        dmImage = true;
+                        //check for publish side
+                        boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
+                        String dmServerUrl;
+                        if (!isWCMDisabled) {
+                            //for Author
+                            dmServerUrl = "/is/image/";
+                        } else {
+                            //for Publish
+                            dmServerUrl = (String) properties.get(PN_IMAGE_SERVER_URL);
+                        }
+                        dmImageUrl = dmServerUrl + dmAssetName;
+                    }
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
                             request.getResource().getPath());
@@ -147,21 +194,67 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
-            String staticSelectors = selector;
-            if (smartSizes.length > 0) {
-                // only include the quality selector in the URL, if there are sizes configured
-                staticSelectors += DOT + jpegQuality;
-            }
-            srcUriTemplate = baseResourcePath + DOT + staticSelectors +
-                SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-                (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
-                (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension): "");
+            if(dmImageUrl == null){
+                String staticSelectors = selector;
+                if (smartSizes.length > 0) {
+                    // only include the quality selector in the URL, if there are sizes configured
+                    staticSelectors += DOT + jpegQuality;
+                }
+                srcUriTemplate = baseResourcePath + DOT + staticSelectors +
+                    SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
+                    (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
+                    (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension): "");
 
-            // if content policy delegate path is provided pass it to the image Uri
-            String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
-            if (StringUtils.isNotBlank(policyDelegatePath)) {
-                srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
-                src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+                // if content policy delegate path is provided pass it to the image Uri
+                String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
+                if (StringUtils.isNotBlank(policyDelegatePath)) {
+                    srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+                    src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+                }
+            } else {
+                srcUriTemplate = dmImageUrl;
+                src = dmImageUrl;
+                if (StringUtils.isNotBlank(smartCropRendition)) {
+                    if(smartCropRendition.equals(SMART_CROP_AUTO)) {
+                        srcUriTemplate += SRC_URI_TEMPLATE_WIDTH_VAR;
+                    } else {
+                        srcUriTemplate += "%3A" + smartCropRendition;
+                        src += "%3A" + smartCropRendition;
+                    }
+                }
+                if (smartSizes.length > 0 && StringUtils.isBlank(smartCropRendition)) {
+                    String qualityCommand = "?qlt=" + jpegQuality;
+                    srcUriTemplate += qualityCommand;
+                    src += qualityCommand;
+                    String widCommand;
+                    if (smartSizes.length == 1) {
+                        widCommand = "&wid=" + smartSizes[0];
+                        srcUriTemplate += widCommand;
+                        src += widCommand;
+                    } else {
+                        widCommand = "&wid=%7B.width%7D";
+                        srcUriTemplate += widCommand;
+                    }
+                }
+                String suffix = "";
+                if (lastModifiedDate > 0){
+                    String timeStampCommand = (srcUriTemplate.contains("?") ? '&':'?') + "ts=" + lastModifiedDate;
+                    srcUriTemplate += timeStampCommand;
+                    src += timeStampCommand;
+                }
+                if (StringUtils.isNotBlank(imagePreset) && StringUtils.isBlank(smartCropRendition)){
+                    String imagePresetCommand = (srcUriTemplate.contains("?") ? '&':'?') + "$" + imagePreset + "$";
+                    srcUriTemplate += imagePresetCommand;
+                    src += imagePresetCommand;
+                }
+                if (StringUtils.isNotBlank(imageModifiers)){
+                    String imageModifiersCommand = (srcUriTemplate.contains("?") ? '&':'?') + imageModifiers;
+                    srcUriTemplate += imageModifiersCommand;
+                    src += imageModifiersCommand;
+                }
+                if (srcUriTemplate.equals(src)) {
+                    srcUriTemplate = null;
+                }
             }
             buildJson();
         }
@@ -183,6 +276,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     public boolean isLazyEnabled() {
         return !disableLazyLoading;
+    }
+
+    public boolean isDmImage() {
+        return dmImage;
+    }
+
+    public String getSmartCropRendition() {
+        return smartCropRendition;
     }
 
     @Override
