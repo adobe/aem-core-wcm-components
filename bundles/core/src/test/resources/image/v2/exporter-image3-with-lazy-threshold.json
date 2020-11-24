@@ -6,6 +6,7 @@
     "srcUriTemplate": "/core/content/test/_jcr_content/root/image3.coreimg{.width}.png",
     "areas": [],
     "lazyThreshold": 100,
+    "dmImage": false,
     "widths": [],
     "lazyEnabled": false,
     "link": "https://www.adobe.com",
