@@ -18,6 +18,13 @@
                     "jcr:title"         : "Adobe Logo",
                     "linkURL"           : "/content/test"
                 },
+                "image0invalid"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/not-existing-image.png",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677326"
+                },
                 "image1"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",

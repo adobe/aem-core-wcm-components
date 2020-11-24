@@ -134,6 +134,14 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
     }
 
     @Test
+    void testImageDirectFromDAMInvalidAsset() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, ImageImpl.PN_DIRECT_DAM_SRC, "true");
+        Image image = getImageUnderTest(IMAGE0_PATH + "invalid");
+        assertNull(image.getSrc());
+        assertNull(image.getSrcUriTemplate());
+    }
+
+    @Test
     void testImageWithAltAndFallbackIfDescriptionIsEmpty() {
         Image image = getImageUnderTest(IMAGE21_PATH);
         assertEquals("Adobe Systems Logo and Wordmark", image.getAlt());
