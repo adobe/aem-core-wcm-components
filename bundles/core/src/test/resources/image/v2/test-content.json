@@ -317,6 +317,228 @@
                             "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
                         }
                     }
+                },
+                "image31"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, uses nonDM image",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image32"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+                    "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, DM image",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image33"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+                    "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+                    "dmpResetType"      : "imagePreset",
+                    "imagePreset"       : "greyscale",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, DM image, Image Preset",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image34"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+                    "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+                    "imageModifiers"    : "op_invert=1&op_blur=10",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, DM image, Image Modifiers",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image35"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+                    "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+                    "dmpResetType"      : "imagePreset",
+                    "imagePreset"       : "greyscale",
+                    "imageModifiers"    : "op_invert=1&op_blur=10",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, DM image, Image Preset and Image Modifiers",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image36"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+                    "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+                    "dmpResetType"      : "smartCrop",
+                    "smartCropRendition": "Medium",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, DM image, Smart Crop Rendition",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image37"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+                    "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+                    "dmpResetType"      : "smartCrop",
+                    "smartCropRendition": "Medium",
+                    "imageModifiers"    : "op_invert=1&op_blur=10",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, DM image, Smart Crop Rendition and Image Modifiers",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image38"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+                    "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+                    "dmpResetType"      : "smartCrop",
+                    "smartCropRendition": "SmartCrop:Auto",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, DM image, Auto Smart Crop",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image39"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+                    "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+                    "dmpResetType"      : "smartCrop",
+                    "smartCropRendition": "SmartCrop:Auto",
+                    "imageModifiers"    : "op_invert=1&op_blur=10",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, DM image, Auto Smart Crop and Image Modifiers",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
                 }
             },
             "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
