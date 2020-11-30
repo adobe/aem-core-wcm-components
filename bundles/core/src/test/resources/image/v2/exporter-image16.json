@@ -4,6 +4,7 @@
     "srcUriTemplate": "/core/content/test/_jcr_content/root/image16.coreimg{.width}.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
     "areas": [],
     "lazyThreshold": 0,
+    "dmImage": false,
     "widths": [],
     "lazyEnabled": false,
     "dataLayer": {

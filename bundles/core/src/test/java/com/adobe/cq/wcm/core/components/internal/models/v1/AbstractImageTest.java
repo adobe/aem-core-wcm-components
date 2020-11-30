@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.testing.MockPublishUtils;
+import com.day.cq.dam.api.s7dam.utils.PublishUtils;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.commons.mime.MimeTypeService;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -103,6 +105,7 @@ public class AbstractImageTest {
     protected void internalSetUp(String testBase) {
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_CONTENT_ROOT);
         context.load().json(testBase + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+        context.registerService(PublishUtils.class, new MockPublishUtils());
         mockedMimeTypeService = mock(MimeTypeService.class);
         when(mockedMimeTypeService.getMimeType("tif")).thenReturn(StandardImageHandler.TIFF_MIMETYPE);
         when(mockedMimeTypeService.getMimeType("tiff")).thenReturn(StandardImageHandler.TIFF_MIMETYPE);
