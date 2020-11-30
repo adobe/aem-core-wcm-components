@@ -77,11 +77,11 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
             } else {
                 if (StringUtils.startsWith(rendition.getMimeType(), "image/")
                     && rendition.getSize() < Math.pow(AdaptiveImageServlet.DEFAULT_MAX_SIZE, 2)) {
-                    // Try to load image to determine dimensions, if not too large
-                    try {
-                        dimension = Imaging.getImageSize(getStream(), getName());
+                    // Try to load image to determine dimensions, if not too large\
+                    try (InputStream stream = getStream()) {
+                        dimension = Imaging.getImageSize(stream, getName());
                     } catch (Exception e) {
-                        LOG.error("Cannot get rendition " + getName() + " dimension from stream", e);
+                        LOG.error("Cannot get rendition {} dimension from stream", getName(), e);
                     }
                 }
             }

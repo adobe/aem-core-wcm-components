@@ -103,4 +103,19 @@ public class EnhancedRenditionTest {
             fail(ioex);
         }
     }
+
+    @Test
+    public void testInvalidRendition() {
+        Rendition mockRendition = mock(Rendition.class);
+        when(mockRendition.getProperties()).thenReturn(ValueMap.EMPTY);
+        when(mockRendition.getName()).thenReturn("custom");
+        when(mockRendition.getMimeType()).thenReturn("text");
+        try (InputStream is = this.getClass().getClassLoader().getResourceAsStream("image/1x1.png")) {
+            when(mockRendition.getStream()).thenReturn(is);
+            EnhancedRendition rendition = new EnhancedRendition(mockRendition);
+            assertNull(rendition.getDimension());
+        } catch (IOException ioex) {
+            fail(ioex);
+        }
+    }
 }
