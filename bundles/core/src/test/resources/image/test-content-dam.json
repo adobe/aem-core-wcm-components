@@ -87,14 +87,14 @@
                 "jcr:primaryType"         : "nt:folder",
                 "jcr:createdBy"           : "admin",
                 "jcr:created"             : "Mon Mar 20 2017 11:20:37 GMT+0100",
-                "cq5dam.web.1280.1280.png": {
+                "cq5dam.web.1280.1280.jpg": {
                     "jcr:primaryType": "nt:file",
                     "jcr:createdBy"  : "workflow-process-service",
                     "jcr:created"    : "Mon Mar 20 2017 11:20:39 GMT+0100",
                     "jcr:content"    : {
                         "jcr:primaryType"   : "oak:Resource",
                         "jcr:lastModifiedBy": "workflow-process-service",
-                        "jcr:mimeType"      : "image/png",
+                        "jcr:mimeType"      : "image/jpg",
                         "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
                         ":jcr:data"         : 27795
                     }
