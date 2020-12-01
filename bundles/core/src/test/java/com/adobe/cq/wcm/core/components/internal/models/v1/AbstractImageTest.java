@@ -78,6 +78,7 @@ public class AbstractImageTest {
     protected static final String TEMPLATE_IMAGE_PATH = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template";
     protected static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.png";
     protected static final String GIF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.gif";
+    protected static final String JPG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.jpg";
     protected static final String _1PX_IMAGE_BINARY_NAME = "1x1.png";
     protected static final String _40MPX_IMAGE_BINARY_NAME = "20000x20000.png";
     protected static final String TIFF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.tiff";
@@ -124,6 +125,8 @@ public class AbstractImageTest {
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
         context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH +
                 "/jcr:content/renditions/cq5dam.web.1280.1280.png");
+        context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + JPG_IMAGE_BINARY_NAME, PNG_ASSET_PATH +
+                "/jcr:content/renditions/cq5dam.web.1280.1280.jpg");
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH_WITHOUT_EXTENSION + "/jcr:content/renditions/original");
         context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH_WITHOUT_EXTENSION +
                 "/jcr:content/renditions/cq5dam.web.1280.1280.png");
