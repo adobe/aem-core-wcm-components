@@ -5,13 +5,13 @@
     jcr:uuid="d16f0a8a-c694-45a6-9346-bb5b030d4809">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2020-11-27T18:36:26.939+02:00"
+        jcr:lastModified="{Date}2020-12-01T11:42:32.116+02:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Bitsperpixel="{Long}32"
             dam:Comments="XML:com.adobe.xmp: &lt;x:xmpmeta xmlns:x=&quot;adobe:ns:meta/&quot; x:xmptk=&quot;XMP Core 5.4.0&quot;>&#xa;   &lt;rdf:RDF xmlns:rdf=&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;>&#xa;      &lt;rdf:Description rdf:about=&quot;&quot;&#xa;            xmlns:tiff=&quot;http://ns.adobe.com/tiff/1.0/&quot;>&#xa;         &lt;tiff:Orientation>1&lt;/tiff:Orientation>&#xa;      &lt;/rdf:Description>&#xa;   &lt;/rdf:RDF>&#xa;&lt;/x:xmpmeta>&#xa;&#xa;"
-            dam:extracted="{Date}2020-11-27T18:36:26.653+02:00"
+            dam:extracted="{Date}2020-12-01T11:42:31.869+02:00"
             dam:Fileformat="PNG"
             dam:MIMEtype="image/png"
             dam:Numberofimages="{Long}1"
