@@ -257,10 +257,10 @@
                                                         <items jcr:primaryType="nt:unstructured">
                                                             <links
                                                                 jcr:primaryType="nt:unstructured"
-                                                                jcr:title="Show link insertion options (link, unlink)"
+                                                                jcr:title="Show link insertion options (link, unlink, anchor)"
                                                                 sling:resourceType="cq/gui/components/authoring/dialog/inplaceediting/configuration/plugin"
                                                                 defaultEnabled="{Boolean}true"
-                                                                features="modifylink,unlink"
+                                                                features="modifylink,unlink,anchor"
                                                                 name="links"/>
                                                         </items>
                                                         <granite:data
