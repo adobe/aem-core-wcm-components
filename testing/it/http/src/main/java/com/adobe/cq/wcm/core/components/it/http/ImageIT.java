@@ -67,14 +67,7 @@ public class ImageIT {
     public void testImages(Elements html) {
         // Find all image components on page
         html.select("[data-cmp-is=image]").stream().forEach(img -> {
-            // Check the default (no-width) image
             String imageSource = img.attr("data-cmp-src");
-            try {
-                adminAuthor.doGet(imageSource.replace("{.width}", ""));
-            } catch (ClientException e) {
-                collector.addError(e);
-            }
-
             // Check all defined widths
             String imageWidths = img.attr("data-cmp-widths");
             if (StringUtils.isNotEmpty(imageWidths)) {

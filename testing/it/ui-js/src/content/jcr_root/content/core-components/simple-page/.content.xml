@@ -49,7 +49,7 @@
                             <default
                                 jcr:primaryType="nt:unstructured"
                                 offset="0"
-                                width="6"/>
+                                width="5"/>
                         </cq:responsive>
                         <list
                             jcr:created="{Date}2020-11-27T19:46:40.900+02:00"
@@ -78,7 +78,7 @@
                             <default
                                 jcr:primaryType="nt:unstructured"
                                 offset="0"
-                                width="6"/>
+                                width="7"/>
                         </cq:responsive>
                         <image
                             jcr:created="{Date}2020-11-27T19:46:45.330+02:00"

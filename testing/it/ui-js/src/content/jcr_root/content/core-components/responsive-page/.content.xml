@@ -75,7 +75,7 @@
                         <default
                             jcr:primaryType="nt:unstructured"
                             offset="0"
-                            width="4"/>
+                            width="5"/>
                     </cq:responsive>
                     <teaser
                         jcr:created="{Date}2020-11-27T18:33:44.869+02:00"
