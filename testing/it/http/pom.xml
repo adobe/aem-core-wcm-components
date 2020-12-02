@@ -32,77 +32,142 @@
     <!-- P R O J E C T   D E S C R I P T I O N                                  -->
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.it.http</artifactId>
-    <version>2.2.3-SNAPSHOT</version>
+    <version>2.12.3-SNAPSHOT</version>
     <name>Core Components HTTP Integration Tests</name>
 
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+                <!-- Cloud author service (LB) -->
+                <it.author.url>http://localhost:4502</it.author.url>
+                <it.author.user>admin</it.author.user>
+                <it.author.password>admin</it.author.password>
 
-    <properties>
-        <!-- Cloud author service (LB) -->
-        <it.author.url>http://localhost:4502</it.author.url>
-        <it.author.user>admin</it.author.user>
-        <it.author.password>admin</it.author.password>
+                <!-- cloud publish service (LB) -->
+                <it.publish.url>http://localhost:4503</it.publish.url>
+                <it.publish.user>admin</it.publish.user>
+                <it.publish.password>admin</it.publish.password>
+            </properties>
 
-        <!-- cloud publish service (LB) -->
-        <it.publish.url>http://localhost:4503</it.publish.url>
-        <it.publish.user>admin</it.publish.user>
-        <it.publish.password>admin</it.publish.password>
-    </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.21.0</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.21.0</version>
+                        <configuration>
+                            <testSourceDirectory>${basedir}/src/main/java/</testSourceDirectory>
+                            <testClassesDirectory>${project.build.directory}/classes/</testClassesDirectory>
+                            <systemPropertyVariables>
+                                <!-- Same properties as used when run in a AEM CI/CD pipeline -->
+                                <sling.it.configure.default.replication.agents>false</sling.it.configure.default.replication.agents>
+                                <com.sun.security.enableAIAcaIssuers>true</com.sun.security.enableAIAcaIssuers>
+                                <it.logintokenauth>true</it.logintokenauth>
+
+                                <!-- Sling Testing Tools properties for configuring the test instances -->
+                                <sling.it.instances>2</sling.it.instances>
+
+                                <!-- Author service -->
+                                <sling.it.instance.url.1>${it.author.url}</sling.it.instance.url.1>
+                                <sling.it.instance.runmode.1>author</sling.it.instance.runmode.1>
+                                <sling.it.instance.adminUser.1>${it.author.user}</sling.it.instance.adminUser.1>
+                                <sling.it.instance.adminPassword.1>${it.author.password}</sling.it.instance.adminPassword.1>
+
+                                <!-- Publish service -->
+                                <sling.it.instance.url.2>${it.publish.url}</sling.it.instance.url.2>
+                                <sling.it.instance.runmode.2>publish</sling.it.instance.runmode.2>
+                                <sling.it.instance.adminUser.2>${it.publish.user}</sling.it.instance.adminUser.2>
+                                <sling.it.instance.adminPassword.2>${it.publish.password}</sling.it.instance.adminPassword.2>
+                            </systemPropertyVariables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>default-integration-test</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>
+                                        <include>**/*IT.java</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>default-verify</id>
+                                <goals>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.21.0</version>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.21.0</version>
-                <configuration>
-                    <testSourceDirectory>${basedir}/src/main/java/</testSourceDirectory>
-                    <testClassesDirectory>${project.build.directory}/classes/</testClassesDirectory>
-                    <systemPropertyVariables>
-                        <!-- Same properties as used when run in a AEM CI/CD pipeline -->
-                        <sling.it.configure.default.replication.agents>false</sling.it.configure.default.replication.agents>
-                        <com.sun.security.enableAIAcaIssuers>true</com.sun.security.enableAIAcaIssuers>
-                        <it.logintokenauth>true</it.logintokenauth>
-
-                        <!-- Sling Testing Tools properties for configuring the test instances -->
-                        <sling.it.instances>2</sling.it.instances>
-
-                        <!-- Author service -->
-                        <sling.it.instance.url.1>${it.author.url}</sling.it.instance.url.1>
-                        <sling.it.instance.runmode.1>author</sling.it.instance.runmode.1>
-                        <sling.it.instance.adminUser.1>${it.author.user}</sling.it.instance.adminUser.1>
-                        <sling.it.instance.adminPassword.1>${it.author.password}</sling.it.instance.adminPassword.1>
-
-                        <!-- Publish service -->
-                        <sling.it.instance.url.2>${it.publish.url}</sling.it.instance.url.2>
-                        <sling.it.instance.runmode.2>publish</sling.it.instance.runmode.2>
-                        <sling.it.instance.adminUser.2>${it.publish.user}</sling.it.instance.adminUser.2>
-                        <sling.it.instance.adminPassword.2>${it.publish.password}</sling.it.instance.adminPassword.2>
-                    </systemPropertyVariables>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifestEntries>
+                            <Cloud-Manager-TestType>integration-test</Cloud-Manager-TestType>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>default-integration-test</id>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/*IT.java</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>default-verify</id>
-                        <goals>
-                            <goal>verify</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
