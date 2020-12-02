@@ -21,26 +21,91 @@
     <!-- P A R E N T  P R O J E C T  D E S C R I P T I O N                      -->
     <!-- ====================================================================== -->
     <parent>
-        <groupId>com.adobe.qe</groupId>
-        <artifactId>cq-it-parent</artifactId>
-        <version>34</version>
-        <relativePath />
+        <groupId>com.adobe.cq</groupId>
+        <artifactId>core.wcm.components.parent</artifactId>
+        <version>2.12.3-SNAPSHOT</version>
+        <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
+
 
     <!-- ====================================================================== -->
     <!-- P R O J E C T   D E S C R I P T I O N                                  -->
     <!-- ====================================================================== -->
-    <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.it.http</artifactId>
     <version>2.2.3-SNAPSHOT</version>
     <name>Core Components HTTP Integration Tests</name>
 
+
+    <properties>
+        <!-- Cloud author service (LB) -->
+        <it.author.url>http://localhost:4502</it.author.url>
+        <it.author.user>admin</it.author.user>
+        <it.author.password>admin</it.author.password>
+
+        <!-- cloud publish service (LB) -->
+        <it.publish.url>http://localhost:4503</it.publish.url>
+        <it.publish.user>admin</it.publish.user>
+        <it.publish.password>admin</it.publish.password>
+    </properties>
+
     <build>
         <plugins>
-            <!-- Create self-contained jar with dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <testSourceDirectory>${basedir}/src/main/java/</testSourceDirectory>
+                    <testClassesDirectory>${project.build.directory}/classes/</testClassesDirectory>
+                    <systemPropertyVariables>
+                        <!-- Same properties as used when run in a AEM CI/CD pipeline -->
+                        <sling.it.configure.default.replication.agents>false</sling.it.configure.default.replication.agents>
+                        <com.sun.security.enableAIAcaIssuers>true</com.sun.security.enableAIAcaIssuers>
+                        <it.logintokenauth>true</it.logintokenauth>
+
+                        <!-- Sling Testing Tools properties for configuring the test instances -->
+                        <sling.it.instances>2</sling.it.instances>
+
+                        <!-- Author service -->
+                        <sling.it.instance.url.1>${it.author.url}</sling.it.instance.url.1>
+                        <sling.it.instance.runmode.1>author</sling.it.instance.runmode.1>
+                        <sling.it.instance.adminUser.1>${it.author.user}</sling.it.instance.adminUser.1>
+                        <sling.it.instance.adminPassword.1>${it.author.password}</sling.it.instance.adminPassword.1>
+
+                        <!-- Publish service -->
+                        <sling.it.instance.url.2>${it.publish.url}</sling.it.instance.url.2>
+                        <sling.it.instance.runmode.2>publish</sling.it.instance.runmode.2>
+                        <sling.it.instance.adminUser.2>${it.publish.user}</sling.it.instance.adminUser.2>
+                        <sling.it.instance.adminPassword.2>${it.publish.password}</sling.it.instance.adminPassword.2>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*IT.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.rat</groupId>
@@ -60,21 +125,14 @@
     <!-- ====================================================================== -->
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>aem-cloud-testing-clients</artifactId>
             <version>0.4.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.testing.clients</artifactId>
-            <version>2.0.8</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.13</version>
         </dependency>
     </dependencies>
 </project>
