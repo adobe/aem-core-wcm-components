@@ -34,6 +34,17 @@ The following configuration properties are used:
 2. `./embeddablesDisabled` - defines whether or not embeddables are disabled in the edit dialog.
 1. `./htmlDisabled` - defines whether or not free-form HTML input is disabled in the edit dialog.
 3. `./allowedEmbeddables` - defines the embeddables that are allowed to be selected by an author when embeddables are not disabled.
+4. `./youtubeMuteEnabled` - enables the ability of content authors to configure the [YouTube mute parameter][yt-parameters]
+5. `./youtubeMuteDefaultValue` - the default value of the [YouTube mute parameter][yt-parameters]
+6. `./youtubeAutoPlayEnabled` - enables the ability of content authors to configure the [YouTube Autoplay parameter][yt-parameters]
+7. `./youtubeAutoPlayDefaultValue` - the default value of the [YouTube Autoplay parameter][yt-parameters]
+8. `./youtubeLoopEnabled` - enables the ability of content authors to configure the [YouTube loop parameter][yt-parameters]
+9. `./youtubeLoopDefaultValue` - the default value of the [YouTube loop parameter][yt-parameters]
+10. `./youtubePlaysInlineEnabled` - enables the ability of content authors to configure the [YouTube playsinline parameter][yt-parameters]
+11. `./youtubePlaysInlineDefaultValue` - the default value of the [YouTube playsinline parameter][yt-parameters]
+12. `./youtubeRelatedVideosEnabled` - enables the ability of content authors to configure the [YouTube rel parameter][yt-parameters]
+13. `./youtubeRelatedVideosDefaultValue` - the default value of the [YouTube rel parameter][yt-parameters]
+
 
 ### Edit Dialog Properties
 The following JCR properties are used:
@@ -94,6 +105,11 @@ where `<embeddableResourceType>` is the resource type of your custom embeddable.
 * `./youtubeVideoId` - defines the YouTube video ID.
 * `./youtubeWidth` - defines the YouTube video player width.
 * `./youtubeHeight` - defines the YouTube video player height.
+* `./youtubeMute` - the value of the [YouTube mute parameter][yt-parameters]
+* `./youtubeAutoPlay` - the value of the [YouTube Autoplay parameter][yt-parameters]
+* `./youtubeLoop` - the value of the [YouTube loop parameter][yt-parameters]
+* `./youtubePlaysInline` - the value of the [YouTube playsinline parameter][yt-parameters]
+* `./youtubeRel` - the default value of the [YouTube rel parameter][yt-parameters]
 
 Example:
 * [YouTube embeddable](embeddable/youtube)
@@ -115,3 +131,6 @@ Example:
 * **Co-authors**: [Jean-Christophe Kautzmann](https://github.com/jckautzmann), [Richard Hand](https://github.com/richardhand), [Vlad Bailescu](https://github.com/vladbailescu)
 
 _If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._
+
+
+[yt-parameters]: https://developers.google.com/youtube/player_parameters

@@ -21,6 +21,8 @@
 
     var selectors = {
         dialogContent: ".cmp-embed__editor",
+        designDialogContent: ".cmp-embed__design-editor",
+        toggleCheckboxes: ".toggle-checkbox",
         embeddableField: "[data-cmp-embed-dialog-edit-hook='embeddableField']",
         typeField: "[data-cmp-embed-dialog-edit-hook='typeField']",
         typeRadio: "[data-cmp-embed-dialog-edit-hook='typeField'] coral-radio",
@@ -186,6 +188,25 @@
                         });
                     }
                 }
+            }
+            
+            var designDialogContent = $dialog[0].querySelector(selectors.designDialogContent);
+            if (designDialogContent) {
+                // for all toggles
+                var toggleCheckboxes = designDialogContent.querySelectorAll(selectors.toggleCheckboxes);
+                toggleCheckboxes.forEach(function(toggleCheckbox) {
+                        Coral.commons.ready(toggleCheckbox, function() {
+                            var showHideTarget = getShowHideTarget(toggleCheckbox);
+                            
+                            // either hide or show them depending on the value of the toggle
+                            toggleShowHideTargets(showHideTarget, toggleCheckbox.checked.toString());
+                            
+                            // register an event handler
+                            toggleCheckbox.on("change", function() {
+                                toggleShowHideTargets(showHideTarget, toggleCheckbox.checked.toString());
+                            });
+                        });
+                });
             }
         }
     });
