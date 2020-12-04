@@ -15,7 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.embeddable;
 
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
@@ -134,7 +136,7 @@ public class YouTubeImpl implements YouTube {
      * This helper method rebuilds the logic from "com.day.cq.wcm.scripting.impl.WcmBindingsValesProvider" but uses the wrapped resource.
      * @return the style for the  wrapped resource
      */
-    private Style getStyleForWrappedResource(Resource resource) {
+     Style getStyleForWrappedResource(Resource resource) {
         ContentPolicyManager policyManager = resource.getResourceResolver().adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
             Resource wrappedResource = getWrappedResource(resource);
@@ -156,10 +158,18 @@ public class YouTubeImpl implements YouTube {
 
     @Override
     public @Nullable String getIFrameSrc() throws URISyntaxException {
-        if (isEmpty()) {
+        Optional<URI> uri = getIFrameSrc(getStyleForWrappedResource(request.getResource()));
+        if (!uri.isPresent()) {
             return null;
+        } else {
+            return uri.get().toString();
         }
-        Style currentStyle = getStyleForWrappedResource(request.getResource());
+    }
+   
+    Optional<URI> getIFrameSrc(Style currentStyle) throws URISyntaxException {
+        if (isEmpty()) {
+            return Optional.empty();
+        }
         URIBuilder uriBuilder = new URIBuilder(String.format(BASE_EMBED_URL, videoId));
         StringBuffer requestURL = request.getRequestURL();
         String currentProtocolHostandPort = requestURL.substring(0, requestURL.length() - request.getPathInfo().length());
@@ -180,10 +190,11 @@ public class YouTubeImpl implements YouTube {
                 }
             }
             if (Boolean.TRUE.equals(currentStyle.get(PN_DESIGN_LOOP_ENABLED, false))) {
-                addYouTubeBooleanUriParameter(uriBuilder, PARAMETER_LOOP, isLoop, currentStyle, PN_DESIGN_LOOP_DEFAULT_VALUE);
-                // from https://developers.google.com/youtube/player_parameters#loop
-                // This parameter has limited support in IFrame embeds. To loop a single video, set the loop parameter value to 1 and set the playlist parameter value to the same video ID already specified in the Player API URL
-                uriBuilder.addParameter(PARAMETER_PLAYLIST, videoId);
+                if (addYouTubeBooleanUriParameter(uriBuilder, PARAMETER_LOOP, isLoop, currentStyle, PN_DESIGN_LOOP_DEFAULT_VALUE)) {
+                    // from https://developers.google.com/youtube/player_parameters#loop
+                    // This parameter has limited support in IFrame embeds. To loop a single video, set the loop parameter value to 1 and set the playlist parameter value to the same video ID already specified in the Player API URL
+                    uriBuilder.addParameter(PARAMETER_PLAYLIST, videoId);
+                }
             }
             if (Boolean.TRUE.equals(currentStyle.get(PN_DESIGN_RELATED_VIDEOS_ENABLED, false))) {
                 addYouTubeBooleanUriParameter(uriBuilder, PARAMETER_REL, isRel, currentStyle, PN_DESIGN_RELATED_VIDEOS_DEFAULT_VALUE);
@@ -194,7 +205,7 @@ public class YouTubeImpl implements YouTube {
         } else {
             LOGGER.debug("No style available, optional YouTube parameters are not used!");
         }
-        return uriBuilder.build().toString();
+        return Optional.of(uriBuilder.build());
     }
 
     boolean getBooleanValueOrDefaultFromStyle(Boolean value, Style style, String stylePropertyName) {
@@ -205,7 +216,9 @@ public class YouTubeImpl implements YouTube {
         }
     }
 
-    void addYouTubeBooleanUriParameter(URIBuilder uriBuilder, String parameterName, Boolean value, Style style, String stylePropertyName) {
-        uriBuilder.addParameter(parameterName, getBooleanValueOrDefaultFromStyle(value, style, stylePropertyName)? "1" : "0");
+    boolean addYouTubeBooleanUriParameter(URIBuilder uriBuilder, String parameterName, Boolean value, Style style, String stylePropertyName) {
+        boolean effectiveValue = getBooleanValueOrDefaultFromStyle(value, style, stylePropertyName);
+        uriBuilder.addParameter(parameterName, effectiveValue ? "1" : "0");
+        return effectiveValue;
     }
 }

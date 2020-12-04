@@ -22,6 +22,7 @@
     var selectors = {
         dialogContent: ".cmp-embed__editor",
         designDialogContent: ".cmp-embed__design-editor",
+        allowedEmbeddables: ".allowed-embeddables",
         toggleCheckboxes: ".toggle-checkbox",
         embeddableField: "[data-cmp-embed-dialog-edit-hook='embeddableField']",
         typeField: "[data-cmp-embed-dialog-edit-hook='typeField']",
@@ -206,6 +207,23 @@
                                 toggleShowHideTargets(showHideTarget, toggleCheckbox.checked.toString());
                             });
                         });
+                });
+                
+                // for all optional tabs
+                var allowedEmbeddablesDropdown = designDialogContent.querySelector(selectors.allowedEmbeddables);
+                Coral.commons.ready(allowedEmbeddablesDropdown, function() {
+                        var showHideTarget = getShowHideTarget(allowedEmbeddablesDropdown);
+                        
+                        /**
+                        TODO: showing and hiding tabs is more complex
+                        // either hide or show them depending on the value of the toggle
+                        toggleShowHideTargets(showHideTarget, allowedEmbeddablesDropdown.value);
+                        
+                        // register an event handler
+                        allowedEmbeddablesDropdown.on("change", function() {
+                            toggleShowHideTargets(showHideTarget, allowedEmbeddablesDropdown.value);
+                        });
+                        */
                 });
             }
         }

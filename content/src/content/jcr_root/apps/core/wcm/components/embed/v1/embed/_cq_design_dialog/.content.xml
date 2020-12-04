@@ -31,7 +31,7 @@
                 <items jcr:primaryType="nt:unstructured">
                     <properties
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Properties"
+                        jcr:title="Embeddable Types"
                         sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
                         <items jcr:primaryType="nt:unstructured">
                             <column
@@ -66,7 +66,7 @@
                                         uncheckedValue="false"
                                         value="{Boolean}true"/>
                                     <allowedEmbeddables
-                                        granite:class="cq-dialog-dropdown-showhide"
+                                        granite:class="allowed-embeddables"
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                         deleteHint="{Boolean}true"
@@ -79,189 +79,28 @@
                                             sling:resourceType="core/wcm/components/embed/v1/datasources/embeddables"/>
                                         <granite:data
                                             jcr:primaryType="nt:unstructured"
-                                            cq-dialog-dropdown-showhide-target=".list-option-listfrom-showhide-target"/>
+                                            cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-youtube\]"/>
                                     </allowedEmbeddables>
-                                    <youtubeParameters
-                                        granite:class="hide list-option-listfrom-showhide-target"
-                                        jcr:primaryType="nt:unstructured"
-                                        jcr:title="YouTube Parameters"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
-                                        margin="{Boolean}true">
-                                        <granite:data
-                                            jcr:primaryType="nt:unstructured"
-                                            showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
-                                        <items jcr:primaryType="nt:unstructured">
-                                            <mute
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="false"
-                                                value="true"
-                                                uncheckedValue="false"
-                                                fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
-                                                name="./youtubeMuteEnabled"
-                                                text="Allow configuration of Mute behaviour"
-                                                granite:class="toggle-checkbox">
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-mute\]"/>
-                                            </mute>
-                                            <muteGroup
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/well">
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <enable
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="false"
-                                                        uncheckedValue="false"
-                                                        value="true"
-                                                        fieldDescription="This parameter specifies whether the video will play muted by default. Enabling this increases the chance that Autoplay works in modern browsers."
-                                                        text="Default Value of Mute"
-                                                        name="./youtubeMuteDefaultValue"/>
-                                                </items>
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-mute="true"
-                                                    cmp-embed-dialog-edit-showhidetargetvalue="true"/>
-                                            </muteGroup>
-                                            <autoplay
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="false"
-                                                uncheckedValue="false"
-                                                value="true"
-                                                fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
-                                                text="Allow configuration of Autoplay behaviour"
-                                                name="./youtubeAutoPlayEnabled"
-                                                granite:class="toggle-checkbox">
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-autoplay\]"/>
-                                            </autoplay>
-                                            <autoplayGroup
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/well">
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <enable
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="false"
-                                                        uncheckedValue="false"
-                                                        value="true"
-                                                        fieldDescription="This parameter specifies whether the initial video will automatically start to play when the player loads."
-                                                        text="Default Value of Autoplay"
-                                                        name="./youtubeAutoPlayDefaultValue"/>
-                                                </items>
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-autoplay="true"
-                                                    cmp-embed-dialog-edit-showhidetargetvalue="true"/>
-                                            </autoplayGroup>
-                                            <loop
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="false"
-                                                uncheckedValue="false"
-                                                value="true"
-                                                fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
-                                                text="Allow configuration of Loop behaviour"
-                                                name="./youtubeLoopEnabled"
-                                                granite:class="toggle-checkbox">
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-loop\]"/>
-                                            </loop>
-                                            <loopGroup
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/well">
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <enable
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="false"
-                                                        uncheckedValue="false"
-                                                        value="true"
-                                                        fieldDescription="In the case of a single video specifies whether the player should play the initial video again and again. In the case of a playlist, the player plays the entire playlist and then starts again at the first video."
-                                                        text="Default Value of Loop"
-                                                        name="./youtubeLoopDefaultValue"/>
-                                                </items>
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-loop="true"
-                                                    cmp-embed-dialog-edit-showhidetargetvalue="true"/>
-                                            </loopGroup>
-                                            <inline
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="false"
-                                                uncheckedValue="false"
-                                                value="true"
-                                                fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
-                                                text="Allow configuration of Inline Playback (iOS)"
-                                                name="./youtubePlaysInlineEnabled"
-                                                granite:class="toggle-checkbox">
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-inline\]"/>
-                                            </inline>
-                                            <inlineGroup
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/well">
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <enable
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="false"
-                                                        uncheckedValue="false"
-                                                        value="true"
-                                                        fieldDescription="This parameter controls whether videos play inline (on) or fullscreen (off) in an HTML5 player on iOS."
-                                                        text="Default Value of Inline Playback (iOS)"
-                                                        name="./youtubePlaysInlineDefaultValue"/>
-                                                </items>
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-inline="true"
-                                                    cmp-embed-dialog-edit-showhidetargetvalue="true"/>
-                                            </inlineGroup>
-                                            <rel
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="false"
-                                                uncheckedValue="false"
-                                                value="true"
-                                                fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
-                                                text="Allow configuration of related videos"
-                                                name="./youtubeRelatedVideosEnabled"
-                                                granite:class="toggle-checkbox">
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-rel\]"/>
-                                            </rel>
-                                            <relGroup
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/well">
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <enable
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="false"
-                                                        uncheckedValue="false"
-                                                        value="true"
-                                                        fieldDescription="If enabled related videos will come from the same channel as the video that was just played, otherwise from any channel."
-                                                        text="Default Value of related videos"
-                                                        name="./youtubeRelatedVideosDefaultValue"/>
-                                                </items>
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-rel="true"
-                                                    cmp-embed-dialog-edit-showhidetargetvalue="true"/>
-                                            </relGroup>
-                                        </items>
-                                    </youtubeParameters>
                                 </items>
                             </column>
                         </items>
                     </properties>
+                    <youTubeParametersTab
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="YouTube Parameters"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <!-- hiding/showing requires additional JS:  http://www.sgaemsolutions.com/2019/01/showhide-tabs-and-fields-based-on-drop.html -->
+                        <granite:data
+                            jcr:primaryType="nt:unstructured"
+                            cmp-embed-dialog-edit-youtube="true"
+                            cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
+                        <items jcr:primaryType="nt:unstructured">
+                            <container
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/include"
+                                path="/mnt/overlay/core/wcm/components/embed/v1/embed/embeddable/youtube/cq:design_dialog"/>
+                        </items>
+                    </youTubeParametersTab>
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"

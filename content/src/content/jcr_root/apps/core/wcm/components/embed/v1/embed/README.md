@@ -34,16 +34,8 @@ The following configuration properties are used:
 2. `./embeddablesDisabled` - defines whether or not embeddables are disabled in the edit dialog.
 1. `./htmlDisabled` - defines whether or not free-form HTML input is disabled in the edit dialog.
 3. `./allowedEmbeddables` - defines the embeddables that are allowed to be selected by an author when embeddables are not disabled.
-4. `./youtubeMuteEnabled` - enables the ability of content authors to configure the [YouTube mute parameter][yt-parameters]
-5. `./youtubeMuteDefaultValue` - the default value of the [YouTube mute parameter][yt-parameters]
-6. `./youtubeAutoPlayEnabled` - enables the ability of content authors to configure the [YouTube Autoplay parameter][yt-parameters]
-7. `./youtubeAutoPlayDefaultValue` - the default value of the [YouTube Autoplay parameter][yt-parameters]
-8. `./youtubeLoopEnabled` - enables the ability of content authors to configure the [YouTube loop parameter][yt-parameters]
-9. `./youtubeLoopDefaultValue` - the default value of the [YouTube loop parameter][yt-parameters]
-10. `./youtubePlaysInlineEnabled` - enables the ability of content authors to configure the [YouTube playsinline parameter][yt-parameters]
-11. `./youtubePlaysInlineDefaultValue` - the default value of the [YouTube playsinline parameter][yt-parameters]
-12. `./youtubeRelatedVideosEnabled` - enables the ability of content authors to configure the [YouTube rel parameter][yt-parameters]
-13. `./youtubeRelatedVideosDefaultValue` - the default value of the [YouTube rel parameter][yt-parameters]
+
+In addition once the YouTube embeddable is allowed a tab from [YouTube component](embeddable/youtube)'s design dialog is included.
 
 
 ### Edit Dialog Properties
@@ -73,6 +65,7 @@ By implementing the [UrlProcessor](../../../../../../../../../../../bundles/core
 You will also need to create an HTL template file, with the same name as the `processor` field returned in the `Result`.
 
 Example:
+
 * [Pinterest processor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/services/embed/PinterestUrlProcessor.java)
 * [Pinterest HTL template](processors/pinterest.html)
 
@@ -81,9 +74,11 @@ Example:
 By adding an OSGi configuration you can embed an URL from an oEmbed provider.
 
 Example:
+
 * [YouTube configuration](../../../../../../../../../../../config/src/content/jcr_root/apps/core/wcm/config/com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedClientImplConfigurationFactory-youtube.config)
 
 See also:
+
 * [oEmbed specification](https://oembed.com)
 * [oEmbed providers](https://oembed.com/providers.json)
 
@@ -93,25 +88,16 @@ See also:
 2. Create a rendering HTL script suitable for what your want to render.
 3. Create a cq:dialog node with only the configuration options needed for your embeddable.
 4. Make sure to have the following properties added to a `granite:data` node under the `cq:dialog` node:
-
-```
-cmp-embed-dialog-edit-embeddableoptions="true"
-cmp-embed-dialog-edit-showhidetargetvalue="<embeddableResourceType>"
-```
-where `<embeddableResourceType>` is the resource type of your custom embeddable. See [YouTube embeddable options](./embeddable/youtube/_cq_dialog/.content.xml#L42) for an example!
-
-
-5. The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes. The following JCR properties are used for the provided YouTube embeddable:
-* `./youtubeVideoId` - defines the YouTube video ID.
-* `./youtubeWidth` - defines the YouTube video player width.
-* `./youtubeHeight` - defines the YouTube video player height.
-* `./youtubeMute` - the value of the [YouTube mute parameter][yt-parameters]
-* `./youtubeAutoPlay` - the value of the [YouTube Autoplay parameter][yt-parameters]
-* `./youtubeLoop` - the value of the [YouTube loop parameter][yt-parameters]
-* `./youtubePlaysInline` - the value of the [YouTube playsinline parameter][yt-parameters]
-* `./youtubeRel` - the default value of the [YouTube rel parameter][yt-parameters]
+   
+   ```
+   cmp-embed-dialog-edit-embeddableoptions="true"
+   cmp-embed-dialog-edit-showhidetargetvalue="<embeddableResourceType>"
+   ```
+   where `<embeddableResourceType>` is the resource type of your custom embeddable. See [YouTube embeddable options](./embeddable/youtube/_cq_dialog/.content.xml#L42) for an example!
+5. The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes. 
 
 Example:
+
 * [YouTube embeddable](embeddable/youtube)
 
 ### Security Recommendations
@@ -131,6 +117,3 @@ Example:
 * **Co-authors**: [Jean-Christophe Kautzmann](https://github.com/jckautzmann), [Richard Hand](https://github.com/richardhand), [Vlad Bailescu](https://github.com/vladbailescu)
 
 _If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._
-
-
-[yt-parameters]: https://developers.google.com/youtube/player_parameters
