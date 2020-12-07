@@ -198,36 +198,77 @@
                 toggleCheckboxes.forEach(function(toggleCheckbox) {
                         Coral.commons.ready(toggleCheckbox, function() {
                             var showHideTarget = getShowHideTarget(toggleCheckbox);
-                            
+
                             // either hide or show them depending on the value of the toggle
                             toggleShowHideTargets(showHideTarget, toggleCheckbox.checked.toString());
-                            
+
                             // register an event handler
                             toggleCheckbox.on("change", function() {
                                 toggleShowHideTargets(showHideTarget, toggleCheckbox.checked.toString());
                             });
                         });
                 });
-                
-                // for all optional tabs
-                var allowedEmbeddablesDropdown = designDialogContent.querySelector(selectors.allowedEmbeddables);
-                Coral.commons.ready(allowedEmbeddablesDropdown, function() {
-                        var showHideTarget = getShowHideTarget(allowedEmbeddablesDropdown);
-                        
-                        /**
-                        TODO: showing and hiding tabs is more complex
-                        // either hide or show them depending on the value of the toggle
-                        toggleShowHideTargets(showHideTarget, allowedEmbeddablesDropdown.value);
-                        
-                        // register an event handler
-                        allowedEmbeddablesDropdown.on("change", function() {
-                            toggleShowHideTargets(showHideTarget, allowedEmbeddablesDropdown.value);
-                        });
-                        */
-                });
             }
         }
     });
+
+    /**
+     * This is triggered after "dialog-loaded" but is required, as otherwise the relation between panel and tab is not yet established.
+     */
+    $(document).on("dialog-ready", function() {
+        var designDialogContent = document.querySelector(selectors.designDialogContent);
+        if (designDialogContent) {
+            // for all optional tabs
+            var allowedEmbeddablesDropdown = designDialogContent.querySelector(selectors.allowedEmbeddables);
+            Coral.commons.ready(allowedEmbeddablesDropdown, function() {
+                var panelSelectors = getShowHideTarget(allowedEmbeddablesDropdown);
+                // register an event handler
+                allowedEmbeddablesDropdown.on("change", function() {
+                    toggleShowHideTabs(panelSelectors, allowedEmbeddablesDropdown.value);
+                });
+                // set initial state inside requestAnimationFrame as only there the relevant attribute "aria-labelledby" is set
+                window.requestAnimationFrame((function() {
+                    toggleShowHideTabs(panelSelectors, allowedEmbeddablesDropdown.value);
+                }));
+            });
+        }
+    });
+
+	/**
+     * Toggles the disabled state and visibility of tabs linked to panels matching the target.
+     * Tabs that match the provided value are enabled / shown, otherwise they are disabled / hidden.
+     *
+     * @param {String} panelSelectors Comma separated list of panel selectors for which the tabs should be toggled
+     * @param {String} value The value of the target to enable and show
+     */
+    function toggleShowHideTabs(panelSelectors, value) {
+        var panelElements = document.querySelectorAll(panelSelectors);
+
+        for (var i = 0; i < panelElements.length; i++) {
+            var panelElement = panelElements[i];
+            var showHideTargetValue = getShowHideTargetValue(panelElement);
+            var tabElement = getTabElementForPanel(panelElement);
+            if (showHideTargetValue === value) {
+                toggleTarget($(tabElement), true);
+            } else {
+                toggleTarget($(tabElement), false);
+            }
+        }
+    }
+
+    /**
+     * Retrieves the tab element connected to a given panel element
+     *
+     * @param {Element} panelElement The panel element for which to return the tab element
+     * @returns {Element} The related tab element
+     */
+    function getTabElementForPanel(panelElement) {
+        // go to one level below panelstack
+        var panel = panelElement.parentElement.parentElement;
+        // get tab id controlling this panel
+        var tabId = panel.getAttribute("aria-labelledby");
+        return document.getElementById(tabId);
+    }
 
     /**
      * Toggles the disabled state and visibility of elements matching the target.
