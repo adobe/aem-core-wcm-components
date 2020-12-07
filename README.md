@@ -14,7 +14,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 
 ### Usability Study 2020
 
-We're conducting a usability study by using the [System Usability Scale](https://measuringu.com/sus/), a reliable tool to measure the perceived usability.  
+We're conducting a usability study by using the [System Usability Scale](https://measuringu.com/sus/), a reliable tool to measure the perceived usability.
 Please help us making the Core Components better by responding to our **[short usability questionnaire](https://s2.userzoom.com/m/MSBDNTc1MlMxMDk1)**. Thank you!
 
 ## Documentation
@@ -121,15 +121,7 @@ Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install
 * `-am/-also-make` options specifies that dependencies should also be built
 
-For convenience, the following deployment profiles are provided when running the Maven install goal with `mvn install`:
-* `autoInstallSinglePackage`: Install everything to the AEM author instance.
-* `autoInstallSinglePackagePublish`: Install everything to the AEM publish instance.
-* `autoInstallPackage`: Install the `ui.content` and `ui.apps` content packages to the AEM author instance.
-* `autoInstallPackagePublish`: Install the `ui.content` and `ui.apps` content packages to the  AEM publish instance.
-
-The hostname and port of the instance can be changed with the following user defined properties:
-* `aem.host` and `aem.port` for the author instance.
-* `aem.publish.host` and `aem.publish.port` for the publish instance.
+For detailed informations see [BUILDING.md](BUILDING.md).
 
 ### Known Issues
 - The provided oEmbed URL Processor configuration for Facebook and Instagram is not working at the moment as a new version of the endpoint was released by Facebook and now an access token needs to be passed in the request. A possible workaround is described in https://github.com/adobe/aem-core-wcm-components/issues/1225
