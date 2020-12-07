@@ -199,6 +199,7 @@
                     <version>1.1.4</version>
                     <configuration>
                         <failOnMissingEmbed>true</failOnMissingEmbed>
+                        <showImportPackageReport>false</showImportPackageReport>
                         <filterSource>${project.basedir}/src/content/META-INF/vault/filter.xml</filterSource>
                         <excludes>
                             <!-- exclude .vlt control files in the package -->
