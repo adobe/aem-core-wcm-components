@@ -46,6 +46,7 @@ import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.apache.sling.commons.metrics.Timer;
 import org.apache.sling.commons.mime.MimeTypeService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -102,6 +103,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
     private int maxInputWidth;
+    
+    private AdaptiveImageServletMetrics metrics;
 
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient MimeTypeService mimeTypeService;
@@ -109,16 +112,20 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
-    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, int defaultResizeWidth, int maxInputWidth) {
+    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics, 
+            int defaultResizeWidth, int maxInputWidth) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
+        this.metrics = metrics;
         this.defaultResizeWidth = defaultResizeWidth > 0 ? defaultResizeWidth : DEFAULT_RESIZE_WIDTH;
         this.maxInputWidth = maxInputWidth > 0 ? maxInputWidth : DEFAULT_MAX_SIZE;
     }
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
+        Timer.Context requestDuration = metrics.startDurationRecording();
         try {
+            metrics.markServletInvocation();
             RequestPathInfo requestPathInfo = request.getRequestPathInfo();
             List<String> selectorList = selectorToList(requestPathInfo.getSelectorString());
             String suffix = requestPathInfo.getSuffix();
@@ -231,10 +238,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     transformAndStreamAsset(response, componentProperties, resizeWidth, quality, asset, imageType,
                             imageName);
                 }
+                metrics.markRenditionRendered();
             }
         } catch (IllegalArgumentException e) {
             LOGGER.error("Invalid image request", e.getMessage());
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } finally {
+            requestDuration.stop();
         }
 
     }
@@ -496,7 +506,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         // If no rendition was found, attempt to use original
         if (bestRendition == null) {
-            bestRendition = new EnhancedRendition(asset.getOriginal());
+            bestRendition = getOriginal(asset);
         }
         return filter(bestRendition);
     }
@@ -511,7 +521,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @NotNull
     private EnhancedRendition getOriginal(@NotNull Asset asset) throws IOException {
         EnhancedRendition original = new EnhancedRendition(asset.getOriginal());
-        return filter(original);
+        EnhancedRendition filtered = filter(original);
+        metrics.markOriginalRenditionUsed();
+        return filtered;
     }
 
     /**
@@ -528,6 +540,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if (dimension != null && dimension.getWidth() <= maxInputWidth) {
             return rendition;
         }
+        metrics.markRejectedTooLargeRendition();
         throw new IOException(String.format("Cannot process rendition %s due to size %s", rendition.getName(), rendition.getDimension()));
     }
 
