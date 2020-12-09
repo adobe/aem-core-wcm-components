@@ -43,6 +43,7 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
+import com.day.cq.dam.scene7.api.constants.Scene7AssetType;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
 
 /**
@@ -175,8 +176,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         String dmServerUrl;
                         if (!isWCMDisabled) {
-                            //for Author
-                            dmServerUrl = "/is/image/";
+                            if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
+                                dmServerUrl = "/is/content/";
+                            } else {
+                                //for Author
+                                dmServerUrl = "/is/image/";
+                            }
                         } else {
                             //for Publish
                             dmServerUrl = (String) properties.get(PN_IMAGE_SERVER_URL);
