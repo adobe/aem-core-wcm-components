@@ -347,10 +347,23 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
                         layer = getLayer(rendition);
+                        if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
+                                ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension))) {
+                            LOGGER.debug("Adding default (white) background to a transparent PNG: {}/{}", asset.getPath(),
+                                    rendition.getName());
+                            layer.setBackground(Color.white);
+                        }
                         layer.resize(resizeWidth, resizeHeight);
                         response.setContentType(imageType);
                         LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
                         layer.write(imageType, quality, response.getOutputStream());
+//                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                        layer.write(imageType, quality, baos);
+//                        Layer res = new Layer(new ByteArrayInputStream(baos.toByteArray()));
+//                        LOGGER.info(res.getBackground().toString());
+//                        try (FileOutputStream fos = new FileOutputStream("out1" + "." + "jpg")) {
+//                            fos.write(baos.toByteArray());
+//                        }
                     } else {
                         LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
                             asset.getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);

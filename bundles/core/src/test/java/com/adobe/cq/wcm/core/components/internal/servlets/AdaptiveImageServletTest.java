@@ -694,6 +694,18 @@ class AdaptiveImageServletTest extends AbstractImageTest {
                 "Expecting to throw an exception complaining that dimensions are too large");
     }
 
+    @Test
+    void testTransparentImage() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE29_PATH,
+                1607501105000L, "img.1500", "jpeg");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new String[] {"1500"});
+        servlet.doGet(request, response);
+        Layer responseImage = new Layer(new ByteArrayInputStream(response.getOutput()));
+        Assertions.assertTrue(true);
+    }
+
     private void testNegativeRequestedWidth(String imagePath) throws IOException {
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
                 prepareRequestResponsePair(imagePath, "img.-1", "png");

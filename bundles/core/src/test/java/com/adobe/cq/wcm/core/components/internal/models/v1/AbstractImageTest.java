@@ -73,6 +73,7 @@ public class AbstractImageTest {
     protected static final String IMAGE26_PATH = PAGE + "/jcr:content/root/image26";
     protected static final String IMAGE27_PATH = PAGE + "/jcr:content/root/image27";
     protected static final String IMAGE28_PATH = PAGE + "/jcr:content/root/image28";
+    protected static final String IMAGE29_PATH = PAGE + "/jcr:content/root/image29";
     protected static final String TEMPLATE_PATH = "/conf/coretest/settings/wcm/templates/testtemplate";
     protected static final String TEMPLATE_STRUCTURE_PATH = TEMPLATE_PATH + "/structure";
     protected static final String TEMPLATE_IMAGE_PATH = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template";
@@ -81,6 +82,7 @@ public class AbstractImageTest {
     protected static final String JPG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.jpg";
     protected static final String _1PX_IMAGE_BINARY_NAME = "1x1.png";
     protected static final String _40MPX_IMAGE_BINARY_NAME = "20000x20000.png";
+    protected static final String TRANSPARENT_IMAGE_BINARY_NAME = "transparent_hd.png";
     protected static final String TIFF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.tiff";
     protected static final String SVG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.svg";
     protected static final String PNG_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_BINARY_NAME;
@@ -97,6 +99,7 @@ public class AbstractImageTest {
     protected static final String PNG23_FILE_PATH = IMAGE23_PATH + "/file";
     protected static final String SVG_FILE_PATH = IMAGE24_PATH + "/file";
     protected static final String LARGE_PNG_ASSET_PATH = "/content/dam/core/images/20000x20000.png";
+    protected static final String TRANSPARENT_PNG_ASSET_PATH = "/content/dam/core/images/transparent_hd.png";
 
     protected static ContentPolicyManager contentPolicyManager;
     protected static MimeTypeService mockedMimeTypeService;
@@ -144,7 +147,7 @@ public class AbstractImageTest {
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG23_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
         context.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_FILE_PATH, MIME_TYPE_SVG);
         context.load().binaryFile("/image/" + _40MPX_IMAGE_BINARY_NAME, LARGE_PNG_ASSET_PATH + "/jcr:content/renditions/original");
-
+        context.load().binaryFile("/image/" + TRANSPARENT_IMAGE_BINARY_NAME, TRANSPARENT_PNG_ASSET_PATH + "/jcr:content/renditions/original");
     }
 
 }
