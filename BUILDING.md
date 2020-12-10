@@ -24,6 +24,10 @@ The hostname and port of the instance can be changed with the following user def
 * `aem.host` and `aem.port` for the author instance.
 * `aem.publish.host` and `aem.publish.port` for the publish instance.
 
+### AEM as a Cloud Service SDK
+
+When compiling and deploying to AEM as a Cloud Service SDK, you can use the `cloud` profile (in conjunction with previously documented profiles) to generate `cloud`-ready artifacts (with components located in `/libs` instead of `/apps`). To allow recompilation of the HTL scripts, you should disable `aem-precompiled-scripts` bundle.
+
 ## NPM modules
 
 Modules that export Javscript and CSS are usually also configured as NPM modules.
