@@ -26,7 +26,12 @@ The hostname and port of the instance can be changed with the following user def
 
 ### AEM as a Cloud Service SDK
 
-When compiling and deploying to AEM as a Cloud Service SDK, you can use the `cloud` profile (in conjunction with previously documented profiles) to generate `cloud`-ready artifacts (with components located in `/libs` instead of `/apps`). To allow recompilation of the HTL scripts, you should disable `aem-precompiled-scripts` bundle.
+When compiling and deploying to AEM as a Cloud Service SDK, you can use the `cloud` profile (in conjunction with 
+previously documented profiles) to generate `cloud`-ready artifacts (with components located in `/libs` instead 
+of `/apps`). To allow recompilation of the HTL scripts, you should disable `aem-precompiled-scripts` bundle.
+
+Due to [FELIX-6365](https://issues.apache.org/jira/browse/FELIX-6365), please only use `autoInstallPackage` and 
+`autoInstallPackagePublish` when working with the AEM as a Cloud Service SDK!
 
 ## NPM modules
 
