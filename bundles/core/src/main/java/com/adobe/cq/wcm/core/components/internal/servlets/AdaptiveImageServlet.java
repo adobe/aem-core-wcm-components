@@ -357,13 +357,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         response.setContentType(imageType);
                         LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
                         layer.write(imageType, quality, response.getOutputStream());
-//                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                        layer.write(imageType, quality, baos);
-//                        Layer res = new Layer(new ByteArrayInputStream(baos.toByteArray()));
-//                        LOGGER.info(res.getBackground().toString());
-//                        try (FileOutputStream fos = new FileOutputStream("out1" + "." + "jpg")) {
-//                            fos.write(baos.toByteArray());
-//                        }
                     } else {
                         LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
                             asset.getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);

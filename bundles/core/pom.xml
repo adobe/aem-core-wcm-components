@@ -521,6 +521,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.day.commons</groupId>
+            <artifactId>day-commons-gfx</artifactId>
+            <version>2.1.50</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
             <classifier>apis</classifier>
