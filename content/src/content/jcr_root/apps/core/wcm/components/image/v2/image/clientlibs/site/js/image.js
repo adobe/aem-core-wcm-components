@@ -98,7 +98,7 @@
         "lazythreshold": {
             "default": 0,
             "transform": function(value) {
-                const val =  parseInt(value);
+                var val =  parseInt(value);
                 if (isNaN(val)) {
                     return LAZY_THRESHOLD_DEFAULT;
                 }
@@ -160,7 +160,7 @@
 
             setupProperties(config.options);
             cacheElements(config.element);
-            //check image is DM asset; if true try to make req=set
+            // check image is DM asset; if true try to make req=set
             if (config.options.src && config.options.hasOwnProperty("dmimage") && (config.options["smartcroprendition"] === "SmartCrop:Auto")) {
                 var request = new XMLHttpRequest();
                 var url = decodeURIComponent(config.options.src).split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
@@ -171,10 +171,9 @@
                     if (request.status >= 200 && request.status < 400) {
                         // success status
                         var responseText = request.responseText;
-						var rePayload = new RegExp(/^(?:\/\*jsonp\*\/)?\s*([^()]+)\(([\s\S]+),\s*"[0-9]*"\);?$/gmi);
+                        var rePayload = new RegExp(/^(?:\/\*jsonp\*\/)?\s*([^()]+)\(([\s\S]+),\s*"[0-9]*"\);?$/gmi);
                         var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
-						var resPayload = rePayload.exec(responseText);
-                        var smartcropList = "";
+                        var resPayload = rePayload.exec(responseText);
                         var payload;
                         if (resPayload) {
                             var payloadStr = resPayload[2];
@@ -183,11 +182,11 @@
                             }
 
                         }
-                        //check "relation" - only in case of smartcrop preset
+                        // check "relation" - only in case of smartcrop preset
                         if (payload && payload.set.relation && payload.set.relation.length > 0) {
-                            for(var i = 0; i < payload.set.relation.length ; i++) {
-                                smartcropList += payload.set.relation[i].n +"\n";
-			                    smartCrops[parseInt(payload.set.relation[i].userdata.SmartCropWidth)] = ":" + payload.set.relation[i].userdata.SmartCropDef;
+                            for (var i = 0; i < payload.set.relation.length; i++) {
+                                smartCrops[parseInt(payload.set.relation[i].userdata.SmartCropWidth)] =
+                                    ":" + payload.set.relation[i].userdata.SmartCropDef;
                             }
                         }
                     } else {

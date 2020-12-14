@@ -28,7 +28,7 @@
      * @alias CQ.CoreComponents.container.utils
      * @type {{}}
      */
-    CQ.CoreComponents.container.utils = {
+    window.CQ.CoreComponents.container.utils = {
 
         /**
          * Returns index of the container component item (accordion, tabs) that corresponds to the deep link in the URL fragment.
@@ -64,7 +64,7 @@
          * @returns {Object} the item if it exists, undefined otherwise.
          */
         getDeepLinkItem: function(component, itemType) {
-            var idx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(component, itemType);
+            var idx = window.CQ.CoreComponents.container.utils.getDeepLinkItemIdx(component, itemType);
             if (component && component._elements && component._elements[itemType]) {
                 return component._elements[itemType][idx];
             }
