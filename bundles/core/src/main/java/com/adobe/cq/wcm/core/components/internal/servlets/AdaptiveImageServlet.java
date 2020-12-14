@@ -506,7 +506,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         // If no rendition was found, attempt to use original
         if (bestRendition == null) {
-            bestRendition = getOriginal(asset);
+            return getOriginal(asset);
         }
         return filter(bestRendition);
     }
