@@ -80,7 +80,7 @@ public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
         return embeddableResources;
     }
 
-    private Collection<EmbeddableDescription> findEmbeddables(ResourceResolver resourceResolver) {
+    static Collection<EmbeddableDescription> findEmbeddables(ResourceResolver resourceResolver) {
         String[] searchPaths = resourceResolver.getSearchPath();
         for (int i = 0; i < searchPaths.length; i++) {
             searchPaths[i] = searchPaths[i].substring(0, searchPaths[i].length() - 1);

@@ -18,6 +18,10 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="YouTube"
     sling:resourceType="granite/ui/components/coral/foundation/container">
+    <granite:data
+        jcr:primaryType="nt:unstructured"
+        cmp-embed-dialog-edit-youtube="true"
+        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
     <items jcr:primaryType="nt:unstructured">
         <mute
             granite:class="toggle-checkbox"

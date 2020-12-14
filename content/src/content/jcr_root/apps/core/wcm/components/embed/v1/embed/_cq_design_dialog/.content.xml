@@ -28,7 +28,10 @@
             <tabs
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="granite/ui/components/coral/foundation/tabs">
-                <items jcr:primaryType="nt:unstructured">
+                <datasource
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/embed/v1/datasources/embeddesigntabs"/>
+                <firsttabs jcr:primaryType="nt:unstructured">
                     <properties
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Embeddable Types"
@@ -85,27 +88,13 @@
                             </column>
                         </items>
                     </properties>
-                    <youTubeParametersTab
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="YouTube Parameters"
-                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
-                        <!-- hiding/showing requires additional JS:  http://www.sgaemsolutions.com/2019/01/showhide-tabs-and-fields-based-on-drop.html -->
-                        <granite:data
-                            jcr:primaryType="nt:unstructured"
-                            cmp-embed-dialog-edit-youtube="true"
-                            cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
-                        <items jcr:primaryType="nt:unstructured">
-                            <container
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/include"
-                                path="/mnt/overlay/core/wcm/components/embed/v1/embed/embeddable/youtube/cq:design_dialog"/>
-                        </items>
-                    </youTubeParametersTab>
+                 </firsttabs>
+                 <lasttabs jcr:primaryType="nt:unstructured">
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
                         path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
-                </items>
+                </lasttabs>
             </tabs>
         </items>
     </content>
