@@ -77,10 +77,10 @@
         }
         if (self._textfield) {
             if (self._isRichText) {
-                self._richTextInstance.$element.on('editing-start', function() {
+                self._richTextInstance.$element.on("editing-start", function() {
                     self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
                 });
-                self._richTextInstance.$element.on('change', function() {
+                self._richTextInstance.$element.on("change", function() {
                     self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
                 });
             } else {
