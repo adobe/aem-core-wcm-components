@@ -347,6 +347,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
                         layer = getLayer(rendition);
+                        if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
+                                ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension))) {
+                            LOGGER.debug("Adding default (white) background to a transparent PNG: {}/{}", asset.getPath(),
+                                    rendition.getName());
+                            layer.setBackground(Color.white);
+                        }
                         layer.resize(resizeWidth, resizeHeight);
                         response.setContentType(imageType);
                         LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
