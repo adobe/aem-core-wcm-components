@@ -57,6 +57,7 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <enableJcrRootFiltering>true</enableJcrRootFiltering>
                     <properties>
                         <acHandling>merge_preserve</acHandling>
                     </properties>

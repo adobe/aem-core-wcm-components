@@ -116,17 +116,19 @@
                     </execution>
                     <execution>
                         <id>npm install</id>
+                        <phase>validate</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>npm run build</id>
+                        <id>lint</id>
+                        <phase>validate</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>run build</arguments>
+                            <arguments>run lint</arguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -136,6 +138,15 @@
                         </goals>
                         <configuration>
                             <arguments>run sync-pom-version</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm run build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
                         </configuration>
                     </execution>
                 </executions>

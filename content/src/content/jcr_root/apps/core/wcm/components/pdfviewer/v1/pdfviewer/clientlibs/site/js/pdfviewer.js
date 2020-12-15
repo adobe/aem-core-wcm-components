@@ -48,7 +48,7 @@
             if (window.AdobeDC && window.AdobeDC.View) {
                 dcView(component);
             } else {
-                document.addEventListener(SDK_READY_EVENT, function () {
+                document.addEventListener(SDK_READY_EVENT, function() {
                     dcView(component);
                 });
             }
@@ -56,14 +56,14 @@
     }
 
     function dcView(component) {
-        var adobeDCView = new AdobeDC.View({
+        var adobeDCView = new window.AdobeDC.View({
             clientId: component.dataset.cmpClientId,
-            divId: component.id + '-content',
+            divId: component.id + "-content",
             reportSuiteId: component.dataset.cmpReportSuiteId
         });
         adobeDCView.previewFile({
-            content:{location: {url: component.dataset.cmpDocumentPath}},
-            metaData:{fileName: component.dataset.cmpDocumentFileName}
+            content: { location: { url: component.dataset.cmpDocumentPath } },
+            metaData: { fileName: component.dataset.cmpDocumentFileName }
         }, JSON.parse(component.dataset.cmpViewerConfigJson));
     }
 
