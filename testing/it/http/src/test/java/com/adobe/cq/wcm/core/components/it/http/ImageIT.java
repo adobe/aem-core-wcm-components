@@ -75,7 +75,7 @@ public class ImageIT {
                 Arrays.stream(widths).forEach(width -> {
                     try {
                         String imagePath = imageSource.replace("{.width}", "." + width);
-                        adminAuthor.doGet(imagePath, 200);
+                        adminAuthor.doGet(adminAuthor.getPath(imagePath).getPath(), 200);
                     } catch (ClientException e) {
                         // Collect errors so we don't stop after the first
                         collector.addError(e);
