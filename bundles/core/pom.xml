@@ -525,6 +525,7 @@
             <artifactId>day-commons-gfx</artifactId>
             <version>2.1.50</version>
             <scope>test</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
