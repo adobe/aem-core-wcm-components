@@ -37,55 +37,59 @@
         var dialogContent = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
 
         if (dialogContent) {
-            titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector);
-            descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
 
             var rteInstance = $(descriptionTextfieldSelector).data("rteinstance");
             // wait for the description textfield rich text editor to signal start before initializing.
             // Ensures that any state adjustments made here will not be overridden.
             if (rteInstance && rteInstance.isActive) {
-                toggleInputs($dialogContent);
-                retrievePageInfo($dialogContent);
+                init(e, $dialog, $dialogContent, dialogContent);
             } else {
                 $(descriptionTextfieldSelector).on("editing-start", function() {
-                    toggleInputs($dialogContent);
-                    retrievePageInfo($dialogContent);
-                });
-            }
-
-            var $linkURLField = $dialogContent.find(linkURLSelector);
-            if ($linkURLField.length) {
-                linkURL = $linkURLField.adaptTo("foundation-field").getValue();
-                $linkURLField.on("change", function() {
-                    linkURL = $linkURLField.adaptTo("foundation-field").getValue();
-                    retrievePageInfo($dialogContent);
-                });
-            }
-
-            var $actionsEnabledCheckbox = $dialogContent.find(actionsEnabledCheckboxSelector);
-            if ($actionsEnabledCheckbox.size() > 0) {
-                actionsEnabled = $actionsEnabledCheckbox.adaptTo("foundation-field").getValue() === "true";
-                $actionsEnabledCheckbox.on("change", function(e) {
-                    actionsEnabled = $(e.target).adaptTo("foundation-field").getValue() === "true";
-                    toggleInputs($dialogContent);
-                    retrievePageInfo($dialogContent);
-                });
-
-                var $actionsMultifield = $dialogContent.find(actionsMultifieldSelector);
-                $actionsMultifield.on("change", function(event) {
-                    var $target = $(event.target);
-                    if ($target.is("coral-multifield") && event.target.items && event.target.items.length === 0) {
-                        actionsEnabled = false;
-                        $actionsEnabledCheckbox.adaptTo("foundation-field").setValue(false);
-                        toggleInputs($dialogContent);
-                    } else if ($target.is("foundation-autocomplete")) {
-                        updateText($target);
-                    }
-                    retrievePageInfo($dialogContent);
+                    init(e, $dialog, $dialogContent, dialogContent);
                 });
             }
         }
     });
+
+    // Initialize all fields once both the dialog and the description textfield RTE have loaded
+    function init(e, $dialog, $dialogContent, dialogContent) {
+        titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector, false);
+        descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
+        toggleInputs($dialogContent);
+        retrievePageInfo($dialogContent);
+
+        var $linkURLField = $dialogContent.find(linkURLSelector);
+        if ($linkURLField.length) {
+            linkURL = $linkURLField.adaptTo("foundation-field").getValue();
+            $linkURLField.on("change", function() {
+                linkURL = $linkURLField.adaptTo("foundation-field").getValue();
+                retrievePageInfo($dialogContent);
+            });
+        }
+
+        var $actionsEnabledCheckbox = $dialogContent.find(actionsEnabledCheckboxSelector);
+        if ($actionsEnabledCheckbox.size() > 0) {
+            actionsEnabled = $actionsEnabledCheckbox.adaptTo("foundation-field").getValue() === "true";
+            $actionsEnabledCheckbox.on("change", function(e) {
+                actionsEnabled = $(e.target).adaptTo("foundation-field").getValue() === "true";
+                toggleInputs($dialogContent);
+                retrievePageInfo($dialogContent);
+            });
+
+            var $actionsMultifield = $dialogContent.find(actionsMultifieldSelector);
+            $actionsMultifield.on("change", function(event) {
+                var $target = $(event.target);
+                if ($target.is("coral-multifield") && event.target.items && event.target.items.length === 0) {
+                    actionsEnabled = false;
+                    $actionsEnabledCheckbox.adaptTo("foundation-field").setValue(false);
+                    toggleInputs($dialogContent);
+                } else if ($target.is("foundation-autocomplete")) {
+                    updateText($target);
+                }
+                retrievePageInfo($dialogContent);
+            });
+        }
+    }
 
     function toggleInputs(dialogContent) {
         var $actionsMultifield = dialogContent.find(actionsMultifieldSelector);
