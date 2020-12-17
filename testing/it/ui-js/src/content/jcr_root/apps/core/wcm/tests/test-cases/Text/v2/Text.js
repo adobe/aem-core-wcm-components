@@ -38,10 +38,8 @@ window.CQ.CoreComponentsIT.Text.v2 = window.CQ.CoreComponentsIT.Text.v2 || {}
     text.tcCheckTextWithXSSProtection = function(selectors, tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Check text with XSS protection", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest,
-            metadata: {
-                ignoreOn63: true
-            } })
+            execAfter: tcExecuteAfterTest
+        })
 
             // open dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
