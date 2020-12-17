@@ -599,10 +599,7 @@
     accordion.tcPanelSelectReorder = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
         return new h.TestCase("Panel Select: Reorder items", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest,
-            metadata: {
-                ignoreOn63: true
-            }
+            execAfter: tcExecuteAfterTest
         })
             // 1.
             .execTestCase(accordion.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))

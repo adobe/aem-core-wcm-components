@@ -35,10 +35,8 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
     pageV2.tcAdvancedConfigurationPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Advanced Configuration page property", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest,
-            metadata: {
-                ignoreOn63: true
-            } })
+            execAfter: tcExecuteAfterTest
+        })
 
             // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
@@ -76,13 +74,11 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
     /**
      * Test: Check the Blueprint options of a page properties.
      */
-    pageV2.tcBlueprintPageProperties64 = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase("Blueprint for a page (6.4)", {
+    pageV2.tcBlueprintPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Blueprint for a page", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest,
-            metadata: {
-                ignoreOn63: true
-            } })
+            execAfter: tcExecuteAfterTest
+        })
 
             // create the live copy page, store page path in 'testLiveCopyPagePath'
             .execFct(function(opts, done) {
