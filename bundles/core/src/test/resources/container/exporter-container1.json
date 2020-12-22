@@ -1,6 +1,6 @@
 {
     "id": "test",
-    "layout": "RESPONSIVE_GRID",
+    "layout": "responsiveGrid",
     "backgroundStyle": "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
     "dataLayer": {
         "test": {

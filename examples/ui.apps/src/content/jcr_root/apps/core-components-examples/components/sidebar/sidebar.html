@@ -15,7 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-use.container="com.adobe.cq.wcm.core.components.models.LayoutContainer">
     <button class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}"><i class="cmp-examples-button__icon fas fa-bars"></i></button>
-    <sly data-sly-test.responsive="${container.layout == 'RESPONSIVE_GRID'}"
+    <sly data-sly-test.responsive="${container.layout == 'responsiveGrid'}"
          data-sly-use.responsiveGridTemplate="responsiveGrid.html"
          data-sly-call="${responsiveGridTemplate.responsiveGrid @ container=container}"></sly>
     <sly data-sly-test.simple="${!responsive}"

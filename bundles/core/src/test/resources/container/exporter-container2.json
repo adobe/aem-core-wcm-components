@@ -1,6 +1,6 @@
 {
     "id": "container-2611f8dc62",
-    "layout": "RESPONSIVE_GRID",
+    "layout": "responsiveGrid",
     "dataLayer": {
         "container-2611f8dc62": {
             "@type": "core/wcm/components/container/v1/container"
