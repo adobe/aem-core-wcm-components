@@ -14,7 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-use.container="com.adobe.cq.wcm.core.components.models.LayoutContainer">
-    <sly data-sly-test.responsive="${container.layout == 'RESPONSIVE_GRID'}"
+    <sly data-sly-test.responsive="${container.layout == 'responsiveGrid'}"
          data-sly-use.responsiveGridTemplate="responsiveGrid.html"
          data-sly-call="${responsiveGridTemplate.responsiveGrid @ container=container}"></sly>
     <sly data-sly-test.simple="${!responsive}"
