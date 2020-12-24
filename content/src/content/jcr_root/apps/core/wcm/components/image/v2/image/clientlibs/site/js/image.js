@@ -232,7 +232,7 @@
             }
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
 
-            if (that._elements.image.getAttribute("src") !== url) {
+            if (that._elements.image.getAttribute("src") == EMPTY_PIXEL) {
                 that._elements.image.setAttribute("src", url);
                 if (!hasWidths) {
                     window.removeEventListener("scroll", that.update);
