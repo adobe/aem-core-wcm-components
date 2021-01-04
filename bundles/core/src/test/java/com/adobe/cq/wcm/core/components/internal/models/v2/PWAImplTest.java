@@ -136,7 +136,7 @@ public class PWAImplTest {
         when(mockSitesProject.getValueMap()).thenReturn(mvp);
 
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("#AAAAAA", pwa.getThemecolor());
+        assertEquals("#AAAAAA", pwa.getThemeColor());
     }
 
     @Test
@@ -151,7 +151,7 @@ public class PWAImplTest {
         when(mockSitesProject.getValueMap()).thenReturn(mvp);
 
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("#ffa000", pwa.getThemecolor());
+        assertEquals("#ffa000", pwa.getThemeColor());
     }
 
     @Test
@@ -166,7 +166,7 @@ public class PWAImplTest {
         when(mockSitesProject.getValueMap()).thenReturn(mvp);
 
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("#ffff00", pwa.getThemecolor());
+        assertEquals("#ffff00", pwa.getThemeColor());
     }
 
     @Test
@@ -181,7 +181,7 @@ public class PWAImplTest {
         when(mockSitesProject.getValueMap()).thenReturn(mvp);
 
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("", pwa.getThemecolor());
+        assertEquals("", pwa.getThemeColor());
     }
 
     @Test
@@ -196,7 +196,7 @@ public class PWAImplTest {
         when(mockSitesProject.getValueMap()).thenReturn(mvp);
 
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("", pwa.getThemecolor());
+        assertEquals("", pwa.getThemeColor());
     }
 
 }

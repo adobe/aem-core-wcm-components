@@ -18,18 +18,37 @@ package com.adobe.cq.wcm.core.components.models;
 
 /**
  * Interface for reading progressive web apps configuration
+ *
+ * @since com.adobe.cq.wcm.core.components.models 12.18.0
  */
 public interface PWA {
 
-    String PROP_PWA_ENABLEPWA = "enablePWA";
-    String PROP_PWA_THEMECOLOR = "themecolor";
-    String PROP_PWA_ICON = "pwaicon";
+    /**
+     * Name of the property that defines it PWA is enabled for the website.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
+     */
+    String PN_ENABLE_PWA = "enablePWA";
 
     /**
-     * Returns true if PWA features are enabled false otherwise
+     * Name of the property that defines the theme color used.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
+     */
+    String PN_THEME_COLOR = "themecolor";
+
+    /**
+     * Name of the property that defines the PWA icon
+     *
+    @since com.adobe.cq.wcm.core.components.models 12.18.0
+    */
+    String PN_PWA_ICON = "pwaicon";
+
+    /**
+     * Returns {@code true} if PWA features are enabled, {@code false} otherwise
      *
      * @return whether PWA is enabled or not
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     default boolean isPWAEnabled() { throw new UnsupportedOperationException("Not Implemented"); };
 
@@ -37,7 +56,7 @@ public interface PWA {
      * The name of the sites project for this site
      *
      * @return A String that represents the name of the sites project for this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     default String getProjectName() { throw new UnsupportedOperationException("Not Implemented"); };
 
@@ -45,15 +64,15 @@ public interface PWA {
      * The theme color of the site sometimes used to color the address bar of the browser
      *
      * @return A Hex String that represents the theme color for this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    default String getThemecolor() { throw new UnsupportedOperationException("Not Implemented"); };
+    default String getThemeColor() { throw new UnsupportedOperationException("Not Implemented"); };
 
     /**
      * The path to the icon of this PWA
      *
      * @return A String that represents the relative path to the icon of this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     default String getIconPath() { throw new UnsupportedOperationException("Not Implemented"); };
 
@@ -61,15 +80,15 @@ public interface PWA {
      * The relative path to the web manifest
      *
      * @return A String that represents the relative path to the web manifest of this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     default String getManifestPath() { throw new UnsupportedOperationException("Not Implemented"); }
 
     /**
-     * The relative path to the web manifest
+     * The relative path to the service worker
      *
-     * @return A String that represents the relative path to the web manifest of this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @return A String that represents the relative path to the service worker of this site
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     default String getServiceWorkerPath() { throw new UnsupportedOperationException("Not Implemented"); }
 

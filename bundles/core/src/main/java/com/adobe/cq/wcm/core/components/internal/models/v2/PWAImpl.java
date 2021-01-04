@@ -38,7 +38,7 @@ public class PWAImpl implements PWA {
     private String projectName = "";
     private String manifestPath = "";
     private String serviceWorkerPath = "";
-    private String themecolor = "";
+    private String themeColor = "";
     private String iconPath = "";
 
     @Self
@@ -51,10 +51,10 @@ public class PWAImpl implements PWA {
 
         if (project != null) {
             ValueMap valueMap = project.getValueMap();
-            Boolean isPWAEnabled = valueMap.get(PROP_PWA_ENABLEPWA, Boolean.class);
+            Boolean isPWAEnabled = valueMap.get(PN_ENABLE_PWA, Boolean.class);
             this.isPWAEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
-            this.themecolor = colorToHex(valueMap.get(PROP_PWA_THEMECOLOR, ""));
-            this.iconPath = valueMap.get(PROP_PWA_ICON, "");
+            this.themeColor = colorToHex(valueMap.get(PN_THEME_COLOR, ""));
+            this.iconPath = valueMap.get(PN_PWA_ICON, "");
         }
 
         String[] levels = projectPath.split("/");
@@ -74,8 +74,8 @@ public class PWAImpl implements PWA {
     }
 
     @Override
-    public String getThemecolor() {
-        return this.themecolor;
+    public String getThemeColor() {
+        return this.themeColor;
     }
 
     @Override
