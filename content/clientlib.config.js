@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/* global
+    module, __dirname
+ */
 module.exports = {
     context: __dirname,
     clientLibRoot: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/v1/clientlibs",
