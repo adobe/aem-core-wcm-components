@@ -115,7 +115,7 @@
                 that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
 
                 // Expand the item based on deep-link-id if it matches with any existing accordion item id
-                var deepLinkItem = CQ.CoreComponents.container.utils.getDeepLinkItem(that, "item");
+                var deepLinkItem = window.CQ.CoreComponents.container.utils.getDeepLinkItem(that, "item");
                 if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
                     setItemExpanded(deepLinkItem, true);
                 }
@@ -154,8 +154,8 @@
                      * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
                      * - if so, route the "navigate" operation to enact a navigation of the Accordion based on index data
                      */
-                    CQ.CoreComponents.MESSAGE_CHANNEL = CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
-                    CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                    window.CQ.CoreComponents.MESSAGE_CHANNEL = window.CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
+                    window.CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
                         if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
                             if (message.data.operation === "navigate") {
                                 // switch to single expansion mode when navigating in edit mode.
@@ -332,10 +332,10 @@
                             return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
                         });
 
-                    var uploadPayload = {component: {}};
+                    var uploadPayload = { component: {} };
                     uploadPayload.component[accordionId] = { shownItems: expandedItems };
 
-                    var removePayload = {component: {}};
+                    var removePayload = { component: {} };
                     removePayload.component[accordionId] = { shownItems: undefined };
 
                     dataLayer.push(removePayload);
@@ -542,10 +542,10 @@
      * @private
      */
     function onDocumentReady() {
-      dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-      dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
 
-      var elements = document.querySelectorAll(selectors.self);
+        var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new Accordion({ element: elements[i], options: readData(elements[i]) });
         }

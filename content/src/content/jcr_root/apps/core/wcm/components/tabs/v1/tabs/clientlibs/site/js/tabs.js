@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/* global
+    CQ
+ */
 (function() {
     "use strict";
 
@@ -363,10 +366,10 @@
      * @private
      */
     function onDocumentReady() {
-      dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-      dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
 
-      var elements = document.querySelectorAll(selectors.self);
+        var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new Tabs({ element: elements[i], options: readData(elements[i]) });
         }

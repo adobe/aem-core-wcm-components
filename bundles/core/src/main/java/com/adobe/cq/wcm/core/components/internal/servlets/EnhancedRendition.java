@@ -17,10 +17,9 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.awt.*;
 import java.io.InputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.imaging.Imaging;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
@@ -38,9 +37,6 @@ import com.day.cq.dam.api.Rendition;
 public class EnhancedRendition extends ResourceWrapper implements Rendition {
 
     private static final Logger LOG = LoggerFactory.getLogger(EnhancedRendition.class);
-    private static final Pattern pattern = Pattern.compile(".*\\.(?<width>\\d+)\\.(?<height>\\d+)\\..*");
-    private static final String WIDTH_GROUP = "width";
-    private static final String HEIGHT_GROUP = "height";
 
     private Rendition rendition;
     private Dimension dimension;
@@ -79,22 +75,13 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
                     LOG.error("Cannot parse rendition dimensions from metadata", nfex);
                 }
             } else {
-                Matcher matcher = pattern.matcher(getName());
-                if (matcher.matches()) {
-                    // Try to infer dimensions from rendition name
-                    try {
-                        int width = Integer.parseInt(matcher.group(WIDTH_GROUP));
-                        int height = Integer.parseInt(matcher.group(HEIGHT_GROUP));
-                        dimension = new Dimension(width, height);
-                    } catch (NumberFormatException nfex) {
-                        LOG.error("Cannot parse rendition dimensions from name", nfex);
-                    }
-                } else if (rendition.getSize() < (AdaptiveImageServlet.DEFAULT_MAX_SIZE ^ 2)) {
-                    // Try to load image to determine dimensions, if not too large
-                    try {
-                        dimension = Imaging.getImageSize(getStream(), getName());
+                if (StringUtils.startsWith(rendition.getMimeType(), "image/")
+                    && rendition.getSize() < Math.pow(AdaptiveImageServlet.DEFAULT_MAX_SIZE, 2)) {
+                    // Try to load image to determine dimensions, if not too large\
+                    try (InputStream stream = getStream()) {
+                        dimension = Imaging.getImageSize(stream, getName());
                     } catch (Exception e) {
-                        LOG.error("Cannot get rendition dimension from stream", e);
+                        LOG.error("Cannot get rendition {} dimension from stream", getName(), e);
                     }
                 }
             }

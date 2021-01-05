@@ -276,7 +276,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically) {
             int originalWidth = getDimension(asset.getMetadataValue(DamConstants.TIFF_IMAGEWIDTH));
             int originalHeight = getDimension(asset.getMetadataValue(DamConstants.TIFF_IMAGELENGTH));
-            AssetHandler assetHandler = assetStore.getAssetHandler(imageType);
             Layer layer = null;
             boolean appliedTransformation = false;
             if (rectangle != null) {
@@ -298,7 +297,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         scaling = 1.0;
                     }
                 }
-                layer = new Layer(assetHandler.getImage(getOriginal(asset)));
+                layer = getLayer(getOriginal(asset));
                 if (Math.abs(scaling - 1.0D) != 0) {
                     Rectangle scaledRectangle = new Rectangle(
                             (int) (rectangle.x * scaling),
@@ -314,7 +313,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             if (rotationAngle != 0) {
                 if (layer == null) {
-                    layer = new Layer(assetHandler.getImage(getBestRendition(asset, resizeWidth)));
+                    layer = getLayer(getBestRendition(asset, resizeWidth));
                 }
                 layer.rotate(rotationAngle);
                 LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
@@ -322,7 +321,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             if (flipHorizontally) {
                 if (layer == null) {
-                    layer = new Layer(assetHandler.getImage(getBestRendition(asset, resizeWidth)));
+                    layer = getLayer(getBestRendition(asset, resizeWidth));
                 }
                 layer.flipHorizontally();
                 LOGGER.debug("Flipped image horizontally.");
@@ -330,7 +329,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             if (flipVertically) {
                 if (layer == null) {
-                    layer = new Layer(assetHandler.getImage(getBestRendition(asset, resizeWidth)));
+                    layer = getLayer(getBestRendition(asset, resizeWidth));
                 }
                 layer.flipVertically();
                 LOGGER.debug("Flipped image vertically.");
@@ -347,7 +346,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (originalWidth > resizeWidth) {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
-                        layer = new Layer(assetHandler.getImage(rendition));
+                        layer = getLayer(rendition);
+                        if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
+                                ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension))) {
+                            LOGGER.debug("Adding default (white) background to a transparent PNG: {}/{}", asset.getPath(),
+                                    rendition.getName());
+                            layer.setBackground(Color.white);
+                        }
                         layer.resize(resizeWidth, resizeHeight);
                         response.setContentType(imageType);
                         LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
@@ -442,6 +447,20 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             LOGGER.debug("No need to resize processed (cropped and/or rotated) layer since it would lead to upscaling; rendering.");
             layer.write(imageType, quality, response.getOutputStream());
         }
+    }
+
+    /**
+     * Return a {@link Layer} based on the provided {@link EnhancedRendition}. Ensures the proper asset handler is
+     * being used, based on rendition mime type.
+     *
+     * @param rendition - the rendition
+     * @return a layer for the rendition
+     * @throws IOException if a {@link Layer} cannot be created for the given rendition
+     */
+    @NotNull
+    private Layer getLayer(@NotNull EnhancedRendition rendition) throws IOException {
+        AssetHandler assetHandler = assetStore.getAssetHandler(rendition.getMimeType());
+        return new Layer(assetHandler.getImage(rendition));
     }
 
     /**

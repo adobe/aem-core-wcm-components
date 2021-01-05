@@ -164,10 +164,8 @@
     embed.tcUrlValidation = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlValidation, selectors) {
         return new h.TestCase("URL Validation", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest,
-            metadata: {
-                ignoreOn63: true
-            } })
+            execAfter: tcExecuteAfterTest
+        })
             // 1.
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 

@@ -17,19 +17,18 @@ package com.adobe.cq.wcm.core.components.internal.form;
 
 import java.io.IOException;
 
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.sling.servlets.post.JSONResponse;
 import org.json.JSONObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.Designate;
@@ -55,44 +54,50 @@ public class FormHandlerImpl implements FormHandler {
 
     private static final String CHARSET = "UTF-8";
 
-    private int connectionTimeout;
-    private int socketTimeout;
+    private CloseableHttpClient client;
 
     @Reference
     private HttpClientBuilderFactory clientBuilderFactory;
 
     @Override
     public boolean forwardFormData(JSONObject formData, String endPointUrl) {
-        RequestConfig config = RequestConfig.custom()
+        HttpPost post = new HttpPost(endPointUrl);
+        post.setEntity(new StringEntity(formData.toString(), ContentType.create(JSONResponse.RESPONSE_CONTENT_TYPE,
+                CHARSET)));
+        try  {
+            String response = client.execute(post, new BasicResponseHandler());
+            LOG.debug("POSTing form data to '{}' succeeded: response: {}", endPointUrl, response);
+            return true;
+        } catch (IOException e) {
+            // for all status codes != 2xx an HttpResponseException is thrown (http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/BasicResponseHandler.html)
+            LOG.error("POSTing form data to '{}' failed: {}", endPointUrl, e.getMessage(), e);
+        }
+        return false;
+    }
+
+    @Activate
+    protected void activate(Config config) {
+        int connectionTimeout = config.connectionTimeout();
+        if (connectionTimeout < 0) {
+            throw new IllegalArgumentException("Connection timeout value cannot be less than 0");
+        }
+        int socketTimeout = config.socketTimeout();
+        if (socketTimeout < 0) {
+            throw new IllegalArgumentException("Socket timeout value cannot be less than 0");
+        }
+        
+        RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(connectionTimeout)
                 .setConnectionRequestTimeout(connectionTimeout)
                 .setSocketTimeout(socketTimeout)
                 .build();
 
-        CloseableHttpClient client = clientBuilderFactory.newBuilder().setDefaultRequestConfig(config).build();
-        HttpPost post = new HttpPost(endPointUrl);
-        post.setEntity(new StringEntity(formData.toString(), ContentType.create(JSONResponse.RESPONSE_CONTENT_TYPE,
-                CHARSET)));
-        CloseableHttpResponse response = null;
-        try {
-            response = client.execute(post);
-        } catch (IOException e) {
-            LOG.error(e.getMessage());
-        }
-        StatusLine responseStatusLine = response != null ? response.getStatusLine() : null;
-        return responseStatusLine != null && responseStatusLine.getStatusCode() == HttpStatus.SC_OK;
+        client = clientBuilderFactory.newBuilder().setDefaultRequestConfig(requestConfig).build();
     }
 
-    @Activate
-    protected void activate(Config config) {
-        connectionTimeout = config.connectionTimeout();
-        if (connectionTimeout < 0) {
-            throw new IllegalArgumentException("Connection timeout value cannot be less than 0");
-        }
-        socketTimeout = config.socketTimeout();
-        if (socketTimeout < 0) {
-            throw new IllegalArgumentException("Socket timeout value cannot be less than 0");
-        }
+    @Deactivate
+    protected void deactivate() throws IOException {
+        client.close();
     }
 
     @ObjectClassDefinition(
