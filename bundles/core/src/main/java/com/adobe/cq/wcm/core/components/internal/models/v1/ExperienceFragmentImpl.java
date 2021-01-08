@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.jcr.RangeIterator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -51,15 +50,13 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.adobe.cq.wcm.core.components.util.LocalizationUtils;
 import com.adobe.cq.xf.ExperienceFragmentsConstants;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
-import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.api.designer.ComponentStyle;
-import com.day.cq.wcm.msm.api.LiveCopy;
-import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.day.text.Text;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -186,6 +183,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @return The CSS class names to be applied to the current grid.
      * @deprecated Use {@link #getCssClassNames()}
      */
+    @Deprecated
     @Override
     @JsonProperty("classNames")
     public String getCssClassNames() {
@@ -202,7 +200,8 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         if (inTemplate()) {
             if (currentPage != null) {
                 final String pagePath = currentPage.getPath();
-                final String currentPageRootPath = getLocalizationRoot(pagePath);
+                final String currentPageRootPath = LocalizationUtils.getLocalizationRoot(pagePath, resolver, languageManager,
+                    relationshipManager);
                 // we should use getLocalizationRoot instead of getXfLocalizationRoot once the XF UI supports creating Live and Language Copies
                 String xfRootPath = getXfLocalizationRoot(fragmentVariationPath, currentPageRootPath);
                 if (StringUtils.isNotEmpty(currentPageRootPath) && StringUtils.isNotEmpty(xfRootPath)) {
@@ -222,101 +221,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         }
     }
 
-
-
-
-    /**
-     * Returns the localization root of the resource defined at the given path.
-     *
-     * Use case                                  | Path                                 | Root
-     * ------------------------------------------|--------------------------------------|------------------
-     * 1. No localization                        | /content/mysite/mypage               | null
-     * 2. Language localization                  | /content/mysite/en/mypage            | /content/mysite/en
-     * 3. Country-language localization          | /content/mysite/us/en/mypage         | /content/mysite/us/en
-     * 4. Country-language localization (variant)| /content/us/mysite/en/mypage         | /content/us/mysite/en
-     * 5. Blueprint                              | /content/mysite/blueprint/mypage     | /content/mysite/blueprint
-     * 6. Live Copy                              | /content/mysite/livecopy/mypage      | /content/mysite/livecopy
-     *
-     * @param path the resource path
-     * @return the localization root of the resource at the given path if it exists, {@code null} otherwise
-     */
-    private String getLocalizationRoot(String path) {
-        String root = null;
-        if (StringUtils.isNotEmpty(path)) {
-            Resource resource = resolver.getResource(path);
-            root = getLanguageRoot(resource);
-            if (StringUtils.isEmpty(root)) {
-                root = getBlueprintPath(resource);
-            }
-            if (StringUtils.isEmpty(root)) {
-                root = getLiveCopyPath(resource);
-            }
-        }
-        return root;
-    }
-
-    /**
-     * Returns the language root of the resource.
-     *
-     * @param resource the resource
-     * @return the language root of the resource if it exists, {@code null} otherwise
-     */
-    private String getLanguageRoot(Resource resource) {
-        Page rootPage = languageManager.getLanguageRoot(resource);
-        if (rootPage != null) {
-            return rootPage.getPath();
-        }
-        return null;
-    }
-
-    /**
-     * Returns the path of the blueprint of the resource.
-     *
-     * @param resource the resource
-     * @return the path of the blueprint of the resource if it exists, {@code null} otherwise
-     */
-    private String getBlueprintPath(Resource resource) {
-        try {
-            if (relationshipManager.isSource(resource)) {
-                // the resource is a blueprint
-                RangeIterator liveCopiesIterator = relationshipManager.getLiveRelationships(resource, null, null);
-                if (liveCopiesIterator != null) {
-                    LiveRelationship relationship = (LiveRelationship) liveCopiesIterator.next();
-                    LiveCopy liveCopy = relationship.getLiveCopy();
-                    if (liveCopy != null) {
-                        return liveCopy.getBlueprintPath();
-                    }
-                }
-            }
-        } catch (WCMException e) {
-            LOGGER.error("Unable to get the blueprint: {}", e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * Returns the path of the live copy of the resource.
-     *
-     * @param resource the resource
-     * @return the path of the live copy of the resource if it exists, {@code null} otherwise
-     */
-    private String getLiveCopyPath(Resource resource) {
-        try {
-            if (relationshipManager.hasLiveRelationship(resource)) {
-                // the resource is a live copy
-                LiveRelationship liveRelationship = relationshipManager.getLiveRelationship(resource, false);
-                if (liveRelationship != null) {
-                    LiveCopy liveCopy = liveRelationship.getLiveCopy();
-                    if (liveCopy != null) {
-                        return liveCopy.getPath();
-                    }
-                }
-            }
-        } catch (WCMException e) {
-            LOGGER.error("Unable to get the live copy: {}", e.getMessage());
-        }
-        return null;
-    }
 
     /**
      * Returns the localization root of the experience fragment path based on the localization root of the current page.
