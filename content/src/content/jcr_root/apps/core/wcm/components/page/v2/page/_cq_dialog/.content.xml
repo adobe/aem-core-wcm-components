@@ -168,6 +168,10 @@
                             </column>
                         </items>
                     </socialmedia>
+                    <pwa
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/pwa"/>
                 </items>
             </tabs>
         </items>
