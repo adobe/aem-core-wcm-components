@@ -190,23 +190,23 @@
                     }
                 }
             }
-            
+
             var designDialogContent = $dialog[0].querySelector(selectors.designDialogContent);
             if (designDialogContent) {
                 // for all toggles
                 var toggleCheckboxes = designDialogContent.querySelectorAll(selectors.toggleCheckboxes);
                 toggleCheckboxes.forEach(function(toggleCheckbox) {
-                        Coral.commons.ready(toggleCheckbox, function() {
-                            var showHideTarget = getShowHideTarget(toggleCheckbox);
+                    Coral.commons.ready(toggleCheckbox, function() {
+                        var showHideTarget = getShowHideTarget(toggleCheckbox);
 
-                            // either hide or show them depending on the value of the toggle
+                        // either hide or show them depending on the value of the toggle
+                        toggleShowHideTargets(showHideTarget, toggleCheckbox.checked.toString());
+
+                        // register an event handler
+                        toggleCheckbox.on("change", function() {
                             toggleShowHideTargets(showHideTarget, toggleCheckbox.checked.toString());
-
-                            // register an event handler
-                            toggleCheckbox.on("change", function() {
-                                toggleShowHideTargets(showHideTarget, toggleCheckbox.checked.toString());
-                            });
                         });
+                    });
                 });
             }
         }
@@ -234,7 +234,7 @@
         }
     });
 
-	/**
+    /**
      * Toggles the disabled state and visibility of tabs linked to panels matching the target.
      * Tabs that match the provided value are enabled / shown, otherwise they are disabled / hidden.
      *
