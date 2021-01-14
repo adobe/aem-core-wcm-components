@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,6 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.embed;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,30 +28,21 @@ import java.util.Objects;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.hamcrest.ResourceMatchers;
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource;
-import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet.EmbeddableDescription;
-import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet.EmbeddableDataResourceSource;
-import com.adobe.granite.ui.components.ds.DataSource;
-import com.adobe.granite.ui.components.ds.SimpleDataSource;
-import io.wcm.testing.mock.aem.junit5.AemContext;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet.EmbeddableDataResourceSource;
+import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet.EmbeddableDescription;
+import com.adobe.granite.ui.components.ds.DataSource;
+import com.adobe.granite.ui.components.ds.SimpleDataSource;
+
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 @ExtendWith(AemContextExtension.class)
 public class EmbedDesignTabsDataSourceServletTest {

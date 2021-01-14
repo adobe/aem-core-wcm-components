@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -33,7 +33,8 @@ import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 
 /**
- * Data source that returns the design dialog options for all allowed embeddables.
+ * Data source that returns the design dialog options for all allowed embeddables,
+ * optionally preceded and/or succeeded by some other static tabs. 
  */
 @Component(
     service = { Servlet.class },
@@ -64,14 +65,14 @@ public class EmbedDesignTabsDataSourceServlet extends SlingSafeMethodsServlet {
             firstTabs.getChildren().forEach(embedDesignTabs::add);
         }
         ResourceResolver resolver = request.getResourceResolver();
-        // then tabs for embeddables
+        // then dynamic tabs for embeddables
         for (EmbeddableDescription embeddableDescription : EmbeddablesDataSourceServlet.findEmbeddables(request.getResourceResolver())) {
             Resource embeddableDesignTab = resolver.getResource(embeddableDescription.getResourceType() + "/" + NN_DESIGN_DIALOG);
             if (embeddableDesignTab != null) {
                 embedDesignTabs.add(embeddableDesignTab);
             }
         }
-        // last include static tabs below "lasttabbs"
+        // last include static tabs below "lasttabs"
         Resource lastTabs = request.getResource().getChild("lasttabs");
         if (lastTabs != null) {
             lastTabs.getChildren().forEach(embedDesignTabs::add);
