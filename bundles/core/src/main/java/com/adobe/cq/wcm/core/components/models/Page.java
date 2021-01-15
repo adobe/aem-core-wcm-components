@@ -381,4 +381,15 @@ public interface Page extends ContainerExporter, Component {
     default List<HtmlPageItem> getHtmlPageItems() {
         return null;
     }
+    
+    /**
+     * Returns a content path or authored publish domain that should be included in the page view resource
+     *
+     * @return content path or publish domain
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
+     */
+    @Nullable
+    default String getCanonicalURL() {
+    	throw new UnsupportedOperationException();
+    }
 }

@@ -161,4 +161,18 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
     }
+    
+    @Test
+    void testgetCanonicalURL_External() {
+    	Page page = getPageUnderTest("/content/page/external-canonicalurl");
+    	String canonical = page.getCanonicalURL();
+    	assertNotNull(canonical);
+    }
+    
+    @Test
+    void testgetCanonicalURL_Internal() {
+    	Page page = getPageUnderTest("/content/page/internal-canonicalurl");
+    	String canonical = page.getCanonicalURL();
+    	assertNotNull(canonical);
+    }
 }
