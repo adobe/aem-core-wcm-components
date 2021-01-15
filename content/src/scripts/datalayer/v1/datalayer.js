@@ -71,32 +71,32 @@
     }
 
     function onDocumentReady() {
-      dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-      dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+        dataLayer        = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
 
-      if (dataLayerEnabled) {
+        if (dataLayerEnabled) {
 
-        var components = document.querySelectorAll("[data-cmp-data-layer]");
-        var clickableElements = document.querySelectorAll("[data-cmp-clickable]");
+            var components        = document.querySelectorAll("[data-cmp-data-layer]");
+            var clickableElements = document.querySelectorAll("[data-cmp-clickable]");
 
-        components.forEach(function (component) {
-          addComponentToDataLayer(component);
-        });
+            components.forEach(function(component) {
+                addComponentToDataLayer(component);
+            });
 
-        clickableElements.forEach(function (element) {
-          attachClickEventListener(element);
-        });
+            clickableElements.forEach(function(element) {
+                attachClickEventListener(element);
+            });
 
-        dataLayer.push({
-          event: "cmp:loaded"
-        });
-      }
+            dataLayer.push({
+                event: "cmp:loaded"
+            });
+        }
     }
 
-  if (document.readyState !== "loading") {
-    onDocumentReady();
-  } else {
-    document.addEventListener("DOMContentLoaded", onDocumentReady);
-  }
+    if (document.readyState !== "loading") {
+        onDocumentReady();
+    } else {
+        document.addEventListener("DOMContentLoaded", onDocumentReady);
+    }
 
 }());

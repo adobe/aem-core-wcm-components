@@ -356,10 +356,7 @@
     tabs.tcPanelSelectReorder = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
         return new h.TestCase("Panel Select: Re-order items", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest,
-            metadata: {
-                ignoreOn63: true
-            }
+            execAfter: tcExecuteAfterTest
         })
             // create new items with titles
             .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))

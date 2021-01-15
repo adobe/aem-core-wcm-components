@@ -199,7 +199,8 @@ public class ListImplTest {
     @Test
     public void testOrderByTitleWithNoTitleForOneItem() {
         List list = getListUnderTest(LIST_15);
-        checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1", "/content/list/pages/page_2", "/content/list/pages/page_4"});
+        list.getItems().stream().map(PageListItemImpl::getTitle).forEach(System.out::println);
+        checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_4", "/content/list/pages/page_1", "/content/list/pages/page_2" });
     }
 
     @Test

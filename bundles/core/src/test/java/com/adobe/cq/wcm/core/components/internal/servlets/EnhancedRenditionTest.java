@@ -84,26 +84,12 @@ public class EnhancedRenditionTest {
         assertNull(rendition.getDimension());
     }
 
-
-    @Test
-    public void testGetDimensionsFromName() {
-        Rendition mockRendition = mock(Rendition.class);
-        when(mockRendition.getProperties()).thenReturn(ValueMap.EMPTY);
-        when(mockRendition.getName()).thenReturn("image.320.240.small");
-        EnhancedRendition rendition = new EnhancedRendition(mockRendition);
-        assertEquals(320, rendition.getDimension().getWidth());
-        assertEquals(240, rendition.getDimension().getHeight());
-
-        when(mockRendition.getName()).thenReturn("image.320.9999999999899999999999999999999999999999999999999.bogus");
-        rendition = new EnhancedRendition(mockRendition);
-        assertNull(rendition.getDimension());
-    }
-
     @Test
     public void testGetDimensionsFromImage() {
         Rendition mockRendition = mock(Rendition.class);
         when(mockRendition.getProperties()).thenReturn(ValueMap.EMPTY);
         when(mockRendition.getName()).thenReturn("custom");
+        when(mockRendition.getMimeType()).thenReturn("image/png");
         try (InputStream is = this.getClass().getClassLoader().getResourceAsStream("image/1x1.png")) {
             when(mockRendition.getStream()).thenReturn(is);
             EnhancedRendition rendition = new EnhancedRendition(mockRendition);
@@ -112,6 +98,21 @@ public class EnhancedRenditionTest {
 
             is.close();
             rendition = new EnhancedRendition(mockRendition);
+            assertNull(rendition.getDimension());
+        } catch (IOException ioex) {
+            fail(ioex);
+        }
+    }
+
+    @Test
+    public void testInvalidRendition() {
+        Rendition mockRendition = mock(Rendition.class);
+        when(mockRendition.getProperties()).thenReturn(ValueMap.EMPTY);
+        when(mockRendition.getName()).thenReturn("custom");
+        when(mockRendition.getMimeType()).thenReturn("text");
+        try (InputStream is = this.getClass().getClassLoader().getResourceAsStream("image/1x1.png")) {
+            when(mockRendition.getStream()).thenReturn(is);
+            EnhancedRendition rendition = new EnhancedRendition(mockRendition);
             assertNull(rendition.getDimension());
         } catch (IOException ioex) {
             fail(ioex);

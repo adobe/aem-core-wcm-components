@@ -40,7 +40,7 @@
             c.policyPath, c.policyAssignmentPath))
         .addTestCase(search.testResultsSize(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components",
             c.policyPath, c.policyAssignmentPath))
-        //.addTestCase(search.testScrollDown(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components",
+        // .addTestCase(search.testScrollDown(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components",
         //    c.policyPath, c.policyAssignmentPath))
         .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/search/v1/search/clientlibs/site.js"))
         .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/search/v1/search/clientlibs/site.css"));

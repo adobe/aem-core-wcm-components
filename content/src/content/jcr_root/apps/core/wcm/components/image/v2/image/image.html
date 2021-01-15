@@ -22,6 +22,8 @@
      data-cmp-lazythreshold="${image.lazyThreshold}"
      data-cmp-src="${image.srcUriTemplate ? image.srcUriTemplate : image.src}"
      data-cmp-widths="${image.widths}"
+     data-cmp-dmimage="${image.dmImage}"
+     data-cmp-smartcroprendition="${image.smartCropRendition}"     
      data-asset="${image.fileReference}"
      data-asset-id="${image.uuid}"
      data-title="${image.title || image.alt}"
@@ -33,7 +35,7 @@
        class="cmp-image__link" href="${image.link}"
        data-cmp-clickable="${image.data ? true : false}"
        data-cmp-hook-image="link">
-        <noscript data-sly-unwrap="${!image.lazyEnabled && image.widths.length <= 1 && !image.areas}" data-cmp-hook-image="noscript">
+        <noscript data-sly-unwrap="${image.smartCropRendition != 'SmartCrop:Auto' && (!image.lazyEnabled && image.widths.length <= 1 && !image.areas)}" data-cmp-hook-image="noscript">
             <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
             <sly data-sly-test.empty= '\''></sly>
             <img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"

@@ -11,7 +11,9 @@
                 jcr:primaryType="nt:unstructured"
                 imageCrop=""
                 imageMap=""
-                imageRotate=""/>
+                imageRotate=""
+                dmPresetType=""
+                smartCropRendition=""/>
         </image>
     </cq:dropTargets>
     <cq:inplaceEditing
