@@ -77,6 +77,10 @@
                             </column>
                         </items>
                     </basic>
+                    <advanced
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/core/wcm/components/page/v2/page/tabs/advanced"/>
                     <socialmedia
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
