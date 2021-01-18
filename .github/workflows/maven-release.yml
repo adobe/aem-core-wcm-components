@@ -20,10 +20,14 @@ name: Release to OSSRH
 on:
   workflow_dispatch:
     inputs:
-      semantic_version:
+      releaseVersion:
         description: 'Release version (major.minor.patch)'
         required: false
         default: ''
+      dryRun:
+        description: 'Set to (false) to do an actual release'
+        required: true
+        default: 'true'
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -72,4 +76,4 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           X_GITHUB_USERNAME: ${{ secrets.ADOBE_BOT_GITHUB_USERNAME  }}
           X_GITHUB_PASSWORD: ${{ secrets.ADOBE_BOT_GITHUB_PASSWORD }}
-        run: mvn -B -Prelease,cloud,ossrh,adobe-public -s ./.github/workflows/settings.xml clean release:prepare release:perform -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdryRun
+        run: mvn -B -Prelease,cloud,ossrh,adobe-public -s ./.github/workflows/settings.xml clean release:prepare release:perform -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdryRun=${{ github.event.inputs.dryRun }}
