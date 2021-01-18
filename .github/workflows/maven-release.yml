@@ -18,10 +18,16 @@ name: Release to OSSRH
 
 # Run workflow on commits to default branch
 on: workflow_dispatch
-
+  inputs:
+    semantic_version:
+      description: 'Release version (major.minor.patch)'
+      required: false
+      default: ''
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Only release from master branch
+    if: github.ref == 'refs/heads/master'
     steps:
       # Check out Git repository
       - uses: actions/checkout@v2
@@ -65,5 +71,4 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           X_GITHUB_USERNAME: ${{ secrets.ADOBE_BOT_GITHUB_USERNAME  }}
           X_GITHUB_PASSWORD: ${{ secrets.ADOBE_BOT_GITHUB_PASSWORD }}
-        run: mvn -B -Prelease,cloud,ossrh,adobe-public -s ./.github/workflows/settings.xml clean release:prepare release:perform
-        -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdryRun
+        run: mvn -B -Prelease,cloud,ossrh,adobe-public -s ./.github/workflows/settings.xml clean release:prepare release:perform -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdryRun
