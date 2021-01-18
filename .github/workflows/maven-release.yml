@@ -25,7 +25,7 @@ on:
         required: false
         default: ''
       dryRun:
-        description: 'Set to (false) to do an actual release'
+        description: 'Dry Run? (false to do an actual release)'
         required: true
         default: 'true'
 jobs:
