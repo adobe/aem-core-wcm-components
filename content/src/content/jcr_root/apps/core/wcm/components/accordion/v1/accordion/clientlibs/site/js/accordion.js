@@ -329,7 +329,7 @@
                     var accordionId = that._elements.self.id;
                     var expandedItems = getExpandedItems()
                         .map(function(item) {
-                            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+                            return getDataLayerId(item);
                         });
 
                     var uploadPayload = { component: {} };
@@ -358,7 +358,7 @@
                     dataLayer.push({
                         event: "cmp:show",
                         eventInfo: {
-                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                            path: "component." + getDataLayerId(item)
                         }
                     });
                 }
@@ -369,7 +369,7 @@
                     dataLayer.push({
                         event: "cmp:hide",
                         eventInfo: {
-                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                            path: "component." + getDataLayerId(item)
                         }
                     });
                 }
@@ -529,11 +529,15 @@
      * Parses the dataLayer string and returns the ID
      *
      * @private
-     * @param {String} componentDataLayer the dataLayer string
+     * @param {HTMLElement} item the accordion item
      * @returns {String} dataLayerId or undefined
      */
-    function getDataLayerId(componentDataLayer) {
-        return Object.keys(JSON.parse(componentDataLayer))[0];
+    function getDataLayerId(item) {
+        if (item.dataset.cmpDataLayer) {
+            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+        } else {
+            return item.id;
+        }
     }
 
     /**

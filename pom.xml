@@ -67,6 +67,7 @@
         <module>testing/junit/core</module>
         <module>testing/it/ui-js</module>
         <module>testing/it/http</module>
+        <module>testing/it/e2e</module>
         <module>content</module>
         <module>config</module>
         <module>all</module>
