@@ -17,12 +17,13 @@
 name: Release to OSSRH
 
 # Run workflow on commits to default branch
-on: workflow_dispatch
-  inputs:
-    semantic_version:
-      description: 'Release version (major.minor.patch)'
-      required: false
-      default: ''
+on:
+  workflow_dispatch:
+    inputs:
+      semantic_version:
+        description: 'Release version (major.minor.patch)'
+        required: false
+        default: ''
 jobs:
   release:
     runs-on: ubuntu-latest
