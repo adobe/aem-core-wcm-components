@@ -50,7 +50,7 @@ jobs:
           echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
           echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust --no-tty --batch --yes
 
-      # Deploy to OSSRH, which will automatically sync to Central Repository
+      # Build and deploy to OSSRH, which will automatically sync to Central Repository
       - name: Deploy to Central Repository
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

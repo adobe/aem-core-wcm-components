@@ -64,7 +64,7 @@ jobs:
           git config user.email "Grp-opensourceoffice@adobe.com"
           git config user.name "${X_GITHUB_USERNAME}"
 
-      # Deploy to OSSRH, which will automatically sync to Central Repository
+      # Build and deploy to OSSRH, which will automatically sync to Central Repository
       - name: Deploy to Central Repository
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
