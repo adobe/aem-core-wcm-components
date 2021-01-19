@@ -22,15 +22,19 @@ import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.api.DamConstants;
 import com.day.cq.tagging.TagConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.JcrConstants;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -122,7 +126,22 @@ public final class DataLayerBuilder {
                     .map(Arrays::stream)
                     .orElseGet(Stream::empty)
                     .filter(StringUtils::isNotEmpty)
-                    .toArray(String[]::new));
+                    .toArray(String[]::new))
+            .withSmartTags(() -> {
+                Map<String, Object> smartTags = new HashMap<>();
+                Optional.ofNullable(asset.adaptTo(Resource.class))
+                    .map(assetResource -> assetResource.getChild(DamConstants.PREDICTED_TAGS))
+                    .map(predictedTagsResource -> {
+                        for (Resource smartTagResource : predictedTagsResource.getChildren()) {
+                            Optional.ofNullable(smartTagResource.adaptTo(ValueMap.class))
+                                .map(props -> Optional.ofNullable(props.get(AssetDataBuilder.SMARTTAG_NAME_PROP))
+                                    .map(tagName -> Optional.ofNullable(smartTags.put((String)tagName, props.get(AssetDataBuilder.SMARTTAG_CONFIDENCE_PROP)))
+                                    ));
+                        }
+                        return Optional.empty();
+                    });
+                return smartTags;
+            });
     }
 
     /**

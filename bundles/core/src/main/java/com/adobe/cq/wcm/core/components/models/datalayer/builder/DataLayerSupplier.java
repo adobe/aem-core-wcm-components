@@ -20,6 +20,7 @@ import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -151,6 +152,16 @@ public interface DataLayerSupplier {
     */
     @NotNull
     default Optional<Supplier<String[]>> getTags() {
+        return Optional.empty();
+    }
+
+    /**
+     * Get the smart tags field value supplier.
+     *
+     * @return The smart tags field value supplier, or empty if not set.
+     */
+    @NotNull
+    default Optional<Supplier<Map<String, Object>>> getSmartTags() {
         return Optional.empty();
     }
 

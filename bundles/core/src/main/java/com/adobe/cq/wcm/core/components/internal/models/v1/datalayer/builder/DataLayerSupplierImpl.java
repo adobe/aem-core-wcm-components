@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -118,6 +119,12 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     @Nullable
     private Supplier<String[]> tagsSupplier;
+
+    /**
+     * The smart tags value supplier.
+     */
+    @Nullable
+    private Supplier<Map<String, Object>> smartTagsSupplier;
 
     /**
      * The template path value supplier.
@@ -455,6 +462,26 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     public DataLayerSupplierImpl setTags(@NotNull final Supplier<String[]> supplier) {
         this.tagsSupplier = supplier;
+        return this;
+    }
+
+    @Override
+    @NotNull
+    public Optional<Supplier<Map<String, Object>>> getSmartTags() {
+        if (this.smartTagsSupplier != null) {
+            return Optional.of(this.smartTagsSupplier);
+        }
+        return this.wrappedSupplier.getSmartTags();
+    }
+
+    /**
+     * Set the smart tags field value supplier.
+     *
+     * @param supplier The smart tags field value supplier.
+     * @return This.
+     */
+    public DataLayerSupplierImpl setSmartTags(@NotNull final Supplier<Map<String, Object>> supplier) {
+        this.smartTagsSupplier = supplier;
         return this;
     }
 
