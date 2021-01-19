@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
 import java.util.Date;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -89,4 +90,17 @@ public interface AssetData {
     default Date getLastModifiedDate() {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * Returns the asset smart tags
+     *
+     * @return Asset smart tags
+     *
+     * @since com.adobe.cq.wcm.core.components.models.datalayer 1.1.0
+     */
+    @JsonProperty("xdm:smartTags")
+    default Map<String, Object> getSmartTags() {
+        throw new UnsupportedOperationException();
+    }
+
 }

@@ -65,7 +65,38 @@
                 "dam:Numberoftextualcomments": 0,
                 "tiff:ImageWidth"            : 2000,
                 "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
-                "dam:size"                   : 49069
+                "dam:size"                   : 49069,
+                "predictedTags":{
+                    "jcr:primaryType":"nt:unstructured",
+                    "lake":{
+                        "confidence":0.79,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"lake",
+                        "jcr:primaryType":"nt:unstructured"
+                    },
+                    "water":{
+                        "confidence":0.78,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"water",
+                        "jcr:primaryType":"nt:unstructured"
+                    },
+                    "landscape":{
+                        "confidence":0.75,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"landscape",
+                        "jcr:primaryType":"nt:unstructured"
+                    },
+                    "nature":{
+                        "confidence":0.74,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"nature",
+                        "jcr:primaryType":"nt:unstructured"
+                    }
+                }
             }
         }
     },
