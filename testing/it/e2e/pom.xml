@@ -32,6 +32,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.it.e2e</artifactId>
     <version>2.13.3-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>Core Components End-to-End Tests</name>
 
     <properties>
