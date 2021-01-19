@@ -142,7 +142,7 @@
                     <artifactId>maven-scm-plugin</artifactId>
                     <configuration>
                         <message>@releng [maven-scm] : Updating NPM versions</message>
-                        <includes>package.json,package-lock.json</includes>
+                        <includes>**/content/package.json,**/ui-js/package.json,**/content/package-lock.json,**/io-js/package-lock.json</includes>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -163,8 +163,11 @@
                     </dependencies>
                     <configuration>
                         <scmCommentPrefix>@releng [maven-scm] :</scmCommentPrefix>
+                        <!-- Commit package.json and package-lock.json before updating the POMs with the release version -->
                         <preparationGoals>clean install scm:checkin</preparationGoals>
-                        <completionGoals>scm:checkin</completionGoals>
+                        <!-- Build (no need to rerun tests) and commit package.json and package-lock.json again before updating
+                        the POMs with next snapshot version -->
+                        <completionGoals>clean install -DskipTests scm:checkin</completionGoals>
                         <goals>deploy</goals>
                         <releaseProfiles>release</releaseProfiles>
                         <projectVersionPolicyId>OddEvenVersionPolicy</projectVersionPolicyId>
