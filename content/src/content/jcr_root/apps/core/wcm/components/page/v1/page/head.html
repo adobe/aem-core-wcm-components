@@ -15,7 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.head="${ @ page }" data-sly-use.headlibRenderer="headlibs.html">
     <meta charset="UTF-8">
-    <title>${page.title}</title>
+    <title>${page.title}${page.brandSlug ? ' | ' : ''}${page.brandSlug}</title>
     <meta data-sly-test.keywords="${page.keywords}" name="keywords" content="${keywords}"/>
     <meta data-sly-test.description="${properties['jcr:description']}" name="description" content="${description}"/>
     <meta data-sly-test.templateName="${page.templateName}" name="template" content="${templateName}"/>
