@@ -57,7 +57,11 @@
 
     function getComponentData(element) {
         var dataLayerJson = element.dataset.cmpDataLayer;
-        return JSON.parse(dataLayerJson);
+        if (dataLayerJson) {
+            return JSON.parse(dataLayerJson);
+        } else {
+            return undefined;
+        }
     }
 
     function getClickId(element) {
