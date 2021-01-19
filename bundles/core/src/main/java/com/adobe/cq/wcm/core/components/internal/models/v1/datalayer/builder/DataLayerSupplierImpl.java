@@ -20,6 +20,7 @@ import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 
 import org.jetbrains.annotations.NotNull;
@@ -136,6 +137,12 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     @Nullable
     private Supplier<String> languageSupplier;
+
+    /**
+     * The language value supplier.
+     */
+    @Nullable
+    private Supplier<ContentFragmentData.ElementData[]> contentFragmentElementsSupplier;
 
     /**
      * Construct a wrapper for a {@link DataLayerSupplier}.
@@ -515,6 +522,26 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     public DataLayerSupplierImpl setLanguage(@NotNull final Supplier<String> supplier) {
         this.languageSupplier = supplier;
+        return this;
+    }
+
+    @Override
+    @NotNull
+    public Optional<Supplier<ContentFragmentData.ElementData[]>> getContentFragmentElements() {
+        if (this.contentFragmentElementsSupplier != null) {
+            return Optional.of(this.contentFragmentElementsSupplier);
+        }
+        return this.wrappedSupplier.getContentFragmentElements();
+    }
+
+    /**
+     * Set the content fragment elements field value supplier.
+     *
+     * @param supplier The content fragment elements field value supplier.
+     * @return This.
+     */
+    public DataLayerSupplierImpl setContentFragmentElements(@NotNull final Supplier<ContentFragmentData.ElementData[]> supplier) {
+        this.contentFragmentElementsSupplier = supplier;
         return this;
     }
 }

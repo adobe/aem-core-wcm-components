@@ -122,6 +122,19 @@ public interface DAMContentFragment extends ComponentExporter {
         }
 
         /**
+         * Returns the value of the element. The returned object's type would correspond to the types as specified in
+         * {@link com.adobe.cq.dam.cfm.BasicDataType} or an array of those types.
+         *
+         * @return the value of the element
+         * @see com.adobe.cq.dam.cfm.FragmentData#getValue()
+         * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
+         */
+        @Nullable
+        default <T> T getValue(Class<T> var1) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
          * Returns the type of the resource for which the export is performed.
          *
          * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
