@@ -92,7 +92,7 @@
                                                 min="{Long}1"
                                                 name="./rows"
                                                 value="2"
-                                                wrapperClass="cmp-form-textfield-rows"/>
+                                                wrapperClass="cmp-form-text__rows"/>
                                             <label
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
