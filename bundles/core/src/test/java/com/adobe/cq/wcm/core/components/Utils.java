@@ -23,7 +23,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import javax.json.Json;
-import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonStructure;
 
@@ -72,7 +71,7 @@ public class Utils {
         InputStream is = Utils.class.getResourceAsStream(expectedJsonResource);
         if (is != null) {
             JsonReader expectedReader = Json.createReader(is);
-            assertEquals(expectedReader.read(), outputReader.read());
+            assertEquals(expectedReader.read(), outputReader.read(), "JSON export is not equal to JSON in  '" + expectedJsonResource + "'");
         } else {
             fail("Unable to find test file " + expectedJsonResource + ".");
         }
@@ -91,8 +90,8 @@ public class Utils {
         try (JsonReader jsonReader = Json.createReader(new StringReader(Objects.requireNonNull(data.getJson())))) {
             if (is != null) {
                 JsonStructure expected = Json.createReader(is).read();
-                JsonObject actual = jsonReader.readObject();
-                assertEquals(expected, actual);
+                JsonStructure actual = jsonReader.readObject();
+                assertEquals(expected, actual, "JSON of data layer is not equal to JSON in '" + expectedJsonResource + "'");
             } else {
                 fail("Unable to find test file " + expectedJsonResource + ".");
             }

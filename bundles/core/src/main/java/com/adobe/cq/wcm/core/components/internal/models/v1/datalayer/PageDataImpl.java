@@ -15,13 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
-import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import java.util.Arrays;
+import java.util.function.Supplier;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.function.Supplier;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 
 /**
  * {@link DataLayerSupplier} backed page component data implementation.
@@ -47,6 +48,11 @@ public final class PageDataImpl extends ComponentDataImpl implements PageData {
      * The URL field value.
      */
     private String url;
+
+    /**
+     * The mode field value.
+     */
+    private String mode;
 
     /**
      * Construct the data layer model.
@@ -106,5 +112,17 @@ public final class PageDataImpl extends ComponentDataImpl implements PageData {
                 .orElse(null);
         }
         return this.url;
+    }
+
+    @Override
+    @Nullable
+    public String getMode() {
+        if (this.mode == null) {
+            this.mode = this.getDataLayerSupplier()
+                .getMode()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return mode;
     }
 }

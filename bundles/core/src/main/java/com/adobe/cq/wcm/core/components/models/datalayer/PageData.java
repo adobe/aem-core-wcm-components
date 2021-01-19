@@ -72,4 +72,13 @@ public interface PageData extends ComponentData {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Returns the mode of the current page rendering. 
+     * May be one of "preview", "edit" and "live". While the latter is only active on publish, the former two modes are relevant for author.
+     * @return mode
+     */
+    @JsonProperty("mode")
+    default String getMode() {
+        throw new UnsupportedOperationException();
+    }
 }

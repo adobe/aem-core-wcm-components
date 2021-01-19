@@ -205,4 +205,14 @@ public interface DataLayerSupplier {
     default Optional<Supplier<ContentFragmentData.ElementData[]>> getContentFragmentElements() {
         return Optional.empty();
     }
+
+    /**
+     * Get mode field value supplier.
+     *
+     * @return The mode field value supplier, or empty if not set..
+     */
+    @NotNull
+    default Optional<Supplier<String>> getMode() {
+        return Optional.empty();
+    }
 }
