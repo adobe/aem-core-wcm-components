@@ -76,7 +76,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testPage() throws ParseException {
+    protected void testPage() throws ParseException {
         loadHtmlPageItemsConfig();
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH, PageImpl.PN_CLIENTLIBS_JS_HEAD,
                 new String[]{"coretest.product-page-js-head"}, PN_CLIENT_LIBS,
@@ -104,7 +104,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testFavicons() {
+    protected void testFavicons() {
         Page page = getPageUnderTest(PAGE);
         assertThrows(UnsupportedOperationException.class, page::getFavicons);
     }

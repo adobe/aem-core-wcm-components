@@ -138,6 +138,9 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
     @Nullable
     private Supplier<String> languageSupplier;
 
+    @Nullable
+    private Supplier<String> mode;
+
     /**
      * The language value supplier.
      */
@@ -177,7 +180,8 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
             supplier.setUrl(pageData::getUrl)
                 .setTags(pageData::getTags)
                 .setTemplatePath(pageData::getTemplatePath)
-                .setLanguage(pageData::getLanguage);
+                .setLanguage(pageData::getLanguage)
+                .setMode(pageData::getMode);
         }
 
         // set container field value suppliers
@@ -460,6 +464,7 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      * @param supplier The tags field value supplier.
      * @return This.
      */
+    @NotNull
     public DataLayerSupplierImpl setTags(@NotNull final Supplier<String[]> supplier) {
         this.tagsSupplier = supplier;
         return this;
@@ -520,6 +525,7 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      * @param supplier The language field value supplier.
      * @return This.
      */
+    @NotNull
     public DataLayerSupplierImpl setLanguage(@NotNull final Supplier<String> supplier) {
         this.languageSupplier = supplier;
         return this;
@@ -542,6 +548,21 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     public DataLayerSupplierImpl setContentFragmentElements(@NotNull final Supplier<ContentFragmentData.ElementData[]> supplier) {
         this.contentFragmentElementsSupplier = supplier;
+        return this;
+    }
+
+    @Override
+    @NotNull
+    public Optional<Supplier<String>> getMode() {
+        if (this.mode != null) {
+            return Optional.of(this.mode);
+        }
+        return this.wrappedSupplier.getMode();
+    }
+
+    @NotNull 
+    public DataLayerSupplierImpl setMode(@NotNull Supplier<String> supplier) {
+        this.mode = supplier;
         return this;
     }
 }
