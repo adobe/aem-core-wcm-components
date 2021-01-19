@@ -80,6 +80,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     private static final String PREDICATE_TYPE = "type";
     private static final String PREDICATE_PATH = "path";
     private static final String NN_STRUCTURE = "structure";
+    private static final String JCR_CONTENT = "jcr:content";
+    private static final String FRAGMENT_PATH = "fragmentPath";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchResultServlet.class);
 
@@ -136,13 +138,16 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         if (StringUtils.isNotEmpty(relativeContentResource)) {
             searchContentResource = resource.getChild(relativeContentResource);
             if (searchContentResource == null) {
-                PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
-                if (pageManager != null) {
-                    Template template = currentPage.getTemplate();
-                    if (template != null) {
-                        Resource templateResource = request.getResourceResolver().getResource(template.getPath());
-                        if (templateResource != null) {
-                            searchContentResource = templateResource.getChild(NN_STRUCTURE + "/" + relativeContentResource);
+                searchContentResource = getSearchContentResourceFromFragments(resource.getChild(JCR_CONTENT), relativeContentResource);
+                if (searchContentResource == null) {
+                    PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
+                    if (pageManager != null) {
+                        Template template = currentPage.getTemplate();
+                        if (template != null) {
+                            Resource templateResource = request.getResourceResolver().getResource(template.getPath());
+                            if (templateResource != null) {
+                                searchContentResource = templateResource.getChild(NN_STRUCTURE + "/" + relativeContentResource);
+                            }
                         }
                     }
                 }
@@ -151,6 +156,34 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return searchContentResource;
     }
 
+    private Resource getSearchContentResourceFromFragments(Resource pageResource, String relativeContentResource) {
+        Resource searchContentResource = findFragmentProperties(pageResource, relativeContentResource);
+        if(searchContentResource == null) {
+            for (Resource resource : pageResource.getChildren()) {
+                searchContentResource = getSearchContentResourceFromFragments(resource, relativeContentResource);
+                if(searchContentResource != null){
+                    return searchContentResource;
+                }
+            }
+        }
+        return searchContentResource;
+    }
+
+    private Resource findFragmentProperties(Resource parentResource, String relativeContentResource) {
+        ValueMap contentProperties;
+        Resource searchContentResource = null;
+        if (parentResource != null) {
+            contentProperties = parentResource.getValueMap();
+            if(contentProperties.containsKey(FRAGMENT_PATH)){
+                String searchResourcePath = contentProperties.get(FRAGMENT_PATH,String.class);
+                searchContentResource =  parentResource.getChild(searchResourcePath+ "/" +relativeContentResource);
+                if(searchContentResource != null){
+                    return searchContentResource;
+                }
+            }
+        }
+        return searchContentResource;
+    }
 
     private List<ListItem> getResults(SlingHttpServletRequest request, Resource searchResource, Page currentPage) {
         int searchTermMinimumLength = SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT;
