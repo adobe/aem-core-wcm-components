@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -41,16 +41,16 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
-import com.day.cq.commons.inherit.HierarchyNodeInheritanceValueMap;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -58,7 +58,6 @@ import com.day.cq.wcm.api.designer.Design;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.base.Strings;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { Page.class,
         ContainerExporter.class }, resourceType = PageImpl.RESOURCE_TYPE)
@@ -79,6 +78,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
+    @Nullable
     protected Style currentStyle;
 
     @ScriptVariable
@@ -111,6 +111,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     
     private Map<String, ComponentExporter> childModels = null;
     private String resourceType;
+    private Set<String> resourceTypes;
 
     @JsonIgnore
     protected Map<String, String> favicons = new HashMap<>();
@@ -153,7 +154,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         }
         return templateName;
     }
-    
+
     @Override
     public String getLanguage() {
         return currentPage == null ? Locale.getDefault().toLanguageTag()
@@ -210,6 +211,15 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @JsonIgnore
     public String[] getClientLibCategories() {
         return Arrays.copyOf(clientLibCategories, clientLibCategories.length);
+    }
+
+    @Override
+    @JsonIgnore
+    public Set<String> getComponentsResourceTypes() {
+        if (resourceTypes == null) {
+            resourceTypes = Utils.getPageResourceTypes(currentPage, request, modelFactory);
+        }
+        return resourceTypes;
     }
 
     @NotNull
@@ -295,7 +305,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
                 addPolicyClientLibs(categories);
             }
         }
-        clientLibCategories = categories.toArray(new String[categories.size()]);
+        clientLibCategories = categories.toArray(new String[0]);
     }
 
     protected void addDefaultTemplateEditorClientLib(Resource templateResource, List<String> categories) {
@@ -310,42 +320,17 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         }
     }
 
-    /*
-     * DataLayer specific methods
-     */
-
+    @Override
     @NotNull
-    protected ComponentData getComponentData() {
-        return new PageDataImpl(this, resource);
+    protected final PageData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asPage()
+            .withTitle(this::getTitle)
+            .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
+            .withDescription(() -> this.pageProperties.get(NameConstants.PN_DESCRIPTION, String.class))
+            .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
+            .withUrl(() -> Utils.getURL(request, currentPage))
+            .withLanguage(this::getLanguage)
+            .build();
     }
 
-    @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String[] getDataLayerTags() {
-        return Arrays.copyOf(keywords, keywords.length);
-    }
-
-    @Override
-    public String getDataLayerDescription() {
-        return pageProperties.get(NameConstants.PN_DESCRIPTION, String.class);
-    }
-
-    @Override
-    public String getDataLayerTemplatePath() {
-        return currentPage.getTemplate().getPath();
-    }
-
-    @Override
-    public String getDataLayerUrl() {
-        return Utils.getURL(request, currentPage);
-    }
-
-    @Override
-    public String getDataLayerLanguage() {
-        return getLanguage();
-    }
 }

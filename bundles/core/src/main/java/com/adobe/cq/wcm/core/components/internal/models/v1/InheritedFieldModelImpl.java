@@ -36,6 +36,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.InheritedFieldModel;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
@@ -57,7 +58,7 @@ public class InheritedFieldModelImpl implements InheritedFieldModel {
 	}
 	
 	public String getId() {
-		return Utils.generateId(prop, StringUtils.EMPTY, path);
+        return ComponentUtils.generateId(prop, path);
 	}
 
     @Inject @Via("resource")
