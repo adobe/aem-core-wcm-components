@@ -199,9 +199,9 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private void resolveLocalizedFragmentVariationPath() {
         if (inTemplate()) {
             if (currentPage != null) {
-                final String pagePath = currentPage.getPath();
-                final String currentPageRootPath = LocalizationUtils.getLocalizationRoot(pagePath, resolver, languageManager,
-                    relationshipManager);
+                final Resource pageResource = currentPage.adaptTo(Resource.class);
+                final String currentPageRootPath = pageResource != null ? LocalizationUtils.getLocalizationRoot(pageResource, resolver,
+                    languageManager, relationshipManager) : null;
                 // we should use getLocalizationRoot instead of getXfLocalizationRoot once the XF UI supports creating Live and Language Copies
                 String xfRootPath = getXfLocalizationRoot(fragmentVariationPath, currentPageRootPath);
                 if (StringUtils.isNotEmpty(currentPageRootPath) && StringUtils.isNotEmpty(xfRootPath)) {

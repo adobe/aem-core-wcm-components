@@ -36,9 +36,9 @@ public class LocalizationUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalizationUtils.class);
 
     /**
-     * Returns the localization root of the resource defined at the given path.
+     * Returns the localization root of the given resource.
      * <pre>
-     * Use case                                  | Path                                 | Root
+     * Use case                                  | Resource Path                        | Root
      * ------------------------------------------|--------------------------------------|------------------
      * 1. No localization                        | /content/mysite/mypage               | null
      * 2. Language localization                  | /content/mysite/en/mypage            | /content/mysite/en
@@ -48,27 +48,20 @@ public class LocalizationUtils {
      * 6. Live Copy                              | /content/mysite/livecopy/mypage      | /content/mysite/livecopy
      * </pre>
      *
-     * @param path the resource path
+     * @param resource the resource for which we want to find the localization root
      * @param resolver the resource resolver
      * @param languageManager the language manager service
      * @param relationshipManager the live relationship manager service
      * @return the localization root of the resource at the given path if it exists, {@code null} otherwise
      */
-    public static String getLocalizationRoot(@NotNull String path, @NotNull ResourceResolver resolver,
+    public static String getLocalizationRoot(@NotNull Resource resource, @NotNull ResourceResolver resolver,
         @NotNull LanguageManager languageManager, @NotNull LiveRelationshipManager relationshipManager) {
-        String root = null;
-        if (StringUtils.isNotEmpty(path)) {
-            Resource resource = resolver.getResource(path);
-            if (resource == null) {
-                return null;
-            }
-            root = getLanguageRoot(resource, languageManager);
-            if (StringUtils.isEmpty(root)) {
-                root = getBlueprintPath(resource, relationshipManager);
-            }
-            if (StringUtils.isEmpty(root)) {
-                root = getLiveCopyPath(resource, relationshipManager);
-            }
+        String root = getLanguageRoot(resource, languageManager);
+        if (StringUtils.isEmpty(root)) {
+            root = getBlueprintPath(resource, relationshipManager);
+        }
+        if (StringUtils.isEmpty(root)) {
+            root = getLiveCopyPath(resource, relationshipManager);
         }
         return root;
     }
