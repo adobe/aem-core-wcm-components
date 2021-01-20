@@ -4,174 +4,33 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Advanced"
     sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
-    <items jcr:primaryType="nt:unstructured">
+    <items
+        jcr:primaryType="nt:unstructured"
+        sling:hideChildren="[configuration,templates,authenticationrequirement,export]">
         <column
             jcr:primaryType="nt:unstructured"
             sling:resourceType="granite/ui/components/coral/foundation/container">
-            <items jcr:primaryType="nt:unstructured">
+            <items
+                jcr:primaryType="nt:unstructured"
+                sling:hideChildren="[language,isLanguageRoot,redirect,designs,alias]">
                 <section1
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Settings"
                     sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
                     <items jcr:primaryType="nt:unstructured">
-                        <language
-                            granite:class="language"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                            emptyText="Select"
-                            fieldLabel="Language"
-                            name="./jcr:language"
-                            renderReadOnly="{Boolean}true"
-                            translateOptions="{Boolean}true">
-                            <granite:data
-                                jcr:primaryType="nt:unstructured"
-                                cq-msm-lockable="jcr:language"/>
-                            <datasource
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="cq/gui/components/common/datasources/languages"
-                                addNone="{Boolean}true"/>
-                        </language>
-                        <isLanguageRoot
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                            fieldDescription="Must be checked if page is the root of a language copy."
-                            name="./cq:isLanguageRoot"
-                            renderReadOnly="{Boolean}true"
-                            text="Language Root"
-                            value="true">
-                            <granite:data
-                                jcr:primaryType="nt:unstructured"
-                                cq-msm-lockable="cq:isLanguageRoot"/>
-                        </isLanguageRoot>
-                        <redirect
-                            cq:showOnCreate="{Boolean}true"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                            fieldLabel="Redirect"
-                            name="./cq:redirectTarget"
-                            rootPath="/content">
-                            <granite:data
-                                jcr:primaryType="nt:unstructured"
-                                cq-msm-lockable="cq:redirectPath"/>
-                        </redirect>
-                        <designs
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="wcm/designer/gui/components/designfield"
-                            fieldLabel="Design"
-                            name="./cq:designPath"
-                            renderReadOnly="{Boolean}true">
-                            <granite:data
-                                jcr:primaryType="nt:unstructured"
-                                cq-msm-lockable="cq:designPath"/>
-                        </designs>
-                        <alias
-                            cq:showOnCreate="{Boolean}true"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Alias"
-                            name="./sling:alias"
-                            renderReadOnly="{Boolean}true">
-                            <granite:data
-                                jcr:primaryType="nt:unstructured"
-                                cq-msm-lockable="sling:alias"/>
-                        </alias>
                         <canonical
                             cq:showOnCreate="{Boolean}false"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
                             fieldLabel="Canonical Url"
-                            name="./canonical"
+                            name="./sling:canonical"
                             renderReadOnly="{Boolean}true">
                             <granite:data
                                 jcr:primaryType="nt:unstructured"
-                                cq-msm-lockable="canonical"/>
+                                cq-msm-lockable="./sling:canonical"/>
                         </canonical>
                     </items>
                 </section1>
-                <configuration
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Configuration"
-                    sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
-                    <items jcr:primaryType="nt:unstructured">
-                        <cqConf
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="cq/cloudconfig/components/admin/configpathbrowser"
-                            emptyText="Select Configuration Path"
-                            fieldLabel="Cloud Configuration">
-                            <granite:data
-                                jcr:primaryType="nt:unstructured"
-                                cq-msm-lockable="cq:conf"/>
-                        </cqConf>
-                    </items>
-                </configuration>
-                <templates
-                    cq:showOnCreate="{Boolean}false"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Templates Settings"
-                    sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
-                    <items jcr:primaryType="nt:unstructured">
-                        <allowedtemplates
-                            granite:class="foundation-layout-util-maximized-alt"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                            fieldDescription="Click 'Add Field' to add a template or a list of templates to be allowed as child pages. Each value in the list must be an absolute path to a template or use '/.*' to allow all templates below this path."
-                            fieldLabel="Allowed Templates"
-                            renderReadOnly="{Boolean}true">
-                            <field
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                name="./cq:allowedTemplates"
-                                renderReadOnly="{Boolean}true"/>
-                        </allowedtemplates>
-                    </items>
-                </templates>
-                <authenticationrequirement
-                    cq:showOnCreate="{Boolean}false"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Authentication Requirement"
-                    sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
-                    <items jcr:primaryType="nt:unstructured">
-                        <cugconfigwarning
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="cq/gui/components/siteadmin/admin/properties/cugconfigwarning"
-                            warning="The Authentication Requirement cannot be edited because the page is using a deprecated configuration for the Closed User Group.&lt;br>Please refer to the &lt;a href=&quot;https://www.adobe.com/go/aem6_5_docs_cug_migration_en&quot; class=&quot;coral-Link&quot;>documentation&lt;/a>."/>
-                        <enable
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="cq/gui/components/siteadmin/admin/properties/authrequirement"
-                            fieldDescription="You might need to configure a Closed User Group in the Permission tab."
-                            text="Enable"/>
-                        <loginpath
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="cq/gui/components/siteadmin/admin/properties/loginpath"
-                            fieldLabel="Login Page"
-                            name="./cq:loginPath"
-                            rootPath="/content">
-                            <granite:data
-                                jcr:primaryType="nt:unstructured"
-                                cq-msm-lockable="cq:loginPath"/>
-                        </loginpath>
-                    </items>
-                </authenticationrequirement>
-                <export
-                    cq:showOnCreate="{Boolean}false"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Export"
-                    sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
-                    <items jcr:primaryType="nt:unstructured">
-                        <exConfig
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                            fieldLabel="Export Configuration"
-                            name="./cq:exportTemplate"
-                            optionLoader="cq.exportTemplate"
-                            renderReadOnly="{Boolean}true"
-                            rootPath="/etc/contentsync/templates">
-                            <granite:data
-                                jcr:primaryType="nt:unstructured"
-                                cq-msm-lockable="cq:exportTemplate"/>
-                        </exConfig>
-                    </items>
-                </export>
             </items>
         </column>
     </items>

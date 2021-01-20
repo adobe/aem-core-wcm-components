@@ -150,8 +150,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private String[] clientLibCategoriesJsHead;
 
     private List<HtmlPageItem> htmlPageItems;
-    
-    public static final String CANONICAL_URL = "canonical";
 
     @PostConstruct
     protected void initModel() {
@@ -296,16 +294,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     
     @Override
 	public String getCanonicalURL() {
-		String canonicalURL = null;
 		if (currentPage != null) {
-			String authoredCanonicalURL = pageProperties.get(CANONICAL_URL, String.class);
+			String authoredCanonicalURL = pageProperties.get(PN_CANONICAL_URL, String.class);
 			PageManager pageManager = currentPage.getPageManager();
-			if (pageManager != null && pageManager.getPage(authoredCanonicalURL)!=null) {			
-					canonicalURL = Utils.getURL(request,pageManager.getPage(authoredCanonicalURL));
-				} else {
-					canonicalURL = authoredCanonicalURL;
-				}
+			return Optional.ofNullable(authoredCanonicalURL)
+	                .map(p -> Utils.getURL(request, pageManager, p))
+	                .orElse(authoredCanonicalURL);
 			}
-		return canonicalURL;
+		return null; 
 	}
 }

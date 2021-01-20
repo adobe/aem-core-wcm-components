@@ -167,6 +167,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     	Page page = getPageUnderTest("/content/page/external-canonicalurl");
     	String canonical = page.getCanonicalURL();
     	assertNotNull(canonical);
+    	assertEquals("External canonical url", canonical, "https://www.adobe.com");
     }
     
     @Test
@@ -174,5 +175,6 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     	Page page = getPageUnderTest("/content/page/internal-canonicalurl");
     	String canonical = page.getCanonicalURL();
     	assertNotNull(canonical);
+    	assertEquals("Internal canonical url", canonical, "/content/page/internal-page");
     }
 }
