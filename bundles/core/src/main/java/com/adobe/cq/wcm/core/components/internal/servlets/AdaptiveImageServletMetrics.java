@@ -37,16 +37,18 @@ public class AdaptiveImageServletMetrics {
     // how often a base rendition has been rejected because it exceeded the configured limits
     private Counter baseRenditionRejected;
     // how often a new rendition was actually created
-    private Counter renditionRendered;
+    private Counter imageStreamed;
     // record the duration of the request
     private Timer requestDuration;
+    // how often the image couldn't served
+    private Counter imageError;
     
     @Activate
     public void activate() {
         invocations = metricsService.counter(BASENAME + "invocations");
         originalRenditionUsed = metricsService.counter(BASENAME + "original-rendition-used");
         baseRenditionRejected = metricsService.counter(BASENAME + "base-rendition-rejected-because-of-size");
-        renditionRendered = metricsService.counter(BASENAME + "rendition-rendered");
+        imageStreamed = metricsService.counter(BASENAME + "rendition-rendered");
         requestDuration = metricsService.timer(BASENAME + "request-duration");
         
     }
@@ -63,8 +65,12 @@ public class AdaptiveImageServletMetrics {
         baseRenditionRejected.increment();
     }
     
-    public void markRenditionRendered() {
-        renditionRendered.increment();
+    public void markImageStreamed() {
+        imageStreamed.increment();
+    }
+
+    public void markImageError() {
+        imageError.increment();
     }
     
     public Timer.Context startDurationRecording() {

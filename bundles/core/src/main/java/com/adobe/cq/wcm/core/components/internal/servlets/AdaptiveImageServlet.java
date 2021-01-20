@@ -136,11 +136,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (StringUtils.isNotEmpty(suffixExtension)) {
                     if (!suffixExtension.equals(requestPathInfo.getExtension())) {
                         LOGGER.error("The suffix part defines a different extension than the request: {}.", suffix);
+                        metrics.markImageError();
                         response.sendError(HttpServletResponse.SC_NOT_FOUND);
                         return;
                     }
                 } else {
                     LOGGER.error("Invalid suffix: {}.", suffix);
+                    metrics.markImageError();
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
@@ -173,6 +175,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 }
                 if (componentCandidate == null) {
                     LOGGER.error("Unable to retrieve an image from this page's template.");
+                    metrics.markImageError();
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
@@ -183,6 +186,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             ImageComponent imageComponent = new ImageComponent(component);
             if (imageComponent.source == Source.NONEXISTING) {
                 LOGGER.error("The image from {} does not have a valid file reference.", component.getPath());
+                metrics.markImageError();
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
@@ -202,6 +206,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (asset == null) {
                     LOGGER.error("Unable to adapt resource {} used by image {} to an asset.", imageComponent.imageResource.getPath(),
                             component.getPath());
+                    metrics.markImageError();
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
@@ -219,6 +224,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     return;
                 } else {
                     LOGGER.error("Unable to determine correct redirect location.");
+                    metrics.markImageError();
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
@@ -238,10 +244,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     transformAndStreamAsset(response, componentProperties, resizeWidth, quality, asset, imageType,
                             imageName);
                 }
-                metrics.markRenditionRendered();
+                metrics.markImageStreamed();
             }
         } catch (IllegalArgumentException e) {
             LOGGER.error("Invalid image request", e.getMessage());
+            metrics.markImageError();
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } finally {
             requestDuration.stop();
