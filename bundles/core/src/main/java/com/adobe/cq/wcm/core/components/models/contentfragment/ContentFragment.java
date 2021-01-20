@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.models.contentfragment;
 
 import java.util.Map;
 
+import com.adobe.cq.wcm.core.components.models.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
  */
-public interface ContentFragment extends DAMContentFragment, ContainerExporter {
+public interface ContentFragment extends DAMContentFragment, ContainerExporter, Component {
 
     /**
      * Name of the mandatory resource property that stores the path to a content fragment.

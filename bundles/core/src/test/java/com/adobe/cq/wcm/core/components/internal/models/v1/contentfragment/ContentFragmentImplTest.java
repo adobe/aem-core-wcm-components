@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,8 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+
+import javax.json.Json;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -259,6 +262,15 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
         ContentFragment contentFragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT_MAIN);
 
         assertArrayEquals(new String[]{MAIN_CONTENT}, contentFragment.getParagraphs());
+    }
+
+    @Test
+    void testDataLayerJson() {
+        Utils.enableDataLayer(context, true);
+        String expected = "{\"contentfragment-bb4058160c\":{\"@type\":\"core/wcm/components/contentfragment/v1/contentfragment\",\"dc:title\":\"Test Content Fragment\",\"elements\":[{\"xdm:text\":\"<p>Main content</p>\",\"xdm:title\":\"Main\"},{\"xdm:text\":\"Second content\",\"xdm:title\":\"Second\"}]}}";
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
+        assertEquals(Json.createReader(new StringReader(expected)).read(),
+            Json.createReader(new StringReader(fragment.getData().getJson())).read());
     }
 
     /**
