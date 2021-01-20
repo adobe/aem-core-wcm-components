@@ -506,6 +506,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             if (dimension != null) {
                 if (dimension.getWidth() >= width) {
                     bestRendition = enhancedRendition;
+                    if (StringUtils.equals(bestRendition.getPath(), asset.getOriginal().getPath())) {
+                        metrics.markOriginalRenditionUsed();
+                    }
                     break;
                 }
             }
