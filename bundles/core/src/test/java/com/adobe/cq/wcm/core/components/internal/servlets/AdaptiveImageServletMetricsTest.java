@@ -32,21 +32,12 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 @ExtendWith(AemContextExtension.class)
 public class AdaptiveImageServletMetricsTest {
-    
-    
-    
-    /**
-     * Oh really, you want me to write unit tests for this class, which 
-     * actually does not have ANY logic?
-     * 
-     * Ok, here we go ... don't be disappointed.
-     */
-    
+
     public final AemContext context = new AemContext();
     
     
     @BeforeEach
-    public void setup() {
+    void setup() {
         MetricsService s = mock (MetricsService.class);
         Timer timer = mock(Timer.class);
         when(timer.time()).thenReturn(mock(Timer.Context.class));
@@ -56,13 +47,14 @@ public class AdaptiveImageServletMetricsTest {
     }
     
     @Test
-    public void test() {
+    void test() {
         AdaptiveImageServletMetrics metrics = new AdaptiveImageServletMetrics();
         context.registerInjectActivateService(metrics);
         
         metrics.markOriginalRenditionUsed();
         metrics.markRejectedTooLargeRendition();
         metrics.markServletInvocation();
+        metrics.markRenditionRendered();
         Timer.Context c = metrics.startDurationRecording();
         assertNotNull(c); // silly, as it is a mock ...
       
