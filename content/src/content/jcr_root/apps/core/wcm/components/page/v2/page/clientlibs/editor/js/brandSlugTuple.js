@@ -21,7 +21,7 @@
      */
     var brandSlugCheckboxSelector = 'coral-checkbox[name="./brandSlug_override"]';
     var brandSlugTextfieldSelector = 'input[name="./brandSlug"]';
-    var brandSlugSectionSelector = 'section.cq-siteadmin-admin-properties-basic-brandSlug';
+    var brandSlugSectionSelector = "section.cq-siteadmin-admin-properties-basic-brandSlug";
 
     $(document).on("dialog-loaded", function(e) {
         var $dialog = e.dialog;
@@ -30,8 +30,8 @@
         var $brandSlugTextfield = $(brandSlugTextfieldSelector, $brandSlugSection);
 
         if ($brandSlugCheckbox.length > 0 && $brandSlugTextfield.length > 0) {
-            var inheritedValue = $brandSlugTextfield.data('inheritedValue');
-            var specifiedValue = $brandSlugTextfield.data('specifiedValue');
+            var inheritedValue = $brandSlugTextfield.data("inheritedValue");
+            var specifiedValue = $brandSlugTextfield.data("specifiedValue");
             var textfieldFoundation = $brandSlugTextfield.adaptTo("foundation-field");
             var checkboxFoundation  = $brandSlugCheckbox.adaptTo("foundation-field");
             changeTextFieldState(textfieldFoundation, checkboxFoundation.getValue() === "true", inheritedValue, specifiedValue);
@@ -44,10 +44,10 @@
     function changeTextFieldState(textfield, enabled, inheritedValue, specifiedValue) {
         if (enabled) {
             textfield.setDisabled(false);
-            textfield.setValue(specifiedValue ? specifiedValue: '');
+            textfield.setValue(specifiedValue || "");
         } else {
             textfield.setDisabled(true);
-            textfield.setValue(inheritedValue ? inheritedValue: '');
+            textfield.setValue(inheritedValue || "");
         }
     }
 
