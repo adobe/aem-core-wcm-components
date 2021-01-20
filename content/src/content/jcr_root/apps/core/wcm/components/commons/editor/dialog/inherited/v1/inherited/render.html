@@ -15,17 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <section data-sly-use.model="com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited.InheritedField" class="${model.attrClass}">
   <label class="coral-Form-fieldlabel">${model.heading}</label>
-  <label class="coral-Form-fieldlabel">
-    Inherited Value: 
-      <strong data-sly-unwrap="${!model.inheritedValue}">
-        ${model.inheritedValue || '<None>'}
-      </strong>
-  </label>
   <div class="coral-Form-fieldwrapper foundation-field-edit">
     <coral-checkbox name="./${model.prop}_override"
             value="true"
-            data-sly-attribute.checked="${model.override ? 'true' : ''}"
-            onclick="${model.id @context='unsafe'}.disabled=this.checked">
+            data-sly-attribute.checked="${model.override ? 'true' : ''}">
             Override: 
     </coral-checkbox>
     <input type="hidden" name="./${model.prop}_override@Delete" value=""/>
@@ -33,7 +26,8 @@
          is="coral-textfield" 
          placeholder="Override Value" 
          name="./${model.prop}"
-         value="${model.specifiedValue}" 
+         data-inherited-value="${model.inheritedValue}"
+         data-specified-value="${model.specifiedValue}"
          data-sly-attribute.disabled="${model.override ? '' : 'true'}"/>
   </div>
 </section>
