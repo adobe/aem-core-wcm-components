@@ -55,7 +55,7 @@ public class AdaptiveImageServletMetricsTest {
         metrics.markRejectedTooLargeRendition();
         metrics.markServletInvocation();
         metrics.markImageStreamed();
-        metrics.markImageError();
+        metrics.markImageErrors();
         Timer.Context c = metrics.startDurationRecording();
         assertNotNull(c); // silly, as it is a mock ...
       

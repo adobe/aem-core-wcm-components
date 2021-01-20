@@ -41,7 +41,7 @@ public class AdaptiveImageServletMetrics {
     // record the duration of the request
     private Timer requestDuration;
     // how often the image couldn't served
-    private Counter imageError;
+    private Counter imageErrors;
     
     @Activate
     public void activate() {
@@ -50,7 +50,7 @@ public class AdaptiveImageServletMetrics {
         baseRenditionRejected = metricsService.counter(BASENAME + "base-rendition-rejected-because-of-size");
         imageStreamed = metricsService.counter(BASENAME + "rendition-rendered");
         requestDuration = metricsService.timer(BASENAME + "request-duration");
-        
+        imageErrors = metricsService.counter(BASENAME + "image-errors");
     }
     
     public void markServletInvocation() {
@@ -69,8 +69,8 @@ public class AdaptiveImageServletMetrics {
         imageStreamed.increment();
     }
 
-    public void markImageError() {
-        imageError.increment();
+    public void markImageErrors() {
+        imageErrors.increment();
     }
     
     public Timer.Context startDurationRecording() {
