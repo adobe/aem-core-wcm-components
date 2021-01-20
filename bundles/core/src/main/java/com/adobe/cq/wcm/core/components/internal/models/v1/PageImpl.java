@@ -140,7 +140,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         }
         populateClientlibCategories();
         templateName = extractTemplateName();
-        brandSlug = Utils.inheritWithOverrides(currentPage, PN_BRANDSLUG);
+        brandSlug = Utils.getInheritedValue(currentPage, PN_BRANDSLUG);
     }
 
     protected String extractTemplateName() {

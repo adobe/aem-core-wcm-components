@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
  * <p>
- *      This package defines the Sling Models exposed for the childreneditor component.
+ *      This package defines the Sling Models exposed for the inherited component.
  * </p>
  *
  */

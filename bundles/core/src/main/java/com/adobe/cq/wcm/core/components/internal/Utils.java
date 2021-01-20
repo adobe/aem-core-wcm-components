@@ -231,19 +231,29 @@ public class Utils {
         return superTypes;
     }
 
-    public static String inheritWithOverrides(com.day.cq.wcm.api.Page startingPoint, String propertyName) {
-    	if( startingPoint == null ) {
+
+    /**
+     * Get the inherited value of a property form the page content resource. Walk the content tree upwards until an override of that
+     * property is specified.
+     *
+     * @param startPage the page in the content tree to start looking for the requested property.
+     * @param propertyName the name of the property which is inherited.
+     * @return the inherited value of the property or empty string if the property is not specified in the content tree.
+     */
+    @NotNull
+    public static String getInheritedValue(com.day.cq.wcm.api.Page startPage, String propertyName) {
+    	if( startPage == null ) {
     		return StringUtils.EMPTY;
     	}
     	
-    	com.day.cq.wcm.api.Page tmp = startingPoint;
+    	com.day.cq.wcm.api.Page tmp = startPage;
     	
 		while( tmp != null && tmp.hasContent() && tmp.getDepth() > 1 ) {
 			ValueMap props = tmp.getProperties();
 			if( props != null ) {
 				boolean override = Boolean.parseBoolean(props.get(propertyName + "_override", String.class));
 				if(override) {
-					return props.get(propertyName, String.class);
+					return props.get(propertyName, StringUtils.EMPTY);
 				}
 				tmp = tmp.getParent();
 			}

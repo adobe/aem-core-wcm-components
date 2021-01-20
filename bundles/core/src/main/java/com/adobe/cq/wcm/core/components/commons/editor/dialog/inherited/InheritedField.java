@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -26,66 +25,69 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Via;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
-@Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
+@Model(adaptables = SlingHttpServletRequest.class,
+       defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class InheritedField {
     private final static Logger log = LoggerFactory.getLogger(InheritedField.class);
+    private static final String OVERRIDE_SUFFIX = "_override";
+    private static final boolean OVERRIDE_DEFAULT = false;
 
-    @Inject @Self
+    /**
+     * The current request
+     */
+    @Self
     private SlingHttpServletRequest slingRequest;
 
-    private String path;
-    private Page containingPage;
-    
-    @Inject @Via("resource")
+    /**
+     * The value map property which should be inherited
+     */
+    @ValueMapValue
     private String prop;
-	public String getProp() {
-		return prop;
-	}
 
-    @ValueMapValue(name="granite:class")
-	private String attrClass;
-	public String getAttrClass() {
-	    return attrClass;
-    }
-	
-	public String getId() {
-        return ComponentUtils.generateId(prop, path);
-	}
+    /**
+     * The HTML class attribute
+     */
+    @ValueMapValue(name = "granite:class")
+    private String attrClass;
 
-    @Inject @Via("resource")
+    /**
+     * The heading for the dialog
+     */
+    @ValueMapValue
     private String heading;
-    public String getHeading() {
-		return heading;
-	}
 
+    /**
+     * The path to the page for which the property should be inherited
+     */
+    private String path;
+    /**
+     * The page which contains the inherited propery
+     */
+    private Page containingPage;
+    /**
+     * The inherited value for the requested property
+     */
     private String inheritedValue;
-    public String getInheritedValue() {
-		return inheritedValue;
-	}
-
+    /**
+     * The specified value in case the requested property is set on the current page
+     */
     private String specifiedValue;
-    public String getSpecifiedValue() {
-		return specifiedValue;
-	}
+    /**
+     * {@code true} if the requested property should be overridden by the current page, otherwise {@code false}
+     */
+    private boolean override;
 
-	private boolean override = false;
-	public boolean isOverride() {
-		return override;
-	}
-
-	@PostConstruct
-    void OverridableFieldModelImplPC() {
+    @PostConstruct
+    private void initModel() {
         path = slingRequest.getRequestPathInfo().getSuffix();
         if (StringUtils.isBlank(path)) {
             RequestParameter itemParam = slingRequest.getRequestParameter("item");
@@ -103,29 +105,53 @@ public class InheritedField {
 
         ResourceResolver rr = slingRequest.getResourceResolver();
         PageManager pm = rr.adaptTo(PageManager.class);
-        if( pm == null ) {
-        	log.error("pagemanager is null");
-        	return;
+        if (pm == null) {
+            log.error("pagemanager is null");
+            return;
         }
-        
+
         containingPage = pm.getPage(path);
-    	if( containingPage == null ) {
+        if (containingPage == null) {
             log.error("page is null");
             return;
         }
-    	inheritedValue = Utils.inheritWithOverrides(containingPage.getParent(), prop);
+        inheritedValue = Utils.getInheritedValue(containingPage.getParent(), prop);
 
-		Resource contentResource = containingPage.getContentResource();
-		if( contentResource ==  null) {
-			return;
-		}
-		
-		ValueMap props = contentResource.adaptTo(ValueMap.class);
-		if( props == null ) {
-			return;
-		}
-		
-		override = Boolean.parseBoolean(props.get(getProp() + "_override", String.class));
-		specifiedValue = props.get(getProp(), String.class);
-    }    
+        Resource contentResource = containingPage.getContentResource();
+        if (contentResource == null) {
+            return;
+        }
+
+        ValueMap props = contentResource.adaptTo(ValueMap.class);
+        if (props == null) {
+            return;
+        }
+
+        override = props.get(getProp() + OVERRIDE_SUFFIX, OVERRIDE_DEFAULT);
+        specifiedValue = props.get(getProp(), String.class);
+    }
+
+    public String getProp() {
+        return prop;
+    }
+
+    public String getAttrClass() {
+        return attrClass;
+    }
+
+    public String getHeading() {
+        return heading;
+    }
+
+    public String getInheritedValue() {
+        return inheritedValue;
+    }
+
+    public String getSpecifiedValue() {
+        return specifiedValue;
+    }
+
+    public boolean isOverride() {
+        return override;
+    }
 }
