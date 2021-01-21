@@ -50,9 +50,9 @@ public class PageIT {
     @Test
     public void testBrandSlug() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/simple-page.html", 200).getContent();
-        GraniteAssert.assertRegExFind(content, "<title>Simple Page | Core Components</title>");
+        GraniteAssert.assertRegExFind(content, "<title>Simple Page \\| Core Components</title>");
         // validate that the sub page has also the brand slug without specify it.
-        content = adminAuthor.doGet("/content/core-components/simple-page.html", 200).getContent();
-        GraniteAssert.assertRegExFind(content, "<title>Simple SubPage | Core Components</title>");
+        content = adminAuthor.doGet("/content/core-components/simple-page/simple-subpage.html", 200).getContent();
+        GraniteAssert.assertRegExFind(content, "<title>Simple SubPage \\| Core Components</title>");
     }
 }
