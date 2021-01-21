@@ -139,7 +139,9 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.11.2</version>
                     <configuration>
                         <message>@releng [maven-scm] : Updating NPM versions</message>
                         <includes>**/content/package.json,**/ui-js/package.json,**/content/package-lock.json,**/io-js/package-lock.json</includes>
