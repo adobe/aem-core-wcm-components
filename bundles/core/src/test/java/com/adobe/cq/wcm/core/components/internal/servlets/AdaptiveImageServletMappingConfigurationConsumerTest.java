@@ -53,6 +53,8 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
     public void setUp() {
         AssetStore assetStore = mock(AssetStore.class);
         context.registerService(AssetStore.class, assetStore);
+        AdaptiveImageServletMetrics metrics = mock(AdaptiveImageServletMetrics.class);
+        context.registerService(AdaptiveImageServletMetrics.class, metrics);
     }
 
     @Test
