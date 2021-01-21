@@ -233,7 +233,7 @@ public class Utils {
 
 
     /**
-     * Get the inherited value of a property form the page content resource. Walk the content tree upwards until an override of that
+     * Get the inherited value of a property from the page content resource. Walk the content tree upwards until an override of that
      * property is specified.
      *
      * @param startPage the page in the content tree to start looking for the requested property.
