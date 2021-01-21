@@ -92,7 +92,7 @@
                                                 min="{Long}1"
                                                 name="./rows"
                                                 value="2"
-                                                wrapperClass="cmp-form-textfield-rows"/>
+                                                wrapperClass="cmp-form-text__rows"/>
                                             <label
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -110,9 +110,8 @@
                                             <name
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                emptyText="The name of the field which is submitted with the form data"
-                                                fieldDescription="The name of the field which is submitted with the form data"
-                                                fieldLabel="Element Name"
+                                                fieldDescription="The name of the field, which is submitted with the form data."
+                                                fieldLabel="Name"
                                                 name="./name"
                                                 required="{Boolean}true"/>
                                             <value

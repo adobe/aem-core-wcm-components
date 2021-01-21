@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/* global
+    CQ
+ */
 (function() {
     "use strict";
 
@@ -284,8 +287,8 @@
 
             if (dataLayerEnabled) {
 
-                var activeItem = getDataLayerId(that._elements.tabpanel[index].dataset.cmpDataLayer);
-                var exActiveItem = getDataLayerId(that._elements.tabpanel[exActive].dataset.cmpDataLayer);
+                var activeItem = getDataLayerId(that._elements.tabpanel[index]);
+                var exActiveItem = getDataLayerId(that._elements.tabpanel[exActive]);
 
                 dataLayer.push({
                     event: "cmp:show",
@@ -350,11 +353,15 @@
      * Parses the dataLayer string and returns the ID
      *
      * @private
-     * @param {String} componentDataLayer the dataLayer string
+     * @param {HTMLElement} item the accordion item
      * @returns {String} dataLayerId or undefined
      */
-    function getDataLayerId(componentDataLayer) {
-        return Object.keys(JSON.parse(componentDataLayer))[0];
+    function getDataLayerId(item) {
+        if (item.dataset.cmpDataLayer) {
+            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+        } else {
+            return item.id;
+        }
     }
 
     /**
@@ -363,10 +370,10 @@
      * @private
      */
     function onDocumentReady() {
-      dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-      dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
 
-      var elements = document.querySelectorAll(selectors.self);
+        var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new Tabs({ element: elements[i], options: readData(elements[i]) });
         }

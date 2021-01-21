@@ -123,6 +123,26 @@
                                         "jcr:content": {
                                             "jcr:primaryType": "nt:unstructured"
                                         }
+                                    },
+                                    "policy_1602844411172": {
+                                        "jcr:primaryType"       : "nt:unstructured",
+                                        "jcr:title"             : "mytest",
+                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
+                                        "disableLazyLoading"    : "false",
+                                        "allowUpload"           : "true",
+                                        "altValueFromDAM"       : "true",
+                                        "displayPopupTitle"     : "true",
+                                        "enableDmFeatures"      : "true",
+                                        "isDecorative"          : "false",
+                                        "jpegQuality"           : "99",
+                                        "titleValueFromDAM"     : "true",
+                                        "uuidDisabled"          : "true",
+                                        "jcr:content"           : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        },
+                                        "plugins"               : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        }
                                     }
                                 }
                             }

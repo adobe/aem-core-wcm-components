@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -60,6 +61,11 @@ public final class AssetDataImpl implements AssetData {
      * The tags field value.
      */
     private String[] tags;
+
+    /**
+     * The smart tags field value.
+     */
+    private Map<String, Object> smartTags;
 
     /**
      * Construct an AssetData model.
@@ -127,5 +133,16 @@ public final class AssetDataImpl implements AssetData {
             return Arrays.copyOf(this.tags, this.tags.length);
         }
         return null;
+    }
+
+    @Override
+    public Map<String, Object> getSmartTags() {
+        if (this.smartTags == null) {
+            this.smartTags = this.dataLayerSupplier
+                .getSmartTags()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.smartTags;
     }
 }

@@ -18,9 +18,16 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -57,7 +64,7 @@ import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragmen
 )
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ContentFragmentImpl implements ContentFragment {
+public class ContentFragmentImpl extends AbstractComponentImpl implements ContentFragment {
 
     /**
      * The resource type of the component associated with this Sling model.
@@ -214,6 +221,25 @@ public class ContentFragmentImpl implements ContentFragment {
 
         // split into paragraphs
         return content.split("(?=(<p>|<h1>|<h2>|<h3>|<h4>|<h5>|<h6>))");
+    }
+
+    @Override
+    @NotNull
+    protected ComponentData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asContentFragment()
+            .withTitle(this::getTitle)
+            .withElementsData(() -> {
+                List<ContentFragmentData.ElementData> elementsData = new ArrayList<>();
+                Optional.ofNullable(this.getElements())
+                    .map(elements -> {
+                        for (DAMContentFragment.DAMContentElement contentElement : elements) {
+                            elementsData.add(new ContentFragmentDataImpl.ElementDataImpl(contentElement));
+                        }
+                        return Optional.empty();
+                    });
+                return elementsData.toArray(new ContentFragmentData.ElementData[0]);
+            })
+            .build();
     }
 
     /**

@@ -4,4 +4,5 @@
     jcr:primaryType="cq:Page">
     <templates/>
     <policies/>
+    <template-types/>
 </jcr:root>

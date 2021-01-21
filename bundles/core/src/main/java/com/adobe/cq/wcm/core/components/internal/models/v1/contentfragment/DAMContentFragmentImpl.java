@@ -234,6 +234,12 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
             return getData().getValue();
         }
 
+        @Nullable
+        @Override
+        public <T> T getValue(Class<T> var1) {
+            return getData().getValue(var1);
+        }
+
         @NotNull
         @Override
         public String getExportedType() {

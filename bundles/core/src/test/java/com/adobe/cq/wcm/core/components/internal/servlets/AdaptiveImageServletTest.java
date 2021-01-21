@@ -27,9 +27,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.http.HttpStatus;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.servlets.HttpConstants;
+import org.apache.sling.commons.metrics.Timer;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
@@ -42,6 +44,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl;
+import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.api.handler.AssetHandler;
 import com.day.cq.dam.api.handler.store.AssetStore;
@@ -87,12 +90,14 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         resourceResolver = context.resourceResolver();
         AssetHandler assetHandler = mock(AssetHandler.class);
         AssetStore assetStore = mock(AssetStore.class);
+        AdaptiveImageServletMetrics metrics = mock(AdaptiveImageServletMetrics.class);
+        when(metrics.startDurationRecording()).thenReturn(mock(Timer.Context.class));
         when(assetStore.getAssetHandler(anyString())).thenReturn(assetHandler);
         when(assetHandler.getImage(any(Rendition.class))).thenAnswer(invocation -> {
             Rendition rendition = invocation.getArgument(0);
             return ImageIO.read(rendition.getStream());
         });
-        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
+        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
         testLogger = TestLoggerFactory.getTestLogger(AdaptiveImageServlet.class);
     }
 
@@ -692,6 +697,26 @@ class AdaptiveImageServletTest extends AbstractImageTest {
                 IOException.class,
                 () -> servlet.doGet(request, response),
                 "Expecting to throw an exception complaining that dimensions are too large");
+    }
+
+    @Test
+    void testTransparentImage() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE29_PATH,
+                1607501105000L, "coreimg.80.1500", "jpeg");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
+                Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[] {"1500"},
+                Image.PN_DESIGN_JPEG_QUALITY, 80);
+        servlet.doGet(request, response);
+        Assertions.assertEquals(HttpStatus.SC_OK, response.getStatus());
+        Layer responseImage = new Layer(new ByteArrayInputStream(response.getOutput()));
+        Assertions.assertEquals(1500, responseImage.getWidth());
+        for (int x = 0; x < responseImage.getWidth(); x++) {
+            for (int y = 0; y < responseImage.getHeight(); y++) {
+                Assertions.assertEquals(Color.white.getRGB(), responseImage.getPixel(x, y), "Expected white background");
+            }
+        }
     }
 
     private void testNegativeRequestedWidth(String imagePath) throws IOException {

@@ -21,6 +21,7 @@ import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -28,6 +29,16 @@ import java.util.function.Supplier;
  * This builder will produce a valid {@link AssetData} object.
  */
 public final class AssetDataBuilder extends GenericDataBuilder<AssetDataBuilder, AssetData> {
+
+    /**
+     * Name of the property holding the name of smart tag;
+     */
+    public final static String SMARTTAG_NAME_PROP = "name";
+
+    /**
+     * Name of the property holding the confidence of smart tag;
+     */
+    public final static String SMARTTAG_CONFIDENCE_PROP = "confidence";
 
     /**
      * Construct an Asset Data Builder.
@@ -63,7 +74,6 @@ public final class AssetDataBuilder extends GenericDataBuilder<AssetDataBuilder,
         return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setFormat(supplier));
     }
 
-
     /**
      * Sets the supplier that supplies the Asset's tags.
      *
@@ -74,6 +84,18 @@ public final class AssetDataBuilder extends GenericDataBuilder<AssetDataBuilder,
     @NotNull
     public AssetDataBuilder withTags(@NotNull final Supplier<String[]> supplier) {
         return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setTags(supplier));
+    }
+
+    /**
+     * Sets the supplier that supplies the Asset's smart tags.
+     *
+     * @param supplier The smart tags value supplier.
+     * @return A new {@link AssetDataBuilder}.
+     * @see AssetData#getSmartTags()
+     */
+    @NotNull
+    public AssetDataBuilder withSmartTags(@NotNull final Supplier<Map<String, Object>> supplier) {
+        return this.createInstance(new DataLayerSupplierImpl(this.getDataLayerSupplier()).setSmartTags(supplier));
     }
 
     /**

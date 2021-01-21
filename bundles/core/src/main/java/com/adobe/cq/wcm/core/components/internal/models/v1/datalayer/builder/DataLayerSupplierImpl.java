@@ -20,12 +20,14 @@ import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -119,6 +121,12 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
     private Supplier<String[]> tagsSupplier;
 
     /**
+     * The smart tags value supplier.
+     */
+    @Nullable
+    private Supplier<Map<String, Object>> smartTagsSupplier;
+
+    /**
      * The template path value supplier.
      */
     @Nullable
@@ -129,6 +137,12 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     @Nullable
     private Supplier<String> languageSupplier;
+
+    /**
+     * The language value supplier.
+     */
+    @Nullable
+    private Supplier<ContentFragmentData.ElementData[]> contentFragmentElementsSupplier;
 
     /**
      * Construct a wrapper for a {@link DataLayerSupplier}.
@@ -453,6 +467,26 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
 
     @Override
     @NotNull
+    public Optional<Supplier<Map<String, Object>>> getSmartTags() {
+        if (this.smartTagsSupplier != null) {
+            return Optional.of(this.smartTagsSupplier);
+        }
+        return this.wrappedSupplier.getSmartTags();
+    }
+
+    /**
+     * Set the smart tags field value supplier.
+     *
+     * @param supplier The smart tags field value supplier.
+     * @return This.
+     */
+    public DataLayerSupplierImpl setSmartTags(@NotNull final Supplier<Map<String, Object>> supplier) {
+        this.smartTagsSupplier = supplier;
+        return this;
+    }
+
+    @Override
+    @NotNull
     public Optional<Supplier<String>> getTemplatePath() {
         if (this.templatePathSupplier != null) {
             return Optional.of(this.templatePathSupplier);
@@ -488,6 +522,26 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     public DataLayerSupplierImpl setLanguage(@NotNull final Supplier<String> supplier) {
         this.languageSupplier = supplier;
+        return this;
+    }
+
+    @Override
+    @NotNull
+    public Optional<Supplier<ContentFragmentData.ElementData[]>> getContentFragmentElements() {
+        if (this.contentFragmentElementsSupplier != null) {
+            return Optional.of(this.contentFragmentElementsSupplier);
+        }
+        return this.wrappedSupplier.getContentFragmentElements();
+    }
+
+    /**
+     * Set the content fragment elements field value supplier.
+     *
+     * @param supplier The content fragment elements field value supplier.
+     * @return This.
+     */
+    public DataLayerSupplierImpl setContentFragmentElements(@NotNull final Supplier<ContentFragmentData.ElementData[]> supplier) {
+        this.contentFragmentElementsSupplier = supplier;
         return this;
     }
 }
