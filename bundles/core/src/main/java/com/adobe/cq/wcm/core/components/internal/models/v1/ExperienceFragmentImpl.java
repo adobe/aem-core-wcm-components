@@ -224,21 +224,13 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
-        if (this.children == null) {
-            this.children = Optional.ofNullable(this.getLocalizedFragmentVariationPath())
-                .filter(StringUtils::isNotBlank)
-                .map(this.request.getResourceResolver()::getResource)
-                .map(Resource::listChildren)
-                .map(it -> ContentFragmentUtils.getComponentExporters(it, this.modelFactory, this.request))
-                .orElseGet(LinkedHashMap::new);
-        }
-        return this.children;
+        return this.getChildren();
     }
 
     @NotNull
     @Override
     public String[] getExportedItemsOrder() {
-        return this.getExportedItems().keySet().toArray(new String[0]);
+        return this.getChildren().keySet().toArray(new String[0]);
     }
 
     @Override
@@ -259,6 +251,24 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @JsonInclude
     public boolean isConfigured() {
         return StringUtils.isNotEmpty(this.getLocalizedFragmentVariationPath()) && !this.getExportedItems().isEmpty();
+    }
+
+    /**
+     * Gets an ordered map of all children resources of the experience fragment with the resource name as the key
+     * and the corresponding {@link ComponentExporter} model as the value.
+     *
+     * @return Ordered map of resource names to {@link ComponentExporter} models.
+     */
+    private LinkedHashMap<String, ComponentExporter> getChildren() {
+        if (this.children == null) {
+            this.children = Optional.ofNullable(this.getLocalizedFragmentVariationPath())
+                    .filter(StringUtils::isNotBlank)
+                    .map(this.request.getResourceResolver()::getResource)
+                    .map(Resource::listChildren)
+                    .map(it -> ContentFragmentUtils.getComponentExporters(it, this.modelFactory, this.request))
+                    .orElseGet(LinkedHashMap::new);
+        }
+        return this.children;
     }
 
     /**
