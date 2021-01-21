@@ -27,7 +27,8 @@
                 "repo:modifyDate": "2017-03-20T10:20:39Z",
                 "@type": "image/png",
                 "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
-                "xdm:tags": []
+                "xdm:tags": [],
+                "xdm:smartTags": {}
             }
         }
     }

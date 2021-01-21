@@ -65,7 +65,38 @@
                 "dam:Numberoftextualcomments": 0,
                 "tiff:ImageWidth"            : 2000,
                 "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
-                "dam:size"                   : 49069
+                "dam:size"                   : 49069,
+                "predictedTags":{
+                    "jcr:primaryType":"nt:unstructured",
+                    "lake":{
+                        "confidence":0.79,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"lake",
+                        "jcr:primaryType":"nt:unstructured"
+                    },
+                    "water":{
+                        "confidence":0.78,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"water",
+                        "jcr:primaryType":"nt:unstructured"
+                    },
+                    "landscape":{
+                        "confidence":0.75,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"landscape",
+                        "jcr:primaryType":"nt:unstructured"
+                    },
+                    "nature":{
+                        "confidence":0.74,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"nature",
+                        "jcr:primaryType":"nt:unstructured"
+                    }
+                }
             }
         }
     },
@@ -655,6 +686,119 @@
                         "jcr:mimeType"      : "image/png"
                     }
                 }
+            }
+        }
+    },
+    "transparent_hd.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes": [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy": "admin",
+        "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+        "jcr:uuid": "f6460529-b7b1-4b3a-8980-b3b3f0ee109c",
+        "jcr:content": {
+            "jcr:primaryType": "dam:AssetContent",
+            "jcr:lastModifiedBy": "admin",
+            "dam:assetState": "processed",
+            "jcr:lastModified": "Wed Dec 09 2020 10:05:05 GMT+0200",
+            "renditions": {
+                "jcr:primaryType": "nt:folder",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                "cq5dam.web.1280.1280.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "workflow-process-service",
+                    "jcr:created": "Wed Dec 09 2020 10:05:05 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:05 GMT+0200",
+                        ":jcr:data": 3653
+                    }
+                },
+                "cq5dam.thumbnail.48.48.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "workflow-process-service",
+                    "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                        ":jcr:data": 85
+                    }
+                },
+                "cq5dam.thumbnail.140.100.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "workflow-process-service",
+                    "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                        ":jcr:data": 122
+                    }
+                },
+                "original": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                        ":jcr:data": 37394
+                    }
+                },
+                "cq5dam.thumbnail.319.319.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "workflow-process-service",
+                    "jcr:created": "Wed Dec 09 2020 10:05:05 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:05 GMT+0200",
+                        ":jcr:data": 300
+                    }
+                }
+            },
+            "related": {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:mixinTypes": [
+                    "cq:Taggable"
+                ],
+                "dam:Physicalheightininches": "14.998125076293945",
+                "dam:Physicalwidthininches": "26.663333892822266",
+                "dam:Fileformat": "PNG",
+                "dam:Progressive": "no",
+                "tiff:ImageLength": 1080,
+                "dam:extracted": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                "dc:format": "image/png",
+                "dam:Bitsperpixel": 32,
+                "dam:MIMEtype": "image/png",
+                "tiff:Orientation": 1,
+                "dam:Comments": "XML:com.adobe.xmp: <x:xmpmeta xmlns:x=\"adobe:ns:meta/\" x:xmptk=\"XMP Core 6.0.0\">\n   <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n      <rdf:Description rdf:about=\"\"\n            xmlns:exif=\"http://ns.adobe.com/exif/1.0/\"\n            xmlns:tiff=\"http://ns.adobe.com/tiff/1.0/\">\n         <exif:PixelYDimension>75</exif:PixelYDimension>\n         <exif:UserComment>Screenshot</exif:UserComment>\n         <exif:PixelXDimension>78</exif:PixelXDimension>\n         <tiff:Orientation>1</tiff:Orientation>\n      </rdf:Description>\n   </rdf:RDF>\n</x:xmpmeta>\n\n",
+                "dam:Physicalwidthindpi": 72,
+                "dam:Physicalheightindpi": 72,
+                "exif:UserComment": [
+                    "Screenshot"
+                ],
+                "dam:Numberofimages": 1,
+                "exif:PixelYDimension": 75,
+                "exif:PixelXDimension": 78,
+                "dam:Numberoftextualcomments": 1,
+                "tiff:ImageWidth": 1920,
+                "dam:sha1": "ce14157091eec4e7c44be64ff2bb70d41d40507d",
+                "dam:size": 37394,
+                "exif:UserComment_xmpArrayType": "rdf:Alt"
             }
         }
     },

@@ -78,4 +78,15 @@ public final class ComponentDataLayerExtender {
     public ImageComponentDataBuilder asImageComponent() {
         return new ImageComponentDataBuilder(DataLayerSupplierImpl.extend(this.componentData));
     }
+
+    /**
+     * Get a ContentFragmentDataBuilder that extends existing component data.
+     *
+     * @return A new ContentFragmentDataBuilder pre-initialized with the existing component data.
+     */
+    @NotNull
+    public ContentFragmentDataBuilder asContentFragment() {
+        return new ContentFragmentDataBuilder(DataLayerSupplierImpl.extend(this.componentData));
+    }
+
 }

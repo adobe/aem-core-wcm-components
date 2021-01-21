@@ -46,6 +46,7 @@ import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.apache.sling.commons.metrics.Timer;
 import org.apache.sling.commons.mime.MimeTypeService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -102,6 +103,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
     private int maxInputWidth;
+    
+    private AdaptiveImageServletMetrics metrics;
 
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient MimeTypeService mimeTypeService;
@@ -109,16 +112,20 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
-    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, int defaultResizeWidth, int maxInputWidth) {
+    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics, 
+            int defaultResizeWidth, int maxInputWidth) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
+        this.metrics = metrics;
         this.defaultResizeWidth = defaultResizeWidth > 0 ? defaultResizeWidth : DEFAULT_RESIZE_WIDTH;
         this.maxInputWidth = maxInputWidth > 0 ? maxInputWidth : DEFAULT_MAX_SIZE;
     }
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
+        Timer.Context requestDuration = metrics.startDurationRecording();
         try {
+            metrics.markServletInvocation();
             RequestPathInfo requestPathInfo = request.getRequestPathInfo();
             List<String> selectorList = selectorToList(requestPathInfo.getSelectorString());
             String suffix = requestPathInfo.getSuffix();
@@ -129,11 +136,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (StringUtils.isNotEmpty(suffixExtension)) {
                     if (!suffixExtension.equals(requestPathInfo.getExtension())) {
                         LOGGER.error("The suffix part defines a different extension than the request: {}.", suffix);
+                        metrics.markImageErrors();
                         response.sendError(HttpServletResponse.SC_NOT_FOUND);
                         return;
                     }
                 } else {
                     LOGGER.error("Invalid suffix: {}.", suffix);
+                    metrics.markImageErrors();
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
@@ -166,6 +175,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 }
                 if (componentCandidate == null) {
                     LOGGER.error("Unable to retrieve an image from this page's template.");
+                    metrics.markImageErrors();
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
@@ -176,6 +186,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             ImageComponent imageComponent = new ImageComponent(component);
             if (imageComponent.source == Source.NONEXISTING) {
                 LOGGER.error("The image from {} does not have a valid file reference.", component.getPath());
+                metrics.markImageErrors();
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
@@ -195,6 +206,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (asset == null) {
                     LOGGER.error("Unable to adapt resource {} used by image {} to an asset.", imageComponent.imageResource.getPath(),
                             component.getPath());
+                    metrics.markImageErrors();
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
@@ -212,6 +224,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     return;
                 } else {
                     LOGGER.error("Unable to determine correct redirect location.");
+                    metrics.markImageErrors();
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
@@ -231,10 +244,14 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     transformAndStreamAsset(response, componentProperties, resizeWidth, quality, asset, imageType,
                             imageName);
                 }
+                metrics.markImageStreamed();
             }
         } catch (IllegalArgumentException e) {
             LOGGER.error("Invalid image request", e.getMessage());
+            metrics.markImageErrors();
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } finally {
+            requestDuration.stop();
         }
 
     }
@@ -347,6 +364,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
                         layer = getLayer(rendition);
+                        if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
+                                ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension))) {
+                            LOGGER.debug("Adding default (white) background to a transparent PNG: {}/{}", asset.getPath(),
+                                    rendition.getName());
+                            layer.setBackground(Color.white);
+                        }
                         layer.resize(resizeWidth, resizeHeight);
                         response.setContentType(imageType);
                         LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
@@ -490,13 +513,16 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             if (dimension != null) {
                 if (dimension.getWidth() >= width) {
                     bestRendition = enhancedRendition;
+                    if (StringUtils.equals(bestRendition.getPath(), asset.getOriginal().getPath())) {
+                        metrics.markOriginalRenditionUsed();
+                    }
                     break;
                 }
             }
         }
         // If no rendition was found, attempt to use original
         if (bestRendition == null) {
-            bestRendition = new EnhancedRendition(asset.getOriginal());
+            return getOriginal(asset);
         }
         return filter(bestRendition);
     }
@@ -511,7 +537,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @NotNull
     private EnhancedRendition getOriginal(@NotNull Asset asset) throws IOException {
         EnhancedRendition original = new EnhancedRendition(asset.getOriginal());
-        return filter(original);
+        EnhancedRendition filtered = filter(original);
+        metrics.markOriginalRenditionUsed();
+        return filtered;
     }
 
     /**
@@ -528,6 +556,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if (dimension != null && dimension.getWidth() <= maxInputWidth) {
             return rendition;
         }
+        metrics.markRejectedTooLargeRendition();
         throw new IOException(String.format("Cannot process rendition %s due to size %s", rendition.getName(), rendition.getDimension()));
     }
 

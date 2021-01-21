@@ -15,6 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Calendar;
+import java.util.Optional;
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -29,9 +32,6 @@ import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
-
-import java.util.Calendar;
-import java.util.Optional;
 
 /**
  * Abstract class that can be used as a base class for {@link Component} implementations.
@@ -80,6 +80,23 @@ public abstract class AbstractComponentImpl implements Component {
      */
     private ComponentData componentData;
 
+    /**
+     * Getter for current page.
+     *
+     * @return The current {@link Page}
+     */
+    protected Page getCurrentPage() {
+        return currentPage;
+    }
+
+    /**
+     * Setter for current page.
+     * @param currentPage The {@link Page} to set
+     */
+    protected void setCurrentPage(Page currentPage) {
+        this.currentPage = currentPage;
+    }
+
     @NotNull
     @Override
     public String getId() {
@@ -105,7 +122,12 @@ public abstract class AbstractComponentImpl implements Component {
     public ComponentData getData() {
         if (componentData == null) {
             if (this.dataLayerEnabled == null) {
-                this.dataLayerEnabled = ComponentUtils.isDataLayerEnabled(this.resource);
+                if (this.currentPage != null ) {
+                    // Check at page level to allow components embedded via containers in editable templates to inherit the setting
+                    this.dataLayerEnabled = ComponentUtils.isDataLayerEnabled(this.currentPage.getContentResource());
+                } else {
+                    this.dataLayerEnabled = ComponentUtils.isDataLayerEnabled(this.resource);
+                }
             }
             if (this.dataLayerEnabled) {
                 componentData = getComponentData();
