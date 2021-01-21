@@ -2,6 +2,7 @@
     "id": "page-bb590de134",
     "designPath": "/etc/designs/mysite",
     "title": "Templated Page",
+    "brandSlug": "Brand Slug",
     "lastModifiedDate": 1453282416000,
     "templateName": "product-page",
     "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",

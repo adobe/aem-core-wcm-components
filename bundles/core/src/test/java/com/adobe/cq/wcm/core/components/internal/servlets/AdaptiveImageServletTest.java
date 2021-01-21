@@ -31,6 +31,7 @@ import org.apache.http.HttpStatus;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.servlets.HttpConstants;
+import org.apache.sling.commons.metrics.Timer;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
@@ -89,12 +90,14 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         resourceResolver = context.resourceResolver();
         AssetHandler assetHandler = mock(AssetHandler.class);
         AssetStore assetStore = mock(AssetStore.class);
+        AdaptiveImageServletMetrics metrics = mock(AdaptiveImageServletMetrics.class);
+        when(metrics.startDurationRecording()).thenReturn(mock(Timer.Context.class));
         when(assetStore.getAssetHandler(anyString())).thenReturn(assetHandler);
         when(assetHandler.getImage(any(Rendition.class))).thenAnswer(invocation -> {
             Rendition rendition = invocation.getArgument(0);
             return ImageIO.read(rendition.getStream());
         });
-        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
+        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
         testLogger = TestLoggerFactory.getTestLogger(AdaptiveImageServlet.class);
     }
 
