@@ -66,7 +66,6 @@ class InheritedFieldTest {
         InheritedField inheritedField = request.adaptTo(InheritedField.class);
         if (inheritedField != null) {
             assertEquals("Test Slug", inheritedField.getInheritedValue());
-            assertEquals("brandSlug-a0ea77f8cd", inheritedField.getId());
             assertEquals("Brand Slug", inheritedField.getHeading());
             assertNull(inheritedField.getSpecifiedValue());
             assertEquals("brandSlug", inheritedField.getProp());
@@ -85,7 +84,6 @@ class InheritedFieldTest {
         InheritedField inheritedField = request.adaptTo(InheritedField.class);
         if (inheritedField != null) {
             assertEquals("Test Slug", inheritedField.getInheritedValue());
-            assertEquals("brandSlug-a0ea77f8cd", inheritedField.getId());
             assertEquals("Brand Slug", inheritedField.getHeading());
             assertNull(inheritedField.getSpecifiedValue());
             assertEquals("brandSlug", inheritedField.getProp());
