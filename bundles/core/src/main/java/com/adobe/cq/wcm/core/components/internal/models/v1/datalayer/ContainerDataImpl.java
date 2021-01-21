@@ -15,20 +15,45 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import org.apache.sling.api.resource.Resource;
-import org.jetbrains.annotations.NotNull;
-
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class ContainerDataImpl extends ComponentDataImpl implements ContainerData {
+import java.util.Arrays;
+import java.util.function.Supplier;
 
-    public ContainerDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
-        super(component, resource);
+/**
+ * {@link DataLayerSupplier} backed container component data implementation.
+ */
+public final class ContainerDataImpl extends ComponentDataImpl implements ContainerData {
+
+    /**
+     * The shown items field value.
+     */
+    private String[] shownItems;
+
+    /**
+     * Construct the data layer model.
+     *
+     * @param supplier The data layer supplier.
+     */
+    public ContainerDataImpl(@NotNull final DataLayerSupplier supplier) {
+        super(supplier);
     }
 
     @Override
+    @Nullable
     public String[] getShownItems() {
-        return component.getDataLayerShownItems();
+        if (this.shownItems == null) {
+            this.shownItems = this.getDataLayerSupplier()
+                .getShownItems()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        if (this.shownItems != null) {
+            return Arrays.copyOf(this.shownItems, this.shownItems.length);
+        }
+        return null;
     }
 }

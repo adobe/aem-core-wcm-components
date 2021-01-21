@@ -24,13 +24,13 @@ To achieve this, a customized page component is used (`core/wcm/extension/amp/co
 Where: 
 
 1. `resourceTypes = page.componentsResourceTypes` is the set of resource types for components present on the page (along with those included via the template or experience fragments).
-2. `filter='.*\\.amp'` is the regular expression used the filter the AMP-specific client libraries, by category.
+2. `filter='.*\\.amp'` is the regular expression used to filter the AMP-specific client libraries, by category.
 
 As an example, check out this [accordion AMP-specific clientlib folder](../../examples/ui.apps/src/content/jcr_root/apps/core-components-examples/components/accordion/clientlibs/amp/)
 
 ### AMP component library asynchronous loading
 
-Certain AEM Core Components require to be mapped to AMP components in order to render valid AMP code and functionality. When it is the case, developers can use / overlay the [customheadlibs.amp.html](content/src/content/jcr_root/apps/core/wcm/extensions/amp/components/accordion/v1/accordion/customheadlibs.amp.html) file in order to inject a `<script>` tag in the `<head>`.
+Some AEM Core Components require to be mapped to AMP components in order to render valid AMP code and functionality. When it is the case, developers can use / overlay the [customheadlibs.amp.html](content/src/content/jcr_root/apps/core/wcm/extensions/amp/components/accordion/v1/accordion/customheadlibs.amp.html) file in order to inject a `<script>` tag in the `<head>`.
 
 These files are picked up by this snippet in [ampheadlibs.html](content/src/content/jcr_root/apps/core/wcm/extensions/amp/components/page/v1/page/ampheadlibs.html):
 

@@ -22,6 +22,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class NavigationItemImpl extends PageListItemImpl implements NavigationItem {
@@ -30,12 +31,14 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     protected int level;
     protected boolean active;
 
-    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, String parentId) {
-        this(page, active, request, level, children, parentId, PROP_DISABLE_SHADOWING_DEFAULT);
+    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children,
+                              String parentId, Component component) {
+        this(page, active, request, level, children, parentId, PROP_DISABLE_SHADOWING_DEFAULT, component);
     }
 
-    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, String parentId, boolean isShadowingDisabled) {
-        super(request, page, parentId, isShadowingDisabled);
+    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children,
+                              String parentId, boolean isShadowingDisabled, Component component) {
+        super(request, page, parentId, isShadowingDisabled, component);
         this.active = active;
         this.level = level;
         this.children = children;

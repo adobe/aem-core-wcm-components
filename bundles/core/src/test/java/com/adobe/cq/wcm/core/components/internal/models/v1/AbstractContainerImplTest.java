@@ -19,17 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(AemContextExtension.class)
 public class AbstractContainerImplTest {
 
     private static final String TEST_BASE = "/container";
@@ -40,12 +42,12 @@ public class AbstractContainerImplTest {
     // private static final String CONTAINER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-1";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
-    @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @BeforeClass
-    public static void init() {
-        AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
     }
 
     @Test
@@ -61,6 +63,11 @@ public class AbstractContainerImplTest {
         @NotNull
         protected List<ListItem> readItems() {
             return new ArrayList<>();
+        }
+
+        @Override
+        public String[] getDataLayerShownItems() {
+            return null;
         }
     }
 }

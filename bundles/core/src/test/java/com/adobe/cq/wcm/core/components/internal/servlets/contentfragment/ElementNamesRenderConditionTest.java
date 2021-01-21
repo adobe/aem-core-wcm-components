@@ -37,9 +37,9 @@ import com.adobe.granite.ui.components.rendercondition.RenderCondition;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.AbstractContentFragmentTest.ADAPTER;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.AbstractContentFragmentTest.CONTENT_FRAGMENT_ADAPTER;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -65,13 +65,13 @@ class ElementNamesRenderConditionTest {
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
         // load the content fragments
-        context.load().json("/contentfragment/test-content-dam-contentfragments.json", CONTENT_FRAGMENTS_PATH);
+        context.load().json(TEST_BASE + "/test-content-dam-contentfragments.json", CONTENT_FRAGMENTS_PATH);
         // load the render conditions
-        context.load().json("/contentfragment/test-content-renderconditions.json", RENDERCONDITIONS_PATH);
+        context.load().json(TEST_BASE + "/test-content-renderconditions.json", RENDERCONDITIONS_PATH);
         // load the content fragment models
-        context.load().json("/contentfragment/test-content-conf.json", "/conf/global/settings/dam/cfm/models");
+        context.load().json(TEST_BASE + "/test-content-conf.json", "/conf/global/settings/dam/cfm/models");
         // register an adapter that adapts resources to (mocks of) content fragments
-        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, ADAPTER);
+        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, CONTENT_FRAGMENT_ADAPTER);
         // mock services
         context.registerService(FragmentRenderService.class, mock(FragmentRenderService.class));
         context.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
@@ -86,17 +86,15 @@ class ElementNamesRenderConditionTest {
     }
 
     @Test
-    void testSingleTextDisplayMode()
-            throws ServletException, IOException {
+    void testSingleTextDisplayMode() throws ServletException, IOException {
         RenderCondition renderCondition = getRenderCondition(RC_SINGLE_TEXT);
-        assertTrue("Invalid value of render condition", renderCondition.check());
+        assertTrue(renderCondition.check(), "Invalid value of render condition");
     }
 
     @Test
-    void testMultipleElementsDisplayMode()
-            throws ServletException, IOException {
+    void testMultipleElementsDisplayMode() throws ServletException, IOException {
         RenderCondition renderCondition = getRenderCondition(RC_MULTI);
-        assertFalse("Invalid value of render condition", renderCondition.check());
+        assertFalse(renderCondition.check(), "Invalid value of render condition");
     }
 
     /**

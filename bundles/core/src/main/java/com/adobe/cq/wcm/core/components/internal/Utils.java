@@ -15,37 +15,40 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceResolverFactory;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.foundation.AllowedComponentList;
+import com.google.common.collect.ImmutableSet;
 
 public class Utils {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Utils.class);
-
-    /**
-     * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
-     */
-    public static final String ID_SEPARATOR = "-";
+    private static final Set<String> INTERNAL_PARAMETER = ImmutableSet.of(
+            ":formstart",
+            "_charset_",
+            ":redirect",
+            ":cq_csrf_token"
+    );
 
     /**
      * Name of the subservice used to authenticate as in order to be able to read details about components and
@@ -120,24 +123,14 @@ public class Utils {
     }
 
     /**
-     * Returns an ID based on the prefix, the ID_SEPARATOR and a hash of the path, e.g. image-5c7e0ef90d
-     *
-     * @param prefix the prefix for the ID
-     * @param path   the resource path
-     * @return the generated ID
-     */
-    public static String generateId(String prefix, String path) {
-        return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
-    }
-
-    /**
      * Returns a set of resource types for components used to render a given page, including those
      * from the page template and embedded experience templates.
      *
      * @param page the {@link Page}
      * @param request the current request
      * @param modelFactory the {@link ModelFactory}
-     * @return
+     *
+     * @return The set of resource types for components used to render a page.
      */
     @NotNull
     public static Set<String> getPageResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
@@ -163,7 +156,6 @@ public class Utils {
         resourceTypes.add(resource.getResourceType());
         resourceTypes.addAll(getXFResourceTypes(resource, request, modelFactory));
         for (Resource child : resource.getChildren()) {
-            //TODO: check it's a cq:Component, used to be allowed node (filtered out by regex)
             resourceTypes.addAll(getResourceTypes(child, request, modelFactory));
         }
         return resourceTypes;
@@ -184,12 +176,9 @@ public class Utils {
         if (experienceFragment != null) {
             String fragmentPath = experienceFragment.getLocalizedFragmentVariationPath();
             if (StringUtils.isNotEmpty(fragmentPath)) {
-                ResourceResolver resolver = resource.getResourceResolver();
-                if (resolver != null) {
-                    Resource fragmentResource = resolver.getResource(fragmentPath);
-                    if (fragmentResource != null) {
-                        return getResourceTypes(fragmentResource, request, modelFactory);
-                    }
+                Resource fragmentResource = resource.getResourceResolver().getResource(fragmentPath);
+                if (fragmentResource != null) {
+                    return getResourceTypes(fragmentResource, request, modelFactory);
                 }
             }
         }
@@ -210,33 +199,123 @@ public class Utils {
         Template template = page.getTemplate();
         if (template != null) {
             String templatePath = template.getPath() + AllowedComponentList.STRUCTURE_JCR_CONTENT;
-            ResourceResolver resolver = page.getContentResource().getResourceResolver();
-            if (resolver != null) {
-                Resource templateResource = resolver.getResource(templatePath);
-                if (templateResource != null) {
-                    return getResourceTypes(templateResource, request, modelFactory);
-                }
+            Resource templateResource = request.getResourceResolver().getResource(templatePath);
+            if (templateResource != null) {
+                return getResourceTypes(templateResource, request, modelFactory);
             }
         }
         return Collections.emptySet();
     }
 
     /**
-     * Returns a {@link ResourceResolver} that is able to read information from the components (scripts, client
-     * libraries).
+     * Returns all the super-types of a component defined by its resource type.
      *
-     * @param resolverFactory the {@link ResourceResolverFactory}
+     * @param resourceType the resource type of the component.
+     * @param resourceResolver the resource resolver.
      *
-     * @return a {@link ResourceResolver} that is able to read information from the components
+     * @return a set of the inherited resource types.
      */
-    @Nullable
-    public static ResourceResolver getComponentsResolver(ResourceResolverFactory resolverFactory) {
-        try {
-            return resolverFactory.getServiceResourceResolver(
-                    Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE));
-        } catch (LoginException e) {
-            LOG.error("Cannot login as a service user", e);
-            return null;
+    @NotNull
+    public static Set<String> getSuperTypes(@NotNull final String resourceType, @NotNull final ResourceResolver resourceResolver) {
+        Set<String> superTypes = new HashSet<>();
+        String superType = resourceType;
+        while (superType != null) {
+            superType = Optional.ofNullable(resourceResolver.getResource(superType))
+                .map(Resource::getResourceSuperType)
+                .filter(StringUtils::isNotEmpty)
+                .orElse(null);
+            if (superType != null) {
+                superTypes.add(superType);
+            }
         }
+        return superTypes;
+    }
+
+
+    /**
+     * Get the inherited value of a property from the page content resource. Walk the content tree upwards until an override of that
+     * property is specified.
+     *
+     * @param startPage the page in the content tree to start looking for the requested property.
+     * @param propertyName the name of the property which is inherited.
+     * @return the inherited value of the property or empty string if the property is not specified in the content tree.
+     */
+    @NotNull
+    public static String getInheritedValue(com.day.cq.wcm.api.Page startPage, String propertyName) {
+    	if( startPage == null ) {
+    		return StringUtils.EMPTY;
+    	}
+    	
+    	com.day.cq.wcm.api.Page tmp = startPage;
+    	
+		while( tmp != null && tmp.hasContent() && tmp.getDepth() > 1 ) {
+			ValueMap props = tmp.getProperties();
+			if( props != null ) {
+				boolean override = Boolean.parseBoolean(props.get(propertyName + "_override", String.class));
+				if(override) {
+					return props.get(propertyName, StringUtils.EMPTY);
+				}
+				tmp = tmp.getParent();
+			}
+		}
+    	return StringUtils.EMPTY;
+    }
+
+    /**
+     * Converts the input into a set of strings. The input can be either a {@link Collection}, an array or a CSV.
+     *
+     * @param input - the input
+     *
+     * @return Set of strings from input
+     */
+    @NotNull
+    public static Set<String> getStrings(@Nullable final Object input) {
+        Set<String> strings = new LinkedHashSet<>();
+        if (input != null) {
+            Class clazz = input.getClass();
+            if (Collection.class.isAssignableFrom(clazz)) {
+                // Try to convert from a collection
+                for (Object obj : (Collection)input) {
+                    if (obj != null) {
+                        strings.add(obj.toString());
+                    }
+                }
+            } else if (Object[].class.isAssignableFrom(clazz)) {
+                // Try to convert from an array
+                for (Object obj : (Object[]) input) {
+                    if (obj != null) {
+                        strings.add(obj.toString());
+                    }
+                }
+            } else if (String.class.isAssignableFrom(clazz)) {
+                // Try to convert from a CSV string
+                for (String str : ((String)input).split(",")) {
+                    if (StringUtils.isNotBlank(str)) {
+                        strings.add(str.trim());
+                    }
+                }
+            }
+        }
+        return strings;
+    }
+
+    /**
+     * Converts request parameters to a JSON object and filter AEM specific parameters out.
+     *
+     * @param request - the current {@link SlingHttpServletRequest}
+     * @return JSON object of the request parameters
+     */
+    public static JSONObject getJsonOfRequestParameters(SlingHttpServletRequest request) throws JSONException {
+        org.json.JSONObject jsonObj = new org.json.JSONObject();
+        Map<String, String[]> params = request.getParameterMap();
+
+        for (Map.Entry<String, String[]> entry : params.entrySet()) {
+            if (!INTERNAL_PARAMETER.contains(entry.getKey())) {
+                String[] v = entry.getValue();
+                Object o = (v.length == 1) ? v[0] : v;
+                jsonObj.put(entry.getKey(), o);
+            }
+        }
+        return jsonObj;
     }
 }

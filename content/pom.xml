@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.10.1-SNAPSHOT</version>
+        <version>2.13.3-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,7 @@
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.content</artifactId>
-    <version>2.10.1-SNAPSHOT</version>
+    <version>2.13.3-SNAPSHOT</version>
     <packaging>content-package</packaging>
     <name>Adobe Experience Manager Core WCM Components Content Package</name>
 
@@ -57,6 +57,11 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <filters>
+                        <filter>
+                            <root>/apps/core/wcm/components</root>
+                        </filter>
+                    </filters>
                     <packageType>application</packageType>
                     <dependencies>
                         <dependency>
@@ -111,9 +116,29 @@
                     </execution>
                     <execution>
                         <id>npm install</id>
+                        <phase>validate</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>lint</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run lint</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>sync pom version to package.json</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run sync-pom-version</arguments>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>npm run build</id>
@@ -170,6 +195,7 @@
                                 <configuration>
                                     <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                                     <failOnError>true</failOnError>
+                                    <packageFile>${contentPackageFile}</packageFile>
                                 </configuration>
                             </execution>
                         </executions>
@@ -196,6 +222,118 @@
                                 <configuration>
                                     <targetURL>http://${aem.publish.host}:${aem.publish.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                                     <failOnError>true</failOnError>
+                                    <packageFile>${contentPackageFile}</packageFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>cloud</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <contentPackageFile>${project.build.directory}/${project.build.finalName}-cloud.zip</contentPackageFile>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/jcr_root/libs</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/src/content/jcr_root/apps</directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>prepare-package</phase>
+                                <configuration>
+                                    <tasks>
+                                        <replace file="target/jcr_root/libs/core/wcm/components/breadcrumb/v2/breadcrumb/.content.xml" token=".core-wcm" value="Core Structure" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/languagenavigation/v1/languagenavigation/.content.xml" token=".core-wcm" value="Core Structure" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/navigation/v1/navigation/.content.xml" token=".core-wcm" value="Core Structure" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/search/v1/search/.content.xml" token=".core-wcm" value="Core Structure" />
+
+                                        <replace file="target/jcr_root/libs/core/wcm/components/accordion/v1/accordion/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/button/v1/button/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/carousel/v1/carousel/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/container/v1/container/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/contentfragment/v1/contentfragment/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/contentfragmentlist/v1/contentfragmentlist/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/download/v1/download/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/embed/v1/embed/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/experiencefragment/v1/experiencefragment/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/image/v2/image/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/list/v2/list/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/pdfviewer/v1/pdfviewer/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/progressbar/v1/progressbar/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/separator/v1/separator/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/sharing/v1/sharing/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/tabs/v1/tabs/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/teaser/v1/teaser/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/text/v2/text/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/title/v2/title/.content.xml" token=".core-wcm" value="Core Content" />
+
+                                        <replace file="target/jcr_root/libs/core/wcm/components/form/container/v2/container/.content.xml" token=".core-wcm-form" value="Core Content" />
+
+                                        <replace file="target/jcr_root/libs/core/wcm/components/form/button/v2/button/.content.xml" token=".core-wcm-form" value="Core Form" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/form/hidden/v2/hidden/.content.xml" token=".core-wcm-form" value="Core Form" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/form/options/v2/options/.content.xml" token=".core-wcm-form" value="Core Form" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/form/text/v2/text/.content.xml" token=".core-wcm-form" value="Core Form" />
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.jackrabbit</groupId>
+                        <artifactId>filevault-package-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>generate-metadata-cloud</id>
+                                <goals>
+                                    <goal>generate-metadata</goal>
+                                </goals>
+                                <configuration>
+                                    <filters>
+                                        <filter>
+                                            <root>/libs/core/wcm/components</root>
+                                        </filter>
+                                    </filters>
+                                    <classifier>cloud</classifier>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>package-cloud</id>
+                                <goals>
+                                    <goal>package</goal>
+                                </goals>
+                                <configuration>
+                                    <jcrRootSourceDirectory>${project.build.directory}/jcr_root</jcrRootSourceDirectory>
+                                    <classifier>cloud</classifier>
+                                    <workDirectory>${project.build.directory}/vault-work-cloud</workDirectory>
                                 </configuration>
                             </execution>
                         </executions>

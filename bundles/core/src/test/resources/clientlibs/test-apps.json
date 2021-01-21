@@ -212,6 +212,36 @@
                 "sling:resourceSuperType": "core/wcm/components/carousel/v1/carousel",
                 "componentGroup"         : ".core-wcm"
             }
+        },
+        "v3"              : {
+            "jcr:primaryType": "nt:unstructured",
+            "carousel"         : {
+                "cq:isContainer"         : "true",
+                "jcr:description"        : "Displays content as a carousel",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Carousel (v3)",
+                "sling:resourceSuperType": "core/wcm/components/carousel/v2/carousel",
+                "componentGroup"         : ".core-wcm"
+            }
+        },
+        "v4"              : {
+            "jcr:primaryType": "nt:unstructured",
+            "carousel"         : {
+                "cq:isContainer"         : "true",
+                "jcr:description"        : "Displays content as a carousel",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Carousel (v4)",
+                "sling:resourceSuperType": "core/wcm/components/carousel/v3/carousel",
+                "componentGroup"         : ".core-wcm",
+                "customheadlibs.amp.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/plain",
+                        "jcr:data": "<!--Test Carousel-->"
+                    }
+                }
+            }
         }
     },
     "responsivegrid": {

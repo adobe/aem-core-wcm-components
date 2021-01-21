@@ -17,69 +17,54 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
-import org.jetbrains.annotations.Nullable;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.workflow.WorkflowSession;
 import com.adobe.granite.workflow.model.WorkflowModel;
-import com.google.common.base.Function;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(AemContextExtension.class)
 public class WorkflowModelDataSourceServletTest {
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/form/container/datasource/workflowmodeldatasource",
-            "/apps/workflowdatasource");
+    private static final String TEST_BASE = "/form/container/datasource/workflowmodeldatasource";
+    private static final String APPS_ROOT = "/apps/workflowdatasource";
 
-    @Mock
-    private WorkflowSession workflowSessionMock;
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Mock
-    private WorkflowModel workflowModelMock;
-
-    private WorkflowModelDataSourceServlet dataSourceServlet;
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, APPS_ROOT);
+
+        WorkflowSession workflowSessionMock = mock(WorkflowSession.class);
+        WorkflowModel workflowModelMock = mock(WorkflowModel.class);
         when(workflowModelMock.getTitle()).thenReturn("Workflow Title");
         when(workflowModelMock.getId()).thenReturn("test/workflow");
         when(workflowSessionMock.getModels()).thenReturn(new WorkflowModel[]{workflowModelMock});
-        registerWorkflowSessionAdapter();
-    }
-
-    private void registerWorkflowSessionAdapter() {
-        context.registerAdapter(ResourceResolver.class, WorkflowSession.class, new Function<ResourceResolver, WorkflowSession>() {
-            @Nullable
-            @Override
-            public WorkflowSession apply(@Nullable ResourceResolver input) {
-                return workflowSessionMock;
-            }
-        });
+        context.registerAdapter(ResourceResolver.class, WorkflowSession.class,
+            (Function<ResourceResolver, WorkflowSession>) input -> workflowSessionMock);
     }
 
     @Test
     public void testDataSource() throws Exception {
         context.currentResource("/apps/workflowdatasource");
-        dataSourceServlet = new WorkflowModelDataSourceServlet();
+        WorkflowModelDataSourceServlet dataSourceServlet = new WorkflowModelDataSourceServlet();
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         Resource resource = dataSource.iterator().next();
-        ValueMap valueMap = resource.adaptTo(ValueMap.class);
-        assertEquals("Workflow Title", valueMap.get("text", String.class));
-        assertEquals("test/workflow", valueMap.get("value", String.class));
+        assertEquals("Workflow Title", resource.getValueMap().get("text", String.class));
+        assertEquals("test/workflow", resource.getValueMap().get("value", String.class));
     }
 }

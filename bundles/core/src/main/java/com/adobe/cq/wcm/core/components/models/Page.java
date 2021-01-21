@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -228,6 +229,16 @@ public interface Page extends ContainerExporter, Component {
     }
 
     /**
+     * Returns the brand slug of this page.
+     *
+     * @return the page's brandSlug
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.18.0
+     */
+    default String getBrandSlug() {
+    	throw new UnsupportedOperationException();
+    }
+    
+    /**
      * If this page is associated with a Template, then this method will return the Template's client library categories
      * to be included in the page as defined by the user in the policy.
      *
@@ -367,6 +378,17 @@ public interface Page extends ContainerExporter, Component {
      */
     @Nullable
     default String getMainContentSelector() {
+        return null;
+    }
+
+    /**
+     * Returns a list of HTML items that should be included in the page
+     *
+     * @return list of page items
+     * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     */
+    @Nullable
+    default List<HtmlPageItem> getHtmlPageItems() {
         return null;
     }
 }

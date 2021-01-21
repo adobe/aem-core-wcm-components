@@ -18,6 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -138,17 +140,13 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
         return resource.getResourceType();
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
     @Override
-    public String getDataLayerLinkUrl() {
-        return getLinkURL();
+    @NotNull
+    protected ComponentData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asComponent()
+            .withTitle(this::getText)
+            .withLinkUrl(this::getLinkURL)
+            .build();
     }
 
-    @Override
-    public String getDataLayerTitle() {
-        return getText();
-    }
 }

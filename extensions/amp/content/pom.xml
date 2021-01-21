@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.10.1-SNAPSHOT</version>
+        <version>2.13.3-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,7 @@
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.extensions.amp.content</artifactId>
-    <version>2.10.1-SNAPSHOT</version>
+    <version>2.13.3-SNAPSHOT</version>
     <packaging>content-package</packaging>
     <name>Adobe Experience Manager Core WCM Components AMP Extension Content Package</name>
 
@@ -66,6 +66,11 @@
                             <version>[${project.version},)</version>
                         </dependency>
                     </dependencies>
+                    <filters>
+                        <filter>
+                            <root>/apps/core/wcm/extensions</root>
+                        </filter>
+                    </filters>
                 </configuration>
             </plugin>
             <plugin>
@@ -127,6 +132,15 @@
                             <arguments>run lint</arguments>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>sync pom version to package.json</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run sync-pom-version</arguments>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -171,6 +185,7 @@
                                 <configuration>
                                     <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                                     <failOnError>true</failOnError>
+                                    <packageFile>${contentPackageFile}</packageFile>
                                 </configuration>
                             </execution>
                         </executions>
@@ -197,6 +212,72 @@
                                 <configuration>
                                     <targetURL>http://${aem.publish.host}:${aem.publish.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                                     <failOnError>true</failOnError>
+                                    <packageFile>${contentPackageFile}</packageFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>cloud</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <contentPackageFile>${project.build.directory}/${project.build.finalName}-cloud.zip</contentPackageFile>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/jcr_root/libs</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${basedir}/src/content/jcr_root/apps</directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.jackrabbit</groupId>
+                        <artifactId>filevault-package-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>generate-metadata-cloud</id>
+                                <goals>
+                                    <goal>generate-metadata</goal>
+                                </goals>
+                                <configuration>
+                                    <filters>
+                                        <filter>
+                                            <root>/libs/core/wcm/extensions</root>
+                                        </filter>
+                                    </filters>
+                                    <classifier>cloud</classifier>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>package-cloud</id>
+                                <goals>
+                                    <goal>package</goal>
+                                </goals>
+                                <configuration>
+                                    <jcrRootSourceDirectory>${project.build.directory}/jcr_root</jcrRootSourceDirectory>
+                                    <classifier>cloud</classifier>
+                                    <workDirectory>${project.build.directory}/vault-work-cloud</workDirectory>
                                 </configuration>
                             </execution>
                         </executions>

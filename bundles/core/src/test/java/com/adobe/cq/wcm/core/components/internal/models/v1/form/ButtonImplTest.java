@@ -20,75 +20,79 @@ import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.i18n.ResourceBundleProvider;
 import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.form.Button;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+@ExtendWith(AemContextExtension.class)
 public class ButtonImplTest {
 
     private static final String TEST_BASE = "/form/button";
-    private static final String ROOT_PATH = "/content/buttons";
-    private static final String EMPTY_BUTTON_PATH = ROOT_PATH + "/button";
-    private static final String BUTTON1_PATH = ROOT_PATH + "/button1";
-    private static final String BUTTON2_PATH = ROOT_PATH + "/button2";
+    private static final String CONTENT_ROOT = "/content/buttons";
+    private static final String EMPTY_BUTTON_PATH = CONTENT_ROOT + "/button";
+    private static final String BUTTON1_PATH = CONTENT_ROOT + "/button1";
+    private static final String BUTTON2_PATH = CONTENT_ROOT + "/button2";
     private static final String ID_PREFIX = "form-button";
-
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, ROOT_PATH);
-
     private static final RootResourceBundle RESOURCE_BUNDLE = new RootResourceBundle();
 
-    @BeforeClass
-    public static void setUp() {
+    public final AemContext context = CoreComponentTestContext.newAemContext();
+
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
-        CONTEXT.registerService(ResourceBundleProvider.class, resourceBundleProvider);
+        context.registerService(ResourceBundleProvider.class, resourceBundleProvider);
         Mockito.when(resourceBundleProvider.getResourceBundle(null)).thenReturn(RESOURCE_BUNDLE);
         Mockito.when(resourceBundleProvider.getResourceBundle(null, null)).thenReturn(RESOURCE_BUNDLE);
     }
 
     @Test
-    public void testEmptyButton() throws Exception {
+    public void testEmptyButton() {
         Button button = getButtonUnderTest(EMPTY_BUTTON_PATH);
         assertEquals(Button.Type.SUBMIT, button.getType());
         assertEquals("Submit", button.getTitle());
         assertEquals("", button.getName());
         assertEquals("", button.getValue());
-        assertEquals(null, button.getHelpMessage());
-        String id = ID_PREFIX + "-" + String.valueOf(Math.abs(EMPTY_BUTTON_PATH.hashCode() - 1));
+        assertNull(button.getHelpMessage());
+        String id = ID_PREFIX + "-" + Math.abs(EMPTY_BUTTON_PATH.hashCode() - 1);
         assertEquals(id, button.getId());
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, EMPTY_BUTTON_PATH));
     }
 
     @Test
-    public void testButton() throws Exception {
+    public void testButton() {
         Button button = getButtonUnderTest(BUTTON1_PATH);
         assertEquals(Button.Type.BUTTON, button.getType());
         assertEquals("button title", button.getTitle());
         assertEquals("name1", button.getName());
         assertEquals("value1", button.getValue());
         assertEquals("button-id", button.getId());
-        assertEquals(null, button.getHelpMessage());
+        assertNull(button.getHelpMessage());
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, BUTTON1_PATH));
     }
 
     @Test
-    public void testV2JSONExport() throws Exception {
+    public void testV2JSONExport() {
         Button button = getButtonUnderTest(BUTTON2_PATH);
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, BUTTON2_PATH));
     }
 
 
     private Button getButtonUnderTest(String resourcePath) {
-        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
+        Resource resource = context.resourceResolver().getResource(resourcePath);
+        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver(), context.bundleContext());
         request.setResource(resource);
         SlingBindings bindings = new SlingBindings();
         bindings.put(SlingBindings.RESOURCE, resource);

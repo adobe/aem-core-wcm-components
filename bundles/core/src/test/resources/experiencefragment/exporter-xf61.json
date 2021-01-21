@@ -1,4 +1,8 @@
 {
-    "localizedFragmentVariationPath":"/content/experience-fragments/mysite/blueprint/footer/master/jcr:content",
-   ":type": "core/wcm/components/experiencefragment/v1/experiencefragment"
+    "localizedFragmentVariationPath": "/content/experience-fragments/mysite/blueprint/footer/master/jcr:content",
+    "configured": false,
+    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+    "classNames": "aem-xf empty",
+    ":itemsOrder": [],
+    ":items": {}
 }

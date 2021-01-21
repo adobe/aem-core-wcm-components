@@ -30,7 +30,9 @@ import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(AemContextExtension.class)
@@ -74,7 +76,7 @@ class DownloadImplTest {
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(TEST_BASE + TEST_CONTENT_DAM_JSON, "/content/dam/core/documents");
-        context.load().binaryFile("/download/" + PDF_BINARY_NAME, PDF_ASSET_PATH + "/jcr:content/renditions/original");
+        context.load().binaryFile(TEST_BASE + "/" + PDF_BINARY_NAME, PDF_ASSET_PATH + "/jcr:content/renditions/original");
     }
 
     @Test
@@ -94,7 +96,7 @@ class DownloadImplTest {
     @Test
     void testFullyConfiguredDownload_assetWithoutSizeProperty() {
         context.load().json(TEST_BASE + TEST_CONTENT_DAM_WITHOUT_SIZE_PROP_JSON, "/content/dam/core/documents_without_size");
-        context.load().binaryFile("/download/" + PDF_BINARY_NAME, PDF_ASSET_WITHOUT_SIZE_PROP_PATH + "/jcr:content/renditions/original");
+        context.load().binaryFile(TEST_BASE+ "/" + PDF_BINARY_NAME, PDF_ASSET_WITHOUT_SIZE_PROP_PATH + "/jcr:content/renditions/original");
 
         Download download = getDownloadUnderTest(DOWNLOAD_4);
         assertEquals(TITLE, download.getTitle());
@@ -139,9 +141,9 @@ class DownloadImplTest {
                 Download.PN_DISPLAY_FILENAME, true,
                 Download.PN_DISPLAY_FORMAT, true,
                 Download.PN_DISPLAY_SIZE, true);
-        assertTrue("Display of filename is not enabled", download.displayFilename());
-        assertTrue("Display of file size is not enabled", download.displaySize());
-        assertTrue("Display of file format is not enabled", download.displayFormat());
+        assertTrue(download.displayFilename(), "Display of filename is not enabled");
+        assertTrue(download.displaySize(), "Display of file size is not enabled");
+        assertTrue(download.displayFormat(), "Display of file format is not enabled");
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
     }
 
@@ -149,7 +151,7 @@ class DownloadImplTest {
     void testDownloadWithTitleType() {
         Download download = getDownloadUnderTest(DOWNLOAD_1,
                 Download.PN_TITLE_TYPE, "h5");
-        assertEquals("Expected title type is not correct", "h5", download.getTitleType());
+        assertEquals("h5", download.getTitleType(), "Expected title type is not correct");
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITH_TITLE_TYPE));
     }
 
@@ -159,7 +161,7 @@ class DownloadImplTest {
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource));
 
         Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
-        assertNull("Expected title type is not correct", download.getTitleType());
+        assertNull(download.getTitleType(), "Expected title type is not correct");
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
     }
 
@@ -167,14 +169,14 @@ class DownloadImplTest {
     void testDownloadWithCustomActionText() {
         Download download = getDownloadUnderTest(DOWNLOAD_1,
                 Download.PN_ACTION_TEXT, STYLE_ACTION_TEST);
-        assertEquals("Expected action text is not correct", COMPONENT_ACTION_TEXT, download.getActionText());
+        assertEquals(COMPONENT_ACTION_TEXT, download.getActionText(), "Expected action text is not correct");
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
     }
 
     @Test
     void testDownloadWithoutActionText() {
         Download downloadWithoutActionText = getDownloadUnderTest(DOWNLOAD_2);
-        assertNull("Expected action text is not correct", downloadWithoutActionText.getActionText());
+        assertNull(downloadWithoutActionText.getActionText(), "Expected action text is not correct");
         Utils.testJSONExport(downloadWithoutActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITH_DAM_PROPERTIES));
     }
 

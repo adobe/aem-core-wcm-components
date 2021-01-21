@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -49,9 +48,9 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -99,12 +98,17 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     protected String designPath;
     protected String staticDesignPath;
     protected String title;
+    protected String brandSlug;
+    
     protected String[] clientLibCategories = new String[0];
     protected Calendar lastModifiedDate;
     protected String templateName;
 
     protected static final String DEFAULT_TEMPLATE_EDITOR_CLIENTLIB = "wcm.foundation.components.parsys.allowedcomponents";
     protected static final String PN_CLIENTLIBS = "clientlibs";
+    
+    protected static final String PN_BRANDSLUG = "brandSlug";
+    
     private Map<String, ComponentExporter> childModels = null;
     private String resourceType;
     private Set<String> resourceTypes;
@@ -136,6 +140,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         }
         populateClientlibCategories();
         templateName = extractTemplateName();
+        brandSlug = Utils.getInheritedValue(currentPage, PN_BRANDSLUG);
     }
 
     protected String extractTemplateName() {
@@ -193,6 +198,11 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     }
 
     @Override
+    public String getBrandSlug() {
+		return brandSlug;
+	}
+
+	@Override
     public String getTemplateName() {
         return templateName;
     }
@@ -295,7 +305,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
                 addPolicyClientLibs(categories);
             }
         }
-        clientLibCategories = categories.toArray(new String[categories.size()]);
+        clientLibCategories = categories.toArray(new String[0]);
     }
 
     protected void addDefaultTemplateEditorClientLib(Resource templateResource, List<String> categories) {
@@ -310,42 +320,17 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         }
     }
 
-    /*
-     * DataLayer specific methods
-     */
-
+    @Override
     @NotNull
-    protected ComponentData getComponentData() {
-        return new PageDataImpl(this, resource);
+    protected final PageData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asPage()
+            .withTitle(this::getTitle)
+            .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
+            .withDescription(() -> this.pageProperties.get(NameConstants.PN_DESCRIPTION, String.class))
+            .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
+            .withUrl(() -> Utils.getURL(request, currentPage))
+            .withLanguage(this::getLanguage)
+            .build();
     }
 
-    @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String[] getDataLayerTags() {
-        return Arrays.copyOf(keywords, keywords.length);
-    }
-
-    @Override
-    public String getDataLayerDescription() {
-        return pageProperties.get(NameConstants.PN_DESCRIPTION, String.class);
-    }
-
-    @Override
-    public String getDataLayerTemplatePath() {
-        return currentPage.getTemplate().getPath();
-    }
-
-    @Override
-    public String getDataLayerUrl() {
-        return Utils.getURL(request, currentPage);
-    }
-
-    @Override
-    public String getDataLayerLanguage() {
-        return getLanguage();
-    }
 }

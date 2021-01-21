@@ -38,9 +38,9 @@ import com.google.common.collect.Sets;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static junit.framework.TestCase.assertNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 public class PageImplTest {
@@ -54,7 +54,7 @@ public class PageImplTest {
 
     private static final String DESING_CACHE_KEY = "io.wcm.testing.mock.aem.context.MockAemSlingBindings_design_/content/page/templated" +
             "-page";
-    private static String TEST_BASE = "/page";
+    private static final String TEST_BASE = "/page";
     private static final String FN_FAVICON_ICO = "favicon.ico";
     private static final String FN_FAVICON_PNG = "favicon_32.png";
     private static final String FN_TOUCH_ICON_60 = "touch-icon_60.png";
@@ -79,7 +79,7 @@ public class PageImplTest {
     protected void internalSetup(String testBase) {
         this.context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         this.context.load().json(testBase + "/test-conf.json", "/conf/coretest/settings");
-        this.context.load().json(testBase + "/default-tags.json", "/etc/tags/default");
+        this.context.load().json(testBase + "/default-tags.json", "/content/cq:tags/default");
         this.context.load().binaryFile(TEST_BASE + "/" + FN_FAVICON_ICO, DESIGN_PATH + "/" + FN_FAVICON_ICO);
         this.context.load().binaryFile(TEST_BASE + "/" + FN_FAVICON_PNG, DESIGN_PATH + "/" + FN_FAVICON_PNG);
         this.context.load().binaryFile(TEST_BASE + "/" + FN_TOUCH_ICON_60, DESIGN_PATH + "/" + FN_TOUCH_ICON_60);
@@ -101,6 +101,7 @@ public class PageImplTest {
         assertEquals(page.getLastModifiedDate().getTime(), calendar.getTime());
         assertEquals("en-GB", page.getLanguage());
         assertEquals("Templated Page", page.getTitle());
+        assertEquals("Brand Slug", page.getBrandSlug());
         assertEquals(DESIGN_PATH, page.getDesignPath());
         assertEquals(DESIGN_PATH + "/static.css", page.getStaticDesignPath());
         String[] keywordsArray = page.getKeywords();
@@ -117,7 +118,7 @@ public class PageImplTest {
     @SuppressWarnings("deprecation")
     void testFavicons() {
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH);
-        Map favicons = page.getFavicons();
+        Map<String, String> favicons = page.getFavicons();
         assertEquals(DESIGN_PATH + "/" + FN_FAVICON_ICO, favicons.get(PN_FAVICON_ICO));
         assertEquals(DESIGN_PATH + "/" + FN_FAVICON_PNG, favicons.get(PN_FAVICON_PNG));
         assertEquals(DESIGN_PATH + "/" + FN_TOUCH_ICON_60, favicons.get(PN_TOUCH_ICON_60));

@@ -1,0 +1,14 @@
+{
+  "container": {
+    "jcr:primaryType": "nt:unstructured",
+    "actionType": "foundation/components/form/actions/rpc",
+    "redirect" : "/content",
+    "errorMessage": "Ups"
+  },
+  "containerWithMappedRedirect": {
+    "jcr:primaryType": "nt:unstructured",
+    "actionType": "foundation/components/form/actions/rpc",
+    "redirect" : "/content.html",
+    "errorMessage": "Ups"
+  }
+}

@@ -62,6 +62,13 @@
                                         text="Hide title"
                                         name="./titleHidden"
                                         value="{Boolean}true"/>
+                                    <titleType
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Show title type"
+                                        name="./showTitleType"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
                                     <description
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -73,7 +80,7 @@
                             <type
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                fieldLabel="Title Type"
+                                fieldLabel="Default Title Type"
                                 name="./titleType"
                                 granite:class="foundation-toggleable">
                                 <items jcr:primaryType="nt:unstructured">

@@ -25,12 +25,10 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
-
-import static org.junit.Assert.fail;
-
 
 public class AbstractModelTest {
 
@@ -99,28 +97,26 @@ public class AbstractModelTest {
                     } catch (InvocationTargetException e) {
                         t = e.getCause();
                     }
-                    if ((t == null || !(t instanceof UnsupportedOperationException)) && ret != null) {
+                    if ((t == null || !(t instanceof UnsupportedOperationException)) && (ret != null && !(ret instanceof Optional))) {
                         errors.append("Expected method ")
                                 .append(m.toString())
                                 .append("in class ")
                                 .append(clazz.getName())
                                 .append(" to throw an ")
                                 .append(UnsupportedOperationException.class.getName())
-                                .append(" or return null.\n");
+                                .append(" or return either an instance of Optional or null.\n");
                     }
                 }
             }
         }
         if (errors.length() > 0) {
             errors.insert(0, "\n");
-            fail(errors.toString());
+            throw new AssertionError(errors.toString());
         }
     }
 
     private static List<Class> getClasses(String packageName) {
-        List<Class> classes = new ArrayList<>();
         Reflections reflections = new Reflections(packageName,  new SubTypesScanner(false));
-        reflections.getSubTypesOf(Object.class).forEach(clazz -> classes.add(clazz));
-        return classes;
+        return new ArrayList<>(reflections.getSubTypesOf(Object.class));
     }
 }

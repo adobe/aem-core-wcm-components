@@ -7,4 +7,5 @@
     jcr:primaryType="sling:OrderedFolder"
     jcr:title="core-components">
     <settings/>
+    <sling:configs/>
 </jcr:root>

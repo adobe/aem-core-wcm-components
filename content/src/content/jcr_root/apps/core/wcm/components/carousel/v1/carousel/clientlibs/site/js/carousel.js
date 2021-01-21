@@ -16,8 +16,8 @@
 (function() {
     "use strict";
 
-    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+    var dataLayerEnabled;
+    var dataLayer;
 
     var NS = "cmp";
     var IS = "carousel";
@@ -124,6 +124,7 @@
                 refreshPlayPauseActions();
             }
 
+            // TODO: This section is only relevant in edit mode and should move to the editor clientLib
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
                 /*
                  * Editor message handling:
@@ -131,7 +132,10 @@
                  * - check that the message data panel container type is correct and that the id (path) matches this specific Carousel component
                  * - if so, route the "navigate" operation to enact a navigation of the Carousel based on index data
                  */
-                new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                window.CQ = window.CQ || {};
+                window.CQ.CoreComponents = window.CQ.CoreComponents || {};
+                window.CQ.CoreComponents.MESSAGE_CHANNEL = window.CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
+                window.CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
                     if (message.data && message.data.type === "cmp-carousel" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
                         if (message.data.operation === "navigate") {
                             navigate(message.data.index);
@@ -216,7 +220,7 @@
                         dataLayer.push({
                             event: "cmp:show",
                             eventInfo: {
-                                path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                                path: "component." + getDataLayerId(that._elements.item[index])
                             }
                         });
                     }
@@ -231,7 +235,7 @@
                         dataLayer.push({
                             event: "cmp:show",
                             eventInfo: {
-                                path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                                path: "component." + getDataLayerId(that._elements.item[index])
                             }
                         });
                     }
@@ -490,7 +494,7 @@
 
             if (dataLayerEnabled) {
                 var carouselId = that._elements.self.id;
-                var activeItem = getDataLayerId(that._elements.item[index].dataset.cmpDataLayer);
+                var activeItem = getDataLayerId(that._elements.item[index]);
                 var updatePayload = { component: {} };
                 updatePayload.component[carouselId] = { shownItems: [activeItem] };
 
@@ -523,7 +527,7 @@
                 dataLayer.push({
                     event: "cmp:show",
                     eventInfo: {
-                        path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                        path: "component." + getDataLayerId(that._elements.item[index])
                     }
                 });
             }
@@ -620,11 +624,15 @@
      * Parses the dataLayer string and returns the ID
      *
      * @private
-     * @param {String} componentDataLayer the dataLayer string
+     * @param {HTMLElement} item the accordion item
      * @returns {String} dataLayerId or undefined
      */
-    function getDataLayerId(componentDataLayer) {
-        return Object.keys(JSON.parse(componentDataLayer))[0];
+    function getDataLayerId(item) {
+        if (item.dataset.cmpDataLayer) {
+            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+        } else {
+            return item.id;
+        }
     }
 
     /**
@@ -633,6 +641,9 @@
      * @private
      */
     function onDocumentReady() {
+        dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new Carousel({ element: elements[i], options: readData(elements[i]) });

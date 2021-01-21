@@ -7,6 +7,7 @@
     "areas": [],
     "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
     "lazyThreshold": 0,
+    "dmImage":false,
     "widths": [
         600,
         700,
@@ -26,7 +27,8 @@
                 "@type": "image/png",
                 "repo:id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
                 "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                "xdm:tags": []
+                "xdm:tags": [],
+                "xdm:smartTags": {}
             }
         }
     },

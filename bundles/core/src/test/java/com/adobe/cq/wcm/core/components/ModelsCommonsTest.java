@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.testing.AbstractModelTest;
 

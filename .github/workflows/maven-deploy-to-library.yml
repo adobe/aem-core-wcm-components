@@ -1,0 +1,53 @@
+name: Deploy to Components Library
+env:
+  # Username/email used to commit to the Core Components Library
+  PROJECT_DIR: core-components
+  # Components Library
+  TARGET_REPO: ${{ secrets.LIBRARY_REPOSITORY }}
+  TARGET_BRANCH: ${{ secrets.LIBRARY_BRANCH_DEV }}
+  USER_EMAIL: ${{ secrets.LIBRARY_USER_EMAIL }}
+  USER_NAME: ${{ secrets.LIBRARY_USER_NAME }}
+  USER_PWD: ${{ secrets.LIBRARY_PASSWORD }}
+ 
+# Only run on a push to this branch
+on:
+  push:
+     branches: [ development ]
+  workflow_dispatch:
+  
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      # Checkout this project into a sub folder
+      - uses: actions/checkout@v2
+        with:
+          path: sub
+      # Cleanup sub project
+      - name: Clean project
+        run: |
+          git -C sub log --format="%an : %s" -n 1 > commit.txt
+          rm -rf sub/.git
+          rm -rf sub/.github
+      # Set global git configuration
+      - name: Set git config
+        run: |
+          git config --global credential.helper cache
+          git config --global user.email ${USER_EMAIL}
+          git config --global user.name ${USER_NAME}
+      # Checkout the main project
+      - name: Checkout main project
+        run:
+          git clone -b ${TARGET_BRANCH} https://${USER_EMAIL}:${USER_PWD}@${TARGET_REPO} main 
+      # Move sub project
+      - name: Move project to main
+        run: |
+          rm -rf main/${PROJECT_DIR} 
+          mv sub main/${PROJECT_DIR}
+      - name: Commit Changes
+        run: |
+          git -C main add ${PROJECT_DIR}
+          git -C main commit -F ../commit.txt
+          git -C main push

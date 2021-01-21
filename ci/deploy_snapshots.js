@@ -27,7 +27,7 @@ if (gitTag != "@deploy-snapshot") {
 try {
     tools.stage("DEPLOY SNAPSHOTS");
     tools.prepareGPGKey();
-    tools.sh("mvn deploy -B -s ci/settings.xml -Prelease -Padobe-public");
+    tools.sh("mvn deploy -B -s ci/settings.xml -Prelease -Padobe-public -Pcloud");
     tools.stage("DEPLOY SNAPSHOTS DONE");
 } finally {
     tools.removeGitTag(gitTag);

@@ -15,101 +15,199 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
-import com.day.cq.commons.jcr.JcrConstants;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Date;
+import java.util.function.Supplier;
 
 /**
- * Implements the DataLayer functionality.
- *
+ * {@link DataLayerSupplier} backed component data implementation.
  */
 public class ComponentDataImpl implements ComponentData {
+
+    /**
+     * Logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ComponentDataImpl.class);
 
-    protected final AbstractComponentImpl component;
+    /**
+     * The current data layer supplier.
+     */
+    @NotNull
+    private final DataLayerSupplier dataLayerSupplier;
 
-    protected final Resource resource;
+    /**
+     * The ID field value.
+     */
+    private String id;
 
-    public ComponentDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
-        this.component = component;
-        this.resource = resource;
+    /**
+     * The type field value.
+     */
+    private String type;
+
+    /**
+     * The last modified date field value.
+     */
+    private Date lastModifiedDate;
+
+    /**
+     * The parent ID field value.
+     */
+    private String parentId;
+
+    /**
+     * The title field value.
+     */
+    private String title;
+
+    /**
+     * The description field value.
+     */
+    private String description;
+
+    /**
+     * The text field value.
+     */
+    private String text;
+
+    /**
+     * The link URL field value.
+     */
+    private String linkUrl;
+
+    /**
+     * Construct the data layer model.
+     *
+     * @param supplier The data layer supplier.
+     */
+    public ComponentDataImpl(@NotNull final DataLayerSupplier supplier) {
+        this.dataLayerSupplier = supplier;
     }
 
     @Override
-    public String getId() {
-        return component.getId();
+    @NotNull
+    public final String getId() {
+        if (this.id == null) {
+            this.id = this.getDataLayerSupplier().getId().get();
+        }
+        return this.id;
     }
 
     @Override
-    public String getParentId() {
+    @Nullable
+    public final String getType() {
+        if (this.type == null) {
+            this.type = this.getDataLayerSupplier()
+                .getType()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.type;
+    }
+
+    @Override
+    @Nullable
+    public final Date getLastModifiedDate() {
+        if (this.lastModifiedDate == null) {
+            this.lastModifiedDate = this.getDataLayerSupplier()
+                .getLastModifiedDate()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        if (this.lastModifiedDate != null) {
+            return new Date(this.lastModifiedDate.getTime());
+        }
         return null;
     }
 
     @Override
-    public String getType() {
-        return resource.getResourceType();
-    }
-
-    @Override
-    public String getTitle() {
-        return component.getDataLayerTitle();
-    }
-
-    @Override
-    public String getDescription() {
-        return component.getDataLayerDescription();
-    }
-
-    @Override
-    public Date getLastModifiedDate() {
-        ValueMap valueMap = resource.adaptTo(ValueMap.class);
-        Calendar lastModified = null;
-
-        if (valueMap != null) {
-            lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
-
-            if (lastModified == null) {
-                lastModified = valueMap.get(JcrConstants.JCR_CREATED, Calendar.class);
-            }
+    @Nullable
+    public final String getParentId() {
+        if (this.parentId == null) {
+            this.parentId = this.getDataLayerSupplier()
+                .getParentId()
+                .map(Supplier::get)
+                .orElse(null);
         }
+        return this.parentId;
+    }
 
-        if (lastModified != null) {
-            return lastModified.getTime();
+    @Override
+    @Nullable
+    public final String getTitle() {
+        if (this.title == null) {
+            this.title = this.getDataLayerSupplier()
+                .getTitle()
+                .map(Supplier::get)
+                .orElse(null);
         }
-
-        return null;
+        return this.title;
     }
 
     @Override
-    public String getText() {
-        return component.getDataLayerText();
+    @Nullable
+    public final String getDescription() {
+        if (this.description == null) {
+            this.description = this.getDataLayerSupplier()
+                .getDescription()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.description;
     }
 
     @Override
-    public String getLinkUrl() {
-        return component.getDataLayerLinkUrl();
+    @Nullable
+    public final String getText() {
+        if (this.text == null) {
+            this.text = this.getDataLayerSupplier()
+                .getText()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.text;
     }
 
     @Override
-    public String getJson() {
+    @Nullable
+    public final String getLinkUrl() {
+        if (this.linkUrl == null) {
+            this.linkUrl = this.getDataLayerSupplier()
+                .getLinkUrl()
+                .map(Supplier::get)
+                .orElse(null);
+        }
+        return this.linkUrl;
+    }
+
+    @Override
+    @Nullable
+    public final String getJson() {
         try {
             return String.format("{\"%s\":%s}",
-                    getId(),
-                    new ObjectMapper().writeValueAsString(this));
+                this.getId(),
+                new ObjectMapper().writeValueAsString(this));
         } catch (JsonProcessingException e) {
             LOGGER.error("Unable to generate dataLayer JSON string", e);
         }
         return null;
+    }
+
+    /**
+     * Get the data layer supplier.
+     *
+     * @return The data layer supplier.
+     */
+    @NotNull
+    protected final DataLayerSupplier getDataLayerSupplier() {
+        return this.dataLayerSupplier;
     }
 }

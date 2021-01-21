@@ -17,21 +17,22 @@ package com.adobe.cq.wcm.core.components.internal.jackson;
 
 import com.customer.models.CustomerInterfaceWithDefaultMethod;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.io.StringReader;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class DefaultMethodSkippingModuleProviderTest {
 
     private ObjectMapper objectMapper;
 
-    @Before
+    @BeforeEach
     public void setup() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new DefaultMethodSkippingModuleProvider().getModule());
@@ -41,7 +42,7 @@ public class DefaultMethodSkippingModuleProviderTest {
     public void testDefaultMethodIsSkipped() throws Exception {
         Object obj = new ClassUsingDefaultMethod();
         String result = objectMapper.writer().writeValueAsString(obj);
-        try (JsonReader jsonReader = Json.createReader(new StringReader(result));) {
+        try (JsonReader jsonReader = Json.createReader(new StringReader(result))) {
             JsonObject json = jsonReader.readObject();
             assertFalse(json.containsKey("defaultProperty"));
             assertEquals("fromcustomer", json.getString("customerDefaultProperty"));

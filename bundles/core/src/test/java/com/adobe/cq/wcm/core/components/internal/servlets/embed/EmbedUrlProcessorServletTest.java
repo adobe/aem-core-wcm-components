@@ -20,75 +20,60 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.services.embed.PinterestUrlProcessor;
-import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbedUrlProcessorServlet;
 import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 import com.adobe.cq.wcm.core.components.testing.Utils;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(AemContextExtension.class)
 public class EmbedUrlProcessorServletTest {
 
     private static final String TEST_BASE = "/embed";
+    private static final String CONTENT_ROOT = "/content";
 
-    private EmbedUrlProcessorServlet servlet;
+    private final EmbedUrlProcessorServlet servlet = new EmbedUrlProcessorServlet();
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content");
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        servlet = new EmbedUrlProcessorServlet();
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         UrlProcessor pinterestUrlProcessor = new PinterestUrlProcessor();
         List<UrlProcessor> urlProcessors = new ArrayList<>();
         urlProcessors.add(pinterestUrlProcessor);
         Utils.setInternalState(servlet, "urlProcessors", urlProcessors);
     }
 
-    @After
-    public void tearDown() {
-        servlet = null;
-    }
-
     @Test
     public void testWithoutUrlParameter() throws Exception {
         servlet.doGet(context.request(), context.response());
-        MockSlingHttpServletResponse response = context.response();
-        assertEquals("Expected the 404 status code.", HttpServletResponse.SC_NOT_FOUND, response.getStatus());
-        assertEquals("Expected empty response output.", "", response.getOutputAsString());
+        assertEquals(HttpServletResponse.SC_NOT_FOUND, context.response().getStatus(), "Expected the 404 status code.");
+        assertEquals("", context.response().getOutputAsString(), "Expected empty response output.");
     }
 
     @Test
     public void testUrlWithoutRegisteredProvider() throws Exception {
-        MockSlingHttpServletRequest request = context.request();
-        MockSlingHttpServletResponse response = context.response();
-        request.setQueryString("url=http://www.no-registered-provider.com");
-        servlet.doGet(request, context.response());
-        assertEquals("Expected the 404 status code.", HttpServletResponse.SC_NOT_FOUND, response.getStatus());
-        assertEquals("Expected empty response output.", "", response.getOutputAsString());
+        context.request().setQueryString("url=http://www.no-registered-provider.com");
+        servlet.doGet(context.request(), context.response());
+        assertEquals(HttpServletResponse.SC_NOT_FOUND, context.response().getStatus(), "Expected the 404 status code.");
+        assertEquals("", context.response().getOutputAsString(), "Expected empty response output.");
     }
 
     @Test
     public void testUrlWithRegisteredProvider() throws Exception {
-        MockSlingHttpServletRequest request = context.request();
-        MockSlingHttpServletResponse response = context.response();
-        request.setQueryString("url=https://www.pinterest.com/pin/99360735500167749/");
-        servlet.doGet(request, response);
+        context.request().setQueryString("url=https://www.pinterest.com/pin/99360735500167749/");
+        servlet.doGet(context.request(), context.response());
         String expectedOutput = "{\"processor\":\"pinterest\",\"options\":{\"pinId\":\"99360735500167749\"}}";
-        assertEquals("Expected the 200 status code.", HttpServletResponse.SC_OK, response.getStatus());
-        assertEquals("Expected the JSON content type.", "application/json;charset=utf-8", response.getContentType());
-        assertEquals("Does not match the expected response output.", expectedOutput, response.getOutputAsString());
+        assertEquals(HttpServletResponse.SC_OK, context.response().getStatus(), "Expected the 200 status code.");
+        assertEquals("application/json;charset=utf-8", context.response().getContentType(), "Expected the JSON content type.");
+        assertEquals(expectedOutput, context.response().getOutputAsString(), "Does not match the expected response output.");
     }
 }

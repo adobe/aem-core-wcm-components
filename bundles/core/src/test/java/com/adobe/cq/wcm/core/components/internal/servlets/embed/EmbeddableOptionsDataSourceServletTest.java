@@ -15,72 +15,44 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.embed;
 
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceUtil;
-import org.apache.sling.api.resource.ValueMap;
-import org.jetbrains.annotations.Nullable;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import com.adobe.granite.ui.components.Value;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddableOptionsDataSourceServlet;
 import com.adobe.granite.ui.components.ds.DataSource;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
-import com.google.common.base.Function;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
+import java.util.Objects;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(AemContextExtension.class)
 public class EmbeddableOptionsDataSourceServletTest {
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/embed/v1/datasources/allowedembeddables",
-        "/apps");
+    private static final String TEST_BASE = "/embed/v1/datasources/allowedembeddables";
+    private static final String APPS_ROOT = "/apps";
+    private static final String CURRENT_PATH = "/apps/content/embed";
 
-    private EmbeddableOptionsDataSourceServlet dataSourceServlet;
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Mock
-    private ContentPolicyManager contentPolicyManager;
+    private final EmbeddableOptionsDataSourceServlet dataSourceServlet = new EmbeddableOptionsDataSourceServlet();
 
-    @Mock
-    private ContentPolicy contentPolicy;
-
-    @Before
+    @BeforeEach
     public void setUp() {
-        Resource policyResource = context.resourceResolver().getResource("/apps/conf/policy_1558011912823");
-        ValueMap properties = ResourceUtil.getValueMap(policyResource);
-        dataSourceServlet = new EmbeddableOptionsDataSourceServlet();
-        registerContentPolicyManager();
-        when(contentPolicyManager.getPolicy(context.currentResource())).thenReturn(contentPolicy);
-        when(contentPolicy.getProperties()).thenReturn(properties);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, APPS_ROOT);
+        context.contentPolicyMapping("my-app/components/embed",
+            Objects.requireNonNull(context.resourceResolver().getResource("/apps/conf/policy_1558011912823"))
+                .getValueMap());
+        context.request().setAttribute(Value.CONTENTPATH_ATTRIBUTE, CURRENT_PATH);
     }
 
     @Test
     public void testEmbeddableOptionsDataSourceServlet() {
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
-        assertNotNull(dataSource);
-        dataSource.iterator().forEachRemaining(resource -> {
-            assertNotNull(resource);
-        });
-    }
-
-    private void registerContentPolicyManager() {
-        context.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
-            new Function<ResourceResolver, ContentPolicyManager>() {
-                @Nullable
-                @Override
-                public ContentPolicyManager apply(@Nullable ResourceResolver input) {
-                    return contentPolicyManager;
-                }
-            });
+        Assertions.assertNotNull(dataSource);
+        dataSource.iterator().forEachRemaining(Assertions::assertNotNull);
     }
 }

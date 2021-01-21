@@ -13,37 +13,36 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.jetbrains.annotations.Nullable;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.day.cq.wcm.foundation.forms.FormsManager;
-import com.google.common.base.Function;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class FormActionTypeSettingsDataSourceServletTest {
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/form/container/datasource/actiontypesettingsdatasource",
-            "/apps");
+    private static final String TEST_BASE = "/form/container/datasource/actiontypesettingsdatasource";
+    private static final String APPS_ROOT = "/apps";
+
+    public final AemContext context = CoreComponentTestContext.newAemContext();
 
     @Mock
     private FormsManager formsManagerMock;
@@ -51,11 +50,10 @@ public class FormActionTypeSettingsDataSourceServletTest {
     @Mock
     private FormsManager.ComponentDescription description;
 
+    @BeforeEach
+    public void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, APPS_ROOT);
 
-    private FormActionTypeSettingsDataSourceServlet dataSourceServlet;
-
-    @Before
-    public void setUp() throws Exception {
         registerFormsManagerAdapter();
         ArrayList<FormsManager.ComponentDescription> componentDescriptions = new ArrayList<>();
         componentDescriptions.add(description);
@@ -66,22 +64,16 @@ public class FormActionTypeSettingsDataSourceServletTest {
     @Test
     public void testDataSource() throws Exception {
         context.currentResource("/apps/actiontypesettingsdatasource");
-        dataSourceServlet = new FormActionTypeSettingsDataSourceServlet();
+        FormActionTypeSettingsDataSourceServlet dataSourceServlet = new FormActionTypeSettingsDataSourceServlet();
         dataSourceServlet.doGet(context.request(), context.response());
-        DataSource dataSource = (DataSource) context.request().getAttribute(
-                DataSource.class.getName());
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         Resource resource = dataSource.iterator().next();
         assertEquals(resource.getPath(), context.currentResource("/apps/form/action/cq:dialog").getPath());
     }
 
     private void registerFormsManagerAdapter() {
-        context.registerAdapter(ResourceResolver.class, FormsManager.class, new Function<ResourceResolver, FormsManager>() {
-            @Nullable
-            @Override
-            public FormsManager apply(@Nullable ResourceResolver input) {
-                return formsManagerMock;
-            }
-        });
+        context.registerAdapter(ResourceResolver.class, FormsManager.class,
+            (Function<ResourceResolver, FormsManager>) input -> formsManagerMock);
     }
 }

@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,36 +27,69 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * List item implementation for a page-backed list item.
+ */
 public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
+    /**
+     * Standard logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
 
     /**
      * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
-     * Dafault is `false`. If `true` - original page is returned. If `false` or not configured - redirect target page.
+     * Default is `false`. If `true` - original page is returned. If `false` or not configured - redirect target page.
      */
     static final String PN_DISABLE_SHADOWING = "disableShadowing";
+
+    /**
+     * Flag indicating if showing is disabled.
+     */
     public static final boolean PROP_DISABLE_SHADOWING_DEFAULT = false;
 
+    /**
+     * The current request.
+     */
     protected SlingHttpServletRequest request;
+
+    /**
+     * The page for this list item.
+     */
     protected Page page;
 
-    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page, String parentId, boolean isShadowingDisabled) {
-        super(parentId, page.getContentResource());
+    /**
+     * Construct a list item for a given page.
+     *
+     * @param request The current request.
+     * @param page The current page.
+     * @param parentId The ID of the list containing this item.
+     * @param isShadowingDisabled Flag indicating if redirect shadowing should be disabled.
+     * @param component The component containing this list item.
+     */
+    public PageListItemImpl(@NotNull final SlingHttpServletRequest request,
+                            @NotNull final Page page,
+                            final String parentId,
+                            final boolean isShadowingDisabled,
+                            final Component component) {
+        super(parentId, page.getContentResource(), component);
         this.request = request;
         this.page = page;
         this.parentId = parentId;
-        Page redirectTarget = getRedirectTarget(page);
-        if (shouldSetRedirectTargetAsPage(page, redirectTarget, isShadowingDisabled)) {
-            this.page = redirectTarget;
+
+        if (!isShadowingDisabled) {
+            this.page = getRedirectTarget(page)
+                .filter(redirectTarget -> !redirectTarget.equals(page))
+                .orElse(page);
         }
     }
 
@@ -66,6 +100,24 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     @Override
     public String getTitle() {
+        return PageListItemImpl.getTitle(this.page);
+    }
+
+    /**
+     * Gets the title of a page list item from a given page.
+     * The list item title is derived from the page by selecting the first non-null value from the
+     * following:
+     * <ul>
+     *     <li>{@link Page#getNavigationTitle()}</li>
+     *     <li>{@link Page#getPageTitle()}</li>
+     *     <li>{@link Page#getTitle()}</li>
+     *     <li>{@link Page#getName()}</li>
+     * </ul>
+     *
+     * @param page The page for which to get the title.
+     * @return The list item title.
+     */
+    public static String getTitle(@NotNull final Page page) {
         String title = page.getNavigationTitle();
         if (title == null) {
             title = page.getPageTitle();
@@ -100,12 +152,15 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
         return page.getName();
     }
 
-    private boolean shouldSetRedirectTargetAsPage(@NotNull Page page, Page redirectTarget,
-                                                  boolean isShadowingDisabled) {
-        return !isShadowingDisabled && redirectTarget != null && !redirectTarget.equals(page);
-    }
-
-    private Page getRedirectTarget(@NotNull Page page) {
+    /**
+     * Get the redirect target for the specified page.
+     * This method will follow a chain or redirects to the final target.
+     *
+     * @param page The page for which to get the redirect target.
+     * @return The redirect target if found, empty if not.
+     */
+    @NotNull
+    static Optional<Page> getRedirectTarget(@NotNull final Page page) {
         Page result = page;
         String redirectTarget;
         PageManager pageManager = page.getPageManager();
@@ -121,25 +176,15 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
                 }
             }
         }
-        return result;
-    }
-
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
-    @Override
-    protected @NotNull ComponentData getComponentData() {
-        return new PageDataImpl(this, resource);
+        return Optional.ofNullable(result);
     }
 
     @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getURL();
+    @NotNull
+    protected PageData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asPage()
+            .withTitle(this::getTitle)
+            .withLinkUrl(this::getURL)
+            .build();
     }
 }

@@ -17,11 +17,17 @@ package com.adobe.cq.wcm.core.components;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import javax.json.Json;
+import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.json.JsonStructure;
 
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
@@ -34,8 +40,8 @@ import com.adobe.cq.wcm.core.components.internal.jackson.PageModuleProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 /**
@@ -62,9 +68,8 @@ public class Utils {
         } catch (IOException e) {
             fail(String.format("Unable to generate JSON export for model %s: %s", model.getClass().getName(), e.getMessage()));
         }
-        JsonReader outputReader = Json.createReader(IOUtils.toInputStream(writer.toString()));
-        InputStream is = Utils.class.getResourceAsStream
-                (expectedJsonResource);
+        JsonReader outputReader = Json.createReader(IOUtils.toInputStream(writer.toString(), StandardCharsets.UTF_8));
+        InputStream is = Utils.class.getResourceAsStream(expectedJsonResource);
         if (is != null) {
             JsonReader expectedReader = Json.createReader(is);
             assertEquals(expectedReader.read(), outputReader.read());
@@ -72,6 +77,28 @@ public class Utils {
             fail("Unable to find test file " + expectedJsonResource + ".");
         }
         IOUtils.closeQuietly(is);
+    }
+
+    /**
+     * Provided a {@link ComponentData} object and an {@code expectedJsonResource} identifying a JSON file in the class path, this method will
+     * test the JSON of the data layer and compare it to the JSON object provided by the {@code expectedJsonResource}.
+     *
+     * @param data                 the component data
+     * @param expectedJsonResource the class path resource providing the expected JSON object
+     */
+    public static void testJSONDataLayer(final ComponentData data, String expectedJsonResource) {
+        InputStream is = Utils.class.getResourceAsStream(expectedJsonResource);
+        try (JsonReader jsonReader = Json.createReader(new StringReader(Objects.requireNonNull(data.getJson())))) {
+            if (is != null) {
+                JsonStructure expected = Json.createReader(is).read();
+                JsonObject actual = jsonReader.readObject();
+                assertEquals(expected, actual);
+            } else {
+                fail("Unable to find test file " + expectedJsonResource + ".");
+            }
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
     }
 
     /**
@@ -99,27 +126,36 @@ public class Utils {
     }
 
     /**
+     * Provided a test base folder ({@code testBase}) and a virtual resource path ({@code testResourcePath}), this method generates the
+     * class path resource path for the JSON files that represent the expected data model output for a component. The returned value is
+     * generated using the following concatenation operation:
+     *
+     * <pre>
+     *     testBase + '/data-' + fileName(testResourcePath) + '.json'
+     * </pre>
+     *
+     * For example:
+     * <pre>
+     *     testBase = '/form/button'
+     *     testResourcePath = '/content/buttons/button'
+     *     output = '/form/button/data-button.json'
+     * </pre>
+     *
+     * @param testBase         the test base folder (under the {@code src/test/resources} folder)
+     * @param testResourcePath the test resource path in the virtual repository
+     * @return the expected class path location of the JSON data model file
+     */
+    public static String getTestDataModelJSONPath(String testBase, String testResourcePath) {
+        return testBase + "/data-" + FilenameUtils.getName(testResourcePath) + ".json";
+    }
+
+    /**
      * Sets the data layer context aware configuration of the AEM test context to enabled/disabled
      *
      * @param context The AEM test context
      * @param enabled {@code true} to enable the data layer, {@code false} to disable it
      */
     public static void enableDataLayer(AemContext context, boolean enabled) {
-        ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
-        DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
-        when(dataLayerConfig.enabled()).thenReturn(enabled);
-        when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
-        context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
-    }
-
-    /**
-     * Sets the data layer context aware configuration of the AEM test context to enabled/disabled
-     * for older test context (before io.wcm.testing.mock.aem.junit5.AemContext was introduced)
-     *
-     * @param context The non-junit5 AEM test context
-     * @param enabled {@code true} to enable the data layer, {@code false} to disable it
-     */
-    public static void enableDataLayerForOldAemContext(io.wcm.testing.mock.aem.junit.AemContext context, boolean enabled) {
         ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
         DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
         when(dataLayerConfig.enabled()).thenReturn(enabled);

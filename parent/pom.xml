@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.10.1-SNAPSHOT</version>
+    <version>2.13.3-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
@@ -75,22 +75,24 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.0</version>
                 <configuration>
-                    <stylesheet>maven</stylesheet>
+                    <stylesheet>java</stylesheet>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <source>${aem.java.version}</source>
+                    <detectJavaApiLink>false</detectJavaApiLink>
                     <links>
                         <link>https://docs.oracle.com/javase/${aem.java.version}/docs/api/</link>
                         <link>https://docs.oracle.com/javaee/7/api/</link>
                         <link>https://docs.adobe.com/docs/en/spec/jsr170/javadocs/jcr-2.0/</link>
                         <link>https://sling.apache.org/apidocs/sling9/</link>
-                        <link>https://helpx.adobe.com/experience-manager/6-3/sites/developing/using/reference-materials/javadoc/</link>
+                        <link>https://helpx.adobe.com/experience-manager/6-5/sites/developing/using/reference-materials/javadoc/</link>
                         <link>https://jackrabbit.apache.org/api/2.12/</link>
                         <link>https://osgi.org/javadoc/r6/core/</link>
                         <link>https://osgi.org/javadoc/r6/annotation/</link>
                         <link>https://osgi.org/javadoc/r6/cmpn/</link>
                     </links>
-                    <excludePackageNames>*.impl:*.internal</excludePackageNames>
+                    <excludePackageNames>*.impl:*.internal:*.internal.*</excludePackageNames>
                 </configuration>
             </plugin>
         </plugins>
@@ -181,6 +183,7 @@
                     <version>2.1.0</version>
                     <executions>
                         <execution>
+                            <id>install-bundle</id>
                             <goals>
                                 <goal>install</goal>
                             </goals>
@@ -194,9 +197,10 @@
                 <plugin>
                     <groupId>org.apache.jackrabbit</groupId>
                     <artifactId>filevault-package-maven-plugin</artifactId>
-                    <version>1.1.2</version>
+                    <version>1.1.4</version>
                     <configuration>
                         <failOnMissingEmbed>true</failOnMissingEmbed>
+                        <showImportPackageReport>false</showImportPackageReport>
                         <filterSource>${project.basedir}/src/content/META-INF/vault/filter.xml</filterSource>
                         <excludes>
                             <!-- exclude .vlt control files in the package -->
@@ -221,11 +225,10 @@
                         <validatorsSettings>
                             <jackrabbit-filter>
                                 <options>
-                                    <validRoots>/,/libs,/apps,/apps/core/wcm,/etc,/var,/tmp,/content</validRoots>
+                                    <validRoots>/,/libs,/libs/core/wcm,/apps,/apps/core/wcm,/etc,/var,/tmp,/content</validRoots>
                                 </options>
                             </jackrabbit-filter>
                             <netcentric-aem-classification>
-                                <!-- <disabled>true</disabled>  -->
                                 <defaultSeverity>WARN</defaultSeverity>
                                 <options>
                                     <severitiesPerClassification>INTERNAL_DEPRECATED=WARN</severitiesPerClassification>
@@ -256,7 +259,7 @@
                 <plugin>
                     <groupId>com.day.jcr.vault</groupId>
                     <artifactId>content-package-maven-plugin</artifactId>
-                    <version>1.0.2</version>
+                    <version>1.0.4</version>
                     <configuration>
                         <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                         <failOnError>true</failOnError>
@@ -287,7 +290,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>1.4</version>
+                    <version>3.0.0-M3</version>
                     <executions>
                         <execution>
                             <id>enforce-maven</id>
@@ -316,22 +319,24 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.2.0</version>
                     <configuration>
-                        <stylesheet>maven</stylesheet>
+                        <stylesheet>java</stylesheet>
                         <encoding>${project.build.sourceEncoding}</encoding>
+                        <source>${aem.java.version}</source>
+                        <detectJavaApiLink>false</detectJavaApiLink>
                         <links>
                             <link>https://docs.oracle.com/javase/${aem.java.version}/docs/api/</link>
                             <link>https://docs.oracle.com/javaee/7/api/</link>
                             <link>https://docs.adobe.com/docs/en/spec/jsr170/javadocs/jcr-2.0/</link>
                             <link>https://sling.apache.org/apidocs/sling9/</link>
-                            <link>https://helpx.adobe.com/experience-manager/6-3/sites/developing/using/reference-materials/javadoc/</link>
+                            <link>https://helpx.adobe.com/experience-manager/6-5/sites/developing/using/reference-materials/javadoc/</link>
                             <link>https://jackrabbit.apache.org/api/2.12/</link>
                             <link>https://osgi.org/javadoc/r6/core/</link>
                             <link>https://osgi.org/javadoc/r6/annotation/</link>
                             <link>https://osgi.org/javadoc/r6/cmpn/</link>
                         </links>
-                        <excludePackageNames>*.impl:*.internal</excludePackageNames>
+                        <excludePackageNames>*.impl:*.internal:*.internal.*</excludePackageNames>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -352,11 +357,7 @@
                             <!-- don't check anything in target -->
                             <exclude>**/target/*</exclude>
                             <!-- README files in markdown format -->
-                            <exclude>**/README.md</exclude>
-                            <exclude>CODE_OF_CONDUCT.md</exclude>
-                            <exclude>CONTRIBUTING.md</exclude>
-                            <exclude>VERSIONS.md</exclude>
-                            <exclude>AMP.md</exclude>
+                            <exclude>**/*.md</exclude>
                             <!-- Ignore files generated by IDE plugins e.g. maven-eclipse-plugin -->
                             <exclude>maven-eclipse.xml</exclude>
                             <!-- Ignore VLT .content.xml files + dialog configurations -->
@@ -417,9 +418,9 @@
                     <version>${jacoco.version}</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>3.0.4</version>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>4.0.4</version>
                     <configuration>
                         <effort>Max</effort>
                         <xmlOutput>true</xmlOutput>
@@ -581,6 +582,7 @@
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <stagingProgressTimeoutMinutes>20</stagingProgressTimeoutMinutes>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -747,7 +749,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient-osgi</artifactId>
-                <version>4.3.4</version>
+                <version>4.5.4</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -758,7 +760,7 @@
             <dependency>
                 <groupId>com.adobe.aem</groupId>
                 <artifactId>uber-jar</artifactId>
-                <version>6.3.2</version>
+                <version>6.4.0</version>
                 <classifier>apis</classifier>
                 <scope>provided</scope>
             </dependency>
@@ -774,7 +776,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.12</version>
+                <version>4.13.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -834,13 +836,13 @@
             <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
-                <version>2.7.0</version>
+                <version>3.1.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit4</artifactId>
-                <version>2.7.0</version>
+                <version>3.1.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

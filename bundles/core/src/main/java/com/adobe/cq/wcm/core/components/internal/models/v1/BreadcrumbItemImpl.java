@@ -22,6 +22,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import static org.apache.sling.api.SlingConstants.PROPERTY_PATH;
@@ -29,8 +30,9 @@ import static org.apache.sling.api.SlingConstants.PROPERTY_PATH;
 @JsonIgnoreProperties(value = {"page", "children", "level", "description", "lastModified",PROPERTY_PATH})
 public class BreadcrumbItemImpl extends NavigationItemImpl implements NavigationItem {
 
-    public BreadcrumbItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, String parentId, boolean isShadowingDisabled) {
-        super(page, active, request, level, children, parentId, isShadowingDisabled);
+    public BreadcrumbItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children,
+                              String parentId, boolean isShadowingDisabled, Component component) {
+        super(page, active, request, level, children, parentId, isShadowingDisabled, component);
     }
 
 }

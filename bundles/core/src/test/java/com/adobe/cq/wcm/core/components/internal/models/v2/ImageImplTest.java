@@ -15,9 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import java.io.StringReader;
+import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Assert;
+import com.day.cq.wcm.api.WCMMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,15 +32,31 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.*;
+import javax.json.Json;
+
+import static com.day.cq.wcm.api.WCMMode.REQUEST_ATTRIBUTE_NAME;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImplTest {
 
-    private static String TEST_BASE = "/image/v2";
+    private static final String TEST_BASE = "/image/v2";
     private static final String IMAGE20_PATH = PAGE + "/jcr:content/root/image20";
     private static final String IMAGE21_PATH = PAGE + "/jcr:content/root/image21";
     private static final String IMAGE22_PATH = PAGE + "/jcr:content/root/image22";
+    private static final String IMAGE32_PATH = PAGE + "/jcr:content/root/image32";
+    private static final String IMAGE33_PATH = PAGE + "/jcr:content/root/image33";
+    private static final String IMAGE34_PATH = PAGE + "/jcr:content/root/image34";
+    private static final String IMAGE35_PATH = PAGE + "/jcr:content/root/image35";
+    private static final String IMAGE36_PATH = PAGE + "/jcr:content/root/image36";
+    private static final String IMAGE37_PATH = PAGE + "/jcr:content/root/image37";
+    private static final String IMAGE38_PATH = PAGE + "/jcr:content/root/image38";
+    private static final String IMAGE39_PATH = PAGE + "/jcr:content/root/image39";
 
     @BeforeEach
     void setUp() {
@@ -73,7 +91,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
                 "allowedRenditionWidths", new int[]{600});
         Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
-        Assert.assertArrayEquals(new int[] {600}, image.getWidths());
+        assertArrayEquals(new int[] {600}, image.getWidths());
         assertFalse(image.isLazyEnabled());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, AbstractImageTest.IMAGE3_PATH));
     }
@@ -85,7 +103,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         context.request().setParameterMap(ImmutableMap.of("contentPolicyDelegatePath", IMAGE0_PATH));
         Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
 
-        Assert.assertArrayEquals(new int[] {600}, image.getWidths());
+        assertArrayEquals(new int[] {600}, image.getWidths());
         assertFalse(image.isLazyEnabled());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, AbstractImageTest.IMAGE3_PATH + "-with-policy-delegate"));
     }
@@ -95,7 +113,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
                 "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
         Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
-        Assert.assertArrayEquals(new int[] { 600, 700, 800, 2000, 2500 }, image.getWidths());
+        assertArrayEquals(new int[] { 600, 700, 800, 2000, 2500 }, image.getWidths());
         assertFalse(image.isLazyEnabled());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, AbstractImageTest.IMAGE0_PATH));
     }
@@ -106,7 +124,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
                 "uuidDisabled", true);
         Image image = getImageUnderTest(AbstractImageTest.IMAGE4_PATH);
 
-        Assert.assertArrayEquals(new int[] {}, image.getWidths());
+        assertArrayEquals(new int[] {}, image.getWidths());
         assertFalse(image.isLazyEnabled());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, AbstractImageTest.IMAGE4_PATH));
     }
@@ -127,16 +145,26 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
     }
 
     @Test
+    void testGetDataLayerJson() throws Exception {
+        Image image = getImageUnderTest(IMAGE6_PATH);
+        assertNotNull(image.getData());
+
+        String expected = "{\"image-db7ae5b54e\":{\"image\":{\"repo:id\":\"60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5\",\"xdm:tags\":[],\"@type\":\"image/gif\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\",\"repo:path\":\"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif\",\"xdm:smartTags\":{\"nature\":0.74,\"lake\":0.79,\"water\":0.78,\"landscape\":0.75}},\"dc:title\":\"Adobe Logo\",\"@type\":\"core/wcm/components/image/v2/image\",\"xdm:linkURL\":\"/core/content/test-image.html\",\"repo:modifyDate\":\"2017-03-20T08:33:42Z\"}}";
+        assertEquals(Json.createReader(new StringReader(expected)).read(),
+            Json.createReader(new StringReader(image.getData().getJson())).read());
+    }
+
+    @Test
     @SuppressWarnings("deprecation")
     void testSimpleDecorativeImage() {
         context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
                 "uuidDisabled", true);
         String escapedResourcePath = AbstractImageTest.IMAGE4_PATH.replace("jcr:content", "_jcr_content");
         com.adobe.cq.wcm.core.components.models.Image image = getImageUnderTest(AbstractImageTest.IMAGE4_PATH);
-        assertNull("Did not expect a value for the alt attribute, since the image is marked as decorative.", image.getAlt());
+        assertNull(image.getAlt(), "Did not expect a value for the alt attribute, since the image is marked as decorative.");
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
-        assertTrue("Image should display a caption popup.", image.displayPopupTitle());
-        assertNull("Did not expect a link for this image, since it's marked as decorative.", image.getLink());
+        assertTrue(image.displayPopupTitle(), "Image should display a caption popup.");
+        assertNull(image.getLink(), "Did not expect a link for this image, since it's marked as decorative.");
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/" + ASSET_NAME + ".png", image.getSrc());
         compareJSON(
                 "{\"" + com.adobe.cq.wcm.core.components.models.Image.JSON_SMART_IMAGES + "\":[], \"" + com.adobe.cq.wcm.core.components.models.Image.JSON_SMART_SIZES + "\":[], \"" + com.adobe.cq.wcm.core.components.models.Image.JSON_LAZY_ENABLED +
@@ -182,12 +210,12 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         int index = 0;
         while (areas.size() > index) {
             ImageArea area = areas.get(index);
-            assertEquals("The image area's shape is not as expected.", expectedAreas[index][0], area.getShape());
-            assertEquals("The image area's coordinates are not as expected.", expectedAreas[index][1], area.getCoordinates());
-            assertEquals("The image area's relative coordinates are not as expected.", expectedAreas[index][2], area.getRelativeCoordinates());
-            assertEquals("The image area's href is not as expected.", expectedAreas[index][3], area.getHref());
-            assertEquals("The image area's target is not as expected.", expectedAreas[index][4], area.getTarget());
-            assertEquals("The image area's alt text is not as expected.", expectedAreas[index][5], area.getAlt());
+            assertEquals(expectedAreas[index][0], area.getShape(), "The image area's shape is not as expected.");
+            assertEquals(expectedAreas[index][1], area.getCoordinates(), "The image area's coordinates are not as expected.");
+            assertEquals(expectedAreas[index][2], area.getRelativeCoordinates(), "The image area's relative coordinates are not as expected.");
+            assertEquals(expectedAreas[index][3], area.getHref(), "The image area's href is not as expected.");
+            assertEquals(expectedAreas[index][4], area.getTarget(), "The image area's target is not as expected.");
+            assertEquals(expectedAreas[index][5], area.getAlt(), "The image area's alt text is not as expected.");
             index++;
         }
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, AbstractImageTest.IMAGE24_PATH));
@@ -228,7 +256,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
                 "allowedRenditionWidths", new int[]{600});
         String escapedResourcePath = IMAGE27_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE27_PATH);
-        assertNull("Did not expect a file reference.", image.getFileReference());
+        assertNull(image.getFileReference(), "Did not expect a file reference.");
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".82.600.png/1490005239000.png", image.getSrc());
         String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image27." + selector +  "." + jpegQuality +
             ".600.png/1490005239000.png\"],\"smartSizes\":[600],\"lazyEnabled\":false}";
@@ -249,5 +277,166 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
         assertEquals(100, image.getLazyThreshold());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, AbstractImageTest.IMAGE3_PATH + "-with-lazy-threshold"));
+    }
+
+    @Test
+    void testDMImage() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE32_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE32_PATH));
+    }
+
+    @Test
+    void testDMImageOnAuthor() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        context.request().setAttribute(REQUEST_ATTRIBUTE_NAME, WCMMode.EDIT);
+        Image image = getImageUnderTest(IMAGE32_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE32_PATH + "-on-author"));
+    }
+
+    @Test
+    void testDMImageOneSmartSize() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, new HashMap<String, Object>() {{
+            put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+            put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600});
+        }});
+        Image image = getImageUnderTest(IMAGE32_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE32_PATH + "-one-smart-size"));
+    }
+
+    @Test
+    void testDMImageTwoSmartSizes() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, new HashMap<String, Object>() {{
+            put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+            put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600, 800});
+        }});
+        Image image = getImageUnderTest(IMAGE32_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE32_PATH + "-two-smart-sizes"));
+    }
+
+    @Test
+    void testDMImageWithImagePreset() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE33_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE33_PATH));
+    }
+
+    @Test
+    void testDMImageWithImagePresetOneSmartSize() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, new HashMap<String, Object>() {{
+            put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+            put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600});
+        }});
+        Image image = getImageUnderTest(IMAGE33_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE33_PATH + "-one-smart-size"));
+    }
+
+    @Test
+    void testDMImageWithImagePresetTwoSmartSizes() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, new HashMap<String, Object>() {{
+            put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+            put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600, 800});
+        }});
+        Image image = getImageUnderTest(IMAGE33_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE33_PATH + "-two-smart-sizes"));
+    }
+
+    @Test
+    void testDMImageWithImageModifiers() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE34_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE34_PATH));
+    }
+
+    @Test
+    void testDMImageWithImagePresetAndImageModifiers() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE35_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE35_PATH));
+    }
+
+    @Test
+    void testDMImageWithSmartCropRendition() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE36_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE36_PATH));
+    }
+
+    @Test
+    void testDMImageWithSmartCropRenditionOneSmartSize() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, new HashMap<String, Object>() {{
+            put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+            put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600});
+        }});
+        Image image = getImageUnderTest(IMAGE36_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE36_PATH + "-one-smart-size"));
+    }
+
+    @Test
+    void testDMImageWithSmartCropRenditionTwoSmartSizes() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, new HashMap<String, Object>() {{
+            put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+            put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600, 800});
+        }});
+        Image image = getImageUnderTest(IMAGE36_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE36_PATH + "-two-smart-sizes"));
+    }
+
+    @Test
+    void testDMImageWithSmartCropRenditionAndImageModifiers() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE37_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE37_PATH));
+    }
+
+    @Test
+    void testDMImageWithAutoSmartCrop() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE38_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE38_PATH));
+    }
+
+    @Test
+    void testDMImageWithAutoSmartCropOneSmartSize() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, new HashMap<String, Object>() {{
+            put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+            put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600});
+        }});
+        Image image = getImageUnderTest(IMAGE38_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE38_PATH + "-one-smart-size"));
+    }
+
+    @Test
+    void testDMImageWithAutoSmartCropTwoSmartSizes() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, new HashMap<String, Object>() {{
+            put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+            put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600, 800});
+        }});
+        Image image = getImageUnderTest(IMAGE38_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE38_PATH + "-two-smart-sizes"));
+    }
+
+    @Test
+    void testDMImageWithAutoSmartCropAndImageModifiers() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE39_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE39_PATH));
     }
 }

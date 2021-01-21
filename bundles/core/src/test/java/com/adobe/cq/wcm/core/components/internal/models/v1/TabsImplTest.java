@@ -65,7 +65,7 @@ class TabsImplTest {
     @Test
     void testEmptyTabs() {
         Tabs tabs = getTabsUnderTest(TABS_EMPTY);
-        Assert.assertEquals(0, tabs.getItems().size());
+        assertEquals(0, tabs.getItems().size());
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs0"));
     }
 
@@ -164,13 +164,11 @@ class TabsImplTest {
     }
 
     private void verifyTabItems(Object[][] expectedItems, List<ListItem> items) {
-        assertEquals("The tabs contains a different number of items than expected.", expectedItems.length, items.size());
+        assertEquals(expectedItems.length, items.size(), "The tabs contains a different number of items than expected.");
         int index = 0;
         for (ListItem item : items) {
-            assertEquals("The tabs item's name is not what was expected.",
-                expectedItems[index][0], item.getName());
-            assertEquals("The tabs item's title is not what was expected: " + item.getTitle(),
-                expectedItems[index][1], item.getTitle());
+            assertEquals(expectedItems[index][0], item.getName(), "The tabs item's name is not what was expected.");
+            assertEquals(expectedItems[index][1], item.getTitle(), "The tabs item's title is not what was expected: " + item.getTitle());
             index++;
         }
     }

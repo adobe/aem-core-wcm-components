@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,13 +53,13 @@ public class ComponentImplTest {
     @Test
     public void testComponentId() {
         Component component = getComponentUnderTest(XF_COMPONENT_1);
-        Assert.assertEquals("ID mismatch", "experiencefragment-4d2d8fd496", component.getId());
+        Assertions.assertEquals("experiencefragment-4d2d8fd496", component.getId(), "ID mismatch");
     }
 
     @Test
     public void testReferencedComponentId() {
         Component component = getReferencedComponentUnderTest(XF_COMPONENT_1, TEST_PAGE_EN, XF_COMPONENT_10);
-        Assert.assertEquals("ID mismatch", "experiencefragment-789e0d5de3", component.getId());
+        Assertions.assertEquals("experiencefragment-789e0d5de3", component.getId(), "ID mismatch");
     }
 
     private Component getComponentUnderTest(String resourcePath, Object ... properties) {

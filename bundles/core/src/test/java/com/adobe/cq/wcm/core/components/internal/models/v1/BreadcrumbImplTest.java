@@ -28,19 +28,21 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
 class BreadcrumbImplTest {
 
     private static final String TEST_BASE = "/breadcrumb";
     private static final String CURRENT_PAGE = "/content/breadcrumb/women/shirts/devi-sleeveless-shirt";
+    private static final String CURRENT_PAGE_2 = "/content/breadcrumb/women/shirts2/devi-sleeveless-shirt";
     private static final String BREADCRUMB_1 = CURRENT_PAGE + "/jcr:content/header/breadcrumb";
     private static final String BREADCRUMB_2 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-show-hidden";
     private static final String BREADCRUMB_3 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-hide-current";
     private static final String BREADCRUMB_4 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-start-level";
     private static final String BREADCRUMB_5 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-style-based";
     private static final String BREADCRUMB_6 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-v2";
+    private static final String BREADCRUMB_7 = CURRENT_PAGE_2 + "/jcr:content/header/breadcrumb-page-without-jcrcontent";
 
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
@@ -95,9 +97,19 @@ class BreadcrumbImplTest {
         Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_6));
     }
 
+    /**
+     * Verifies that a breadcrumb item is not created when the corresponding ancestor page does not have a jcr:content node
+     */
+    @Test
+    void testBreadcrumbItemsPageWithoutJcrContent() {
+        Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_7);
+        checkBreadcrumbConsistency(breadcrumb, new String[]{"Women", "Devi Sleeveless Shirt"});
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_7));
+    }
+
     private void checkBreadcrumbConsistency(Breadcrumb breadcrumb, String[] expectedPages) {
-        assertEquals("Expected that the returned breadcrumb will contain " + expectedPages.length + " items", breadcrumb.getItems().size(),
-                expectedPages.length);
+        assertEquals(breadcrumb.getItems().size(), expectedPages.length,
+            "Expected that the returned breadcrumb will contain " + expectedPages.length + " items");
         int index = 0;
         for (NavigationItem item : breadcrumb.getItems()) {
             assertEquals(expectedPages[index++], item.getTitle());
