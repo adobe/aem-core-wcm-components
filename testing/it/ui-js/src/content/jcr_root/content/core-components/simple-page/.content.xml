@@ -2,12 +2,14 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2020-11-27T19:48:21.559+02:00"
+        cq:lastModified="{Date}2021-01-21T11:25:03.532+01:00"
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components/settings/wcm/templates/simple-template"
         jcr:primaryType="cq:PageContent"
         jcr:title="Simple Page"
-        sling:resourceType="core/wcm/components/page/v2/page">
+        sling:resourceType="core/wcm/components/page/v2/page"
+        brandSlug="Core Components"
+        brandSlug_override="true">
         <root
             jcr:lastModified="{Date}2020-11-27T17:51:51.431+02:00"
             jcr:lastModifiedBy="admin"
