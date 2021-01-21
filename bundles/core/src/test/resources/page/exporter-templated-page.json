@@ -3,6 +3,7 @@
     "designPath": "/etc/designs/mysite",
     "staticDesignPath": "/etc/designs/mysite/static.css",
     "title": "Templated Page",
+    "brandSlug": "Brand Slug",
     "lastModifiedDate": 1453282416000,
     "templateName": "product-page",
     "language": "en-GB",

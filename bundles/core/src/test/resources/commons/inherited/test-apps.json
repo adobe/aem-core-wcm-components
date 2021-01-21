@@ -1,0 +1,16 @@
+{
+    "brandSlug": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "core/wcm/components/inherited",
+        "granite:class": "cssClass",
+        "prop": "brandSlug",
+        "heading": "Brand Slug",
+        "path": "/content/parent/child"
+    },
+    "missingProp": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "core/wcm/components/inherited",
+        "heading": "Brand Slug",
+        "path": "/content/parent/child"
+    }
+}

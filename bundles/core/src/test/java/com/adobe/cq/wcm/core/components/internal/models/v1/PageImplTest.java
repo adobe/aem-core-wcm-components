@@ -101,6 +101,7 @@ public class PageImplTest {
         assertEquals(page.getLastModifiedDate().getTime(), calendar.getTime());
         assertEquals("en-GB", page.getLanguage());
         assertEquals("Templated Page", page.getTitle());
+        assertEquals("Brand Slug", page.getBrandSlug());
         assertEquals(DESIGN_PATH, page.getDesignPath());
         assertEquals(DESIGN_PATH + "/static.css", page.getStaticDesignPath());
         String[] keywordsArray = page.getKeywords();
