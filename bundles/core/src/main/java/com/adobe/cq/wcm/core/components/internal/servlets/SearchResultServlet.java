@@ -54,12 +54,19 @@ import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
-import com.day.cq.wcm.api.*;
+import com.day.cq.wcm.api.LanguageManager;
+import com.day.cq.wcm.api.NameConstants;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static com.adobe.cq.wcm.core.components.models.ExperienceFragment.PN_FRAGMENT_VARIATION_PATH;
 
 @Component(
         service = Servlet.class,
@@ -76,12 +83,10 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     protected static final String PARAM_FULLTEXT = "fulltext";
 
     private static final String PARAM_RESULTS_OFFSET = "resultsOffset";
-    private static final String PREDICATE_FULLTEXT = "fulltext";
-    private static final String PREDICATE_TYPE = "type";
-    private static final String PREDICATE_PATH = "path";
+    protected static final String PREDICATE_FULLTEXT = "fulltext";
+    protected static final String PREDICATE_TYPE = "type";
+    protected static final String PREDICATE_PATH = "path";
     private static final String NN_STRUCTURE = "structure";
-    private static final String JCR_CONTENT = "jcr:content";
-    private static final String FRAGMENT_PATH = "fragmentPath";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchResultServlet.class);
 
@@ -130,38 +135,49 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     private Resource getSearchContentResource(SlingHttpServletRequest request, Page currentPage) {
         Resource searchContentResource = null;
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();
-        Resource resource = request.getResource();
         String relativeContentResource = requestPathInfo.getSuffix();
         if (StringUtils.startsWith(relativeContentResource, "/")) {
             relativeContentResource = StringUtils.substring(relativeContentResource, 1);
         }
         if (StringUtils.isNotEmpty(relativeContentResource)) {
-            searchContentResource = resource.getChild(relativeContentResource);
+            searchContentResource = getSearchContentResourceFromPage(request.getResource(), relativeContentResource);
             if (searchContentResource == null) {
-                searchContentResource = getSearchContentResourceFromFragments(resource.getChild(JCR_CONTENT), relativeContentResource);
+                searchContentResource = getSearchContentResourceFromTemplate(currentPage, relativeContentResource);
+            }
+        }
+        return searchContentResource;
+    }
+
+    private Resource getSearchContentResourceFromPage(Resource pageResource, String relativeContentResource) {
+        Resource searchContentResource = pageResource.getChild(relativeContentResource);
+        if (searchContentResource == null) {
+            searchContentResource = getSearchContentResourceFromFragments(pageResource.getChild(NameConstants.NN_CONTENT), relativeContentResource);
+        }
+        return searchContentResource;
+    }
+
+    private Resource getSearchContentResourceFromTemplate(Page currentPage, String relativeContentResource) {
+        Resource searchContentResource = null;
+
+        Template template = currentPage.getTemplate();
+        if (template != null) {
+            Resource templateStructure = currentPage.getContentResource().getResourceResolver().getResource(template.getPath() + "/" + NN_STRUCTURE);
+            if (templateStructure != null) {
+                searchContentResource = templateStructure.getChild(relativeContentResource);
                 if (searchContentResource == null) {
-                    PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
-                    if (pageManager != null) {
-                        Template template = currentPage.getTemplate();
-                        if (template != null) {
-                            Resource templateResource = request.getResourceResolver().getResource(template.getPath());
-                            if (templateResource != null) {
-                                searchContentResource = templateResource.getChild(NN_STRUCTURE + "/" + relativeContentResource);
-                            }
-                        }
-                    }
+                    searchContentResource = getSearchContentResourceFromFragments(templateStructure, relativeContentResource);
                 }
             }
         }
         return searchContentResource;
     }
 
-    private Resource getSearchContentResourceFromFragments(Resource pageResource, String relativeContentResource) {
-        Resource searchContentResource = findFragmentProperties(pageResource, relativeContentResource);
-        if(searchContentResource == null) {
-            for (Resource resource : pageResource.getChildren()) {
+    private Resource getSearchContentResourceFromFragments(Resource parentResource, String relativeContentResource) {
+        Resource searchContentResource = findFragmentProperties(parentResource, relativeContentResource);
+        if (searchContentResource == null) {
+            for (Resource resource : parentResource.getChildren()) {
                 searchContentResource = getSearchContentResourceFromFragments(resource, relativeContentResource);
-                if(searchContentResource != null){
+                if (searchContentResource != null) {
                     return searchContentResource;
                 }
             }
@@ -174,10 +190,10 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         Resource searchContentResource = null;
         if (parentResource != null) {
             contentProperties = parentResource.getValueMap();
-            if(contentProperties.containsKey(FRAGMENT_PATH)){
-                String searchResourcePath = contentProperties.get(FRAGMENT_PATH,String.class);
-                searchContentResource =  parentResource.getChild(searchResourcePath+ "/" +relativeContentResource);
-                if(searchContentResource != null){
+            if (contentProperties.containsKey(PN_FRAGMENT_VARIATION_PATH)) {
+                String searchResourcePath = contentProperties.get(PN_FRAGMENT_VARIATION_PATH, String.class);
+                searchContentResource =  parentResource.getChild(searchResourcePath + "/" + relativeContentResource);
+                if (searchContentResource != null) {
                     return searchContentResource;
                 }
             }
