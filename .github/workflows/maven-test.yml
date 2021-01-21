@@ -58,3 +58,7 @@ jobs:
       # Build & Test
       - name: Build & Test with Maven
         run: mvn -B -U clean verify
+
+      # Run code coverage check
+      - name: Run core coverage check
+        run: bash <(curl -s https://codecov.io/bash)
