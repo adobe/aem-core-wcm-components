@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -278,16 +279,11 @@ public class SearchResultServletTest {
         module.setAbstractTypes(resolver);
         mapper.registerModule(module);
         ListItem[] listItems = mapper.readValue(response.getOutputAsString(), ListItem[].class);
-        assertEquals(expected.size(), listItems.length);
-
-        for (int i = 0; i < expected.size(); i++) {
-            Map<String, String> expectedMap = expected.get(i);
-            ListItem listItem = listItems[i];
-            assertEquals(expectedMap.get("id"), listItem.getId());
-            assertEquals(expectedMap.get("url"), listItem.getURL());
-            assertEquals(expectedMap.get("title"), listItem.getTitle());
-
+        List<Map<String, String>> actual = new LinkedList<>();
+        for (ListItem item : listItems) {
+            actual.add(ImmutableMap.of("url", item.getURL(), "title", item.getTitle(), "id", item.getId()));
         }
+        assertEquals(expected, actual);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
