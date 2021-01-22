@@ -31,15 +31,15 @@ public final class FormConstants {
     /** The prefixes for all core form related resource types */
     public final static String RT_CORE_FORM_PREFIX = "core/wcm/components/form/";
 
-    /** The resource type for form container v1 */
+    /** The resource type for core form container v1 */
     public final static String RT_CORE_FORM_CONTAINER_V1 = RT_CORE_FORM_PREFIX + "container/v1/container";
-    /** The resource type for form container v2 */
+    /** The resource type for core form container v2 */
     public final static String RT_CORE_FORM_CONTAINER_V2 = RT_CORE_FORM_PREFIX + "container/v2/container";
 
-    /* The resource type prefix for the form container related datasources */
+    /* The resource type prefix for the core form container related datasources */
     public final static String RT_CORE_FORM_CONTAINER_DATASOURCE_V1 = RT_CORE_FORM_PREFIX + "container/v1/datasource";
 
-    /** Array of all resource types for the form container, including versions */
+    /** Array of all resource types for the core form container, including versions */
     public final static Set<String> RT_ALL_CORE_FORM_CONTAINER = Collections.unmodifiableSet(new HashSet<String>() {{
         add(RT_CORE_FORM_CONTAINER_V1);
         add(RT_CORE_FORM_CONTAINER_V2);

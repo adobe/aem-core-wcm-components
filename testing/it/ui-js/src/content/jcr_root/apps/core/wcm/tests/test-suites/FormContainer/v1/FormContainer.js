@@ -30,7 +30,7 @@
     /**
      * The main test suite.
      */
-    new h.TestSuite("Form Container v1", { path: "/apps/core/wcm/tests/test-suites/FormContainer/v1/FormContainer.js",
+    new h.TestSuite("Core Form Container v1", { path: "/apps/core/wcm/tests/test-suites/FormContainer/v1/FormContainer.js",
         execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false })
 

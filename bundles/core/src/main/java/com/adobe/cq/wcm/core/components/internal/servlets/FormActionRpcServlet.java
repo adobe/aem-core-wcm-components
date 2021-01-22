@@ -45,7 +45,7 @@ import com.day.cq.wcm.foundation.forms.FormsHandlingServletHelper;
 import com.day.cq.wcm.foundation.forms.ValidationInfo;
 
 /**
- * This servlet is used by the form container as a form action to send the form data to a remote endpoint.
+ * This servlet is used by the core form container as a form action to send the form data to a remote endpoint.
  */
 @Component(
         service = Servlet.class,

@@ -71,7 +71,7 @@
     c.rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
     // content fragment list component
     c.rtContentFragmentList_v1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
-    // form container
+    // core form container
     c.rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
     c.rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
     // form button

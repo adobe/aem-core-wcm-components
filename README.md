@@ -77,7 +77,7 @@ Please help us making the Core Components better by responding to our **[short u
 
 ### Form Components
 
-25. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+25. [Core Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
 26. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
 27. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
 28. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
