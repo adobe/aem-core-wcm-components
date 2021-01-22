@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -26,8 +27,8 @@ import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.day.cq.search.PredicateGroup;
-import com.day.cq.search.eval.PathPredicateEvaluator;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
@@ -43,8 +44,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
+import com.day.cq.search.eval.PathPredicateEvaluator;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -55,8 +58,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import javax.servlet.http.HttpServletResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -86,6 +87,8 @@ public class SearchResultServletTest {
     private static final String TEST_ROOT_EN = "/content/en/search/page";
     private static final String TEST_ROOT_DE = "/content/de/search/page";
     private static final String TEST_TEMPLATE_EN = "/content/en/search/page-template";
+    private static final String TEST_XF_PAGE_EN = "/content/en/search/xf-page";
+    private static final String TEST_XF_TEMPLATE_EN = "/content/en/search/xf-page-template";
 
     @BeforeEach
     public void setUp() {
@@ -146,7 +149,9 @@ public class SearchResultServletTest {
         List<Map<String, String>> expected = ImmutableList.of(
             ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page", "id", "search-0dc87a6d22-item-2290228025"),
             ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2", "id", "search-0dc87a6d22-item-ad3d190367"),
-            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-0dc87a6d22-item-1abc47fffe")
+            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-0dc87a6d22-item-1abc47fffe"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page.html", "title", "XF Page", "id", "search-0dc87a6d22-item-2246ed81a7"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-0dc87a6d22-item-7345474d48")
         );
 
         validateResponse(context.response(), expected);
@@ -222,11 +227,47 @@ public class SearchResultServletTest {
         List<Map<String, String>> expected = ImmutableList.of(
             ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page", "id", "search-ea349504cd-item-2290228025"),
             ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2", "id", "search-ea349504cd-item-ad3d190367"),
-            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-ea349504cd-item-1abc47fffe")
+            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-ea349504cd-item-1abc47fffe"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page.html", "title", "XF Page", "id", "search-ea349504cd-item-2246ed81a7"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-ea349504cd-item-7345474d48")
         );
 
         validateResponse(context.response(), expected);
         verify(this.spyResolver, atLeastOnce()).close();
+    }
+
+    @Test
+    public void testXFSearch() throws Exception {
+        setUpQueryBuilder();
+        com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
+        context.currentResource(TEST_XF_PAGE_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=found");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01", "id", "search-1f0d0a33b1-item-7ae4fa6340"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02", "id", "search-1f0d0a33b1-item-05b6f78858"));
+
+        validateResponse(context.response(), expected);
+    }
+
+    @Test
+    public void testXFTemplateSearch() throws Exception {
+        setUpQueryBuilder();
+        com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
+        context.currentResource(TEST_XF_TEMPLATE_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=found");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01", "id", "search-1f0d0a33b1-item-7ae4fa6340"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02", "id", "search-1f0d0a33b1-item-05b6f78858"));
+
+        validateResponse(context.response(), expected);
     }
 
     private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> expected)
@@ -238,16 +279,11 @@ public class SearchResultServletTest {
         module.setAbstractTypes(resolver);
         mapper.registerModule(module);
         ListItem[] listItems = mapper.readValue(response.getOutputAsString(), ListItem[].class);
-        assertEquals(expected.size(), listItems.length);
-
-        for (int i = 0; i < expected.size(); i++) {
-            Map<String, String> expectedMap = expected.get(i);
-            ListItem listItem = listItems[i];
-            assertEquals(expectedMap.get("id"), listItem.getId());
-            assertEquals(expectedMap.get("url"), listItem.getURL());
-            assertEquals(expectedMap.get("title"), listItem.getTitle());
-
+        List<Map<String, String>> actual = new LinkedList<>();
+        for (ListItem item : listItems) {
+            actual.add(ImmutableMap.of("url", item.getURL(), "title", item.getTitle(), "id", item.getId()));
         }
+        assertEquals(expected, actual);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
