@@ -112,14 +112,15 @@ public final class LocalizationUtils {
         } else {
             try {
                 String currentPagePath = currentPage.getPath() + "/";
-                return Optional.ofNullable(
-                    (Iterator<LiveRelationship>) relationshipManager.getLiveRelationships(referencePage.adaptTo(Resource.class), null, null))
+                return Optional.of(
+                    Optional.ofNullable((Iterator<LiveRelationship>) relationshipManager.getLiveRelationships(referencePage.adaptTo(Resource.class), null, null))
                     .map(liveRelationshipIterator -> StreamSupport.stream(((Iterable<LiveRelationship>) () -> liveRelationshipIterator).spliterator(), false))
                     .orElseGet(Stream::empty)
                     .map(LiveRelationship::getTargetPath)
                     .filter(target -> currentPagePath.startsWith(target + "/"))
                     .map(referencePage.getPageManager()::getPage)
-                    .findFirst();
+                    .findFirst()
+                    .orElse(referencePage));
             } catch (WCMException e) {
                 // ignore it
             }
