@@ -17,8 +17,8 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     cq:icon="form"
     cq:isContainer="{Boolean}true"
-    jcr:description="Form Container component for the Core Components Library"
+    jcr:description="Core Form Container component for the Core Components Library"
     jcr:primaryType="cq:Component"
-    jcr:title="Form Container"
+    jcr:title="Core Form Container"
     sling:resourceSuperType="core/wcm/extensions/amp/components/form/container/v1/container"
     componentGroup="Core Components Examples - Form"/>
