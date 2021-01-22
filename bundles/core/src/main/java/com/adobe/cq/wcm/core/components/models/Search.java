@@ -81,7 +81,7 @@ public interface Search extends Component {
     }
 
     /**
-     * Gets the path of the search root.
+     * Gets the path of the localized search root.
      *
      * @return The search root path.
      * @since com.adobe.cq.wcm.core.components.models 12.17.0
