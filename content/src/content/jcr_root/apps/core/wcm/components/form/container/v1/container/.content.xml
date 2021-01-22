@@ -2,8 +2,8 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     cq:icon="form"
     cq:isContainer="{Boolean}true"
-    jcr:description="Components Container allowing visitors to submit information"
+    jcr:description="Container allowing to construct simple forms for visitors to submit information"
     jcr:primaryType="cq:Component"
-    jcr:title="Form Container (v1)"
+    jcr:title="Core Form Container (v1)"
     sling:resourceSuperType="wcm/foundation/components/responsivegrid"
     componentGroup=".core-wcm-form"/>

@@ -16,30 +16,24 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.jcr.RangeIterator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.models.annotations.Default;
-import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,164 +60,216 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL,
-       adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
-       resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
-          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+import static com.day.cq.wcm.api.NameConstants.NN_CONTENT;
+
+/**
+ * Experience Fragment model implementation.
+ */
+@Model(adaptables = SlingHttpServletRequest.class,
+    adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
+    resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ExperienceFragmentImpl implements ExperienceFragment {
 
+    /**
+     * Logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFragmentImpl.class);
 
+    /**
+     * The experience fragment component resource type.
+     */
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/experiencefragment/v1/experiencefragment";
 
-    private static final String PATH_DELIMITER = "/";
+    /**
+     * Sling path delimiter.
+     */
     private static final char PATH_DELIMITER_CHAR = '/';
+
+    /**
+     * Content root.
+     */
     private static final String CONTENT_ROOT = "/content";
-    private static final String EXPERIENCE_FRAGMENTS_ROOT = "/content/experience-fragments";
-    private static final String JCR_CONTENT_ROOT = "/jcr:content";
+
+    /**
+     * Class name to be applied if the XF is empty or not configured.
+     */
     private static final String CSS_EMPTY_CLASS = "empty";
+
+    /**
+     * Class name to be applied to all experience fragments.
+     */
     private static final String CSS_BASE_CLASS = "aem-xf";
 
+    /**
+     * The current request.
+     */
     @Self
     private SlingHttpServletRequest request;
 
-    @Inject
-    protected Resource resource;
-
-    @SlingObject
-    private ResourceResolver resolver;
-
-    @ScriptVariable
+    /**
+     * The current page.
+     */
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private Page currentPage;
 
-    @ValueMapValue(name = ExperienceFragment.PN_FRAGMENT_VARIATION_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private String fragmentVariationPath;
-
+    /**
+     * The language manager service.
+     */
     @OSGiService
     private LanguageManager languageManager;
 
+    /**
+     * The live relationship manager service.
+     */
     @OSGiService
     private LiveRelationshipManager relationshipManager;
 
-    @ValueMapValue(name = ComponentStyle.PN_CSS_CLASS)
-    @Default(values = "")
-    private String customCssClass;
-
-    @Inject
+    /**
+     * The model factory service.
+     */
+    @OSGiService
     private ModelFactory modelFactory;
 
+    /**
+     * Path of the experience fragment variation.
+     */
     private String localizedFragmentVariationPath;
+
+    /**
+     * Name of the experience fragment.
+     */
     private String name;
 
     /**
-     * Class names of the responsive grid
+     * Class names of the responsive grid.
      */
-    private String classNames = CSS_BASE_CLASS;
+    private String classNames;
 
     /**
-     * Child columns of the responsive grid
+     * Child columns of the responsive grid.
      */
-    private final Map<String, ComponentExporter> children = new HashMap<>();
+    private LinkedHashMap<String, ComponentExporter> children;
 
+    /**
+     * Initialize the model.
+     */
     @PostConstruct
-    protected void initModel() {
+    private void initModel() {
+        // currentPage is null when accessing the sling model exporter.
+        this.currentPage = Optional.ofNullable(this.currentPage)
+            .orElseGet(() -> Optional.ofNullable(this.request.getResourceResolver().adaptTo(PageManager.class))
+                .map(pm -> pm.getContainingPage(this.request.getResource()))
+                .orElse(null));
 
-        final PageManager pageManager = resolver.adaptTo(PageManager.class);
-
-        if (pageManager != null) {
-            /**
-             * CurrentPage is null when accessing the sling model exporter.
-             */
-            if (currentPage == null) {
-                currentPage = pageManager.getContainingPage(resource);
-            }
-
-            if (currentPage != null) {
-                resolveLocalizedFragmentVariationPath();
-                resolveName(pageManager);
-                retrieveExperienceFragmentChildModels();
-            } else {
-                LOGGER.error("Could not resolve currentPage!");
-            }
+        if (this.currentPage == null) {
+            LOGGER.error("Could not resolve currentPage!");
         }
-
-        appendCssClassNames();
     }
 
     @Override
+    @Nullable
     public String getLocalizedFragmentVariationPath() {
-        return localizedFragmentVariationPath;
+        if (this.localizedFragmentVariationPath == null) {
+
+            // get the configured fragment variation path
+            String fragmentVariationPath = request.getResource().getValueMap()
+                .get(ExperienceFragment.PN_FRAGMENT_VARIATION_PATH, String.class);
+
+            final Page page = this.currentPage;
+            if (page != null && inTemplate()) {
+                final String currentPageRootPath = getLocalizationRoot(page.getPath());
+                // we should use getLocalizationRoot instead of getXfLocalizationRoot once the XF UI supports creating Live and Language Copies
+                String xfRootPath = getXfLocalizationRoot(fragmentVariationPath, currentPageRootPath);
+                if (StringUtils.isNotEmpty(currentPageRootPath) && StringUtils.isNotEmpty(xfRootPath)) {
+                    String xfRelativePath = StringUtils.substring(fragmentVariationPath, xfRootPath.length());
+                    String localizedXfRootPath = StringUtils.replace(currentPageRootPath, CONTENT_ROOT, ExperienceFragmentsConstants.CONTENT_PATH, 1);
+                    this.localizedFragmentVariationPath = StringUtils.join(localizedXfRootPath, xfRelativePath, PATH_DELIMITER_CHAR, NN_CONTENT);
+                }
+            }
+
+            String xfContentPath = String.join(Character.toString(PATH_DELIMITER_CHAR), fragmentVariationPath, NN_CONTENT);
+            if (!resourceExists(localizedFragmentVariationPath) && resourceExists(xfContentPath)) {
+                this.localizedFragmentVariationPath = xfContentPath;
+            }
+            if (!isExperienceFragmentVariation(localizedFragmentVariationPath)) {
+                this.localizedFragmentVariationPath = null;
+            }
+        }
+        return this.localizedFragmentVariationPath;
     }
 
     @Override
     @JsonIgnore
+    @Nullable
     public String getName() {
-        return name;
+        if (this.name == null) {
+            this.name = Optional.ofNullable(this.request.getResourceResolver().adaptTo(PageManager.class))
+                .flatMap(pm -> Optional.ofNullable(this.getLocalizedFragmentVariationPath())
+                    .map(pm::getContainingPage))
+                .map(Page::getParent)
+                .map(Page::getName)
+                .orElse(null);
+        }
+        return this.name;
     }
 
     @NotNull
-    @Override public String getExportedType() {
-        return request.getResource().getResourceType();
+    @Override
+    public String getExportedType() {
+        return this.request.getResource().getResourceType();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
-        return children;
+        return this.getChildren();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
-        return children.isEmpty() ?
-                new String[0] : children.keySet().toArray(new String[children.size()]);
+        return this.getChildren().keySet().toArray(new String[0]);
     }
 
-    /**
-     * @return The CSS class names to be applied to the current grid.
-     * @deprecated Use {@link #getCssClassNames()}
-     */
     @Override
     @JsonProperty("classNames")
+    @NotNull
     public String getCssClassNames() {
+        if (this.classNames == null) {
+            this.classNames = Stream.of(
+                CSS_BASE_CLASS,
+                this.getExportedItems().isEmpty() ? CSS_EMPTY_CLASS : "",
+                this.request.getResource().getValueMap().get(ComponentStyle.PN_CSS_CLASS, "")
+            ).filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
+        }
         return classNames;
     }
 
     @Override
     @JsonInclude
     public boolean isConfigured() {
-        return StringUtils.isNotEmpty(localizedFragmentVariationPath) && !children.isEmpty();
+        return StringUtils.isNotEmpty(this.getLocalizedFragmentVariationPath()) && !this.getExportedItems().isEmpty();
     }
 
-    private void resolveLocalizedFragmentVariationPath() {
-        if (inTemplate()) {
-            if (currentPage != null) {
-                final String pagePath = currentPage.getPath();
-                final String currentPageRootPath = getLocalizationRoot(pagePath);
-                // we should use getLocalizationRoot instead of getXfLocalizationRoot once the XF UI supports creating Live and Language Copies
-                String xfRootPath = getXfLocalizationRoot(fragmentVariationPath, currentPageRootPath);
-                if (StringUtils.isNotEmpty(currentPageRootPath) && StringUtils.isNotEmpty(xfRootPath)) {
-                    String xfRelativePath = StringUtils.substring(fragmentVariationPath, xfRootPath.length());
-                    String localizedXfRootPath = StringUtils.replace(currentPageRootPath, CONTENT_ROOT, EXPERIENCE_FRAGMENTS_ROOT, 1);
-                    localizedFragmentVariationPath = StringUtils.join(localizedXfRootPath, xfRelativePath, JCR_CONTENT_ROOT);
-                }
-            }
+    /**
+     * Gets an ordered map of all children resources of the experience fragment with the resource name as the key
+     * and the corresponding {@link ComponentExporter} model as the value.
+     *
+     * @return Ordered map of resource names to {@link ComponentExporter} models.
+     */
+    private LinkedHashMap<String, ComponentExporter> getChildren() {
+        if (this.children == null) {
+            this.children = Optional.ofNullable(this.getLocalizedFragmentVariationPath())
+                    .filter(StringUtils::isNotBlank)
+                    .map(this.request.getResourceResolver()::getResource)
+                    .map(Resource::listChildren)
+                    .map(it -> ContentFragmentUtils.getComponentExporters(it, this.modelFactory, this.request))
+                    .orElseGet(LinkedHashMap::new);
         }
-
-        String xfContentPath = StringUtils.join(fragmentVariationPath, JCR_CONTENT_ROOT);
-        if (!resourceExists(localizedFragmentVariationPath) && resourceExists(xfContentPath)) {
-            localizedFragmentVariationPath = xfContentPath;
-        }
-        if (!isExperienceFragmentVariation(localizedFragmentVariationPath)) {
-            localizedFragmentVariationPath = null;
-        }
+        return this.children;
     }
-
-
-
 
     /**
      * Returns the localization root of the resource defined at the given path.
@@ -240,16 +286,19 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @param path the resource path
      * @return the localization root of the resource at the given path if it exists, {@code null} otherwise
      */
-    private String getLocalizationRoot(String path) {
+    @Nullable
+    private String getLocalizationRoot(@Nullable final String path) {
         String root = null;
         if (StringUtils.isNotEmpty(path)) {
-            Resource resource = resolver.getResource(path);
-            root = getLanguageRoot(resource);
-            if (StringUtils.isEmpty(root)) {
-                root = getBlueprintPath(resource);
-            }
-            if (StringUtils.isEmpty(root)) {
-                root = getLiveCopyPath(resource);
+            Resource resource = this.request.getResourceResolver().getResource(path);
+            if (resource != null) {
+                root = getLanguageRoot(resource);
+                if (StringUtils.isEmpty(root)) {
+                    root = getBlueprintPath(resource);
+                }
+                if (StringUtils.isEmpty(root)) {
+                    root = getLiveCopyPath(resource);
+                }
             }
         }
         return root;
@@ -261,12 +310,11 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @param resource the resource
      * @return the language root of the resource if it exists, {@code null} otherwise
      */
-    private String getLanguageRoot(Resource resource) {
-        Page rootPage = languageManager.getLanguageRoot(resource);
-        if (rootPage != null) {
-            return rootPage.getPath();
-        }
-        return null;
+    @Nullable
+    private String getLanguageRoot(@NotNull final Resource resource) {
+        return Optional.ofNullable(languageManager.getLanguageRoot(resource))
+            .map(Page::getPath)
+            .orElse(null);
     }
 
     /**
@@ -275,7 +323,8 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @param resource the resource
      * @return the path of the blueprint of the resource if it exists, {@code null} otherwise
      */
-    private String getBlueprintPath(Resource resource) {
+    @Nullable
+    private String getBlueprintPath(@NotNull final Resource resource) {
         try {
             if (relationshipManager.isSource(resource)) {
                 // the resource is a blueprint
@@ -300,7 +349,8 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @param resource the resource
      * @return the path of the live copy of the resource if it exists, {@code null} otherwise
      */
-    private String getLiveCopyPath(Resource resource) {
+    @Nullable
+    private String getLiveCopyPath(@NotNull final Resource resource) {
         try {
             if (relationshipManager.hasLiveRelationship(resource)) {
                 // the resource is a live copy
@@ -329,20 +379,21 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @param currentPageRoot the localization root of the current page
      * @return the localization root of the experience fragment path if it exists, {@code null} otherwise
      */
-    private String getXfLocalizationRoot(String xfPath, String currentPageRoot) {
-        String xfRoot = null;
+    @Nullable
+    private String getXfLocalizationRoot(@Nullable final String xfPath, @Nullable final String currentPageRoot) {
         if (StringUtils.isNotEmpty(xfPath) && StringUtils.isNotEmpty(currentPageRoot)
-                && resolver.getResource(xfPath) != null && resolver.getResource(currentPageRoot) != null) {
+                && this.request.getResourceResolver().getResource(xfPath) != null
+                && this.request.getResourceResolver().getResource(currentPageRoot) != null) {
             String[] xfPathTokens = Text.explode(xfPath, PATH_DELIMITER_CHAR);
-            String[] referenceRootTokens = Text.explode(currentPageRoot, PATH_DELIMITER_CHAR);
-            int xfRootDepth = referenceRootTokens.length + 1;
+            int xfRootDepth = Text.explode(currentPageRoot, PATH_DELIMITER_CHAR).length + 1;
             if (xfPathTokens.length >= xfRootDepth) {
                 String[] xfRootTokens = new String[xfRootDepth];
                 System.arraycopy(xfPathTokens, 0, xfRootTokens, 0, xfRootDepth);
-                xfRoot = StringUtils.join(PATH_DELIMITER, Text.implode(xfRootTokens, PATH_DELIMITER));
+                return StringUtils.join(PATH_DELIMITER_CHAR,
+                    Text.implode(xfRootTokens, Character.toString(PATH_DELIMITER_CHAR)));
             }
         }
-        return xfRoot;
+        return null;
     }
 
     /**
@@ -351,8 +402,8 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @param path the resource path
      * @return {@code true} if the resource exists, {@code false} otherwise
      */
-    private boolean resourceExists(String path) {
-        return (StringUtils.isNotEmpty(path) && resolver.getResource(path) != null);
+    private boolean resourceExists(@Nullable final String path) {
+        return (StringUtils.isNotEmpty(path) && this.request.getResourceResolver().getResource(path) != null);
     }
 
     /**
@@ -360,13 +411,12 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      *
      * @return {@code true} if the resource is defined in the template, {@code false} otherwise
      */
-    private boolean inTemplate () {
-        if (currentPage == null) {
-            return false;
-        }
-
-        Template template = currentPage.getTemplate();
-        return template != null && StringUtils.startsWith(resource.getPath(), template.getPath());
+    private boolean inTemplate() {
+        return Optional.ofNullable(this.currentPage)
+            .map(Page::getTemplate)
+            .map(Template::getPath)
+            .filter(request.getResource().getPath()::startsWith)
+            .isPresent();
     }
 
     /**
@@ -374,48 +424,13 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      *
      * @return {@code true} if the resource is an XF variation, {@code false} otherwise
      */
-    private boolean isExperienceFragmentVariation(String path) {
-        if (StringUtils.isNotEmpty(path)) {
-            Resource resource = resolver.getResource(path);
-            if (resource != null) {
-                ValueMap properties = resource.getValueMap();
-                String xfVariantType = properties.get(ExperienceFragmentsConstants.PN_XF_VARIANT_TYPE, String.class);
-                return xfVariantType != null;
-            }
-        }
-        return false;
-    }
-
-    private void resolveName(PageManager pageManager) {
-        Page xfVariationPage = pageManager.getPage(fragmentVariationPath);
-        if (xfVariationPage != null) {
-            Page xfPage = xfVariationPage.getParent();
-            if (xfPage != null) {
-                name = xfPage.getName();
-            }
-        }
-    }
-
-    private void retrieveExperienceFragmentChildModels() {
-        if (StringUtils.isNotBlank(localizedFragmentVariationPath) && resourceExists(localizedFragmentVariationPath)) {
-            final Resource experienceFragmentResource = resolver.getResource(localizedFragmentVariationPath);
-
-            if (experienceFragmentResource != null) {
-                Iterator<Resource> experienceFragmentVariantChildResources = experienceFragmentResource.listChildren();
-                Map<String, ComponentExporter> resolvedChildren =
-                        ContentFragmentUtils.getComponentExporters(experienceFragmentVariantChildResources, modelFactory, request);
-                children.putAll(resolvedChildren);
-            }
-        }
-    }
-
-    private void appendCssClassNames() {
-
-        if (children.isEmpty()) {
-            classNames += " empty";
-        }
-
-        classNames += StringUtils.isNotEmpty(customCssClass) ? " " + customCssClass : "";
+    private boolean isExperienceFragmentVariation(@Nullable final String path) {
+        return Optional.ofNullable(path)
+            .filter(StringUtils::isNotEmpty)
+            .map(request.getResourceResolver()::getResource)
+            .map(Resource::getValueMap)
+            .map(vm -> vm.get(ExperienceFragmentsConstants.PN_XF_VARIANT_TYPE, String.class))
+            .isPresent();
     }
 
 }

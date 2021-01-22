@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.models;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Defines the {@code Search} Sling Model used for the {@code /apps/core/wcm/components/search} component.
@@ -76,6 +77,17 @@ public interface Search extends Component {
      */
     @NotNull
     default String getRelativePath() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Gets the path of the localized search root.
+     *
+     * @return The search root path.
+     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     */
+    @NotNull
+    default String getSearchRootPagePath() {
         throw new UnsupportedOperationException();
     }
 

@@ -17,64 +17,113 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
 
+import com.day.cq.wcm.api.LanguageManager;
+import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.LocalizationUtils;
 import com.adobe.cq.wcm.core.components.models.Search;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Search.class, ComponentExporter.class},
-       resourceType = {SearchImpl.RESOURCE_TYPE})
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME ,
-          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class SearchImpl implements Search {
+import java.util.Optional;
 
+/**
+ * Search model implementation.
+ */
+@Model(adaptables = SlingHttpServletRequest.class,
+    adapters = {Search.class, ComponentExporter.class},
+    resourceType = SearchImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class SearchImpl extends AbstractComponentImpl implements Search {
+
+    /**
+     * The resource type.
+     */
     protected static final String RESOURCE_TYPE = "core/wcm/components/search/v1/search";
 
+    /**
+     * Default number of results to show.
+     */
     public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
-    public static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
-    public static final String PROP_SEARCH_ROOT_DEFAULT = "/content";
 
+    /**
+     * Default minimum search term length.
+     */
+    public static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
+
+    /**
+     * The current request.
+     */
     @Self
     private SlingHttpServletRequest request;
 
+    /**
+     * The current page.
+     */
     @ScriptVariable
     private Page currentPage;
 
-    @ScriptVariable
-    private ValueMap properties;
-
+    /**
+     * The current style.
+     */
     @ScriptVariable
     private Style currentStyle;
 
+    /**
+     * The language manager service.
+     */
+    @OSGiService
+    private LanguageManager languageManager;
+
+    /**
+     * The live relationship manager service.
+     */
+    @OSGiService
+    private LiveRelationshipManager relationshipManager;
+
+    /**
+     * The relative path between this component and the containing page.
+     */
     private String relativePath;
+
+    /**
+     * The number of results to return.
+     */
     private int resultsSize;
+
+    /**
+     * The minimum search term length.
+     */
     private int searchTermMinimumLength;
 
+    /**
+     * The path of the search root page.
+     */
+    private String searchRootPagePath;
+
+    /**
+     * Initialize the model.
+     */
     @PostConstruct
     private void initModel() {
         resultsSize = currentStyle.get(PN_RESULTS_SIZE, PROP_RESULTS_SIZE_DEFAULT);
         searchTermMinimumLength = currentStyle.get(PN_SEARCH_TERM_MINIMUM_LENGTH, PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT);
-        PageManager pageManager = currentPage.getPageManager();
         Resource currentResource = request.getResource();
-        if (pageManager != null) {
-            Page containingPage = pageManager.getContainingPage(currentResource);
-            if(containingPage != null) {
-                relativePath = StringUtils.substringAfter(currentResource.getPath(), containingPage.getPath());
-            }
-        }
+        this.relativePath = Optional.ofNullable(currentPage.getPageManager().getContainingPage(currentResource))
+            .map(Page::getPath)
+            .map(path -> StringUtils.substringAfter(currentResource.getPath(), path))
+            .orElse(null);
     }
 
     @Override
@@ -91,6 +140,18 @@ public class SearchImpl implements Search {
     @Override
     public String getRelativePath() {
         return relativePath;
+    }
+
+    @NotNull
+    @Override
+    public String getSearchRootPagePath() {
+        if (this.searchRootPagePath == null) {
+            this.searchRootPagePath = Optional.ofNullable(this.request.getResource().getValueMap().get(Search.PN_SEARCH_ROOT, String.class))
+                .flatMap(searchRoot -> LocalizationUtils.getLocalPage(searchRoot, currentPage, this.request.getResourceResolver(), languageManager, relationshipManager))
+                .map(Page::getPath)
+                .orElseGet(currentPage::getPath);
+        }
+        return this.searchRootPagePath;
     }
 
     @NotNull

@@ -44,7 +44,7 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
                 c.createProxyComponent(formContainerRT, c.proxyPath, "compPathContainer", done);
             })
 
-            // add the form container component
+            // add the core form container component
             .execFct(function(opts, done) {
                 c.addComponent(h.param("compPathContainer")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "containerPath", done);
             })

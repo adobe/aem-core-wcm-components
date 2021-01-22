@@ -22,12 +22,20 @@
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:createdBy"     : "admin",
                         "placeholder"       : "Suche starten",
-                        "navigationRoot"    : "/content/de/search",
                         "jcr:lastModifiedBy": "admin",
                         "jcr:created"       : "Thu Aug 03 2017 20:50:40 GMT+0200",
                         "jcr:lastModified"  : "Thu Aug 03 2017 22:42:00 GMT+0200",
                         "sling:resourceType": "core/wcm/components/search/v1/search"
                     }
+                }
+            },
+            "page2"           : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "Page2",
+                    "jcr:description": "Yoda ist nicht zurück!",
+                    "cq:lastModified": "Thu Aug 03 2020 22:42:00 GMT+0200"
                 }
             }
         }
@@ -63,11 +71,20 @@
                     }
                 }
             },
+            "page2"           : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "Page2",
+                    "jcr:description": "Yoda isn't back!",
+                    "cq:lastModified": "Thu Aug 03 2020 22:42:00 GMT+0200"
+                }
+            },
             "page-template"  : {
                 "jcr:primaryType": "cq:Page",
                 "jcr:content"    : {
                     "jcr:primaryType": "cq:PageContent",
-                    "jcr:title"      : "Page",
+                    "jcr:title"      : "Page3",
                     "cq:template"    : "/conf/test/settings/wcm/templates/search-template",
                     "jcr:description": "Yoda is back!",
                     "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200"

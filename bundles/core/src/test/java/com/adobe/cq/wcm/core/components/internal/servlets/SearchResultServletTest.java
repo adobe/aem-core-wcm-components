@@ -17,15 +17,19 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import javax.jcr.RepositoryException;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
@@ -34,17 +38,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.day.cq.search.PredicateConverter;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
-import com.day.cq.search.result.Hit;
+import com.day.cq.search.eval.PathPredicateEvaluator;
 import com.day.cq.search.result.SearchResult;
-import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,9 +60,10 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class SearchResultServletTest {
@@ -75,18 +79,12 @@ public class SearchResultServletTest {
     @Mock
     private LiveRelationshipManager mockLiveRelationshipManager;
 
-    @Mock
-    private SearchResult mockSearchResult;
-
-    @Mock
-    private Query mockQuery;
-
-    @Mock
-    private Hit mockHit;
+    private ResourceResolver spyResolver;
 
     public final AemContext context = CoreComponentTestContext.newAemContext();
 
     private static final String TEST_ROOT_EN = "/content/en/search/page";
+    private static final String TEST_ROOT_DE = "/content/de/search/page";
     private static final String TEST_TEMPLATE_EN = "/content/en/search/page-template";
     private static final String TEST_XF_PAGE_EN = "/content/en/search/xf-page";
     private static final String TEST_XF_TEMPLATE_EN = "/content/en/search/xf-page-template";
@@ -95,118 +93,171 @@ public class SearchResultServletTest {
     public void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(TEST_BASE + "/test-conf.json", "/conf/test/settings/wcm/templates");
+
         context.registerService(QueryBuilder.class, mockQueryBuilder);
         context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
         underTest = context.registerInjectActivateService(new SearchResultServlet());
     }
 
     /**
-     * Setup search to return only the specified hit.
+     * Sets up a mock query builder.
+     * If there are any results then `this.spyResolver` will be set to a non-null value.
+     *
+     * Note: any query executed on the query builder configured by calling this method will simply list all of the
+     * child pages of the search path. No actual search, or other predicates on the query will be honoured. Therefore,
+     * the results from the query builder cannot be trusted for testing purposes beyond testing the search root and
+     * the handling / transformation of results.
      */
-    protected void setUpSearchResults(Hit hit) {
-        when(mockQueryBuilder.createQuery(any(), any())).thenReturn(mockQuery);
-        when(mockQuery.getResult()).thenReturn(mockSearchResult);
-        when(mockSearchResult.getHits()).thenReturn(Collections.singletonList(hit));
-    }
-
-    /**
-     * Setup search to return the specified hits when certain predicates are used.
-     */
-    protected void setUpSearchResults(PredicateGroup predicates, List<Hit> hits) {
-        when(mockQueryBuilder.createQuery(eq(predicates), any())).thenReturn(mockQuery);
-        when(mockQuery.getResult()).thenReturn(mockSearchResult);
-        when(mockSearchResult.getHits()).thenReturn(hits);
-    }
-
-    /**
-     * Return a list of mock hits based on nodes that contain the search string and are located
-     * under the parent resource.
-     */
-    protected List<Hit> mockHits(Resource parent, String search) throws RepositoryException {
-        List<Hit> hits = new ArrayList<>();
-        for (Resource child : parent.getChildren()) {
-            if (StringUtils.containsIgnoreCase(child.getName(), search)) {
-                Hit hit = mock(Hit.class);
-                hits.add(hit);
-                when(hit.getResource()).thenReturn(child);
-            }
-        }
-        return hits;
+    public void setUpQueryBuilder() {
+        doAnswer(invocationOnQueryBuilder -> {
+            PredicateGroup predicateGroup = invocationOnQueryBuilder.getArgument(0);
+            Query query = Mockito.mock(Query.class);
+            doAnswer(invocationOnQuery -> {
+                SearchResult result = Mockito.mock(SearchResult.class);
+                doAnswer(invocationOnResult -> {
+                    String searchPath = predicateGroup.getByName(PathPredicateEvaluator.PATH).get(PathPredicateEvaluator.PATH);
+                    Iterator<Resource> res = Objects.requireNonNull(this.context.resourceResolver().getResource(searchPath)).listChildren();
+                    List<Resource> resources = StreamSupport.stream(Spliterators.spliteratorUnknownSize(res, Spliterator.ORDERED), false)
+                        .filter(r -> r.isResourceType("cq:Page"))
+                        .collect(Collectors.toList());
+                    if (resources.size() > 0) {
+                        this.spyResolver = Mockito.spy(this.context.resourceResolver());
+                        doNothing().when(spyResolver).close();
+                        Resource spyResource = Mockito.spy(resources.get(0));
+                        doAnswer(invocationOnMock3 -> spyResolver).when(spyResource).getResourceResolver();
+                        resources.set(0, spyResource);
+                    }
+                    return resources.iterator();
+                }).when(result).getResources();
+                return result;
+            }).when(query).getResult();
+            return query;
+        }).when(mockQueryBuilder).createQuery(any(), any());
     }
 
     @Test
     public void testSimpleSearch() throws Exception {
+        setUpQueryBuilder();
         com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
-        Resource resource = context.currentResource(TEST_ROOT_EN);
-        when(mockHit.getResource()).thenReturn(resource);
-        setUpSearchResults(mockHit);
+        context.currentResource(TEST_ROOT_EN);
         MockSlingHttpServletRequest request = context.request();
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> expected = ImmutableList
-                .of(ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page"));
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page", "id", "search-0dc87a6d22-item-2290228025"),
+            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2", "id", "search-0dc87a6d22-item-ad3d190367"),
+            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-0dc87a6d22-item-1abc47fffe"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page.html", "title", "XF Page", "id", "search-0dc87a6d22-item-2246ed81a7"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-0dc87a6d22-item-7345474d48")
+        );
 
         validateResponse(context.response(), expected);
+        verify(this.spyResolver, atLeastOnce()).close();
+    }
+
+    /**
+     * Confirms that the servlet returns 404 status if the result offset is not a long.
+     *
+     * @throws Exception any exception.
+     */
+    @Test
+    public void testSimpleSearch_badOffset() throws Exception {
+        context.currentResource(TEST_ROOT_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod&"
+            + SearchResultServlet.PARAM_RESULTS_OFFSET + "=3x");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+        assertEquals(HttpServletResponse.SC_BAD_REQUEST, context.response().getStatus());
+    }
+
+    @Test
+    public void testSimpleSearch_tooShortQuery() throws Exception {
+        context.currentResource(TEST_ROOT_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yo");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+
+        validateResponse(context.response(), new ArrayList<>());
+    }
+
+    @Test
+    public void testSimpleSearch_default() throws Exception {
+        setUpQueryBuilder();
+        context.currentResource(TEST_ROOT_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
+        underTest.doGet(request, context.response());
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search.html", "title", "Search", "id", "-item-277e64839a")
+        );
+
+        validateResponse(context.response(), expected);
+    }
+
+    @Test
+    public void testSimpleSearch_noPath() throws Exception {
+        setUpQueryBuilder();
+        context.currentResource(TEST_ROOT_DE);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+
+        validateResponse(context.response(), new ArrayList<>());
     }
 
     @Test
     public void testTemplateBasedSearch() throws Exception {
+        setUpQueryBuilder();
         com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
-        Resource resource = context.currentResource(TEST_TEMPLATE_EN);
-        when(mockHit.getResource()).thenReturn(resource);
-        setUpSearchResults(mockHit);
+        context.currentResource(TEST_TEMPLATE_EN);
         MockSlingHttpServletRequest request = context.request();
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> expected = ImmutableList
-                .of(ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page"));
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page", "id", "search-ea349504cd-item-2290228025"),
+            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2", "id", "search-ea349504cd-item-ad3d190367"),
+            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-ea349504cd-item-1abc47fffe"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page.html", "title", "XF Page", "id", "search-ea349504cd-item-2246ed81a7"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-ea349504cd-item-7345474d48")
+        );
 
         validateResponse(context.response(), expected);
+        verify(this.spyResolver, atLeastOnce()).close();
     }
 
     @Test
     public void testXFSearch() throws Exception {
+        setUpQueryBuilder();
         com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
         context.currentResource(TEST_XF_PAGE_EN);
         MockSlingHttpServletRequest request = context.request();
-
-        // Wire resources to search results only for specified search path
-        Map<String, String> predicatesMap = new HashMap<>();
-        predicatesMap.put(SearchResultServlet.PREDICATE_FULLTEXT, "found");
-        predicatesMap.put(SearchResultServlet.PREDICATE_PATH, "/content/en/search/xf-page/searched-tree");
-        predicatesMap.put(SearchResultServlet.PREDICATE_TYPE, NameConstants.NT_PAGE);
-        setUpSearchResults(PredicateConverter.createPredicates(predicatesMap),
-                mockHits(context.resourceResolver().getResource("/content/en/search/xf-page/searched-tree"), "found"));
-
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=found");
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList
-                .of(ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01"),
-                        ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02"));
+                .of(ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01", "id", "search-1f0d0a33b1-item-ee6d5e7860"),
+                        ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02", "id", "search-1f0d0a33b1-item-ee6d5e7860"));
 
         validateResponse(context.response(), expected);
     }
 
     @Test
     public void testXFTemplateSearch() throws Exception {
+        setUpQueryBuilder();
         com.adobe.cq.wcm.core.components.Utils.enableDataLayer(context, true);
         context.currentResource(TEST_XF_TEMPLATE_EN);
         MockSlingHttpServletRequest request = context.request();
-
-        // Wire resources to search results only for specified search path
-        Map<String, String> predicatesMap = new HashMap<>();
-        predicatesMap.put(SearchResultServlet.PREDICATE_FULLTEXT, "found");
-        predicatesMap.put(SearchResultServlet.PREDICATE_PATH, "/content/en/search/xf-page/searched-tree");
-        predicatesMap.put(SearchResultServlet.PREDICATE_TYPE, NameConstants.NT_PAGE);
-        setUpSearchResults(PredicateConverter.createPredicates(predicatesMap),
-                mockHits(context.resourceResolver().getResource("/content/en/search/xf-page/searched-tree"), "found"));
-
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=found");
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
@@ -232,6 +283,7 @@ public class SearchResultServletTest {
         for (int i = 0; i < expected.size(); i++) {
             Map<String, String> expectedMap = expected.get(i);
             ListItem listItem = listItems[i];
+            assertEquals(expectedMap.get("id"), listItem.getId());
             assertEquals(expectedMap.get("url"), listItem.getURL());
             assertEquals(expectedMap.get("title"), listItem.getTitle());
 

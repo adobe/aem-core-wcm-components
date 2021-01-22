@@ -15,8 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.testing.mock.osgi.MapUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,10 +29,14 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
+import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static org.apache.sling.api.resource.ResourceResolver.PROPERTY_RESOURCE_TYPE;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(AemContextExtension.class)
 class TabsImplTest {
@@ -89,6 +97,63 @@ class TabsImplTest {
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs3"));
     }
 
+    @Test
+    void testDataLayerShownItems_ThreeItems_NoActiveItem() {
+        Resource tabsResource = createTabsResource();
+        addTabsItemResources(tabsResource, "item1", "item2", "item3");
+
+        Tabs tabs = getTabsUnderTest(tabsResource.getPath());
+        assertEquals("item1", tabs.getActiveItem());
+        assertArrayEquals(new String[] {"tabs-3d7c531ec1-item-58f3fa999a"}, ((TabsImpl)tabs).getDataLayerShownItems());
+    }
+
+    @Test
+    void testDataLayerShownItems_ThreeItems_ActiveItem() {
+        Resource tabsResource = createTabsResource("activeItem", "item2");
+        addTabsItemResources(tabsResource, "item1", "item2", "item3");
+
+        Tabs tabs = getTabsUnderTest(tabsResource.getPath());
+        assertEquals("item2", tabs.getActiveItem());
+        assertArrayEquals(new String[] {"tabs-3d7c531ec1-item-e2c847d465"}, ((TabsImpl)tabs).getDataLayerShownItems());
+    }
+
+    @Test
+    void testDataLayerShownItems_ThreeItems_InvalidActiveItem() {
+        Resource tabsResource = createTabsResource("activeItem", "not-existing-item");
+        addTabsItemResources(tabsResource, "item1", "item2", "item3");
+
+        Tabs tabs = getTabsUnderTest(tabsResource.getPath());
+        assertEquals("item1", tabs.getActiveItem());
+        assertArrayEquals(new String[] {"tabs-3d7c531ec1-item-58f3fa999a"}, ((TabsImpl)tabs).getDataLayerShownItems());
+    }
+
+    @Test
+    void testDataLayerShownItems_NoItems_NoActiveItem() {
+        Resource tabsResource = createTabsResource();
+
+        Tabs tabs = getTabsUnderTest(tabsResource.getPath());
+        assertNull(tabs.getActiveItem());
+        assertArrayEquals(new String[0], ((TabsImpl)tabs).getDataLayerShownItems());
+    }
+
+    @Test
+    void testDataLayerShownItems_NoItems_ActiveItem() {
+        Resource tabsResource = createTabsResource("activeItem", "item2");
+
+        Tabs tabs = getTabsUnderTest(tabsResource.getPath());
+        assertNull(tabs.getActiveItem());
+        assertArrayEquals(new String[0], ((TabsImpl)tabs).getDataLayerShownItems());
+    }
+
+    @Test
+    void testDataLayerShownItems_NoItems_InvalidActiveItem() {
+        Resource tabsResource = createTabsResource("activeItem", "not-existing-item");
+
+        Tabs tabs = getTabsUnderTest(tabsResource.getPath());
+        assertNull(tabs.getActiveItem());
+        assertArrayEquals(new String[0], ((TabsImpl)tabs).getDataLayerShownItems());
+    }
+
     private Tabs getTabsUnderTest(String resourcePath) {
         Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
@@ -105,4 +170,21 @@ class TabsImplTest {
             index++;
         }
     }
+
+    private Resource createTabsResource(Object... properties) {
+        Map<String,Object> props = new HashMap<>();
+        props.put(PROPERTY_RESOURCE_TYPE, TabsImpl.RESOURCE_TYPE);
+        props.putAll(MapUtil.toMap(properties));
+
+        Page testPage = context.pageManager().getPage(TEST_ROOT_PAGE);
+        return context.create().resource(testPage, "tabs-test", props);
+    }
+
+    private void addTabsItemResources(Resource tabsResource, String... itemNames) {
+        for (String itemName : itemNames) {
+            context.create().resource(tabsResource, itemName,
+                    PROPERTY_RESOURCE_TYPE, TeaserImpl.RESOURCE_TYPE);
+        }
+    }
+
 }

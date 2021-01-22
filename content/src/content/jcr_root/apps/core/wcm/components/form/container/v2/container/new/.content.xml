@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    jcr:description="New Paragraph - Form Container (v2) - HTL"
+    jcr:description="New Paragraph - Core Form Container (v2) - HTL"
     jcr:primaryType="cq:Component"
-    jcr:title="New Paragraph - Form Container Component (v2)"
+    jcr:title="New Paragraph - Core Form Container Component (v2)"
     sling:resourceSuperType="wcm/foundation/components/parsys/newpar"
     cq:deprecated="Core Components 2.8.0"
-    cq:deprecatedReason="The Form Container now uses the responsive grid new component by default, overriding this in a proxy will not have an effect."
+    cq:deprecatedReason="The Core Form Container now uses the responsive grid new component by default, overriding this in a proxy will not have an effect."
     componentGroup=".hidden"/>
