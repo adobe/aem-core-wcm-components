@@ -245,9 +245,9 @@ public class SearchResultServletTest {
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> expected = ImmutableList
-                .of(ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01", "id", "search-1f0d0a33b1-item-ee6d5e7860"),
-                        ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02", "id", "search-1f0d0a33b1-item-ee6d5e7860"));
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01", "id", "search-1f0d0a33b1-item-ee6d5e7860"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02", "id", "search-1f0d0a33b1-item-ee6d5e7860"));
 
         validateResponse(context.response(), expected);
     }
@@ -262,9 +262,9 @@ public class SearchResultServletTest {
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> expected = ImmutableList
-                .of(ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01"),
-                        ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02"));
+        List<Map<String, String>> expected = ImmutableList.of(
+            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01"),
+            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02"));
 
         validateResponse(context.response(), expected);
     }

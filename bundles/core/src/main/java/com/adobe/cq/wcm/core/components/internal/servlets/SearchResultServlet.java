@@ -181,6 +181,7 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
             .filter(path -> StringUtils.startsWith(path, "/"))
             .map(path -> StringUtils.substring(path, 1))
             .orElse(suffix);
+
         return Optional.ofNullable(relativeContentResource)
             .filter(StringUtils::isNotEmpty)
             .map(rcr -> getSearchComponentResourceFromPage(request.getResource(), rcr)
@@ -188,41 +189,40 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
                     .orElse(null)))
             .map(resource -> modelFactory.getModelFromWrappedRequest(request, resource, Search.class))
             .orElseGet(() -> new DefaultSearch(currentPage, request.getResourceResolver()));
-        }
+    }
 
 
     private Optional<Resource> getSearchComponentResourceFromPage(@NotNull final Resource pageResource, final String relativeContentResource) {
-
         return Optional.ofNullable(Optional.ofNullable(pageResource.getChild(relativeContentResource))
-                .orElse(getSearchComponentResourceFromFragments(pageResource.getChild(NameConstants.NN_CONTENT), relativeContentResource)
+            .orElse(getSearchComponentResourceFromFragments(pageResource.getChild(NameConstants.NN_CONTENT), relativeContentResource)
                 .orElse(null)));
     }
 
     private Optional<Resource> getSearchComponentResourceFromTemplate(@NotNull final Page currentPage, final String relativeCotentResource) {
         return Optional.ofNullable(currentPage.getTemplate())
-                .map(Template::getPath)
-                .map(currentPage.getContentResource().getResourceResolver()::getResource)
-                .map(templateResource -> Optional.ofNullable(templateResource.getChild(NN_STRUCTURE + "/" + relativeCotentResource))
-                        .orElse(getSearchComponentResourceFromFragments(templateResource, relativeCotentResource)
-                                .orElse(null)));
+            .map(Template::getPath)
+            .map(currentPage.getContentResource().getResourceResolver()::getResource)
+            .map(templateResource -> Optional.ofNullable(templateResource.getChild(NN_STRUCTURE + "/" + relativeCotentResource))
+                .orElse(getSearchComponentResourceFromFragments(templateResource, relativeCotentResource)
+                    .orElse(null)));
     }
 
     private Optional<Resource> getSearchComponentResourceFromFragments(Resource resource, String relativeContentResource) {
         return Optional.ofNullable(resource)
-                .map(res -> findFragmentProperties(res, relativeContentResource)
-                    .orElse(StreamSupport.stream(res.getChildren().spliterator(), false)
-                            .map(child -> getSearchComponentResourceFromFragments(child, relativeContentResource).orElse(null))
-                            .filter(Objects::nonNull)
-                            .findFirst()
-                            .orElse(null)));
+            .map(res -> findFragmentProperties(res, relativeContentResource)
+                .orElse(StreamSupport.stream(res.getChildren().spliterator(), false)
+                    .map(child -> getSearchComponentResourceFromFragments(child, relativeContentResource).orElse(null))
+                    .filter(Objects::nonNull)
+                    .findFirst()
+                    .orElse(null)));
     }
 
     private Optional<Resource> findFragmentProperties(Resource candidate, String relativeContentResource) {
         return Optional.ofNullable(candidate)
-                .map(Resource::getValueMap)
-                .filter(properties -> properties.containsKey(PN_FRAGMENT_VARIATION_PATH))
-                .map(properties -> properties.get(PN_FRAGMENT_VARIATION_PATH, String.class))
-                .map(path -> candidate.getResourceResolver().getResource(path + "/" + relativeContentResource));
+            .map(Resource::getValueMap)
+            .filter(properties -> properties.containsKey(PN_FRAGMENT_VARIATION_PATH))
+            .map(properties -> properties.get(PN_FRAGMENT_VARIATION_PATH, String.class))
+            .map(path -> candidate.getResourceResolver().getResource(path + "/" + relativeContentResource));
     }
 
     /**
