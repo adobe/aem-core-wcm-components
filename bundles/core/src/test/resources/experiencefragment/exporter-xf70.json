@@ -3,8 +3,8 @@
     "configured": true,
     ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
     ":itemsOrder": [
-        "image",
-        "text"
+        "text",
+        "image"
     ],
     ":items": {
         "image": {
