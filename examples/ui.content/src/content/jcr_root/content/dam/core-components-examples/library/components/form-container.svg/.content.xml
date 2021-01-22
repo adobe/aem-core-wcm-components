@@ -14,7 +14,7 @@
             dam:size="{Long}1766"
             dc:format="image/svg+xml"
             dc:modified="{Date}2020-01-16T18:09:51.376+01:00"
-            dc:title="Form Container"
+            dc:title="Core Form Container"
             jcr:lastModified="{Date}2020-01-16T18:09:51.376+01:00"
             jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"

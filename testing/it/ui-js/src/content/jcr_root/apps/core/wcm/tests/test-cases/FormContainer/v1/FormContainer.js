@@ -49,7 +49,7 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
                 c.createProxyComponent(formContainerRT, c.proxyPath, "compPathContainer", done);
             })
 
-            // add the form container component
+            // add the core form container component
             .execFct(function(opts, done) {
                 c.addComponent(h.param("compPathContainer")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "containerPath", done);
             })
@@ -289,7 +289,7 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
             .execFct(function(opts, done) {
                 c.getJSON(h.param("containerPath")() + "/from.json", "json", done);
             })
-            // get the json for the form container
+            // get the json for the core form container
             .execFct(function(opts, done) {
                 c.getJSON(h.param("containerPath")() + ".json", "json", done);
             })
