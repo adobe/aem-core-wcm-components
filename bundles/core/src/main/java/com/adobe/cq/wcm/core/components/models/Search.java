@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.models;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Defines the {@code Search} Sling Model used for the {@code /apps/core/wcm/components/search} component.
