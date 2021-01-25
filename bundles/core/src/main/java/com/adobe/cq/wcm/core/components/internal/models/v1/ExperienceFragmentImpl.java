@@ -176,7 +176,10 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
             final Page page = this.currentPage;
             if (page != null && inTemplate()) {
-                final Resource pageResource = currentPage.adaptTo(Resource.class);
+                final Resource pageResource = Optional.ofNullable(currentPage)
+                    .map(p -> p.adaptTo(Resource.class))
+                    .orElse(null);
+
                 final String currentPageRootPath = pageResource != null ? LocalizationUtils.getLocalizationRoot(pageResource, request
                     .getResourceResolver(), languageManager, relationshipManager) : null;
                 // we should use getLocalizationRoot instead of getXfLocalizationRoot once the XF UI supports creating Live and Language Copies
