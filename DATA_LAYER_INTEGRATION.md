@@ -130,7 +130,7 @@ Download | 
 Embed | 
 Experience Fragment | 
 Form button | 
-Form container | 
+Core Form container | 
 Form hidden field | 
 Form options field | 
 Form text field | 

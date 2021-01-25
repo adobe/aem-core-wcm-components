@@ -42,7 +42,7 @@ import com.day.cq.wcm.foundation.forms.FormsHandlingServletHelper;
 import com.day.cq.wcm.foundation.security.SaferSlingPostValidator;
 
 /**
- * This form handling servlet accepts POSTs to a form container
+ * This form handling servlet accepts POSTs to a core form container
  * but only if the selector "form" and the extension "html" is used.
  */
 @SuppressWarnings("serial")
@@ -68,7 +68,7 @@ public class CoreFormHandlingServlet
 
     @ObjectClassDefinition(
             name = "Core Form Handling Servlet",
-            description = "Accepts posting to a form container component and performs validations"
+            description = "Accepts posting to a core form container component and performs validations"
     )
     @interface Configuration {
         @AttributeDefinition(

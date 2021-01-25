@@ -15,12 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.util;
 
+import java.util.Optional;
+
 import javax.jcr.RangeIterator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +57,7 @@ public class LocalizationUtils {
      * @param relationshipManager the live relationship manager service
      * @return the localization root of the resource at the given path if it exists, {@code null} otherwise
      */
+    @Nullable
     public static String getLocalizationRoot(@NotNull Resource resource, @NotNull ResourceResolver resolver,
         @NotNull LanguageManager languageManager, @NotNull LiveRelationshipManager relationshipManager) {
         String root = getLanguageRoot(resource, languageManager);
@@ -73,12 +77,11 @@ public class LocalizationUtils {
      * @param languageManager the language manager service
      * @return the language root of the resource if it exists, {@code null} otherwise
      */
+    @Nullable
     public static String getLanguageRoot(@NotNull Resource resource, @NotNull LanguageManager languageManager) {
-        Page rootPage = languageManager.getLanguageRoot(resource);
-        if (rootPage != null) {
-            return rootPage.getPath();
-        }
-        return null;
+        return Optional.ofNullable(languageManager.getLanguageRoot(resource))
+            .map(Page::getPath)
+            .orElse(null);
     }
 
     /**
@@ -88,6 +91,7 @@ public class LocalizationUtils {
      * @param relationshipManager the live relationship manager service
      * @return the path of the blueprint of the resource if it exists, {@code null} otherwise
      */
+    @Nullable
     public static String getBlueprintPath(@NotNull Resource resource, @NotNull LiveRelationshipManager relationshipManager) {
         try {
             if (relationshipManager.isSource(resource)) {
@@ -114,6 +118,7 @@ public class LocalizationUtils {
      * @param relationshipManager the live relationship manager service
      * @return the path of the live copy of the resource if it exists, {@code null} otherwise
      */
+    @Nullable
     public static String getLiveCopyPath(@NotNull Resource resource, @NotNull LiveRelationshipManager relationshipManager) {
         try {
             if (relationshipManager.hasLiveRelationship(resource)) {

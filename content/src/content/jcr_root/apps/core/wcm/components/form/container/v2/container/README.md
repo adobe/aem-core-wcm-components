@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Form Container (v2)
+Core Form Container (v2)
 ====
 Form container written in HTL.
 
@@ -23,7 +23,7 @@ Form container written in HTL.
 * Thank you page
 
 ### Use Object
-The Form Container component uses the `com.adobe.cq.wcm.core.components.models.form.Container` Sling Model for its Use-object.
+The Core Form Container component uses the `com.adobe.cq.wcm.core.components.models.form.Container` Sling Model for its Use-object.
 
 ### Component Policy Configuration Properties
 The following configuration properties are used:
@@ -32,7 +32,8 @@ The following configuration properties are used:
 2. `./columns` - defines the number of columns for the container's grid for a Form Container associated to this component policy
 
 ### Edit Dialog Properties
-The following properties are written to JCR for this Form Container component and are expected to be available as `Resource` properties:
+The following properties are written to JCR for this Core Form Container component and are expected to be available as `Resource` 
+properties:
 
 1. `./actionType` - defines the action that will be performed by the form
 2. `./workflowModel` - defines the workflow which should be started with the stored content as payload

@@ -94,6 +94,32 @@
                     jcr:primaryType="nt:unstructured"
                     features="bold,italic"/>
             </rtePlugins>
+            <uiSettings jcr:primaryType="nt:unstructured">
+                <cui jcr:primaryType="nt:unstructured">
+                    <inline
+                        jcr:primaryType="nt:unstructured"
+                        toolbar="[#format,#justify,#lists,links#modifylink,links#unlink,#paraformat,fullscreen#start,control#close,control#save]">
+                        <popovers jcr:primaryType="nt:unstructured">
+                            <format
+                                jcr:primaryType="nt:unstructured"
+                                items="[format#bold,format#italic,format#underline]"
+                                ref="format"/>
+                            <justify
+                                jcr:primaryType="nt:unstructured"
+                                items="[justify#justifyleft,justify#justifycenter,justify#justifyright,justify#justifyjustify]"
+                                ref="justify"/>
+                            <lists
+                                jcr:primaryType="nt:unstructured"
+                                items="[lists#unordered,lists#ordered,lists#outdent,lists#indent]"
+                                ref="lists"/>
+                            <paraformat
+                                jcr:primaryType="nt:unstructured"
+                                items="paraformat:getFormats:paraformat-pulldown"
+                                ref="paraformat"/>
+                        </popovers>
+                    </inline>
+                </cui>
+            </uiSettings>
         </inplaceEditingConfig>
     </cq:inplaceEditing>
 </jcr:root>
