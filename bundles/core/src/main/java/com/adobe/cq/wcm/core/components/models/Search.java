@@ -80,6 +80,17 @@ public interface Search extends Component {
     }
 
     /**
+     * Gets the path of the localized search root.
+     *
+     * @return The search root path.
+     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     */
+    @NotNull
+    default String getSearchRootPagePath() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
