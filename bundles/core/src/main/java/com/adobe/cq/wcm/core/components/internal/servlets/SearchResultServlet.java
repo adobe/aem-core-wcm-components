@@ -177,15 +177,15 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
     @NotNull
     private Search getSearchComponent(@NotNull final SlingHttpServletRequest request, @NotNull final Page currentPage) {
         String suffix = request.getRequestPathInfo().getSuffix();
-        String relativeContentResource = Optional.ofNullable(suffix)
+        String relativeContentResourcePath = Optional.ofNullable(suffix)
             .filter(path -> StringUtils.startsWith(path, "/"))
             .map(path -> StringUtils.substring(path, 1))
             .orElse(suffix);
 
-        return Optional.ofNullable(relativeContentResource)
+        return Optional.ofNullable(relativeContentResourcePath)
             .filter(StringUtils::isNotEmpty)
-            .map(rcr -> getSearchComponentResourceFromPage(request.getResource(), rcr)
-                .orElse(getSearchComponentResourceFromTemplate(currentPage, rcr)
+            .map(rcrp -> getSearchComponentResourceFromPage(request.getResource(), rcrp)
+                .orElse(getSearchComponentResourceFromTemplate(currentPage, rcrp)
                     .orElse(null)))
             .map(resource -> modelFactory.getModelFromWrappedRequest(request, resource, Search.class))
             .orElseGet(() -> new DefaultSearch(currentPage, request.getResourceResolver()));
@@ -195,43 +195,43 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
      * Gets the search component resource from the page. Looks inside experience fragments in the page too.
      *
      * @param pageResource The page resource.
-     * @param relativeContentResource The relative path of the search component resource.
+     * @param relativeContentResourcePath The relative path of the search component resource.
      * @return The search component resource.
      */
-    private Optional<Resource> getSearchComponentResourceFromPage(@NotNull final Resource pageResource, final String relativeContentResource) {
-        return Optional.ofNullable(Optional.ofNullable(pageResource.getChild(relativeContentResource))
-            .orElse(getSearchComponentResourceFromFragments(pageResource.getChild(NameConstants.NN_CONTENT), relativeContentResource)
+    private Optional<Resource> getSearchComponentResourceFromPage(@NotNull final Resource pageResource, final String relativeContentResourcePath) {
+        return Optional.ofNullable(Optional.ofNullable(pageResource.getChild(relativeContentResourcePath))
+            .orElse(getSearchComponentResourceFromFragments(pageResource.getChild(NameConstants.NN_CONTENT), relativeContentResourcePath)
                 .orElse(null)));
     }
 
     /**
-     * Gets the search component resource from the page's template. Looks inside experience fragments in the templat too.
+     * Gets the search component resource from the page's template. Looks inside experience fragments in the template too.
      *
      * @param currentPage The current page, whose template will be used.
-     * @param relativeCotentResource The relative path of the search component resource.
+     * @param relativeContentResourcePath The relative path of the search component resource.
      * @return The search component resource.
      */
-    private Optional<Resource> getSearchComponentResourceFromTemplate(@NotNull final Page currentPage, final String relativeCotentResource) {
+    private Optional<Resource> getSearchComponentResourceFromTemplate(@NotNull final Page currentPage, final String relativeContentResourcePath) {
         return Optional.ofNullable(currentPage.getTemplate())
             .map(Template::getPath)
             .map(currentPage.getContentResource().getResourceResolver()::getResource)
-            .map(templateResource -> Optional.ofNullable(templateResource.getChild(NN_STRUCTURE + "/" + relativeCotentResource))
-                .orElse(getSearchComponentResourceFromFragments(templateResource, relativeCotentResource)
+            .map(templateResource -> Optional.ofNullable(templateResource.getChild(NN_STRUCTURE + "/" + relativeContentResourcePath))
+                .orElse(getSearchComponentResourceFromFragments(templateResource, relativeContentResourcePath)
                     .orElse(null)));
     }
 
     /**
-     * Gets the search component resource from experience fragments under the resource. Walks down the children tree.
+     * Gets the search component resource from experience fragments under the resource. Walks down the descendants tree.
      *
      * @param resource The resource where experience fragments with search component would be looked up.
-     * @param relativeContentResource The relative path of the search component resource.
+     * @param relativeContentResourcePath The relative path of the search component resource.
      * @return The search component resource.
      */
-    private Optional<Resource> getSearchComponentResourceFromFragments(Resource resource, String relativeContentResource) {
+    private Optional<Resource> getSearchComponentResourceFromFragments(Resource resource, String relativeContentResourcePath) {
         return Optional.ofNullable(resource)
-            .map(res -> findFragmentProperties(res, relativeContentResource)
+            .map(res -> getSearchComponentResourceFromFragment(res, relativeContentResourcePath)
                 .orElse(StreamSupport.stream(res.getChildren().spliterator(), false)
-                    .map(child -> getSearchComponentResourceFromFragments(child, relativeContentResource).orElse(null))
+                    .map(child -> getSearchComponentResourceFromFragments(child, relativeContentResourcePath).orElse(null))
                     .filter(Objects::nonNull)
                     .findFirst()
                     .orElse(null)));
@@ -241,15 +241,14 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
      * Gets the search component resource from a candidate experience fragment component resource.
      *
      * @param candidate The candidate experience fragment component resource.
-     * @param relativeContentResource The relative path of the search component resource.
+     * @param relativeContentResourcePath The relative path of the search component resource.
      * @return The search component resource.
      */
-    private Optional<Resource> findFragmentProperties(Resource candidate, String relativeContentResource) {
+    private Optional<Resource> getSearchComponentResourceFromFragment(Resource candidate, String relativeContentResourcePath) {
         return Optional.ofNullable(candidate)
             .map(Resource::getValueMap)
-            .filter(properties -> properties.containsKey(PN_FRAGMENT_VARIATION_PATH))
             .map(properties -> properties.get(PN_FRAGMENT_VARIATION_PATH, String.class))
-            .map(path -> candidate.getResourceResolver().getResource(path + "/" + relativeContentResource));
+            .map(path -> candidate.getResourceResolver().getResource(path + "/" + relativeContentResourcePath));
     }
 
     /**
