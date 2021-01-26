@@ -13,6 +13,14 @@
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
             sling:resourceType="core/wcm/components/container/v1/container"
-            layout="simple"/>
+            layout="simple">
+            <container
+                jcr:created="{Date}2020-11-27T17:53:54.583+02:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2020-11-27T17:54:02.429+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/container/v1/container"/>
+        </root>
     </jcr:content>
 </jcr:root>
