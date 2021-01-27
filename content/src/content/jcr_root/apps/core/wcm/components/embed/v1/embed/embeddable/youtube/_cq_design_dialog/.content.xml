@@ -176,10 +176,10 @@
                 <enable
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                    checked="false"
-                    fieldDescription="If enabled related videos will come from the same channel as the video that was just played, otherwise from any channel."
+                    checked="true"
+                    fieldDescription="If disabled related videos will come from the same channel as the video that was just played, otherwise from any channel."
                     name="./youtubeRelatedVideosDefaultValue"
-                    text="Default Value of related videos"
+                    text="Default Value of Unrestricted Related Videos"
                     uncheckedValue="false"
                     value="true"/>
             </items>

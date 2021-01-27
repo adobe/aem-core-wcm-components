@@ -76,7 +76,7 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                     text="Enable Loop"
-                    checked="${cqDesign.youtubteLoopDefaultValue == 'true'}"
+                    checked="${cqDesign.youtubeLoopDefaultValue == 'true'}"
                     uncheckedValue="false"
                     value="true"
                     fieldDescription="In the case of a single video specifies whether the player should play the initial video again and again. In the case of a playlist, the player plays the entire playlist and then starts again at the first video."
@@ -103,11 +103,11 @@
                 <rel
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                    text="Restrict Related Videos"
-                    checked="${cqDesign.youtubeRelatedVideosDefaultValue == 'true'}"
+                    text="Unrestricted Related Videos"
+                    checked="${cqDesign.youtubeRelatedVideosDefaultValue != 'false'}"
                     uncheckedValue="false"
                     value="true"
-                    fieldDescription="If enabled related videos will come from the same channel as the video that was just played, otherwise from any channel."
+                    fieldDescription="If disabled related videos will come from the same channel as the video that was just played, otherwise from any channel."
                     name="./youtubeRel">
                     <granite:rendercondition
                         jcr:primaryType="nt:unstructured"
