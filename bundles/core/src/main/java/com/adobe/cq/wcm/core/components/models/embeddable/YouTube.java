@@ -67,11 +67,11 @@ public interface YouTube {
 
     String  PN_DESIGN_PLAYS_INLINE_DEFAULT_VALUE = "youtubePlaysInlineDefaultValue";
 
-    default @Nullable Integer getIFrameWidth() {
+    default @Nullable String getIFrameWidth() {
         throw new UnsupportedOperationException();
     }
 
-    default @Nullable Integer getIFrameHeight() {
+    default @Nullable String getIFrameHeight() {
         throw new UnsupportedOperationException();
     }
 

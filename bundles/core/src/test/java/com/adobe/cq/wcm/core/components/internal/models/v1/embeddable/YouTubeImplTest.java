@@ -104,8 +104,8 @@ class YouTubeImplTest {
         Mockito.when(page.getLanguage()).thenReturn(Locale.US);
         YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_1);
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=en_US&mute=1&autoplay=1&loop=1&playlist=2R2gb0MKJlo&rel=1&playsinline=1"), youTube.getIFrameSrc(style).get());
-        assertEquals(new Integer(300), youTube.getIFrameWidth());
-        assertEquals(new Integer(200), youTube.getIFrameHeight());
+        assertEquals("300", youTube.getIFrameWidth());
+        assertEquals("200", youTube.getIFrameHeight());
     }
 
     @Test
@@ -115,8 +115,8 @@ class YouTubeImplTest {
         YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_1);
         // autoplay should not be set in edit mode
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=en_US&mute=1&loop=1&playlist=2R2gb0MKJlo&rel=1&playsinline=1"), youTube.getIFrameSrc(style).get());
-        assertEquals(new Integer(300), youTube.getIFrameWidth());
-        assertEquals(new Integer(200), youTube.getIFrameHeight());
+        assertEquals("300", youTube.getIFrameWidth());
+        assertEquals("200", youTube.getIFrameHeight());
     }
 
     @Test

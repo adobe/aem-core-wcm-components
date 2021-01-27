@@ -73,11 +73,11 @@ public class YouTubeImpl implements YouTube {
 
     @ValueMapValue(name = PN_WIDTH)
     @Nullable
-    private Integer iFrameWidth;
+    private String iFrameWidth;
 
     @ValueMapValue(name = PN_HEIGHT)
     @Nullable
-    private Integer iFrameHeight;
+    private String iFrameHeight;
 
     @ValueMapValue(name = PN_MUTE)
     @Nullable
@@ -114,12 +114,12 @@ public class YouTubeImpl implements YouTube {
     }
 
     @Override
-    public @Nullable Integer getIFrameWidth() {
+    public @Nullable String getIFrameWidth() {
         return iFrameWidth;
     }
 
     @Override
-    public @Nullable Integer getIFrameHeight() {
+    public @Nullable String getIFrameHeight() {
         return iFrameHeight;
     }
 
