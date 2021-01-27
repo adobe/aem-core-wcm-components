@@ -1,0 +1,46 @@
+{
+    "youtube": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Embed Test Page",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "jcr:description": "Test page with embed component configurations",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "video1": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/embed/v1/embed",
+                        "type": "embeddable",
+                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube",
+                        "youtubeVideoId": "2R2gb0MKJlo",
+                        "youtubeWidth": "300",
+                        "youtubeHeight": "200"
+                    },
+                    "video2": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/embed/v1/embed",
+                        "type": "embeddable",
+                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube",
+                        "youtubeVideoId": "2R2gb0MKJlo",
+                        "youtubeAutoPlay": "false",
+                        "youtubeMute": "false",
+                        "youtubeLoop": "false",
+                        "youtubeRel": "false",
+                        "youtubePlaysInline": "false"
+                    },
+                    "video3": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/embed/v1/embed",
+                        "type": "embeddable",
+                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube"
+                    }
+                }
+            }
+        }
+    }
+}
