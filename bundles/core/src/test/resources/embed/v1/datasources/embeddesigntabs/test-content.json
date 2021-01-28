@@ -1,0 +1,203 @@
+{
+    "jcr:primaryType": "nt:unstructured",
+    "embed": {
+        "jcr:primaryType": "nt:unstructured",
+        "embeddesigntabsdatasource": {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType": "core/wcm/components/embed/v1/datasources/embeddesigntabs" 
+        },
+        "firsttabs": {
+            "jcr:primaryType": "nt:unstructured",
+            "first" : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "second": {
+                "jcr:primaryType": "nt:unstructured"
+            }
+        },
+        "lasttabs": {
+            "jcr:primaryType": "nt:unstructured",
+             "last": {
+                "jcr:primaryType": "nt:unstructured"
+            }
+        }
+    },
+   
+    "my-app": {
+        "youtube": {
+            "jcr:primaryType": "cq:Component",
+            "jcr:title": "YouTube",
+            "sling:resourceSuperType": "core/wcm/components/embed/v1/embed/embeddable",
+            "order": 1,
+            "componentGroup": ".hidden",
+            "youtube.html": {
+                "jcr:primaryType": "nt:file",
+                "jcr:createdBy": "admin",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:mimeType": "text/html",
+                    ":jcr:data": 2402,
+                    "jcr:uuid": "0ae6d2c7-6fb1-43f2-8a84-3050458d6dca"
+                }
+            },
+            "cq:dialog": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "YouTube Options",
+                "sling:resourceType": "granite/ui/components/coral/foundation/container",
+                "items": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "youtubeVideoId": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "YouTube video ID.",
+                        "fieldLabel": "Video ID",
+                        "name": "./youtubeVideoId",
+                        "required": true
+                    },
+                    "youtubeWidth": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/numberfield",
+                        "fieldDescription": "YouTube video player Width.",
+                        "fieldLabel": "Width",
+                        "name": "./youtubeWidth"
+                    },
+                    "youtubeHeight": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/numberfield",
+                        "fieldDescription": "YouTube video player height.",
+                        "fieldLabel": "Height",
+                        "name": "./youtubeHeight"
+                    }
+                },
+                "granite:data": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "cmp-embed-dialog-edit-embeddableoptions": true,
+                    "cmp-embed-dialog-edit-showhidetargetvalue": "core-components-examples/components/embeddables/youtube"
+                }
+            },
+            "cq:design_dialog": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "YouTube Design Tab",
+                "sling:resourceType": "granite/ui/components/coral/foundation/container",
+                "items": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "youtubeVideoId": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "YouTube video ID.",
+                        "fieldLabel": "Video ID",
+                        "name": "./youtubeVideoId",
+                        "required": true
+                    },
+                    "youtubeWidth": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/numberfield",
+                        "fieldDescription": "YouTube video player Width.",
+                        "fieldLabel": "Width",
+                        "name": "./youtubeWidth"
+                    },
+                    "youtubeHeight": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/numberfield",
+                        "fieldDescription": "YouTube video player height.",
+                        "fieldLabel": "Height",
+                        "name": "./youtubeHeight"
+                    }
+                },
+                "granite:data": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "cmp-embed-dialog-edit-embeddableoptions": true,
+                    "cmp-embed-dialog-edit-showhidetargetvalue": "core-components-examples/components/embeddables/youtube"
+                }
+            }
+        },
+        "chatbot": {
+            "jcr:primaryType": "cq:Component",
+            "jcr:title": "Chatbot",
+            "sling:resourceSuperType": "core/wcm/components/embed/v1/embed/embeddable",
+            "order": 2,
+            "componentGroup": ".hidden",
+            "chatbot.html": {
+                "jcr:primaryType": "nt:file",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:mimeType": "text/html",
+                    ":jcr:data": 2402,
+                    "jcr:uuid": "0ae6d2c7-6fb1-43f2-8a84-3050458d6dca"
+                }
+            },
+            "cq:dialog": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "Chatbot Options",
+                "sling:resourceType": "granite/ui/components/coral/foundation/container",
+                "items": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "chatbotId": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "Chatbot ID",
+                        "fieldLabel": "ID",
+                        "name": "./chatbotId",
+                        "required": true
+                    },
+                    "chatbotCaption": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "Chatbot caption.",
+                        "fieldLabel": "Caption",
+                        "name": "./chatbotCaption"
+                    }
+                },
+                "granite:data": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "cmp-embed-dialog-edit-embeddableoptions": true,
+                    "cmp-embed-dialog-edit-showhidetargetvalue": "core-components-examples/components/embeddables/chatbot"
+                }
+            }
+        },
+        "social": {
+            "jcr:primaryType": "cq:Component",
+            "jcr:title": "Social",
+            "sling:resourceSuperType": "core/wcm/components/embed/v1/embed/embeddable",
+            "order": 2,
+            "componentGroup": ".hidden",
+            "social.html": {
+                "jcr:primaryType": "nt:file",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:mimeType": "text/html",
+                    ":jcr:data": 2402,
+                    "jcr:uuid": "0ae6d2c7-6fb1-43f2-8a84-3050458d6dca"
+                }
+            },
+            "cq:dialog": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "Social Options",
+                "sling:resourceType": "granite/ui/components/coral/foundation/container",
+                "items": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "socialId": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "Social ID.",
+                        "fieldLabel": "ID",
+                        "name": "./socialId",
+                        "required": true
+                    },
+                    "socialCaption": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "Social caption.",
+                        "fieldLabel": "Caption",
+                        "name": "./socialCaption"
+                    }
+                },
+                "granite:data": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "cmp-embed-dialog-edit-embeddableoptions": true,
+                    "cmp-embed-dialog-edit-showhidetargetvalue": "core-components-examples/components/embeddables/social"
+                }
+            }
+        }
+    }
+}
