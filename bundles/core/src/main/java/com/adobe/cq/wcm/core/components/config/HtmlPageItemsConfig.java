@@ -20,46 +20,47 @@ import org.apache.sling.caconfig.annotation.Property;
 
 /**
  * Context-aware configuration holding information on items to be included in pages:
- *      - scripts
- *      - links
- *      - meta
- *  This configuration is meant to be used as a context-aware resource.
- *  See <a href="https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html#context-aware-resources">Context-Aware Resources</a>
+ * - scripts
+ * - links
+ * - meta
+ * This configuration is meant to be used as a context-aware resource.
+ * See <a href="https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html#context-aware-resources">Context-Aware Resources</a>
+ * <p>
+ * Assumed structure:
  *
- *  Assumed structure:
- *
- *  <pre>
+ * <pre>
  *      com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
  *          - prefixPath="/some/path"
- *          + item01
- *              - element=["link"|"script"|"meta"]
- *              - location=["header"|"footer"]
- *              + attributes
- *                  - attributeName01="attributeValue01"
- *                  - attributeName02="attributeValue02"
+ *          + items
+ *              + item01
+ *                  - element=["link"|"script"|"meta"]
+ *                  - location=["header"|"footer"]
+ *                  + attributes
+ *                      - attributeName01="attributeValue01"
+ *                      - attributeName02="attributeValue02"
+ *                      ...
+ *              + item02
+ *                  ...
  *              ...
- *          + item02
- *              ...
- *          ...
  *  </pre>
  */
 @Configuration(label = "Page Items", description = "Context-Aware Configuration for items that will be included in the page")
 public @interface HtmlPageItemsConfig {
-
-    /**
-     * Name of the property that stores the path that will be prefixed to all href's and src's
-     *
-     * @since com.adobe.cq.wcm.core.components.config 1.0.0
-     */
-    String PN_PREFIX_PATH = "prefixPath";
-
     /**
      * Returns the path that will be prefixed to all href's and src's
      *
      * @return The prefix path
-     *
      * @since com.adobe.cq.wcm.core.components.config 1.0.0
      */
     @Property(label = "Prefix path")
     String prefixPath() default "";
+
+    /**
+     * Returns the items to render.
+     *
+     * @return The array of items to render
+     * @since com.adobe.cq.wcm.core.components.config 2.0.0
+     */
+    @Property(label = "Items")
+    HtmlPageItemConfig[] items() default {};
 }
