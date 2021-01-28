@@ -15,20 +15,31 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.text.ParseException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Set;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.caconfig.ConfigurationBuilder;
+import org.apache.sling.caconfig.ConfigurationResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.osgi.framework.Version;
 
+import com.adobe.cq.wcm.core.components.config.AttributeConfig;
+import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
+import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockConfigurationResourceResolver;
@@ -47,6 +58,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -58,6 +70,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     private static final String SLING_CONFIGS_ROOT = "/conf/sling:configs";
 
     private static final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
+    private static final ConfigurationResolver mockConfigurationResolver = Mockito.mock(ConfigurationResolver.class);
 
     @BeforeEach
     protected void setUp() {
@@ -69,20 +82,35 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         context.registerInjectActivateService(mockProductInfoProvider);
         MockConfigurationResourceResolver mockConfigurationResourceResolver = new MockConfigurationResourceResolver(context.resourceResolver(), SLING_CONFIGS_ROOT);
         context.registerInjectActivateService(mockConfigurationResourceResolver);
+        context.registerService(ConfigurationResolver.class, mockConfigurationResolver);
     }
 
-    protected void loadHtmlPageItemsConfig() {
-        context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
+    private void loadHtmlPageItemsConfig(boolean useNewFormat) {
+        if (useNewFormat) {
+            context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
+        } else {
+            context.load().json(TEST_BASE + "/test-sling-configs-deprecated-caconfig.json", SLING_CONFIGS_ROOT);
+        }
     }
 
     @Test
-    void testPage() throws ParseException {
-        loadHtmlPageItemsConfig();
+    void testPage() throws Exception {
+        testPage(true);
+    }
+
+    @Test
+    void testPageWithDeprecatedCaconfig() throws Exception {
+        testPage(false);
+    }
+
+    private void testPage(boolean useNewCaconfig) throws Exception {
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH, PageImpl.PN_CLIENTLIBS_JS_HEAD,
                 new String[]{"coretest.product-page-js-head"}, PN_CLIENT_LIBS,
                 new String[]{"coretest.product-page","coretest.product-page-js-head"}, Page.PN_APP_RESOURCES_CLIENTLIB,
                 "coretest.product-page.appResources",
                 CSS_CLASS_NAMES_KEY, new String[]{"class1", "class2"});
+        loadHtmlPageItemsConfig(useNewCaconfig);
+        mockConfigurationResolver(page);
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
@@ -104,22 +132,28 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testFavicons() {
+    void testFavicons() throws Exception {
         Page page = getPageUnderTest(PAGE);
+        loadHtmlPageItemsConfig(true);
+        mockConfigurationResolver(page);
         assertThrows(UnsupportedOperationException.class, page::getFavicons);
     }
 
     @Test
-    void testGetFaviconClientLibPath() {
+    void testGetFaviconClientLibPath() throws Exception {
         Page page = getPageUnderTest(PAGE, Page.PN_APP_RESOURCES_CLIENTLIB,
                 "coretest.product-page.appResources");
+        loadHtmlPageItemsConfig(true);
+        mockConfigurationResolver(page);
         String faviconClientLibPath = page.getAppResourcesPath();
         assertEquals(CONTEXT_PATH + "/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources", faviconClientLibPath);
     }
 
     @Test
-    void testRedirectTarget() {
+    void testRedirectTarget() throws Exception {
         Page page = getPageUnderTest(REDIRECT_PAGE);
+        loadHtmlPageItemsConfig(true);
+        mockConfigurationResolver(page);
         NavigationItem redirectTarget = page.getRedirectTarget();
         assertNotNull(redirectTarget);
         assertEquals("Templated Page", redirectTarget.getPage().getTitle());
@@ -127,15 +161,19 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testGetCssClasses() {
+    void testGetCssClasses() throws Exception {
         Page page = getPageUnderTest(PAGE, CSS_CLASS_NAMES_KEY, new String[]{"class1", "class2"});
+        loadHtmlPageItemsConfig(true);
+        mockConfigurationResolver(page);
         String cssClasses = page.getCssClassNames();
         assertEquals("class1 class2", cssClasses, "The CSS classes of the page are not expected: " + PAGE);
     }
 
     @Test
-    void testHasCloudconfigSupport() {
+    void testHasCloudconfigSupport() throws Exception {
         Page page = new PageImpl();
+        loadHtmlPageItemsConfig(true);
+        mockConfigurationResolver(page);
         assertFalse(page.hasCloudconfigSupport(), "Expected no cloudconfig support if product info provider missing");
 
         mockProductInfoProvider.setVersion(new Version("6.3.1"));
@@ -149,16 +187,83 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testNoHtmlPageItemsConfig() {
+    void testNoHtmlPageItemsConfig() throws Exception {
         Page page = getPageUnderTest(PAGE);
+        mockConfigurationResolver(page);
         assertEquals(0, page.getHtmlPageItems().size(), "Expected no HTML page items");
     }
 
     @Test
-    void testHtmlPageItemsConfig() {
-        loadHtmlPageItemsConfig();
+    void testHtmlPageItemsConfigWithDeprecatedCaconfig() throws Exception {
         Page page = getPageUnderTest(PAGE);
+        loadHtmlPageItemsConfig(false);
+        mockConfigurationResolver(page);
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
     }
+
+    @Test
+    void testHtmlPageItemsConfig() throws Exception {
+        Page page = getPageUnderTest(PAGE);
+        loadHtmlPageItemsConfig(true);
+        mockConfigurationResolver(page);
+        assertNotNull(page.getHtmlPageItems());
+        assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
+    }
+
+    private void mockConfigurationResolver(Page underTest) throws Exception {
+        Resource htmlPageItemsConfigRes = context.resourceResolver().getResource(SLING_CONFIGS_ROOT + "/" + HtmlPageItemsConfig.class.getName());
+        HtmlPageItemsConfig mockConfig = Mockito.mock(HtmlPageItemsConfig.class);
+        if (htmlPageItemsConfigRes != null) {
+            Resource itemsRes = htmlPageItemsConfigRes.getChild("items");
+            ValueMap configProps = htmlPageItemsConfigRes.getValueMap();
+            String prefixPath = configProps.get("prefixPath", String.class);
+            when(mockConfig.prefixPath()).thenReturn(prefixPath);
+
+            List<HtmlPageItemConfig> mockItemsList = new LinkedList<>();
+            // the new caconfig has an item resource
+            if (itemsRes != null) {
+                for (Resource child : itemsRes.getChildren()) {
+                    ValueMap properties = child.getValueMap();
+                    String element = properties.get("element", String.class);
+                    String location = properties.get("location", String.class);
+                    HtmlPageItemConfig mockItem = Mockito.mock(HtmlPageItemConfig.class);
+                    when(mockItem.element()).thenReturn(element);
+                    when(mockItem.location()).thenReturn(location);
+                    Resource attributesRes = child.getChild("attributes");
+                    if (attributesRes != null) {
+                        ValueMap attributesProps = attributesRes.getValueMap();
+                        List<AttributeConfig> attributeConfigList = new LinkedList<>();
+                        Set<String> keys = attributesProps.keySet();
+                        for (String key : keys) {
+                            if (StringUtils.equals(key, "jcr:primaryType")) {
+                                continue;
+                            }
+                            String value = (String) attributesProps.get(key);
+                            AttributeConfig mockAttributeConfig = Mockito.mock(AttributeConfig.class);
+                            when(mockAttributeConfig.name()).thenReturn(key);
+                            when(mockAttributeConfig.value()).thenReturn(value);
+                            attributeConfigList.add(mockAttributeConfig);
+                        }
+                        when(mockItem.attributes()).thenReturn(attributeConfigList.toArray(new AttributeConfig[0]));
+                    } else {
+                        when(mockItem.attributes()).thenReturn(new AttributeConfig[0]);
+                    }
+                    mockItemsList.add(mockItem);
+                }
+            }
+            HtmlPageItemConfig[] mockItems = mockItemsList.toArray(new HtmlPageItemConfig[0]);
+            when(mockConfig.items()).thenReturn(mockItems);
+
+        } else {
+            when(mockConfig.items()).thenReturn(ArrayUtils.toArray());
+        }
+        ConfigurationBuilder mockConfigurationBuilder = Mockito.mock(ConfigurationBuilder.class);
+        when(mockConfigurationBuilder.as(HtmlPageItemsConfig.class)).thenReturn(mockConfig);
+        when(mockConfigurationResolver.get(any())).thenReturn(mockConfigurationBuilder);
+        Field configurationResourceResolverField = underTest.getClass().getDeclaredField("configurationResolver");
+        configurationResourceResolverField.setAccessible(true);
+        configurationResourceResolverField.set(underTest, mockConfigurationResolver);
+    }
+
 }

@@ -1,74 +1,76 @@
 {
-    "id": "page-bb590de134",
-    "designPath": "/etc/designs/mysite",
-    "title": "Templated Page",
-    "brandSlug": "Brand Slug",
-    "lastModifiedDate": 1453282416000,
-    "templateName": "product-page",
-    "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
-    "cssClassNames": "class1 class2",
-    "language": "en-GB",
-    "htmlPageItems": [
-        {
-            "element"   : "link",
-            "location"  : "header",
-            "attributes": {
-                "href": "/_theme/theme.css"
-            }
-        },
-        {
-            "element"   : "script",
-            "location"  : "footer",
-            "attributes": {
-                "src": "/_theme/theme.js"
-            }
-        },
-        {
-            "element"   : "meta",
-            "location"  : "header",
-            "attributes": {}
-        }
-    ],
-    "dataLayer": {
-        "page-bb590de134": {
-            "dc:description": "Description",
-            "xdm:language": "en-GB",
-            "@type": "core/wcm/components/page/v2/page",
-            "dc:title": "Templated Page",
-            "xdm:template": "/conf/coretest/settings/wcm/templates/product-page",
-            "repo:path": "/core/content/page/templated-page.html",
-            "xdm:tags": [
-                "three",
-                "one",
-                "two"
-            ]
-        }
+  "id": "page-bb590de134",
+  "designPath": "/etc/designs/mysite",
+  "title": "Templated Page",
+  "brandSlug": "Brand Slug",
+  "lastModifiedDate": 1453282416000,
+  "templateName": "product-page",
+  "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
+  "htmlPageItems": [
+    {
+      "element": "link",
+      "location": "header",
+      "attributes": {
+        "href": "/_theme/theme.css"
+      }
     },
-    ":itemsOrder": [
-        "root"
-    ],
-    ":items": {
-        "root": {
-            ":type": "wcm/foundation/components/responsivegrid",
-            ":itemsOrder": [
-                "text"
-            ],
-            ":items": {
-                "text": {
-                    "id": "text-41bcd02e64",
-                    "text": "<p>This is a test</p>",
-                    "richText": true,
-                    "dataLayer": {
-                        "text-41bcd02e64": {
-                            "repo:modifyDate": "2016-01-18T15:59:43Z",
-                            "xdm:text": "<p>This is a test</p>",
-                            "@type": "core/wcm/components/text/v2/text"
-                        }
-                    },
-                    ":type": "core/wcm/components/text/v2/text"
-                }
-            }
-        }
+    {
+      "element": "script",
+      "location": "footer",
+      "attributes": {
+        "src": "/_theme/theme.js"
+      }
     },
-    ":type": "core/wcm/components/page/v2/page"
+    {
+      "element": "meta",
+      "location": "header",
+      "attributes": {
+        "charset": "UTF-8"
+      }
+    }
+  ],
+  "cssClassNames": "class1 class2",
+  "language": "en-GB",
+  ":itemsOrder": [
+    "root"
+  ],
+  ":items": {
+    "root": {
+      ":itemsOrder": [
+        "text"
+      ],
+      ":items": {
+        "text": {
+          "id": "text-41bcd02e64",
+          "text": "<p>This is a test</p>",
+          "richText": true,
+          ":type": "core/wcm/components/text/v2/text",
+          "dataLayer": {
+            "text-41bcd02e64": {
+              "@type": "core/wcm/components/text/v2/text",
+              "repo:modifyDate": "2016-01-18T15:59:43Z",
+              "xdm:text": "<p>This is a test</p>"
+            }
+          }
+        }
+      },
+      ":type": "wcm/foundation/components/responsivegrid"
+    }
+  },
+  ":type": "core/wcm/components/page/v2/page",
+  "dataLayer": {
+    "page-bb590de134": {
+      "@type": "core/wcm/components/page/v2/page",
+      "dc:title": "Templated Page",
+      "dc:description": "Description",
+      "xdm:template": "/conf/coretest/settings/wcm/templates/product-page",
+      "xdm:language": "en-GB",
+      "xdm:tags": [
+        "three",
+        "one",
+        "two"
+      ],
+      "repo:path": "/core/content/page/templated-page.html"
+    }
+  }
 }

@@ -43,9 +43,34 @@ import org.apache.sling.caconfig.annotation.Property;
  *                  ...
  *              ...
  *  </pre>
+ *
+ *  The structure of the initial implementation is deprecated but still supported:
+ *
+ *  <pre>
+ *      com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
+ *          - prefixPath="/some/path"
+ *          + item01
+ *              - element=["link"|"script"|"meta"]
+ *              - location=["header"|"footer"]
+ *              + attributes
+ *                  - attributeName01="attributeValue01"
+ *                  - attributeName02="attributeValue02"
+ *              ...
+ *          + item02
+ *              ...
+ *          ...
+ *  </pre>
  */
 @Configuration(label = "Page Items", description = "Context-Aware Configuration for items that will be included in the page")
 public @interface HtmlPageItemsConfig {
+
+    /**
+     * Name of the property that stores the path that will be prefixed to all href's and src's
+     *
+     * @since com.adobe.cq.wcm.core.components.config 1.0.0
+     */
+    String PN_PREFIX_PATH = "prefixPath";
+
     /**
      * Returns the path that will be prefixed to all href's and src's
      *
