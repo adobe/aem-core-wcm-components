@@ -1,0 +1,17 @@
+{
+    "!BAD_VALUE!": {
+        "parentId": "!BAD_VALUE!",
+        "xdm:language": "!BAD_VALUE!",
+        "@type": "!BAD_VALUE!",
+        "xdm:tags": [
+            "!BAD_VALUE!"
+        ],
+        "dc:description": "!BAD_VALUE!",
+        "repo:modifyDate": "1970-01-01T00:00:00Z",
+        "xdm:linkURL": "!BAD_VALUE!",
+        "xdm:text": "!BAD_VALUE!",
+        "dc:title": "!BAD_VALUE!",
+        "xdm:template": "!BAD_VALUE!",
+        "repo:path": "!BAD_VALUE!"
+    }
+}

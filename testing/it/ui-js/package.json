@@ -1,6 +1,6 @@
 {
     "name": "com.adobe.cq.core.wcm.components.it.ui-js",
-    "version": "2.11.1-SNAPSHOT",
+    "version": "2.13.3-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components UI End-to-End Tests",
     "license": "Apache-2.0",
     "private": false,
@@ -12,9 +12,11 @@
     "scripts": {
         "eslint": "eslint .",
         "eslint:fix": "eslint . --fix",
-        "lint": "npm run eslint"
+        "lint": "npm run eslint",
+        "sync-pom-version": "sync-pom-version"
     },
     "devDependencies": {
-        "eslint": "^4.19.1"
+        "eslint": "^4.19.1",
+        "sync-pom-version-to-package": "^1.6.0"
     }
 }

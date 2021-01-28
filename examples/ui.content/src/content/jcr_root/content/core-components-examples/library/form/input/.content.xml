@@ -99,7 +99,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>&lt;span>This is a Form Container with the Form Texts: Text, Textarea, and Email as child elements.&lt;/span>&lt;br>&#xd;&#xa;&lt;/p>&#xd;&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>&lt;span>This is a Core Form Container with the Form Texts: Text, Textarea, and Email as child elements.&lt;/span>&lt;br>&#xd;&#xa;&lt;/p>&#xd;&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
                     jcr:created="{Date}2019-12-12T14:27:56.627+01:00"
@@ -200,7 +200,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Form Container with Form Text variations: Phone Number, Date, Number fields as child elements.&amp;nbsp;&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Core Form Container with Form Text variations: Phone Number, Date, Number fields as child elements.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_881795653
                     jcr:created="{Date}2019-12-12T15:39:30.893+01:00"
@@ -297,7 +297,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Form Container with Form Text Password. It hides the input from being visible.&amp;nbsp;&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Core Form Container with Form Text Password. It hides the input from being visible.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_665944747
                     jcr:created="{Date}2019-12-12T15:53:10.284+01:00"

@@ -20,8 +20,11 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,8 +34,12 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ComponentFiles;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(AemContextExtension.class)
 public class ComponentFilesImplTest {
@@ -58,11 +65,35 @@ public class ComponentFilesImplTest {
             }});
             put(ComponentFiles.OPTION_FILTER_REGEX, "customheadlibs\\.amp\\.html");
         }};
-        ComponentFiles componentFiles = getComponentFilesUnderTest(ROOT_PAGE, attributes);
+        ComponentFiles componentFiles = Objects.requireNonNull(getComponentFilesUnderTest(ROOT_PAGE, attributes));
         List<String> expected = new LinkedList<String>() {{
             add("/apps/core/wcm/components/accordion/v1/accordion/customheadlibs.amp.html");
         }};
         assertEquals(expected, componentFiles.getPaths());
+
+        // tests that the same object is returned on multiple calls
+        assertSame(componentFiles.getPaths(), componentFiles.getPaths());
+    }
+
+    /**
+     * Same as {@link #testGetPathWithOneResourceType()} however a login exception will occur when fetching the
+     * resource resolver.
+     */
+    @Test
+    void testGetPathWithOneResourceTypeWithLoginException() throws Exception {
+        Map<String, Object> attributes = new HashMap<String, Object>() {{
+            put(ComponentFiles.OPTION_RESOURCE_TYPES, new LinkedHashSet<String>() {{
+                add("core/wcm/components/accordion/v1/accordion");
+            }});
+            put(ComponentFiles.OPTION_FILTER_REGEX, "customheadlibs\\.amp\\.html");
+        }};
+        ComponentFiles componentFiles = Objects.requireNonNull(getComponentFilesUnderTest(ROOT_PAGE, attributes));
+
+        ResourceResolverFactory factory = mock(ResourceResolverFactory.class);
+        Mockito.doThrow(new LoginException()).when(factory).getServiceResourceResolver(anyMap());
+        ((ComponentFilesImpl) componentFiles).resolverFactory = factory;
+
+        assertEquals(new LinkedList<>(), componentFiles.getPaths());
     }
 
     @Test

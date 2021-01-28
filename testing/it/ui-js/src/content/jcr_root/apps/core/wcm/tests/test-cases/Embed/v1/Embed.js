@@ -164,10 +164,8 @@
     embed.tcUrlValidation = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlValidation, selectors) {
         return new h.TestCase("URL Validation", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest,
-            metadata: {
-                ignoreOn63: true
-            } })
+            execAfter: tcExecuteAfterTest
+        })
             // 1.
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
@@ -237,46 +235,6 @@
     };
 
     /**
-     * URL : Pinterest
-     *
-     * 1. verify all test URLs
-     */
-    embed.tcUrlPinterest = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
-        return new h.TestCase("URL : Pinterest", {
-            execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest })
-            // 1.
-            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
-    };
-
-    /**
-     * URL : oEmbed : Facebook Post
-     *
-     * 1. verify all test URLs
-     */
-    embed.tcUrlOEmbedFacebookPost = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
-        return new h.TestCase("URL : oEmbed : Facebook Post", {
-            execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest })
-            // 1.
-            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors))
-            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[1], urlProcessor, selectors));
-    };
-
-    /**
-     * URL : oEmbed : Facebook Video
-     *
-     * 1. verify all test URLs
-     */
-    embed.tcUrlOEmbedFacebookVideo = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
-        return new h.TestCase("URL : oEmbed : Facebook Video", {
-            execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest })
-            // 1.
-            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
-    };
-
-    /**
      * URL : oEmbed : Flickr
      *
      * 1. verify all test URLs
@@ -287,20 +245,6 @@
             execAfter: tcExecuteAfterTest })
             // 1.
             .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
-    };
-
-    /**
-     * URL : oEmbed : Instagram
-     *
-     * 1. verify all test URLs
-     */
-    embed.tcUrlOEmbedInstagram = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
-        return new h.TestCase("URL : oEmbed : Instagram", {
-            execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest })
-            // 1.
-            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors))
-            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[1], urlProcessor, selectors));
     };
 
     /**

@@ -48,6 +48,20 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/include"
                                         path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/basic/items/column/items/title"/>
+                                    <branding
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Branding"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <brandSlug
+                                                granite:class="cq-siteadmin-admin-properties-basic-brandSlug"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/components/commons/editor/dialog/inherited/v1/inherited"
+                                                prop="brandSlug"
+                                                heading="Brand Slug"
+                                                path="${empty param.item ? requestPathInfo.suffix : param.item}"/>
+                                        </items>
+                                    </branding>
                                     <htmlid
                                         jcr:primaryType="nt:unstructured"
                                         jcr:title="HTML ID"

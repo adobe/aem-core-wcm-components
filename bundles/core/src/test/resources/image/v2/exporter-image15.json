@@ -5,6 +5,7 @@
     "srcUriTemplate": "/core/content/test/_jcr_content/root/image15.coreimg{.width}.png/1494867377756/adobe-systems-logo-and-wordmark.png",
     "areas": [],
     "lazyThreshold": 0,
+    "dmImage": false,
     "widths": [],
     "lazyEnabled": false,
     "dataLayer": {
@@ -16,7 +17,8 @@
                 "@type": "image/png",
                 "repo:id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
                 "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                "xdm:tags": []
+                "xdm:tags": [],
+                "xdm:smartTags": {}
             }
         }
     },

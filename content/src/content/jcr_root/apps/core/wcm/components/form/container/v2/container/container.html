@@ -18,6 +18,11 @@
       method="${container.method}" action="${container.action}" id="${container.id}" name="${container.name}"
       enctype="${container.enctype}"
       class="cmp-form ${grid.cssClass}">
+    <div data-sly-test="${container.errorMessages}"
+         data-sly-list.item="${container.errorMessages}"
+         class="cmp-form-error">
+        <p class="cmp-form-error__item">${item}</p>
+    </div>
     <input type="hidden" name=":formstart" value="${resource.path}"/>
     <input type="hidden" name="_charset_" value="utf-8"/>
     <input data-sly-test="${container.redirect}" type="hidden" name=":redirect" value="${container.redirect @ extension='html'}"/>

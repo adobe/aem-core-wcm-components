@@ -23,18 +23,19 @@ import java.util.List;
 import javax.jcr.RangeIterator;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
-import com.adobe.cq.wcm.core.components.testing.MockLanguageManager;
-import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.WCMException;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -86,7 +87,6 @@ class NavigationImplTest {
     void setUp() throws WCMException {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
         context.load().json("/navigation/test-conf.json", "/conf");
-        context.registerService(LanguageManager.class, new MockLanguageManager());
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
         when(relationshipManager.getLiveRelationships(any(Resource.class), isNull(), isNull())).then(
                 invocation -> {
@@ -458,6 +458,11 @@ class NavigationImplTest {
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath("/core");
+        Component component = mock(Component.class);
+        when(component.getResourceType()).thenReturn(NavigationImpl.RESOURCE_TYPE);
+        SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
+        slingBindings.put(WCMBindings.COMPONENT, component);
+        request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Navigation.class);
     }
 

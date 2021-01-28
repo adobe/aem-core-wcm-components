@@ -65,7 +65,38 @@
                 "dam:Numberoftextualcomments": 0,
                 "tiff:ImageWidth"            : 2000,
                 "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
-                "dam:size"                   : 49069
+                "dam:size"                   : 49069,
+                "predictedTags":{
+                    "jcr:primaryType":"nt:unstructured",
+                    "lake":{
+                        "confidence":0.79,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"lake",
+                        "jcr:primaryType":"nt:unstructured"
+                    },
+                    "water":{
+                        "confidence":0.78,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"water",
+                        "jcr:primaryType":"nt:unstructured"
+                    },
+                    "landscape":{
+                        "confidence":0.75,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"landscape",
+                        "jcr:primaryType":"nt:unstructured"
+                    },
+                    "nature":{
+                        "confidence":0.74,
+                        "jcr:lastModified":"Thu Oct 24 2019 15:40:55 GMT-0700",
+                        "isCustom":false,
+                        "name":"nature",
+                        "jcr:primaryType":"nt:unstructured"
+                    }
+                }
             }
         }
     },
@@ -87,14 +118,14 @@
                 "jcr:primaryType"         : "nt:folder",
                 "jcr:createdBy"           : "admin",
                 "jcr:created"             : "Mon Mar 20 2017 11:20:37 GMT+0100",
-                "cq5dam.web.1280.1280.png": {
+                "cq5dam.web.1280.1280.jpg": {
                     "jcr:primaryType": "nt:file",
                     "jcr:createdBy"  : "workflow-process-service",
                     "jcr:created"    : "Mon Mar 20 2017 11:20:39 GMT+0100",
                     "jcr:content"    : {
                         "jcr:primaryType"   : "oak:Resource",
                         "jcr:lastModifiedBy": "workflow-process-service",
-                        "jcr:mimeType"      : "image/png",
+                        "jcr:mimeType"      : "image/jpg",
                         "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
                         ":jcr:data"         : 27795
                     }
@@ -465,6 +496,382 @@
                 "dc:format": "image/svg+xml",
                 "dam:sha1": "94e4da3bd7023101d939f6c04ea85feba93994b9",
                 "dam:size": 4668
+            }
+        }
+    },
+    "Adobe_Systems_logo_and_wordmark_rectangle.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes" : [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy"  : "admin",
+        "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+        "jcr:uuid"       : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModifiedBy": "admin",
+            "dam:assetState"    : "processed",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "dam:relativePath"  : "core/images/Adobe_Systems_logo_and_wordmark_rectangle.png",
+            "renditions"        : {
+                "jcr:primaryType"         : "nt:folder",
+                "jcr:createdBy"           : "admin",
+                "jcr:created"             : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                "cq5dam.web.1280.1280.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "workflow-process-service",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        ":jcr:data"         : 27795
+                    }
+                },
+                "original"                : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                        ":jcr:data"         : 49069
+                    }
+                }
+            },
+            "related"           : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata"          : {
+                "jcr:primaryType"            : "nt:unstructured",
+                "jcr:mixinTypes"             : [
+                    "cq:Taggable"
+                ],
+                "dam:Physicalheightininches" : "27.77777862548828",
+                "dam:Physicalwidthininches"  : "27.77777862548828",
+                "dam:Fileformat"             : "PNG",
+                "dam:Progressive"            : "no",
+                "tiff:ImageLength"           : 2000,
+                "dam:extracted"              : "Mon Mar 20 2017 11:20:38 GMT+0100",
+                "dc:format"                  : "image/png",
+                "dam:Bitsperpixel"           : 8,
+                "dam:MIMEtype"               : "image/png",
+                "dam:Physicalwidthindpi"     : 72,
+                "dam:Physicalheightindpi"    : 72,
+                "dam:Numberofimages"         : 1,
+                "dam:Numberoftextualcomments": 0,
+                "tiff:ImageWidth"            : 2500,
+                "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
+                "dam:size"                   : 49069,
+                "dc:title": "Adobe Systems Logo and Wordmark",
+                "dc:description": "Adobe Systems Logo and Wordmark in PNG format"
+            }
+        }
+    },
+    "Adobe_Systems_logo_and_wordmark_small.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes" : [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy"  : "admin",
+        "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+        "jcr:uuid"       : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModifiedBy": "admin",
+            "dam:assetState"    : "processed",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "dam:relativePath"  : "core/images/Adobe_Systems_logo_and_wordmark_small.png",
+            "renditions"        : {
+                "jcr:primaryType"         : "nt:folder",
+                "jcr:createdBy"           : "admin",
+                "jcr:created"             : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                "cq5dam.web.1280.1280.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "workflow-process-service",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        ":jcr:data"         : 27795
+                    }
+                },
+                "original"                : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                        ":jcr:data"         : 49069
+                    }
+                }
+            },
+            "related"           : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata"          : {
+                "jcr:primaryType"            : "nt:unstructured",
+                "jcr:mixinTypes"             : [
+                    "cq:Taggable"
+                ],
+                "dam:Physicalheightininches" : "27.77777862548828",
+                "dam:Physicalwidthininches"  : "27.77777862548828",
+                "dam:Fileformat"             : "PNG",
+                "dam:Progressive"            : "no",
+                "tiff:ImageLength"           : 192,
+                "dam:extracted"              : "Mon Mar 20 2017 11:20:38 GMT+0100",
+                "dc:format"                  : "image/png",
+                "dam:Bitsperpixel"           : 8,
+                "dam:MIMEtype"               : "image/png",
+                "dam:Physicalwidthindpi"     : 72,
+                "dam:Physicalheightindpi"    : 72,
+                "dam:Numberofimages"         : 1,
+                "dam:Numberoftextualcomments": 0,
+                "tiff:ImageWidth"            : 192,
+                "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
+                "dam:size"                   : 49069,
+                "dc:title": "Adobe Systems Logo and Wordmark",
+                "dc:description": "Adobe Systems Logo and Wordmark in PNG format"
+            }
+        }
+    },
+    "20000x20000.png": {
+        "jcr:mixinTypes":"[mix:referenceable]",
+        "jcr:primaryType":"dam:Asset",
+        "jcr:uuid":"b46d02c9-a10b-46f6-8fca-347f4d1927ff",
+        "jcr:content": {
+            "dam:assetState"    : "processed",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:primaryType"   : "dam:AssetContent",
+            "metadata"          : {
+                "dam:Bitsperpixel"           : "{Long}1",
+                "dam:extracted"              : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                "dam:Fileformat"             : "PNG",
+                "dam:MIMEtype"               : "image/png",
+                "dam:Numberofimages"         : "1",
+                "dam:Numberoftextualcomments": "0",
+                "dam:Physicalheightindpi"    : "-1",
+                "dam:Physicalheightininches" : "-1.0",
+                "dam:Physicalwidthindpi"     : "-1",
+                "dam:Physicalwidthininches"  : "-1.0",
+                "dam:Progressive"            : "no",
+                "dam:sha1"                   : "f52be6e2d7e479e0ff5bce4112893825453554e2",
+                "dam:size"                   : "48727",
+                "dc:format"                  : "image/png",
+                "jcr:mixinTypes"             : "[cq:Taggable]",
+                "jcr:primaryType"            : "nt:unstructured",
+                "tiff:ImageLength"           : "20000",
+                "tiff:ImageWidth"            : "20000"
+            },
+            "related"           : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "renditions": {
+                "original"                : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "image/png"
+                    }
+                }
+            }
+        }
+    },
+    "transparent_hd.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes": [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy": "admin",
+        "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+        "jcr:uuid": "f6460529-b7b1-4b3a-8980-b3b3f0ee109c",
+        "jcr:content": {
+            "jcr:primaryType": "dam:AssetContent",
+            "jcr:lastModifiedBy": "admin",
+            "dam:assetState": "processed",
+            "jcr:lastModified": "Wed Dec 09 2020 10:05:05 GMT+0200",
+            "renditions": {
+                "jcr:primaryType": "nt:folder",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                "cq5dam.web.1280.1280.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "workflow-process-service",
+                    "jcr:created": "Wed Dec 09 2020 10:05:05 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:05 GMT+0200",
+                        ":jcr:data": 3653
+                    }
+                },
+                "cq5dam.thumbnail.48.48.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "workflow-process-service",
+                    "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                        ":jcr:data": 85
+                    }
+                },
+                "cq5dam.thumbnail.140.100.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "workflow-process-service",
+                    "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                        ":jcr:data": 122
+                    }
+                },
+                "original": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                        ":jcr:data": 37394
+                    }
+                },
+                "cq5dam.thumbnail.319.319.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "workflow-process-service",
+                    "jcr:created": "Wed Dec 09 2020 10:05:05 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType": "image/png",
+                        "jcr:lastModified": "Wed Dec 09 2020 10:05:05 GMT+0200",
+                        ":jcr:data": 300
+                    }
+                }
+            },
+            "related": {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:mixinTypes": [
+                    "cq:Taggable"
+                ],
+                "dam:Physicalheightininches": "14.998125076293945",
+                "dam:Physicalwidthininches": "26.663333892822266",
+                "dam:Fileformat": "PNG",
+                "dam:Progressive": "no",
+                "tiff:ImageLength": 1080,
+                "dam:extracted": "Wed Dec 09 2020 10:05:04 GMT+0200",
+                "dc:format": "image/png",
+                "dam:Bitsperpixel": 32,
+                "dam:MIMEtype": "image/png",
+                "tiff:Orientation": 1,
+                "dam:Comments": "XML:com.adobe.xmp: <x:xmpmeta xmlns:x=\"adobe:ns:meta/\" x:xmptk=\"XMP Core 6.0.0\">\n   <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n      <rdf:Description rdf:about=\"\"\n            xmlns:exif=\"http://ns.adobe.com/exif/1.0/\"\n            xmlns:tiff=\"http://ns.adobe.com/tiff/1.0/\">\n         <exif:PixelYDimension>75</exif:PixelYDimension>\n         <exif:UserComment>Screenshot</exif:UserComment>\n         <exif:PixelXDimension>78</exif:PixelXDimension>\n         <tiff:Orientation>1</tiff:Orientation>\n      </rdf:Description>\n   </rdf:RDF>\n</x:xmpmeta>\n\n",
+                "dam:Physicalwidthindpi": 72,
+                "dam:Physicalheightindpi": 72,
+                "exif:UserComment": [
+                    "Screenshot"
+                ],
+                "dam:Numberofimages": 1,
+                "exif:PixelYDimension": 75,
+                "exif:PixelXDimension": 78,
+                "dam:Numberoftextualcomments": 1,
+                "tiff:ImageWidth": 1920,
+                "dam:sha1": "ce14157091eec4e7c44be64ff2bb70d41d40507d",
+                "dam:size": 37394,
+                "exif:UserComment_xmpArrayType": "rdf:Alt"
+            }
+        }
+    },
+    "Adobe_Systems_logo_and_wordmark_DM.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes" : [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy"  : "admin",
+        "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+        "jcr:uuid"       : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModifiedBy": "admin",
+            "dam:assetState"    : "processed",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "dam:relativePath"  : "core/images/Adobe_Systems_logo_and_wordmark.png",
+            "renditions"        : {
+                "jcr:primaryType"         : "nt:folder",
+                "jcr:createdBy"           : "admin",
+                "jcr:created"             : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                "cq5dam.web.1280.1280.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "workflow-process-service",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        ":jcr:data"         : 27795
+                    }
+                },
+                "original"                : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                        ":jcr:data"         : 49069
+                    }
+                }
+            },
+            "related"           : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata"          : {
+                "jcr:primaryType"            : "nt:unstructured",
+                "jcr:mixinTypes"             : [
+                    "cq:Taggable"
+                ],
+                "dam:Physicalheightininches" : "27.77777862548828",
+                "dam:Physicalwidthininches"  : "27.77777862548828",
+                "dam:Fileformat"             : "PNG",
+                "dam:Progressive"            : "no",
+                "tiff:ImageLength"           : 2000,
+                "dam:extracted"              : "Mon Mar 20 2017 11:20:38 GMT+0100",
+                "dc:format"                  : "image/png",
+                "dam:Bitsperpixel"           : 8,
+                "dam:MIMEtype"               : "image/png",
+                "dam:Physicalwidthindpi"     : 72,
+                "dam:Physicalheightindpi"    : 72,
+                "dam:Numberofimages"         : 1,
+                "dam:Numberoftextualcomments": 0,
+                "dam:scene7File"             : "dmtestcompany/Adobe_Systems_logo_and_wordmark_DM",
+                "tiff:ImageWidth"            : 2000,
+                "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
+                "dam:size"                   : 49069,
+                "dc:title": "Adobe Systems Logo and Wordmark",
+                "dc:description": "Adobe Systems Logo and Wordmark in PNG format"
             }
         }
     }

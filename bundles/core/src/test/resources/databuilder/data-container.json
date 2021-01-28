@@ -1,0 +1,15 @@
+{
+    "TEST_ID": {
+        "parentId": "TEST_PARENT_ID",
+        "shownItems": [
+            "TEST_SHOWN_ITEM_1",
+            "TEST_SHOWN_ITEM_2"
+        ],
+        "dc:description": "TEST DESCRIPTION",
+        "xdm:linkURL": "https://www.adobe.com/",
+        "xdm:text": "TEST TEXT",
+        "dc:title": "TEST TITLE",
+        "repo:modifyDate": "2020-06-16T19:23:57Z",
+        "@type": "TEST TYPE"
+    }
+}

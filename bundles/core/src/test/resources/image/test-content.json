@@ -18,6 +18,26 @@
                     "jcr:title"         : "Adobe Logo",
                     "linkURL"           : "/content/test"
                 },
+                "image0r"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_rectangle.png",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "/content/test"
+                },
+                "image0s"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_small.png",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "/content/test"
+                },
                 "image1"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
@@ -368,6 +388,23 @@
                             "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
                         }
                     }
+                },
+                "image28"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "fileReference"     : "/content/dam/core/images/20000x20000.png",
+                    "alt"               : "Large Image",
+                    "jcr:title"         : "Large Image"
+                },
+                "image29": {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "cq:lastModified"   : "2017-05-15T17:56:17.756+01:00",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "fileReference"     : "/content/dam/core/images/transparent_hd.png",
+                    "alt"               : "Transparent Image",
+                    "jcr:title"         : "Transparent Image"
                 }
             },
             "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"

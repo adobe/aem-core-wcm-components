@@ -45,8 +45,7 @@ import com.day.cq.wcm.foundation.forms.FormStructureHelper;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.msm.api.MSMNameConstants;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class ContainerImplTest {
@@ -104,6 +103,7 @@ public class ContainerImplTest {
         assertEquals(CONTEXT_PATH + CONTAINING_PAGE + ".html", container.getAction());
         assertEquals("wcm/foundation/components/responsivegrid/new", container.getResourceTypeForDropArea());
         assertEquals(CONTEXT_PATH + "/content/coretest/home", container.getRedirect());
+        assertEquals(0, container.getErrorMessages().length);
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, FORM1_PATH));
     }
 

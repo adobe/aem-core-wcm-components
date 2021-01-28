@@ -21,19 +21,13 @@ import java.util.Iterator;
 import javax.jcr.RangeIterator;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
-import com.adobe.cq.wcm.core.components.testing.MockLanguageManager;
-import com.day.cq.wcm.api.LanguageManager;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.msm.api.LiveCopy;
 import com.day.cq.wcm.msm.api.LiveRelationship;
@@ -42,7 +36,11 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -72,7 +70,6 @@ class ExperienceFragmentImplTest {
     void setUp() throws WCMException {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONF_JSON, CONF_ROOT);
-        context.registerService(LanguageManager.class, new MockLanguageManager());
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
         when(relationshipManager.isSource(any(Resource.class))).then(
             invocation -> {
@@ -166,6 +163,26 @@ class ExperienceFragmentImplTest {
             + "/jcr:content/root/xf-component-1");
         assertEquals(XF_NAME, experienceFragment.getName());
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf1"));
+    }
+
+    /**
+     * Tests that methods that cache results return the same object on subsequent calls.
+     */
+    @Test
+    void testCaching() {
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(NO_LOC_PAGE
+            + "/jcr:content/root/xf-component-1");
+        assertNotNull(experienceFragment.getName());
+        assertSame(experienceFragment.getName(), experienceFragment.getName());
+
+        assertNotNull(experienceFragment.getCssClassNames());
+        assertSame(experienceFragment.getCssClassNames(), experienceFragment.getCssClassNames());
+
+        assertNotNull(experienceFragment.getExportedItems());
+        assertSame(experienceFragment.getExportedItems(), experienceFragment.getExportedItems());
+
+        assertNotNull(experienceFragment.getLocalizedFragmentVariationPath());
+        assertSame(experienceFragment.getLocalizedFragmentVariationPath(), experienceFragment.getLocalizedFragmentVariationPath());
     }
 
     /**
@@ -699,17 +716,9 @@ class ExperienceFragmentImplTest {
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        final MockSlingHttpServletRequest request =
-            new MockSlingHttpServletRequest(context.resourceResolver(), context.bundleContext());
-        request.setContextPath(CONTEXT_PATH);
-        request.setResource(resource);
-        SlingBindings slingBindings = new SlingBindings();
-        Page currentPage = context.pageManager().getPage(currentPagePath);
-        slingBindings.put(SlingBindings.RESOURCE, resource);
-        slingBindings.put(WCMBindings.CURRENT_PAGE, currentPage);
-        slingBindings.put(WCMBindings.PAGE_MANAGER, context.pageManager());
-        slingBindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        request.setAttribute(SlingBindings.class.getName(), slingBindings);
-        return request.adaptTo(ExperienceFragment.class);
+        context.currentPage(currentPagePath);
+        context.currentResource(resource);
+        context.request().setContextPath(CONTEXT_PATH);
+        return context.request().adaptTo(ExperienceFragment.class);
     }
 }

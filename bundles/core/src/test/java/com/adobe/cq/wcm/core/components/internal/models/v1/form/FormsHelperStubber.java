@@ -32,7 +32,7 @@ public class FormsHelperStubber {
     private FormsHelperStubber() {
     }
 
-    protected static void createStub() {
+    public static void createStub() {
         ClassPool classPool = ClassPool.getDefault();
         CtClass ctClass;
         try {
@@ -44,14 +44,18 @@ public class FormsHelperStubber {
             // set the body of all methods in the class to empty,
             // to remove any dependencies on impl classes.
             for (CtMethod ctMethod : ctClass.getDeclaredMethods()) {
-                ctMethod.setBody(null);
+                if (!ctMethod.getName().equals("getContentRequestParameterNames") &&
+                        !ctMethod.getName().equals("getFormId")) {
+                    ctMethod.setBody(null);
+                }
             }
             // remove the error causing static field declaration
             ctClass.removeField(ctClass.getDeclaredField(ERROR_FIELD));
             // remove the static initializer block calling new on impl class.
             ctClass.removeConstructor(ctClass.getClassInitializer());
             // defer getValues(..) to another method call so that we can manipulate/mock return values
-            ctClass.getDeclaredMethod("getValues").setBody("return com.adobe.cq.wcm.core.components.internal.models.v1.form.FormsHelperGetValuesStubMethod.get();");
+            ctClass.getDeclaredMethod("getValues")
+                    .setBody("return com.adobe.cq.wcm.core.components.internal.models.v1.form.FormsHelperGetValuesStubMethod.get();");
             // load the stubbed class
             ctClass.toClass();
         } catch (NotFoundException e) {

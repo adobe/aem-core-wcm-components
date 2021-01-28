@@ -21,6 +21,7 @@
     <filter root="/content/campaigns/core_component_brand"/>
     <filter root="/content/dam/core-components"/>
     <filter root="/content/cq:tags/core-components"/>
+    <filter root="/content/experience-fragments/core-components-test"/>
     <filter root="/home/users/core-component"/>
     <filter root="/etc/blueprints/corecomp_blueprint"/>
     <!-- Hobbes IT folder -->

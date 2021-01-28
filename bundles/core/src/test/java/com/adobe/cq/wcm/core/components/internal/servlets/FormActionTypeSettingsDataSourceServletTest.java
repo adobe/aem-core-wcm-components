@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -23,7 +24,6 @@ import org.apache.sling.api.resource.ResourceResolver;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.day.cq.wcm.foundation.forms.FormsManager;
-import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.junit.jupiter.api.BeforeEach;

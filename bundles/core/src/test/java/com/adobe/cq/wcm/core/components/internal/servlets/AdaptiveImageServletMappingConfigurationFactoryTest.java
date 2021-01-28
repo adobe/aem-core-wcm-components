@@ -53,6 +53,11 @@ public class AdaptiveImageServletMappingConfigurationFactoryTest {
             public int defaultResizeWidth() {
                 return AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH;
             }
+
+            @Override
+            public int maxSize() {
+                return AdaptiveImageServlet.DEFAULT_MAX_SIZE;
+            }
         });
         testValues(new String[] {"core/image"}, configurationFactory.getResourceTypes());
         testValues(new String[] {"coreimg"}, configurationFactory.getSelectors());

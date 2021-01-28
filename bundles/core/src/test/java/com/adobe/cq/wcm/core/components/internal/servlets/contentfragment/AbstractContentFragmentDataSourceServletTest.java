@@ -74,7 +74,7 @@ abstract class AbstractContentFragmentDataSourceServletTest {
         // load the content fragment models
         context.load().json(TEST_BASE + "/test-content-conf.json", "/conf/global/settings/dam/cfm/models");
         // register an adapter that adapts resources to (mocks of) content fragments
-        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, AbstractContentFragmentTest.ADAPTER);
+        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, AbstractContentFragmentTest.CONTENT_FRAGMENT_ADAPTER);
 
         // mock resource bundle provider to enable constructing i18n instances
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class, withSettings().lenient());

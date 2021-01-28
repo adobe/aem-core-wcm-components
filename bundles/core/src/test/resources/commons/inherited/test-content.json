@@ -1,0 +1,42 @@
+{
+    "jcr:primaryType": "cq:Page",
+    "jcr:createdBy"  : "admin",
+    "jcr:created"    : "Wed Jan 13 2016 15:56:31 GMT+0100",
+    "jcr:content"    : {
+        "jcr:primaryType"   : "cq:PageContent",
+        "jcr:createdBy"     : "admin",
+        "jcr:created"       : "Wed Jan 13 2016 15:56:31 GMT+0100",
+        "cq:lastModified"   : "Wed Jan 13 2016 16:14:51 GMT+0100",
+        "sling:resourceType": "core/wcm/components/page/v2/page",
+        "cq:lastModifiedBy" : "admin",
+        "brandSlug"         : "Test Slug",
+        "brandSlug_override": "true"
+    },
+    "parent" : {
+        "jcr:primaryType": "cq:Page",
+        "jcr:createdBy"  : "admin",
+        "jcr:created"    : "Wed Jan 13 2016 15:56:31 GMT+0100",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:createdBy"     : "admin",
+            "jcr:created"       : "Wed Jan 13 2016 15:56:31 GMT+0100",
+            "cq:lastModified"   : "Wed Jan 13 2016 16:14:51 GMT+0100",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "cq:lastModifiedBy" : "admin"
+        },
+        "child" : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Wed Jan 13 2016 15:56:31 GMT+0100",
+            "jcr:content"    : {
+                "jcr:primaryType"   : "cq:PageContent",
+                "jcr:createdBy"     : "admin",
+                "jcr:created"       : "Wed Jan 13 2016 15:56:31 GMT+0100",
+                "cq:lastModified"   : "Wed Jan 13 2016 16:14:51 GMT+0100",
+                "sling:resourceType": "core/wcm/components/page/v2/page",
+                "cq:lastModifiedBy" : "admin"
+            }
+        }
+
+    }
+}

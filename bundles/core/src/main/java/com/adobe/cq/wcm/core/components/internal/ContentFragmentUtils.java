@@ -31,6 +31,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -202,7 +203,7 @@ public class ContentFragmentUtils {
      * Returns an optional grid type configured via {@link ContentPolicy content policy} property
      * ({@value #PN_CFM_GRID_TYPE}) or {@value #DEFAULT_GRID_TYPE} as default.
      *
-     * @param fragmentResource         the content fragment resource resource to be checked
+     * @param fragmentResource the content fragment resource resource to be checked
      * @return the configured grid type of a default
      */
     public static String getGridResourceType(Resource fragmentResource) {
@@ -235,13 +236,23 @@ public class ContentFragmentUtils {
     }
 
     /**
-     * Returns a map of all given resources mapping their name to their {@link ComponentExporter component exporter}
-     * model.
+     * Gets a map of all resources with the resource name as the key and the corresponding {@link ComponentExporter}
+     * model as the value.
+     *
+     * The returned map is ordered as provided by the resourceIterator.
+     * Any resource that cannot be adapted to a {@link ComponentExporter} model is omitted from the returned map.
+     *
+     * @param resourceIterator Iterator of resources for which to get the component exporters.
+     * @param modelFactory Model factory service.
+     * @param slingHttpServletRequest Current request.
+     * @return Ordered map of resource names to {@link ComponentExporter} models.
      */
-    public static Map<String, ComponentExporter> getComponentExporters(Iterator<Resource> resourceIterator,
-                                                                       ModelFactory modelFactory,
-                                                                       SlingHttpServletRequest slingHttpServletRequest) {
-        final Map<String, ComponentExporter> componentExporterMap = new LinkedHashMap<>();
+    @NotNull
+    public static LinkedHashMap<String, ComponentExporter> getComponentExporters(
+        @NotNull final Iterator<Resource> resourceIterator,
+        @NotNull final ModelFactory modelFactory,
+        @NotNull final SlingHttpServletRequest slingHttpServletRequest) {
+        final LinkedHashMap<String, ComponentExporter> componentExporterMap = new LinkedHashMap<>();
 
         while (resourceIterator.hasNext()) {
             Resource resource = resourceIterator.next();

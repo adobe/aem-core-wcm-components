@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    granite:class="action-type-dialog"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Core Form Container"
+    sling:resourceType="granite/ui/components/coral/foundation/container">
+    <items jcr:primaryType="nt:unstructured">
+        <formEndPointUrl
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+            fieldLabel="Endpoint"
+            fieldDescription="Endpoint URL of the RESTful service"
+            name="./externalServiceEndPointUrl"
+            required="{Boolean}true"/>
+        <errorMessage
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+            fieldLabel="Error Message"
+            fieldDescription="Error Message to display if form data couldn't post successfully to remote endpoint"
+            name="./errorMessage"/>
+    </items>
+    <granite:data
+        jcr:primaryType="nt:unstructured"
+        showhidetargetvalue="core/wcm/components/form/actions/rpc"
+        usesRedirect="true"/>
+</jcr:root>

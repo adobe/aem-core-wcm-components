@@ -149,7 +149,7 @@
                                                             <popovers jcr:primaryType="nt:unstructured">
                                                                 <justify
                                                                     jcr:primaryType="nt:unstructured"
-                                                                    items="[justify#justifyleft,justify#justifycenter,justify#justifyright]"
+                                                                    items="[justify#justifyleft,justify#justifycenter,justify#justifyright,justify#justifyjustify]"
                                                                     ref="justify"/>
                                                                 <lists
                                                                     jcr:primaryType="nt:unstructured"

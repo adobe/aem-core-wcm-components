@@ -26,7 +26,6 @@ import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -46,6 +45,9 @@ import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -54,8 +56,9 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
+import static com.adobe.cq.wcm.core.components.util.ComponentUtils.ID_SEPARATOR;
 
 /**
  * Teaser model implementation.
@@ -113,6 +116,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      * Flag indicating if the title should be hidden.
      */
     private boolean titleHidden = false;
+
+    /**
+     * Flag indicating if the title type should be hidden.
+     */
+    private boolean showTitleType = false;
 
     /**
      * Flag indicating if the description should be hidden.
@@ -204,6 +212,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
         descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
         titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
+        showTitleType = currentStyle.get(Teaser.PN_SHOW_TITLE_TYPE, showTitleType);
         imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
         titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
         if (imageLinkHidden) {
@@ -273,7 +282,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 .map(Iterable::spliterator)
                 .map(s -> StreamSupport.stream(s, false))
                 .orElseGet(Stream::empty)
-                .map(action -> new Action(action, this.getId()))
+                .map(action -> new Action(action, this.getId(), component))
                 .collect(Collectors.toList());
         }
         return this.actions;
@@ -371,6 +380,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getTitleType() {
+        if (showTitleType) {
+            titleType = resource.getValueMap().get(Teaser.PN_TITLE_TYPE, titleType);
+        }
+
         Utils.Heading heading = Utils.Heading.getHeading(titleType);
         if (heading != null) {
             return heading.getElement();
@@ -384,23 +397,14 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return request.getResource().getResourceType();
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
+    @NotNull
     @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getLinkURL();
-    }
-
-    @Override
-    public String getDataLayerDescription() {
-        return getDescription();
+    protected ComponentData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asComponent()
+            .withTitle(this::getTitle)
+            .withLinkUrl(this::getLinkURL)
+            .withDescription(this::getDescription)
+            .build();
     }
 
 
@@ -452,8 +456,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          * @param actionRes The action resource.
          * @param parentId The ID of the containing Teaser.
          */
-        private Action(@NotNull final Resource actionRes, final String parentId) {
-            super(parentId, actionRes);
+        private Action(@NotNull final Resource actionRes, final String parentId, Component component) {
+            super(parentId, actionRes, component);
             ctaParentId = parentId;
             ctaResource = actionRes;
             ValueMap ctaProperties = actionRes.getValueMap();
@@ -463,6 +467,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 ctaPage = pageManager.getPage(ctaUrl);
             } else {
                 ctaPage = null;
+            }
+            if (component != null) {
+                this.dataLayerType = component.getResourceType() + "/" + CTA_ID_PREFIX;
             }
         }
 
@@ -498,7 +505,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
 
-        @Nullable
+        @NotNull
         @Override
         public String getId() {
             if (ctaId == null) {
@@ -506,24 +513,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                     .filter(StringUtils::isNotEmpty)
                     .map(id -> StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(id)), " ", ID_SEPARATOR))
                     .orElseGet(() ->
-                        Utils.generateId(StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX), this.ctaResource.getPath())
+                        ComponentUtils.generateId(StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX), this.ctaResource.getPath())
                     );
             }
             return ctaId;
-        }
-
-        /*
-         * DataLayerProvider implementation of field getters
-         */
-
-        @Override
-        public String getDataLayerLinkUrl() {
-            return getURL();
-        }
-
-        @Override
-        public String getDataLayerTitle() {
-            return getTitle();
         }
     }
 }

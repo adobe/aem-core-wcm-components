@@ -3,6 +3,7 @@
 [![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components)
 [![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all)
+[![javadoc](https://javadoc.io/badge2/com.adobe.cq/core.wcm.components.core/javadoc.svg)](https://javadoc.io/doc/com.adobe.cq/core.wcm.components.core)
 
 Set of standardized Web Content Management (WCM) components for [Adobe Experience Manager (AEM)](https://www.adobe.com/marketing/experience-manager.html) to speed up development time and reduce maintenance cost of your websites.
 
@@ -13,7 +14,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 
 ### Usability Study 2020
 
-We're conducting a usability study by using the [System Usability Scale](https://measuringu.com/sus/), a reliable tool to measure the perceived usability.  
+We're conducting a usability study by using the [System Usability Scale](https://measuringu.com/sus/), a reliable tool to measure the perceived usability.
 Please help us making the Core Components better by responding to our **[short usability questionnaire](https://s2.userzoom.com/m/MSBDNTc1MlMxMDk1)**. Thank you!
 
 ## Documentation
@@ -31,11 +32,11 @@ Please help us making the Core Components better by responding to our **[short u
 * **Cloud-Ready:** Whether on [AEM as a Cloud Service](https://docs.adobe.com/content/help/en/experience-manager-cloud-service/landing/home.html), on [Adobe Managed Services](https://github.com/adobe/aem-project-archetype/tree/master/src/main/archetype/dispatcher.ams), or on-premise, they just work.
 * **Versatile:** The components represent generic concepts with which the authors can assemble nearly any layout.
 * **Configurable:** Template-level [content policies](https://docs.adobe.com/content/help/en/experience-manager-65/developing/platform/templates/page-templates-editable.html#content-policies) define which features the page authors are allowed to use or not.
-* **Trackable:** The [Adobe Client Data Layer](https://github.com/adobe/adobe-client-data-layer/) integration allows to track all aspects of the visitor experience.
+* **Trackable:** The [Adobe Client Data Layer](DATA_LAYER_INTEGRATION.md) integration allows to track all aspects of the visitor experience.
 * **Accessible:** They comply [WCAG 2.1 standard](https://www.w3.org/TR/WCAG21/), provide ARIA labels, and support keyboard navigation ([known issues](https://github.com/adobe/aem-core-wcm-components/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+accessibility+in%3Atitle)).
 * **SEO-Friendly:** The HTML output is semantic and provides schema.org microdata annotations.
 * **WebApp-Ready:** The [streamlined JSON output](https://docs.adobe.com/content/help/en/experience-manager-learn/foundation/development/develop-sling-model-exporter.html) allows client-side rendering, still with a possibility of [in-context editing](https://docs.adobe.com/content/help/en/experience-manager-learn/sites/spa-editor/spa-editor-framework-feature-video-use.html).
-* **Design Kit:** A [UI kit for Adobe XD](https://docs.adobe.com/content/help/en/experience-manager-learn/getting-started-wknd-tutorial-develop/assets/overview/AEM_UI-kit_Wireframe.xd) allows designers to create wireframes that they can then [style as needed](https://docs.adobe.com/content/help/en/experience-manager-learn/getting-started-wknd-tutorial-develop/assets/overview/AEM_UI-kit_WKND.xd).
+* **Design Kit:** A [UI kit for Adobe XD](https://experienceleague.adobe.com/docs/experience-manager-learn/assets/AEM-CoreComponents-UI-Kit.xd) allows designers to create wireframes that they can then [style as needed](https://github.com/adobe/aem-guides-wknd/releases/download/aem-guides-wknd-0.0.2/AEM_UI-kit-WKND.xd).
 * **Themeable:** The components implement the [Style System](https://docs.adobe.com/content/help/en/experience-manager-65/developing/components/style-system.html), and the markup follows [BEM CSS conventions](http://getbem.com/).
 * **Customizable:** Several patterns allow [easy customization](https://docs.adobe.com/content/help/en/experience-manager-core-components/using/developing/customizing.html), from adjusting the HTML to advanced functionality reuse.
 * **Versionned:** The [versioning policy](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) ensures we won't break your site when improving things that might impact you.
@@ -56,16 +57,16 @@ Please help us making the Core Components better by responding to our **[short u
 8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
 9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
 10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
-11. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
-12. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
-13. [Experience Fragment](content/src/content/jcr_root/apps/core/wcm/components/experiencefragment/v1/experiencefragment)
-14. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
-15. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
-16. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
-17. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
-18. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
-19. [Progress Bar](content/src/content/jcr_root/apps/core/wcm/components/progressbar/v1/progressbar)
-20. [PDF Viewer](content/src/content/jcr_root/apps/core/wcm/components/pdfviewer/v1/pdfviewer)
+11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
+12. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
+13. [PDF Viewer](content/src/content/jcr_root/apps/core/wcm/components/pdfviewer/v1/pdfviewer)
+14. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
+15. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+16. [Progress Bar](content/src/content/jcr_root/apps/core/wcm/components/progressbar/v1/progressbar)
+17. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
+18. [Experience Fragment](content/src/content/jcr_root/apps/core/wcm/components/experiencefragment/v1/experiencefragment)
+19. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
+20. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
 
 ### Container Components
 
@@ -76,7 +77,7 @@ Please help us making the Core Components better by responding to our **[short u
 
 ### Form Components
 
-25. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+25. [Core Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
 26. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
 27. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
 28. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
@@ -96,9 +97,9 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 Core Components | AEM as a Cloud Service | AEM 6.5 | AEM 6.4 | Java SE | Maven
 ----------------|------------------------|---------|---------|---------|---------
-[2.11.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.11.0) | Continual | 6.5.5.0+ (*) | 6.4.8.1+ (*) | 8, 11 | 3.3.9+
+[2.13.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.13.2) | Continual | 6.5.5.0+ (*) | 6.4.8.1+ (*) | 8, 11 | 3.3.9+
 
-(*) - Version 2.11.0 requires `org.apache.sling.models.impl` version 1.4.12 or higher (because of [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
+(*) - Since version 2.11.0 `org.apache.sling.models.impl` version 1.4.12 or higher is required (due to [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
 
 For the requirements from previous Core Component releases, see [Historical System Requirements](VERSIONS.md).
 
@@ -120,12 +121,7 @@ Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install
 * `-am/-also-make` options specifies that dependencies should also be built
 
-For convenience, the following deployment profiles are provided when running the Maven install goal with `mvn install`:
-* `autoInstallSinglePackage`: Install everything to the AEM author instance.
-* `autoInstallSinglePackagePublish`: Install everything to the AEM publish instance.
-* `autoInstallPackage`: Install the `ui.content` and `ui.apps` content packages to the AEM author instance.
-* `autoInstallPackagePublish`: Install the `ui.content` and `ui.apps` content packages to the  AEM publish instance.
+For detailed informations see [BUILDING.md](BUILDING.md).
 
-The hostname and port of the instance can be changed with the following user defined properties:
-* `aem.host` and `aem.port` for the author instance.
-* `aem.publish.host` and `aem.publish.port` for the publish instance.
+### Known Issues
+- The provided oEmbed URL Processor configuration for Facebook and Instagram is not working at the moment as a new version of the endpoint was released by Facebook and now an access token needs to be passed in the request. A possible workaround is described in https://github.com/adobe/aem-core-wcm-components/issues/1225

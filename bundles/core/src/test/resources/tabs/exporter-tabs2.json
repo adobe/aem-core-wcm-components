@@ -124,8 +124,8 @@
                                 },
                                 "item_1_2_2_2": {
                                     "id": "carousel-21953a9100",
-                                    "autoplay": false,
-                                    "delay": 5000,
+                                    "autoplay": true,
+                                    "delay": 7000,
                                     "autopauseDisabled": false,
                                     "dataLayer": {
                                         "carousel-21953a9100": {
