@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingException;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -289,4 +291,30 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
         return htmlPageItems;
     }
+    
+    @Override
+	public Map<String, String> getMetaTags() {
+		Map<String, String> map = new HashMap<String, String>();
+		String metaName = StringUtils.EMPTY;
+		String metaValue = StringUtils.EMPTY;
+		if (resolver != null) {			
+			try {
+				org.apache.sling.api.resource.Resource seometatag = resource.getChild(PN_SEO_METATAGS);
+				if (null != seometatag) {
+					for (org.apache.sling.api.resource.Resource res : seometatag.getChildren()) {
+						if (res.getValueMap().containsKey(PN_SEO_METATAG_NAME)) {
+							metaName = res.getValueMap().get(PN_SEO_METATAG_NAME, String.class);
+						}
+						if (res.getValueMap().containsKey(PN_SEO_METATAG_VALUE)) {
+							metaValue = res.getValueMap().get(PN_SEO_METATAG_VALUE, String.class);
+						}
+						map.put(metaName, metaValue);
+					}
+				}
+			} catch (SlingException e) {
+				e.printStackTrace();
+			}
+		}
+		return map;
+	}
 }

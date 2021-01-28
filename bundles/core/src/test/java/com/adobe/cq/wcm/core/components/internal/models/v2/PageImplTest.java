@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -160,5 +161,12 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         Page page = getPageUnderTest(PAGE);
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
+    }
+    
+    @Test
+    void testgetMetatags() {
+    	Page page = getPageUnderTest("/content/page/seo-metatags");
+    	Map<String, String> map = page.getMetaTags();
+    	assertNotNull(map);
     }
 }

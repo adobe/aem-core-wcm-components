@@ -59,5 +59,35 @@
             "cq:lastModified"   : "Wed Jan 20 2016 10:33:36 GMT+0100",
             "cq:redirectTarget" : "/content/page/templated-page"
         }
-    }
+    },
+    "seo-metatags": {
+		"jcr:primaryType": "cq:Page",
+		"jcr:createdBy": "admin",
+		"jcr:created": "Wed Jan 20 2016 10:29:36 GMT+0100",
+		"jcr:content": {
+			"jcr:primaryType": "cq:PageContent",
+			"jcr:createdBy": "admin",
+			"jcr:title": "Redirect Page",
+			"jcr:description": "Description",
+			"cq:template": "/conf/coretest/settings/wcm/templates/product-page",
+			"sling:resourceType": "core/wcm/components/page/v2/page",
+			"jcr:created": "Wed Jan 20 2016 10:29:36 GMT+0100",
+			"jcr:language": "en_GB",
+			"cq:lastModified": "Wed Jan 20 2016 10:33:36 GMT+0100",
+			"canonical": "/content/page/redirect-page",
+			"seometatags": {
+				"jcr:primaryType": "nt:unstructured",
+				"item0": {
+					"jcr:primaryType": "nt:unstructured",
+					"customTagName": "custom-tag-name-1",
+					"customTagValue": "custom-tag-value-1"
+				},
+				"item1": {
+					"jcr:primaryType": "nt:unstructured",
+					"customTagName": "custom-tag-name-2",
+					"customTagValue": "custom-tag-value-2"
+				}
+			}
+		}
+	}
 }
