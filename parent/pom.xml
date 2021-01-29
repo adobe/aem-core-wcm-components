@@ -210,7 +210,7 @@
                 <plugin>
                     <groupId>org.apache.jackrabbit</groupId>
                     <artifactId>filevault-package-maven-plugin</artifactId>
-                    <version>1.1.4</version>
+                    <version>1.1.6</version>
                     <configuration>
                         <failOnMissingEmbed>true</failOnMissingEmbed>
                         <showImportPackageReport>false</showImportPackageReport>
@@ -241,6 +241,12 @@
                                     <validRoots>/,/libs,/libs/core/wcm,/apps,/apps/core/wcm,/etc,/var,/tmp,/content</validRoots>
                                 </options>
                             </jackrabbit-filter>
+                            <jackrabbit-nodetypes>
+                                <options>
+                                    <!-- use the nodetypes and namespaces from the aem-nodetypes.jar provided in the plugin dependencies -->
+                                    <cnds>tccl:aem.cnd</cnds>
+                                </options>
+                            </jackrabbit-nodetypes>
                             <netcentric-aem-classification>
                                 <defaultSeverity>WARN</defaultSeverity>
                                 <options>
@@ -248,10 +254,15 @@
                                     <maps>tccl:biz/netcentric/filevault/validator/maps/aem-classification-map-deprecations/coral2deprecations.map,tccl:biz/netcentric/filevault/validator/maps/aem-classification-map-deprecations/graniteuideprecations.map,tccl:biz/netcentric/filevault/validator/maps/aem-classification-map-repo-annotations.map</maps>
                                 </options>
                             </netcentric-aem-classification>
+                            <netcentric-aem-cloud>
+                                <options>
+                                    <allowVarNodeOutsideContainer>false</allowVarNodeOutsideContainer><!-- default value is true, as it is allowed to have /var nodes inside author-only container -->
+                                </options>
+                            </netcentric-aem-cloud>
                         </validatorsSettings>
                     </configuration>
-                        <dependencies>
-                    <dependency>
+                    <dependencies>
+                        <dependency>
                             <groupId>biz.netcentric.filevault.validator</groupId>
                             <artifactId>aem-classification-validator</artifactId>
                             <version>1.0.0</version>
@@ -267,7 +278,18 @@
                             <artifactId>aem-classification-map-deprecations</artifactId>
                             <version>6.5.0.0</version>
                         </dependency>
-                        </dependencies>
+                        <dependency>
+                            <groupId>biz.netcentric.aem</groupId>
+                            <artifactId>aem-nodetypes</artifactId>
+                            <version>6.5.7.0</version>
+                        </dependency>
+                        <!-- https://github.com/Netcentric/aem-cloud-validator -->
+                        <dependency>
+                            <groupId>biz.netcentric.filevault.validator</groupId>
+                            <artifactId>aem-cloud-validator</artifactId>
+                            <version>1.0.0</version>
+                         </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>com.day.jcr.vault</groupId>
