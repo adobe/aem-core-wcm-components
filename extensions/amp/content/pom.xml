@@ -58,7 +58,6 @@
                 <extensions>true</extensions>
                 <configuration>
                     <packageType>application</packageType>
-                    <acHandling>merge</acHandling>
                     <dependencies>
                         <dependency>
                             <groupId>com.adobe.cq</groupId>
