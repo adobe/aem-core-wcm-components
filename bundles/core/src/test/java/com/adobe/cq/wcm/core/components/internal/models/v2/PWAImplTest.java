@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,12 +42,13 @@ class PWAImplTest {
     private PWA pwa;
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
+    private Resource contextResource;
 
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         MockContextAwareConfig.registerAnnotationClasses(context, PWACaConfig.class);
-        Resource contextResource = context.currentResource(CONTENT_ROOT + "/templated-page/jcr:content");
+        contextResource = context.currentResource(CONTENT_ROOT + "/templated-page/jcr:content");
         if (contextResource != null) {
             MockContextAwareConfig.writeConfiguration(context, contextResource.getPath(), PWACaConfig.class, "projectSiteRootLevel", 2);
         }
@@ -61,6 +64,45 @@ class PWAImplTest {
         assertEquals("#ffa000", pwa.getThemeColor());
     }
 
+    @Test
+    void testEmptyColorToHex() {
+        ModifiableValueMap map = contextResource.adaptTo(ModifiableValueMap.class);
+        map.put("themeColor", StringUtils.EMPTY);
+        pwa = context.request().adaptTo(PWA.class);
+        assertEquals(StringUtils.EMPTY, pwa.getThemeColor());
+    }
+
+    @Test
+    void testHexColorToHex() {
+        ModifiableValueMap map = contextResource.adaptTo(ModifiableValueMap.class);
+        map.put("themeColor", "#ffa000");
+        pwa = context.request().adaptTo(PWA.class);
+        assertEquals("#ffa000", pwa.getThemeColor());
+    }
+
+    @Test
+    void testInvalidColorToHex() {
+        ModifiableValueMap map = contextResource.adaptTo(ModifiableValueMap.class);
+        map.put("themeColor", "xyz(foo)");
+        pwa = context.request().adaptTo(PWA.class);
+        assertEquals(StringUtils.EMPTY, pwa.getThemeColor());
+    }
+
+    @Test
+    void testInvalidNumberColorToHex() {
+        ModifiableValueMap map = contextResource.adaptTo(ModifiableValueMap.class);
+        map.put("themeColor", "rgb(foo)");
+        pwa = context.request().adaptTo(PWA.class);
+        assertEquals(StringUtils.EMPTY, pwa.getThemeColor());
+    }
+
+    @Test
+    void testRgbaNumberColorToHex() {
+        ModifiableValueMap map = contextResource.adaptTo(ModifiableValueMap.class);
+        map.put("themeColor", "rgba(53,167,233,1)");
+        pwa = context.request().adaptTo(PWA.class);
+        assertEquals("#35a7e9", pwa.getThemeColor());
+    }
 
     @Test
     void testPWAReturnsFalseIfPWAOptionIsNotEnabled() {
