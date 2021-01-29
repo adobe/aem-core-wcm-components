@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,12 +13,14 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
- * <p>
- *      This package defines the context-aware configurations used by the WCM Core Components
- * </p>
- */
-@Version("1.1.0")
 package com.adobe.cq.wcm.core.components.config;
 
-import org.osgi.annotation.versioning.Version;
+import org.apache.sling.caconfig.annotation.Configuration;
+import org.apache.sling.caconfig.annotation.Property;
+
+@Configuration(label = "PWA - Configuration", description = "PWA Configuration")
+public @interface PWACaConfig {
+
+    @Property(label = "PWA Project Root level", description = "Root level of the PWA Project (default 2)")
+    int projectSiteRootLevel() default 2;
+}
