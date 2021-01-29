@@ -2,6 +2,6 @@
     "com.adobe.cq.wcm.core.components.config.PWACaConfig": {
         "jcr:primaryType": "nt:unstructured",
         "jcr:lastModified": "2020-10-14T15:56:53.696+02:00",
-        "projectSiteRootLevel": "{Long}2"
+        "projectSiteRootLevel": "3"
     }
 }
