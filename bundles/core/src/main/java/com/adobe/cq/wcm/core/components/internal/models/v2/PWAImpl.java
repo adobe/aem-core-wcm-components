@@ -16,56 +16,79 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import javax.annotation.Nonnull;
+import javax.annotation.CheckForNull;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.Self;
 
+import com.adobe.cq.wcm.core.components.config.PWACaConfig;
 import com.adobe.cq.wcm.core.components.models.PWA;
-import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 
-@Model(adaptables = Resource.class,
-    adapters = {PWA.class})
+@Model(adaptables = SlingHttpServletRequest.class,
+    adapters = {PWA.class}, resourceType = PageImpl.RESOURCE_TYPE)
 public class PWAImpl implements PWA {
 
-    static final String MANIFEST_NAME = "manifest.webmanifest";
-    static final int SITES_PROJECT_LEVEL = 3;
+    private static final String MANIFEST_NAME = "manifest.webmanifest";
 
-    private boolean isPWAEnabled = false;
+    @Inject
+    private Resource resource;
+
+    private boolean isEnabled = false;
     private String projectName = "";
     private String manifestPath = "";
     private String serviceWorkerPath = "";
     private String themeColor = "";
     private String iconPath = "";
 
-    @Self
-    private Resource resource;
-
     @PostConstruct
     protected void initModel() {
-        String projectPath = this.getSitesProjectPath(resource.getPath());
-        Resource project = resource.getResourceResolver().getResource(projectPath + JcrConstants.JCR_CONTENT);
-
-        if (project != null) {
-            ValueMap valueMap = project.getValueMap();
-            Boolean isPWAEnabled = valueMap.get(PN_ENABLE_PWA, Boolean.class);
-            this.isPWAEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
-            this.themeColor = colorToHex(valueMap.get(PN_THEME_COLOR, ""));
-            this.iconPath = valueMap.get(PN_PWA_ICON, "");
+        Page pwaSiteRootPage = getPWASiteRootPage();
+        if (pwaSiteRootPage != null) {
+            Resource contentResource = pwaSiteRootPage.getContentResource();
+            if (contentResource != null) {
+                ValueMap valueMap = contentResource.adaptTo(ValueMap.class);
+                if (valueMap != null) {
+                    isEnabled = valueMap.get(PN_ENABLE_PWA, isEnabled);
+                    if (isEnabled) {
+                        themeColor = colorToHex(valueMap.get(PN_THEME_COLOR, StringUtils.EMPTY));
+                        iconPath = valueMap.get(PN_PWA_ICON, StringUtils.EMPTY);
+                        projectName = pwaSiteRootPage.getName();
+                        manifestPath = pwaSiteRootPage.getPath() + "/" + MANIFEST_NAME;
+                        serviceWorkerPath = "/" + projectName + "sw.js";
+                    }
+                }
+            }
         }
+    }
 
-        String[] levels = projectPath.split("/");
-        this.projectName = levels[levels.length - 1];
-        this.manifestPath = projectPath + MANIFEST_NAME;
-        this.serviceWorkerPath = "/" + this.projectName + "sw.js";
+    @CheckForNull
+    private Page getPWASiteRootPage() {
+        Page pwaSiteRoot = null;
+        ResourceResolver resourceResolver = resource.getResourceResolver();
+        PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
+        if (pageManager != null) {
+            Page page = pageManager.getContainingPage(resource);
+            ConfigurationBuilder configurationBuilder = resource.adaptTo(ConfigurationBuilder.class);
+            if (configurationBuilder != null && page != null) {
+                PWACaConfig caConfig = configurationBuilder.as(PWACaConfig.class);
+                pwaSiteRoot = page.getAbsoluteParent(caConfig.projectSiteRootLevel());
+            }
+        }
+        return pwaSiteRoot;
     }
 
     @Override
-    public boolean isPWAEnabled() {
-        return this.isPWAEnabled;
+    public boolean isEnabled() {
+        return this.isEnabled;
     }
 
     @Override
@@ -91,28 +114,6 @@ public class PWAImpl implements PWA {
     @Override
     public String getServiceWorkerPath() {
         return this.serviceWorkerPath;
-    }
-
-    @Nonnull
-    private String getSitesProjectPath(String path) {
-        String[] levels = path.split("/");
-
-        if (levels.length < SITES_PROJECT_LEVEL) {
-            return "";
-        }
-
-        if (levels.length == SITES_PROJECT_LEVEL) {
-            return path;
-        }
-
-        int i = 0;
-        StringBuilder projectPath = new StringBuilder();
-        while (i < SITES_PROJECT_LEVEL) {
-            projectPath.append(levels[i]).append('/');
-            i++;
-        }
-
-        return projectPath.toString();
     }
 
     private String colorToHex(String color) {

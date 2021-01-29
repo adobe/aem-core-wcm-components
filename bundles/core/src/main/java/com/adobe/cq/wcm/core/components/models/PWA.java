@@ -24,25 +24,25 @@ package com.adobe.cq.wcm.core.components.models;
 public interface PWA {
 
     /**
-     * Name of the property that defines it PWA is enabled for the website.
+     * Name of the property that defines if PWA is enabled for the website.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    String PN_ENABLE_PWA = "enablePWA";
+    String PN_ENABLE_PWA = "pwaEnabled";
 
     /**
      * Name of the property that defines the theme color used.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    String PN_THEME_COLOR = "themecolor";
+    String PN_THEME_COLOR = "themeColor";
 
     /**
      * Name of the property that defines the PWA icon
      *
     @since com.adobe.cq.wcm.core.components.models 12.18.0
     */
-    String PN_PWA_ICON = "pwaicon";
+    String PN_PWA_ICON = "pwaIcon";
 
     /**
      * Returns {@code true} if PWA features are enabled, {@code false} otherwise
@@ -50,7 +50,7 @@ public interface PWA {
      * @return whether PWA is enabled or not
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    default boolean isPWAEnabled() { throw new UnsupportedOperationException("Not Implemented"); };
+    default boolean isEnabled() { throw new UnsupportedOperationException("Not Implemented"); };
 
     /**
      * The name of the sites project for this site

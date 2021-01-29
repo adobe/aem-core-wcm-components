@@ -23,7 +23,7 @@
     <meta data-sly-test.templateName="${page.templateName}" name="template" content="${templateName}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <sly data-sly-test="${pwa.pWAEnabled}">
+    <sly data-sly-test="${pwa.enabled}">
         <link rel="manifest" href="${pwa.manifestPath}" crossorigin="use-credentials"/>
         <meta name="theme-color" content="${pwa.themeColor}"/>
         <link rel="apple-touch-icon" href="${pwa.iconPath}"/>

@@ -24,7 +24,7 @@
     <sly data-sly-list="${page.htmlPageItems}"><script data-sly-test="${item.location.name == 'footer'}"
             data-sly-element="${item.element.name @ context='unsafe'}" data-sly-attribute="${item.attributes}"></script>
     </sly>
-    <sly data-sly-test="${pwa.pWAEnabled}">
+    <sly data-sly-test="${pwa.enabled}">
         <script>
             // Check that service workers are supported
             if ('serviceWorker' in navigator) {

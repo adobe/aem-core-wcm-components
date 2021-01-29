@@ -1,22 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-          xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
-          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="nt:unstructured"
     jcr:title="Page"
     sling:resourceType="cq/gui/components/authoring/dialog"
@@ -57,9 +40,9 @@
                                                 granite:class="cq-siteadmin-admin-properties-basic-brandSlug"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="core/wcm/components/commons/editor/dialog/inherited/v1/inherited"
-                                                prop="brandSlug"
                                                 heading="Brand Slug"
-                                                path="${empty param.item ? requestPathInfo.suffix : param.item}"/>
+                                                path="${empty param.item ? requestPathInfo.suffix : param.item}"
+                                                prop="brandSlug"/>
                                         </items>
                                     </branding>
                                     <htmlid
@@ -95,8 +78,8 @@
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Social Media"
-                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
-                        sling:orderBefore="cloudservices">
+                        sling:orderBefore="cloudservices"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
                         <items jcr:primaryType="nt:unstructured">
                             <column
                                 jcr:primaryType="nt:unstructured"
@@ -146,12 +129,12 @@
                                                 cq:showOnCreate="{Boolean}true"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                name="./facebookAppId"
+                                                fieldDescription="Facebook APP ID to be used if Facebook sharing is enabled. See https://developers.facebook.com/apps for details"
                                                 fieldLabel="Facebook App ID"
-                                                fieldDescription="Facebook APP ID to be used if Facebook sharing is enabled. See https://developers.facebook.com/apps for details">
+                                                name="./facebookAppId">
                                                 <granite:data
-                                                        jcr:primaryType="nt:unstructured"
-                                                        cq-msm-lockable="facebookAppId"/>
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="facebookAppId"/>
                                             </facebookAppId>
                                             <variantpath
                                                 cq:showOnCreate="{Boolean}true"
@@ -184,8 +167,243 @@
                     </socialmedia>
                     <pwa
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/include"
-                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/pwa"/>
+                        jcr:title="Progressive Web App"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <manifest
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Configure installable experience"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <label
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/foundation/text"
+                                                text="Make your site behave like a native app by making it installable on the visitors' home screen and available offline."/>
+                                            <enablePWA
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="Allow users to install the site as a PWA."
+                                                name="./pwaEnabled"
+                                                text="Enable PWA"
+                                                value="{Boolean}true"/>
+                                            <enablePWAType
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/foundation/form/hidden"
+                                                name="./pwaEnabled@TypeHint"
+                                                value="Boolean"/>
+                                            <charset
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                allowBulkEdit="{Boolean}true"
+                                                ignoreData="{Boolean}true"
+                                                name="_charset_"
+                                                value="utf-8"/>
+                                            <startURL
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Preferred URL that should be loaded when the user launches the web app. If the URL is relative, the manifest URL is used as the base URL to resolve it. When this field is left empty, the feature uses the address of the web page from which the web app got installed. It is recommended to set a value."
+                                                fieldLabel="Startup URL"
+                                                name="./startURL"/>
+                                            <display
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="Preferred display mode. The display mode influences how the web app is displayed to the user."
+                                                fieldLabel="Display mode"
+                                                name="./display"
+                                                translateOptions="{Boolean}true">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="jcr:language"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <standalone
+                                                        jcr:primaryType="nt:unstructured"
+                                                        selected="{Boolean}true"
+                                                        text="Standalone (Like a Native app)"
+                                                        value="standalone"/>
+                                                    <browser
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Browser (Like a web page in a full browser window)"
+                                                        value="browser"/>
+                                                    <minimal-ui
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Minimal UI (Like a native app but with minimal navigation browser controls)"
+                                                        value="minimal-ui"/>
+                                                    <fullscreen
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Full Screen (Like a native app in full screen mode)"
+                                                        value="fullscreen"/>
+                                                </items>
+                                            </display>
+                                            <orientation
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="Preferred orientation of the web app."
+                                                fieldLabel="Screen orientation"
+                                                name="./orientation"
+                                                translateOptions="{Boolean}true">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="jcr:language"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <any
+                                                        jcr:primaryType="nt:unstructured"
+                                                        selected="{Boolean}true"
+                                                        text="Any"
+                                                        value="any"/>
+                                                    <portrait
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Portrait"
+                                                        value="portrait"/>
+                                                    <landscape
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Landscape"
+                                                        value="landscape"/>
+                                                </items>
+                                            </orientation>
+                                            <themecolor
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
+                                                fieldDescription="Preferred color for the web app that affects how the Operating System displays the native UI toolbar and the navigation controls."
+                                                fieldLabel="Theme color"
+                                                name="./themeColor"
+                                                renderReadOnly="{Boolean}true">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="jcr:title"/>
+                                            </themecolor>
+                                            <backgroundcolor
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
+                                                fieldDescription="Placeholder background (splash screen) color for the application page to display before its stylesheet is loaded."
+                                                fieldLabel="Background color"
+                                                name="./backgroundcolor"
+                                                renderReadOnly="{Boolean}true">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="jcr:title"/>
+                                            </backgroundcolor>
+                                        </items>
+                                    </manifest>
+                                    <icons
+                                        cq:showOnCreate="{Boolean}true"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <icon
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                fieldDescription="Icon used to represent the web app on the Operating System."
+                                                fieldLabel="Icon"
+                                                filter="hierarchyNotFile"
+                                                name="./pwaIcon"
+                                                rootPath="/content/dam"/>
+                                            <label
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/foundation/text"
+                                                text="Please use a PNG icon of size 512x512 pixels."/>
+                                            <link
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/hyperlink"
+                                                href="/assets.html/content/dam"
+                                                target="_blank"
+                                                text="Click here to upload your assets"/>
+                                        </items>
+                                    </icons>
+                                    <serviceworker
+                                        cq:showOnCreate="{Boolean}true"
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Cache management (Advanced)"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <label
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/foundation/text"
+                                                text="Allows to control the cache of the web app to optimize network requests and support offline experiences"/>
+                                            <cachestrategy
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="How frequently should the content be refreshed?"
+                                                fieldLabel="Caching strategy and frequency of content refresh"
+                                                name="./cachestrategy"
+                                                translateOptions="{Boolean}true">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="jcr:language"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <staleWhileRevalidate
+                                                        jcr:primaryType="nt:unstructured"
+                                                        selected="{Boolean}true"
+                                                        text="Moderately (Stale while revalidate)"
+                                                        value="staleWhileRevalidate"/>
+                                                    <networkfirst
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Frequently (Network first, cache fallback)"
+                                                        value="networkFirst"/>
+                                                    <cachefirst
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Rarely (Cache first, network fallback)"
+                                                        value="cacheFirst"/>
+                                                </items>
+                                            </cachestrategy>
+                                            <labelOffline
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/foundation/text"
+                                                text="Files to cache for offline use"/>
+                                            <precache
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                fieldDescription="Save files hosted on AEM to the browser cache when the service worker is installing - before it gets used. This guarantees that the web app is fully functional when offline. E.g. /content/site/page.html, /etc.clientlibs/mylib.js"
+                                                fieldLabel="File pre-caching"
+                                                renderReadOnly="{Boolean}true">
+                                                <field
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                    name="./precache"/>
+                                            </precache>
+                                            <offlinepaths
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                cq-msm-lockable="sling:vanityPath"
+                                                fieldDescription="Network requests for the listed paths are intercepted and cached content is returned in accordance with the caching strategy. E.g. /content/dam/pathtoassets, /etc.clientlibs/pathtocode"
+                                                fieldLabel="Path inclusions"
+                                                renderReadOnly="{Boolean}true">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="sling:vanityPath"/>
+                                                <field
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                    name="./cachingpaths"/>
+                                            </offlinepaths>
+                                            <exclusionpaths
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                cq-msm-lockable="sling:vanityPath"
+                                                fieldDescription="Sub-paths to exclude from the cache. E.g. /content/dam/pathtoassets/ignore"
+                                                fieldLabel="Path exclusions"
+                                                renderReadOnly="{Boolean}true">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="sling:vanityPath"/>
+                                                <field
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                    name="./exclusionpaths"/>
+                                            </exclusionpaths>
+                                        </items>
+                                    </serviceworker>
+                                </items>
+                            </column>
+                        </items>
+                        <granite:rendercondition
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/commons/renderconditions/issiteproject"
+                            path="${empty param.item ? requestPathInfo.suffix : param.item}"/>
+                    </pwa>
                 </items>
             </tabs>
         </items>
