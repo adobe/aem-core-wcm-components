@@ -1,7 +1,0 @@
-{
-  "issiteproject": {
-    "jcr:primaryType": "nt:unstructured",
-    "sling:resourceType": "core/wcm/components/commons/renderconditions/issiteproject",
-    "path": "${empty param.item ? requestPathInfo.suffix : param.item}"
-  }
-}

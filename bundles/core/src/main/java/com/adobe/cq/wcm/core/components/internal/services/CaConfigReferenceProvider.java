@@ -25,7 +25,6 @@ import org.apache.sling.caconfig.resource.ConfigurationResourceResolver;
 import org.osgi.service.component.annotations.Component;
 
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
-import com.adobe.cq.wcm.core.components.config.PWACaConfig;
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -67,7 +66,6 @@ public class CaConfigReferenceProvider implements ReferenceProvider {
         addCaConfigReference(HtmlPageItemsConfig.class.getName(), resource, references);
         addCaConfigReference(DataLayerConfig.class.getName(), resource, references);
         addCaConfigReference(PdfViewerCaConfig.class.getName(), resource, references);
-        addCaConfigReference(PWACaConfig.class.getName(), resource, references);
         return references;
     }
 
