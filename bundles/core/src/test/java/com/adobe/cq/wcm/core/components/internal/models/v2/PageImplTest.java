@@ -23,15 +23,12 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.osgi.framework.Version;
 
-import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
-import com.adobe.cq.wcm.core.components.config.PWACaConfig;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockConfigurationResourceResolver;
@@ -55,22 +52,23 @@ import static org.mockito.Mockito.when;
 @ExtendWith(AemContextExtension.class)
 class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
 
-    protected static final String TEST_BASE = "/page/v2";
+    private static final String TEST_BASE = "/page/v2";
     private static final String REDIRECT_PAGE = CONTENT_ROOT + "/redirect-page";
     private static final String PN_CLIENT_LIBS = "clientlibs";
-    private static final String SLING_CONFIGS_ROOT = "/conf/page/sling:configs";
+    private static final String SLING_CONFIGS_ROOT = "/conf/sling:configs";
 
     private static final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
 
     @BeforeEach
     protected void setUp() {
         internalSetup(TEST_BASE);
-        MockContextAwareConfig.registerAnnotationClasses(context, HtmlPageItemsConfig.class);
         ClientLibrary mockClientLibrary = Mockito.mock(ClientLibrary.class);
         when(mockClientLibrary.getPath()).thenReturn("/apps/wcm/core/page/clientlibs/favicon");
         when(mockClientLibrary.allowProxy()).thenReturn(true);
         context.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
         context.registerInjectActivateService(mockProductInfoProvider);
+        MockConfigurationResourceResolver mockConfigurationResourceResolver = new MockConfigurationResourceResolver(context.resourceResolver(), SLING_CONFIGS_ROOT);
+        context.registerInjectActivateService(mockConfigurationResourceResolver);
     }
 
     protected void loadHtmlPageItemsConfig() {
