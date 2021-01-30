@@ -10,7 +10,11 @@
         "location"       : "header",
         "attributes"     : {
           "jcr:primaryType": "nt:unstructured",
-          "href"           : "/theme.css"
+          "href"           : {
+            "jcr:primaryType": "nt:unstructured",
+            "name"           : "href",
+            "value"          : "/theme.css"
+          }
         }
       },
       "theme.js"       : {
@@ -19,7 +23,11 @@
         "location"       : "footer",
         "attributes"     : {
           "jcr:primaryType": "nt:unstructured",
-          "src"            : "/theme.js"
+          "src"            : {
+            "jcr:primaryType": "nt:unstructured",
+            "name"           : "src",
+            "value"          : "/theme.js"
+          }
         }
       },
       "meta"           : {
@@ -27,7 +35,11 @@
         "element"        : "meta",
         "attributes"     : {
           "jcr:primaryType": "nt:unstructured",
-          "charset"        : "UTF-8"
+          "charset"        : {
+            "jcr:primaryType": "nt:unstructured",
+            "name"           : "charset",
+            "value"          : "UTF-8"
+          }
         }
       },
       "invalid"        : {
