@@ -1,8 +1,6 @@
 {
     "id"   : "form-options-1196922035",
     "type" : "CHECKBOX",
-    "required":false,
-    "requiredMessage":"",
     "items": [
         {
             "text"    : "datasource-item1-name",

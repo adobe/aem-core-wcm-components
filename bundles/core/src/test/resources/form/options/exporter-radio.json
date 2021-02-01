@@ -4,8 +4,6 @@
     "name"       : "name1",
     "helpMessage": "helpMessage1",
     "type"       : "RADIO",
-    "required"          : true,
-    "requiredMessage"   : "Required",
     "items"      : [
         {
             "text"    : "t1",

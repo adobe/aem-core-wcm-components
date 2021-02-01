@@ -2,7 +2,5 @@
     "id"   : "form-options-1703814447",
     "type" : "CHECKBOX",
     "items": [],
-    "required":false,
-    "requiredMessage":"",
     ":type": "core/wcm/components/form/options/v2/options"
 }
