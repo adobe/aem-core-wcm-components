@@ -23,7 +23,7 @@ import com.adobe.cq.wcm.core.components.models.Page;
  * Helper Use-Object for displaying the Core Components bundle version
  *
  * Usage:
- *    <sly data-sly-use.version="VersionHelper">${version.bundleVersion}</sly>
+ *    <sly data-sly-use.bundle="CoreComponentsBundle">${bundle.version}</sly>
  */
 public class CoreComponentsBundle extends WCMUsePojo {
 
