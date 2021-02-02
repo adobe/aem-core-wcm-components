@@ -22,7 +22,7 @@ $(document).ready(function () {
             if($(this).find('fieldset').attr('required') != undefined){
                 var elemName = $('input:first', this).attr('name');
                 //console.log("Name -- " + elemName);
-                var fieldset = $(this).find('fieldset');
+                //var fieldset = $(this).find('fieldset');
                 var firstElement = $('input:first', this);
                 if (($("input[name*=" + elemName + "]:checked").length)<=0) {
                     firstElement.on('invalid', function(){ firstElement.get(0).setCustomValidity(errorMsg); });
