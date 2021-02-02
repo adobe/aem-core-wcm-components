@@ -25,14 +25,14 @@ import com.adobe.cq.wcm.core.components.models.Page;
  * Usage:
  *    <sly data-sly-use.version="VersionHelper">${version.bundleVersion}</sly>
  */
-public class VersionHelper extends WCMUsePojo {
+public class CoreComponentsBundle extends WCMUsePojo {
 
     @Override
     public void activate() throws Exception {
 
     }
 
-    public String getBundleVersion() {
+    public String getVersion() {
         return FrameworkUtil.getBundle(Page.class).getVersion().toString();
     }
 
