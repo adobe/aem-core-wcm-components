@@ -21,10 +21,6 @@ package com.adobe.cq.wcm.core.components.models;
  */
 public interface PWA {
 
-    String PROP_PWA_ENABLEPWA = "enablePWA";
-    String PROP_PWA_THEMECOLOR = "themecolor";
-    String PROP_PWA_ICON = "pwaicon";
-
     /**
      * Returns true if PWA features are enabled false otherwise
      *
@@ -34,20 +30,12 @@ public interface PWA {
     default boolean isPWAEnabled() { throw new UnsupportedOperationException("Not Implemented"); };
 
     /**
-     * The name of the sites project for this site
-     *
-     * @return A String that represents the name of the sites project for this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
-     */
-    default String getProjectName() { throw new UnsupportedOperationException("Not Implemented"); };
-
-    /**
      * The theme color of the site sometimes used to color the address bar of the browser
      *
      * @return A Hex String that represents the theme color for this site
      * @since com.adobe.cq.wcm.core.components.models 12.17.0
      */
-    default String getThemecolor() { throw new UnsupportedOperationException("Not Implemented"); };
+    default String getThemeColor() { throw new UnsupportedOperationException("Not Implemented"); };
 
     /**
      * The path to the icon of this PWA

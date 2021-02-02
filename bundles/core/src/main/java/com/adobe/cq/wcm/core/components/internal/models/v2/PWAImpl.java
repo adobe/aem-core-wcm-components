@@ -25,20 +25,22 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 import com.adobe.cq.wcm.core.components.models.PWA;
-import com.day.cq.commons.jcr.JcrConstants;
 
 @Model(adaptables = Resource.class,
     adapters = {PWA.class})
 public class PWAImpl implements PWA {
 
+    static final String PROP_PWA_PWAENABLED = "pwaEnabled";
+    static final String PROP_PWA_STARTURL = "startURL";
+    static final String PROP_PWA_THEMECOLOR = "themeColor";
+    static final String PROP_PWA_ICON = "pwaIcon";
     static final String MANIFEST_NAME = "manifest.webmanifest";
-    static final int SITES_PROJECT_LEVEL = 3;
+    static final String CONTENT_PATH = "/content/";
 
     private boolean isPWAEnabled = false;
-    private String projectName = "";
     private String manifestPath = "";
     private String serviceWorkerPath = "";
-    private String themecolor = "";
+    private String themeColor = "";
     private String iconPath = "";
 
     @Self
@@ -46,21 +48,24 @@ public class PWAImpl implements PWA {
 
     @PostConstruct
     protected void initModel() {
-        String projectPath = this.getSitesProjectPath(resource.getPath());
-        Resource project = resource.getResourceResolver().getResource(projectPath + JcrConstants.JCR_CONTENT);
-
-        if (project != null) {
-            ValueMap valueMap = project.getValueMap();
-            Boolean isPWAEnabled = valueMap.get(PROP_PWA_ENABLEPWA, Boolean.class);
-            this.isPWAEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
-            this.themecolor = colorToHex(valueMap.get(PROP_PWA_THEMECOLOR, ""));
-            this.iconPath = valueMap.get(PROP_PWA_ICON, "");
+        ValueMap valueMap = resource.getValueMap();
+        Boolean isPWAEnabled = valueMap.get(PROP_PWA_PWAENABLED, Boolean.class);
+        this.isPWAEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
+        if (!this.isPWAEnabled) {
+            return;
         }
 
-        String[] levels = projectPath.split("/");
-        this.projectName = levels[levels.length - 1];
-        this.manifestPath = projectPath + MANIFEST_NAME;
-        this.serviceWorkerPath = "/" + this.projectName + "sw.js";
+        this.themeColor = colorToHex(valueMap.get(PROP_PWA_THEMECOLOR, ""));
+        this.iconPath = valueMap.get(PROP_PWA_ICON, "");
+
+        String startURL = valueMap.get(PROP_PWA_STARTURL, "");
+        this.manifestPath = replaceSuffix(startURL, MANIFEST_NAME);
+
+        Resource page = resource.getParent();
+        if (page != null) {
+            String mappingName = page.getPath().replace("/", ".").substring(CONTENT_PATH.length());
+            this.serviceWorkerPath = "/" + mappingName + "sw.js";
+        }
     }
 
     @Override
@@ -69,13 +74,8 @@ public class PWAImpl implements PWA {
     }
 
     @Override
-    public String getProjectName() {
-        return this.projectName;
-    }
-
-    @Override
-    public String getThemecolor() {
-        return this.themecolor;
+    public String getThemeColor() {
+        return this.themeColor;
     }
 
     @Override
@@ -91,28 +91,6 @@ public class PWAImpl implements PWA {
     @Override
     public String getServiceWorkerPath() {
         return this.serviceWorkerPath;
-    }
-
-    @Nonnull
-    private String getSitesProjectPath(String path) {
-        String[] levels = path.split("/");
-
-        if (levels.length < SITES_PROJECT_LEVEL) {
-            return "";
-        }
-
-        if (levels.length == SITES_PROJECT_LEVEL) {
-            return path;
-        }
-
-        int i = 0;
-        StringBuilder projectPath = new StringBuilder();
-        while (i < SITES_PROJECT_LEVEL) {
-            projectPath.append(levels[i]).append('/');
-            i++;
-        }
-
-        return projectPath.toString();
     }
 
     private String colorToHex(String color) {
@@ -148,4 +126,12 @@ public class PWAImpl implements PWA {
         }
     }
 
+    private String replaceSuffix(@Nonnull String url, @Nonnull String newSuffix) {
+        int index = url.lastIndexOf(".");
+        if (index == -1) {
+            return url + (url.endsWith("/") ? newSuffix : "/" + newSuffix);
+        }
+
+        return url.replace(url.substring(index, url.length()), "/" + newSuffix);
+    }
 }

@@ -39,8 +39,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(AemContextExtension.class)
 public class PWAImplTest {
 
-    private static final String SITES_PROJECT_PATH = "/content/mysite";
-    private static final String SITES_PAGE_PATH = "/content/mysite/us/en";
+    private static final String SITES_PAGE_PATH = "/content/mysite/en";
     private ResourceResolver resolver;
     private PWA pwa;
     private Resource resource;
@@ -54,32 +53,22 @@ public class PWAImplTest {
         resolver = context.resourceResolver();
         resource = spy(resolver.getResource(SITES_PAGE_PATH));
         mvp = resource.adaptTo(ModifiableValueMap.class);
+
+        when(resource.getPath()).thenReturn(SITES_PAGE_PATH);
+        ResourceResolver spyResolver = spy(resolver);
+        when(resource.getResourceResolver()).thenReturn(spyResolver);
+        Resource mockPWAResource = mock(Resource.class);
+        when(spyResolver.getResource("/content/mysite/" + JcrConstants.JCR_CONTENT)).thenReturn(mockPWAResource);
+
+        mvp.put("pwaEnabled", true);
+        mvp.put("startURL", SITES_PAGE_PATH + ".html");
+        when(mockPWAResource.getValueMap()).thenReturn(mvp);
     }
 
     @Test
     public void testPWAReturnsManifestPath() {
         pwa = resource.adaptTo(PWA.class);
-        assertEquals(SITES_PROJECT_PATH + "/manifest.webmanifest", pwa.getManifestPath());
-    }
-
-    @Test
-    public void testPWAReturnsProjectName() {
-        pwa = resource.adaptTo(PWA.class);
-        assertEquals("mysite", pwa.getProjectName());
-    }
-
-    @Test
-    public void testProjectNameReturnsBlankIfResourceIsNotUnderSitesProject() {
-        when(resource.getPath()).thenReturn("/");
-        pwa = resource.adaptTo(PWA.class);
-        assertEquals("", pwa.getProjectName());
-    }
-
-    @Test
-    public void testReturnsProjectNameIfResourceIsSitesProject() {
-        when(resource.getPath()).thenReturn("/foo/bar");
-        pwa = resource.adaptTo(PWA.class);
-        assertEquals("bar", pwa.getProjectName());
+        assertEquals(SITES_PAGE_PATH + "/manifest.webmanifest", pwa.getManifestPath());
     }
 
     @Test
@@ -90,113 +79,57 @@ public class PWAImplTest {
 
     @Test
     public void testPWAReturnsFalseIfPWAOptionIsNotEnabled() {
+        mvp.remove("pwaEnabled");
         pwa = resource.adaptTo(PWA.class);
         assertFalse(pwa.isPWAEnabled());
     }
 
     @Test
-    public void testPWAReturnsTrueIfPWAOptionIsNotEnabled() {
-        when(resource.getPath()).thenReturn("/foo/bar/baz");
-        ResourceResolver spyResolver = spy(resolver);
-        when(resource.getResourceResolver()).thenReturn(spyResolver);
-        Resource mockSitesProject = mock(Resource.class);
-        when(spyResolver.getResource("/foo/bar/" + JcrConstants.JCR_CONTENT)).thenReturn(mockSitesProject);
-
-        mvp.put("enablePWA", true);
-        when(mockSitesProject.getValueMap()).thenReturn(mvp);
-
+    public void testPWAReturnsTrueIfPWAOptionIsEnabled() {
         pwa = resource.adaptTo(PWA.class);
         assertTrue(pwa.isPWAEnabled());
     }
 
     @Test
     public void testPWAReturnsIconPath() {
-        when(resource.getPath()).thenReturn("/foo/bar/baz");
-        ResourceResolver spyResolver = spy(resolver);
-        when(resource.getResourceResolver()).thenReturn(spyResolver);
-        Resource mockSitesProject = mock(Resource.class);
-        when(spyResolver.getResource("/foo/bar/" + JcrConstants.JCR_CONTENT)).thenReturn(mockSitesProject);
-
-        mvp.put("pwaicon", "/content/dam/foo.png");
-        when(mockSitesProject.getValueMap()).thenReturn(mvp);
-
+        mvp.put("pwaIcon", "/content/dam/foo.png");
         pwa = resource.adaptTo(PWA.class);
         assertEquals("/content/dam/foo.png", pwa.getIconPath());
     }
 
     @Test
     public void testPWAReturnsThemeColor() {
-        when(resource.getPath()).thenReturn("/foo/bar/baz");
-        ResourceResolver spyResolver = spy(resolver);
-        when(resource.getResourceResolver()).thenReturn(spyResolver);
-        Resource mockSitesProject = mock(Resource.class);
-        when(spyResolver.getResource("/foo/bar/" + JcrConstants.JCR_CONTENT)).thenReturn(mockSitesProject);
-
-        mvp.put("themecolor", "#AAAAAA");
-        when(mockSitesProject.getValueMap()).thenReturn(mvp);
-
+        mvp.put("themeColor", "#AAAAAA");
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("#AAAAAA", pwa.getThemecolor());
+        assertEquals("#AAAAAA", pwa.getThemeColor());
     }
 
     @Test
     public void testPWAReturnsThemeColorConvertingRGBToHex() {
-        when(resource.getPath()).thenReturn("/foo/bar/baz");
-        ResourceResolver spyResolver = spy(resolver);
-        when(resource.getResourceResolver()).thenReturn(spyResolver);
-        Resource mockSitesProject = mock(Resource.class);
-        when(spyResolver.getResource("/foo/bar/" + JcrConstants.JCR_CONTENT)).thenReturn(mockSitesProject);
-
-        mvp.put("themecolor", "rgb(255,160,0)");
-        when(mockSitesProject.getValueMap()).thenReturn(mvp);
-
+        mvp.put("themeColor", "rgb(255,160,0)");
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("#ffa000", pwa.getThemecolor());
+        assertEquals("#ffa000", pwa.getThemeColor());
     }
 
     @Test
     public void testPWAReturnsThemeColorConvertingRGBAToHex() {
-        when(resource.getPath()).thenReturn("/foo/bar/baz");
-        ResourceResolver spyResolver = spy(resolver);
-        when(resource.getResourceResolver()).thenReturn(spyResolver);
-        Resource mockSitesProject = mock(Resource.class);
-        when(spyResolver.getResource("/foo/bar/" + JcrConstants.JCR_CONTENT)).thenReturn(mockSitesProject);
-
-        mvp.put("themecolor", "rgba(255,255,0,0.75)");
-        when(mockSitesProject.getValueMap()).thenReturn(mvp);
-
+        mvp.put("themeColor", "rgba(255,255,0,0.75)");
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("#ffff00", pwa.getThemecolor());
+        assertEquals("#ffff00", pwa.getThemeColor());
     }
 
     @Test
     public void testPWAReturnsBlankThemeColorIfValueHadInvalidFormat() {
-        when(resource.getPath()).thenReturn("/foo/bar/baz");
-        ResourceResolver spyResolver = spy(resolver);
-        when(resource.getResourceResolver()).thenReturn(spyResolver);
-        Resource mockSitesProject = mock(Resource.class);
-        when(spyResolver.getResource("/foo/bar/" + JcrConstants.JCR_CONTENT)).thenReturn(mockSitesProject);
-
-        mvp.put("themecolor", "123");
-        when(mockSitesProject.getValueMap()).thenReturn(mvp);
-
+        mvp.put("themeColor", "123");
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("", pwa.getThemecolor());
+        assertEquals("", pwa.getThemeColor());
     }
 
     @Test
     public void testPWAReturnsBlankThemeColorIfValueHadInvalidValue() {
-        when(resource.getPath()).thenReturn("/foo/bar/baz");
-        ResourceResolver spyResolver = spy(resolver);
-        when(resource.getResourceResolver()).thenReturn(spyResolver);
-        Resource mockSitesProject = mock(Resource.class);
-        when(spyResolver.getResource("/foo/bar/" + JcrConstants.JCR_CONTENT)).thenReturn(mockSitesProject);
-
-        mvp.put("themecolor", "rgbbar");
-        when(mockSitesProject.getValueMap()).thenReturn(mvp);
-
+        mvp.put("themeColor", "rgbbar");
         pwa = resource.adaptTo(PWA.class);
-        assertEquals("", pwa.getThemecolor());
+        assertEquals("", pwa.getThemeColor());
     }
 
 }

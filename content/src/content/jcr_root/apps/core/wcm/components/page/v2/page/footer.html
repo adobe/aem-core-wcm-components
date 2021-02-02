@@ -25,13 +25,96 @@
             data-sly-element="${item.element.name @ context='unsafe'}" data-sly-attribute="${item.attributes}"></script>
     </sly>
     <sly data-sly-test="${pwa.pWAEnabled}">
+        <style>
+            #snackbar {
+                visibility: hidden;
+                min-width: 250px;
+                margin-left: -125px;
+                background-color: #333;
+                color: #fff;
+                text-align: center;
+                border-radius: 2px;
+                padding: 16px;
+                position: fixed;
+                z-index: 1;
+                left: 50%;
+                bottom: 30px;
+            }
+
+            #snackbar.show {
+                visibility: visible;
+                -webkit-animation: fadein 0.5s;
+                animation: fadein 0.5s;
+            }
+
+            @-webkit-keyframes fadein {
+                from {
+                    bottom: 0;
+                    opacity: 0;
+                }
+                to {
+                    bottom: 30px;
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadein {
+                from {
+                    bottom: 0;
+                    opacity: 0;
+                }
+                to {
+                    bottom: 30px;
+                    opacity: 1;
+                }
+            }
+        </style>
+        <div id="snackbar">A new version of this app is available. Click <a id="reload" href="#">here</a> to update.</div>
         <script>
+            let newWorker;
+
+            function showUpdateBar() {
+                let snackbar = document.getElementById('snackbar');
+                snackbar.className = 'show';
+            }
+
+            // The click event on the pop up notification
+            document.getElementById('reload').addEventListener('click', function(){
+                newWorker.postMessage({ action: 'skipWaiting' });
+            });
+
             // Check that service workers are supported
             if ('serviceWorker' in navigator) {
                 // Use the window load event to keep the page load performant
                 window.addEventListener('load', () => {
                     let serviceWorker = '${pwa.serviceWorkerPath @ context = "text" }';
-                    navigator.serviceWorker.register(serviceWorker);
+                    navigator.serviceWorker.register(serviceWorker).then(reg => {
+                        reg.addEventListener('updatefound', () => {
+                            // An updated service worker has appeared in reg.installing!
+                            newWorker = reg.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                // Has service worker state changed?
+                                switch (newWorker.state) {
+                                    case 'installed':
+                                        // There is a new service worker available, show the notification
+                                        if (navigator.serviceWorker.controller) {
+                                            console.log('There is a new version of this app available');
+                                            showUpdateBar();
+                                            // newWorker.postMessage({ action: 'skipWaiting' });
+                                        }
+                                        break;
+                                    default: break;
+                                }
+                            });
+                        });
+                    });
+
+                    let refreshing;
+                    navigator.serviceWorker.addEventListener('controllerchange', function () {
+                        if (refreshing) return;
+                        window.location.reload();
+                        refreshing = true;
+                    });
                 });
             }
         </script>
