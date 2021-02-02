@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.13.3-SNAPSHOT</version>
+    <version>2.13.5-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
@@ -140,6 +140,15 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.11.2</version>
+                    <configuration>
+                        <message>@releng [maven-scm] : Updating NPM versions</message>
+                        <includes>**/content/package.json,**/ui-js/package.json,**/content/package-lock.json,**/io-js/package-lock.json</includes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.5.1</version>
                     <dependencies>
@@ -156,7 +165,11 @@
                     </dependencies>
                     <configuration>
                         <scmCommentPrefix>@releng [maven-scm] :</scmCommentPrefix>
-                        <preparationGoals>clean install</preparationGoals>
+                        <!-- Commit package.json and package-lock.json before updating the POMs with the release version -->
+                        <preparationGoals>clean install scm:checkin</preparationGoals>
+                        <!-- Build (no need to rerun tests) and commit package.json and package-lock.json again before updating
+                        the POMs with next snapshot version -->
+                        <completionGoals>clean install -DskipTests scm:checkin</completionGoals>
                         <goals>deploy</goals>
                         <releaseProfiles>release</releaseProfiles>
                         <projectVersionPolicyId>OddEvenVersionPolicy</projectVersionPolicyId>
