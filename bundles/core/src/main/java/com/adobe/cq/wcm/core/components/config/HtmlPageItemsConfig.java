@@ -30,18 +30,23 @@ import org.apache.sling.caconfig.annotation.Property;
  *
  * <pre>
  *      com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
- *          - prefixPath="/some/path"
- *          + items
- *              + item01
- *                  - element=["link"|"script"|"meta"]
- *                  - location=["header"|"footer"]
- *                  + attributes
- *                      - attributeName01="attributeValue01"
- *                      - attributeName02="attributeValue02"
+ *          + jcr:content
+ *              - prefixPath="/some/path"
+ *              + items
+ *                  + item01
+ *                      - element=["link"|"script"|"meta"]
+ *                      - location=["header"|"footer"]
+ *                      + attributes
+ *                          + attribute01
+ *                              - name="attribute01Name"
+ *                              - value="attribute01Value"
+ *                          + attribute02
+ *                              - name="attribute02Name"
+ *                              - value="attribute02Value"
+ *                              ...
+ *                  + item02
  *                      ...
- *              + item02
  *                  ...
- *              ...
  *  </pre>
  *
  *  The structure of the initial implementation is deprecated but still supported:
