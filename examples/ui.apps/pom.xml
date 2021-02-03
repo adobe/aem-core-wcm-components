@@ -225,6 +225,11 @@
     <!-- D E P E N D E N C I E S                                                -->
     <!-- ====================================================================== -->
     <dependencies>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.framework</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- HTL dependencies needed for the HTL Maven Plugin source code generation -->
         <dependency>
