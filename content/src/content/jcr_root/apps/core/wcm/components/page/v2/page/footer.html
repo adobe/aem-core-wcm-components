@@ -43,6 +43,7 @@
 
             #snackbar.show {
                 visibility: visible;
+                cursor: pointer;
                 -webkit-animation: fadein 0.5s;
                 animation: fadein 0.5s;
             }
@@ -69,7 +70,7 @@
                 }
             }
         </style>
-        <div id="snackbar">A new version of this app is available. Click <a id="reload" href="#">here</a> to update.</div>
+        <div id="snackbar"></div>
         <script>
             let newWorker;
 
@@ -79,9 +80,18 @@
             }
 
             // The click event on the pop up notification
-            document.getElementById('reload').addEventListener('click', function(){
-                newWorker.postMessage({ action: 'skipWaiting' });
-            });
+            let snackbar = document.getElementById('snackbar');
+            if (snackbar) {
+                snackbar.addEventListener('click', function(){
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                });
+                if (CQ && CQ.I18n) {
+                    snackbar.innerText = CQ.I18n.getMessage('A new version of this app is available. Click this message to reload.');
+                }
+                else {
+                    snackbar.innerText = 'A new version of this app is available. Click this message to reload.';
+                }
+            }
 
             // Check that service workers are supported
             if ('serviceWorker' in navigator) {
@@ -100,7 +110,6 @@
                                         if (navigator.serviceWorker.controller) {
                                             console.log('There is a new version of this app available');
                                             showUpdateBar();
-                                            // newWorker.postMessage({ action: 'skipWaiting' });
                                         }
                                         break;
                                     default: break;
