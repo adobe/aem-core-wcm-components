@@ -27,7 +27,9 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonStructure;
 
+import com.adobe.cq.wcm.core.components.internal.jackson.ComponentDataModelSerializer;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
@@ -63,6 +65,7 @@ public class Utils {
         mapper.registerModule(pageModuleProvider.getModule());
         DefaultMethodSkippingModuleProvider defaultMethodSkippingModuleProvider = new DefaultMethodSkippingModuleProvider();
         mapper.registerModule(defaultMethodSkippingModuleProvider.getModule());
+        mapper.registerModule(new SimpleModule().addSerializer(ComponentData.class, new ComponentDataModelSerializer()));
         try {
             mapper.writer().writeValue(writer, model);
         } catch (IOException e) {

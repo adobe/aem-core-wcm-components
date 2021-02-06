@@ -15,13 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import com.adobe.cq.wcm.core.components.internal.jackson.ComponentDataModelSerializer;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -43,9 +41,7 @@ public class ComponentDataImpl implements ComponentData {
     /**
      * The {@link ObjectWriter} used for JSON serialization. We can safely re-use the instance since it's thread-safe.
      */
-    private static final ObjectWriter OBJECT_WRITER = new ObjectMapper().registerModule(
-        new SimpleModule().addSerializer(ComponentData.class, new ComponentDataModelSerializer())
-    ).writer();
+    private static final ObjectWriter OBJECT_WRITER = new ObjectMapper().writer();
 
     /**
      * The current data layer supplier.
