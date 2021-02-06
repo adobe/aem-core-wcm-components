@@ -15,10 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
+import com.adobe.cq.wcm.core.components.internal.jackson.ComponentDataModelSerializer;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerSupplier;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -36,6 +39,13 @@ public class ComponentDataImpl implements ComponentData {
      * Logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ComponentDataImpl.class);
+
+    /**
+     * The {@link ObjectWriter} used for JSON serialization. We can safely re-use the instance since it's thread-safe.
+     */
+    private static final ObjectWriter OBJECT_WRITER = new ObjectMapper().registerModule(
+        new SimpleModule().addSerializer(ComponentData.class, new ComponentDataModelSerializer())
+    ).writer();
 
     /**
      * The current data layer supplier.
@@ -194,7 +204,8 @@ public class ComponentDataImpl implements ComponentData {
         try {
             return String.format("{\"%s\":%s}",
                 this.getId(),
-                new ObjectMapper().writeValueAsString(this));
+                OBJECT_WRITER
+                    .writeValueAsString(this));
         } catch (JsonProcessingException e) {
             LOGGER.error("Unable to generate dataLayer JSON string", e);
         }
