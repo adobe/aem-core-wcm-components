@@ -628,7 +628,7 @@
      * @returns {String} dataLayerId or undefined
      */
     function getDataLayerId(item) {
-        if (item.dataset && item.dataset.cmpDataLayer) {
+        if (item && item.dataset.cmpDataLayer) {
             return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
         } else {
             return item.id;
