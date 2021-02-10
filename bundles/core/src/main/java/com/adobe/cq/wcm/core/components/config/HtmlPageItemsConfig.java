@@ -26,7 +26,10 @@ import org.apache.sling.caconfig.annotation.Property;
  * This configuration is meant to be used as a context-aware resource.
  * See <a href="https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html#context-aware-resources">Context-Aware Resources</a>
  * <p>
- * Assumed structure:
+ * The JCR node structure depends on the provided Persistence Strategy.
+ * See https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration-spi.html#configuration-persistence-strategy-1
+ *
+ * Assumed structure (default AEM Setup):
  *
  * <pre>
  *      com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig

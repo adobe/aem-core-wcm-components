@@ -28,15 +28,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
+import com.adobe.cq.wcm.core.components.testing.MockPersistenceStrategy;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
+import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.Utils.getTestExporterJSONPath;
@@ -63,6 +66,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         when(mockClientLibrary.allowProxy()).thenReturn(true);
         context.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
         context.registerInjectActivateService(mockProductInfoProvider);
+        context.registerInjectActivateService(new MockPersistenceStrategy(), ImmutableMap.of(Constants.SERVICE_RANKING, Integer.MAX_VALUE));
     }
 
     private void loadHtmlPageItemsConfig(boolean useNewFormat) {
