@@ -124,7 +124,7 @@ Breadcrumb | x
 Button | x
 Carousel | x
 Container | 
-Content Fragment | 
+Content Fragment | x
 Content Fragment List | 
 Download | 
 Embed | 
