@@ -21,7 +21,10 @@
     <meta data-sly-test.keywords="${page.keywords}" name="keywords" content="${keywords}"/>
     <meta data-sly-test.description="${properties['jcr:description']}" name="description" content="${description}"/>
     <meta data-sly-test.templateName="${page.templateName}" name="template" content="${templateName}"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<sly data-sly-list.metatag="${page.getMetaTags.entrySet}">
+		<meta name=${metatag.key} content=${metatag.value} />
+	</sly>
     <sly data-sly-include="head.links.html"></sly>
     <sly data-sly-include="head.socialmedia.html"></sly>
     <sly data-sly-include="customheaderlibs.html"></sly>

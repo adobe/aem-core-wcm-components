@@ -139,6 +139,25 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String FN_TOUCH_ICON_152 = "touch-icon_152.png";
+    
+    /**
+     * Name of the SEO Meta tag node that will contain the meta tag name(s) and value(s)     *
+     * @see #getMetaTags
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    public static final String PN_SEO_METATAGS = "seocustomtags";
+    /**
+     * Name of the SEO Meta tag name 
+     * @see #getMetaTags
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    public static final String PN_SEO_METATAG_NAME = "sling:customTagName";
+    /**
+     * Name of the SEO Meta tag value    
+     * @see #getMetaTags
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    public static final String PN_SEO_METATAG_VALUE = "sling:customTagValue";
 
     /**
      * Returns the language of this page, if one has been defined. Otherwise the default {@link java.util.Locale} will be used.
@@ -390,5 +409,10 @@ public interface Page extends ContainerExporter, Component {
     @Nullable
     default List<HtmlPageItem> getHtmlPageItems() {
         return null;
+    }
+    
+    @Nullable
+    default  Map<String,String> getMetaTags() {
+    	throw new UnsupportedOperationException();
     }
 }

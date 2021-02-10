@@ -91,6 +91,9 @@
                             </column>
                         </items>
                     </basic>
+                    <advanced
+                        jcr:primaryType="nt:unstructured"
+                        path="/mnt/override/apps/core/wcm/components/page/v2/page/tabs/advanced"/>                    
                     <socialmedia
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
