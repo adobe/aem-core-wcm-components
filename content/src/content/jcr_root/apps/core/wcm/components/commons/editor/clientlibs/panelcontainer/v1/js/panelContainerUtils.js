@@ -58,7 +58,7 @@
             var element;
 
             if (container) {
-                element = editable.dom.find(container.selector)[0];
+                element = editable.dom.filter(container.selector)[0] || editable.dom.find(container.selector)[0];
             }
 
             return element;
@@ -96,7 +96,7 @@
             for (var i = 0; i < panelContainerTypes.length; i++) {
                 var container = panelContainerTypes[i];
 
-                if (editable.dom.find(container.selector)) {
+                if (editable.dom.is(container.selector) || editable.dom.find(container.selector).length) {
                     panelContainerType = container;
                     break;
                 }
