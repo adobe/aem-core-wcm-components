@@ -18,27 +18,35 @@
     "use strict";
 
     var newServiceWorker = null;
+    var SW_PATH = "cq:sw_path";
     var toastMessage = document.getElementsByClassName("cmp-page__toastmessagehide")[0];
 
     function showUpdate() {
-        toastMessage.className = "cmp-page__toastmessageshow";
+        if (toastMessage) {
+            toastMessage.className = "cmp-page__toastmessageshow";
+        }
     }
 
-    // The click event on the pop up notification
-    toastMessage.addEventListener("click", function() {
-        newServiceWorker.postMessage({ action: "skipWaiting" });
-    });
-    if (window.CQ && window.CQ.I18n) {
-        toastMessage.innerText = window.CQ.I18n.getMessage("A new version of this app is available. Click this message to reload.");
-    } else {
-        toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
+    if (toastMessage) {
+        // The click event on the pop up notification
+        toastMessage.addEventListener("click", function() {
+            newServiceWorker.postMessage({ action: "skipWaiting" });
+        });
+        if (window.CQ && window.CQ.I18n) {
+            toastMessage.innerText = window.CQ.I18n.getMessage("A new version of this app is available. Click this message to reload.");
+        } else {
+            toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
+        }
     }
 
     // Check that service workers are supported
     if ("serviceWorker" in navigator) {
         // Use the window load event to keep the page load performant
         window.addEventListener("load", function() {
-            var pwaMetaData = document.getElementsByName("cq:sw_path")[0];
+            var pwaMetaData = document.getElementsByName(SW_PATH)[0];
+            if (!pwaMetaData) {
+                return;
+            }
             var serviceWorker = pwaMetaData.getAttribute("content");
             navigator.serviceWorker.register(serviceWorker).then(function(registration) {
                 registration.addEventListener("updatefound", function() {

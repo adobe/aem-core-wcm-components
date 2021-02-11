@@ -22,31 +22,31 @@ package com.adobe.cq.wcm.core.components.models;
 public interface PWA {
 
     /**
-     * Property that indicates whether the page is PWA enabled
+     * Name of the property that defines if PWA is enabled for the website.
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    final String PROP_PWA_PWAENABLED = "pwaEnabled";
+    final String PN_ENABLE_PWA = "pwaEnabled";
 
     /**
-     * The start URL of this PWA as specified in the start_url property of the manifest
+     * Name of the property that defines the start URL of this PWA
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    final String PROP_PWA_STARTURL = "startURL";
+    final String PN_START_URL = "startURL";
 
     /**
-     * The theme color of this PWA as specified in the theme_color property of the manifest
+     * Name of the property that defines the theme color used.
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    final String PROP_PWA_THEMECOLOR = "themeColor";
+    final String PN_THEME_COLOR = "themeColor";
 
     /**
-     * Path to the icon used for this PWA
+     * Name of the property that defines the PWA icon
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    final String PROP_PWA_ICON = "pwaIcon";
+    final String PN_PWA_ICON = "pwaIcon";
 
     /**
-     * The name of the manifest file used by this PWA
+     * Name of the manifest file that provides information about the PWA
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     final String MANIFEST_NAME = "manifest.webmanifest";
