@@ -20,13 +20,39 @@ import org.apache.sling.caconfig.annotation.Property;
 
 /**
  * Context-aware configuration holding information on items to be included in pages:
- *      - scripts
- *      - links
- *      - meta
- *  This configuration is meant to be used as a context-aware resource.
- *  See <a href="https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html#context-aware-resources">Context-Aware Resources</a>
+ * - scripts
+ * - links
+ * - meta
+ * This configuration is meant to be used as a context-aware resource.
+ * See <a href="https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html#context-aware-resources">Context-Aware Resources</a>
+ * <p>
+ * The JCR node structure depends on the provided Persistence Strategy.
+ * See https://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration-spi.html#configuration-persistence-strategy-1
  *
- *  Assumed structure:
+ * Assumed structure (default AEM Setup):
+ *
+ * <pre>
+ *      com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
+ *          + jcr:content
+ *              - prefixPath="/some/path"
+ *              + items
+ *                  + item01
+ *                      - element=["link"|"script"|"meta"]
+ *                      - location=["header"|"footer"]
+ *                      + attributes
+ *                          + attribute01
+ *                              - name="attribute01Name"
+ *                              - value="attribute01Value"
+ *                          + attribute02
+ *                              - name="attribute02Name"
+ *                              - value="attribute02Value"
+ *                              ...
+ *                  + item02
+ *                      ...
+ *                  ...
+ *  </pre>
+ *
+ *  The structure of the initial implementation is deprecated but still supported:
  *
  *  <pre>
  *      com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
@@ -57,9 +83,17 @@ public @interface HtmlPageItemsConfig {
      * Returns the path that will be prefixed to all href's and src's
      *
      * @return The prefix path
-     *
      * @since com.adobe.cq.wcm.core.components.config 1.0.0
      */
     @Property(label = "Prefix path")
     String prefixPath() default "";
+
+    /**
+     * Returns the items to render.
+     *
+     * @return The array of items to render
+     * @since com.adobe.cq.wcm.core.components.config 2.0.0
+     */
+    @Property(label = "Items")
+    HtmlPageItemConfig[] items() default {};
 }
