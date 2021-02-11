@@ -22,18 +22,48 @@ package com.adobe.cq.wcm.core.components.models;
 public interface PWA {
 
     /**
+     * Property that indicates whether the page is PWA enabled
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
+     */
+    final String PROP_PWA_PWAENABLED = "pwaEnabled";
+
+    /**
+     * The start URL of this PWA as specified in the start_url property of the manifest
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
+     */
+    final String PROP_PWA_STARTURL = "startURL";
+
+    /**
+     * The theme color of this PWA as specified in the theme_color property of the manifest
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
+     */
+    final String PROP_PWA_THEMECOLOR = "themeColor";
+
+    /**
+     * Path to the icon used for this PWA
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
+     */
+    final String PROP_PWA_ICON = "pwaIcon";
+
+    /**
+     * The name of the manifest file used by this PWA
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
+     */
+    final String MANIFEST_NAME = "manifest.webmanifest";
+
+    /**
      * Returns true if PWA features are enabled false otherwise
      *
      * @return whether PWA is enabled or not
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    default boolean isPWAEnabled() { throw new UnsupportedOperationException("Not Implemented"); };
+    default boolean isEnabled() { throw new UnsupportedOperationException("Not Implemented"); };
 
     /**
      * The theme color of the site sometimes used to color the address bar of the browser
      *
      * @return A Hex String that represents the theme color for this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     default String getThemeColor() { throw new UnsupportedOperationException("Not Implemented"); };
 
@@ -41,7 +71,7 @@ public interface PWA {
      * The path to the icon of this PWA
      *
      * @return A String that represents the relative path to the icon of this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     default String getIconPath() { throw new UnsupportedOperationException("Not Implemented"); };
 
@@ -49,15 +79,15 @@ public interface PWA {
      * The relative path to the web manifest
      *
      * @return A String that represents the relative path to the web manifest of this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     default String getManifestPath() { throw new UnsupportedOperationException("Not Implemented"); }
 
     /**
-     * The relative path to the web manifest
+     * The relative path to the service worker
      *
-     * @return A String that represents the relative path to the web manifest of this site
-     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     * @return A String that represents the path to the service worker used by this site
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
     default String getServiceWorkerPath() { throw new UnsupportedOperationException("Not Implemented"); }
 

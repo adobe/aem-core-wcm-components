@@ -30,14 +30,9 @@ import com.adobe.cq.wcm.core.components.models.PWA;
     adapters = {PWA.class})
 public class PWAImpl implements PWA {
 
-    static final String PROP_PWA_PWAENABLED = "pwaEnabled";
-    static final String PROP_PWA_STARTURL = "startURL";
-    static final String PROP_PWA_THEMECOLOR = "themeColor";
-    static final String PROP_PWA_ICON = "pwaIcon";
-    static final String MANIFEST_NAME = "manifest.webmanifest";
     static final String CONTENT_PATH = "/content/";
 
-    private boolean isPWAEnabled = false;
+    private boolean isEnabled = false;
     private String manifestPath = "";
     private String serviceWorkerPath = "";
     private String themeColor = "";
@@ -50,8 +45,8 @@ public class PWAImpl implements PWA {
     protected void initModel() {
         ValueMap valueMap = resource.getValueMap();
         Boolean isPWAEnabled = valueMap.get(PROP_PWA_PWAENABLED, Boolean.class);
-        this.isPWAEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
-        if (!this.isPWAEnabled) {
+        this.isEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
+        if (!this.isEnabled) {
             return;
         }
 
@@ -69,8 +64,8 @@ public class PWAImpl implements PWA {
     }
 
     @Override
-    public boolean isPWAEnabled() {
-        return this.isPWAEnabled;
+    public boolean isEnabled() {
+        return this.isEnabled;
     }
 
     @Override

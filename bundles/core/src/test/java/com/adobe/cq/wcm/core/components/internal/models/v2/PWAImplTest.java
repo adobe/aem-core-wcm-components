@@ -81,13 +81,13 @@ public class PWAImplTest {
     public void testPWAReturnsFalseIfPWAOptionIsNotEnabled() {
         mvp.remove("pwaEnabled");
         pwa = resource.adaptTo(PWA.class);
-        assertFalse(pwa.isPWAEnabled());
+        assertFalse(pwa.isEnabled());
     }
 
     @Test
     public void testPWAReturnsTrueIfPWAOptionIsEnabled() {
         pwa = resource.adaptTo(PWA.class);
-        assertTrue(pwa.isPWAEnabled());
+        assertTrue(pwa.isEnabled());
     }
 
     @Test
