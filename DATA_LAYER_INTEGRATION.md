@@ -183,6 +183,31 @@ id: {
 }
 ```
 
+#### Content Fragment
+
+Schema used for the Content Fragment:
+
+```
+id: {
+    @type
+    repo:modifyDate
+    dc:title
+    dc:description
+    xdm:text
+    xdm:linkURL
+    parentId
+    elements            // array of the Content Fragment elements
+}
+```
+
+Schema used for the Content Fragment element:
+```
+{
+    xdm:title           // title
+    xdm:text            // text
+}
+```
+
 #### Page
 
 Schema used for the Page component:
