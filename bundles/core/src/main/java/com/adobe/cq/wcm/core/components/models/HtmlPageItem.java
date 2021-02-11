@@ -32,19 +32,25 @@ public interface HtmlPageItem {
     /**
      * Property name that defines the type of the HTML element rendered by the page item
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     * @deprecated since 12.18.0
      */
+    @Deprecated
     String PN_ELEMENT = "element";
 
     /**
      * Property that defines the location (header or footer) where the page item should be inserted
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     * @deprecated since 12.18.0
      */
+    @Deprecated
     String PN_LOCATION = "location";
 
     /**
      * Sub-node that holds the page item's attributes
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
+     * @deprecated since 12.18.0
      */
+    @Deprecated
     String NN_ATTRIBUTES = "attributes";
 
     /**
