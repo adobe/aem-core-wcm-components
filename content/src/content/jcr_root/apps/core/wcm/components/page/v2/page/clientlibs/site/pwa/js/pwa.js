@@ -18,25 +18,20 @@
     "use strict";
 
     var newServiceWorker = null;
+    var toastMessage = document.getElementsByClassName("cmp-page__toastmessagehide")[0];
 
     function showUpdate() {
-        var toastMessage = document.getElementsByClassName("cmp-page__toastmessagehide")[0];
-        if (toastMessage) {
-            toastMessage.className = "cmp-page__toastmessageshow";
-        }
+        toastMessage.className = "cmp-page__toastmessageshow";
     }
 
     // The click event on the pop up notification
-    var toastMessage = document.getElementsByClassName("cmp-page__toastmessagehide")[0];
-    if (toastMessage) {
-        toastMessage.addEventListener("click", function() {
-            newServiceWorker.postMessage({ action: "skipWaiting" });
-        });
-        if (window.CQ && window.CQ.I18n) {
-            toastMessage.innerText = window.CQ.I18n.getMessage("A new version of this app is available. Click this message to reload.");
-        } else {
-            toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
-        }
+    toastMessage.addEventListener("click", function() {
+        newServiceWorker.postMessage({ action: "skipWaiting" });
+    });
+    if (window.CQ && window.CQ.I18n) {
+        toastMessage.innerText = window.CQ.I18n.getMessage("A new version of this app is available. Click this message to reload.");
+    } else {
+        toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
     }
 
     // Check that service workers are supported
@@ -51,14 +46,8 @@
                     newServiceWorker = registration.installing;
                     newServiceWorker.addEventListener("statechange", function() {
                         // Has service worker state changed?
-                        switch (newServiceWorker.state) {
-                            case "installed":
-                                // There is a new service worker available, show the notification
-                                if (navigator.serviceWorker.controller) {
-                                    showUpdate();
-                                }
-                                break;
-                            default: break;
+                        if ((newServiceWorker.state === "installed") && navigator.serviceWorker.controller) {
+                            showUpdate(); // There is a new service worker available, show the notification
                         }
                     });
                 });
