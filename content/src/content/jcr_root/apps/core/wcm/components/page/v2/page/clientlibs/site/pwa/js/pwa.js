@@ -30,22 +30,20 @@
         return;
     }
     var serviceWorker = pwaMetaData.getAttribute("content");
+    var refreshing = false;
 
     function showUpdate() {
         if (toastMessage) {
+            // The click event on the pop up notification
+            toastMessage.addEventListener("click", function() {
+                newServiceWorker.postMessage({ action: "skipWaiting" });
+            });
+
+            toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
+            if (window.CQ && window.CQ.I18n) {
+                toastMessage.innerText = window.CQ.I18n.getMessage("A new version of this app is available. Click this message to reload.");
+            }
             toastMessage.className = "cmp-page__toastmessageshow";
-        }
-    }
-
-    if (toastMessage) {
-        // The click event on the pop up notification
-        toastMessage.addEventListener("click", function() {
-            newServiceWorker.postMessage({ action: "skipWaiting" });
-        });
-
-        toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
-        if (window.CQ && window.CQ.I18n) {
-            toastMessage.innerText = window.CQ.I18n.getMessage("A new version of this app is available. Click this message to reload.");
         }
     }
 
@@ -63,16 +61,17 @@
             });
         });
 
-        var refreshing;
-        navigator.serviceWorker.addEventListener("controllerchange", function() {
-            if (refreshing) {
-                return;
-            }
-            window.location.reload();
-            refreshing = true;
-        });
+        navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
+    }
+
+    function onControllerChange() {
+        if (refreshing) {
+            return;
+        }
+        window.location.reload();
+        refreshing = true;
     }
 
     // Use the window load event to keep the page load performant
-    window.addEventListener("load", onLoad());
+    window.addEventListener("load", onLoad);
 }(document));
