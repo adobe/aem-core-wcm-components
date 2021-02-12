@@ -33,18 +33,20 @@
     var refreshing = false;
 
     function showUpdate() {
-        if (toastMessage) {
-            // The click event on the pop up notification
-            toastMessage.addEventListener("click", function() {
-                newServiceWorker.postMessage({ action: "skipWaiting" });
-            });
-
-            toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
-            if (window.CQ && window.CQ.I18n) {
-                toastMessage.innerText = window.CQ.I18n.getMessage("A new version of this app is available. Click this message to reload.");
-            }
-            toastMessage.className = "cmp-page__toastmessageshow";
+        if (!toastMessage) {
+            return;
         }
+
+        // The click event on the pop up notification
+        toastMessage.addEventListener("click", function() {
+            newServiceWorker.postMessage({ action: "skipWaiting" });
+        });
+
+        toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
+        if (window.CQ && window.CQ.I18n) {
+            toastMessage.innerText = window.CQ.I18n.getMessage("A new version of this app is available. Click this message to reload.");
+        }
+        toastMessage.className = "cmp-page__toastmessageshow";
     }
 
     function onLoad() {
