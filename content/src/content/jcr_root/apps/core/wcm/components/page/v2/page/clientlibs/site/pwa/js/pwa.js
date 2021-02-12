@@ -29,6 +29,7 @@
     if (!pwaMetaData) {
         return;
     }
+    var serviceWorker = pwaMetaData.getAttribute("content");
 
     function showUpdate() {
         if (toastMessage) {
@@ -48,9 +49,7 @@
         }
     }
 
-    // Use the window load event to keep the page load performant
-    window.addEventListener("load", function() {
-        var serviceWorker = pwaMetaData.getAttribute("content");
+    function onLoad() {
         navigator.serviceWorker.register(serviceWorker).then(function(registration) {
             registration.addEventListener("updatefound", function() {
                 // An updated service worker is available
@@ -72,5 +71,8 @@
             window.location.reload();
             refreshing = true;
         });
-    });
+    }
+
+    // Use the window load event to keep the page load performant
+    window.addEventListener("load", onLoad());
 }(document));
