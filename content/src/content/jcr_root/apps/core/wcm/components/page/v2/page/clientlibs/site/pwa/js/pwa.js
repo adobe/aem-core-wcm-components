@@ -17,6 +17,11 @@
 (function(document) {
     "use strict";
 
+    // Check that service workers are supported
+    if (!("serviceWorker" in navigator)) {
+        return;
+    }
+
     var newServiceWorker = null;
     var SW_PATH = "cq:sw_path";
     var toastMessage = document.getElementsByClassName("cmp-page__toastmessagehide")[0];
@@ -43,32 +48,29 @@
         }
     }
 
-    // Check that service workers are supported
-    if ("serviceWorker" in navigator) {
-        // Use the window load event to keep the page load performant
-        window.addEventListener("load", function() {
-            var serviceWorker = pwaMetaData.getAttribute("content");
-            navigator.serviceWorker.register(serviceWorker).then(function(registration) {
-                registration.addEventListener("updatefound", function() {
-                    // An updated service worker is available
-                    newServiceWorker = registration.installing;
-                    newServiceWorker.addEventListener("statechange", function() {
-                        // Has service worker state changed?
-                        if ((newServiceWorker.state === "installed") && navigator.serviceWorker.controller) {
-                            showUpdate(); // There is a new service worker available, show the notification
-                        }
-                    });
+    // Use the window load event to keep the page load performant
+    window.addEventListener("load", function() {
+        var serviceWorker = pwaMetaData.getAttribute("content");
+        navigator.serviceWorker.register(serviceWorker).then(function(registration) {
+            registration.addEventListener("updatefound", function() {
+                // An updated service worker is available
+                newServiceWorker = registration.installing;
+                newServiceWorker.addEventListener("statechange", function() {
+                    // Has service worker state changed?
+                    if ((newServiceWorker.state === "installed") && navigator.serviceWorker.controller) {
+                        showUpdate(); // There is a new service worker available, show the notification
+                    }
                 });
             });
-
-            var refreshing;
-            navigator.serviceWorker.addEventListener("controllerchange", function() {
-                if (refreshing) {
-                    return;
-                }
-                window.location.reload();
-                refreshing = true;
-            });
         });
-    }
+
+        var refreshing;
+        navigator.serviceWorker.addEventListener("controllerchange", function() {
+            if (refreshing) {
+                return;
+            }
+            window.location.reload();
+            refreshing = true;
+        });
+    });
 }(document));
