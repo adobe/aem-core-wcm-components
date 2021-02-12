@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(AemContextExtension.class)
 public class PWAImplTest {
 
-    private static final String SITES_PAGE_PATH = "/content/mysite/en";
+    private static final String SITES_PAGE_PATH = "/content/mysite";
     private ResourceResolver resolver;
     private PWA pwa;
     private Resource resource;
@@ -63,7 +63,7 @@ public class PWAImplTest {
         ResourceResolver spyResolver = spy(resolver);
         when(resource.getResourceResolver()).thenReturn(spyResolver);
         Resource mockPWAResource = mock(Resource.class);
-        when(spyResolver.getResource("/content/mysite/" + JcrConstants.JCR_CONTENT)).thenReturn(mockPWAResource);
+        when(spyResolver.getResource(SITES_PAGE_PATH + "/" + JcrConstants.JCR_CONTENT)).thenReturn(mockPWAResource);
 
         mvp.put(PN_ENABLE_PWA, true);
         mvp.put(PN_START_URL, SITES_PAGE_PATH + ".html");

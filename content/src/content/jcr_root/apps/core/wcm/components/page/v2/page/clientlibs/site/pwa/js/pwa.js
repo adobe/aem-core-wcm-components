@@ -20,6 +20,10 @@
     var newServiceWorker = null;
     var SW_PATH = "cq:sw_path";
     var toastMessage = document.getElementsByClassName("cmp-page__toastmessagehide")[0];
+    var pwaMetaData = document.getElementsByName(SW_PATH)[0];
+    if (!pwaMetaData) {
+        return;
+    }
 
     function showUpdate() {
         if (toastMessage) {
@@ -32,10 +36,10 @@
         toastMessage.addEventListener("click", function() {
             newServiceWorker.postMessage({ action: "skipWaiting" });
         });
+
+        toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
         if (window.CQ && window.CQ.I18n) {
             toastMessage.innerText = window.CQ.I18n.getMessage("A new version of this app is available. Click this message to reload.");
-        } else {
-            toastMessage.innerText = "A new version of this app is available. Click this message to reload.";
         }
     }
 
@@ -43,10 +47,6 @@
     if ("serviceWorker" in navigator) {
         // Use the window load event to keep the page load performant
         window.addEventListener("load", function() {
-            var pwaMetaData = document.getElementsByName(SW_PATH)[0];
-            if (!pwaMetaData) {
-                return;
-            }
             var serviceWorker = pwaMetaData.getAttribute("content");
             navigator.serviceWorker.register(serviceWorker).then(function(registration) {
                 registration.addEventListener("updatefound", function() {

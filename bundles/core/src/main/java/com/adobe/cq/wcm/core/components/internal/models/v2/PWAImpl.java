@@ -25,6 +25,8 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 import com.adobe.cq.wcm.core.components.models.PWA;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 
 @Model(adaptables = Resource.class,
     adapters = {PWA.class})
@@ -56,10 +58,13 @@ public class PWAImpl implements PWA {
         String startURL = valueMap.get(PN_START_URL, "");
         this.manifestPath = replaceSuffix(startURL, MANIFEST_NAME);
 
-        Resource page = resource.getParent();
-        if (page != null) {
-            String mappingName = page.getPath().replace("/", ".").substring(CONTENT_PATH.length());
-            this.serviceWorkerPath = "/" + mappingName + "sw.js";
+        PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
+        if (pageManager != null) {
+            Page page = pageManager.getContainingPage(resource);
+            if (page != null) {
+                String mappingName = page.getPath().replace("/", ".").substring(CONTENT_PATH.length());
+                this.serviceWorkerPath = "/" + mappingName + "sw.js";
+            }
         }
     }
 
