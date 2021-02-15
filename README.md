@@ -1,6 +1,6 @@
 # AEM WCM Core Components
 
-[![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components)
+[![Test](https://github.com/adobe/aem-core-wcm-components/workflows/Test/badge.svg)](https://github.com/adobe/aem-core-wcm-components/actions?query=workflow%3ATest)
 [![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all)
 [![javadoc](https://javadoc.io/badge2/com.adobe.cq/core.wcm.components.core/javadoc.svg)](https://javadoc.io/doc/com.adobe.cq/core.wcm.components.core)
@@ -36,7 +36,7 @@ Please help us making the Core Components better by responding to our **[short u
 * **Accessible:** They comply [WCAG 2.1 standard](https://www.w3.org/TR/WCAG21/), provide ARIA labels, and support keyboard navigation ([known issues](https://github.com/adobe/aem-core-wcm-components/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+accessibility+in%3Atitle)).
 * **SEO-Friendly:** The HTML output is semantic and provides schema.org microdata annotations.
 * **WebApp-Ready:** The [streamlined JSON output](https://docs.adobe.com/content/help/en/experience-manager-learn/foundation/development/develop-sling-model-exporter.html) allows client-side rendering, still with a possibility of [in-context editing](https://docs.adobe.com/content/help/en/experience-manager-learn/sites/spa-editor/spa-editor-framework-feature-video-use.html).
-* **Design Kit:** A [UI kit for Adobe XD](https://docs.adobe.com/content/help/en/experience-manager-learn/getting-started-wknd-tutorial-develop/assets/overview/AEM_UI-kit_Wireframe.xd) allows designers to create wireframes that they can then [style as needed](https://docs.adobe.com/content/help/en/experience-manager-learn/getting-started-wknd-tutorial-develop/assets/overview/AEM_UI-kit_WKND.xd).
+* **Design Kit:** A [UI kit for Adobe XD](https://experienceleague.adobe.com/docs/experience-manager-learn/assets/AEM-CoreComponents-UI-Kit.xd) allows designers to create wireframes that they can then [style as needed](https://github.com/adobe/aem-guides-wknd/releases/download/aem-guides-wknd-0.0.2/AEM_UI-kit-WKND.xd).
 * **Themeable:** The components implement the [Style System](https://docs.adobe.com/content/help/en/experience-manager-65/developing/components/style-system.html), and the markup follows [BEM CSS conventions](http://getbem.com/).
 * **Customizable:** Several patterns allow [easy customization](https://docs.adobe.com/content/help/en/experience-manager-core-components/using/developing/customizing.html), from adjusting the HTML to advanced functionality reuse.
 * **Versionned:** The [versioning policy](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) ensures we won't break your site when improving things that might impact you.
@@ -77,7 +77,7 @@ Please help us making the Core Components better by responding to our **[short u
 
 ### Form Components
 
-25. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+25. [Core Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
 26. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
 27. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
 28. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
@@ -97,7 +97,7 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 Core Components | AEM as a Cloud Service | AEM 6.5 | AEM 6.4 | Java SE | Maven
 ----------------|------------------------|---------|---------|---------|---------
-[2.13.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.13.0) | Continual | 6.5.5.0+ (*) | 6.4.8.1+ (*) | 8, 11 | 3.3.9+
+[2.14.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.14.0) | Continual | 6.5.5.0+ (*) | 6.4.8.1+ (*) | 8, 11 | 3.3.9+
 
 (*) - Since version 2.11.0 `org.apache.sling.models.impl` version 1.4.12 or higher is required (due to [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
 

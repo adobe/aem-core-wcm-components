@@ -83,10 +83,10 @@ public interface Container extends ContainerExporter {
     }
 
     /**
-     * Returns the resource type for the "new" section in the form container where other input components will
+     * Returns the resource type for the "new" section in the core form container where other input components will
      * be dropped.
      *
-     * @return resource type for the "new" section in form container where other input components will
+     * @return resource type for the "new" section in core form container where other input components will
      * be dropped
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */

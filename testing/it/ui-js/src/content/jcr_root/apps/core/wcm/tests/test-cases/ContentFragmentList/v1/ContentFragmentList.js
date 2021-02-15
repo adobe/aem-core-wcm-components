@@ -113,10 +113,7 @@
     contentfragmentlist.tcSetTagNames = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
         return new h.TestCase("Set the tag names", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest,
-            metadata: {
-                ignoreOn63: true
-            }
+            execAfter: tcExecuteAfterTest
         })
         // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))

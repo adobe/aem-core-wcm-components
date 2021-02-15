@@ -38,6 +38,84 @@
             fieldDescription="Height of the YouTube video player."
             fieldLabel="Height"
             name="./youtubeHeight"/>
+        <parameters
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/container"
+            fieldDescription="Parameters of the YouTube video player."
+            fieldLabel="Parameters">
+            <items jcr:primaryType="nt:unstructured">
+                <mute
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    text="Enable Mute"
+                    checked="${cqDesign.youtubeMuteDefaultValue == 'true'}"
+                    uncheckedValue="false"
+                    value="true"
+                    fieldDescription="This parameter specifies whether the video will play muted by default. Enabling this increases the chance that Autoplay works in modern browsers."
+                    name="./youtubeMute">
+                    <granite:rendercondition
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                        expression="${cqDesign.youtubeMuteEnabled == 'true'}"/>
+                </mute>
+                <autoplay
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    text="Enable Autoplay"
+                    checked="${cqDesign.youtubeAutoPlayDefaultValue == 'true'}"
+                    uncheckedValue="false"
+                    value="true"
+                    fieldDescription="This parameter specifies whether the initial video will automatically start to play when the player loads. This is only effective on Publish or when using &quot;View as Published&quot;."
+                    name="./youtubeAutoPlay">
+                    <granite:rendercondition
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                        expression="${cqDesign.youtubeAutoPlayEnabled == 'true'}"/>
+                </autoplay>
+                <loop
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    text="Enable Loop"
+                    checked="${cqDesign.youtubeLoopDefaultValue == 'true'}"
+                    uncheckedValue="false"
+                    value="true"
+                    fieldDescription="In the case of a single video specifies whether the player should play the initial video again and again. In the case of a playlist, the player plays the entire playlist and then starts again at the first video."
+                    name="./youtubeLoop">
+                    <granite:rendercondition
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                        expression="${cqDesign.youtubeLoopEnabled == 'true'}"/>
+                </loop>
+                <inline
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    text="Enable Inline Playback (iOS)"
+                    checked="${cqDesign.youtubePlaysInlineDefaultValue == 'true'}"
+                    uncheckedValue="false"
+                    value="true"
+                    fieldDescription="This parameter controls whether videos play inline (on) or fullscreen (off) in an HTML5 player on iOS."
+                    name="./youtubePlaysInline">
+                    <granite:rendercondition
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                        expression="${cqDesign.youtubePlaysInlineEnabled == 'true'}"/>
+                </inline>
+                <rel
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    text="Unrestricted Related Videos"
+                    checked="${cqDesign.youtubeRelatedVideosDefaultValue != 'false'}"
+                    uncheckedValue="false"
+                    value="true"
+                    fieldDescription="If disabled related videos will come from the same channel as the video that was just played, otherwise from any channel."
+                    name="./youtubeRel">
+                    <granite:rendercondition
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                        expression="${cqDesign.youtubeRelatedVideosEnabled == 'true'}"/>
+                </rel>
+            </items>/
+        </parameters>
     </items>
     <granite:data
         jcr:primaryType="nt:unstructured"

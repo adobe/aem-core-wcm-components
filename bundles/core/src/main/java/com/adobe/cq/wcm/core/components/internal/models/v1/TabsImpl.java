@@ -119,7 +119,6 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
         return items.stream()
             .filter(e -> StringUtils.equals(e.getName(), activeItemName))
             .findFirst()
-            .map(item -> item != null ? item : (!items.isEmpty() ? items.get(0) : null))
             .map(ListItem::getData)
             .map(ComponentData::getId)
             .map(item -> new String[]{item})

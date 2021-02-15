@@ -4,4 +4,5 @@
     jcr:title="Core Components Test Experience Fragments">
     <header/>
     <footer/>
+    <panels/>
 </jcr:root>

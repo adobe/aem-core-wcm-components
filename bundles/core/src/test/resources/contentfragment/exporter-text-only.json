@@ -1,4 +1,5 @@
 {
+    "id": "contentfragment-bb4058160c",
     "title": "Test Content Fragment",
     "description": "This is a test content fragment.",
     "model": "/content/dam/contentfragments/text-only/jcr:content/model",

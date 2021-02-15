@@ -23,7 +23,8 @@
             "cq:templateType"   : "/libs/settings/wcm/template-types/html5page",
             "sling:resourceType": "core/wcm/components/page/v1/page",
             "cq:lastModifiedBy" : "admin",
-
+            "brandSlug"         : "Brand Slug",
+            "brandSlug_override": "true",
                 "text"              : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",

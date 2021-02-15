@@ -18,7 +18,7 @@
  *      This package defines the context-aware configurations used by the WCM Core Components
  * </p>
  */
-@Version("1.0.0")
+@Version("1.1.0")
 package com.adobe.cq.wcm.core.components.config;
 
 import org.osgi.annotation.versioning.Version;

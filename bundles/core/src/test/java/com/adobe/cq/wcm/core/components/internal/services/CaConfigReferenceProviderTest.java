@@ -16,18 +16,24 @@
 package com.adobe.cq.wcm.core.components.internal.services;
 
 import java.util.List;
+import java.util.TreeSet;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.caconfig.management.ConfigurationManager;
+import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.testing.MockConfigurationResourceResolver;
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
+import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
 import com.day.cq.wcm.api.reference.Reference;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
@@ -35,7 +41,8 @@ class CaConfigReferenceProviderTest {
 
     private static final String TEST_BASE = "/com/adobe/cq/wcm/core/components/internal/services/CaConfigReferenceProvider";
     private static final String TEST_PAGE = "/content/mysite/page";
-    private static final String TEST_COMPONENT = TEST_PAGE + "/jcr:content/par/title";
+    private static final String TEST_CA_COMPONENT = TEST_PAGE + "/ca-page/jcr:content/par/title";
+    private static final String TEST_NO_CA_COMPONENT = TEST_PAGE + "/no-ca-page/jcr:content/par/title";
     private static final String SLING_CONFIGS_ROOT = "/conf/mysite/sling:configs";
 
     private CaConfigReferenceProvider caConfigReferenceProvider;
@@ -45,19 +52,21 @@ class CaConfigReferenceProviderTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
-        MockConfigurationResourceResolver mockConfigurationResourceResolver = new MockConfigurationResourceResolver(context.resourceResolver(), SLING_CONFIGS_ROOT);
-        context.registerInjectActivateService(mockConfigurationResourceResolver);
-        caConfigReferenceProvider = context.registerInjectActivateService(new CaConfigReferenceProvider());
-    }
-
-    void loadHtmlPageItemsConfig() {
         context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
+        MockContextAwareConfig.registerAnnotationClasses(context, HtmlPageItemsConfig.class);
+        ConfigurationManager mockConfigurationManager = Mockito.mock(ConfigurationManager.class);
+        Mockito.when(mockConfigurationManager.getConfigurationNames()).thenReturn(new TreeSet<String>() {{
+            add(HtmlPageItemsConfig.class.getName());
+            add(DataLayerConfig.class.getName());
+            add(PdfViewerCaConfig.class.getName());
+        }});
+        context.registerService(ConfigurationManager.class, mockConfigurationManager);
+        caConfigReferenceProvider = context.registerInjectActivateService(new CaConfigReferenceProvider());
     }
 
     @Test
     void testFindReferences() {
-        loadHtmlPageItemsConfig();
-        Resource resource = context.resourceResolver().getResource(TEST_COMPONENT);
+        Resource resource = context.resourceResolver().getResource(TEST_CA_COMPONENT);
         List<Reference> references = caConfigReferenceProvider.findReferences(resource);
         assertEquals(1, references.size());
         Reference reference = references.get(0);
@@ -72,7 +81,7 @@ class CaConfigReferenceProviderTest {
 
     @Test
     void testNoReferences() {
-        Resource resource = context.resourceResolver().getResource(TEST_COMPONENT);
+        Resource resource = context.resourceResolver().getResource(TEST_NO_CA_COMPONENT);
         List<Reference> references = caConfigReferenceProvider.findReferences(resource);
         assertEquals(0, references.size());
     }

@@ -18,16 +18,14 @@
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
-                <text_1740702241
+                <title
                     cq:styleIds="[1644862132301]"
                     jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-02-15T20:21:58.794+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Component Library &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.13.0&quot;>2.13.0&lt;/a>&lt;/h1>&#xa;"
-                    textIsRich="true"/>
+                    sling:resourceType="core-components-examples/components/version/title"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:created="{Date}2018-12-10T18:55:07.046+01:00"

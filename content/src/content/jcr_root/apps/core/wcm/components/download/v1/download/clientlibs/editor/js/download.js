@@ -35,36 +35,50 @@
         var dialogContent = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
 
         if (dialogContent) {
-            titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector);
-            descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
-            $cqFileUpload     = $dialog.find(".cq-FileUpload");
-            $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
-            if ($cqFileUpload) {
-                $cqFileUpload.on("assetselected", function(e) {
-                    fileReference = e.path;
-                    retrieveDAMInfo(fileReference).then(
-                        function() {
-                            titleTuple.reinitCheckbox();
-                            descriptionTuple.reinitCheckbox();
-                        }
-                    );
+
+            var rteInstance = $(descriptionTextfieldSelector).data("rteinstance");
+            // wait for the description textfield rich text editor to signal start before initializing.
+            if (rteInstance && rteInstance.isActive) {
+                init($dialog, dialogContent);
+            } else {
+                $(descriptionTextfieldSelector).on("editing-start", function() {
+                    init($dialog, dialogContent);
                 });
-                $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
-                    titleTuple.reset();
-                    descriptionTuple.reset();
-                });
-            }
-            if ($cqFileUploadEdit) {
-                fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
-                if (fileReference === "") {
-                    fileReference = undefined;
-                }
-                if (fileReference) {
-                    retrieveDAMInfo(fileReference);
-                }
             }
         }
     });
+
+    // Initialize all fields once both the dialog and the description textfield RTE have loaded
+    function init($dialog, dialogContent) {
+        titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector, false);
+        descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
+        $cqFileUpload     = $dialog.find(".cq-FileUpload");
+        $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
+        if ($cqFileUpload) {
+            $cqFileUpload.on("assetselected", function(e) {
+                fileReference = e.path;
+                retrieveDAMInfo(fileReference).then(
+                    function() {
+                        titleTuple.reinitCheckbox();
+                        descriptionTuple.reinitCheckbox();
+                    }
+                );
+            });
+            $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
+                titleTuple.reset();
+                descriptionTuple.reset();
+            });
+        }
+        if ($cqFileUploadEdit) {
+            fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
+            if (fileReference === "") {
+                fileReference = undefined;
+            }
+            if (fileReference) {
+                retrieveDAMInfo(fileReference);
+            }
+        }
+    }
 
     $(window).on("focus", function() {
         if (fileReference) {

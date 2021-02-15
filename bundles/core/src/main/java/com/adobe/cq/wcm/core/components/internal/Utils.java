@@ -23,13 +23,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
@@ -37,10 +40,6 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.foundation.AllowedComponentList;
 import com.google.common.collect.ImmutableSet;
-
-import org.jetbrains.annotations.Nullable;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class Utils {
 
@@ -230,6 +229,36 @@ public class Utils {
             }
         }
         return superTypes;
+    }
+
+
+    /**
+     * Get the inherited value of a property from the page content resource. Walk the content tree upwards until an override of that
+     * property is specified.
+     *
+     * @param startPage the page in the content tree to start looking for the requested property.
+     * @param propertyName the name of the property which is inherited.
+     * @return the inherited value of the property or empty string if the property is not specified in the content tree.
+     */
+    @NotNull
+    public static String getInheritedValue(com.day.cq.wcm.api.Page startPage, String propertyName) {
+    	if( startPage == null ) {
+    		return StringUtils.EMPTY;
+    	}
+    	
+    	com.day.cq.wcm.api.Page tmp = startPage;
+    	
+		while( tmp != null && tmp.hasContent() && tmp.getDepth() > 1 ) {
+			ValueMap props = tmp.getProperties();
+			if( props != null ) {
+				boolean override = Boolean.parseBoolean(props.get(propertyName + "_override", String.class));
+				if(override) {
+					return props.get(propertyName, StringUtils.EMPTY);
+				}
+				tmp = tmp.getParent();
+			}
+		}
+    	return StringUtils.EMPTY;
     }
 
     /**

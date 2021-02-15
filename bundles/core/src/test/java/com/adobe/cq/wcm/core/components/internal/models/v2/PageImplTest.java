@@ -23,30 +23,28 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
+import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.testing.MockConfigurationResourceResolver;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
+import com.adobe.cq.wcm.core.components.testing.MockPersistenceStrategy;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
+import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.Utils.getTestExporterJSONPath;
 import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -55,29 +53,42 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     private static final String TEST_BASE = "/page/v2";
     private static final String REDIRECT_PAGE = CONTENT_ROOT + "/redirect-page";
     private static final String PN_CLIENT_LIBS = "clientlibs";
-    private static final String SLING_CONFIGS_ROOT = "/conf/sling:configs";
+    private static final String SLING_CONFIGS_ROOT = "/conf/page/sling:configs";
 
     private static final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
 
     @BeforeEach
     protected void setUp() {
         internalSetup(TEST_BASE);
+        MockContextAwareConfig.registerAnnotationClasses(context, HtmlPageItemsConfig.class);
         ClientLibrary mockClientLibrary = Mockito.mock(ClientLibrary.class);
         when(mockClientLibrary.getPath()).thenReturn("/apps/wcm/core/page/clientlibs/favicon");
         when(mockClientLibrary.allowProxy()).thenReturn(true);
         context.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
         context.registerInjectActivateService(mockProductInfoProvider);
-        MockConfigurationResourceResolver mockConfigurationResourceResolver = new MockConfigurationResourceResolver(context.resourceResolver(), SLING_CONFIGS_ROOT);
-        context.registerInjectActivateService(mockConfigurationResourceResolver);
+        context.registerInjectActivateService(new MockPersistenceStrategy(), ImmutableMap.of(Constants.SERVICE_RANKING, Integer.MAX_VALUE));
     }
 
-    protected void loadHtmlPageItemsConfig() {
-        context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
+    private void loadHtmlPageItemsConfig(boolean useNewFormat) {
+        if (useNewFormat) {
+            context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
+        } else {
+            context.load().json(TEST_BASE + "/test-sling-configs-deprecated-caconfig.json", SLING_CONFIGS_ROOT);
+        }
     }
 
     @Test
-    void testPage() throws ParseException {
-        loadHtmlPageItemsConfig();
+    void testPage() throws Exception {
+        testPage(true);
+    }
+
+    @Test
+    void testPageWithDeprecatedCaconfig() throws Exception {
+        testPage(false);
+    }
+
+    private void testPage(boolean useNewCaconfig) throws ParseException {
+        loadHtmlPageItemsConfig(useNewCaconfig);
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH, PageImpl.PN_CLIENTLIBS_JS_HEAD,
                 new String[]{"coretest.product-page-js-head"}, PN_CLIENT_LIBS,
                 new String[]{"coretest.product-page","coretest.product-page-js-head"}, Page.PN_APP_RESOURCES_CLIENTLIB,
@@ -97,7 +108,8 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         keywords.addAll(Arrays.asList(keywordsArray));
         assertTrue(keywords.contains("one") && keywords.contains("two") && keywords.contains("three"));
         assertArrayEquals(new String[] {"coretest.product-page", "coretest.product-page-js-head"}, page.getClientLibCategories());
-        assertArrayEquals(new String[] {"coretest.product-page-js-head"}, page.getClientLibCategoriesJsHead());
+        assertArrayEquals(new String[] {"" +
+                "coretest.product-page-js-head"}, page.getClientLibCategoriesJsHead());
         assertArrayEquals(new String[] {"coretest.product-page"}, page.getClientLibCategoriesJsBody());
         assertEquals("product-page", page.getTemplateName());
         testJSONExport(page, getTestExporterJSONPath(TEST_BASE, PAGE));
@@ -106,6 +118,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     @Test
     void testFavicons() {
         Page page = getPageUnderTest(PAGE);
+        loadHtmlPageItemsConfig(true);
         assertThrows(UnsupportedOperationException.class, page::getFavicons);
     }
 
@@ -120,6 +133,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     @Test
     void testRedirectTarget() {
         Page page = getPageUnderTest(REDIRECT_PAGE);
+        loadHtmlPageItemsConfig(true);
         NavigationItem redirectTarget = page.getRedirectTarget();
         assertNotNull(redirectTarget);
         assertEquals("Templated Page", redirectTarget.getPage().getTitle());
@@ -129,6 +143,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     @Test
     void testGetCssClasses() {
         Page page = getPageUnderTest(PAGE, CSS_CLASS_NAMES_KEY, new String[]{"class1", "class2"});
+        loadHtmlPageItemsConfig(true);
         String cssClasses = page.getCssClassNames();
         assertEquals("class1 class2", cssClasses, "The CSS classes of the page are not expected: " + PAGE);
     }
@@ -136,6 +151,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     @Test
     void testHasCloudconfigSupport() {
         Page page = new PageImpl();
+        loadHtmlPageItemsConfig(true);
         assertFalse(page.hasCloudconfigSupport(), "Expected no cloudconfig support if product info provider missing");
 
         mockProductInfoProvider.setVersion(new Version("6.3.1"));
@@ -155,8 +171,16 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
+    void testHtmlPageItemsConfigWithDeprecatedCaconfig() throws Exception {
+        Page page = getPageUnderTest(PAGE);
+        loadHtmlPageItemsConfig(false);
+        assertNotNull(page.getHtmlPageItems());
+        assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
+    }
+
+    @Test
     void testHtmlPageItemsConfig() {
-        loadHtmlPageItemsConfig();
+        loadHtmlPageItemsConfig(true);
         Page page = getPageUnderTest(PAGE);
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");

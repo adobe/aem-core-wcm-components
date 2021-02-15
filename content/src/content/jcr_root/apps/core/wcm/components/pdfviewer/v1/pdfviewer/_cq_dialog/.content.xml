@@ -53,6 +53,7 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
                                                 fieldDescription="Path of Document."
                                                 fieldLabel="Document Path"
+                                                nodeTypes="dam:Asset, nt:file, nt:resource"
                                                 name="./documentPath"
                                                 required="{Boolean}true"
                                                 rootPath="/content/dam"/>

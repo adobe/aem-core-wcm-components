@@ -1,31 +1,53 @@
 {
-    "com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig": {
+  "com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig": {
+    "jcr:primaryType": "nt:unstructured",
+    "jcr:content" : {
+      "jcr:primaryType": "nt:unstructured",
+      "prefixPath"     : "/_theme",
+      "items"          : {
         "jcr:primaryType": "nt:unstructured",
-        "prefixPath"     : "/_theme",
         "theme.css"      : {
+          "jcr:primaryType": "nt:unstructured",
+          "element"        : "link",
+          "location"       : "header",
+          "attributes"     : {
             "jcr:primaryType": "nt:unstructured",
-            "element"        : "link",
-            "location"       : "header",
-            "attributes"     : {
-                "jcr:primaryType": "nt:unstructured",
-                "href"           : "/theme.css"
+            "href"           : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "href",
+              "value"          : "/theme.css"
             }
+          }
         },
         "theme.js"       : {
+          "jcr:primaryType": "nt:unstructured",
+          "element"        : "script",
+          "location"       : "footer",
+          "attributes"     : {
             "jcr:primaryType": "nt:unstructured",
-            "element"        : "script",
-            "location"       : "footer",
-            "attributes"     : {
-                "jcr:primaryType": "nt:unstructured",
-                "src"            : "/theme.js"
+            "src"            : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "src",
+              "value"          : "/theme.js"
             }
+          }
         },
         "meta"           : {
+          "jcr:primaryType": "nt:unstructured",
+          "element"        : "meta",
+          "attributes"     : {
             "jcr:primaryType": "nt:unstructured",
-            "element"        : "meta"
+            "charset"        : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "charset",
+              "value"          : "UTF-8"
+            }
+          }
         },
         "invalid"        : {
-            "jcr:primaryType": "nt:unstructured"
+          "jcr:primaryType": "nt:unstructured"
         }
+      }
     }
+  }
 }

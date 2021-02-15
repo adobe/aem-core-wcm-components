@@ -21,8 +21,11 @@
                 "three"
             ],
             "cq:templateType"   : "/libs/settings/wcm/template-types/html5page",
+            "sling:configRef"   : "/conf/page",
             "sling:resourceType": "core/wcm/components/page/v2/page",
             "cq:lastModifiedBy" : "admin",
+            "brandSlug"         : "Brand Slug",
+            "brandSlug_override": "true",
             "root"              : {
                 "jcr:primaryType"   : "nt:unstructured",
                 "jcr:lastModifiedBy": "admin",

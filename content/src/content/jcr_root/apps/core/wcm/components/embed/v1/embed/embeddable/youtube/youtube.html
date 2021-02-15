@@ -13,10 +13,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<iframe data-sly-test="${properties.youtubeVideoId}"
-        width="${properties.youtubeWidth || '100%' @ context='scriptString'}"
-        height="${properties.youtubeHeight || 390 @ context='scriptString'}"
-        src="${'https://www.youtube.com/embed/{0}?origin={1}://{2}' @ format=[properties.youtubeVideoId, request.scheme, request.serverName]}"
+<iframe data-sly-use.youTube="com.adobe.cq.wcm.core.components.models.embeddable.YouTube"
+        data-sly-test="${!youtube.empty}"
+        width="${youTube.iFrameWidth || '100%' @ context='scriptString'}"
+        height="${youTube.iFrameHeight || 390 @ context='scriptString'}"
+        src="${youTube.iFrameSrc}"
         frameborder="0"
         allowfullscreen
+        allow="autoplay; fullscreen"
         aria-label="${'YouTube Video' @ i18n}"></iframe>

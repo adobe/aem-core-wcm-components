@@ -45,6 +45,7 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
                                         fieldDescription="Path under which the Content Fragments are located."
                                         fieldLabel="Parent Path"
+                                        nodeTypes="nt:folder, sling:Folder, sling:OrderedFolder"
                                         name="./parentPath"
                                         rootPath="/content/dam"/>
                                     <tags

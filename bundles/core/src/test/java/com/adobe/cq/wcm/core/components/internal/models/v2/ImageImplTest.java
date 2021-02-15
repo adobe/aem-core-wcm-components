@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,11 +32,14 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import javax.json.Json;
+
 import static com.day.cq.wcm.api.WCMMode.REQUEST_ATTRIBUTE_NAME;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
@@ -139,6 +143,16 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
     void testImageWithAltAndFallbackIfDescriptionIsEmpty() {
         Image image = getImageUnderTest(IMAGE21_PATH);
         assertEquals("Adobe Systems Logo and Wordmark", image.getAlt());
+    }
+
+    @Test
+    void testGetDataLayerJson() throws Exception {
+        Image image = getImageUnderTest(IMAGE6_PATH);
+        assertNotNull(image.getData());
+
+        String expected = "{\"image-db7ae5b54e\":{\"image\":{\"repo:id\":\"60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5\",\"xdm:tags\":[],\"@type\":\"image/gif\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\",\"repo:path\":\"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif\",\"xdm:smartTags\":{\"nature\":0.74,\"lake\":0.79,\"water\":0.78,\"landscape\":0.75}},\"dc:title\":\"Adobe Logo\",\"@type\":\"core/wcm/components/image/v2/image\",\"xdm:linkURL\":\"/core/content/test-image.html\",\"repo:modifyDate\":\"2017-03-20T08:33:42Z\"}}";
+        assertEquals(Json.createReader(new StringReader(expected)).read(),
+            Json.createReader(new StringReader(image.getData().getJson())).read());
     }
 
     @Test

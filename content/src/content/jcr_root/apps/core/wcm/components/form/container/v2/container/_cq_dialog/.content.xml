@@ -18,7 +18,7 @@
           xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
           xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
     jcr:primaryType="nt:unstructured"
-    jcr:title="Form Container"
+    jcr:title="Core Form Container"
     sling:resourceType="cq/gui/components/authoring/dialog"
     extraClientlibs="[core.wcm.components.form.container.v2.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_form_container_v2"
