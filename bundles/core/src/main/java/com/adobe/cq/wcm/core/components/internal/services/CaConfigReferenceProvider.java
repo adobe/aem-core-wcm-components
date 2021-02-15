@@ -21,12 +21,10 @@ import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.caconfig.management.ConfigurationManager;
 import org.apache.sling.caconfig.resource.ConfigurationResourceResolver;
 import org.osgi.service.component.annotations.Component;
 
-import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
-import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
-import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -46,6 +44,12 @@ public class CaConfigReferenceProvider implements ReferenceProvider {
     private static final String CA_CONFIG_REFERENCE_TYPE = "caconfig";
 
     /**
+     * The {@link ConfigurationManager} service;
+     */
+    @org.osgi.service.component.annotations.Reference
+    private ConfigurationManager configurationManager;
+
+    /**
      * The @{@link ConfigurationResourceResolver} service.
      */
     @org.osgi.service.component.annotations.Reference
@@ -63,9 +67,9 @@ public class CaConfigReferenceProvider implements ReferenceProvider {
         if (page == null) {
             return references;
         }
-        addCaConfigReference(HtmlPageItemsConfig.class.getName(), resource, references);
-        addCaConfigReference(DataLayerConfig.class.getName(), resource, references);
-        addCaConfigReference(PdfViewerCaConfig.class.getName(), resource, references);
+        for (String config : configurationManager.getConfigurationNames()) {
+            addCaConfigReference(config, resource, references);
+        }
         return references;
     }
 
