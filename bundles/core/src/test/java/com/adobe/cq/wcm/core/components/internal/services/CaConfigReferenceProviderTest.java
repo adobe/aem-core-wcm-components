@@ -16,15 +16,20 @@
 package com.adobe.cq.wcm.core.components.internal.services;
 
 import java.util.List;
+import java.util.TreeSet;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.caconfig.management.ConfigurationManager;
 import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
+import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
 import com.day.cq.wcm.api.reference.Reference;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -49,6 +54,13 @@ class CaConfigReferenceProviderTest {
         context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
         context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
         MockContextAwareConfig.registerAnnotationClasses(context, HtmlPageItemsConfig.class);
+        ConfigurationManager mockConfigurationManager = Mockito.mock(ConfigurationManager.class);
+        Mockito.when(mockConfigurationManager.getConfigurationNames()).thenReturn(new TreeSet<String>() {{
+            add(HtmlPageItemsConfig.class.getName());
+            add(DataLayerConfig.class.getName());
+            add(PdfViewerCaConfig.class.getName());
+        }});
+        context.registerService(ConfigurationManager.class, mockConfigurationManager);
         caConfigReferenceProvider = context.registerInjectActivateService(new CaConfigReferenceProvider());
     }
 
