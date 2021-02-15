@@ -55,10 +55,13 @@
          */
         getPanelContainerHTMLElement: function(editable) {
             var container = getPanelContainerType(editable);
+            var element;
 
             if (container) {
-                return editable.dom.filter(container.selector)[0] || editable.dom.find(container.selector)[0];
+                element = editable.dom.filter(container.selector)[0] || editable.dom.find(container.selector)[0];
             }
+
+            return element;
         },
 
         /**
