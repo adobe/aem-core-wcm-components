@@ -53,6 +53,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
     private static final String IMAGE37_PATH = PAGE + "/jcr:content/root/image37";
     private static final String IMAGE38_PATH = PAGE + "/jcr:content/root/image38";
     private static final String IMAGE39_PATH = PAGE + "/jcr:content/root/image39";
+    private static final String IMAGE40_PATH = PAGE + "/jcr:content/root/image40";
 
     @BeforeEach
     void setUp() {
@@ -424,5 +425,13 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         Image image = getImageUnderTest(IMAGE39_PATH);
         assertTrue(image.isDmImage());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE39_PATH));
+    }
+
+    @Test
+    void testDMAnimatedGif() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE40_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE40_PATH));
     }
 }
