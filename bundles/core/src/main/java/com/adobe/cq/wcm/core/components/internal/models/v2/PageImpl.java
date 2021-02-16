@@ -49,6 +49,7 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -57,6 +58,7 @@ import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
+import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -309,4 +311,16 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
         return htmlPageItems;
     }
+    
+    @Override
+	public String getCanonicalURL() {
+		if (currentPage != null) {
+			String authoredCanonicalURL = pageProperties.get(PN_CANONICAL_URL, String.class);
+			PageManager pageManager = currentPage.getPageManager();
+			return Optional.ofNullable(authoredCanonicalURL)
+	                .map(p -> Utils.getURL(request, pageManager, p))
+	                .orElse(authoredCanonicalURL);
+			}
+		return null; 
+	}
 }

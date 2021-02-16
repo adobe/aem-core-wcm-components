@@ -91,6 +91,14 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     String PN_APP_RESOURCES_CLIENTLIB = "appResourcesClientlib";
+    
+    /**
+     * Name of the canonical url property that will store the internal or external domain and it will be shown in page view source to define credit of the web application resources
+     *
+     * @see #getCanonicalURL
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    String PN_CANONICAL_URL = "sling:canonical";
 
     /**
      * Expected file name for the regular favicon file.
@@ -390,5 +398,16 @@ public interface Page extends ContainerExporter, Component {
     @Nullable
     default List<HtmlPageItem> getHtmlPageItems() {
         return null;
+    }
+    
+    /**
+     * Returns a content path or authored publish domain that should be included in the page view resource
+     *
+     * @return content path or publish domain
+     * @since com.adobe.cq.wcm.core.components.models 12.18.0
+     */
+    @Nullable
+    default String getCanonicalURL() {
+    	throw new UnsupportedOperationException();
     }
 }
