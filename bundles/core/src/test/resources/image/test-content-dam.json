@@ -942,6 +942,7 @@
                 "dam:Numberofimages"         : 1,
                 "dam:Numberoftextualcomments": 0,
                 "dam:scene7File"             : "dmtestcompany/Adobe_Systems_logo_and_wordmark_DM",
+                "dam:scene7Type"             : "AnimatedGif",
                 "tiff:ImageWidth"            : 2000,
                 "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
                 "dam:size"                   : 49069,

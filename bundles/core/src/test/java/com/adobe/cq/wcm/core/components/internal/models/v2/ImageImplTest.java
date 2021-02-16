@@ -150,7 +150,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         Image image = getImageUnderTest(IMAGE6_PATH);
         assertNotNull(image.getData());
 
-        String expected = "{\"image-db7ae5b54e\":{\"image\":{\"repo:id\":\"60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5\",\"xdm:tags\":[],\"@type\":\"image/gif\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\",\"repo:path\":\"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif\",\"xdm:smartTags\":{\"nature\":0.74,\"lake\":0.79,\"water\":0.78,\"landscape\":0.75}},\"dc:title\":\"Adobe Logo\",\"@type\":\"core/wcm/components/image/v2/image\",\"xdm:linkURL\":\"/core/content/test-image.html\",\"repo:modifyDate\":\"2017-03-20T08:33:42Z\"}}";
+        String expected = "{\"image-db7ae5b54e\":{\"@type\":\"core/wcm/components/image/v2/image\",\"repo:modifyDate\":\"2017-03-20T08:33:42Z\",\"dc:title\":\"Adobe Systems Logo and Wordmark\",\"xdm:linkURL\":\"/core/content/test-image.html\",\"image\":{\"repo:id\":\"60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\",\"@type\":\"image/gif\",\"repo:path\":\"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif\",\"xdm:tags\":[],\"xdm:smartTags\":{\"nature\":0.74,\"lake\":0.79,\"water\":0.78,\"landscape\":0.75}}}}";
         assertEquals(Json.createReader(new StringReader(expected)).read(),
             Json.createReader(new StringReader(image.getData().getJson())).read());
     }
