@@ -1,0 +1,62 @@
+{
+    "jcr:primaryType": "cq:Page",
+    "jcr:createdBy": "admin",
+    "jcr:created": "Thu Oct 01 2020 16:25:10 GMT-0700",
+    "errors": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:createdBy": "admin",
+        "jcr:created": "Thu Oct 01 2020 16:25:12 GMT-0700"
+    },
+    "jcr:content": {
+        "jcr:primaryType": "cq:PageContent",
+        "jcr:mixinTypes": [
+            "cq:LiveRelationship",
+            "cq:LiveSync",
+            "mix:versionable"
+        ],
+        "jcr:createdBy": "admin",
+        "jcr:title": "WKND Adventures and Travel",
+        "cq:lastReplicationAction": "Activate",
+        "jcr:versionHistory": "9c39d796-d4f3-41ba-b3f5-2776d517358a",
+        "cq:template": "/conf/wknd/settings/wcm/templates/landing-page-template",
+        "cq:lastReplicatedBy": "admin",
+        "cq:lastRolledout": "Wed Sep 30 2020 17:38:21 GMT-0700",
+        "jcr:predecessors": [
+            "2452b1d0-0b27-400a-9e28-6170ad692f45"
+        ],
+        "jcr:created": "Thu Oct 01 2020 16:25:10 GMT-0700",
+        "cq:lastReplicated": "Tue Oct 13 2020 14:32:06 GMT-0700",
+        "cq:lastModified": "Wed Sep 30 2020 17:38:06 GMT-0700",
+        "jcr:description": "WKND is a collective of outdoors, music, crafts, adventure sports, and travel enthusiasts that want to share our experiences, connections, and expertise with the world.",
+        "jcr:baseVersion": "2452b1d0-0b27-400a-9e28-6170ad692f45",
+        "jcr:isCheckedOut": true,
+        "pageTitle": "Home",
+        "cq:tags": [
+            "wknd:customer-journey/attract"
+        ],
+        "jcr:uuid": "4338efa2-225b-4bbd-803a-a6c2edbba50b",
+        "sling:resourceType": "wknd/components/page",
+        "cq:lastRolledoutBy": "admin",
+        "cq:lastModifiedBy": "admin"
+    },
+    "magazine": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:createdBy": "admin",
+        "jcr:created": "Thu Oct 01 2020 16:25:11 GMT-0700"
+    },
+    "adventures": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:createdBy": "admin",
+        "jcr:created": "Thu Oct 01 2020 16:25:10 GMT-0700"
+    },
+    "faqs": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:createdBy": "admin",
+        "jcr:created": "Thu Oct 01 2020 16:25:11 GMT-0700"
+    },
+    "about-us": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:createdBy": "admin",
+        "jcr:created": "Thu Oct 01 2020 16:25:10 GMT-0700"
+    }
+}
