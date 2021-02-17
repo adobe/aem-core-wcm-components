@@ -49,16 +49,16 @@ public class PWAImpl implements PWA {
     @PostConstruct
     protected void initModel() {
         ValueMap valueMap = resource.getValueMap();
-        Boolean isPWAEnabled = valueMap.get(PN_ENABLE_PWA, Boolean.class);
+        Boolean isPWAEnabled = valueMap.get(PN_PWA_ENABLE, Boolean.class);
         this.isEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
         if (!this.isEnabled) {
             return;
         }
 
-        this.themeColor = colorToHex(valueMap.get(PN_THEME_COLOR, ""));
+        this.themeColor = colorToHex(valueMap.get(PN_PWA_THEME_COLOR, ""));
         this.iconPath = valueMap.get(PN_PWA_ICON_PATH, "");
 
-        String startURL = valueMap.get(PN_START_URL, "");
+        String startURL = valueMap.get(PN_PWA_START_URL, "");
         this.manifestPath = replaceSuffix(startURL, MANIFEST_NAME);
 
         PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
