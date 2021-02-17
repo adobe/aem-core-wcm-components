@@ -25,7 +25,7 @@ public interface PWA {
      * Name of the property that defines if PWA is enabled for the website.
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    final String PN_PWA_ENABLE = "pwaEnabled";
+    final String PN_PWA_ENABLED = "pwaEnabled";
 
     /**
      * Name of the property that defines the start URL of this PWA

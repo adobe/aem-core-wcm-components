@@ -30,7 +30,7 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.models.PWA.MANIFEST_NAME;
-import static com.adobe.cq.wcm.core.components.models.PWA.PN_PWA_ENABLE;
+import static com.adobe.cq.wcm.core.components.models.PWA.PN_PWA_ENABLED;
 import static com.adobe.cq.wcm.core.components.models.PWA.PN_PWA_ICON_PATH;
 import static com.adobe.cq.wcm.core.components.models.PWA.PN_PWA_START_URL;
 import static com.adobe.cq.wcm.core.components.models.PWA.PN_PWA_THEME_COLOR;
@@ -65,7 +65,7 @@ public class PWAImplTest {
         Resource mockPWAResource = mock(Resource.class);
         when(spyResolver.getResource(SITES_PAGE_PATH + "/" + JcrConstants.JCR_CONTENT)).thenReturn(mockPWAResource);
 
-        mvp.put(PN_PWA_ENABLE, true);
+        mvp.put(PN_PWA_ENABLED, true);
         mvp.put(PN_PWA_START_URL, SITES_PAGE_PATH + ".html");
         when(mockPWAResource.getValueMap()).thenReturn(mvp);
     }
@@ -84,7 +84,7 @@ public class PWAImplTest {
 
     @Test
     public void testPWAReturnsFalseIfPWAOptionIsNotEnabled() {
-        mvp.remove(PN_PWA_ENABLE);
+        mvp.remove(PN_PWA_ENABLED);
         pwa = resource.adaptTo(PWA.class);
         assertFalse(pwa.isEnabled());
     }

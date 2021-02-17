@@ -49,7 +49,7 @@ public class PWAImpl implements PWA {
     @PostConstruct
     protected void initModel() {
         ValueMap valueMap = resource.getValueMap();
-        Boolean isPWAEnabled = valueMap.get(PN_PWA_ENABLE, Boolean.class);
+        Boolean isPWAEnabled = valueMap.get(PN_PWA_ENABLED, Boolean.class);
         this.isEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
         if (!this.isEnabled) {
             return;
