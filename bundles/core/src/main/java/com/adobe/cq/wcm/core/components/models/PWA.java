@@ -31,13 +31,13 @@ public interface PWA {
      * Name of the property that defines the start URL of this PWA
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    final String PN_START_URL = "startURL";
+    final String PN_START_URL = "pwaStartURL";
 
     /**
      * Name of the property that defines the theme color used.
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    final String PN_THEME_COLOR = "themeColor";
+    final String PN_THEME_COLOR = "pwaThemeColor";
 
     /**
      * Name of the property that defines the PWA icon

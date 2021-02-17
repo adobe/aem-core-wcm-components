@@ -16,6 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
@@ -62,7 +65,7 @@ public class PWAImpl implements PWA {
         if (pageManager != null) {
             Page page = pageManager.getContainingPage(resource);
             if (page != null) {
-                String mappingName = page.getPath().replace("/", ".").substring(CONTENT_PATH.length());
+                String mappingName = page.getPath().replace(CONTENT_PATH, "").replace("/", ".");
                 this.serviceWorkerPath = "/" + mappingName + "sw.js";
             }
         }
@@ -102,26 +105,21 @@ public class PWAImpl implements PWA {
             return color;
         }
 
-        if (!color.startsWith("rgb")) {
-            return "";
-        }
-
         try {
-            String[] parts = color.split(",");
-            String r = Integer.toHexString(Integer.parseInt(parts[0].substring(parts[0].indexOf("(") + 1)));
-            String g = Integer.toHexString(Integer.parseInt(parts[1]));
-            String b;
+            Pattern rgbPattern = Pattern.compile("^rgba? *\\( *([0-9]+), *([0-9]+), *([0-9]+),? *([01]|0\\.[0-9]*)? *\\)");
+            Matcher rgbMatcher = rgbPattern.matcher(color);
 
-            if (color.startsWith("rgba")) {
-                b = Integer.toHexString(Integer.parseInt(parts[2]));
+            if (!rgbMatcher.matches()) {
+                return "";
             }
-            else {
-                b = Integer.toHexString(Integer.parseInt(parts[2].substring(0, parts[2].indexOf(")"))));
-            }
+
+            String r = Integer.toHexString(Integer.parseInt(rgbMatcher.group(1)));
+            String g = Integer.toHexString(Integer.parseInt(rgbMatcher.group(2)));
+            String b = Integer.toHexString(Integer.parseInt(rgbMatcher.group(3)));
 
             return "#" + (r.length() == 2 ? r : "0" + r) + (g.length() == 2 ? g : "0" + g) + (b.length() == 2 ? b : "0" + b);
         }
-        catch(ArrayIndexOutOfBoundsException | NumberFormatException e) {
+        catch(NumberFormatException e) {
             return "";
         }
     }
