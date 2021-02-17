@@ -31,7 +31,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.models.PWA.MANIFEST_NAME;
 import static com.adobe.cq.wcm.core.components.models.PWA.PN_ENABLE_PWA;
-import static com.adobe.cq.wcm.core.components.models.PWA.PN_PWA_ICON;
+import static com.adobe.cq.wcm.core.components.models.PWA.PN_PWA_ICON_PATH;
 import static com.adobe.cq.wcm.core.components.models.PWA.PN_START_URL;
 import static com.adobe.cq.wcm.core.components.models.PWA.PN_THEME_COLOR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -97,7 +97,7 @@ public class PWAImplTest {
 
     @Test
     public void testPWAReturnsIconPath() {
-        mvp.put(PN_PWA_ICON, "/content/dam/foo.png");
+        mvp.put(PN_PWA_ICON_PATH, "/content/dam/foo.png");
         pwa = resource.adaptTo(PWA.class);
         assertEquals("/content/dam/foo.png", pwa.getIconPath());
     }

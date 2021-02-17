@@ -56,7 +56,7 @@ public class PWAImpl implements PWA {
         }
 
         this.themeColor = colorToHex(valueMap.get(PN_THEME_COLOR, ""));
-        this.iconPath = valueMap.get(PN_PWA_ICON, "");
+        this.iconPath = valueMap.get(PN_PWA_ICON_PATH, "");
 
         String startURL = valueMap.get(PN_START_URL, "");
         this.manifestPath = replaceSuffix(startURL, MANIFEST_NAME);

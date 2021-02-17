@@ -43,7 +43,7 @@ public interface PWA {
      * Name of the property that defines the PWA icon
      * @since com.adobe.cq.wcm.core.components.models 12.18.0
      */
-    final String PN_PWA_ICON = "pwaIcon";
+    final String PN_PWA_ICON_PATH = "pwaIconPath";
 
     /**
      * Name of the manifest file that provides information about the PWA
