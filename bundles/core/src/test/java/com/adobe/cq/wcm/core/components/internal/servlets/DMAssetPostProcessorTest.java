@@ -52,7 +52,6 @@ public class DMAssetPostProcessorTest {
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_IMAGE_PRESET = PAGE + "/jcr:content/root/image33";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_SMART_CROP_RENDITION = PAGE + "/jcr:content/root/image36";
     private static final String CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET_ANIMATED_GIF = PAGE + "/jcr:content/root/image41";
-    private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_ANIMATED_GIF = PAGE + "/jcr:content/root/image40";
 
     private static final String EXPECTED_IMAGE_SERVER_URL = "https://s7d9.scene7.com/is/image/";
     private static final String EXPECTED_IMAGE_SERVER_CONTENT_URL = "https://s7d9.scene7.com/is/content/";

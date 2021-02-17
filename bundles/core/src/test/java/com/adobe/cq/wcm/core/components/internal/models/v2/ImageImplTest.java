@@ -298,6 +298,15 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
     }
 
     @Test
+    void testDMImageAnimatedGifOnAuthor() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        context.request().setAttribute(REQUEST_ATTRIBUTE_NAME, WCMMode.EDIT);
+        Image image = getImageUnderTest(IMAGE40_PATH);
+        assertTrue(image.isDmImage());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE40_PATH + "-on-author"));
+    }
+
+    @Test
     void testDMImageOneSmartSize() {
         context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, new HashMap<String, Object>() {{
             put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
