@@ -210,7 +210,7 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
                                                 fieldDescription="Make the image a link to another resource."
                                                 fieldLabel="Link"
-                                                nodeTypes="dam:Asset, nt:file, nt:resource, cq:Page"
+                                                nodeTypes="dam:Asset, nt:file, cq:Page"
                                                 name="./linkURL"
                                                 rootPath="/content"
                                                 wrapperClass="cmp-image__editor-link"/>
