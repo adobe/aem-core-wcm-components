@@ -28,7 +28,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         java: [8, 11]
-        profile: [ '', '-Pcloud,release,adobe-public']
+        profile: [ '', '-Pcloud,adobe-public']
 
     steps:
       # Check out Git repository
@@ -63,7 +63,7 @@ jobs:
       - name: Build & Test with Maven
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: mvn -B -U clean install ${{ matrix.profile }} -s ./.github/workflows/settings.xml
+        run: mvn -B -U clean install ${{ matrix.profile }} ${{ fromJSON('["-Prelease", ""]')[matrix.java == 11] }} -s ./.github/workflows/settings.xml
 
       # Run code coverage check
       - name: Run core coverage check
