@@ -28,6 +28,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         java: [8, 11]
+        profile: [ '', '-Pcloud,release']
 
     steps:
       # Check out Git repository
@@ -51,7 +52,7 @@ jobs:
 
       # Build & Test
       - name: Build & Test with Maven
-        run: mvn -B -U clean verify
+        run: mvn -B -U clean install ${{ matrix.profile }}
 
       # Run code coverage check
       - name: Run core coverage check
