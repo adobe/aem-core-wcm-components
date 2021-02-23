@@ -62,6 +62,12 @@
                         <dependency>
                             <groupId>com.adobe.cq</groupId>
                             <artifactId>core.wcm.components.content</artifactId>
+                            <version>2.14.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.adobe.cq</groupId>
+                            <artifactId>core.wcm.components.extensions.amp.content</artifactId>
+                            <version>2.14.0</version>
                         </dependency>
                     </dependencies>
                 </configuration>
@@ -263,10 +269,17 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- AEM Core Components AMP Extension Bundle -->
+        <!-- AEM Core Components AMP Extension -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.extensions.amp</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core.wcm.components.extensions.amp.content</artifactId>
+            <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
