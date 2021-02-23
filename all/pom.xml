@@ -45,6 +45,9 @@
                 <inherited>false</inherited>
                 <configuration>
                     <showImportPackageReport>false</showImportPackageReport>
+                    <properties>
+                        <cloudManagerTarget>none</cloudManagerTarget>
+                    </properties>
                 </configuration>
                 <executions>
                     <execution>
