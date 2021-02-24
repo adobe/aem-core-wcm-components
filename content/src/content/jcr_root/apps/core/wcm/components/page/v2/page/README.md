@@ -27,6 +27,7 @@ Extensible page component written in HTL.
 * Blueprints and live copy
 * Closed user groups and permissions
 * Cloud services
+* [PWA support](https://experienceleague.adobe.com/docs/experience-manager-cloud-service/sites/authoring/features/enable-pwa.html)
 
 ## Loading of CSS/JS
 The page component automatically loads certain client libraries in the head section and at the end of the body section
