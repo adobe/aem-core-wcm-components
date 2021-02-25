@@ -18,21 +18,17 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.List;
 import java.util.Locale;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 
 public class LanguageNavigationItemImpl extends NavigationItemImpl implements LanguageNavigationItem {
-
-    // private static final Logger LOGGER = LoggerFactory.getLogger(LanguageNavigationItemImpl.class);
 
     protected String title;
     protected Locale locale;

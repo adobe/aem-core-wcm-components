@@ -73,9 +73,15 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     @Self
     private SlingHttpServletRequest request;
 
+    /**
+     * The link handler.
+     */
     @Self
     private LinkHandler linkHandler;
 
+    /**
+     * The current page.
+     */
     @ScriptVariable
     private Page currentPage;
 

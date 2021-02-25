@@ -21,7 +21,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +62,9 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
      */
     protected Page page;
 
+    /**
+     * The link for this list item.
+     */
     protected final Link link;
 
     /**
