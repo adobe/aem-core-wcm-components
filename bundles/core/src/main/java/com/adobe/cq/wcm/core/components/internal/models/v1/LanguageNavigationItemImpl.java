@@ -22,7 +22,9 @@ import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
@@ -37,9 +39,9 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
     protected String country;
     protected String language;
 
-    public LanguageNavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level,
-                                      List<NavigationItem> children, String title, String parentId, Component component) {
-        super(page, active, request, level, children, parentId, component);
+    public LanguageNavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level,
+                                      List<NavigationItem> children, String title, String parentId, boolean isShadowingDisabled, Component component) {
+        super(page, active, linkHandler, level, children, parentId, isShadowingDisabled, component);
         this.title = title;
     }
 
