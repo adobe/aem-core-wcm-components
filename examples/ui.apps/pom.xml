@@ -57,7 +57,18 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <packageType>application</packageType>
+                    <packageType>mixed</packageType>
+                    <embeddedTarget>/apps/core-components-examples/install</embeddedTarget>
+                    <embeddeds>
+                        <embedded>
+                            <groupId>io.wcm</groupId>
+                            <artifactId>io.wcm.caconfig.editor</artifactId>
+                        </embedded>
+                        <embedded>
+                            <groupId>io.wcm</groupId>
+                            <artifactId>io.wcm.caconfig.extensions</artifactId>
+                        </embedded>
+                    </embeddeds>
                     <dependencies>
                         <dependency>
                             <groupId>com.adobe.cq</groupId>
@@ -282,6 +293,17 @@
             <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- wcm.io Context-Aware Configuration Editor / -->
+        <dependency>
+            <groupId>io.wcm</groupId>
+            <artifactId>io.wcm.caconfig.editor</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.wcm</groupId>
+            <artifactId>io.wcm.caconfig.extensions</artifactId>
+            <version>1.8.0</version>
         </dependency>
     </dependencies>
 </project>
