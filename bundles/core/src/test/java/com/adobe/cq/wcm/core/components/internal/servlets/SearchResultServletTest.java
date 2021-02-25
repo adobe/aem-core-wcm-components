@@ -34,6 +34,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,7 @@ import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.eval.PathPredicateEvaluator;
 import com.day.cq.search.result.SearchResult;
+import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -270,8 +272,8 @@ public class SearchResultServletTest {
         validateResponse(context.response(), expected);
     }
 
-    private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> expected)
-            throws IOException {
+    @SuppressWarnings("deprecation")
+    private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> expected) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SimpleAbstractTypeResolver resolver = new SimpleAbstractTypeResolver();
         resolver.addMapping(ListItem.class, Item.class);
@@ -288,6 +290,7 @@ public class SearchResultServletTest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Item implements ListItem {
+        private Link link;
         private String id;
         private String url;
         private String title;
@@ -313,4 +316,34 @@ public class SearchResultServletTest {
             return title;
         }
     }
+
+    private static class Link implements com.adobe.cq.wcm.core.components.commons.link.Link {
+
+        private boolean valid;
+        private String url;
+        private Map<String,String> htmlAttributes;
+        private Page targetPage;
+
+        @Override
+        public boolean isValid() {
+            return valid;
+        }
+
+        @Override
+        public @Nullable String getURL() {
+            return url;
+        }
+
+        @Override
+        public @NotNull Map<String, String> getHtmlAttributes() {
+            return htmlAttributes;
+        }
+
+        @Override
+        public @Nullable Page getTargetPage() {
+            return targetPage;
+        }
+
+    }
+
 }
