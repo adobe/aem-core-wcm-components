@@ -33,11 +33,6 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     protected boolean active;
 
     public NavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
-                              String parentId, Component component) {
-        this(page, active, linkHandler, level, children, parentId, PROP_DISABLE_SHADOWING_DEFAULT, component);
-    }
-
-    public NavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
                               String parentId, boolean isShadowingDisabled, Component component) {
         super(linkHandler, page, parentId, isShadowingDisabled, component);
         this.active = active;

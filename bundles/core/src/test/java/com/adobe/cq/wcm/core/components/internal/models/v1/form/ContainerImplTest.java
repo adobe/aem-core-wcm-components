@@ -22,10 +22,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.servlethelpers.MockRequestDispatcherFactory;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,12 +31,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.form.Container;
 import com.day.cq.wcm.api.NameConstants;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.msm.api.MSMNameConstants;
@@ -91,6 +88,7 @@ public class ContainerImplTest {
                         .collect(Collectors.toList());
             }
         });
+        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandler.class, new LinkHandler());
         FormsHelperStubber.createStub();
     }
 
@@ -126,23 +124,12 @@ public class ContainerImplTest {
     }
 
     private Container getContainerUnderTest(String resourcePath) {
-        Resource resource = context.resourceResolver().getResource(resourcePath);
+        Resource resource = context.currentResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        SlingBindings bindings = new SlingBindings();
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver(), context.bundleContext());
-        MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
+        MockSlingHttpServletRequest request = context.request();
         request.setContextPath(CONTEXT_PATH);
-        request.setResource(resource);
-        bindings.put(SlingBindings.RESOURCE, resource);
-        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        bindings.put(SlingBindings.REQUEST, request);
-        bindings.put(SlingBindings.RESPONSE, response);
-        Page page = context.currentPage(CONTAINING_PAGE);
-        bindings.put(WCMBindings.CURRENT_PAGE, page);
-        request.setRequestDispatcherFactory(requestDispatcherFactory);
-        request.setAttribute(SlingBindings.class.getName(), bindings);
         return request.adaptTo(Container.class);
     }
 }

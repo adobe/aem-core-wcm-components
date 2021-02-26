@@ -32,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.commons.link.LinkConstants;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Button;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
@@ -81,7 +80,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @PostConstruct
     private void initModel() {
-        link = linkHandler.getLink(resource, LinkConstants.PN_LINK_URL);
+        link = linkHandler.getLink(resource, "link");
     }
 
     @Override

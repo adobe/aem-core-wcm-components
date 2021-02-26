@@ -25,10 +25,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Container;
+import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.testing.Utils;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -71,17 +70,12 @@ public class AbstractContainerImplTest {
     }
 
     private Container getContainerUnderTest(String resourcePath) {
-        Resource resource = context.resourceResolver().getResource(resourcePath);
+        Resource resource = context.currentResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        context.currentResource(resource);
         context.request().setContextPath(CONTEXT_PATH);
-        Container container = new ContainerImpl();
-        Utils.setInternalState(container, "resource", resource);
-        Utils.setInternalState(container, "request", context.request());
-        Utils.setInternalState(container, "linkHandler", context.request().adaptTo(LinkHandler.class));
-        return container;
+        return context.request().adaptTo(LayoutContainer.class);
     }
 
     private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {

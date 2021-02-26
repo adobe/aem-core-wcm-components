@@ -44,7 +44,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
@@ -91,6 +93,7 @@ public class SearchResultServletTest {
     private static final String TEST_TEMPLATE_EN = "/content/en/search/page-template";
     private static final String TEST_XF_PAGE_EN = "/content/en/search/xf-page";
     private static final String TEST_XF_TEMPLATE_EN = "/content/en/search/xf-page-template";
+    protected static final String CONTEXT_PATH = "/test-cp";
 
     @BeforeEach
     public void setUp() {
@@ -99,6 +102,10 @@ public class SearchResultServletTest {
 
         context.registerService(QueryBuilder.class, mockQueryBuilder);
         context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
+        context.request().setContextPath(CONTEXT_PATH);
+        LinkHandler linkHandler = new LinkHandler();
+        Utils.setInternalState(linkHandler, "request", context.request());
+        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandler.class, linkHandler);
         underTest = context.registerInjectActivateService(new SearchResultServlet());
     }
 
@@ -149,11 +156,11 @@ public class SearchResultServletTest {
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
-            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page", "id", "search-0dc87a6d22-item-2290228025"),
-            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2", "id", "search-0dc87a6d22-item-ad3d190367"),
-            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-0dc87a6d22-item-1abc47fffe"),
-            ImmutableMap.of("url", "null/content/en/search/xf-page.html", "title", "XF Page", "id", "search-0dc87a6d22-item-2246ed81a7"),
-            ImmutableMap.of("url", "null/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-0dc87a6d22-item-7345474d48")
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page.html", "title", "Page", "id", "search-0dc87a6d22-item-2290228025"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page2.html", "title", "Page2", "id", "search-0dc87a6d22-item-ad3d190367"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page-template.html", "title", "Page3", "id", "search-0dc87a6d22-item-1abc47fffe"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page.html", "title", "XF Page", "id", "search-0dc87a6d22-item-2246ed81a7"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-0dc87a6d22-item-7345474d48")
         );
 
         validateResponse(context.response(), expected);
@@ -197,7 +204,7 @@ public class SearchResultServletTest {
         request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
-            ImmutableMap.of("url", "null/content/en/search.html", "title", "Search", "id", "-item-277e64839a")
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search.html", "title", "Search", "id", "-item-277e64839a")
         );
 
         validateResponse(context.response(), expected);
@@ -227,11 +234,11 @@ public class SearchResultServletTest {
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
-            ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page", "id", "search-ea349504cd-item-2290228025"),
-            ImmutableMap.of("url", "null/content/en/search/page2.html", "title", "Page2", "id", "search-ea349504cd-item-ad3d190367"),
-            ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page3", "id", "search-ea349504cd-item-1abc47fffe"),
-            ImmutableMap.of("url", "null/content/en/search/xf-page.html", "title", "XF Page", "id", "search-ea349504cd-item-2246ed81a7"),
-            ImmutableMap.of("url", "null/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-ea349504cd-item-7345474d48")
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page.html", "title", "Page", "id", "search-ea349504cd-item-2290228025"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page2.html", "title", "Page2", "id", "search-ea349504cd-item-ad3d190367"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page-template.html", "title", "Page3", "id", "search-ea349504cd-item-1abc47fffe"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page.html", "title", "XF Page", "id", "search-ea349504cd-item-2246ed81a7"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-ea349504cd-item-7345474d48")
         );
 
         validateResponse(context.response(), expected);
@@ -249,8 +256,8 @@ public class SearchResultServletTest {
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
-            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01", "id", "search-1f0d0a33b1-item-7ae4fa6340"),
-            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02", "id", "search-1f0d0a33b1-item-05b6f78858"));
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01", "id", "search-1f0d0a33b1-item-7ae4fa6340"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02", "id", "search-1f0d0a33b1-item-05b6f78858"));
 
         validateResponse(context.response(), expected);
     }
@@ -266,8 +273,8 @@ public class SearchResultServletTest {
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
-            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01", "id", "search-1f0d0a33b1-item-7ae4fa6340"),
-            ImmutableMap.of("url", "null/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02", "id", "search-1f0d0a33b1-item-05b6f78858"));
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page/searched-tree/found-01.html", "title", "Found 01", "id", "search-1f0d0a33b1-item-7ae4fa6340"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page/searched-tree/found-02.html", "title", "Found 02", "id", "search-1f0d0a33b1-item-05b6f78858"));
 
         validateResponse(context.response(), expected);
     }
