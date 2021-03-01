@@ -1,0 +1,13 @@
+{
+    "id": "title-6032c7e80a",
+    "link": { "valid": true, "url": "https://www.adobe.com" },
+    "linkDisabled": true,
+    "dataLayer": {
+        "title-6032c7e80a": {
+            "repo:modifyDate": "2016-01-13T15:14:51Z",
+            "xdm:linkURL": "https://www.adobe.com",
+            "@type": "core/wcm/components/title/v3/title"
+        }
+    },
+    ":type": "core/wcm/components/title/v3/title"
+}
