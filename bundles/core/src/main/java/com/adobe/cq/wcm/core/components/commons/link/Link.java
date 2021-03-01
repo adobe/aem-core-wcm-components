@@ -25,35 +25,44 @@ import com.day.cq.wcm.api.Page;
 
 /**
  * Describes a link target.
+ *
+ * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
  */
 @ConsumerType
 public interface Link {
 
     /**
      * Check if the link defined for the component is valid.
-     * @return true if component has a valid link defined
+     *
+     * @return {@code true} if component has a valid link defined
+     * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     boolean isValid();
 
     /**
-     * Externalized link URL.
-     * @return Link URL or null if link is invalid.
+     * The link URL, supports context path and vanity paths.
+     *
+     * @return Link URL or {@code null} if link is invalid
      */
     @Nullable
     String getURL();
 
     /**
-     * Map with Attributes for HTML Anchor tag for this links.
+     * Map with Attributes for HTML Anchor tag for this link.
      * This usually also contains the Link URL as <code>href</code> attribute,
      * but may contain additional attributes like <code>target</code> and others.
-     * @return Map with HTML-specific anchor attributes, or an empty map if link is invalid
+     *
+     * @return {@link Map} with HTML-specific anchor attributes, or an empty map if link is invalid
+     * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @NotNull
     Map<String, String> getHtmlAttributes();
 
     /**
-     * Returns the references target page if the links points to an internal page.
-     * @return Target page or null
+     * Returns the referenced target page if the link points to an internal page.
+     *
+     * @return Target page or {@code null}
+     * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @Nullable
     Page getTargetPage();

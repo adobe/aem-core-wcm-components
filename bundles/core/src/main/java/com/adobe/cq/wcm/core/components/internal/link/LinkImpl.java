@@ -64,28 +64,56 @@ public final class LinkImpl implements Link {
         this.targetPage = targetPage;
     }
 
+    /**
+     * Getter exposing if link is valid.
+     *
+     * @return {@code true} if link is valid, {@code false} if link is not valid
+     */
     @Override
     public boolean isValid() {
         return url != null;
     }
 
+    /**
+     * Getter for link URL.
+     *
+     * @return Link URL, can be {@code null} if link is not valid
+     */
     @Override
     public @Nullable String getURL() {
         return url;
     }
 
+    /**
+     * Getter for link HTML attributes.
+     *
+     * @return {@link Map} of HTML attributes, may include the URL as {@code href}
+     */
     @Override
     @JsonIgnore  // exclude HTML-specific attributes in JSON
     public @NotNull Map<String, String> getHtmlAttributes() {
         return htmlAttributes;
     }
 
+    /**
+     * Getter for link target page, if existing.
+     *
+     * @return Link target page or {@code null} if link does not point to a page
+     */
     @Override
     @JsonIgnore  // exclude HTML-specific target attribute in JSON
     public @Nullable Page getTargetPage() {
         return targetPage;
     }
 
+    /**
+     * Builds link HTML attributes.
+     *
+     * @param linkURL Link URL
+     * @param linkTarget Link target
+     *
+     * @return {@link Map} of link attributes
+     */
     private static Map<String, String> buildHtmlAttributes(String linkURL, String linkTarget) {
         Map<String,String> attributes = new HashMap<>();
         if (linkURL != null) {
