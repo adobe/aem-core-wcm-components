@@ -37,7 +37,7 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Simple implementation for resolving and validating links from model's resources.
- * This is a Sling model that can injected into other models using the <code>@Self</code> annotation.
+ * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
 @Model(adaptables=SlingHttpServletRequest.class)
 public class LinkHandler {
@@ -49,15 +49,22 @@ public class LinkHandler {
      */
     private static final Set<String> VALID_LINK_TARGETS = ImmutableSet.of("_blank", "_parent", "_top");
 
-    
+    /**
+     * The current {@link SlingHttpServletRequest}.
+     */
     @Self
     private SlingHttpServletRequest request;
+
+    /**
+     * Reference to {@link PageManager}
+     */
     @ScriptVariable
     private PageManager pageManager;
     
     /**
      * Resolves a link from the properties of the given resource.
      * @param resource Resource
+     *
      * @return Link may be invalid, but is never null
      */
     public @NotNull Link getLink(@NotNull Resource resource) {
@@ -68,6 +75,7 @@ public class LinkHandler {
      * Resolves a link from the properties of the given resource.
      * @param resource Resource
      * @param linkURLPropertyName Property name to read link URL from.
+     *
      * @return Link may be invalid, but is never null
      */
     public @NotNull Link getLink(@NotNull Resource resource, String linkURLPropertyName) {
@@ -80,6 +88,7 @@ public class LinkHandler {
     /**
      * Builds a link pointing to the given target page.
      * @param page Target page
+     *
      * @return Link may be invalid, but is never null
      */
     public @NotNull Link getLink(@Nullable Page page) {
@@ -94,25 +103,31 @@ public class LinkHandler {
      * Builds a link with the given Link URL and target.
      * @param linkURL Link URL
      * @param target Target
+     *
      * @return Link may be invalid, but is never null
      */
     public @NotNull Link getLink(@Nullable String linkURL, @Nullable String target) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
-        String resolvedLinkTarget = validateAndResolverLinkTarget(target);
-
+        String resolvedLinkTarget = validateAndResolveLinkTarget(target);
         Page targetPage = pageManager.getPage(linkURL);
-
         return new LinkImpl(resolvedLinkURL, resolvedLinkTarget, targetPage);
     }
 
     /**
      * Returns an invalid link.
+     *
      * @return Invalid link, never null
      */
     public @NotNull Link getInvalid() {
         return new LinkImpl(null, null, null);
     }
 
+    /**
+     * Validates and resolves a link URL.
+     * @param linkURL Link URL
+     *
+     * @return The validated link URL or {@code null} if not valid
+     */
     private String validateAndResolveLinkURL(String linkURL) {
         if (!StringUtils.isEmpty(linkURL)) {
             return getLinkURL(linkURL);
@@ -120,10 +135,15 @@ public class LinkHandler {
         else {
             return null;
         }
-        
     }
 
-    private String validateAndResolverLinkTarget(String linkTarget) {
+    /**
+     * Validates and resolves the link target.
+     * @param linkTarget Link target
+     *
+     * @return The validated link target or {@code null} if not valid
+     */
+    private String validateAndResolveLinkTarget(String linkTarget) {
         if (linkTarget != null && VALID_LINK_TARGETS.contains(linkTarget)) {
             return linkTarget;
         }
@@ -136,13 +156,14 @@ public class LinkHandler {
      * If the provided {@code path} identifies a {@link Page}, this method will generate the correct URL for the page. Otherwise the
      * original {@code String} is returned.
      * @param path the page path
+     *
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
      */
     @NotNull
     private String getLinkURL(@NotNull String path) {
         Page page = pageManager.getPage(path);
         if (page != null) {
-            return getPageLinkURL( page);
+            return getPageLinkURL(page);
         }
         return path;
     }
@@ -151,6 +172,7 @@ public class LinkHandler {
      * Given a {@link Page}, this method returns the correct URL, taking into account that the provided {@code page} might provide a
      * vanity URL.
      * @param page the page
+     *
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
      */
     @NotNull
