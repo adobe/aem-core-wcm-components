@@ -53,26 +53,6 @@ public interface Button extends Component {
      * Returns the button link.
      *
      * @return the button link
-     * @since com.adobe.cq.wcm.core.components.models 12.20.0
-     */
-    default @NotNull Link getButtonLink() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the button link.
-     *
-     * @return the button link
-     * @since com.adobe.cq.wcm.core.components.models 12.20.0
-     */
-    default @NotNull Link getButtonLink() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the button link.
-     *
-     * @return the button link
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      * @deprecated Please use {@link #getButtonLink()}
      */
