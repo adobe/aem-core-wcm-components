@@ -35,16 +35,16 @@ class LinkImplTest {
         Link link = new LinkImpl(URL, null, null);
 
         assertValidLink(link, URL);
-        assertNull(link.getTargetPage());
+        assertNull(link.getReference());
     }
 
     @Test
     void testValidLinkWithTargetAndTargetPage() {
         Page page = mock(Page.class);
-        Link link = new LinkImpl(URL, "_blank", page);
+        Link<Page> link = new LinkImpl(URL, "_blank", page);
 
         assertValidLink(link, URL, "_blank");
-        assertSame(page, link.getTargetPage());
+        assertSame(page, link.getReference());
     }
 
     @Test
@@ -52,7 +52,7 @@ class LinkImplTest {
         Link link = new LinkImpl(null, null, null);
 
         assertInvalidLink(link);
-        assertNull(link.getTargetPage());
+        assertNull(link.getReference());
     }
 
 }
