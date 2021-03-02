@@ -21,14 +21,24 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
+import com.day.cq.wcm.api.policies.ContentPolicy;
+import com.day.cq.wcm.api.policies.ContentPolicyManager;
+
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Optional;
+import java.util.Map.Entry;
 
 /**
  * Utility helper functions for components.
@@ -49,6 +59,38 @@ public final class ComponentUtils {
      * Length of the ID hash.
      */
     private static final int ID_HASH_LENGTH = 10;
+    
+    /**
+     * Attribute on JCR node that captures component data 
+     */
+	public static final String CQ_STYLEIDS = "cq:styleIds";
+
+	 /**
+     *  Node under content policy that captures different styles
+     */
+	public static final String CQ_STYLES = "cq:styles";
+
+	
+	/**
+     * Node under content policy that captures different style groups
+     */
+	public static final String CQ_STYLEGROUPS = "cq:styleGroups";
+
+	
+	 /**
+     * Child nodes that contain each style definition under a specific group
+     */
+	public static final String CQ_STYLEID = "cq:styleId";
+
+	 /**
+     * Equivalent CSS classes for styleIds
+     */
+	public static final String CQ_STYLECLASSES = "cq:styleClasses";
+	
+	 /**
+     * Default CSS class to provide in absence of any selection
+     */
+	public static final String CQ_STYLECLASSES_DEFAULT = "cq:styleDefaultClasses";
 
     /**
      * Private constructor to prevent instantiation of utility class.
@@ -170,4 +212,88 @@ public final class ComponentUtils {
     public static String generateId(@NotNull final String prefix, @NotNull final String path) {
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, ID_HASH_LENGTH));
     }
+    
+	/**
+	 * @param componentResource
+	 * @return Return equivalent CSS classes separated using an empty space between each, for the resource passed
+	 */
+    @Nullable
+	public static String getStyleSystemClasses(Resource componentResource) {
+		
+		String styleClasses = null;
+		
+		if (componentResource != null) {
+			ResourceResolver resourceResolver = componentResource.getResourceResolver();
+			ValueMap valueMap = componentResource.getValueMap();
+			String[] styleids = valueMap.get(CQ_STYLEIDS, String[].class);
+			if (styleids != null && ArrayUtils.isNotEmpty(styleids)) {
+				ContentPolicyManager policyMgr = resourceResolver.adaptTo(ContentPolicyManager.class);
+				if (policyMgr != null) {
+
+					ContentPolicy contentPolicy = policyMgr.getPolicy(componentResource);
+					if (contentPolicy != null) {
+						
+						String defaultStyle = (String) contentPolicy.getProperties().get(CQ_STYLECLASSES_DEFAULT);
+
+						styleClasses = StringUtils.defaultIfBlank(String.join(StringUtils.SPACE, getStyleSystemClassesFromIds(contentPolicy, styleids)),defaultStyle);
+					}
+				}
+			}
+		}
+		
+		return styleClasses;
+	}
+	
+	/**
+	 * @param contentPolicy
+	 * @param styleids
+	 * @return Return equivalent CSS classes separated using an empty space between each, for the list of style ids shared against the content policy to look for
+	 */
+	public static ArrayList<String> getStyleSystemClassesFromIds(ContentPolicy contentPolicy, String[] styleids) {
+		ArrayList<String> styleClasses = new ArrayList<String>();
+			if (styleids != null && ArrayUtils.isNotEmpty(styleids)) {
+				HashMap<String, String> styleMap = new HashMap<String, String>();
+
+					if (contentPolicy != null) {
+
+						Resource contentPolicyResource = contentPolicy.adaptTo(Resource.class);
+						if(contentPolicyResource != null) {
+							Resource styleGroupsResource = contentPolicyResource.getChild(
+									CQ_STYLEGROUPS);
+							if (styleGroupsResource != null) {
+								Iterator<Resource> styleGroupsIterator = styleGroupsResource.listChildren();
+								while (styleGroupsIterator.hasNext()) {
+									Resource styleGroupItem = styleGroupsIterator.next();
+									Resource cqStylesResource = styleGroupItem.getChild(CQ_STYLES);
+									if(cqStylesResource != null)
+									{
+										Iterator<Resource> cqStylesIterator = cqStylesResource.listChildren();
+										while (cqStylesIterator.hasNext()) {
+											Resource cqStyleDefinition = cqStylesIterator.next();
+											ValueMap childProperties = cqStyleDefinition.getValueMap();
+											String key = childProperties.get(CQ_STYLEID, String.class);
+											String value = childProperties.get(CQ_STYLECLASSES,
+													StringUtils.EMPTY);
+											if (StringUtils.isNotBlank(key)) {
+												styleMap.put(key, value);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				
+				
+				  for (Entry<String, String> entry : styleMap.entrySet()) {
+					    String styleid = entry.getKey();
+					    String styleClass = entry.getValue();
+					    if (ArrayUtils.contains(styleids, styleid)) {
+					    	styleClasses.add(styleClass);
+						}
+					  }
+			}
+		
+		return styleClasses;
+	}
 }

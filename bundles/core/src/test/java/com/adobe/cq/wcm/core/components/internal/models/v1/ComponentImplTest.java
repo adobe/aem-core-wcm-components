@@ -16,22 +16,29 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Component;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
+import com.day.cq.wcm.api.policies.ContentPolicy;
+import com.day.cq.wcm.api.policies.ContentPolicyManager;
+
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -61,6 +68,34 @@ public class ComponentImplTest {
         Component component = getReferencedComponentUnderTest(XF_COMPONENT_1, TEST_PAGE_EN, XF_COMPONENT_10);
         Assertions.assertEquals("experiencefragment-789e0d5de3", component.getId(), "ID mismatch");
     }
+    
+    @Test
+    public void testStyleSystemClasses()
+    {
+    	context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONF_JSON, "/conf/we-retail/settings");
+    	final String WE_RETAIL_TITLE = TEST_PAGE_EN+"/jcr:content/root/title_core";
+    	context.currentPage(TEST_PAGE_EN);
+		
+		ResourceResolver resourceResolver = spy(context.resourceResolver());
+		Resource currentResourceSpy = spy(resourceResolver.getResource(WE_RETAIL_TITLE));
+		Component component = getComponentUnderTest(currentResourceSpy);
+		
+		Mockito.when(currentResourceSpy.getResourceResolver()).thenReturn(resourceResolver);
+		ContentPolicyManager contentPolicyManager = mock(ContentPolicyManager.class);
+		Mockito.when(resourceResolver.adaptTo(ContentPolicyManager.class)).thenReturn(contentPolicyManager);
+		String titlePolicyPath = "/conf/we-retail/settings/wcm/policies/weretail/components/content/title/policy_205022283770700";
+		ContentPolicy contentPolicy = resourceResolver.getResource(titlePolicyPath).adaptTo(ContentPolicy.class);
+		Mockito.when(contentPolicyManager.getPolicy(currentResourceSpy)).thenReturn(contentPolicy);
+		
+		assertNotNull(component.getStyleSystemClasses());
+    }
+    
+    private Component getComponentUnderTest(Resource resource) {
+        context.currentResource(resource);
+        MockSlingHttpServletRequest request = context.request();
+        return request.adaptTo(Component.class);
+    }
+
 
     private Component getComponentUnderTest(String resourcePath, Object ... properties) {
         Resource resource = context.currentResource(resourcePath);
@@ -88,5 +123,5 @@ public class ComponentImplTest {
         MockSlingHttpServletRequest request = context.request();
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Component.class);
-    }
+    }       
 }

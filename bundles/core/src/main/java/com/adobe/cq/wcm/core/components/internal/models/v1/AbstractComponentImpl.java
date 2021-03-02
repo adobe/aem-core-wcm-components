@@ -64,7 +64,7 @@ public abstract class AbstractComponentImpl implements Component {
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private Page currentPage;
-
+    
     /**
      * The ID for this component.
      */
@@ -135,6 +135,13 @@ public abstract class AbstractComponentImpl implements Component {
         }
         return componentData;
     }
+    
+    @Override
+    @Nullable
+	public String getStyleSystemClasses() {
+    	// componentContext can't be leveraged as child components are not accessed directly from an external source e.g browser
+			return ComponentUtils.getStyleSystemClasses(this.resource);
+	}
 
     /**
      * Override this method to provide a different data model for your component. This will be called by
