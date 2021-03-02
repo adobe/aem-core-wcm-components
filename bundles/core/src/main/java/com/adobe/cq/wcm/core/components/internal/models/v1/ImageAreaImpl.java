@@ -26,7 +26,7 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 /**
  * Image area implementation.
  */
-public final class ImageAreaImpl implements ImageArea {
+public class ImageAreaImpl implements ImageArea {
 
     /**
      * The shape of the area.

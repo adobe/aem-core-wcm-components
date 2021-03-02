@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -209,11 +210,23 @@ public interface Image extends Component {
     }
 
     /**
+     * Returns the image's link.
+     *
+     * @return the image's link.
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default @NotNull Link getImageLink() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns the image's link URL, if one was set.
      *
      * @return the image's link URL, if one was set, or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     * @deprecated Please use {@link #getImageLink()}
      */
+    @Deprecated
     default String getLink() {
         throw new UnsupportedOperationException();
     }
@@ -267,7 +280,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     @NotNull
-    default int[] getWidths() {
+    default int @NotNull [] getWidths() {
         throw new UnsupportedOperationException();
     }
 
