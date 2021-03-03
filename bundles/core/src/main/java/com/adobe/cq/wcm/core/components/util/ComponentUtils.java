@@ -68,11 +68,6 @@ public final class ComponentUtils {
 	 */
 	public static final String CQ_STYLEIDS = "cq:styleIds";
 
-//	/**
-//	 * Node under content policy that captures different styles
-//	 */
-//	public static final String CQ_STYLES = "cq:styles";
-
 	/**
 	 * Node under content policy that captures different style groups
 	 */
