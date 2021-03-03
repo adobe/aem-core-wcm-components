@@ -58,7 +58,7 @@ class LinkHandlerTest {
         Link link = underTest.getLink(linkResource);
         
         assertInvalidLink(link);
-        assertNull(link.getTargetPage());
+        assertNull(link.getReference());
     }
 
     @Test
@@ -68,7 +68,7 @@ class LinkHandlerTest {
         Link link = underTest.getLink(linkResource);
         
         assertValidLink(link, "http://myhost");
-        assertNull(link.getTargetPage());
+        assertNull(link.getReference());
     }
 
     @ParameterizedTest
@@ -80,7 +80,7 @@ class LinkHandlerTest {
         Link link = underTest.getLink(linkResource);
 
         assertValidLink(link, "http://myhost", target);
-        assertNull(link.getTargetPage());
+        assertNull(link.getReference());
     }
 
     @ParameterizedTest
@@ -93,7 +93,7 @@ class LinkHandlerTest {
 
         // invalid target or _self target should be stripped away 
         assertValidLink(link, "http://myhost");
-        assertNull(link.getTargetPage());
+        assertNull(link.getReference());
     }
 
     @Test
@@ -102,7 +102,7 @@ class LinkHandlerTest {
                 PN_LINK_URL, page.getPath());
         Link link = underTest.getLink(linkResource);
         assertValidLink(link, page.getPath() + ".html");
-        assertEquals(page, link.getTargetPage());
+        assertEquals(page, link.getReference());
     }
 
     @Test
@@ -126,23 +126,23 @@ class LinkHandlerTest {
 
         // TODO: this link should be handled as invalid. but we keep this behavior for now to keep backwards compatibility
         assertValidLink(link, "/content/non-existing");
-        assertNull(link.getTargetPage());
+        assertNull(link.getReference());
     }
 
     @Test
     void testPageLink() {
-        Link link = underTest.getLink(page);
+        Link<Page> link = underTest.getLink(page);
         
         assertValidLink(link, page.getPath() + ".html");
-        assertEquals(page, link.getTargetPage());
+        assertEquals(page, link.getReference());
     }
 
     @Test
     void testPageLink_Null() {
-        Link link = underTest.getLink((Page)null);
+        Link<Page> link = underTest.getLink((Page)null);
         
         assertInvalidLink(link);
-        assertNull(link.getTargetPage());
+        assertNull(link.getReference());
     }
 
     @Test
@@ -150,7 +150,7 @@ class LinkHandlerTest {
         Link link = underTest.getLink(page.getPath(), "_blank");
         
         assertValidLink(link, page.getPath() + ".html", "_blank");
-        assertEquals(page, link.getTargetPage());
+        assertEquals(page, link.getReference());
     }
 
     @Test
@@ -158,7 +158,7 @@ class LinkHandlerTest {
         Link link = underTest.getInvalid();
         
         assertInvalidLink(link);
-        assertNull(link.getTargetPage());
+        assertNull(link.getReference());
     }
 
 }

@@ -29,7 +29,7 @@ import com.day.cq.wcm.api.Page;
  * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
  */
 @ConsumerType
-public interface Link {
+public interface Link<T> {
 
     /**
      * Check if the link defined for the component is valid.
@@ -59,12 +59,12 @@ public interface Link {
     Map<String, String> getHtmlAttributes();
 
     /**
-     * Returns the referenced target page if the link points to an internal page.
+     * Returns the referenced WCM/DAM object.
      *
      * @return Target page or {@code null}
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @Nullable
-    Page getTargetPage();
+    T getReference();
 
 }
