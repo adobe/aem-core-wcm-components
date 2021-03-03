@@ -180,7 +180,7 @@ public class LinkHandler {
         String vanityURL = page.getVanityUrl();
         String pageLinkURL;
         if (StringUtils.isEmpty(vanityURL)) {
-            pageLinkURL = request.getResourceResolver().map(page.getPath()) + ".html";
+            pageLinkURL = request.getResourceResolver().map(request, page.getPath()) + ".html";
         } else {
             pageLinkURL = vanityURL;
         }
