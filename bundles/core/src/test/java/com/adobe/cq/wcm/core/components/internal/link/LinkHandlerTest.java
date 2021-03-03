@@ -113,7 +113,7 @@ class LinkHandlerTest {
         Link link = underTest.getLink(linkResource);
 
         assertValidLink(link, page.getPath() + ".html");
-        assertEquals(page, link.getTargetPage());
+        assertEquals(page, link.getReference());
     }
 
 

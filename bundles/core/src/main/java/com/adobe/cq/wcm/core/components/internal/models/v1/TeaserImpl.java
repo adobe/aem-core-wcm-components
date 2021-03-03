@@ -443,7 +443,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         /**
          * The CTA link.
          */
-        protected final Link ctaLink;
+        protected final Link<Page> ctaLink;
 
         /**
          * The ID of the teaser that contains this action.
@@ -480,7 +480,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          */
         @NotNull
         protected Optional<Page> getCtaPage() {
-            return Optional.ofNullable(ctaLink.getTargetPage());
+            return Optional.ofNullable(ctaLink.getReference());
         }
 
         @Nullable
@@ -492,7 +492,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Nullable
         @Override
         public String getPath() {
-            Page page = ctaLink.getTargetPage();
+            Page page = ctaLink.getReference();
             if (page != null) {
                 return page.getPath();
             }

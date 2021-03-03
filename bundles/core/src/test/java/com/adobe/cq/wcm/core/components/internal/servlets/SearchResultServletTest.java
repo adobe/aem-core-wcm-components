@@ -324,12 +324,12 @@ public class SearchResultServletTest {
         }
     }
 
-    private static class Link implements com.adobe.cq.wcm.core.components.commons.link.Link {
+    private static class Link<Page> implements com.adobe.cq.wcm.core.components.commons.link.Link<Page> {
 
         private boolean valid;
         private String url;
         private Map<String,String> htmlAttributes;
-        private Page targetPage;
+        private Page reference;
 
         @Override
         public boolean isValid() {
@@ -347,8 +347,8 @@ public class SearchResultServletTest {
         }
 
         @Override
-        public @Nullable Page getTargetPage() {
-            return targetPage;
+        public @Nullable Page getReference() {
+            return reference;
         }
 
     }
