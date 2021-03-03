@@ -25,6 +25,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
@@ -59,6 +60,7 @@ public class LinkHandler {
      * Reference to {@link PageManager}
      */
     @ScriptVariable
+    @Optional
     private PageManager pageManager;
     
     /**
@@ -109,7 +111,7 @@ public class LinkHandler {
     public @NotNull Link getLink(@Nullable String linkURL, @Nullable String target) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        Page targetPage = pageManager.getPage(linkURL);
+        Page targetPage = getPage(linkURL);
         return new LinkImpl(resolvedLinkURL, resolvedLinkTarget, targetPage);
     }
 
@@ -161,7 +163,7 @@ public class LinkHandler {
      */
     @NotNull
     private String getLinkURL(@NotNull String path) {
-        Page page = pageManager.getPage(path);
+        Page page = getPage(path);
         if (page != null) {
             return getPageLinkURL(page);
         }
@@ -184,6 +186,23 @@ public class LinkHandler {
         else {
             return StringUtils.defaultString(request.getContextPath()) + vanityURL;
         }
+    }
+
+    /**
+     * Given a path, tries to resolve to the corresponding page.
+     *
+     * @param path The path
+     * @return The {@link Page} corresponding to the path
+     */
+    @Nullable
+    private Page getPage(@Nullable String path) {
+        if (pageManager == null) {
+            pageManager = request.getResourceResolver().adaptTo(PageManager.class);
+        }
+        if (pageManager == null) {
+            return null;
+        }
+        return pageManager.getPage(path);
     }
 
 }

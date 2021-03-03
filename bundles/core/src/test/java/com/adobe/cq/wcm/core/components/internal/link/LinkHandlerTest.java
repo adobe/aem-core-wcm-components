@@ -31,6 +31,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.wcm.api.Page;
 
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -103,6 +104,19 @@ class LinkHandlerTest {
         assertValidLink(link, page.getPath() + ".html");
         assertEquals(page, link.getTargetPage());
     }
+
+    @Test
+    void testResourcePageLinkWithNoInjectedPageManager() {
+        Utils.setInternalState(underTest, "pageManager", null);
+        Resource linkResource = context.create().resource(page, "link",
+                PN_LINK_URL, page.getPath());
+        Link link = underTest.getLink(linkResource);
+
+        assertValidLink(link, page.getPath() + ".html");
+        assertEquals(page, link.getTargetPage());
+    }
+
+
 
     @Test
     void testResourceInvalidPageLink() {
