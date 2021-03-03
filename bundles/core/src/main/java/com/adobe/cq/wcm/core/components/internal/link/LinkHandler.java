@@ -182,11 +182,11 @@ public class LinkHandler {
         String vanityURL = page.getVanityUrl();
         String pageLinkURL;
         if (StringUtils.isEmpty(vanityURL)) {
-            pageLinkURL = request.getResourceResolver().map(request, page.getPath()) + ".html";
+            pageLinkURL = page.getPath() + ".html";
         } else {
             pageLinkURL = vanityURL;
         }
-        return StringUtils.defaultString(request.getContextPath()) + pageLinkURL;
+        return StringUtils.defaultString(request.getResourceResolver().map(request, pageLinkURL));
     }
 
     /**
