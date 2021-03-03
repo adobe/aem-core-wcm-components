@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.sling.api.resource.Resource;
@@ -138,7 +139,7 @@ public abstract class AbstractComponentImpl implements Component {
     
     @Override
     @Nullable
-	public String getStyleSystemClasses() {
+	public List<String> getAppliedStyleClasses() {
     	// componentContext can't be leveraged as child components are not accessed directly from an external source e.g browser
 			return ComponentUtils.getStyleSystemClasses(this.resource);
 	}

@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Map.Entry;
 
@@ -45,255 +46,257 @@ import java.util.Map.Entry;
  */
 public final class ComponentUtils {
 
-    /**
-     * Name of the node holding the context aware configurations below /conf/{site-name};
-     */
-    public static final String NN_SLING_CONFIGS = "sling:configs";
+	/**
+	 * Name of the node holding the context aware configurations below
+	 * /conf/{site-name};
+	 */
+	public static final String NN_SLING_CONFIGS = "sling:configs";
 
-    /**
-     * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
-     */
-    public static final String ID_SEPARATOR = "-";
+	/**
+	 * Name of the separator character used between prefix and hash when generating
+	 * an ID, e.g. image-5c7e0ef90d
+	 */
+	public static final String ID_SEPARATOR = "-";
 
-    /**
-     * Length of the ID hash.
-     */
-    private static final int ID_HASH_LENGTH = 10;
-    
-    /**
-     * Attribute on JCR node that captures component data 
-     */
+	/**
+	 * Length of the ID hash.
+	 */
+	private static final int ID_HASH_LENGTH = 10;
+
+	/**
+	 * Attribute on JCR node that captures component data
+	 */
 	public static final String CQ_STYLEIDS = "cq:styleIds";
 
-	 /**
-     *  Node under content policy that captures different styles
-     */
-	public static final String CQ_STYLES = "cq:styles";
+//	/**
+//	 * Node under content policy that captures different styles
+//	 */
+//	public static final String CQ_STYLES = "cq:styles";
 
-	
 	/**
-     * Node under content policy that captures different style groups
-     */
+	 * Node under content policy that captures different style groups
+	 */
 	public static final String CQ_STYLEGROUPS = "cq:styleGroups";
 
-	
-	 /**
-     * Child nodes that contain each style definition under a specific group
-     */
+	/**
+	 * Child nodes that contain each style definition under a specific group
+	 */
 	public static final String CQ_STYLEID = "cq:styleId";
 
-	 /**
-     * Equivalent CSS classes for styleIds
-     */
+	/**
+	 * Equivalent CSS classes for styleIds
+	 */
 	public static final String CQ_STYLECLASSES = "cq:styleClasses";
-	
-	 /**
-     * Default CSS class to provide in absence of any selection
-     */
+
+	/**
+	 * Default CSS class to provide in absence of any selection
+	 */
 	public static final String CQ_STYLECLASSES_DEFAULT = "cq:styleDefaultClasses";
 
-    /**
-     * Private constructor to prevent instantiation of utility class.
-     */
-    private ComponentUtils() {
-        // NOOP
-    }
+	/**
+	 * Private constructor to prevent instantiation of utility class.
+	 */
+	private ComponentUtils() {
+		// NOOP
+	}
 
-    /**
-     * Check if data layer is enabled.
-     *
-     * @param resource The resource to check.
-     * @return True if data layer is enabled for this resource, false otherwise.
-     */
-    public static boolean isDataLayerEnabled(@NotNull final Resource resource) {
-        return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
-            .map(builder -> builder.as(DataLayerConfig.class))
-            .map(DataLayerConfig::enabled)
-            .orElse(false);
-    }
+	/**
+	 * Check if data layer is enabled.
+	 *
+	 * @param resource The resource to check.
+	 * @return True if data layer is enabled for this resource, false otherwise.
+	 */
+	public static boolean isDataLayerEnabled(@NotNull final Resource resource) {
+		return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
+				.map(builder -> builder.as(DataLayerConfig.class)).map(DataLayerConfig::enabled).orElse(false);
+	}
 
-    /**
-     * Get the ID property value if set (using {@link #getPropertyId(Resource)},
-     * otherwise generate a new ID (using {@link #generateId(Resource, Page, ComponentContext)}.
-     *
-     * @param resource The resource for which to get or generate an ID.
-     * @param currentPage The current request page.
-     * @param componentContext The current component context.
-     * @return The ID property value for the specified resource, or a generated ID if not set.
-     */
-    @NotNull
-    public static String getId(@NotNull final Resource resource,
-                                                  @Nullable final Page currentPage,
-                                                  @Nullable final ComponentContext componentContext) {
-        return ComponentUtils.getPropertyId(resource)
-            .orElseGet(() -> ComponentUtils.generateId(resource, currentPage, componentContext));
-    }
+	/**
+	 * Get the ID property value if set (using {@link #getPropertyId(Resource)},
+	 * otherwise generate a new ID (using
+	 * {@link #generateId(Resource, Page, ComponentContext)}.
+	 *
+	 * @param resource         The resource for which to get or generate an ID.
+	 * @param currentPage      The current request page.
+	 * @param componentContext The current component context.
+	 * @return The ID property value for the specified resource, or a generated ID
+	 *         if not set.
+	 */
+	@NotNull
+	public static String getId(@NotNull final Resource resource, @Nullable final Page currentPage,
+			@Nullable final ComponentContext componentContext) {
+		return ComponentUtils.getPropertyId(resource)
+				.orElseGet(() -> ComponentUtils.generateId(resource, currentPage, componentContext));
+	}
 
-    /**
-     * Get the ID value from the &quot;{@value Component#PN_ID}&quot; property.
-     *
-     * @param resource The resource for which to get the ID property value.
-     * @return The ID property value if set, empty optional if not.
-     */
-    private static Optional<String> getPropertyId(@NotNull final Resource resource) {
-        return Optional.ofNullable(resource.getValueMap().get(Component.PN_ID, String.class))
-            .filter(StringUtils::isNotEmpty)
-            .map(StringUtils::trim)
-            .map(StringUtils::normalizeSpace)
-            .map(val -> StringUtils.replace(val, " ", ID_SEPARATOR));
-    }
+	/**
+	 * Get the ID value from the &quot;{@value Component#PN_ID}&quot; property.
+	 *
+	 * @param resource The resource for which to get the ID property value.
+	 * @return The ID property value if set, empty optional if not.
+	 */
+	private static Optional<String> getPropertyId(@NotNull final Resource resource) {
+		return Optional.ofNullable(resource.getValueMap().get(Component.PN_ID, String.class))
+				.filter(StringUtils::isNotEmpty).map(StringUtils::trim).map(StringUtils::normalizeSpace)
+				.map(val -> StringUtils.replace(val, " ", ID_SEPARATOR));
+	}
 
-    /**
-     * Returns an auto generated component ID.
-     *
-     * The ID is the first {@value ComponentUtils#ID_HASH_LENGTH} characters of an SHA-1 hexadecimal hash of the component path,
-     * prefixed with the component name. Example: title-810f3af321
-     *
-     * If the component is referenced, the path is taken to be a concatenation of the component path,
-     * with the path of the first parent context resource that exists on the page or in the template.
-     * This ensures the ID is unique if the same component is referenced multiple times on the same page or template.
-     *
-     * Collision
-     * ---------
-     * c = expected collisions
-     * c ~= (i^2)/(2m) - where i is the number of items and m is the number of possibilities for each item.
-     * m = 16^n - for a hexadecimal string, where n is the number of characters.
-     *
-     * For i = 1000 components with the same name, and n = 10 characters:
-     *
-     * c ~= (1000^2)/(2*(16^10))
-     * c ~= 0.00000045
-     *
-     * @return the auto generated component ID
-     */
-    @NotNull
-    private static String generateId(@NotNull final Resource resource,
-                                    @Nullable final Page currentPage,
-                                    @Nullable final ComponentContext componentContext) {
-        String resourceType = resource.getResourceType();
-        String prefix = StringUtils.substringAfterLast(resourceType, "/");
-        String path = resource.getPath();
-        if (currentPage != null && componentContext != null) {
-            PageManager pageManager = currentPage.getPageManager();
-            Page resourcePage = pageManager.getContainingPage(resource);
-            Template template = currentPage.getTemplate();
-            boolean inCurrentPage = (resourcePage != null && StringUtils.equals(resourcePage.getPath(), currentPage.getPath()));
-            boolean inTemplate = (template != null && path.startsWith(template.getPath()));
-            if (!inCurrentPage && !inTemplate) {
-                ComponentContext parentContext = componentContext.getParent();
-                while (parentContext != null) {
-                    Resource parentContextResource = parentContext.getResource();
-                    if (parentContextResource != null) {
-                        Page parentContextPage = pageManager.getContainingPage(parentContextResource);
-                        inCurrentPage = (parentContextPage != null && StringUtils.equals(parentContextPage.getPath(), currentPage.getPath()));
-                        inTemplate = (template != null && parentContextResource.getPath().startsWith(template.getPath()));
-                        if (inCurrentPage || inTemplate) {
-                            path = parentContextResource.getPath().concat(resource.getPath());
-                            break;
-                        }
-                    }
-                    parentContext = parentContext.getParent();
-                }
-            }
+	/**
+	 * Returns an auto generated component ID.
+	 *
+	 * The ID is the first {@value ComponentUtils#ID_HASH_LENGTH} characters of an
+	 * SHA-1 hexadecimal hash of the component path, prefixed with the component
+	 * name. Example: title-810f3af321
+	 *
+	 * If the component is referenced, the path is taken to be a concatenation of
+	 * the component path, with the path of the first parent context resource that
+	 * exists on the page or in the template. This ensures the ID is unique if the
+	 * same component is referenced multiple times on the same page or template.
+	 *
+	 * Collision --------- c = expected collisions c ~= (i^2)/(2m) - where i is the
+	 * number of items and m is the number of possibilities for each item. m = 16^n
+	 * - for a hexadecimal string, where n is the number of characters.
+	 *
+	 * For i = 1000 components with the same name, and n = 10 characters:
+	 *
+	 * c ~= (1000^2)/(2*(16^10)) c ~= 0.00000045
+	 *
+	 * @return the auto generated component ID
+	 */
+	@NotNull
+	private static String generateId(@NotNull final Resource resource, @Nullable final Page currentPage,
+			@Nullable final ComponentContext componentContext) {
+		String resourceType = resource.getResourceType();
+		String prefix = StringUtils.substringAfterLast(resourceType, "/");
+		String path = resource.getPath();
+		if (currentPage != null && componentContext != null) {
+			PageManager pageManager = currentPage.getPageManager();
+			Page resourcePage = pageManager.getContainingPage(resource);
+			Template template = currentPage.getTemplate();
+			boolean inCurrentPage = (resourcePage != null
+					&& StringUtils.equals(resourcePage.getPath(), currentPage.getPath()));
+			boolean inTemplate = (template != null && path.startsWith(template.getPath()));
+			if (!inCurrentPage && !inTemplate) {
+				ComponentContext parentContext = componentContext.getParent();
+				while (parentContext != null) {
+					Resource parentContextResource = parentContext.getResource();
+					if (parentContextResource != null) {
+						Page parentContextPage = pageManager.getContainingPage(parentContextResource);
+						inCurrentPage = (parentContextPage != null
+								&& StringUtils.equals(parentContextPage.getPath(), currentPage.getPath()));
+						inTemplate = (template != null
+								&& parentContextResource.getPath().startsWith(template.getPath()));
+						if (inCurrentPage || inTemplate) {
+							path = parentContextResource.getPath().concat(resource.getPath());
+							break;
+						}
+					}
+					parentContext = parentContext.getParent();
+				}
+			}
 
-        }
+		}
 
-        return ComponentUtils.generateId(prefix, path);
-    }
+		return ComponentUtils.generateId(prefix, path);
+	}
 
-    /**
-     * Returns an ID based on the prefix, the ID_SEPARATOR and a hash of the path, e.g. image-5c7e0ef90d
-     *
-     * @param prefix the prefix for the ID
-     * @param path   the resource path
-     * @return the generated ID
-     */
-    @NotNull
-    public static String generateId(@NotNull final String prefix, @NotNull final String path) {
-        return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, ID_HASH_LENGTH));
-    }
-    
+	/**
+	 * Returns an ID based on the prefix, the ID_SEPARATOR and a hash of the path,
+	 * e.g. image-5c7e0ef90d
+	 *
+	 * @param prefix the prefix for the ID
+	 * @param path   the resource path
+	 * @return the generated ID
+	 */
+	@NotNull
+	public static String generateId(@NotNull final String prefix, @NotNull final String path) {
+		return StringUtils.join(prefix, ID_SEPARATOR,
+				StringUtils.substring(DigestUtils.sha256Hex(path), 0, ID_HASH_LENGTH));
+	}
+
 	/**
 	 * @param componentResource
-	 * @return Return equivalent CSS classes separated using an empty space between each, for the resource passed
+	 * @return Return equivalent CSS classes in an array list, for the resource
+	 *         passed
 	 */
-    @Nullable
-	public static String getStyleSystemClasses(Resource componentResource) {
-		
-		String styleClasses = null;
-		
-		if (componentResource != null) {
-			ResourceResolver resourceResolver = componentResource.getResourceResolver();
-			ValueMap valueMap = componentResource.getValueMap();
-			String[] styleids = valueMap.get(CQ_STYLEIDS, String[].class);
-			if (styleids != null && ArrayUtils.isNotEmpty(styleids)) {
-				ContentPolicyManager policyMgr = resourceResolver.adaptTo(ContentPolicyManager.class);
-				if (policyMgr != null) {
+	@Nullable
+	public static List<String> getStyleSystemClasses(@NotNull Resource componentResource) {
 
-					ContentPolicy contentPolicy = policyMgr.getPolicy(componentResource);
-					if (contentPolicy != null) {
-						
-						String defaultStyle = (String) contentPolicy.getProperties().get(CQ_STYLECLASSES_DEFAULT);
+		ArrayList<String> styleClasses = null;
 
-						styleClasses = StringUtils.defaultIfBlank(String.join(StringUtils.SPACE, getStyleSystemClassesFromIds(contentPolicy, styleids)),defaultStyle);
-					}
+		ResourceResolver resourceResolver = componentResource.getResourceResolver();
+		ValueMap valueMap = componentResource.getValueMap();
+		String[] styleids = valueMap.get(CQ_STYLEIDS, String[].class);
+		ContentPolicyManager policyMgr = resourceResolver.adaptTo(ContentPolicyManager.class);
+		if (policyMgr != null) {
+
+			ContentPolicy contentPolicy = policyMgr.getPolicy(componentResource);
+			if (contentPolicy != null) {
+
+				String defaultStyle = (String) contentPolicy.getProperties().get(CQ_STYLECLASSES_DEFAULT);
+
+				if (ArrayUtils.isEmpty(styleids))
+					styleClasses = new ArrayList<>();
+				else
+					styleClasses = getStyleSystemClassesFromIds(contentPolicy, styleids);
+
+				if (styleClasses.isEmpty()) {
+					if (defaultStyle == null)
+						styleClasses = null;
+					else
+						styleClasses.add(defaultStyle);
 				}
 			}
 		}
-		
+
 		return styleClasses;
 	}
-	
+
 	/**
 	 * @param contentPolicy
 	 * @param styleids
-	 * @return Return equivalent CSS classes separated using an empty space between each, for the list of style ids shared against the content policy to look for
+	 * @return Return equivalent CSS classes in an equivalent list, for the list of
+	 *         style ids shared against the content policy to look for
 	 */
-	public static ArrayList<String> getStyleSystemClassesFromIds(ContentPolicy contentPolicy, String[] styleids) {
-		ArrayList<String> styleClasses = new ArrayList<String>();
-			if (styleids != null && ArrayUtils.isNotEmpty(styleids)) {
-				HashMap<String, String> styleMap = new HashMap<String, String>();
+	private static ArrayList<String> getStyleSystemClassesFromIds(@NotNull ContentPolicy contentPolicy,
+			String[] styleids) {
+		ArrayList<String> styleClasses = new ArrayList<>();
+		HashMap<String, String> styleMap = new HashMap<>();
 
-					if (contentPolicy != null) {
-
-						Resource contentPolicyResource = contentPolicy.adaptTo(Resource.class);
-						if(contentPolicyResource != null) {
-							Resource styleGroupsResource = contentPolicyResource.getChild(
-									CQ_STYLEGROUPS);
-							if (styleGroupsResource != null) {
-								Iterator<Resource> styleGroupsIterator = styleGroupsResource.listChildren();
-								while (styleGroupsIterator.hasNext()) {
-									Resource styleGroupItem = styleGroupsIterator.next();
-									Resource cqStylesResource = styleGroupItem.getChild(CQ_STYLES);
-									if(cqStylesResource != null)
-									{
-										Iterator<Resource> cqStylesIterator = cqStylesResource.listChildren();
-										while (cqStylesIterator.hasNext()) {
-											Resource cqStyleDefinition = cqStylesIterator.next();
-											ValueMap childProperties = cqStyleDefinition.getValueMap();
-											String key = childProperties.get(CQ_STYLEID, String.class);
-											String value = childProperties.get(CQ_STYLECLASSES,
-													StringUtils.EMPTY);
-											if (StringUtils.isNotBlank(key)) {
-												styleMap.put(key, value);
-											}
-										}
-									}
-								}
-							}
+		Resource contentPolicyResource = contentPolicy.adaptTo(Resource.class);
+		if(contentPolicyResource != null)
+		{
+			Resource styleGroupsResource = contentPolicyResource.getChild(CQ_STYLEGROUPS);
+			if (styleGroupsResource != null) {
+				Iterator<Resource> styleGroupsIterator = styleGroupsResource.listChildren();
+				while (styleGroupsIterator.hasNext()) {
+					Resource styleGroupItem = styleGroupsIterator.next();
+					Resource cqStylesResource = styleGroupItem.getChild(com.day.cq.wcm.api.designer.Design.NN_STYLES);
+					if (cqStylesResource != null) {
+						Iterator<Resource> cqStylesIterator = cqStylesResource.listChildren();
+						while (cqStylesIterator.hasNext()) {
+							Resource cqStyleDefinition = cqStylesIterator.next();
+							ValueMap childProperties = cqStyleDefinition.getValueMap();
+							@NotNull
+							String key = childProperties.get(CQ_STYLEID, String.class);
+							@NotNull
+							String value = childProperties.get(CQ_STYLECLASSES, StringUtils.EMPTY);
+							styleMap.put(key, value);
 						}
 					}
-				
-				
-				  for (Entry<String, String> entry : styleMap.entrySet()) {
-					    String styleid = entry.getKey();
-					    String styleClass = entry.getValue();
-					    if (ArrayUtils.contains(styleids, styleid)) {
-					    	styleClasses.add(styleClass);
-						}
-					  }
+				}
 			}
-		
+
+			for (Entry<String, String> entry : styleMap.entrySet()) {
+				String styleid = entry.getKey();
+				String styleClass = entry.getValue();
+
+				if (ArrayUtils.contains(styleids, styleid))
+					styleClasses.add(styleClass);
+			}
+		}
+
+
 		return styleClasses;
 	}
 }

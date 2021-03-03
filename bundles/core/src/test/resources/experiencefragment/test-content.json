@@ -90,6 +90,26 @@
 								"1614651105857",
 								"1614651142305"
 							]
+						},
+						"title_core_1": {
+							"jcr:primaryType": "nt:unstructured",
+							"jcr:createdBy": "admin",
+							"jcr:title": "Welcome to AEM Core Components Demo !!",
+							"jcr:lastModifiedBy": "admin",
+							"jcr:created": "Thu Jan 21 2021 03:24:27 GMT-0600",
+							"type": "h1",
+							"jcr:lastModified": "Thu Jan 21 2021 05:05:03 GMT-0600",
+							"sling:resourceType": "core/wcm/components/title/v2/title"
+						},
+						"title_core_2": {
+							"jcr:primaryType": "nt:unstructured",
+							"jcr:createdBy": "admin",
+							"jcr:title": "Welcome to AEM Core Components Demo !!",
+							"jcr:lastModifiedBy": "admin",
+							"jcr:created": "Thu Jan 21 2021 03:24:27 GMT-0600",
+							"type": "h1",
+							"jcr:lastModified": "Thu Jan 21 2021 05:05:03 GMT-0600",
+							"sling:resourceType": "core/wcm/components/title/v2/title"
 						}
                     }
                 }
