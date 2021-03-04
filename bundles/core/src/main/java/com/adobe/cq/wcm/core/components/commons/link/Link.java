@@ -32,6 +32,17 @@ import com.day.cq.wcm.api.Page;
 public interface Link<T> {
 
     /**
+     * Default property name for storing link URL.
+     * All new model implementation should use this name, some of the existing models use other names to store the link URL.
+     */
+    String PN_LINK_URL = "linkURL";
+
+    /**
+     * Property name for storing link target.
+     */
+    String PN_LINK_TARGET = "linkTarget";
+
+    /**
      * Check if the link defined for the component is valid.
      *
      * @return {@code true} if component has a valid link defined
