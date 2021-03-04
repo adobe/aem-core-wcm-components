@@ -92,11 +92,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String description;
 
     /**
-     * The main teaser link.
-     */
-    private String linkURL;
-
-    /**
      * The title heading level.
      */
     private String titleType;
@@ -234,7 +229,20 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         if (this.hasImage()) {
             this.setImageResource(component, request.getResource(), hiddenImageResourceProperties);
         }
-        link = linkHandler.getLink(resource, LinkConstants.PN_LINK_URL);
+        // use the target page as the link if it exists
+        link = this.getTargetPage()
+                .map(page -> linkHandler.getLink(page))
+                .orElseGet(() -> {
+                    // target page doesn't exist
+                    if (this.isActionsEnabled()) {
+                        return this.getActions().stream().findFirst()
+                                .map(action -> linkHandler.getLink(action.getURL(), null))
+                                .orElse(linkHandler.getInvalid());
+                    } else {
+                        // use the property value if actions are not enabled
+                        return linkHandler.getLink(resource, LinkConstants.PN_LINK_URL);
+                    }
+                });
     }
 
     /**
@@ -251,7 +259,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             .orElseGet(() -> request.getResource().getChild(DownloadResource.NN_FILE)) != null;
     }
 
-    protected ListItem newAction(Resource actionRes, Component component) {
+    protected Action newAction(Resource actionRes, Component component) {
         return new Action(actionRes, getId(), component);
     }
 
@@ -295,7 +303,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 .map(Iterable::spliterator)
                 .map(s -> StreamSupport.stream(s, false))
                 .orElseGet(Stream::empty)
-                .map(action -> new Action(action, this.getId(), component))
+                .map(action -> newAction(action, component))
                 .collect(Collectors.toList());
         }
         return this.actions;
@@ -308,22 +316,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getLinkURL() {
-        if (this.linkURL == null) {
-            // use the target page url if it exists
-            this.linkURL = this.getTargetPage().map(page -> linkHandler.getLink(page).getURL())
-                .orElseGet(() -> {
-                    // target page doesn't exist
-                    if (this.isActionsEnabled()) {
-                        return this.getActions().stream().findFirst()
-                            .map(ListItem::getURL)
-                            .orElse(null);
-                    } else {
-                        // use the property value if actions are not enabled
-                        return link.getURL();
-                    }
-                });
-        }
-        return linkURL;
+        return link.getURL();
     }
 
     /**
@@ -462,7 +455,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          * @param actionRes The action resource.
          * @param parentId The ID of the containing Teaser.
          */
-        private Action(@NotNull final Resource actionRes, final String parentId, Component component) {
+        public Action(@NotNull final Resource actionRes, final String parentId, Component component) {
             super(parentId, actionRes, component);
             ctaParentId = parentId;
             ctaResource = actionRes;
