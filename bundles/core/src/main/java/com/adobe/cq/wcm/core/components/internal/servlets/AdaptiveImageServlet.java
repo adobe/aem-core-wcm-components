@@ -873,7 +873,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             String fileReference = component.getValueMap().get(DownloadResource.PN_REFERENCE, String.class);
             if (StringUtils.isNotEmpty(fileReference)) {
                 imageResource = component.getResourceResolver().getResource(fileReference);
-                if(imageResource != null) {
+                if (imageResource != null) {
                     source = Source.ASSET;
                 }
             } else {
