@@ -58,6 +58,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -471,6 +472,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             if (component != null) {
                 this.dataLayerType = component.getResourceType() + "/" + CTA_ID_PREFIX;
             }
+        }
+
+        @Override
+        @JsonIgnore
+        public @NotNull Link getLink() {
+            return ctaLink;
         }
 
         /**
