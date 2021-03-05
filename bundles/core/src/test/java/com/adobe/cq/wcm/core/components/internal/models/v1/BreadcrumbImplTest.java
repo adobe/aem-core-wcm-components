@@ -36,7 +36,7 @@ public class BreadcrumbImplTest {
     private static final String TEST_BASE = "/breadcrumb";
     private static final String CURRENT_PAGE = "/content/breadcrumb/women/shirts/devi-sleeveless-shirt";
     private static final String CURRENT_PAGE_2 = "/content/breadcrumb/women/shirts2/devi-sleeveless-shirt";
-    private static final String BREADCRUMB_1 = CURRENT_PAGE + "/jcr:content/header/breadcrumb";
+    protected static final String BREADCRUMB_1 = CURRENT_PAGE + "/jcr:content/header/breadcrumb";
     private static final String BREADCRUMB_2 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-show-hidden";
     private static final String BREADCRUMB_3 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-hide-current";
     private static final String BREADCRUMB_4 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-start-level";
@@ -110,7 +110,7 @@ public class BreadcrumbImplTest {
     void testBreadcrumbItemsPageWithoutJcrContent() {
         Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_7);
         checkBreadcrumbConsistency(breadcrumb, new String[]{"Women", "Devi Sleeveless Shirt"});
-        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_7));
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(testBase, BREADCRUMB_7));
     }
 
     protected void checkBreadcrumbConsistency(Breadcrumb breadcrumb, String[] expectedPages) {

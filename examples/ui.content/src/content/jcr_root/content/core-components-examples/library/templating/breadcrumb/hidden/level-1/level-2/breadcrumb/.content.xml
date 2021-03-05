@@ -25,7 +25,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Breadcrumb&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Breadcrumb&lt;sub>v3&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
@@ -50,7 +50,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v3/breadcrumb"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
