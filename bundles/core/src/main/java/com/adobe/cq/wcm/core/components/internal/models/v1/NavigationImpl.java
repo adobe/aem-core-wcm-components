@@ -38,11 +38,13 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.LocalizationUtils;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 
@@ -70,6 +72,12 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      */
     @Self
     private SlingHttpServletRequest request;
+
+    /**
+     * The link handler.
+     */
+    @Self
+    private LinkHandler linkHandler;
 
     /**
      * The current page.
@@ -186,6 +194,10 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         return Collections.unmodifiableList(items);
     }
 
+    protected NavigationItem newNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String parentId, boolean isShadowingDisabled, Component component) {
+        return new NavigationItemImpl(page, active, linkHandler, level, children, parentId, isShadowingDisabled, component);
+    }
+
     @Override
     @Nullable
     public String getAccessibilityLabel() {
@@ -240,10 +252,10 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @param children The child navigation items.
      * @return The newly created navigation item.
      */
-    private NavigationItemImpl createNavigationItem(@NotNull final Page page, @NotNull final List<NavigationItem> children) {
+    private NavigationItem createNavigationItem(@NotNull final Page page, @NotNull final List<NavigationItem> children) {
         int level = page.getDepth() - (this.getNavigationRoot().getDepth() + structureStart);
         boolean selected = checkSelected(page);
-        return new NavigationItemImpl(page, selected, request, level, children, getId(), isShadowingDisabled, component);
+        return newNavigationItem(page, selected, linkHandler, level, children, getId(), isShadowingDisabled, component);
     }
 
     /**

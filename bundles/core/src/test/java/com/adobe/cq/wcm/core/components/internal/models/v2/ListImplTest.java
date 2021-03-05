@@ -16,15 +16,15 @@
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import org.apache.sling.api.resource.Resource;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.List;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,7 +47,7 @@ public class ListImplTest {
     }
 
     @Test
-    public void testProperties() {
+    protected void testProperties() {
         List list = getListUnderTest(LIST_1);
         assertTrue(list.showDescription());
         assertTrue(list.showModificationDate());

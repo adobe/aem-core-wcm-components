@@ -32,9 +32,11 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Breadcrumb;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class,
@@ -61,6 +63,9 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
 
     @Self
     private SlingHttpServletRequest request;
+
+    @Self
+    protected LinkHandler linkHandler;
 
     private boolean showHidden;
     private boolean hideCurrent;
@@ -102,7 +107,7 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel,
+                    NavigationItem navigationItem = newBreadcrumbItem(page, isActivePage, linkHandler, currentLevel,
                             Collections.emptyList(), getId(), isShadowingDisabled, component);
                     items.add(navigationItem);
                 }
@@ -110,6 +115,10 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
             startLevel++;
         }
         return items;
+    }
+
+    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String parentId, boolean isShadowingDisabled, Component component) {
+        return new BreadcrumbItemImpl(page, active, linkHandler, level, children, parentId, isShadowingDisabled, component);
     }
 
     private boolean checkIfNotHidden(Page page) {
