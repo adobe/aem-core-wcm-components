@@ -18,7 +18,6 @@ name: Test (push)
 
 on:
   push:
-  pull_request:
 
 jobs:
   build:
