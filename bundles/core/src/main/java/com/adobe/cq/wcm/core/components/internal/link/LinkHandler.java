@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +23,6 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +60,7 @@ public class LinkHandler {
      * Reference to {@link PageManager}
      */
     @ScriptVariable
-    @Optional
+    @org.apache.sling.models.annotations.Optional
     private PageManager pageManager;
     
     /**
@@ -69,7 +69,7 @@ public class LinkHandler {
      *
      * @return Link may be invalid, but is never null
      */
-    public @NotNull Link getLink(@NotNull Resource resource) {
+    public Optional<Link<Page>> getLink(@NotNull Resource resource) {
         return getLink(resource, PN_LINK_URL);
     }
 
@@ -80,7 +80,7 @@ public class LinkHandler {
      *
      * @return Link may be invalid, but is never null
      */
-    public @NotNull Link getLink(@NotNull Resource resource, String linkURLPropertyName) {
+    public Optional<Link<Page>> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
         String linkTarget = props.get(PN_LINK_TARGET, String.class);
@@ -93,12 +93,12 @@ public class LinkHandler {
      *
      * @return Link may be invalid, but is never null
      */
-    public @NotNull Link<Page> getLink(@Nullable Page page) {
+    public Optional<Link<Page>> getLink(@Nullable Page page) {
         if (page == null) {
-            return getInvalid();
+            return Optional.empty();
         }
         String linkURL = getPageLinkURL(page);
-        return new LinkImpl<>(linkURL, null, page);
+        return Optional.of(new LinkImpl<>(linkURL, null, page));
     }
 
     /**
@@ -108,20 +108,11 @@ public class LinkHandler {
      *
      * @return Link may be invalid, but is never null
      */
-    public @NotNull Link<Page> getLink(@Nullable String linkURL, @Nullable String target) {
+    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        Page targetPage = getPage(linkURL);
-        return new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, targetPage);
-    }
-
-    /**
-     * Returns an invalid link.
-     *
-     * @return Invalid link, never null
-     */
-    public @NotNull Link getInvalid() {
-        return new LinkImpl(null, null, null);
+        Page targetPage = getPage(linkURL).orElse(null);
+        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, targetPage));
     }
 
     /**
@@ -163,11 +154,9 @@ public class LinkHandler {
      */
     @NotNull
     private String getLinkURL(@NotNull String path) {
-        Page page = getPage(path);
-        if (page != null) {
-            return getPageLinkURL(page);
-        }
-        return path;
+        return getPage(path)
+                .map(page -> getPageLinkURL(page))
+                .orElse(path);
     }
 
     /**
@@ -195,15 +184,15 @@ public class LinkHandler {
      * @param path The path
      * @return The {@link Page} corresponding to the path
      */
-    @Nullable
-    private Page getPage(@Nullable String path) {
+    @NotNull
+    private Optional<Page> getPage(@Nullable String path) {
         if (pageManager == null) {
             pageManager = request.getResourceResolver().adaptTo(PageManager.class);
         }
         if (pageManager == null) {
-            return null;
+            return Optional.empty();
         }
-        return pageManager.getPage(path);
+        return Optional.ofNullable(pageManager.getPage(path));
     }
 
 }
