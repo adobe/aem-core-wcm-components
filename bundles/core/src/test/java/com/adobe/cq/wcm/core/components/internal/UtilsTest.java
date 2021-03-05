@@ -49,37 +49,37 @@ class UtilsTest {
         initMocks(this);
     }
 
-    @Test
-    void getURLExtended_pageNull() {
-        String pathSample = "fake/path/for/testing";
-
-        when(this.pageManagerMock.getPage(pathSample))
-         .thenReturn(null);
-
-        assertEquals(pathSample, Utils.getURL(this.slingHttpServletRequestMock, this.pageManagerMock, pathSample));
-    }
-
-    @Test
-    void getURLExtended_vanityUrlEmpty() {
-        when(this.pageMock.getVanityUrl())
-         .thenReturn("");
-        when(this.pageMock.getPath())
-         .thenReturn("testPage");
-        when(this.slingHttpServletRequestMock.getContextPath())
-         .thenReturn("/fake/path/for/testing/");
-
-        assertEquals("/fake/path/for/testing/testPage.html", Utils.getURL(this.slingHttpServletRequestMock, this.pageMock));
-    }
-
-    @Test
-    void getURLExtended_vanityUrlCorrect() {
-        when(this.pageMock.getVanityUrl())
-         .thenReturn("testPage.html");
-        when(this.slingHttpServletRequestMock.getContextPath())
-         .thenReturn("/fake/path/for/testing/");
-
-        assertEquals("/fake/path/for/testing/testPage.html", Utils.getURL(this.slingHttpServletRequestMock, this.pageMock));
-    }
+//    @Test
+//    void getURLExtended_pageNull() {
+//        String pathSample = "fake/path/for/testing";
+//
+//        when(this.pageManagerMock.getPage(pathSample))
+//         .thenReturn(null);
+//
+//        assertEquals(pathSample, Utils.getURL(this.slingHttpServletRequestMock, this.pageManagerMock, pathSample));
+//    }
+//
+//    @Test
+//    void getURLExtended_vanityUrlEmpty() {
+//        when(this.pageMock.getVanityUrl())
+//         .thenReturn("");
+//        when(this.pageMock.getPath())
+//         .thenReturn("testPage");
+//        when(this.slingHttpServletRequestMock.getContextPath())
+//         .thenReturn("/fake/path/for/testing/");
+//
+//        assertEquals("/fake/path/for/testing/testPage.html", Utils.getURL(this.slingHttpServletRequestMock, this.pageMock));
+//    }
+//
+//    @Test
+//    void getURLExtended_vanityUrlCorrect() {
+//        when(this.pageMock.getVanityUrl())
+//         .thenReturn("testPage.html");
+//        when(this.slingHttpServletRequestMock.getContextPath())
+//         .thenReturn("/fake/path/for/testing/");
+//
+//        assertEquals("/fake/path/for/testing/testPage.html", Utils.getURL(this.slingHttpServletRequestMock, this.pageMock));
+//    }
 
     @Test
     void testGetStrings() {

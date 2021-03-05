@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
+import java.util.stream.Stream;
+
 
 import javax.annotation.PostConstruct;
 
@@ -49,6 +51,7 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -135,6 +138,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Nullable
     private String redirectTargetValue;
 
+    @Self
+    private LinkHandler linkHandler;
+
     /**
      * The proxy path of the first client library listed in the style under the
      * &quot;{@value Page#PN_APP_RESOURCES_CLIENTLIB}&quot; property.
@@ -162,13 +168,17 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected void initModel() {
         super.initModel();
         this.appResourcesPath = Optional.ofNullable(currentStyle)
-            .map(style -> style.get(PN_APP_RESOURCES_CLIENTLIB, String.class))
-            .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, false))
-            .map(Collection::stream)
-            .orElse(Stream.empty())
-            .findFirst()
-            .map(this::getProxyPath)
-            .orElse(null);
+                .map(style -> style.get(PN_APP_RESOURCES_CLIENTLIB, String.class))
+                .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, false))
+                .map(Collection::stream)
+                .orElse(Stream.empty())
+                .findFirst()
+                .map(this::getProxyPath)
+                .orElse(null);
+    }
+
+    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
+        return new RedirectItemImpl(redirectTarget, request, linkHandler);
     }
 
     private String getProxyPath(ClientLibrary lib) {
@@ -255,7 +265,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public NavigationItem getRedirectTarget() {
         if (redirectTarget == null && StringUtils.isNotEmpty(redirectTargetValue)) {
-            redirectTarget = new RedirectItemImpl(redirectTargetValue, request);
+            redirectTarget = newRedirectItem(redirectTargetValue, request, linkHandler);
         }
         return redirectTarget;
     }

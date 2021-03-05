@@ -27,9 +27,12 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {List.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
@@ -39,7 +42,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v2/list";
 
     @Self
-    private SlingHttpServletRequest request;
+    private LinkHandler linkHandler;
 
     /**
      * Result list.
@@ -53,9 +56,14 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         if (this.listItems == null) {
             this.listItems = super.getPages().stream()
                 .filter(Objects::nonNull)
-                .map(page -> new PageListItemImpl(request, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, component))
+                .map(page -> newPageListItem(linkHandler, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, component))
                 .collect(Collectors.toList());
         }
         return this.listItems;
     }
+
+    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
+        return new PageListItemImpl(linkHandler, page, parentId, isShadowingDisabled, component);
+    }
+
 }

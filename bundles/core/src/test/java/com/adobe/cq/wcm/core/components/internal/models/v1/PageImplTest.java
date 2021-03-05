@@ -70,13 +70,16 @@ public class PageImplTest {
     private static final String PN_TOUCH_ICON_152 = "touchIcon152";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
+    
+    protected String testBase;
 
     @BeforeEach
     protected void setUp() {
-        internalSetup(TEST_BASE);
+        testBase = TEST_BASE;
+        internalSetup();
     }
 
-    protected void internalSetup(String testBase) {
+    protected void internalSetup() {
         this.context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         this.context.load().json(testBase + "/test-conf.json", "/conf/coretest/settings");
         this.context.load().json(testBase + "/default-tags.json", "/content/cq:tags/default");
@@ -89,7 +92,7 @@ public class PageImplTest {
     }
 
     @Test
-    void testPage() throws ParseException {
+    protected void testPage() throws ParseException {
         context.load().binaryFile(TEST_BASE + "/static.css", DESIGN_PATH + "/static.css");
 
         Page page = getPageUnderTest(PAGE,
@@ -111,12 +114,12 @@ public class PageImplTest {
         assertTrue(keywords.contains("one") && keywords.contains("two") && keywords.contains("three"));
         assertEquals("coretest.product-page", page.getClientLibCategories()[0]);
         assertEquals("product-page", page.getTemplateName());
-        Utils.testJSONExport(page, Utils.getTestExporterJSONPath(TEST_BASE, PAGE));
+        Utils.testJSONExport(page, Utils.getTestExporterJSONPath(testBase, PAGE));
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    void testFavicons() {
+    protected void testFavicons() {
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH);
         Map<String, String> favicons = page.getFavicons();
         assertEquals(DESIGN_PATH + "/" + FN_FAVICON_ICO, favicons.get(PN_FAVICON_ICO));
@@ -128,7 +131,7 @@ public class PageImplTest {
     }
 
     @Test
-    void testDefaultDesign() {
+    protected void testDefaultDesign() {
         Page page = getPageUnderTest(PAGE);
         assertNull(page.getDesignPath());
         assertNull(page.getStaticDesignPath());

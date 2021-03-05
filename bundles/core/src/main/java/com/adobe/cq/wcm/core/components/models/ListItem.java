@@ -17,8 +17,11 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 
 /**
  * Interface for a generic list item, used by the {@link List} and {@link Search} models.
@@ -29,11 +32,24 @@ import org.osgi.annotation.versioning.ConsumerType;
 public interface ListItem extends Component {
 
     /**
+     * Returns the link of this {@code ListItem}.
+     *
+     * @return the link of this list item.
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default @NotNull
+    Link getLink() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns the URL of this {@code ListItem}.
      *
      * @return the URL of this list item or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * @deprecated Please use {@link #getLink()}
      */
+    @Deprecated
     @Nullable
     default String getURL() {
         return null;

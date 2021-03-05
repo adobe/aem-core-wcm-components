@@ -15,6 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 
 /**
@@ -37,15 +43,7 @@ public final class ImageAreaImpl implements ImageArea {
      */
     private final String relativeCoordinates;
 
-    /**
-     * The image area anchor {@code href} value.
-     */
-    private final String href;
-
-    /**
-     * The image area anchor {@code target} value.
-     */
-    private final String target;
+    protected Link link;
 
     /**
      * The image area anchor {@code alt} value
@@ -58,21 +56,18 @@ public final class ImageAreaImpl implements ImageArea {
      * @param shape The shape of the area.
      * @param coordinates The coordinates of the area.
      * @param relativeCoordinates The relative unit representation of the {@code coords}.
-     * @param href The image area anchor href.
-     * @param target The image area anchor target.
+     * @param link The area link
      * @param alt The image area anchor alt text.
      */
     public ImageAreaImpl(final String shape,
                          final String coordinates,
                          final String relativeCoordinates,
-                         final String href,
-                         final String target,
+                         final @NotNull Link link,
                          final String alt) {
         this.shape = shape;
         this.coordinates = coordinates;
         this.relativeCoordinates = relativeCoordinates;
-        this.href = href;
-        this.target = target;
+        this.link = link;
         this.alt = alt;
     }
 
@@ -93,16 +88,24 @@ public final class ImageAreaImpl implements ImageArea {
 
     @Override
     public String getHref() {
-        return href;
+        // fallback for old method for keeping backward compatibility
+        return StringUtils.defaultString(link.getURL());
     }
 
     @Override
     public String getTarget() {
-        return target;
+        // fallback for old method for keeping backward compatibility
+        String target = null;
+        Map<String, String> attrs = link.getHtmlAttributes();
+        if (attrs != null) {
+            target = attrs.get("target");
+        }
+        return StringUtils.defaultString(target);
     }
 
     @Override
     public String getAlt() {
         return alt;
     }
+
 }

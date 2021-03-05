@@ -48,7 +48,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
-class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
+public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
 
     private static final String TEST_BASE = "/page/v2";
     private static final String REDIRECT_PAGE = CONTENT_ROOT + "/redirect-page";
@@ -58,9 +58,16 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     private static final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
 
     @BeforeEach
+    @Override
     protected void setUp() {
-        internalSetup(TEST_BASE);
         MockContextAwareConfig.registerAnnotationClasses(context, HtmlPageItemsConfig.class);
+        testBase = TEST_BASE;
+        internalSetup();
+    }
+
+    @Override
+    protected void internalSetup() {
+        super.internalSetup();
         ClientLibrary mockClientLibrary = Mockito.mock(ClientLibrary.class);
         when(mockClientLibrary.getPath()).thenReturn("/apps/wcm/core/page/clientlibs/favicon");
         when(mockClientLibrary.allowProxy()).thenReturn(true);
@@ -78,7 +85,8 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testPage() throws Exception {
+    @Override
+    protected void testPage() throws ParseException {
         testPage(true);
     }
 
@@ -87,7 +95,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         testPage(false);
     }
 
-    private void testPage(boolean useNewCaconfig) throws ParseException {
+    protected void testPage(boolean useNewCaconfig) throws ParseException {
         loadHtmlPageItemsConfig(useNewCaconfig);
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH, PageImpl.PN_CLIENTLIBS_JS_HEAD,
                 new String[]{"coretest.product-page-js-head"}, PN_CLIENT_LIBS,
@@ -112,18 +120,18 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
                 "coretest.product-page-js-head"}, page.getClientLibCategoriesJsHead());
         assertArrayEquals(new String[] {"coretest.product-page"}, page.getClientLibCategoriesJsBody());
         assertEquals("product-page", page.getTemplateName());
-        testJSONExport(page, getTestExporterJSONPath(TEST_BASE, PAGE));
+        testJSONExport(page, getTestExporterJSONPath(testBase, PAGE));
     }
 
     @Test
-    void testFavicons() {
+    protected void testFavicons() {
         Page page = getPageUnderTest(PAGE);
         loadHtmlPageItemsConfig(true);
         assertThrows(UnsupportedOperationException.class, page::getFavicons);
     }
 
     @Test
-    void testGetFaviconClientLibPath() {
+    protected void testGetFaviconClientLibPath() {
         Page page = getPageUnderTest(PAGE, Page.PN_APP_RESOURCES_CLIENTLIB,
                 "coretest.product-page.appResources");
         String faviconClientLibPath = page.getAppResourcesPath();
@@ -131,7 +139,8 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testRedirectTarget() {
+    @SuppressWarnings("deprecation")
+    protected void testRedirectTarget() {
         Page page = getPageUnderTest(REDIRECT_PAGE);
         loadHtmlPageItemsConfig(true);
         NavigationItem redirectTarget = page.getRedirectTarget();
@@ -141,7 +150,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testGetCssClasses() {
+    protected void testGetCssClasses() {
         Page page = getPageUnderTest(PAGE, CSS_CLASS_NAMES_KEY, new String[]{"class1", "class2"});
         loadHtmlPageItemsConfig(true);
         String cssClasses = page.getCssClassNames();
@@ -149,7 +158,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testHasCloudconfigSupport() {
+    protected void testHasCloudconfigSupport() {
         Page page = new PageImpl();
         loadHtmlPageItemsConfig(true);
         assertFalse(page.hasCloudconfigSupport(), "Expected no cloudconfig support if product info provider missing");

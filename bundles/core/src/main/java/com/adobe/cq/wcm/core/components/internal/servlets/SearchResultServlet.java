@@ -47,6 +47,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.cq.wcm.core.components.internal.LocalizationUtils;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -285,6 +286,7 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
         }
         SearchResult searchResult = query.getResult();
 
+        LinkHandler linkHandler = request.adaptTo(LinkHandler.class);
         // Query builder has a leaking resource resolver, so the following work around is required.
         ResourceResolver leakingResourceResolver = null;
         try {
@@ -300,7 +302,7 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
                 Optional.of(resource)
                     .map(res -> resourceResolver.getResource(res.getPath()))
                     .map(pageManager::getContainingPage)
-                    .map(page -> new PageListItemImpl(request, page, searchComponent.getId(),
+                    .map(page -> new PageListItemImpl(linkHandler, page, searchComponent.getId(),
                         PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, null))
                     .ifPresent(results::add);
             }

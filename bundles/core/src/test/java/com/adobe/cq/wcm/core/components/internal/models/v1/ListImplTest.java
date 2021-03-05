@@ -22,6 +22,9 @@ import javax.jcr.Session;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
@@ -31,10 +34,6 @@ import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,63 +48,70 @@ public class ListImplTest {
     private static final String CURRENT_PAGE = "/content/list";
 
     private static final String TEST_PAGE_CONTENT_ROOT = CURRENT_PAGE + "/jcr:content/root";
-    private static final String LIST_1 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
-    private static final String LIST_2 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
-    private static final String LIST_3 = TEST_PAGE_CONTENT_ROOT + "/childrenListType";
-    private static final String LIST_4 = TEST_PAGE_CONTENT_ROOT + "/childrenListTypeWithDepth";
-    private static final String LIST_5 = TEST_PAGE_CONTENT_ROOT + "/tagsListType";
-    private static final String LIST_6 = TEST_PAGE_CONTENT_ROOT + "/searchListType";
-    private static final String LIST_7 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListType";
-    private static final String LIST_8 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleDescListType";
-    private static final String LIST_9 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateListType";
-    private static final String LIST_10 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateDescListType";
-    private static final String LIST_11 = TEST_PAGE_CONTENT_ROOT + "/staticMaxItemsListType";
-    private static final String LIST_12 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateListTypeWithNoModificationDate";
-    private static final String LIST_13 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateListTypeWithNoModificationDateForOneItem";
-    private static final String LIST_14 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitle";
-    private static final String LIST_15 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitleForOneItem";
-    private static final String LIST_16 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithAccent";
+    protected static final String LIST_1 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
+    protected static final String LIST_2 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
+    protected static final String LIST_3 = TEST_PAGE_CONTENT_ROOT + "/childrenListType";
+    protected static final String LIST_4 = TEST_PAGE_CONTENT_ROOT + "/childrenListTypeWithDepth";
+    protected static final String LIST_5 = TEST_PAGE_CONTENT_ROOT + "/tagsListType";
+    protected static final String LIST_6 = TEST_PAGE_CONTENT_ROOT + "/searchListType";
+    protected static final String LIST_7 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListType";
+    protected static final String LIST_8 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleDescListType";
+    protected static final String LIST_9 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateListType";
+    protected static final String LIST_10 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateDescListType";
+    protected static final String LIST_11 = TEST_PAGE_CONTENT_ROOT + "/staticMaxItemsListType";
+    protected static final String LIST_12 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateListTypeWithNoModificationDate";
+    protected static final String LIST_13 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByModificationDateListTypeWithNoModificationDateForOneItem";
+    protected static final String LIST_14 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitle";
+    protected static final String LIST_15 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitleForOneItem";
+    protected static final String LIST_16 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithAccent";
 
-    public final AemContext context = CoreComponentTestContext.newAemContext();
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
+
+    protected String testBase;
 
     @BeforeEach
     public void setUp() {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_TAGS_JSON, CONTENT_ROOT + "/cq:tags/list");
+        testBase = TEST_BASE;
+        internalSetup();
+    }
+
+    protected void internalSetup() {
+        context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(testBase + CoreComponentTestContext.TEST_TAGS_JSON, CONTENT_ROOT + "/cq:tags/list");
     }
 
     @Test
-    public void testProperties() {
+    protected void testProperties() {
         List list = getListUnderTest(LIST_1);
         assertTrue(list.showDescription());
         assertTrue(list.showModificationDate());
         assertTrue(list.linkItems());
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_1));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_1));
     }
 
     @Test
-    public void testStaticListType() {
+    protected void testStaticListType() {
         List list = getListUnderTest(LIST_2);
         checkListConsistencyByPaths(list, new String[]{
             "/content/list/pages/page_1",
             "/content/list/pages/page_2",
         });
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_2));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_2));
     }
 
     @Test
-    public void testChildrenListType() {
+    protected void testChildrenListType() {
         List list = getListUnderTest(LIST_3);
         checkListConsistencyByPaths(list, new String[]{
             "/content/list/pages/page_1/page_1_1",
             "/content/list/pages/page_1/page_1_2",
             "/content/list/pages/page_1/page_1_3",
         });
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_3));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_3));
     }
 
     @Test
-    public void testChildrenListTypeWithDepth() {
+    protected void testChildrenListTypeWithDepth() {
         List list = getListUnderTest(LIST_4);
         checkListConsistencyByPaths(list, new String[]{
             "/content/list/pages/page_1/page_1_1",
@@ -114,18 +120,18 @@ public class ListImplTest {
             "/content/list/pages/page_1/page_1_3",
 
         });
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_4));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_4));
     }
 
     @Test
-    public void testTagsListType() {
+    protected void testTagsListType() {
         List list = getListUnderTest(LIST_5);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1/page_1_3"});
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_5));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_5));
     }
 
     @Test
-    public void testSearchListType() throws Exception {
+    protected void testSearchListType() throws Exception {
         Session mockSession = mock(Session.class);
         SimpleSearch mockSimpleSearch = mock(SimpleSearch.class);
         context.registerAdapter(ResourceResolver.class, Session.class, mockSession);
@@ -140,64 +146,64 @@ public class ListImplTest {
 
         List list = getListUnderTest(LIST_6);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1"});
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_6));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_6));
     }
 
     @Test
-    public void testOrderBy() {
+    protected void testOrderBy() {
         List list = getListUnderTest(LIST_7);
         checkListConsistencyByTitle(list, new String[]{"Page 1", "Page 2"});
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_7));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_7));
     }
 
     @Test
-    public void testOrderDescBy() {
+    protected void testOrderDescBy() {
         List list = getListUnderTest(LIST_8);
         checkListConsistencyByTitle(list, new String[]{"Page 2", "Page 1"});
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_8));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_8));
     }
 
     @Test
-    public void testOrderByModificationDate() {
+    protected void testOrderByModificationDate() {
         List list = getListUnderTest(LIST_9);
         checkListConsistencyByTitle(list, new String[]{"Page 2", "Page 1"});
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_9));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_9));
     }
 
     @Test
-    public void testOrderByModificationDateDesc() {
+    protected void testOrderByModificationDateDesc() {
         List list = getListUnderTest(LIST_10);
         checkListConsistencyByTitle(list, new String[]{"Page 1", "Page 2"});
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_10));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_10));
     }
 
     @Test
-    public void testMaxItems() {
+    protected void testMaxItems() {
         List list = getListUnderTest(LIST_11);
         checkListConsistencyByTitle(list, new String[]{"Page 1"});
-        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_11));
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_11));
     }
 
     @Test
-    public void testOrderByModificationDateWithNoModificationDate() {
+    protected void testOrderByModificationDateWithNoModificationDate() {
         List list = getListUnderTest(LIST_12);
         checkListConsistencyByTitle(list, new String[]{"Page 1.1", "Page 1.2"});
     }
 
     @Test
-    public void testOrderByModificationDateWithNoModificationDateForOneItem() {
+    protected void testOrderByModificationDateWithNoModificationDateForOneItem() {
         List list = getListUnderTest(LIST_13);
         checkListConsistencyByTitle(list, new String[]{"Page 2", "Page 1", "Page 1.2"});
     }
 
     @Test
-    public void testOrderByTitleWithNoTitle() {
+    protected void testOrderByTitleWithNoTitle() {
         List list = getListUnderTest(LIST_14);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_3", "/content/list/pages/page_4"});
     }
 
     @Test
-    public void testOrderByTitleWithNoTitleForOneItem() {
+    protected void testOrderByTitleWithNoTitleForOneItem() {
         List list = getListUnderTest(LIST_15);
         list.getItems().stream().map(PageListItemImpl::getTitle).forEach(System.out::println);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_4", "/content/list/pages/page_1", "/content/list/pages/page_2" });
@@ -209,7 +215,7 @@ public class ListImplTest {
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1", "/content/list/pages/page_5", "/content/list/pages/page_2"});
     }
 
-    private List getListUnderTest(String resourcePath) {
+    protected List getListUnderTest(String resourcePath) {
         Utils.enableDataLayer(context, true);
         Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
@@ -219,11 +225,11 @@ public class ListImplTest {
         return context.request().adaptTo(List.class);
     }
 
-    private void checkListConsistencyByTitle(List list, String[] expectedPageTitles) {
+    protected void checkListConsistencyByTitle(List list, String[] expectedPageTitles) {
         assertArrayEquals(expectedPageTitles, list.getItems().stream().map(Page::getTitle).toArray());
     }
 
-    private void checkListConsistencyByPaths(List list, String[] expectedPagePaths) {
+    protected void checkListConsistencyByPaths(List list, String[] expectedPagePaths) {
         assertArrayEquals(expectedPagePaths, list.getItems().stream().map(Page::getPath).toArray());
     }
 }
