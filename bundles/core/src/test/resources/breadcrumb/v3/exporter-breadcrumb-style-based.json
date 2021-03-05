@@ -19,8 +19,8 @@
   "dataLayer": {
     "breadcrumb-b54972e1d3": {
       "repo:modifyDate": "2016-01-11T15:21:45Z",
-      "@type": "core/wcm/components/breadcrumb"
+      "@type": "core/wcm/components/breadcrumb/v3/breadcrumb"
     }
   },
-  ":type": "core/wcm/components/breadcrumb"
+  ":type": "core/wcm/components/breadcrumb/v3/breadcrumb"
 }

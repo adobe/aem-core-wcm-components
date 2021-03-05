@@ -36,7 +36,7 @@ public class BreadcrumbImplTest {
     private static final String TEST_BASE = "/breadcrumb";
     private static final String CURRENT_PAGE = "/content/breadcrumb/women/shirts/devi-sleeveless-shirt";
     private static final String CURRENT_PAGE_2 = "/content/breadcrumb/women/shirts2/devi-sleeveless-shirt";
-    protected static final String BREADCRUMB_1 = CURRENT_PAGE + "/jcr:content/header/breadcrumb";
+    private static final String BREADCRUMB_1 = CURRENT_PAGE + "/jcr:content/header/breadcrumb";
     private static final String BREADCRUMB_2 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-show-hidden";
     private static final String BREADCRUMB_3 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-hide-current";
     private static final String BREADCRUMB_4 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-start-level";
