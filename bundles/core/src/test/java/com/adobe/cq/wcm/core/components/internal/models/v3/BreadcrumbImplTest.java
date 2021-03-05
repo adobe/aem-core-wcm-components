@@ -37,13 +37,6 @@ class BreadcrumbImplTest extends com.adobe.cq.wcm.core.components.internal.model
     }
 
     @Test
-    protected void testBreadcrumbItems() {
-        Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_1);
-        checkBreadcrumbConsistency(breadcrumb, new String[]{"Women", "Devi Sleeveless Shirt"});
-        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(testBase, BREADCRUMB_1));
-    }
-
-    @Test
     @Override
     protected void testV2JSONExporter() {
         // ignore for v3
