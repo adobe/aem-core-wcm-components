@@ -15,10 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
-
-import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code PdfViewer} component model.
@@ -153,7 +150,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default String getType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -163,7 +160,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default String getDocumentPath() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -173,7 +170,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default String getDocumentFileName() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -183,7 +180,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default String getClientId() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -193,7 +190,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default String getReportSuiteId() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -203,7 +200,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default String getDefaultViewMode() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -213,7 +210,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default boolean isBorderless() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -223,7 +220,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default boolean isShowAnnotationTools() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -233,7 +230,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default boolean isShowLeftHandPanel() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -243,7 +240,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default boolean isShowFullScreen() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -253,7 +250,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default boolean isShowDownloadPdf() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -263,7 +260,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default boolean isShowPrintPdf() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -273,7 +270,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default boolean isShowPageControls() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -283,7 +280,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default boolean isDockPageControls() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -293,7 +290,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default String getViewerConfigJson() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -303,16 +300,7 @@ public interface PdfViewer extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
     default String getContainerClass() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.13.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 }

@@ -57,7 +57,7 @@ public interface PWA {
      * @return whether PWA is enabled or not
      * @since com.adobe.cq.wcm.core.components.models 12.19.0
      */
-    default boolean isEnabled() { throw new UnsupportedOperationException("Not Implemented"); };
+    default boolean isEnabled() { return false; };
 
     /**
      * The theme color of the site sometimes used to color the address bar of the browser
@@ -65,7 +65,7 @@ public interface PWA {
      * @return A Hex String that represents the theme color for this site
      * @since com.adobe.cq.wcm.core.components.models 12.19.0
      */
-    default String getThemeColor() { throw new UnsupportedOperationException("Not Implemented"); };
+    default String getThemeColor() { return null; };
 
     /**
      * The path to the icon of this PWA
@@ -73,7 +73,7 @@ public interface PWA {
      * @return A String that represents the relative path to the icon of this site
      * @since com.adobe.cq.wcm.core.components.models 12.19.0
      */
-    default String getIconPath() { throw new UnsupportedOperationException("Not Implemented"); };
+    default String getIconPath() { return null; };
 
     /**
      * The relative path to the web manifest
@@ -81,7 +81,7 @@ public interface PWA {
      * @return A String that represents the relative path to the web manifest of this site
      * @since com.adobe.cq.wcm.core.components.models 12.19.0
      */
-    default String getManifestPath() { throw new UnsupportedOperationException("Not Implemented"); }
+    default String getManifestPath() { return null; }
 
     /**
      * The relative path to the service worker
@@ -89,6 +89,6 @@ public interface PWA {
      * @return A String that represents the path to the service worker used by this site
      * @since com.adobe.cq.wcm.core.components.models 12.19.0
      */
-    default String getServiceWorkerPath() { throw new UnsupportedOperationException("Not Implemented"); }
+    default String getServiceWorkerPath() { return null; }
 
 }

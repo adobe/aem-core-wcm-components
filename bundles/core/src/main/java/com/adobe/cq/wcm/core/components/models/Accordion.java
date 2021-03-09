@@ -40,7 +40,7 @@ public interface Accordion extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean isSingleExpansion() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -50,7 +50,7 @@ public interface Accordion extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String[] getExpandedItems() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -60,6 +60,6 @@ public interface Accordion extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getHeadingElement() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }

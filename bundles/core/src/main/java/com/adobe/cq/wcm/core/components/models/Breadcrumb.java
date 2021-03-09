@@ -17,10 +17,7 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
-
-import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code Breadcrumb} Sling Model used for the {@code /apps/core/wcm/components/breadcrumb} component.
@@ -60,16 +57,7 @@ public interface Breadcrumb extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default Collection<NavigationItem> getItems() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 }

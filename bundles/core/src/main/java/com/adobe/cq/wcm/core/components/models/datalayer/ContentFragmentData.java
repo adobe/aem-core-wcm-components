@@ -28,7 +28,7 @@ public interface ContentFragmentData extends ComponentData {
      */
     @JsonProperty("elements")
     default ElementData[] getElementsData() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     interface ElementData {
@@ -42,7 +42,7 @@ public interface ContentFragmentData extends ComponentData {
          */
         @JsonProperty("xdm:title")
         default String getTitle() {
-            throw new UnsupportedOperationException();
+            return null;
         }
 
         /**
@@ -54,7 +54,7 @@ public interface ContentFragmentData extends ComponentData {
          */
         @JsonProperty("xdm:text")
         default String getText() {
-            throw new UnsupportedOperationException();
+            return null;
         }
     }
 }

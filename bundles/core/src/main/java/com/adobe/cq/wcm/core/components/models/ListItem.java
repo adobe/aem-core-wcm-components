@@ -36,7 +36,7 @@ public interface ListItem extends Component {
      */
     @Nullable
     default String getURL() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -47,7 +47,7 @@ public interface ListItem extends Component {
      */
     @Nullable
     default String getTitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -58,7 +58,7 @@ public interface ListItem extends Component {
      */
     @Nullable
     default String getDescription() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -69,7 +69,7 @@ public interface ListItem extends Component {
      */
     @Nullable
     default Calendar getLastModified() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -80,7 +80,7 @@ public interface ListItem extends Component {
      */
     @Nullable
     default String getPath() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -91,6 +91,6 @@ public interface ListItem extends Component {
      */
     @Nullable
     default String getName() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }
