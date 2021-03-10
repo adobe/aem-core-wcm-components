@@ -95,6 +95,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     }
 
     @Override
+    @JsonIgnore
     public @NotNull Link getLink() {
         return link;
     }
