@@ -28,7 +28,6 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -52,7 +51,6 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
         return new Action(actionRes, getId(), component);
     }
 
-    @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
     public class Action extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl.Action {
 
         public Action(@NotNull final Resource actionRes, final String parentId, Component component) {
@@ -60,6 +58,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
         }
 
         @Override
+        @JsonIgnore(false)
         public @NotNull Link getLink() {
             return ctaLink;
         }
