@@ -58,6 +58,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -443,7 +444,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         /**
          * The CTA link.
          */
-        protected final Link ctaLink;
+        protected final Link<Page> ctaLink;
 
         /**
          * The ID of the teaser that contains this action.
@@ -473,6 +474,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
 
+        @Override
+        @JsonIgnore
+        public @NotNull Link getLink() {
+            return ctaLink;
+        }
+
         /**
          * Get the referenced page.
          *
@@ -480,7 +487,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          */
         @NotNull
         protected Optional<Page> getCtaPage() {
-            return Optional.ofNullable(ctaLink.getTargetPage());
+            return Optional.ofNullable(ctaLink.getReference());
         }
 
         @Nullable
@@ -492,7 +499,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Nullable
         @Override
         public String getPath() {
-            Page page = ctaLink.getTargetPage();
+            Page page = ctaLink.getReference();
             if (page != null) {
                 return page.getPath();
             }
