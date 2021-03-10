@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -32,11 +31,11 @@ import com.google.common.collect.ImmutableMap;
  * Wraps link information to be used in models.
  */
 @JsonInclude(Include.NON_NULL)
-public final class LinkImpl implements Link {
+public final class LinkImpl<T> implements Link<T> {
 
     private final String url;
     private final Map<String, String> htmlAttributes;
-    private final Page targetPage;
+    private final T reference;
 
     /**
      * @param url Link URL
@@ -56,12 +55,12 @@ public final class LinkImpl implements Link {
     /**
      * @param url Link URL
      * @param target Target
-     * @param targetPage Target page
+     * @param reference Referenced WCM/DAM entity
      */
-    LinkImpl(String url, String target, Page targetPage) {
+    LinkImpl(String url, String target, T reference) {
         this.url = url;
         this.htmlAttributes = buildHtmlAttributes(url, target);
-        this.targetPage = targetPage;
+        this.reference = reference;
     }
 
     /**
@@ -96,14 +95,14 @@ public final class LinkImpl implements Link {
     }
 
     /**
-     * Getter for link target page, if existing.
+     * Getter for link reference, if existing.
      *
-     * @return Link target page or {@code null} if link does not point to a page
+     * @return Link referenced WCM/DAM entity or {@code null} if link does not point to one
      */
     @Override
-    @JsonIgnore  // exclude HTML-specific target attribute in JSON
-    public @Nullable Page getTargetPage() {
-        return targetPage;
+    @JsonIgnore  // exclude referenced object in jSON
+    public @Nullable T getReference() {
+        return reference;
     }
 
     /**

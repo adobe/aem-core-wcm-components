@@ -15,9 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_URL;
-
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +22,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +32,9 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableSet;
+
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 
 /**
  * Simple implementation for resolving and validating links from model's resources.
@@ -59,6 +60,7 @@ public class LinkHandler {
      * Reference to {@link PageManager}
      */
     @ScriptVariable
+    @Optional
     private PageManager pageManager;
     
     /**
@@ -91,12 +93,12 @@ public class LinkHandler {
      *
      * @return Link may be invalid, but is never null
      */
-    public @NotNull Link getLink(@Nullable Page page) {
+    public @NotNull Link<Page> getLink(@Nullable Page page) {
         if (page == null) {
             return getInvalid();
         }
         String linkURL = getPageLinkURL(page);
-        return new LinkImpl(linkURL, null, page);
+        return new LinkImpl<>(linkURL, null, page);
     }
 
     /**
@@ -106,11 +108,11 @@ public class LinkHandler {
      *
      * @return Link may be invalid, but is never null
      */
-    public @NotNull Link getLink(@Nullable String linkURL, @Nullable String target) {
+    public @NotNull Link<Page> getLink(@Nullable String linkURL, @Nullable String target) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        Page targetPage = pageManager.getPage(linkURL);
-        return new LinkImpl(resolvedLinkURL, resolvedLinkTarget, targetPage);
+        Page targetPage = getPage(linkURL);
+        return new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, targetPage);
     }
 
     /**
@@ -161,7 +163,7 @@ public class LinkHandler {
      */
     @NotNull
     private String getLinkURL(@NotNull String path) {
-        Page page = pageManager.getPage(path);
+        Page page = getPage(path);
         if (page != null) {
             return getPageLinkURL(page);
         }
@@ -170,7 +172,7 @@ public class LinkHandler {
 
     /**
      * Given a {@link Page}, this method returns the correct URL, taking into account that the provided {@code page} might provide a
-     * vanity URL.
+     * vanity URL or can be mapped.
      * @param page the page
      *
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
@@ -178,12 +180,30 @@ public class LinkHandler {
     @NotNull
     private String getPageLinkURL(@NotNull Page page) {
         String vanityURL = page.getVanityUrl();
+        String pageLinkURL;
         if (StringUtils.isEmpty(vanityURL)) {
-            return StringUtils.defaultString(request.getContextPath()) + page.getPath() + ".html";
+            pageLinkURL = page.getPath() + ".html";
+        } else {
+            pageLinkURL = vanityURL;
         }
-        else {
-            return StringUtils.defaultString(request.getContextPath()) + vanityURL;
+        return StringUtils.defaultString(request.getResourceResolver().map(request, pageLinkURL));
+    }
+
+    /**
+     * Given a path, tries to resolve to the corresponding page.
+     *
+     * @param path The path
+     * @return The {@link Page} corresponding to the path
+     */
+    @Nullable
+    private Page getPage(@Nullable String path) {
+        if (pageManager == null) {
+            pageManager = request.getResourceResolver().adaptTo(PageManager.class);
         }
+        if (pageManager == null) {
+            return null;
+        }
+        return pageManager.getPage(path);
     }
 
 }
