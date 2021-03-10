@@ -177,12 +177,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 .orElse(null);
     }
 
-    private void setRedirect() {
-        if (StringUtils.isNotEmpty(redirectTargetValue)) {
-            redirectTarget = newRedirectItem(redirectTargetValue, request, linkHandler);
-        }
-    }
-
     protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
         return new RedirectItemImpl(redirectTarget, request, linkHandler);
     }
@@ -271,7 +265,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public NavigationItem getRedirectTarget() {
         if (redirectTarget == null && StringUtils.isNotEmpty(redirectTargetValue)) {
-            redirectTarget = new RedirectItemImpl(redirectTargetValue, request, linkHandler);
+            redirectTarget = newRedirectItem(redirectTargetValue, request, linkHandler);
         }
         return redirectTarget;
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2018 Adobe
+  ~ Copyright 2021 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,19 +27,13 @@
         <relativePath>../../parent/pom.xml</relativePath>
     </parent>
 
-    <!-- ====================================================================== -->
-    <!-- P R O J E C T  D E S C R I P T I O N                                   -->
-    <!-- ====================================================================== -->
-    <artifactId>core.wcm.components.examples.ui.apps</artifactId>
+    <artifactId>core.wcm.components.examples.all</artifactId>
     <version>2.15.1-SNAPSHOT</version>
     <packaging>content-package</packaging>
-    <name>Adobe Experience Manager Core WCM Components Examples Application Package</name>
 
-    <!-- ====================================================================== -->
-    <!-- B U I L D   D E F I N I T I O N                                        -->
-    <!-- ====================================================================== -->
+    <name>Adobe Experience Manager Core WCM Components Examples Aggregator Package</name>
+
     <build>
-        <sourceDirectory>src/content/jcr_root</sourceDirectory>
         <resources>
             <!-- define the resources that will go into the package -->
             <resource>
@@ -57,63 +51,34 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <packageType>application</packageType>
-                    <dependencies>
-                        <dependency>
+                    <showImportPackageReport>false</showImportPackageReport>
+                    <properties>
+                        <cloudManagerTarget>none</cloudManagerTarget>
+                    </properties>
+                    <packageType>container</packageType>
+                    <embeddedTarget>/apps/core-components-examples/install</embeddedTarget>
+                    <subPackages>
+                        <subPackage>
                             <groupId>com.adobe.cq</groupId>
-                            <artifactId>core.wcm.components.content</artifactId>
-                            <version>2.14.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>com.adobe.cq</groupId>
-                            <artifactId>core.wcm.components.extensions.amp.content</artifactId>
-                            <version>2.14.0</version>
-                        </dependency>
-                        <dependency>
+                            <artifactId>core.wcm.components.examples.ui.apps</artifactId>
+                            <filter>true</filter>
+                        </subPackage>
+                        <subPackage>
                             <groupId>com.adobe.cq</groupId>
                             <artifactId>core.wcm.components.examples.ui.config</artifactId>
-                        </dependency>
-                    </dependencies>
+                            <filter>true</filter>
+                        </subPackage>
+                        <subPackage>
+                            <groupId>com.adobe.cq</groupId>
+                            <artifactId>core.wcm.components.examples.ui.content</artifactId>
+                            <filter>true</filter>
+                        </subPackage>
+                    </subPackages>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>com.day.jcr.vault</groupId>
                 <artifactId>content-package-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.sling</groupId>
-                <artifactId>htl-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>validate-htl-scripts</id>
-                        <goals>
-                            <goal>validate</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <generateJavaClasses>true</generateJavaClasses>
-                            <generatedJavaClassesPrefix>org.apache.sling.scripting.sightly</generatedJavaClassesPrefix>
-                            <allowedExpressionOptions>
-                                <allowedExpressionOption>cssClassName</allowedExpressionOption>
-                                <allowedExpressionOption>decoration</allowedExpressionOption>
-                                <allowedExpressionOption>decorationTagName</allowedExpressionOption>
-                                <allowedExpressionOption>wcmmode</allowedExpressionOption>
-                            </allowedExpressionOptions>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.rat</groupId>
-                <artifactId>apache-rat-plugin</artifactId>
-                <configuration>
-                    <excludes combine.children="append">
-                        <!-- Ignore files -->
-                        <exclude>**/*.editorconfig</exclude>
-                        <exclude>**/vendor/**/*</exclude>
-                        <exclude>**/renditions/*</exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -123,7 +88,7 @@
     <!-- ====================================================================== -->
     <profiles>
         <profile>
-            <id>autoInstallPackage</id>
+            <id>autoInstallSinglePackage</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -141,6 +106,7 @@
                                 <configuration>
                                     <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                                     <failOnError>true</failOnError>
+                                    <packageFile>${contentPackageFile}</packageFile>
                                 </configuration>
                             </execution>
                         </executions>
@@ -149,7 +115,7 @@
             </build>
         </profile>
         <profile>
-            <id>autoInstallPackagePublish</id>
+            <id>autoInstallSinglePackagePublish</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -167,6 +133,7 @@
                                 <configuration>
                                     <targetURL>http://${aem.publish.host}:${aem.publish.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                                     <failOnError>true</failOnError>
+                                    <packageFile>${contentPackageFile}</packageFile>
                                 </configuration>
                             </execution>
                         </executions>
@@ -176,69 +143,24 @@
         </profile>
     </profiles>
 
-    <!-- ====================================================================== -->
-    <!-- D E P E N D E N C I E S                                                -->
-    <!-- ====================================================================== -->
     <dependencies>
         <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.framework</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- HTL dependencies needed for the HTL Maven Plugin source code generation -->
-        <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.scripting.sightly.compiler</artifactId>
-            <version>1.2.4-1.4.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.scripting.sightly.runtime</artifactId>
-            <version>1.2.0-1.4.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- AEM APIs -->
-        <dependency>
-            <groupId>com.adobe.aem</groupId>
-            <artifactId>uber-jar</artifactId>
-            <classifier>apis</classifier>
-            <scope>provided</scope>
-        </dependency>
-        <!-- AEM Sites Core Components-->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.core</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.content</artifactId>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.examples.ui.apps</artifactId>
             <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- AEM Core Components AMP Extension -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.extensions.amp</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.extensions.amp.content</artifactId>
-            <type>zip</type>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--Examples ui.config -->
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.examples.ui.config</artifactId>
+            <type>zip</type>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.examples.ui.content</artifactId>
             <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>

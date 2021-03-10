@@ -56,8 +56,7 @@ public final class ImageAreaImpl implements ImageArea {
      * @param shape The shape of the area.
      * @param coordinates The coordinates of the area.
      * @param relativeCoordinates The relative unit representation of the {@code coords}.
-     * @param href The image area anchor href.
-     * @param target The image area anchor target.
+     * @param link The area link
      * @param alt The image area anchor alt text.
      */
     public ImageAreaImpl(final String shape,
