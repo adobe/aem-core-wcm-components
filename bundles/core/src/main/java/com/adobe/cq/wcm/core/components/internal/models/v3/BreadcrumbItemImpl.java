@@ -22,11 +22,13 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v2.NavigationItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(value = {"page", "children", "level", "description", "lastModified",PROPERTY_PATH})
@@ -37,4 +39,9 @@ public class BreadcrumbItemImpl extends NavigationItemImpl implements Navigation
         super(page, active, linkHandler, level, children, parentId, isShadowingDisabled, component);
     }
 
+    @Override
+    @JsonIgnore(false)
+    public @NotNull Link getLink() {
+        return super.getLink();
+    }
 }
