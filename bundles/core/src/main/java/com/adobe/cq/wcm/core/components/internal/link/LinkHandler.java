@@ -15,9 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_URL;
-
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +32,9 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableSet;
+
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 
 /**
  * Simple implementation for resolving and validating links from model's resources.
