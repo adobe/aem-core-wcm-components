@@ -30,24 +30,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
-public class ListImplTest {
+class ListImplTest {
 
-    private static final String TEST_BASE = "/list/v2";
-    private static final String CONTENT_ROOT = "/content";
-    private static final String CURRENT_PAGE = "/content/list";
+    protected static final String TEST_BASE = "/list/v2";
     private static final String CONTEXT_PATH = "/context";
-    private static final String LIST_1 = CURRENT_PAGE + "/jcr:content/root/staticListType";
+    private static final String LIST_1 = "/content/list/listTypes/staticListType";
 
-    public final AemContext context = CoreComponentTestContext.newAemContext();
+    final AemContext context = CoreComponentTestContext.newAemContext();
 
     @BeforeEach
-    public void setUp() {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
-        context.load().json("/list" + CoreComponentTestContext.TEST_TAGS_JSON, CONTENT_ROOT + "/cq:tags/list");
+    void setUp() throws Exception {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content/list");
+        context.load().json("/list/test-etc.json", "/etc/tags/list");
     }
 
     @Test
-    protected void testProperties() {
+    void testProperties() throws Exception {
         List list = getListUnderTest(LIST_1);
         assertTrue(list.showDescription());
         assertTrue(list.showModificationDate());
@@ -58,8 +56,8 @@ public class ListImplTest {
     }
 
     private List getListUnderTest(String resourcePath) {
-        Utils.enableDataLayer(context, true);
         Resource resource = context.resourceResolver().getResource(resourcePath);
+        Utils.enableDataLayer(context, true);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
         }
