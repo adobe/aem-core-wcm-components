@@ -1,0 +1,10 @@
+{
+  "id": "navigation-64077eb607",
+  "items": [],
+  "dataLayer": {
+    "navigation-64077eb607": {
+      "@type": "core/wcm/components/navigation/v2/navigation"
+    }
+  },
+  ":type": "core/wcm/components/navigation/v2/navigation"
+}
