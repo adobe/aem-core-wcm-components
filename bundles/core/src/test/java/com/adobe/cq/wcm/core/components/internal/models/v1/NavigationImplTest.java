@@ -343,7 +343,7 @@ public class NavigationImplTest {
             {"/content/navigation-redirect-chain", 1, true, "/content/navigation-redirect-chain.html"},
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation18"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation18"));
     }
     /**
      * Test to verify #945: if shadowing is disabled Redirecting pages should be displayed instead of redirect targets
@@ -471,7 +471,7 @@ public class NavigationImplTest {
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath("/core");
         Component component = mock(Component.class);
-        when(component.getResourceType()).thenReturn(resourceType);
+        when(component.getResourceType()).thenReturn(NavigationImpl.RESOURCE_TYPE);
         SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);

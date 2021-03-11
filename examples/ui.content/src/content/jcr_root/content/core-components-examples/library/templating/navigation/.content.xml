@@ -24,7 +24,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Navigation&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Navigation&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
@@ -49,7 +49,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/navigation/v2/navigation"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
@@ -113,7 +113,7 @@
                             jcr:lastModified="{Date}2019-05-21T18:59:35.605+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/navigation/v2/navigation"
+                            sling:resourceType="core/wcm/components/navigation/v1/navigation"
                             collectAllPages="true"
                             hideCurrent="false"
                             navigationRoot="/content/core-components-examples"
@@ -176,7 +176,7 @@
                             jcr:lastModified="{Date}2019-05-21T19:07:03.606+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/navigation/v2/navigation"
+                            sling:resourceType="core/wcm/components/navigation/v1/navigation"
                             collectAllPages="true"
                             hideCurrent="false"
                             navigationRoot="/content/core-components-examples"
@@ -238,7 +238,7 @@
                             jcr:lastModified="{Date}2019-11-11T15:35:02.543+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/navigation/v2/navigation"
+                            sling:resourceType="core/wcm/components/navigation/v1/navigation"
                             collectAllPages="true"
                             navigationRoot="/content/core-components-examples"
                             structureStart="2"/>
@@ -297,7 +297,7 @@
                             jcr:lastModified="{Date}2019-05-21T19:28:11.709+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/navigation/v2/navigation"
+                            sling:resourceType="core/wcm/components/navigation/v1/navigation"
                             collectAllPages="false"
                             hideCurrent="false"
                             navigationRoot="/content/core-components-examples"
