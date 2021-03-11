@@ -1,9 +1,9 @@
 {
-    "id": "list-20f143d89d",
+    "id": "list-b2e295b751",
     "dateFormatString": "yyyy-MM-dd",
     "items": [
         {
-            "id": "list-20f143d89d-item-c1a450dfb3",
+            "id": "list-b2e295b751-item-c1a450dfb3",
             "path": "/content/list/pages/page_1",
             "link": {
                 "url": "/content/list/pages/page_1.html",
@@ -12,18 +12,18 @@
             "title": "Page 1",
             "lastModified": 1474672365000,
             "dataLayer": {
-                "list-20f143d89d-item-c1a450dfb3": {
-                    "type": "cq:PageContent",
-                    "title": "Page 1",
-                    "linkUrl": "/content/list/pages/page_1.html"
+                "list-b2e295b751-item-c1a450dfb3": {
+                    "@type": "cq:PageContent",
+                    "dc:title": "Page 1",
+                    "xdm:linkURL": "/content/list/pages/page_1.html"
                 }
             },
             ":type": "cq:PageContent"
         }
     ],
     "dataLayer": {
-        "list-20f143d89d": {
-            "type": "core/wcm/components/list/v3/list"
+        "list-b2e295b751": {
+            "@type": "core/wcm/components/list/v3/list"
         }
     },
     "showDescription": false,

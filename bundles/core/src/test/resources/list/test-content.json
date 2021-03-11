@@ -4,7 +4,7 @@
         "jcr:content": {
             "jcr:primaryType": "cq:PageContent",
             "jcr:title": "List Page",
-            "root"              : {
+            "root": {
                 "jcr:primaryType": "nt:unstructured",
                 "sling:resourceType": "wcm/foundation/components/responsivegrid",
                 "illegalListType": {

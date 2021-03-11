@@ -34,7 +34,7 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
 
     @BeforeEach
     @Override
-    protected void setUp() {
+    public void setUp() {
         testBase = TEST_BASE;
         internalSetup();
     }

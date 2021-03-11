@@ -54,7 +54,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @JsonProperty("items")
     public Collection<ListItem> getListItems() {
         if (this.listItems == null) {
-            this.listItems = super.getPages().stream()
+            this.listItems = super.getItems().stream()
                 .filter(Objects::nonNull)
                 .map(page -> newPageListItem(linkHandler, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, component))
                 .collect(Collectors.toList());

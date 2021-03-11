@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,6 +32,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     }
 
     @Override
+    @JsonIgnore(false)
     public @NotNull Link getLink() {
         return link;
     }
@@ -41,4 +44,12 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
         return super.getURL();
     }
 
+    @Override
+    @NotNull
+    protected PageData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asPage()
+                .withTitle(this::getTitle)
+                .withLinkUrl(() -> link == null ? null : link.getURL())
+                .build();
+    }
 }

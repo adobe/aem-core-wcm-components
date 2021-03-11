@@ -1,9 +1,9 @@
 {
-    "id": "list-3a0d6ddd86",
+    "id": "list-f56abdba21",
     "dateFormatString": "yyyy-MM-dd",
     "items": [
         {
-            "id": "list-3a0d6ddd86-item-70236eb2fc",
+            "id": "list-f56abdba21-item-70236eb2fc",
             "path": "/content/list/pages/page_1/page_1_1",
             "link": {
                 "url": "/content/list/pages/page_1/page_1_1.html",
@@ -11,16 +11,16 @@
             },
             "title": "Page 1.1",
             "dataLayer": {
-                "list-3a0d6ddd86-item-70236eb2fc": {
-                    "type": "cq:PageContent",
-                    "title": "Page 1.1",
-                    "linkUrl": "/content/list/pages/page_1/page_1_1.html"
+                "list-f56abdba21-item-70236eb2fc": {
+                    "@type": "cq:PageContent",
+                    "dc:title": "Page 1.1",
+                    "xdm:linkURL": "/content/list/pages/page_1/page_1_1.html"
                 }
             },
             ":type": "cq:PageContent"
         },
         {
-            "id": "list-3a0d6ddd86-item-8f6d327bc3",
+            "id": "list-f56abdba21-item-8f6d327bc3",
             "path": "/content/list/pages/page_1/page_1_2",
             "link": {
                 "url": "/content/list/pages/page_1/page_1_2.html",
@@ -28,16 +28,16 @@
             },
             "title": "Page 1.2",
             "dataLayer": {
-                "list-3a0d6ddd86-item-8f6d327bc3": {
-                    "type": "cq:PageContent",
-                    "title": "Page 1.2",
-                    "linkUrl": "/content/list/pages/page_1/page_1_2.html"
+                "list-f56abdba21-item-8f6d327bc3": {
+                    "@type": "cq:PageContent",
+                    "dc:title": "Page 1.2",
+                    "xdm:linkURL": "/content/list/pages/page_1/page_1_2.html"
                 }
             },
             ":type": "cq:PageContent"
         },
         {
-            "id": "list-3a0d6ddd86-item-d9d9688a00",
+            "id": "list-f56abdba21-item-d9d9688a00",
             "path": "/content/list/pages/page_1/page_1_3",
             "link": {
                 "url": "/content/list/pages/page_1/page_1_3.html",
@@ -45,18 +45,18 @@
             },
             "title": "Page 1.3",
             "dataLayer": {
-                "list-3a0d6ddd86-item-d9d9688a00": {
-                    "type": "cq:PageContent",
-                    "title": "Page 1.3",
-                    "linkUrl": "/content/list/pages/page_1/page_1_3.html"
+                "list-f56abdba21-item-d9d9688a00": {
+                    "@type": "cq:PageContent",
+                    "dc:title": "Page 1.3",
+                    "xdm:linkURL": "/content/list/pages/page_1/page_1_3.html"
                 }
             },
             ":type": "cq:PageContent"
         }
     ],
     "dataLayer": {
-        "list-3a0d6ddd86": {
-            "type": "core/wcm/components/list/v3/list"
+        "list-f56abdba21": {
+            "@type": "core/wcm/components/list/v3/list"
         }
     },
     "showDescription": false,
