@@ -31,8 +31,8 @@ import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_URL;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
