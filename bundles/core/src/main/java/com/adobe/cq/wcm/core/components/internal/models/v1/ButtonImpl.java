@@ -39,7 +39,6 @@ import com.adobe.cq.wcm.core.components.models.Button;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
 @Model(
@@ -79,7 +78,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @Self
     private LinkHandler linkHandler;
-    protected Optional<Link<Page>> link;
+    protected Optional<Link> link;
 
     @PostConstruct
     private void initModel() {

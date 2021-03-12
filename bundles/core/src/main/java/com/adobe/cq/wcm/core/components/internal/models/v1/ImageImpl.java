@@ -116,7 +116,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @Self
     protected LinkHandler linkHandler;
-    protected Optional<Link<Page>> link;
+    protected Optional<Link> link;
 
     protected String src;
     protected String[] smartImages = new String[]{};

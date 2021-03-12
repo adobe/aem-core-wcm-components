@@ -84,7 +84,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
 
     @Self
     private LinkHandler linkHandler;
-    protected Optional<Link<Page>> link;
+    protected Optional<Link> link;
 
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Heading} object for the type of this title.

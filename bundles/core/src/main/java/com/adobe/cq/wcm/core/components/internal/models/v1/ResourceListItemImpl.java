@@ -26,7 +26,6 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
-    protected Optional<Link<Page>> link;
+    protected Optional<Link> link;
     /**
      * The title.
      */

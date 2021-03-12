@@ -206,7 +206,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Self
     private LinkHandler linkHandler;
-    protected Optional<Link<Page>> link;
+    protected Optional<Link> link;
 
     /**
      * Initialize the model.
@@ -467,7 +467,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             ctaResource = actionRes;
             ValueMap ctaProperties = actionRes.getValueMap();
             ctaTitle = ctaProperties.get(PN_ACTION_TEXT, String.class);
-            ctaLink = linkHandler.getLink(actionRes, PN_ACTION_LINK);
+            ctaLink = Optional.ofNullable(linkHandler.getLink(actionRes, PN_ACTION_LINK).orElse(null));
             if (component != null) {
                 this.dataLayerType = component.getResourceType() + "/" + CTA_ID_PREFIX;
             }

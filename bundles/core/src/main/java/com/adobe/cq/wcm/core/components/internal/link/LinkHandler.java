@@ -67,9 +67,9 @@ public class LinkHandler {
      * Resolves a link from the properties of the given resource.
      * @param resource Resource
      *
-     * @return Link may be invalid, but is never null
+     * @return {@link Optional} of  {@link Link}
      */
-    public Optional<Link<Page>> getLink(@NotNull Resource resource) {
+    public Optional<Link> getLink(@NotNull Resource resource) {
         return getLink(resource, PN_LINK_URL);
     }
 
@@ -78,20 +78,20 @@ public class LinkHandler {
      * @param resource Resource
      * @param linkURLPropertyName Property name to read link URL from.
      *
-     * @return Link may be invalid, but is never null
+     * @return {@link Optional} of  {@link Link}
      */
-    public Optional<Link<Page>> getLink(@NotNull Resource resource, String linkURLPropertyName) {
+    public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
         String linkTarget = props.get(PN_LINK_TARGET, String.class);
-        return getLink(linkURL, linkTarget);
+        return Optional.ofNullable(getLink(linkURL, linkTarget).orElse(null));
     }
 
     /**
      * Builds a link pointing to the given target page.
      * @param page Target page
      *
-     * @return Link may be invalid, but is never null
+     * @return {@link Optional} of  {@link Link<Page>}
      */
     public Optional<Link<Page>> getLink(@Nullable Page page) {
         if (page == null) {
@@ -106,7 +106,7 @@ public class LinkHandler {
      * @param linkURL Link URL
      * @param target Target
      *
-     * @return Link may be invalid, but is never null
+     * @return {@link Optional} of  {@link Link}
      */
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
