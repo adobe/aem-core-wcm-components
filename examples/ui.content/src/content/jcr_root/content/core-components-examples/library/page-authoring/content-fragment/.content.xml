@@ -76,7 +76,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_219202184
                     cq:styleIds="[1544759676459]"
@@ -86,7 +86,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h1"/>
                 <text_1424864129
                     jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
@@ -153,7 +153,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Variations"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1424864129_copy
                     jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
                     jcr:createdBy="admin"
@@ -215,7 +215,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Structured Content Fragment"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1263763772
                     jcr:created="{Date}2019-01-15T15:51:50.915+01:00"
                     jcr:createdBy="admin"
@@ -276,7 +276,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Elements"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1010010208
                     jcr:created="{Date}2019-01-15T15:56:22.761+01:00"
                     jcr:createdBy="admin"

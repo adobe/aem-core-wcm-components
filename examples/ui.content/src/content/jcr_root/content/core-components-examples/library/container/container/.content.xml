@@ -58,13 +58,13 @@
                     cq:styleIds="[1544759664489]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384499
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671813
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -94,7 +94,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
-                                sling:resourceType="core/wcm/components/title/v2/title"
+                                sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
                                 jcr:primaryType="nt:unstructured"
@@ -127,7 +127,7 @@
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Layout"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671822
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -203,7 +203,7 @@
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Background Color"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671855
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -232,7 +232,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
-                                sling:resourceType="core/wcm/components/title/v2/title"
+                                sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
                                 jcr:primaryType="nt:unstructured"
@@ -265,7 +265,7 @@
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Background Image"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671891
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -294,7 +294,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
-                                sling:resourceType="core/wcm/components/title/v2/title"
+                                sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
                                 jcr:primaryType="nt:unstructured"
@@ -327,7 +327,7 @@
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Nested"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671881
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -357,7 +357,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
-                                sling:resourceType="core/wcm/components/title/v2/title"
+                                sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
                                 jcr:primaryType="nt:unstructured"
@@ -376,7 +376,7 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     jcr:title="Hac Habitasse"
-                                    sling:resourceType="core/wcm/components/title/v2/title"
+                                    sling:resourceType="core-components-examples/components/title"
                                     type="h4"/>
                                 <text
                                     jcr:lastModified="{Date}2019-06-11T19:49:05.704+02:00"
@@ -404,7 +404,7 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     jcr:title="Libero Id Faucibus"
-                                    sling:resourceType="core/wcm/components/title/v2/title"
+                                    sling:resourceType="core-components-examples/components/title"
                                     type="h4"/>
                                 <text
                                     jcr:lastModified="{Date}2019-06-11T19:49:47.985+02:00"

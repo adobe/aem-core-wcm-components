@@ -373,6 +373,20 @@
     </core>
     <core-components-examples jcr:primaryType="nt:unstructured">
         <components jcr:primaryType="nt:unstructured">
+            <download jcr:primaryType="nt:unstructured">
+                <policy_1559906471859
+                    jcr:lastModified="{Date}2019-06-07T13:36:21.106+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="download"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    allowUpload="true"
+                    displayFilename="true"
+                    displayFormat="true"
+                    displaySize="true">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1559906471859>
+            </download>
             <page jcr:primaryType="nt:unstructured">
                 <policy_212634895490169
                     jcr:lastModified="{Date}2019-02-14T14:27:11.516+01:00"
@@ -427,20 +441,42 @@
                     </cq:styleGroups>
                 </policy_1547060084604>
             </teaser>
-            <download jcr:primaryType="nt:unstructured">
-                <policy_1559906471859
-                    jcr:lastModified="{Date}2019-06-07T13:36:21.106+02:00"
+            <title jcr:primaryType="nt:unstructured">
+                <policy_1544759499870
+                    jcr:lastModified="{Date}2018-12-20T19:58:20.742Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="download"
+                    jcr:title="Core Components Examples - Title"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    allowUpload="true"
-                    displayFilename="true"
-                    displayFormat="true"
-                    displaySize="true">
+                    allowedTypes="[h1,h2,h3,h4,h5,h6]"
+                    linkDisabled="false"
+                    type="h1">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
-                </policy_1559906471859>
-            </download>
+                    <cq:styleGroups jcr:primaryType="nt:unstructured">
+                        <item0
+                            cq:styleGroupLabel="Heading"
+                            jcr:primaryType="nt:unstructured">
+                            <cq:styles jcr:primaryType="nt:unstructured">
+                                <item0
+                                    cq:styleClasses="cmp-examples-title--heading1"
+                                    cq:styleId="1544759629303"
+                                    cq:styleLabel="Heading 1"
+                                    jcr:primaryType="nt:unstructured"/>
+                                <item1
+                                    cq:styleClasses="cmp-examples-title--heading2"
+                                    cq:styleId="1544759664489"
+                                    cq:styleLabel="Heading 2"
+                                    jcr:primaryType="nt:unstructured"/>
+                                <item2
+                                    cq:styleClasses="cmp-examples-title--heading3"
+                                    cq:styleId="1544759676459"
+                                    cq:styleLabel="Heading 3"
+                                    jcr:primaryType="nt:unstructured"/>
+                            </cq:styles>
+                        </item0>
+                    </cq:styleGroups>
+                </policy_1544759499870>
+            </title>
         </components>
     </core-components-examples>
 </jcr:root>

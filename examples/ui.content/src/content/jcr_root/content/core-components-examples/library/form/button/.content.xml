@@ -81,7 +81,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_1975440126
                     cq:styleIds="[1544759676459]"
@@ -91,7 +91,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Form Button"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1068966881
                     jcr:created="{Date}2019-12-12T15:10:07.890+01:00"
                     jcr:createdBy="admin"
@@ -200,7 +200,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Form Submit Button"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h1"/>
                 <text_1910564414
                     jcr:created="{Date}2019-12-12T14:22:11.663+01:00"
