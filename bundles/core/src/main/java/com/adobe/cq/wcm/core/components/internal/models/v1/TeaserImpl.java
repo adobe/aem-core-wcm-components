@@ -42,7 +42,6 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.commons.link.LinkConstants;
 import com.adobe.cq.wcm.core.components.internal.Heading;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -224,7 +223,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
         titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
         if (imageLinkHidden) {
-            hiddenImageResourceProperties.add(LinkConstants.PN_LINK_URL);
+            hiddenImageResourceProperties.add(Link.PN_LINK_URL);
         }
         actionsEnabled = !currentStyle.get(Teaser.PN_ACTIONS_DISABLED, !properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled));
 
@@ -234,7 +233,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         if (this.hasImage()) {
             this.setImageResource(component, request.getResource(), hiddenImageResourceProperties);
         }
-        link = linkHandler.getLink(resource, LinkConstants.PN_LINK_URL);
+        link = linkHandler.getLink(resource, Link.PN_LINK_URL);
     }
 
     /**
