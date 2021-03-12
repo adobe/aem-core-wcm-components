@@ -198,10 +198,6 @@
                                     <goal>integration-test</goal>
                                 </goals>
                                 <configuration>
-                                    <systemPropertyVariables>
-                                        <granite.it.author.url>${granite.it.author.url}</granite.it.author.url>
-                                        <granite.it.publish.url>${granite.it.publish.url}</granite.it.publish.url>
-                                    </systemPropertyVariables>
                                     <includes>
                                         <include>**/*IT.java</include>
                                         <include>**/*SST.java</include>
