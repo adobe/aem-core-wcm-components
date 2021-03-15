@@ -54,31 +54,6 @@ public final class ComponentUtils {
 	private static final int ID_HASH_LENGTH = 10;
 
 	/**
-	 * Attribute on JCR node that captures component data
-	 */
-	public static final String CQ_STYLEIDS = "cq:styleIds";
-
-	/**
-	 * Node under content policy that captures different style groups
-	 */
-	public static final String CQ_STYLEGROUPS = "cq:styleGroups";
-
-	/**
-	 * Child nodes that contain each style definition under a specific group
-	 */
-	public static final String CQ_STYLEID = "cq:styleId";
-
-	/**
-	 * Equivalent CSS classes for styleIds
-	 */
-	public static final String CQ_STYLECLASSES = "cq:styleClasses";
-
-	/**
-	 * Default CSS class to provide in absence of any selection
-	 */
-	public static final String CQ_STYLECLASSES_DEFAULT = "cq:styleDefaultClasses";
-
-	/**
 	 * Private constructor to prevent instantiation of utility class.
 	 */
 	private ComponentUtils() {
