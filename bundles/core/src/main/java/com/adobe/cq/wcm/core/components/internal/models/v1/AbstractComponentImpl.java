@@ -147,16 +147,10 @@ public abstract class AbstractComponentImpl implements Component {
     @Nullable
 	public String getAppliedCssClasses() {
     	
-		ComponentStyleInfo componentStyleInfo = this.resource.adaptTo(ComponentStyleInfo.class);
-		String appliedCssClassNames = null;
-		
-		if(componentStyleInfo != null)
-		{
-			appliedCssClassNames = componentStyleInfo.getAppliedCssClasses();
-		}
-
-		// Returning null so sling model exporters don't return anything for this property if not configured
-		return StringUtils.defaultIfBlank(appliedCssClassNames, null);
+    	return Optional.ofNullable(this.resource.adaptTo(ComponentStyleInfo.class)) 
+    			.map(ComponentStyleInfo::getAppliedCssClasses) 
+    			.filter(StringUtils::isNotBlank) 
+    			.orElse(null);		// Returning null so sling model exporters don't return anything for this property if not configured
 	}
     
     /**
