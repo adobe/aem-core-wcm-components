@@ -21,25 +21,15 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
-import java.util.Map.Entry;
 
 /**
  * Utility helper functions for components.
@@ -209,89 +199,4 @@ public final class ComponentUtils {
 				StringUtils.substring(DigestUtils.sha256Hex(path), 0, ID_HASH_LENGTH));
 	}
 
-	/**
-	 * @param componentResource
-	 * @return Return equivalent CSS classes in an array list, for the resource
-	 *         passed
-	 */
-	@Nullable
-	public static List<String> getStyleSystemClasses(@NotNull Resource componentResource) {
-
-		ArrayList<String> styleClasses = null;
-
-		ResourceResolver resourceResolver = componentResource.getResourceResolver();
-		ValueMap valueMap = componentResource.getValueMap();
-		String[] styleids = valueMap.get(CQ_STYLEIDS, String[].class);
-		ContentPolicyManager policyMgr = resourceResolver.adaptTo(ContentPolicyManager.class);
-		if (policyMgr != null) {
-
-			ContentPolicy contentPolicy = policyMgr.getPolicy(componentResource);
-			if (contentPolicy != null) {
-
-				String defaultStyle = (String) contentPolicy.getProperties().get(CQ_STYLECLASSES_DEFAULT);
-
-				if (ArrayUtils.isEmpty(styleids))
-					styleClasses = new ArrayList<>();
-				else
-					styleClasses = getStyleSystemClassesFromIds(contentPolicy, styleids);
-
-				if (styleClasses.isEmpty()) {
-					if (defaultStyle == null)
-						styleClasses = null;
-					else
-						styleClasses.add(defaultStyle);
-				}
-			}
-		}
-
-		return styleClasses;
-	}
-
-	/**
-	 * @param contentPolicy
-	 * @param styleids
-	 * @return Return equivalent CSS classes in an equivalent list, for the list of
-	 *         style ids shared against the content policy to look for
-	 */
-	private static ArrayList<String> getStyleSystemClassesFromIds(@NotNull ContentPolicy contentPolicy,
-			String[] styleids) {
-		ArrayList<String> styleClasses = new ArrayList<>();
-		HashMap<String, String> styleMap = new HashMap<>();
-
-		Resource contentPolicyResource = contentPolicy.adaptTo(Resource.class);
-		if(contentPolicyResource != null)
-		{
-			Resource styleGroupsResource = contentPolicyResource.getChild(CQ_STYLEGROUPS);
-			if (styleGroupsResource != null) {
-				Iterator<Resource> styleGroupsIterator = styleGroupsResource.listChildren();
-				while (styleGroupsIterator.hasNext()) {
-					Resource styleGroupItem = styleGroupsIterator.next();
-					Resource cqStylesResource = styleGroupItem.getChild(com.day.cq.wcm.api.designer.Design.NN_STYLES);
-					if (cqStylesResource != null) {
-						Iterator<Resource> cqStylesIterator = cqStylesResource.listChildren();
-						while (cqStylesIterator.hasNext()) {
-							Resource cqStyleDefinition = cqStylesIterator.next();
-							ValueMap childProperties = cqStyleDefinition.getValueMap();
-							@NotNull
-							String key = childProperties.get(CQ_STYLEID, String.class);
-							@NotNull
-							String value = childProperties.get(CQ_STYLECLASSES, StringUtils.EMPTY);
-							styleMap.put(key, value);
-						}
-					}
-				}
-			}
-
-			for (Entry<String, String> entry : styleMap.entrySet()) {
-				String styleid = entry.getKey();
-				String styleClass = entry.getValue();
-
-				if (ArrayUtils.contains(styleids, styleid))
-					styleClasses.add(styleClass);
-			}
-		}
-
-
-		return styleClasses;
-	}
 }

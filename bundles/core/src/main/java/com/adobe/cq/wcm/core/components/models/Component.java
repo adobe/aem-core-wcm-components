@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -70,13 +68,13 @@ public interface Component extends ComponentExporter {
     /**
      * Returns the style system information associated with the component
      *
-     * @return List of CSS classes selected by the content author delimited using a SPACE character
+     * @return CSS classes selected by the content author delimited using a SPACE character
      *
      * @since com.adobe.cq.wcm.core.components.models 12.20.0
      */
     @Nullable
-    @JsonProperty("appliedStyleClasses")
-    default List<String> getAppliedStyleClasses() {
+    @JsonProperty("appliedCssClassNames")
+    default String getAppliedCssClasses() {
         return null;
     }
 
@@ -89,4 +87,5 @@ public interface Component extends ComponentExporter {
     default String getExportedType() {
         return "";
     }
+
 }

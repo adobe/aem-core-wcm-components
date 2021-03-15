@@ -16,9 +16,9 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -30,6 +30,7 @@ import com.adobe.cq.wcm.core.components.models.Component;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.adobe.cq.wcm.style.ComponentStyleInfo;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
@@ -137,13 +138,27 @@ public abstract class AbstractComponentImpl implements Component {
         return componentData;
     }
     
+    /**
+     * See {@link Component#getAppliedCssClasses()}
+     *
+     * @return The component styles/css class names
+     */
     @Override
     @Nullable
-	public List<String> getAppliedStyleClasses() {
-    	// componentContext can't be leveraged as child components are not accessed directly from an external source e.g browser
-			return ComponentUtils.getStyleSystemClasses(this.resource);
-	}
+	public String getAppliedCssClasses() {
+    	
+		ComponentStyleInfo componentStyleInfo = this.resource.adaptTo(ComponentStyleInfo.class);
+		String appliedCssClassNames = null;
+		
+		if(componentStyleInfo != null)
+		{
+			appliedCssClassNames = componentStyleInfo.getAppliedCssClasses();
+		}
 
+		// Returning null so sling model exporters don't return anything for this property if not configured
+		return StringUtils.defaultIfBlank(appliedCssClassNames, null);
+	}
+    
     /**
      * Override this method to provide a different data model for your component. This will be called by
      * {@link AbstractComponentImpl#getData()} in case the datalayer is activated.
