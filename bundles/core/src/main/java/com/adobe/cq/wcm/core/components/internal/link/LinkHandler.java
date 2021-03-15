@@ -69,6 +69,7 @@ public class LinkHandler {
      *
      * @return {@link Optional} of  {@link Link}
      */
+    @NotNull
     public Optional<Link> getLink(@NotNull Resource resource) {
         return getLink(resource, PN_LINK_URL);
     }
@@ -80,6 +81,7 @@ public class LinkHandler {
      *
      * @return {@link Optional} of  {@link Link}
      */
+    @NotNull
     public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
@@ -93,6 +95,7 @@ public class LinkHandler {
      *
      * @return {@link Optional} of  {@link Link<Page>}
      */
+    @NotNull
     public Optional<Link<Page>> getLink(@Nullable Page page) {
         if (page == null) {
             return Optional.empty();
@@ -106,8 +109,9 @@ public class LinkHandler {
      * @param linkURL Link URL
      * @param target Target
      *
-     * @return {@link Optional} of  {@link Link}
+     * @return {@link Optional} of  {@link Link<Page>}
      */
+    @NotNull
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
