@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -37,9 +36,9 @@ public interface ListItem extends Component {
      * @return the link of this list item.
      * @since com.adobe.cq.wcm.core.components.models 12.20.0
      */
-    default @NotNull
-    Link getLink() {
-        throw new UnsupportedOperationException();
+    @Nullable
+    default Link getLink() {
+        return null;
     }
 
     /**
