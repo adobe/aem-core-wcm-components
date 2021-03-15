@@ -57,18 +57,7 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <packageType>mixed</packageType>
-                    <embeddedTarget>/apps/core-components-examples/install</embeddedTarget>
-                    <embeddeds>
-                        <embedded>
-                            <groupId>io.wcm</groupId>
-                            <artifactId>io.wcm.caconfig.editor</artifactId>
-                        </embedded>
-                        <embedded>
-                            <groupId>io.wcm</groupId>
-                            <artifactId>io.wcm.caconfig.extensions</artifactId>
-                        </embedded>
-                    </embeddeds>
+                    <packageType>application</packageType>
                     <dependencies>
                         <dependency>
                             <groupId>com.adobe.cq</groupId>
@@ -79,6 +68,10 @@
                             <groupId>com.adobe.cq</groupId>
                             <artifactId>core.wcm.components.extensions.amp.content</artifactId>
                             <version>2.14.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.adobe.cq</groupId>
+                            <artifactId>core.wcm.components.examples.ui.config</artifactId>
                         </dependency>
                     </dependencies>
                 </configuration>
@@ -129,58 +122,6 @@
     <!-- P R O F I L E S                                                        -->
     <!-- ====================================================================== -->
     <profiles>
-        <profile>
-            <id>autoInstallSinglePackage</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.day.jcr.vault</groupId>
-                        <artifactId>content-package-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-package</id>
-                                <goals>
-                                    <goal>install</goal>
-                                </goals>
-                                <configuration>
-                                    <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
-                                    <failOnError>true</failOnError>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>autoInstallSinglePackagePublish</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.day.jcr.vault</groupId>
-                        <artifactId>content-package-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-package-publish</id>
-                                <goals>
-                                    <goal>install</goal>
-                                </goals>
-                                <configuration>
-                                    <targetURL>http://${aem.publish.host}:${aem.publish.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
-                                    <failOnError>true</failOnError>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>autoInstallPackage</id>
             <activation>
@@ -294,16 +235,13 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- wcm.io Context-Aware Configuration Editor / -->
+        <!--Examples ui.config -->
         <dependency>
-            <groupId>io.wcm</groupId>
-            <artifactId>io.wcm.caconfig.editor</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.wcm</groupId>
-            <artifactId>io.wcm.caconfig.extensions</artifactId>
-            <version>1.8.0</version>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.examples.ui.config</artifactId>
+            <type>zip</type>
+            <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

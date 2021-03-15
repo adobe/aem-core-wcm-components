@@ -33,11 +33,14 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigation;
+import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class,
@@ -61,9 +64,13 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
     @ScriptVariable
     private Style currentStyle;
 
+    @Self
+    private LinkHandler linkHandler;
+
     private String navigationRoot;
     private int structureDepth;
     private Page rootPage;
+    private boolean isShadowingDisabled;
     private List<NavigationItem> items;
     private int startLevel;
 
@@ -71,6 +78,8 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
     private void initModel() {
         navigationRoot = properties.get(PN_NAVIGATION_ROOT, currentStyle.get(PN_NAVIGATION_ROOT, String.class));
         structureDepth = properties.get(PN_STRUCTURE_DEPTH, currentStyle.get(PN_STRUCTURE_DEPTH, 1));
+        isShadowingDisabled = properties.get(PageListItemImpl.PN_DISABLE_SHADOWING,
+                currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
     @Override
@@ -113,11 +122,15 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
                 if (localizedPage != null) {
                     page = localizedPage;
                 }
-                pages.add(new LanguageNavigationItemImpl(page, active, request, level, children, title, getId(), component));
+                pages.add(newLanguageNavigationItem(page, active, linkHandler, level, children, title, getId(), isShadowingDisabled, component));
             }
         }
 
         return pages;
+    }
+
+    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String title, String parentId, boolean isShadowingDisabled, Component component) {
+        return new LanguageNavigationItemImpl(page, active, linkHandler, level, children, title, parentId, isShadowingDisabled, component);
     }
 
     private Page getLocalizedPage(Page page, Page languageRoot) {

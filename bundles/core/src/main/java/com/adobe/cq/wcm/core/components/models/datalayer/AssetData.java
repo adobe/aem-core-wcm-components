@@ -39,7 +39,7 @@ public interface AssetData {
      */
     @JsonProperty("repo:id")
     default String getId() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -51,7 +51,7 @@ public interface AssetData {
      */
     @JsonProperty("repo:path")
     default String getUrl() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -63,7 +63,7 @@ public interface AssetData {
      */
     @JsonProperty("@type")
     default String getFormat() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -75,7 +75,7 @@ public interface AssetData {
      */
     @JsonProperty("xdm:tags")
     default String[] getTags() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -88,7 +88,7 @@ public interface AssetData {
     @JsonProperty("repo:modifyDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     default Date getLastModifiedDate() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -100,7 +100,7 @@ public interface AssetData {
      */
     @JsonProperty("xdm:smartTags")
     default Map<String, Object> getSmartTags() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 }

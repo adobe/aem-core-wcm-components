@@ -1,4 +1,4 @@
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,6 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -84,7 +83,11 @@ public class AbstractModelTest {
                 Method[] methods = clazz.getMethods();
                 for (Method m : methods) {
                     if (!m.isDefault()) {
-                        errors.append("Method ").append(m.toString()).append(" was not marked as default.\n");
+                        errors.append("Method ")
+                                .append(m.toString())
+                                .append(" was not marked as default in class ")
+                                .append(clazz.getName())
+                                .append(" .\n");
                     }
                     Throwable t = null;
                     Object ret = null;
@@ -97,14 +100,12 @@ public class AbstractModelTest {
                     } catch (InvocationTargetException e) {
                         t = e.getCause();
                     }
-                    if ((t == null || !(t instanceof UnsupportedOperationException)) && (ret != null && !(ret instanceof Optional))) {
+                    if (t != null) {
                         errors.append("Expected method ")
                                 .append(m.toString())
-                                .append("in class ")
+                                .append(" in class ")
                                 .append(clazz.getName())
-                                .append(" to throw an ")
-                                .append(UnsupportedOperationException.class.getName())
-                                .append(" or return either an instance of Optional or null.\n");
+                                .append(" to not throw an exception.\n");
                     }
                 }
             }

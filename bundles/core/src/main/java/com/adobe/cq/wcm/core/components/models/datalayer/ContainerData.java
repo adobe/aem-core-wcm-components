@@ -30,6 +30,6 @@ public interface ContainerData extends ComponentData {
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
     default String[] getShownItems() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }
