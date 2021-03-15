@@ -1,5 +1,5 @@
 <!--
-Copyright 2019 Adobe
+Copyright 2021 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -62,6 +62,7 @@ last modification date of the item; possible values: `title`, `modified`
 13. `./linkItems` - if set to `true` the list will link all items to the corresponding pages
 14. `./showDescription` - if set to `true` each item's description will be rendered
 15. `./showModificationDate` - if set to `true` each item's last modification date will be rendered
+16. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.list.v2.editor` editor client library category that includes JavaScript
