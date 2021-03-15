@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.models.contentfragment;
 
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -97,7 +98,7 @@ public interface ContentFragmentList extends ComponentExporter {
     @NotNull
     @JsonProperty(JSON_PN_ITEMS)
     default Collection<DAMContentFragment> getListItems() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyList();
     }
 
     /**
@@ -108,6 +109,6 @@ public interface ContentFragmentList extends ComponentExporter {
     @NotNull
     @Override
     default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 }

@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.form;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,7 @@ public interface Container extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getMethod() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -49,7 +50,7 @@ public interface Container extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getAction() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -59,7 +60,7 @@ public interface Container extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getId() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -69,7 +70,7 @@ public interface Container extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getName() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -79,7 +80,7 @@ public interface Container extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getEnctype() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -91,7 +92,7 @@ public interface Container extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getResourceTypeForDropArea() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -103,7 +104,7 @@ public interface Container extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getRedirect() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -124,7 +125,7 @@ public interface Container extends ContainerExporter {
     @NotNull
     @Override
     default String[] getExportedItemsOrder() {
-        throw new UnsupportedOperationException();
+        return new String[]{};
     }
 
     /**
@@ -134,7 +135,7 @@ public interface Container extends ContainerExporter {
     @NotNull
     @Override
     default Map<String, ? extends ComponentExporter> getExportedItems() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
     /**
@@ -144,6 +145,6 @@ public interface Container extends ContainerExporter {
     @NotNull
     @Override
     default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 }
