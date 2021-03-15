@@ -119,4 +119,13 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
     public void invalidateOutputCache() throws RepositoryException {
 
     }
+
+	/**
+	 * To mock in future if it is required for local testing
+	 */
+	@Override
+	public void ensureCached() throws IOException, RepositoryException {
+		// TODO Auto-generated method stub
+		
+	}
 }
