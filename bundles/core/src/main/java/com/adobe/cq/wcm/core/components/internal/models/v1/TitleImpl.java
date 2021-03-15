@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -82,7 +84,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
 
     @Self
     private LinkHandler linkHandler;
-    protected Link link;
+    protected Optional<Link> link;
 
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Heading} object for the type of this title.
@@ -124,7 +126,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
 
     @Override
     public String getLinkURL() {
-        return link.getURL();
+        return link.map(Link::getURL).orElse(null);
     }
 
     @Override

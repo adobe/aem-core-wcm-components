@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
@@ -76,7 +78,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @Self
     private LinkHandler linkHandler;
-    protected Link link;
+    protected Optional<Link> link;
 
     @PostConstruct
     private void initModel() {
@@ -90,7 +92,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @Override
     public String getLink() {
-        return link.getURL();
+        return link.map(Link::getURL).orElse(null);
     }
 
     @Override

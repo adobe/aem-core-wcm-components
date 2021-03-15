@@ -65,7 +65,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * The link for this list item.
      */
-    protected final Link link;
+    protected final Optional<Link<Page>> link;
 
     /**
      * Construct a list item for a given page.
@@ -96,13 +96,13 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     @Override
     @JsonIgnore
-    public @NotNull Link getLink() {
-        return link;
+    public @NotNull Link<Page> getLink() {
+        return link.orElse(null);
     }
 
     @Override
     public String getURL() {
-        return link.getURL();
+        return link.map(Link::getURL).orElse(null);
     }
 
     @Override
