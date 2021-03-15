@@ -33,6 +33,7 @@ The following properties are written to JCR for the Language Navigation componen
 
 1. `./navigationRoot` - the root path of the global language structure.
 2. `./structureDepth` - the depth of the global language structure relative to the navigation root.
+3. `./id` - defines the component HTML ID attribute.
 
 ## BEM Description
 ```

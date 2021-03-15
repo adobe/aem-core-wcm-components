@@ -15,7 +15,8 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.item="${@ item='The language navigation item'}"
           data-sly-use.groupTemplate="group.html" data-sly-use.itemContentTemplate="itemContent.html">
-    <li class="cmp-languagenavigation__item${item.country ? ' cmp-languagenavigation__item--countrycode-' : ''}${item.country} cmp-languagenavigation__item--langcode-${item.language} cmp-languagenavigation__item--level-${item.level}${item.active ? ' cmp-languagenavigation__item--active' : ''}">
+    <li class="cmp-languagenavigation__item${item.country ? ' cmp-languagenavigation__item--countrycode-' : ''}${item.country} cmp-languagenavigation__item--langcode-${item.language} cmp-languagenavigation__item--level-${item.level}${item.active ? ' cmp-languagenavigation__item--active' : ''}"
+        data-cmp-data-layer="${item.children.size > 0 ? '' : item.data.json}">
         <sly data-sly-call="${itemContentTemplate.itemContent @ item = item}"></sly>
         <sly data-sly-test="${item.children.size > 0}" data-sly-call="${groupTemplate.group @ items = item.children}"></sly>
     </li>
