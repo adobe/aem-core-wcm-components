@@ -116,7 +116,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @Self
     protected LinkHandler linkHandler;
-    protected Link link;
+    protected Optional<Link> link;
 
     protected String src;
     protected String[] smartImages = new String[]{};
@@ -245,7 +245,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             if (!isDecorative) {
                 link = linkHandler.getLink(resource);
             } else {
-                link = linkHandler.getInvalid();
+                link = Optional.empty();
                 alt = null;
             }
             buildJson();
@@ -313,7 +313,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @Override
     public String getLink() {
-        return link.getURL();
+        return link.map(Link::getURL).orElse(null);
     }
 
     @Override

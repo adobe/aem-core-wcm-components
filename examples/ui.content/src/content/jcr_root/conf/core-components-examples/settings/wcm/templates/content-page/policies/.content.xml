@@ -42,16 +42,6 @@
                                         sling:resourceType="wcm/core/components/policies/mapping"/>
                                 </v2>
                             </text>
-                            <form jcr:primaryType="nt:unstructured">
-                                <text jcr:primaryType="nt:unstructured">
-                                    <v2 jcr:primaryType="nt:unstructured">
-                                        <text
-                                            cq:policy="core/wcm/components/form/text/v2/text/policy_1550289110975"
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="wcm/core/components/policies/mapping"/>
-                                    </v2>
-                                </text>
-                            </form>
                             <separator jcr:primaryType="nt:unstructured">
                                 <v1 jcr:primaryType="nt:unstructured">
                                     <separator
@@ -73,6 +63,12 @@
                 </core>
                 <core-components-examples jcr:primaryType="nt:unstructured">
                     <components jcr:primaryType="nt:unstructured">
+                        <form jcr:primaryType="nt:unstructured">
+                            <text
+                                cq:policy="core-components-examples/components/form/text/policy_1550289110975"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="wcm/core/components/policies/mapping"/>
+                        </form>
                         <search
                             cq:policy="core-components-examples/components/search/policy_1572547933941"
                             jcr:primaryType="nt:unstructured"

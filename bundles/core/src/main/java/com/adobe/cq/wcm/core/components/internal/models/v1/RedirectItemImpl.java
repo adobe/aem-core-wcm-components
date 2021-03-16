@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Optional;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -31,7 +33,7 @@ public class RedirectItemImpl implements NavigationItem {
 
     private final String redirectTarget;
     private final Page page;
-    protected final Link link;
+    protected final Optional<Link<Page>> link;
 
     public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
         this.redirectTarget = redirectTarget;
@@ -60,6 +62,6 @@ public class RedirectItemImpl implements NavigationItem {
     @Override
     @Nullable
     public String getURL() {
-        return link.getURL();
+        return link.map(Link::getURL).orElse(null);
     }
 }
