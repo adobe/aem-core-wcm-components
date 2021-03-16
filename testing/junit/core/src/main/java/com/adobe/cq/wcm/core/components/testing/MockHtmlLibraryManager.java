@@ -125,7 +125,6 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
 	 */
 	@Override
 	public void ensureCached() throws IOException, RepositoryException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException("Not Implemented");		
 	}
 }
