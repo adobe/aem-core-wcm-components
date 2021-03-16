@@ -1,893 +1,140 @@
 {
-	"jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
-	"jcr:createdBy": "admin",
-	"jcr:mixinTypes": [
-		"rep:AccessControllable"
-	],
-	"jcr:primaryType": "sling:Folder",
-	"wcm": {
-		"jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
-		"jcr:createdBy": "admin",
-		"jcr:mixinTypes": [
-			"rep:AccessControllable"
-		],
-		"jcr:primaryType": "cq:Page",
-		"templates": {
-			"jcr:primaryType": "cq:Page",
-			"product-page": {
-				"jcr:content": {
-					"jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
-					"jcr:createdBy": "admin",
-					"jcr:primaryType": "cq:PageContent",
-					"jcr:title": "Product Page"
-				},
-				"jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
-				"jcr:createdBy": "admin",
-				"jcr:primaryType": "cq:Template",
-				"structure": {
-					"jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
-					"jcr:createdBy": "admin",
-					"jcr:primaryType": "cq:Page",
-					"jcr:content": {
-						"cq:template": "/conf/coretest/settings/wcm/templates/product-page",
-						"jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
-						"jcr:createdBy": "admin",
-						"jcr:primaryType": "cq:PageContent",
-						"sling:resourceType": "core/wcm/components/page/v2/page",
-						"xf-component-1a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master"
-						},
-						"xf-component-2a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master/undefined"
-						},
-						"xf-component-3a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment"
-						},
-						"xf-component-10a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master"
-						},
-						"xf-component-11a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/es/footer/master"
-						},
-						"xf-component-12a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master/undefined"
-						},
-						"xf-component-13a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment"
-						},
-						"xf-component-20a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/us/en/footer/master"
-						},
-						"xf-component-21a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/us/es/footer/master"
-						},
-						"xf-component-22a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/us/en/footer/master/undefined"
-						},
-						"xf-component-30a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/ch/mysite/fr/footer/master"
-						},
-						"xf-component-31a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/ch/mysite/de/footer/master"
-						},
-						"xf-component-32a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/ch/mysite/en/footer/master/undefined"
-						},
-						"xf-component-40a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/ch_fr/footer/master"
-						},
-						"xf-component-41a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/ch_de/footer/master"
-						},
-						"xf-component-42a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/ch_fr/footer/master/undefined"
-						},
-						"xf-component-50a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/blueprint/footer/master"
-						},
-						"xf-component-51a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/livecopy/footer/master"
-						},
-						"xf-component-60a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/livecopy/footer/master"
-						},
-						"xf-component-61a": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-							"fragmentVariationPath": "/content/experience-fragments/mysite/blueprint/footer/master"
-						}
-					}
-				}
-			}
-		},
-		"policies": {
-			"jcr:primaryType": "cq:Page",
-			"jcr:mixinTypes": [
-				"rep:AccessControllable"
-			],
-			"jcr:createdBy": "admin",
-			"jcr:created": "Fri Nov 08 2019 14:34:21 GMT-0600",
-			"rep:policy": {
-				"jcr:primaryType": "rep:ACL",
-				"allow": {
-					"jcr:primaryType": "rep:GrantACE",
-					"rep:principalName": "everyone",
-					"rep:privileges": [
-						"jcr:read"
-					]
-				},
-				"allow1": {
-					"jcr:primaryType": "rep:GrantACE",
-					"rep:principalName": "content-authors",
-					"rep:privileges": [
-						"crx:replicate"
-					]
-				},
-				"allow2": {
-					"jcr:primaryType": "rep:GrantACE",
-					"rep:principalName": "template-authors",
-					"rep:privileges": [
-						"jcr:versionManagement",
-						"crx:replicate",
-						"rep:write",
-						"jcr:lockManagement"
-					]
-				}
-			},
-			"wcm": {
-				"jcr:primaryType": "nt:unstructured",
-				"foundation": {
-					"jcr:primaryType": "nt:unstructured",
-					"components": {
-						"jcr:primaryType": "nt:unstructured",
-						"responsivegrid": {
-							"jcr:primaryType": "nt:unstructured",
-							"we-retail-default": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Default",
-								"jcr:lastModifiedBy": "admin",
-								"components": [
-									"/libs/cq/experience-fragments/editor/components/experiencefragment",
-									"/libs/wcm/foundation/components/responsivegrid",
-									"group:We.Retail",
-									"group:We.Retail Commerce"
-								],
-								"policyResourceType": "wcm/foundation/components/responsivegrid",
-								"jcr:description": "Policy for editable layout containers",
-								"jcr:lastModified": "Mon Feb 05 2018 18:34:17 GMT+0100",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"cq:authoring": {
-									"jcr:primaryType": "nt:unstructured",
-									"assetToComponentMapping": {
-										"jcr:primaryType": "nt:unstructured",
-										"image": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/image",
-											"assetMimetype": "image/*",
-											"type": "Images",
-											"droptarget": "image",
-											"assetGroup": "media"
-										},
-										"product": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/structure/product",
-											"type": "Products",
-											"droptarget": "product-data-reference",
-											"assetGroup": "product"
-										},
-										"contentfragment": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/contentfragment",
-											"assetMimetype": [
-												"text/html",
-												"application/vnd.adobe.contentfragment"
-											],
-											"type": "Content Fragment",
-											"droptarget": "contentfragment",
-											"assetGroup": "media"
-										},
-										"experiencefragment": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "cq/experience-fragments/editor/components/experiencefragment",
-											"assetMimetype": "text/html",
-											"type": "experiencefragment",
-											"droptarget": "experiencefragment",
-											"assetGroup": "content"
-										}
-									}
-								},
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							},
-							"we-retail-structure": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Structure",
-								"jcr:lastModifiedBy": "admin",
-								"components": [
-									"/libs/wcm/foundation/components/responsivegrid",
-									"group:We.Retail",
-									"group:We.Retail Commerce",
-									"group:We.Retail.Structure",
-									"/libs/cq/experience-fragments/editor/components/experiencefragment"
-								],
-								"policyResourceType": "wcm/foundation/components/responsivegrid",
-								"jcr:description": "Policy for templates to allow structure components",
-								"jcr:lastModified": "Mon Oct 10 2016 22:34:33 GMT+0200",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"cq:authoring": {
-									"jcr:primaryType": "nt:unstructured",
-									"assetToComponentMapping": {
-										"jcr:primaryType": "nt:unstructured",
-										"image": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/image",
-											"assetMimetype": "image/*",
-											"type": "Images",
-											"droptarget": "image",
-											"assetGroup": "media"
-										},
-										"product": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/structure/product",
-											"type": "Products",
-											"droptarget": "product-data-reference",
-											"assetGroup": "product"
-										},
-										"contentfragment": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/contentfragment",
-											"assetMimetype": [
-												"text/html",
-												"application/vnd.adobe.contentfragment"
-											],
-											"type": "Content Fragment",
-											"droptarget": "contentfragment",
-											"assetGroup": "media"
-										},
-										"experiencefragment": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "cq/experience-fragments/editor/components/experiencefragment",
-											"assetMimetype": "text/html",
-											"type": "experiencefragment",
-											"droptarget": "experiencefragment",
-											"assetGroup": "content"
-										}
-									}
-								},
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							},
-							"we-retail-product-filter": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Product Filter",
-								"jcr:lastModifiedBy": "admin",
-								"components": "/apps/weretail/components/structure/productfilter",
-								"jcr:description": "Policy for Search Components",
-								"jcr:lastModified": "Fri Sep 16 2016 17:02:53 GMT+0200",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							},
-							"we-retail-content": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Content",
-								"jcr:lastModifiedBy": "admin",
-								"components": [
-									"/libs/cq/experience-fragments/editor/components/experiencefragment",
-									"/libs/wcm/foundation/components/responsivegrid",
-									"/apps/spa-poc/components/content/oldSchoolComponent",
-									"group:We.Retail",
-									"group:We.Retail Form"
-								],
-								"jcr:lastModified": "Fri Nov 22 2019 17:47:23 GMT-0600",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								},
-								"cq:authoring": {
-									"jcr:primaryType": "nt:unstructured",
-									"assetToComponentMapping": {
-										"jcr:primaryType": "nt:unstructured",
-										"mapping_1487856929586": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/contentfragment",
-											"assetMimetype": [
-												"text/html",
-												"application/vnd.adobe.contentfragment"
-											],
-											"droptarget": "contentfragment",
-											"assetGroup": "media"
-										},
-										"mapping_1487856938113": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "cq/experience-fragments/editor/components/experiencefragment",
-											"assetMimetype": "text/html",
-											"droptarget": "experiencefragment",
-											"assetGroup": "content"
-										},
-										"mapping_1487856942908": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/image",
-											"assetMimetype": "image/.*",
-											"droptarget": "image",
-											"assetGroup": "media"
-										}
-									}
-								}
-							},
-							"we-retail-experience-fragment": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Default for Experience Fragments",
-								"jcr:lastModifiedBy": "admin",
-								"components": [
-									"group:We.Retail",
-									"group:We.Retail Commerce",
-									"/libs/wcm/foundation/components/responsivegrid",
-									"/libs/cq/experience-fragments/editor/components/experiencefragment",
-									"/libs/cq/experience-fragments/editor/components/buildingblock"
-								],
-								"policyResourceType": "wcm/foundation/components/responsivegrid",
-								"jcr:description": "Policy for editable layout containers",
-								"jcr:lastModified": "Fri Sep 16 2016 07:50:27 GMT+0200",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"cq:authoring": {
-									"jcr:primaryType": "nt:unstructured",
-									"assetToComponentMapping": {
-										"jcr:primaryType": "nt:unstructured",
-										"image": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/image",
-											"assetMimetype": "image/*",
-											"type": "Images",
-											"droptarget": "image",
-											"assetGroup": "media"
-										},
-										"product": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/structure/product",
-											"type": "Products",
-											"droptarget": "product-data-reference",
-											"assetGroup": "product"
-										},
-										"contentfragment": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/contentfragment",
-											"assetMimetype": [
-												"text/html",
-												"application/vnd.adobe.contentfragment"
-											],
-											"type": "Content Fragment",
-											"droptarget": "contentfragment",
-											"assetGroup": "media"
-										},
-										"experiencefragment": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "cq/experience-fragments/editor/components/experiencefragment",
-											"assetMimetype": "text/html",
-											"type": "experiencefragment",
-											"droptarget": "experiencefragment",
-											"assetGroup": "content"
-										},
-										"buildingblock": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "cq/experience-fragments/editor/components/buildingblock",
-											"assetMimetype": "text/html",
-											"droptarget": "buildingblock",
-											"assetGroup": "block"
-										}
-									}
-								},
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							},
-							"we-retail-social-experience-fragment": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "Social media template policy for social Experience Fragments",
-								"jcr:lastModifiedBy": "admin",
-								"components": [
-									"weretail/components/content/image",
-									"weretail/components/content/text",
-									"weretail/components/content/contentfragment",
-									"cq/experience-fragments/editor/components/buildingblock"
-								],
-								"jcr:lastModified": "Mon Feb 05 2018 18:34:05 GMT+0100",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"cq:authoring": {
-									"jcr:primaryType": "nt:unstructured",
-									"assetToComponentMapping": {
-										"jcr:primaryType": "nt:unstructured",
-										"image": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/image",
-											"assetMimetype": "image/*",
-											"type": "Images",
-											"droptarget": "image",
-											"assetGroup": "media"
-										},
-										"contentfragment": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "weretail/components/content/contentfragment",
-											"assetMimetype": [
-												"text/html",
-												"application/vnd.adobe.contentfragment"
-											],
-											"type": "Content Fragment",
-											"droptarget": "contentfragment",
-											"assetGroup": "media"
-										},
-										"buildingblock": {
-											"jcr:primaryType": "nt:unstructured",
-											"resourceType": "cq/experience-fragments/editor/components/buildingblock",
-											"assetMimetype": "text/html",
-											"type": "buildingblock",
-											"droptarget": "buildingblock",
-											"assetGroup": "block"
-										}
-									}
-								},
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							}
-						}
-					}
-				}
-			},
-			"weretail": {
-				"jcr:primaryType": "nt:unstructured",
-				"sling:resourceType": "nt:unstructured",
-				"components": {
-					"jcr:primaryType": "nt:unstructured",
-					"sling:resourceType": "nt:unstructured",
-					"structure": {
-						"jcr:primaryType": "nt:unstructured",
-						"sling:resourceType": "nt:unstructured",
-						"page": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "nt:unstructured",
-							"we-retail-product-page": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Product Page",
-								"jcr:lastModifiedBy": "admin",
-								"jcr:description": "Policy for product pages",
-								"jcr:lastModified": "Wed Jun 21 2017 12:22:11 GMT+0200",
-								"clientlibs": "we-retail.product-page",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"faviconClientLib": "we-retail.structure.page",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured"
-								}
-							},
-							"we-retail-page": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Page",
-								"jcr:lastModifiedBy": "admin",
-								"jcr:lastModified": "Wed Jun 21 2017 12:21:36 GMT+0200",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"faviconClientLib": "we-retail.structure.page",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured"
-								}
-							}
-						}
-					},
-					"content": {
-						"jcr:primaryType": "nt:unstructured",
-						"sling:resourceType": "nt:unstructured",
-						"breadcrumb": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "nt:unstructured",
-							"we-retail-experience-page": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Experience Page Breadcrumb",
-								"startLevel": "3",
-								"jcr:lastModifiedBy": "admin",
-								"jcr:description": "Policy for breadcrumb on experience pages",
-								"jcr:lastModified": "Thu Mar 03 2016 18:52:44 GMT+0100",
-								"hideCurrent": "true",
-								"sling:resourceType": "wcm/core/components/policy/policy"
-							},
-							"we-retail-product-page": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Product Page Breadcrumb",
-								"startLevel": "5",
-								"jcr:lastModifiedBy": "admin",
-								"jcr:description": "Policy for breadcrumb on product pages",
-								"jcr:lastModified": "Fri Sep 16 2016 15:03:54 GMT+0200",
-								"hideCurrent": "true",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							}
-						},
-						"title": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "nt:unstructured",
-							"we-retail-hero-page": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Title policy - Hero Page",
-								"jcr:lastModifiedBy": "admin",
-								"defaultType": "h2",
-								"jcr:description": "",
-								"jcr:lastModified": "Mon Oct 10 2016 23:42:54 GMT+0200",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							},
-							"we-retial-section-page": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Title policy - Section Page",
-								"jcr:lastModifiedBy": "admin",
-								"defaultType": "h2",
-								"jcr:description": "",
-								"jcr:lastModified": "Mon Oct 10 2016 17:23:17 GMT+0200",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							},
-							"policy_205022283770700": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We-Retail-Title",
-								"cq:styleDefaultClasses": "we-retail-title-default",
-								"jcr:lastModifiedBy": "admin",
-								"allowedTypes": [
-									"h1",
-									"h2",
-									"h3",
-									"h4",
-									"h5",
-									"h6"
-								],
-								"type": "h1",
-								"jcr:lastModified": "Mon Mar 01 2021 20:12:49 GMT-0600",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"linkDisabled": "false",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured"
-								},
-								"cq:styleGroups": {
-									"jcr:primaryType": "nt:unstructured",
-									"item0": {
-										"jcr:primaryType": "nt:unstructured",
-										"cq:styleGroupLabel": "Alignment",
-										"cq:styles": {
-											"jcr:primaryType": "nt:unstructured",
-											"item0": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-retail-title-right",
-												"cq:styleId": "1614651105857",
-												"cq:styleLabel": "Right"
-											},
-											"item1": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-retail-title-center",
-												"cq:styleId": "1614651120775",
-												"cq:styleLabel": "Center"
-											}
-										}
-									},
-									"item1": {
-										"jcr:primaryType": "nt:unstructured",
-										"cq:styleGroupLabel": "Color",
-										"cq:styles": {
-											"jcr:primaryType": "nt:unstructured",
-											"item0": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-retail-title-red",
-												"cq:styleId": "1614651142305",
-												"cq:styleLabel": "Red"
-											},
-											"item1": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-retail-title-blue",
-												"cq:styleId": "1614651158639",
-												"cq:styleLabel": "Blue"
-											}
-										}
-									}
-								}
-							}
-						},
-						"image": {
-							"jcr:primaryType": "nt:unstructured",
-							"policy_1490281316632": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Default",
-								"jcr:lastModifiedBy": "admin",
-								"allowedRenditionWidths": [
-									"128",
-									"256",
-									"512",
-									"1024",
-									"1280",
-									"1440",
-									"1920",
-									"2048"
-								],
-								"jcr:lastModified": "Thu Mar 23 2017 16:52:07 GMT+0100",
-								"allowUpload": "true",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured"
-								},
-								"plugins": {
-									"jcr:primaryType": "nt:unstructured",
-									"crop": {
-										"jcr:primaryType": "nt:unstructured",
-										"features": "*",
-										"aspectRatios": {
-											"jcr:primaryType": "nt:unstructured",
-											"item0": {
-												"jcr:primaryType": "nt:unstructured",
-												"name": "Wide Landscape",
-												"ratio": "0.6180"
-											},
-											"item1": {
-												"jcr:primaryType": "nt:unstructured",
-												"name": "Landscape",
-												"ratio": "0.8284"
-											},
-											"item2": {
-												"jcr:primaryType": "nt:unstructured",
-												"name": "Square",
-												"ratio": "1"
-											},
-											"item3": {
-												"jcr:primaryType": "nt:unstructured",
-												"name": "Portrait",
-												"ratio": "1.6180"
-											}
-										}
-									},
-									"rotate": {
-										"jcr:primaryType": "nt:unstructured",
-										"features": "right"
-									},
-									"flip": {
-										"jcr:primaryType": "nt:unstructured",
-										"features": "-"
-									}
-								}
-							}
-						},
-						"list": {
-							"jcr:primaryType": "nt:unstructured",
-							"we-retail-default": {
-								"jcr:primaryType": "nt:unstructured",
-								"showModificationDate": "false",
-								"jcr:title": "We.Retail Default",
-								"linkItems": "false",
-								"jcr:lastModifiedBy": "admin",
-								"cq:allowNoStyle": "true",
-								"disableChildren": "false",
-								"disableSearch": "false",
-								"disableStatic": "false",
-								"showDescription": "false",
-								"jcr:lastModified": "Thu Mar 23 2017 16:52:07 GMT+0100",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"disableTags": "false",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured"
-								},
-								"cq:styleGroups": {
-									"jcr:primaryType": "nt:unstructured",
-									"item0": {
-										"jcr:primaryType": "nt:unstructured",
-										"cq:styleGroupLabel": "Layout",
-										"cq:styles": {
-											"jcr:primaryType": "nt:unstructured",
-											"item0": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-list--block we-list--teaser",
-												"cq:styleId": "1508797741160",
-												"cq:styleLabel": "Block"
-											},
-											"item1": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-list--grid we-list--teaser",
-												"cq:styleId": "1508797744638",
-												"cq:styleLabel": "Grid"
-											}
-										}
-									},
-									"item1": {
-										"jcr:primaryType": "nt:unstructured",
-										"cq:styleGroupLabel": "Display",
-										"cq:styleGroupMultiple": "true",
-										"cq:styles": {
-											"jcr:primaryType": "nt:unstructured",
-											"item0": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-list--date",
-												"cq:styleId": "1508800134047",
-												"cq:styleLabel": "Date"
-											},
-											"item1": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-list--image",
-												"cq:styleId": "1508800123708",
-												"cq:styleLabel": "Image"
-											}
-										}
-									}
-								}
-							}
-						},
-						"contentfragment": {
-							"jcr:primaryType": "nt:unstructured",
-							"default": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Content Fragment policy",
-								"mmf-image-type": "dam/cfm/components/mmimage",
-								"jcr:lastModifiedBy": "admin",
-								"cfm-grid-type": "dam/cfm/components/grid",
-								"jcr:lastModified": "Fri Feb 02 2018 16:04:55 GMT+0100",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							}
-						},
-						"teaser": {
-							"jcr:primaryType": "nt:unstructured",
-							"policy_1526037253202": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Default",
-								"hideTitleLink": "true",
-								"cq:styleDefaultClasses": "we-Teaser",
-								"jcr:lastModifiedBy": "admin",
-								"hideImageLink": "true",
-								"jcr:lastModified": "Tue May 15 2018 13:35:33 GMT+0200",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured"
-								},
-								"cq:styleGroups": {
-									"jcr:primaryType": "nt:unstructured",
-									"item0": {
-										"jcr:primaryType": "nt:unstructured",
-										"cq:styleGroupLabel": "Component Type",
-										"cq:styles": {
-											"jcr:primaryType": "nt:unstructured",
-											"item0": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-Teaser",
-												"cq:styleId": "1526367939478",
-												"cq:styleLabel": "Teaser"
-											},
-											"item1": {
-												"jcr:primaryType": "nt:unstructured",
-												"cq:styleClasses": "we-LinkButton",
-												"cq:styleId": "1526384118577",
-												"cq:styleLabel": "Link Button"
-											}
-										}
-									}
-								}
-							}
-						},
-						"sitefeature": {
-							"jcr:primaryType": "nt:unstructured",
-							"policy_1528460924549": {
-								"jcr:primaryType": "nt:unstructured",
-								"titleType": "h4",
-								"jcr:title": "We.Retail Default",
-								"jcr:lastModifiedBy": "admin",
-								"imageLinkHidden": "true",
-								"actionsDisabled": "true",
-								"titleLinkHidden": "true",
-								"jcr:lastModified": "Fri Jun 08 2018 15:29:16 GMT+0300",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured"
-								}
-							}
-						},
-						"carousel": {
-							"jcr:primaryType": "nt:unstructured",
-							"policy_1550587632390": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "We.Retail Default",
-								"jcr:lastModifiedBy": "admin",
-								"components": [
-									"/libs/wcm/foundation/components/responsivegrid",
-									"/apps/weretail/components/content/teaser"
-								],
-								"autopauseDisabled": "false",
-								"delay": "5000",
-								"jcr:lastModified": "Tue Feb 19 2019 16:48:47 GMT+0200",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"autoplay": "false",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured"
-								}
-							}
-						}
-					}
-				}
-			},
-			"core": {
-				"jcr:primaryType": "nt:unstructured",
-				"sling:resourceType": "nt:unstructured",
-				"wcm": {
-					"jcr:primaryType": "nt:unstructured",
-					"sling:resourceType": "nt:unstructured",
-					"components": {
-						"jcr:primaryType": "nt:unstructured",
-						"sling:resourceType": "nt:unstructured",
-						"title": {
-							"jcr:primaryType": "nt:unstructured",
-							"sling:resourceType": "nt:unstructured",
-							"policy_1475741491582": {
-								"jcr:primaryType": "nt:unstructured",
-								"jcr:title": "title",
-								"jcr:lastModifiedBy": "admin",
-								"defaultType": "h2",
-								"jcr:description": "",
-								"jcr:lastModified": "Thu Oct 06 2016 10:11:49 GMT+0200",
-								"sling:resourceType": "wcm/core/components/policy/policy",
-								"jcr:content": {
-									"jcr:primaryType": "nt:unstructured",
-									"mergeList": true
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+    "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+    "jcr:createdBy": "admin",
+    "jcr:mixinTypes": [
+        "rep:AccessControllable"
+    ],
+    "jcr:primaryType": "sling:Folder",
+    "wcm": {
+        "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+        "jcr:createdBy": "admin",
+        "jcr:mixinTypes": [
+            "rep:AccessControllable"
+        ],
+        "jcr:primaryType": "cq:Page",
+        "templates": {
+            "jcr:primaryType": "cq:Page",
+            "product-page": {
+                "jcr:content": {
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Product Page"
+                },
+                "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                "jcr:createdBy": "admin",
+                "jcr:primaryType": "cq:Template",
+                "structure": {
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content": {
+                        "cq:template": "/conf/coretest/settings/wcm/templates/product-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "sling:resourceType": "core/wcm/components/page/v2/page",
+                        "xf-component-1a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master"
+                        },
+                        "xf-component-2a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master/undefined"
+                        },
+                        "xf-component-3a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment"
+                        },
+                        "xf-component-10a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master"
+                        },
+                        "xf-component-11a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/es/footer/master"
+                        },
+                        "xf-component-12a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master/undefined"
+                        },
+                        "xf-component-13a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment"
+                        },
+                        "xf-component-20a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/us/en/footer/master"
+                        },
+                        "xf-component-21a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/us/es/footer/master"
+                        },
+                        "xf-component-22a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/us/en/footer/master/undefined"
+                        },
+                        "xf-component-30a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/ch/mysite/fr/footer/master"
+                        },
+                        "xf-component-31a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/ch/mysite/de/footer/master"
+                        },
+                        "xf-component-32a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/ch/mysite/en/footer/master/undefined"
+                        },
+                        "xf-component-40a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/ch_fr/footer/master"
+                        },
+                        "xf-component-41a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/ch_de/footer/master"
+                        },
+                        "xf-component-42a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/ch_fr/footer/master/undefined"
+                        },
+                        "xf-component-50a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/blueprint/footer/master"
+                        },
+                        "xf-component-51a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/livecopy/footer/master"
+                        },
+                        "xf-component-60a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/livecopy/footer/master"
+                        },
+                        "xf-component-61a": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/blueprint/footer/master"
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
