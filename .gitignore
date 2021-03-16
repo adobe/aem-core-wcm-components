@@ -20,6 +20,3 @@ atlassian-ide-plugin.xml
 node
 node_modules
 core.wcm.components.commons.datalayer.*
-*/**/META-INF/MANIFEST.MF
-*/**/package-lock.json
-jacoco.exec
