@@ -55,7 +55,6 @@
     function init(e, $dialog, $dialogContent, dialogContent) {
         titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector, false);
         descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
-        toggleInputs($dialogContent);
         retrievePageInfo($dialogContent);
 
         var $linkURLField = $dialogContent.find(linkURLSelector);
@@ -89,6 +88,7 @@
                 retrievePageInfo($dialogContent);
             });
         }
+        toggleInputs($dialogContent);
     }
 
     function toggleInputs(dialogContent) {

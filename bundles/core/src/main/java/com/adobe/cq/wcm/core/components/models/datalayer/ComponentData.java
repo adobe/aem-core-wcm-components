@@ -44,7 +44,7 @@ public interface ComponentData {
     @JsonIgnore
     @JsonProperty("@id")
     default String getId() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -56,7 +56,7 @@ public interface ComponentData {
      */
     @JsonProperty("@type")
     default String getType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -69,7 +69,7 @@ public interface ComponentData {
     @JsonProperty("repo:modifyDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     default Date getLastModifiedDate() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 
@@ -81,7 +81,7 @@ public interface ComponentData {
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
     default String getParentId() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -93,7 +93,7 @@ public interface ComponentData {
      */
     @JsonProperty("dc:title")
     default String getTitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -105,7 +105,7 @@ public interface ComponentData {
      */
     @JsonProperty("dc:description")
     default String getDescription() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -117,7 +117,7 @@ public interface ComponentData {
      */
     @JsonProperty("xdm:text")
     default String getText() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -129,7 +129,7 @@ public interface ComponentData {
      */
     @JsonProperty("xdm:linkURL")
     default String getLinkUrl() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -142,7 +142,7 @@ public interface ComponentData {
     @JsonIgnore
     @Nullable
     default String getJson() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 }

@@ -15,14 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.extensions.amp.models;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
-
-import com.adobe.cq.wcm.core.components.models.Page;
 
 /**
  * Defines the {@code AmpPage} Sling Model used for AMP extension for the {@code /apps/core/wcm/components/page/v2/page} component.
@@ -38,7 +34,7 @@ public interface AmpPage {
      * @return the page link
      */
     default Map<String, String> getPageLinkAttrs() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
     /**
@@ -47,7 +43,7 @@ public interface AmpPage {
      * @return {@code true} if the current request has the AMP selector, {@code false} otherwise
      */
     default boolean isAmpSelector() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -56,6 +52,6 @@ public interface AmpPage {
      * @return boolean for AMP enabled
      */
     default boolean isAmpEnabled() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 }

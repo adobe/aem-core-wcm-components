@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Defines the {@code Teaser} Sling Model for the {@code /apps/core/wcm/components/teaser} component.
@@ -133,7 +132,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default boolean isActionsEnabled() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -143,7 +142,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default List<ListItem> getActions() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -153,7 +152,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getLinkURL() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -163,7 +162,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default Resource getImageResource() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -173,7 +172,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default boolean isImageLinkHidden() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -193,7 +192,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getTitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -203,7 +202,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default boolean isTitleLinkHidden() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -213,7 +212,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getDescription() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -223,15 +222,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getTitleType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
-    /**
-     * @since com.adobe.cq.wcm.core.components.models 12.4.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 }

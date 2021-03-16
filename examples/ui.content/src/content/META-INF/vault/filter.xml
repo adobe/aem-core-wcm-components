@@ -15,9 +15,23 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
-    <filter root="/conf/core-components-examples"/>
-    <filter root="/content/core-components-examples"/>
+
+    <!-- All the exclude rules are defined for Commerce content coming from https://github.com/adobe/aem-core-cif-components/tree/master/examples/ui.content -->
+
+    <filter root="/conf/core-components-examples">
+        <exclude pattern="/conf/core-components-examples/settings/cloudconfigs(/.*)?"/>
+        <exclude pattern="/conf/core-components-examples/settings/wcm/templates/content-page/structure/jcr:content/root/sidebar/accordion/item_1579021109269"/>
+    </filter>
+    <filter root="/content/core-components-examples">
+        <exclude pattern="/content/core-components-examples/library/jcr:content/root/responsivegrid/container_1589240807(/.*)?"/>
+        <exclude pattern="/content/core-components-examples/library/commerce(/.*)?"/>
+    </filter>
     <filter root="/content/cq:tags/core-components-examples"/>
-    <filter root="/content/dam/core-components-examples"/>
-    <filter root="/content/experience-fragments/core-components-examples"/>
+    <filter root="/content/dam/core-components-examples">
+        <exclude pattern="/content/dam/core-components-examples/library/cif-sample-assets(/.*)?"/>
+        <exclude pattern="/content/dam/core-components-examples/library/cif-components(/.*)?"/>
+    </filter>
+    <filter root="/content/experience-fragments/core-components-examples">
+        <exclude pattern="/content/experience-fragments/core-components-examples/library/commerce(/.*)?"/>
+    </filter>
 </workspaceFilter>

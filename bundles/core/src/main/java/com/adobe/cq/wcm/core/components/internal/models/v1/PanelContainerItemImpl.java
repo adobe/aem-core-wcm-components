@@ -17,9 +17,11 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Optional;
 
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
@@ -41,9 +43,9 @@ public class PanelContainerItemImpl extends ResourceListItemImpl implements List
      * @param resource The resource.
      * @param parentId The ID of the containing component.
      */
-    public PanelContainerItemImpl(@NotNull final Resource resource, final String parentId, Component component,
+    public PanelContainerItemImpl(@NotNull final LinkHandler linkHandler, @NotNull final Resource resource, final String parentId, Component component,
                                   Page currentPage) {
-        super(resource, parentId, component);
+        super(linkHandler, resource, parentId, component);
         setCurrentPage(currentPage);
         title = Optional.ofNullable(resource.getValueMap().get(PN_PANEL_TITLE, String.class))
             .orElseGet(() -> resource.getValueMap().get(JcrConstants.JCR_TITLE, String.class));

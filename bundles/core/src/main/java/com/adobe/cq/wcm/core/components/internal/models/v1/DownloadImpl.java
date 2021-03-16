@@ -42,6 +42,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;
@@ -67,6 +69,9 @@ public class DownloadImpl implements Download {
 
     @Self
     private SlingHttpServletRequest request;
+
+    @Self
+    private LinkHandler linkHandler;
 
     @ScriptVariable
     private Resource resource;
@@ -165,7 +170,7 @@ public class DownloadImpl implements Download {
                         extension = mimeTypeService.getExtension(format);
                     }
 
-                    url = getDownloadUrl(file) + "/" + filename;
+                    url = linkHandler.getLink(getDownloadUrl(file) + "/" + filename, null).map(Link::getURL).orElse(null);
                     size = FileUtils.byteCountToDisplaySize(getFileSize(fileContent));
                 }
             }
@@ -198,7 +203,7 @@ public class DownloadImpl implements Download {
                         extension = FilenameUtils.getExtension(filename);
                     }
 
-                    url = getDownloadUrl(downloadResource);
+                    url = linkHandler.getLink(getDownloadUrl(downloadResource), null).map(Link::getURL).orElse(null);
 
                     if (titleFromAsset) {
                         title = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);

@@ -591,6 +591,16 @@ class AdaptiveImageServletTest extends AbstractImageTest {
     }
 
     @Test
+    void testFileReferenceNonexistingAsset() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE30_PATH,
+                "img", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        servlet.doGet(request, response);
+        Assertions.assertEquals(HttpServletResponse.SC_NOT_FOUND, response.getStatus());
+    }
+
+    @Test
     void testDifferentSuffixExtension() throws IOException {
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
                 prepareRequestResponsePair(IMAGE3_PATH, 1490005239000L, "img.600", "png", "jpeg");

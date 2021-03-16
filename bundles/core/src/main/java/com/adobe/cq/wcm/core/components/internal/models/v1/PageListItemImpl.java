@@ -21,12 +21,12 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
@@ -58,31 +58,30 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     public static final boolean PROP_DISABLE_SHADOWING_DEFAULT = false;
 
     /**
-     * The current request.
-     */
-    protected SlingHttpServletRequest request;
-
-    /**
      * The page for this list item.
      */
     protected Page page;
 
     /**
+     * The link for this list item.
+     */
+    protected final Optional<Link<Page>> link;
+
+    /**
      * Construct a list item for a given page.
      *
-     * @param request The current request.
+     * @param linkHandler The link handler.
      * @param page The current page.
      * @param parentId The ID of the list containing this item.
      * @param isShadowingDisabled Flag indicating if redirect shadowing should be disabled.
      * @param component The component containing this list item.
      */
-    public PageListItemImpl(@NotNull final SlingHttpServletRequest request,
+    public PageListItemImpl(@NotNull final LinkHandler linkHandler,
                             @NotNull final Page page,
                             final String parentId,
                             final boolean isShadowingDisabled,
                             final Component component) {
         super(parentId, page.getContentResource(), component);
-        this.request = request;
         this.page = page;
         this.parentId = parentId;
 
@@ -91,11 +90,19 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
                 .filter(redirectTarget -> !redirectTarget.equals(page))
                 .orElse(page);
         }
+
+        this.link = linkHandler.getLink(this.page);
+    }
+
+    @Override
+    @JsonIgnore
+    public @NotNull Link<Page> getLink() {
+        return link.orElse(null);
     }
 
     @Override
     public String getURL() {
-        return Utils.getURL(request, page);
+        return link.map(Link::getURL).orElse(null);
     }
 
     @Override

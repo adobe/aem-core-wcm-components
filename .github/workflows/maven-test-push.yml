@@ -14,17 +14,10 @@
 # limitations under the License.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-name: Test
+name: Test (push)
 
 on:
   push:
-  pull_request:
-    branches:
-      # Branches from forks have the form 'user:branch-name' so we only run
-      # this job on pull_request events for branches that look like fork
-      # branches. Without this we would end up running this job twice for non
-      # forked PRs, once for the push and then once for opening the PR.
-      - '**:**'
 
 jobs:
   build:
@@ -34,6 +27,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         java: [8, 11]
+        profile: [ '', '-Pcloud,adobe-public']
 
     steps:
       # Check out Git repository
@@ -54,10 +48,21 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+            
+      # Import GPG key from env variable into keychain
+      - name: Import GPG key
+        env:
+          GPG_SECRET_KEYS: ${{ secrets.GPG_SECRET_KEYS }}
+          GPG_OWNERTRUST: ${{ secrets.GPG_OWNERTRUST }}
+        run: |
+          echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
+          echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust --no-tty --batch --yes
 
       # Build & Test
       - name: Build & Test with Maven
-        run: mvn -B -U clean verify
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: mvn -B -U clean install ${{ matrix.profile }} ${{ fromJSON('["-Prelease", ""]')[matrix.java == 11 || matrix.profile == ''] }} -s ./.github/workflows/settings.xml
 
       # Run code coverage check
       - name: Run core coverage check

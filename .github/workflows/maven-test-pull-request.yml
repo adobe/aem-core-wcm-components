@@ -1,5 +1,5 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Copyright 2020 Adobe Systems Incorporated
+# Copyright 2021 Adobe Systems Incorporated
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,22 +14,20 @@
 # limitations under the License.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-name: Test Cloud version
+name: Test (pull request)
 
 on:
-  push:
   pull_request:
-    branches:
-      # Branches from forks have the form 'user:branch-name' so we only run
-      # this job on pull_request events for branches that look like fork
-      # branches. Without this we would end up running this job twice for non
-      # forked PRs, once for the push and then once for opening the PR.
-      - '**:**'
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        java: [8, 11]
+        profile: [ '', '-Pcloud,adobe-public']
 
     steps:
       # Check out Git repository
@@ -40,7 +38,7 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: ${{ matrix.java }}
 
       # Set up dependency cache
       - name: Cache local Maven repository
@@ -49,8 +47,12 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-              ${{ runner.os }}-maven-
+            ${{ runner.os }}-maven-
 
       # Build & Test
       - name: Build & Test with Maven
-        run: mvn -B -U clean install -Pcloud
+        run: mvn -B -U clean install ${{ matrix.profile }} -s ./.github/workflows/settings.xml
+
+      # Run code coverage check
+      - name: Run core coverage check
+        run: bash <(curl -s https://codecov.io/bash)
