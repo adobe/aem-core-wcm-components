@@ -577,7 +577,10 @@
                             "jcr:lastModifiedBy": "admin",
                             "jcr:mimeType"      : "image/gif",
                             ":jcr:data"         : 10453365,
-                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088",
+                            "metadata"          : {
+                                "dam:scene7Type"    : "AnimatedGif"
+                            }
                         }
                     }
                 }

@@ -51,6 +51,7 @@ public class DMAssetPostProcessorTest {
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET = PAGE + "/jcr:content/root/image32";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_IMAGE_PRESET = PAGE + "/jcr:content/root/image33";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_SMART_CROP_RENDITION = PAGE + "/jcr:content/root/image36";
+    private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_ANIMATED_GIF = PAGE + "/jcr:content/root/image40";
     private static final String CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET_ANIMATED_GIF = PAGE + "/jcr:content/root/image41";
 
     private static final String EXPECTED_IMAGE_SERVER_URL = "https://s7d9.scene7.com/is/image/";
@@ -100,9 +101,9 @@ public class DMAssetPostProcessorTest {
         value = ModificationType.class,
         names = {"CREATE", "MODIFY"}
     )
-    public void fromNonDMtoDMAssetNAmimatedGif(ModificationType modificationType) throws Exception {
+    public void fromNonDMtoDMAssetAnimatedGif(ModificationType modificationType) throws Exception {
         String existingComponent = CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET_ANIMATED_GIF;
-        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET));
+        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET_ANIMATED_GIF));
         List<Modification> modifications = prepareModifications(modificationType, existingComponent, true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
