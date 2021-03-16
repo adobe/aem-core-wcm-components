@@ -15,13 +15,16 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,25 +34,12 @@ import org.mockito.Mockito;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Component;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.adobe.cq.wcm.style.ComponentStyleInfo;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
 
 @ExtendWith(AemContextExtension.class)
 public class ComponentImplTest {
@@ -65,7 +55,6 @@ public class ComponentImplTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
-    	context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONF_JSON, "/conf/we-retail/settings");
     }
 
     @Test
@@ -86,8 +75,10 @@ public class ComponentImplTest {
     {
     	final String WE_RETAIL_TITLE = TEST_PAGE_EN+"/jcr:content/root/title_core";
     	Object[] mappings = null;
-    	String[] styleClasses = getComponentUnderTest(WE_RETAIL_TITLE,mappings).getAppliedCssClasses().split(StringUtils.SPACE);
-    	assertTrue(styleClasses!=null && styleClasses.length == 2);
+    	Component component = getComponentUnderTest(WE_RETAIL_TITLE,mappings);
+    	String[] styleClasses = component.getAppliedCssClasses().split(StringUtils.SPACE);
+    	assertNotNull(styleClasses);
+    	assertArrayEquals(new String[] {"class1",  "class2"},styleClasses);
     }
     
     private Component getComponentUnderTest(String resourcePath, Object ... properties) {
