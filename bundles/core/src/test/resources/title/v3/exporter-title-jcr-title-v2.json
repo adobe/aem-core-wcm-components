@@ -1,9 +1,6 @@
 {
   "id": "title-614d9def2d",
   "linkDisabled": false,
-  "link": {
-    "valid": false
-  },
   "text": "Hello World",
   ":type": "core/wcm/components/title/v3/title",
   "dataLayer": {

@@ -16,10 +16,10 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -37,8 +37,11 @@ public class TitleImpl extends com.adobe.cq.wcm.core.components.internal.models.
     protected static final String RESOURCE_TYPE = "core/wcm/components/title/v3/title";
 
     @Override
-    public @NotNull Link getLink() {
-        return link;
+    public Link getLink() {
+        if (StringUtils.isNotEmpty(link.get().getURL())) {
+            return link.get();
+        }
+        return null;
     }
 
     @Override

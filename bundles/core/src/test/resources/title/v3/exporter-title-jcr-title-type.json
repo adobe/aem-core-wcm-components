@@ -2,7 +2,6 @@
     "id": "title-4a2e772be1",
     "type": "h2",
     "text": "Hello World",
-    "link": { "valid": false },
     "linkDisabled": false,
     "dataLayer": {
         "title-4a2e772be1": {

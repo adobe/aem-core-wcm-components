@@ -16,10 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.models;
 
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 
 /**
@@ -52,7 +50,7 @@ public interface Title extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getText() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -62,7 +60,7 @@ public interface Title extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -71,9 +69,8 @@ public interface Title extends Component {
      * @return the title's link
      * @since com.adobe.cq.wcm.core.components.models 12.20.0
      */
-    @NotNull
     default Link getLink() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -85,7 +82,7 @@ public interface Title extends Component {
      */
     @Deprecated
     default String getLinkURL() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -95,16 +92,7 @@ public interface Title extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default boolean isLinkDisabled() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 }
