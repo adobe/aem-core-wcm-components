@@ -206,7 +206,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Self
     private LinkHandler linkHandler;
-    protected Link link;
+    protected Optional<Link> link;
 
     /**
      * Initialize the model.
@@ -309,7 +309,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     public String getLinkURL() {
         if (this.linkURL == null) {
             // use the target page url if it exists
-            this.linkURL = this.getTargetPage().map(page -> linkHandler.getLink(page).getURL())
+            this.linkURL = this.getTargetPage().map(page -> linkHandler.getLink(page).map(Link::getURL).orElse(null))
                 .orElseGet(() -> {
                     // target page doesn't exist
                     if (this.isActionsEnabled()) {
@@ -318,7 +318,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                             .orElse(null);
                     } else {
                         // use the property value if actions are not enabled
-                        return link.getURL();
+                        return link.map(Link::getURL).orElse(null);
                     }
                 });
         }
@@ -443,7 +443,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         /**
          * The CTA link.
          */
-        protected final Link<Page> ctaLink;
+        protected final Optional<Link<Page>> ctaLink;
 
         /**
          * The ID of the teaser that contains this action.
@@ -467,7 +467,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             ctaResource = actionRes;
             ValueMap ctaProperties = actionRes.getValueMap();
             ctaTitle = ctaProperties.get(PN_ACTION_TEXT, String.class);
-            ctaLink = linkHandler.getLink(actionRes, PN_ACTION_LINK);
+            ctaLink = Optional.ofNullable(linkHandler.getLink(actionRes, PN_ACTION_LINK).orElse(null));
             if (component != null) {
                 this.dataLayerType = component.getResourceType() + "/" + CTA_ID_PREFIX;
             }
@@ -476,7 +476,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Override
         @JsonIgnore
         public @NotNull Link getLink() {
-            return ctaLink;
+            return ctaLink.orElse(null);
         }
 
         /**
@@ -486,7 +486,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          */
         @NotNull
         protected Optional<Page> getCtaPage() {
-            return Optional.ofNullable(ctaLink.getReference());
+            return Optional.ofNullable(ctaLink.map(Link::getReference).orElse(null));
         }
 
         @Nullable
@@ -498,20 +498,20 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Nullable
         @Override
         public String getPath() {
-            Page page = ctaLink.getReference();
+            Page page = ctaLink.map(Link::getReference).orElse(null);
             if (page != null) {
                 return page.getPath();
             }
             else {
                 // probably would make more sense to return null when not page is target, but we keep this for backward compatibility
-                return ctaLink.getURL();
+                return ctaLink.map(Link::getURL).orElse(null);
             }
         }
 
         @Nullable
         @Override
         public String getURL() {
-            return ctaLink.getURL();
+            return ctaLink.map(Link::getURL).orElse(null);
         }
 
         @Override

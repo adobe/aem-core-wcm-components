@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.15.1-SNAPSHOT</version>
+        <version>2.15.3-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.extensions.amp</artifactId>
-    <version>2.15.1-SNAPSHOT</version>
+    <version>2.15.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>Adobe Experience Manager Core WCM Components AMP Extension Bundle</name>
