@@ -15,13 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
@@ -74,24 +74,35 @@ public class ComponentImplTest {
     public void testStyleSystemClasses()
     {
     	final String WE_RETAIL_TITLE = TEST_PAGE_EN+"/jcr:content/root/title_core";
-    	Object[] mappings = null;
-    	Component component = getComponentUnderTest(WE_RETAIL_TITLE,mappings);
-    	String[] styleClasses = component.getAppliedCssClasses().split(StringUtils.SPACE);
+    	
+    	ComponentStyleInfo componentStyleInfoMock = mock(ComponentStyleInfo.class);
+    	Resource resource = spy(context.resourceResolver().getResource(WE_RETAIL_TITLE));
+    	Mockito.doReturn(componentStyleInfoMock).when(resource).adaptTo(ComponentStyleInfo.class);
+    	
+        MockSlingHttpServletRequest request = context.request();
+        request.setResource(resource);
+    	
+    	Mockito.doReturn("class1 class2").when(componentStyleInfoMock).getAppliedCssClasses();
+    	Component component = request.adaptTo(Component.class);
+    	String styleClasses = component.getAppliedCssClasses();
     	assertNotNull(styleClasses);
-    	assertArrayEquals(new String[] {"class1",  "class2"},styleClasses);
+    	assertEquals("class1 class2",styleClasses);
+    	
+    	Mockito.doReturn(" ").when(componentStyleInfoMock).getAppliedCssClasses();
+    	component = request.adaptTo(Component.class);
+    	styleClasses = component.getAppliedCssClasses();
+    	assertNull(styleClasses);
+    	
+    	Mockito.doReturn(null).when(componentStyleInfoMock).getAppliedCssClasses();
+    	component = request.adaptTo(Component.class);
+    	styleClasses = component.getAppliedCssClasses();
+    	assertNull(styleClasses);
     }
     
     private Component getComponentUnderTest(String resourcePath, Object ... properties) {
         Resource resource = spy(context.resourceResolver().getResource(resourcePath));
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);
-        }
-        else
-        {
-        	// When policy mappings are not provided default the style mappings as style group mappings require child nodes which is not supported by contentPolicyMapping method
-        	ComponentStyleInfo componentStyleInfoMock = mock(ComponentStyleInfo.class);
-        	Mockito.doReturn(componentStyleInfoMock).when(resource).adaptTo(ComponentStyleInfo.class);
-        	Mockito.doReturn("class1 class2").when(componentStyleInfoMock).getAppliedCssClasses();
         }
         
         MockSlingHttpServletRequest request = context.request();
