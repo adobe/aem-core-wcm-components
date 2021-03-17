@@ -23,7 +23,7 @@
                     jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Image&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
@@ -33,7 +33,7 @@
                     jcr:lastModified="{Date}2018-12-07T12:43:27.011+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Image allows a single image asset to be displayed on the page. Images are adaptive; the relevant image width is selected for the screen size and lazy loading is available.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -76,7 +76,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
@@ -86,7 +86,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -94,7 +94,7 @@
                     jcr:lastModified="{Date}2018-12-07T12:43:51.636+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Simple image with an asset referenced from DAM and no other configuration. By default, metadata for the asset (alternative text and caption) is read from DAM but can also be provided by an author.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_554582955
@@ -148,7 +148,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Caption"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337505101
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -156,7 +156,7 @@
                     jcr:lastModified="{Date}2018-12-07T12:44:07.351+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Captions are displayed by default in a pop-up on hover but the image can also be configured so that the caption is displayed directly on the page.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_1384627264
@@ -210,7 +210,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Linked"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337505103
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -218,7 +218,7 @@
                     jcr:lastModified="{Date}2018-12-07T12:44:17.999+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Images can be linked to internal relative AEM resources or to external absolute URLs.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_1473529393
@@ -273,7 +273,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="SVG and GIF Images"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337505105
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -281,7 +281,7 @@
                     jcr:lastModified="{Date}2018-12-07T12:44:34.290+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>SVG and GIF image MIME types are supported.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
