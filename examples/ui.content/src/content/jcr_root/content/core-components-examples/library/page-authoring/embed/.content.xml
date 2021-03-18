@@ -23,7 +23,7 @@
                     jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Embed&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
@@ -33,7 +33,7 @@
                     jcr:lastModified="{Date}2019-08-13T12:07:06.378+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Embed allows a third-party widget to be added to a page. Media can be added from a supported URL, a pre-configured embeddable or with safe freeform HTML.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -76,7 +76,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
@@ -86,7 +86,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="URL"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -94,7 +94,7 @@
                     jcr:lastModified="{Date}2019-08-13T11:59:55.176+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>URLs to embeddable objects can be pasted in the edit dialog. Embed will check that the URL matches a supported processor and provide feedback to the author. Additional URL processors can be registered by a developer.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_1160408555
@@ -112,7 +112,7 @@
                             jcr:lastModified="{Date}2019-08-29T18:24:36.178+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/embed/v1/embed"
+                            sling:resourceType="core-components-examples/components/embed"
                             type="url"
                             url="https://www.pinterest.com/pin/146859637829777606/"/>
                     </component>
@@ -143,7 +143,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="oEmbed URL"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_462863792
                     jcr:created="{Date}2019-08-21T17:13:17.442+03:00"
@@ -151,7 +151,7 @@
                     jcr:lastModified="{Date}2019-08-29T18:27:11.484+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>URLs to embeddable objects that use oEmbed to retrieve the embedding information. This example uses the bundled Twitter configuration. Other configurations can be easily added by a developer.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -168,7 +168,7 @@
                             jcr:lastModified="{Date}2019-08-29T18:28:39.652+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/embed/v1/embed"
+                            sling:resourceType="core-components-examples/components/embed"
                             type="url"
                             url="https://twitter.com/GabrielWalt/status/1159514156074196992"/>
                     </component>
@@ -200,7 +200,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Embeddable"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506722
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -208,7 +208,7 @@
                     jcr:lastModified="{Date}2019-08-13T12:08:08.544+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Trusted pre-configured embeddable snippets that can be selected by an author. These snippets are parameterized and can include unsafe tags such as &lt;i style=&quot;font-size: 1rem;&quot;>script&lt;/i>. Developers are able to create custom embeddable snippets for selection in the edit dialog.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_1160408470
@@ -224,7 +224,7 @@
                         sling:resourceType="core-components-examples/components/demo/component">
                         <embed_616254787
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/embed/v1/embed"
+                            sling:resourceType="core-components-examples/components/embed"
                             embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
                             type="embeddable"
                             youtubeVideoId="f7hbWvHKns0"/>
@@ -257,7 +257,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="HTML"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337505001
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -265,7 +265,7 @@
                     jcr:lastModified="{Date}2019-08-13T12:05:51.987+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Allows an author to input free-form html and is restricted to safe tags only. For example, the &lt;i>script&lt;/i> tag is not supported.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_1160408466
@@ -280,7 +280,7 @@
                         sling:resourceType="core-components-examples/components/demo/component">
                         <embed
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/embed/v1/embed"
+                            sling:resourceType="core-components-examples/components/embed"
                             html="&lt;blockquote>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.&lt;/blockquote>"
                             type="html"/>
                     </component>

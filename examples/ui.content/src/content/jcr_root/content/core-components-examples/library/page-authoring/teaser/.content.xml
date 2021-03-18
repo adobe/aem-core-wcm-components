@@ -23,7 +23,7 @@
                         jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/text/v2/text"
+                        sling:resourceType="core-components-examples/components/text"
                         text="&lt;h1>Teaser&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
                         textIsRich="true"/>
                 <text
@@ -33,7 +33,7 @@
                         jcr:lastModified="{Date}2018-12-07T13:32:37.460+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/text/v2/text"
+                        sling:resourceType="core-components-examples/components/text"
                         text="&lt;p>Teaser allows the grouping of an image, title and description for promoting and linking to site content sections. One or more actions can also be defined.&lt;/p>&#xa;"
                         textIsRich="true"/>
                 <teaser
@@ -76,7 +76,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Examples"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h2"/>
                 <title_290384408
                         cq:styleIds="[1544759676459]"
@@ -86,7 +86,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Pretitle, Title and Description"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h3"/>
                 <text_1337506761
                         jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -94,7 +94,7 @@
                         jcr:lastModified="{Date}2019-12-08T11:06:35.399+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/text/v2/text"
+                        sling:resourceType="core-components-examples/components/text"
                         text="&lt;p>Teaser with a pretitle, title and description.&lt;/p>"
                         textIsRich="true"/>
                 <demo
@@ -125,7 +125,7 @@
                     </component>
                     <info
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            sling:resourceType="core-components-examples/components/tabs">
                         <properties
                                 cq:panelTitle="Properties"
                                 jcr:primaryType="nt:unstructured"
@@ -151,7 +151,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Image, Pretitle, Title and Description"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h3"/>
                 <text_1337505001
                         jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -159,7 +159,7 @@
                         jcr:lastModified="{Date}2019-12-08T11:08:31.143+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/text/v2/text"
+                        sling:resourceType="core-components-examples/components/text"
                         text="&lt;p>Teaser with an image, pretitle, title and description.&lt;/p>"
                         textIsRich="true"/>
                 <demo_1160408466
@@ -190,7 +190,7 @@
                     </component>
                     <info
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            sling:resourceType="core-components-examples/components/tabs">
                         <properties
                                 cq:panelTitle="Properties"
                                 jcr:primaryType="nt:unstructured"
@@ -216,7 +216,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Linked"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h3"/>
                 <text_1337506001
                         jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -224,7 +224,7 @@
                         jcr:lastModified="{Date}2018-12-07T13:33:26.650+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/text/v2/text"
+                        sling:resourceType="core-components-examples/components/text"
                         text="&lt;p>Teasers can be linked to internal relative AEM resources or external absolute URLs.&lt;/p>&#xa;"
                         textIsRich="true"/>
                 <demo_1789748122
@@ -255,7 +255,7 @@
                     </component>
                     <info
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            sling:resourceType="core-components-examples/components/tabs">
                         <properties
                                 cq:panelTitle="Properties"
                                 jcr:primaryType="nt:unstructured"
@@ -281,7 +281,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Call To Action Button"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h3"/>
                 <text_1337507001
                         jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -289,7 +289,7 @@
                         jcr:lastModified="{Date}2018-12-07T13:40:56.099+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/text/v2/text"
+                        sling:resourceType="core-components-examples/components/text"
                         text="&lt;p>Teaser with an image, title, description and call-to-action button.&lt;/p>&#xd;&#xa;"
                         textIsRich="true"/>
                 <demo_1878698139
@@ -326,7 +326,7 @@
                     </component>
                     <info
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            sling:resourceType="core-components-examples/components/tabs">
                         <properties
                                 cq:panelTitle="Properties"
                                 jcr:primaryType="nt:unstructured"
@@ -352,7 +352,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Multiple Call To Action Buttons"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h3"/>
                 <text_1337508001
                         jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -360,7 +360,7 @@
                         jcr:lastModified="{Date}2018-12-07T13:41:04.958+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/text/v2/text"
+                        sling:resourceType="core-components-examples/components/text"
                         text="&lt;p>Teaser with an image, title, description and multiple call-to-action buttons, each with a different link.&lt;/p>&#xa;"
                         textIsRich="true"/>
                 <demo_1581767054
@@ -401,7 +401,7 @@
                     </component>
                     <info
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            sling:resourceType="core-components-examples/components/tabs">
                         <properties
                                 cq:panelTitle="Properties"
                                 jcr:primaryType="nt:unstructured"
@@ -427,7 +427,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Title and Description from Linked Page"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h3"/>
                 <text_1337509001
                         jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -435,7 +435,7 @@
                         jcr:lastModified="{Date}2018-12-07T13:35:37.221+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/text/v2/text"
+                        sling:resourceType="core-components-examples/components/text"
                         text="&lt;p>Teaser with a title, description and link - with the title and description taken from the linked page.&lt;/p>&#xa;"
                         textIsRich="true"/>
                 <demo_1257101605
@@ -464,7 +464,7 @@
                     </component>
                     <info
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            sling:resourceType="core-components-examples/components/tabs">
                         <properties
                                 cq:panelTitle="Properties"
                                 jcr:primaryType="nt:unstructured"
