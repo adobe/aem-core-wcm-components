@@ -35,7 +35,7 @@ public interface Field extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getId() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -48,7 +48,7 @@ public interface Field extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getName() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -61,7 +61,7 @@ public interface Field extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getValue() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -74,7 +74,7 @@ public interface Field extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getTitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -87,7 +87,7 @@ public interface Field extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getHelpMessage() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -97,6 +97,6 @@ public interface Field extends ComponentExporter {
     @NotNull
     @Override
     default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 }

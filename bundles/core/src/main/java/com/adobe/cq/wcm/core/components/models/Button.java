@@ -15,10 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 
 /**
@@ -36,7 +34,7 @@ public interface Button extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getText() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -45,8 +43,8 @@ public interface Button extends Component {
      * @return the button link
      * @since com.adobe.cq.wcm.core.components.models 12.20.0
      */
-    default @NotNull Link getButtonLink() {
-        throw new UnsupportedOperationException();
+    default Link getButtonLink() {
+        return null;
     }
 
     /**
@@ -58,7 +56,7 @@ public interface Button extends Component {
      */
     @Deprecated
     default String getLink() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -68,7 +66,7 @@ public interface Button extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getIcon() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -78,17 +76,7 @@ public interface Button extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
     default String getAccessibilityLabel() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 }

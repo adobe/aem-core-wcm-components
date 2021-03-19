@@ -16,10 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.models;
 
-import javax.annotation.Nonnull;
-
-import com.adobe.cq.export.json.ComponentExporter;
-
 /**
  * Defines the {@code Download} Sling Model used for the {@code /apps/core/wcm/components/download} component.
  *
@@ -92,7 +88,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getTitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -103,7 +99,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getDescription() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -113,7 +109,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getUrl() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -124,7 +120,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getActionText() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -134,7 +130,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getTitleType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -144,7 +140,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getSize() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -155,7 +151,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getExtension() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -165,7 +161,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean displaySize() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -175,7 +171,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getFormat() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -185,7 +181,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean displayFormat() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -195,7 +191,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getFilename() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -205,16 +201,7 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean displayFilename() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    @Nonnull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 }

@@ -33,7 +33,7 @@ public interface PageData extends ComponentData {
      */
     @JsonProperty("xdm:tags")
     default String[] getTags() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -45,7 +45,7 @@ public interface PageData extends ComponentData {
      */
     @JsonProperty("repo:path")
     default String getUrl() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -57,7 +57,7 @@ public interface PageData extends ComponentData {
      */
     @JsonProperty("xdm:template")
     default String getTemplatePath() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -69,7 +69,7 @@ public interface PageData extends ComponentData {
      */
     @JsonProperty("xdm:language")
     default String getLanguage() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 }

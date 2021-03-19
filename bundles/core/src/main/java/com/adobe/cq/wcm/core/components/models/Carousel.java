@@ -53,7 +53,7 @@ public interface Carousel extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
     default boolean getAutoplay() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -63,7 +63,7 @@ public interface Carousel extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
     default Long getDelay() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -73,7 +73,7 @@ public interface Carousel extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.6.0
      */
     default boolean getAutopauseDisabled() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -83,6 +83,6 @@ public interface Carousel extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
     default String getAccessibilityLabel() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }

@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -40,8 +40,9 @@ public class ButtonImpl extends com.adobe.cq.wcm.core.components.internal.models
     public static final String RESOURCE_TYPE = "core/wcm/components/button/v2/button";
 
     @Override
-    public @NotNull Link getButtonLink() {
-        return link;
+    @Nullable
+    public Link getButtonLink() {
+        return link.orElse(null);
     }
 
     @Override
