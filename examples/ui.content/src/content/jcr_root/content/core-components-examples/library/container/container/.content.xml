@@ -21,13 +21,13 @@
                 <text_1740702241
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Container&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Container can be used to group together other components and apply a common layout or style. Custom background image and color can also be applied.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -58,13 +58,13 @@
                     cq:styleIds="[1544759664489]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384499
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671813
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -72,7 +72,7 @@
                     jcr:lastModified="{Date}2019-06-11T19:33:03.874+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Container that uses the default &lt;i>Simple&lt;/i> layout and contains sample content.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_975671813
@@ -85,7 +85,7 @@
                             jcr:lastModified="{Date}2019-06-11T18:23:04.466+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/container/v1/container"
+                            sling:resourceType="core-components-examples/components/container"
                             layout="simple">
                             <title
                                 jcr:created="{Date}2019-06-11T19:44:07.503+02:00"
@@ -94,18 +94,18 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
-                                sling:resourceType="core/wcm/components/title/v2/title"
+                                sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/text/v2/text"
+                                sling:resourceType="core-components-examples/components/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xd;&#xa;"
                                 textIsRich="true"/>
                         </container>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -127,7 +127,7 @@
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Layout"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671822
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -135,7 +135,7 @@
                     jcr:lastModified="{Date}2019-06-11T19:32:53.932+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Container that uses the &lt;i>Responsive Grid&lt;/i> layout and contains sample content.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_975671829
@@ -148,11 +148,11 @@
                             jcr:lastModified="{Date}2019-06-11T18:23:04.466+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/container/v1/container"
+                            sling:resourceType="core-components-examples/components/container"
                             layout="responsiveGrid">
                             <text
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/text/v2/text"
+                                sling:resourceType="core-components-examples/components/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xd;&#xa;"
                                 textIsRich="true">
                                 <cq:responsive jcr:primaryType="nt:unstructured">
@@ -181,7 +181,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -203,7 +203,7 @@
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Background Color"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671855
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -211,7 +211,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:08:28.707+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Container with a background color applied.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -224,7 +224,7 @@
                             jcr:lastModified="{Date}2019-06-11T18:23:04.466+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/container/v1/container"
+                            sling:resourceType="core-components-examples/components/container"
                             backgroundColor="rgba(255,133,27,0.25)"
                             layout="simple">
                             <title
@@ -232,18 +232,18 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
-                                sling:resourceType="core/wcm/components/title/v2/title"
+                                sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/text/v2/text"
+                                sling:resourceType="core-components-examples/components/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xd;&#xa;"
                                 textIsRich="true"/>
                         </container>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -265,7 +265,7 @@
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Background Image"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671891
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -273,7 +273,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:08:28.707+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Container with a background image applied.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_295699411
@@ -286,7 +286,7 @@
                             jcr:lastModified="{Date}2019-06-11T19:50:48.781+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/container/v1/container"
+                            sling:resourceType="core-components-examples/components/container"
                             backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
                             layout="simple">
                             <title
@@ -294,18 +294,18 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
-                                sling:resourceType="core/wcm/components/title/v2/title"
+                                sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/text/v2/text"
+                                sling:resourceType="core-components-examples/components/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xd;&#xa;"
                                 textIsRich="true"/>
                         </container>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -327,7 +327,7 @@
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Nested"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_975671881
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -335,7 +335,7 @@
                     jcr:lastModified="{Date}2019-06-11T19:56:33.701+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Nested containers, with each container using the &lt;i>Responsive Grid&lt;/i> layout.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_2146960736
@@ -346,7 +346,7 @@
                         sling:resourceType="core-components-examples/components/demo/component">
                         <container
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/container/v1/container"
+                            sling:resourceType="core-components-examples/components/container"
                             backgroundColor="#39CCCC"
                             backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
                             layout="responsiveGrid">
@@ -357,16 +357,16 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
-                                sling:resourceType="core/wcm/components/title/v2/title"
+                                sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/text/v2/text"
+                                sling:resourceType="core-components-examples/components/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xa;"
                                 textIsRich="true"/>
                             <container_793091227
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/container/v1/container"
+                                sling:resourceType="core-components-examples/components/container"
                                 backgroundColor="rgba(255,133,27,0.75)"
                                 layout="responsiveGrid">
                                 <title_copy
@@ -376,13 +376,13 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     jcr:title="Hac Habitasse"
-                                    sling:resourceType="core/wcm/components/title/v2/title"
+                                    sling:resourceType="core-components-examples/components/title"
                                     type="h4"/>
                                 <text
                                     jcr:lastModified="{Date}2019-06-11T19:49:05.704+02:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/text/v2/text"
+                                    sling:resourceType="core-components-examples/components/text"
                                     text="&lt;p>Hac habitasse platea dictumst quisque sagittis purus. At risus viverra adipiscing at in tellus integer. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Leo vel orci porta non pulvinar neque laoreet suspendisse. Volutpat diam ut venenatis tellus in metus vulputate eu.&lt;/p>&#xa;"
                                     textIsRich="true"/>
                                 <cq:responsive jcr:primaryType="nt:unstructured">
@@ -394,7 +394,7 @@
                             </container_793091227>
                             <container_793091227_
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/container/v1/container"
+                                sling:resourceType="core-components-examples/components/container"
                                 backgroundColor="rgba(127,219,255,0.5)"
                                 layout="responsiveGrid">
                                 <title
@@ -404,13 +404,13 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     jcr:title="Libero Id Faucibus"
-                                    sling:resourceType="core/wcm/components/title/v2/title"
+                                    sling:resourceType="core-components-examples/components/title"
                                     type="h4"/>
                                 <text
                                     jcr:lastModified="{Date}2019-06-11T19:49:47.985+02:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/text/v2/text"
+                                    sling:resourceType="core-components-examples/components/text"
                                     text="&lt;p>Libero id faucibus nisl tincidunt eget nullam non nisi. Hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris. Velit aliquet sagittis id consectetur purus ut. Orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt.&lt;/p>&#xa;"
                                     textIsRich="true"/>
                                 <cq:responsive jcr:primaryType="nt:unstructured">
@@ -424,7 +424,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"

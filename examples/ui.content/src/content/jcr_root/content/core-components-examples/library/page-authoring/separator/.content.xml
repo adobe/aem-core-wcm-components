@@ -24,7 +24,7 @@
                     jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Separator&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
@@ -34,7 +34,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:06:26.695+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Separator displays a horizontal line on the page for dividing sections of content.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -77,7 +77,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
@@ -87,7 +87,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -95,7 +95,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:04:43.459+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Separator is simply a horizontal rule rendered on the page and can be used for dividing sections of content.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -115,7 +115,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:06:02.107+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/separator/v1/separator"/>
+                            sling:resourceType="core-components-examples/components/separator"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
