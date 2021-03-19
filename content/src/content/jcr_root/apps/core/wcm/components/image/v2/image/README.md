@@ -62,7 +62,7 @@ otherwise a caption will be rendered
 ## Extending from This Component
 1. In case you overwrite the image's HTL script, make sure the necessary attributes for the JavaScript loading script are contained in the markup at the right position (see section below).
 2. In case your own component does not only render an image but does also renders something else, use the following approach:
-  1. `resourceSuperType` should be set to `core/wcm/components/image/v1/image` (to make sure the image rendering servlet is being used)
+  1. `resourceSuperType` should be set to `core/wcm/components/image/v2/image` (to make sure the image rendering servlet is being used)
   2. Your HTL script should include the image markup via `<div class="cmp-image" data-sly-include="image.html"></div>`
   3. You derived component should reset `cq:htmlTags`
   4. You component's dialog should overwrite the dialog fully from the image component via `sling:hideResource="true"` on the node `cq:dialog/content/items/image`

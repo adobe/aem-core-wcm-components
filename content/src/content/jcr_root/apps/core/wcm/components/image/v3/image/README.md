@@ -62,7 +62,7 @@ otherwise a caption will be rendered
 ## Extending from This Component
 1. In case you overwrite the image's HTL script, make sure the necessary attributes for the JavaScript loading script are contained in the markup at the right position (see section below).
 2. In case your own component does not only render an image but does also renders something else, use the following approach:
-  1. `resourceSuperType` should be set to `core/wcm/components/image/v1/image` (to make sure the image rendering servlet is being used)
+  1. `resourceSuperType` should be set to `core/wcm/components/image/v3/image` (to make sure the image rendering servlet is being used)
   2. Your HTL script should include the image markup via `<div class="cmp-image" data-sly-include="image.html"></div>`
   3. You derived component should reset `cq:htmlTags`
   4. You component's dialog should overwrite the dialog fully from the image component via `sling:hideResource="true"` on the node `cq:dialog/content/items/image`
@@ -95,10 +95,10 @@ Publish:
 ```
 
 ## Client Libraries
-The component provides a `core.wcm.components.image.v2` client library category that contains a recommended base
+The component reuses the `core.wcm.components.image.v2` client library category that contains a recommended base
 CSS styling and JavaScript component. It should be added to a relevant site client library using the `embed` property.
 
-It also provides a `core.wcm.components.image.v2.editor` editor client library category that includes JavaScript
+It also reuses the `core.wcm.components.image.v2.editor` editor client library category that includes JavaScript
 handling for dialog interaction. It is already included by its edit dialog.
 
 ## BEM Description
@@ -156,7 +156,7 @@ In addition, SVG image types have a more limited set of editing options availabl
 ## Information
 * **Vendor**: Adobe
 * **Version**: v3
-* **Compatibility**: AEM 6.3
+* **Compatibility**: AEM 6.5
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_image\_v3](https://www.adobe.com/go/aem_cmp_image_v3)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_image](https://www.adobe.com/go/aem_cmp_library_image)
