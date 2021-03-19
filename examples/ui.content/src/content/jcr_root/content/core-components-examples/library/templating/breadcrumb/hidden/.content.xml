@@ -31,7 +31,7 @@
                     jcr:lastModified="{Date}2019-06-03T18:56:17.311+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Breadcrumb&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
@@ -41,7 +41,7 @@
                     jcr:lastModified="{Date}2019-06-03T18:52:42.339+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>This is a sample page representing a typically hidden level in a breadcrumb hierarchy. The page is marked as &lt;i>Hide in Navigation&lt;/i>. For more information, return to the &lt;a href=&quot;/content/core-components-examples/library/templating/breadcrumb/hidden/level-1/level-2/breadcrumb.html&quot;>Breadcrumb example page&lt;/a>.&amp;nbsp;&lt;/p>&#xa;"
                     textIsRich="true">
                 </text>

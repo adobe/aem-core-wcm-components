@@ -72,6 +72,6 @@ public interface Component extends ComponentExporter {
     @NotNull
     @Override
     default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 }

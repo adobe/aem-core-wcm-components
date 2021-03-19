@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +66,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * The link for this list item.
      */
-    protected final Link link;
+    protected final Optional<Link<Page>> link;
 
     /**
      * Construct a list item for a given page.
@@ -96,13 +97,14 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     @Override
     @JsonIgnore
-    public @NotNull Link getLink() {
-        return link;
+    @Nullable
+    public Link<Page> getLink() {
+        return link.orElse(null);
     }
 
     @Override
     public String getURL() {
-        return link.getURL();
+        return link.map(Link::getURL).orElse(null);
     }
 
     @Override

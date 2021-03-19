@@ -32,7 +32,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getShape() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -42,7 +42,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getCoordinates() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -52,7 +52,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getRelativeCoordinates() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -62,7 +62,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getHref() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -72,7 +72,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getTarget() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -82,6 +82,6 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getAlt() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }

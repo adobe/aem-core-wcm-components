@@ -33,6 +33,6 @@ public interface ImageData extends ComponentData {
      */
     @JsonProperty("image")
     default AssetData getAssetData() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }

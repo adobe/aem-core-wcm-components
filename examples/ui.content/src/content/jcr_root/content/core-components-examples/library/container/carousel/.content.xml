@@ -23,7 +23,7 @@
                     jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Carousel&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
@@ -33,7 +33,7 @@
                     jcr:lastModified="{Date}2018-12-06T19:26:27.027+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Carousel allows a user to cycle through content panels. Slides of varying component type can be created.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -76,7 +76,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
@@ -86,7 +86,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Image Slides"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -94,7 +94,7 @@
                     jcr:lastModified="{Date}2018-12-06T19:27:20.010+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Carousel with three image components as child items.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_181646866
@@ -176,7 +176,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Teaser Slides"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506762
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -184,7 +184,7 @@
                     jcr:lastModified="{Date}2018-12-06T19:28:23.900+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Carousel with three teaser components as child items.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -285,7 +285,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Automatic Transitioning"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506823
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -293,7 +293,7 @@
                     jcr:lastModified="{Date}2018-12-06T19:30:10.840+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Automatic transitioning of slides can be enabled. The delay before transitioning to the next slide is also configurable. Pause and play buttons are displayed which allow stopping / continuing slide rotation.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_2135749087
@@ -370,7 +370,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Auto-pause on Hover Disabled"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506877
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -378,7 +378,7 @@
                     jcr:lastModified="{Date}2018-12-06T19:31:53.721+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>The default behavior is to pause when hovering the carousel, and automatic transitioning is enabled. This can be disabled, which may be useful for certain use cases, such as a full screen carousel.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_293658729
