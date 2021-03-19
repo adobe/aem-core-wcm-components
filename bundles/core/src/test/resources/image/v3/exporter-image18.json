@@ -16,9 +16,6 @@
     2048
   ],
   "lazyEnabled": true,
-  "imageLink": {
-    "valid": false
-  },
   "dataLayer": {
     "image-dd0253e3cc": {
       "@type": "core/wcm/components/image/v3/image",

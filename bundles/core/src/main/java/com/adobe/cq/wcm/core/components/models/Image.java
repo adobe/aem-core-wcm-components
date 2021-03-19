@@ -20,7 +20,6 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -176,7 +175,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getSrc() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -186,7 +185,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getAlt() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -196,7 +195,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getTitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -206,7 +205,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0;
      */
     default String getUuid() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -215,8 +214,8 @@ public interface Image extends Component {
      * @return the image's link.
      * @since com.adobe.cq.wcm.core.components.models 12.20.0
      */
-    default @NotNull Link getImageLink() {
-        throw new UnsupportedOperationException();
+    default Link getImageLink() {
+        return null;
     }
 
     /**
@@ -228,7 +227,7 @@ public interface Image extends Component {
      */
     @Deprecated
     default String getLink() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -239,7 +238,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default boolean displayPopupTitle() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -250,7 +249,7 @@ public interface Image extends Component {
      */
     @JsonIgnore
     default String getFileReference() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -269,7 +268,7 @@ public interface Image extends Component {
     @Deprecated
     @JsonIgnore
     default String getJson() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -280,8 +279,8 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     @NotNull
-    default int @NotNull [] getWidths() {
-        throw new UnsupportedOperationException();
+    default int[] getWidths() {
+        return new int[]{};
     }
 
     /**
@@ -292,7 +291,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default String getSrcUriTemplate() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -302,7 +301,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default boolean isLazyEnabled() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -312,7 +311,7 @@ public interface Image extends Component {
      * @return The number of pixels.
      */
     default int getLazyThreshold() {
-        throw new UnsupportedOperationException();
+        return 0;
     }
 
     /**
@@ -322,17 +321,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default List<ImageArea> getAreas() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -342,14 +331,14 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.11.0
      */
     default boolean isDecorative() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     default String getSmartCropRendition() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     default boolean isDmImage() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 }

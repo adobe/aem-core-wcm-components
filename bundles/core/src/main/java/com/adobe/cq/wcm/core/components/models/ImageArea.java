@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
@@ -35,7 +34,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getShape() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -45,7 +44,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getCoordinates() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -55,7 +54,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getRelativeCoordinates() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -64,9 +63,8 @@ public interface ImageArea {
      * @see Link of the image area.
      * @since com.adobe.cq.wcm.core.components.models 12.20.0
      */
-    default @NotNull
-    Link getLink() {
-        throw new UnsupportedOperationException();
+    default Link getLink() {
+        return null;
     }
 
     /**
@@ -76,7 +74,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getHref() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -86,7 +84,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getTarget() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -96,6 +94,6 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getAlt() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }

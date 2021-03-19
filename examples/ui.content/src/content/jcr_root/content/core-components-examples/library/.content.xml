@@ -33,7 +33,7 @@
                     jcr:lastModified="{Date}2019-01-09T16:29:27.380+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Get to know the AEM Core Components with this collection of component examples - currently featuring a selection of the available components. For all components, visit our &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components&quot;>GitHub Project&lt;/a>.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <text_585499147
@@ -58,7 +58,7 @@
                     jcr:lastModified="{Date}2020-01-14T16:34:28.219+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/container/v1/container"
+                    sling:resourceType="core-components-examples/components/container"
                     layout="responsiveGrid">
                     <title_153929503
                         cq:styleIds="[1544759664489]"
@@ -68,7 +68,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Templating"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h2"/>
                     <teaser_7603064014
                         cq:styleIds="[1547060090076]"
@@ -156,7 +156,7 @@
                     jcr:lastModified="{Date}2020-01-14T16:35:42.487+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/container/v1/container"
+                    sling:resourceType="core-components-examples/components/container"
                     layout="responsiveGrid">
                     <title_153929502
                         cq:styleIds="[1544759664489]"
@@ -166,7 +166,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Page Authoring"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h2"/>
                     <teaser_1276818308
                         cq:styleIds="[1547060090076]"
@@ -568,7 +568,7 @@
                     jcr:lastModified="{Date}2020-01-14T16:35:51.897+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/container/v1/container"
+                    sling:resourceType="core-components-examples/components/container"
                     layout="responsiveGrid">
                     <title_153929501
                         cq:styleIds="[1544759664489]"
@@ -578,7 +578,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Container"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h2"/>
                     <teaser_1837085907
                         cq:styleIds="[1547060090076]"
@@ -692,7 +692,7 @@
                     jcr:lastModified="{Date}2020-01-14T16:35:51.897+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/container/v1/container"
+                    sling:resourceType="core-components-examples/components/container"
                     layout="responsiveGrid">
                     <title_153929501
                         cq:styleIds="[1544759664489]"
@@ -702,7 +702,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Form"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core-components-examples/components/title"
                         type="h2"/>
                     <teaser_1837085907
                         cq:styleIds="[1547060090076]"
@@ -848,7 +848,7 @@
                     jcr:lastModified="{Date}2019-02-17T01:01:33.456+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>No components found.&lt;/p>&#xa;"
                     textIsRich="true"/>
             </responsivegrid>

@@ -38,9 +38,6 @@
   ],
   "lazyThreshold": 0,
   "dmImage":false,
-  "imageLink": {
-    "valid": false
-  },
   "widths": [],
   "lazyEnabled": false,
   "dataLayer": {

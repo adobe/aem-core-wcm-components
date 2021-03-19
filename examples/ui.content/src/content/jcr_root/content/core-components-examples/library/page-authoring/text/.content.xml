@@ -24,7 +24,7 @@
                     jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Text&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
@@ -34,7 +34,7 @@
                     jcr:lastModified="{Date}2018-12-10T18:42:42.183+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Text allows the display of a rich text paragraph on the page. Various formatting options are available.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -77,7 +77,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
@@ -87,7 +87,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -95,7 +95,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:44:23.644+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Simple paragraph of text with no formatting applied.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -114,7 +114,7 @@
                             jcr:lastModified="{Date}2019-01-22T12:56:17.631+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/text/v2/text"
+                            sling:resourceType="core-components-examples/components/text"
                             text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xa;"
                             textIsRich="true"/>
                     </component>
@@ -146,7 +146,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Type Formatting"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337500112
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -154,7 +154,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:44:39.090+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Type formatting options are provided in the rich text editor (bold, underline, italic, subscript, superscript). It is also possible to configure the type based on predefined paragraph styles.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_1089961282
@@ -173,7 +173,7 @@
                             jcr:lastModified="{Date}2019-01-22T13:17:02.152+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/text/v2/text"
+                            sling:resourceType="core-components-examples/components/text"
                             text="&lt;p>&lt;b>Bold &lt;/b>can be used to emphasize a word or phrase, as can &lt;u>underline&lt;/u> and &lt;i>italics.&amp;nbsp;&lt;/i>&lt;sup>Superscript&lt;/sup> and &lt;sub>subscript&lt;/sub> are useful for mathematical (E = mc&lt;sup>2&lt;/sup>) or scientific (h&lt;sub>2&lt;/sub>O) expressions. Paragraph styles can provide alternative renderings, such as quote sections:&lt;/p>&#xa;&lt;blockquote>&amp;quot;&lt;i>Be yourself; everyone else is already taken&amp;quot;&lt;/i>&lt;/blockquote>&#xa;&lt;blockquote>- Oscar Wilde&lt;/blockquote>&#xa;"
                             textIsRich="true"/>
                     </component>
@@ -205,7 +205,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Lists"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337501256
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -213,7 +213,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:44:55.232+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Bulleted and numbered lists can be added to the page.&lt;p>&#xa;"
                     textIsRich="true"/>
                 <demo_1695748698
@@ -232,7 +232,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:48:02.703+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/text/v2/text"
+                            sling:resourceType="core-components-examples/components/text"
                             text="&lt;ul>&#xd;&#xa;&lt;li>List item&lt;/li>&#xd;&#xa;&lt;li>List item&lt;/li>&#xd;&#xa;&lt;li>List item&lt;/li>&#xd;&#xa;&lt;li>List item&lt;/li>&#xd;&#xa;&lt;/ul>&#xd;&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xd;&#xa;&lt;ol>&#xd;&#xa;&lt;li>List Item 1&lt;/li>&#xd;&#xa;&lt;li>List Item 2&lt;/li>&#xd;&#xa;&lt;li>List item 3&lt;/li>&#xd;&#xa;&lt;li>List item 4&lt;/li>&#xd;&#xa;&lt;/ol>&#xd;&#xa;"
                             textIsRich="true"/>
                     </component>
@@ -264,7 +264,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Table"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337505728
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -272,7 +272,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:45:12.056+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Table of organized content with six rows and four columns, created using the rich text editor.&lt;p>&#xa;"
                     textIsRich="true"/>
                 <demo_1673220848
@@ -291,7 +291,7 @@
                             jcr:lastModified="{Date}2019-01-14T15:02:56.877+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/text/v2/text"
+                            sling:resourceType="core-components-examples/components/text"
                             text="&lt;table cellpadding=&quot;5&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;>&#xa;&lt;tbody>&lt;tr>&lt;td>Column 1&lt;/td>&#xa;&lt;td>Column 2&lt;/td>&#xa;&lt;td>Column 3&lt;/td>&#xa;&lt;td>Column 4&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;/tbody>&lt;/table>&#xa;"
                             textIsRich="true"/>
                     </component>

@@ -19,6 +19,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -35,8 +36,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
 
     @Override
-    public @NotNull Link getImageLink() {
-        return link;
+    @Nullable
+    public Link getImageLink() {
+        return link.orElse(null);
     }
 
     @Override

@@ -15,12 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -33,8 +27,12 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
-
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImplTest {
@@ -157,7 +155,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertTrue(image.displayPopupTitle());
         assertEquals(null, image.getLink(), "Did not expect a link for this image, since it's marked as decorative.");
-        assertInvalidLink(image.getImageLink());
+        assertNull(image.getImageLink(), "Expected null link");
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/" + ASSET_NAME + ".png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE4_PATH));
     }

@@ -7,9 +7,6 @@
   "dmImage": false,
   "widths": [],
   "lazyEnabled": false,
-  "imageLink": {
-    "valid": false
-  },
   "dataLayer": {
     "image-66bf44d2af": {
       "@type": "core/wcm/components/image/v3/image",
