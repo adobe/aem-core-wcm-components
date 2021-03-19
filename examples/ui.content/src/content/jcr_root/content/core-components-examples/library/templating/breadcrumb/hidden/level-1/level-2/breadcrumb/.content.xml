@@ -50,7 +50,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v3/breadcrumb"
+                    linkURL="https://www.adobe.com/go/aem_cmp_tech_breadcrumb_v3"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
@@ -66,7 +66,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_breadcrumb_v2"
+                    linkURL="https://www.adobe.com/go/aem_cmp_breadcrumb_v3"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <title_865328580

@@ -43,7 +43,7 @@ The following properties are written to JCR for this Breadcrumb component and ar
 5. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
-The component provides a `core.wcm.components.breadcrumb.v2` client library category that contains a recommended base
+The component provides a `core.wcm.components.breadcrumb.v3` client library category that contains a recommended base
 CSS styling. It should be added to a relevant site client library using the `embed` property.
 
 ## BEM description
