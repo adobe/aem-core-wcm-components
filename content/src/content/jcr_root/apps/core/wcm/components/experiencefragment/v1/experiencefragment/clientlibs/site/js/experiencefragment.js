@@ -22,7 +22,7 @@
         var $remoteOfferId = $(this).data("remote-offer-id");
 
         if ($remoteOfferEnabled !== undefined && $remoteOfferEnabled && $remoteOfferId
-            && typeof ADOBE_TARGET !== undefined && ADOBE_TARGET) {
+            && typeof ADOBE_TARGET !== "undefined" && ADOBE_TARGET) {
             ADOBE_TARGET.getOffer({
                 mbox: $remoteOfferId,
                 success: function (offer) {
