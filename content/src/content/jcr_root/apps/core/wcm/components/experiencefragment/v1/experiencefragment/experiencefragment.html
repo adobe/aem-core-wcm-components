@@ -20,23 +20,8 @@
      data-sly-set.selector="content.${request.requestPathInfo.selectorString}"
      data-sly-resource="${@path=fragment.localizedFragmentVariationPath, selectors=selector, wcmmode='disabled'}"
      id="${component.id}"
-     class="cmp-experiencefragment cmp-experiencefragment--${fragment.name} ${properties.enableRemoteOffer ? ' mboxDefault' : ''}">
+     class="cmp-experiencefragment cmp-experiencefragment--${fragment.name} ${properties.enableRemoteOffer ? ' mboxDefault' : ''}"
+     data-sly-attribute.data-enable-remote-offer="${properties.id && properties.enableRemoteOffer}"
+     data-sly-attribute.data-remote-offer-id="${properties.id}">
 </div>
 <sly data-sly-call="${template.placeholder @ isEmpty=!fragment.configured, classAppend='cmp-dd-experiencefragment'}"></sly>
-
-<script data-sly-test="${properties.enableRemoteOffer && properties.id}" data-sly-set.mboxId="${properties.id}">
-    adobe.target.getOffer({
-        mbox: "${mboxId @ context='scriptString'}",
-        success: function (offer) {
-            adobe.target.applyOffer({
-                mbox: "${mboxId @ context='scriptString'}",
-                selector: "#${mboxId @ context='scriptString'}",
-                offer: offer
-            });
-        },
-        error: function (error) {
-            var el = document.getElementById("${mboxId @ context='scriptString'}");
-            el.style.visibility = "visible";
-        }
-    });
-</script>
