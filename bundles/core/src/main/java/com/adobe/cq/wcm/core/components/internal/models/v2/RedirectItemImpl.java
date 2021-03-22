@@ -31,8 +31,9 @@ public class RedirectItemImpl extends com.adobe.cq.wcm.core.components.internal.
     }
 
     @Override
-    public @NotNull Link getLink() {
-        return link;
+    @Nullable
+    public Link getLink() {
+        return link.orElse(null);
     }
 
     @Override
@@ -40,7 +41,7 @@ public class RedirectItemImpl extends com.adobe.cq.wcm.core.components.internal.
     @JsonIgnore
     @Deprecated
     public String getURL() {
-        return link.getURL();
+        return link.map(Link::getURL).orElse(null);
     }
 
 }

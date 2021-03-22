@@ -80,7 +80,7 @@ public interface Options extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default List<OptionItem> getItems() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -92,7 +92,7 @@ public interface Options extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default Type getType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 }
