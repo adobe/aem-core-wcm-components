@@ -69,6 +69,6 @@ public interface LayoutContainer extends Container {
      */
     @NotNull
     default LayoutType getLayout() {
-        throw new UnsupportedOperationException();
+        return LayoutType.SIMPLE;
     }
 }

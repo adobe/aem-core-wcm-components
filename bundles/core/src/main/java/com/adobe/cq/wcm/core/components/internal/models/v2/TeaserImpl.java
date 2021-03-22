@@ -36,8 +36,9 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
 
     @Override
-    public @NotNull Link getLink() {
-        return link;
+    @Nullable
+    public Link getLink() {
+        return link.orElse(null);
     }
 
     @Override
@@ -59,8 +60,9 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
 
         @Override
         @JsonIgnore(false)
-        public @NotNull Link getLink() {
-            return ctaLink;
+        @Nullable
+        public Link getLink() {
+            return ctaLink.orElse(null);
         }
 
         @Nullable
