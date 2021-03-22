@@ -321,9 +321,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @Override
     public String getLinkURL() {
         if (this.linkURL == null) {
-            this.linkURL = link.get().getURL();
+            this.linkURL = link.map(Link::getURL).orElse(null);
         }
-        return linkURL;
+        return this.linkURL;
     }
 
     /**
