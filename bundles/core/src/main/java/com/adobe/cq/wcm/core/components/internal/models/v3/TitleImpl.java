@@ -16,7 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -38,10 +37,7 @@ public class TitleImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public Link getLink() {
-        if (StringUtils.isNotEmpty(link.get().getURL())) {
-            return link.get();
-        }
-        return null;
+        return link.orElse(null);
     }
 
     @Override
