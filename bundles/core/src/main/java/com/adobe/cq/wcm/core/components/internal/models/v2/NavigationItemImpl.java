@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
@@ -65,7 +66,8 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
 
     @Override
     @JsonIgnore(false)
-    public @NotNull Link getLink() {
+    @Nullable
+    public Link getLink() {
         return super.getLink();
     }
 }

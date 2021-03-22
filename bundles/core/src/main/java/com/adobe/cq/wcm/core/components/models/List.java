@@ -16,11 +16,11 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
 import com.day.cq.wcm.api.Page;
 
 /**
@@ -149,7 +149,7 @@ public interface List extends Component {
      */
     @Deprecated
     default Collection<Page> getItems() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -160,7 +160,7 @@ public interface List extends Component {
      */
     @NotNull
     default Collection<ListItem> getListItems() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyList();
     }
 
     /**
@@ -170,7 +170,7 @@ public interface List extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default boolean linkItems() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -180,7 +180,7 @@ public interface List extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default boolean showDescription() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -190,7 +190,7 @@ public interface List extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default boolean showModificationDate() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -201,16 +201,7 @@ public interface List extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getDateFormatString() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 }

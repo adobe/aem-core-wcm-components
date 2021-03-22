@@ -29,7 +29,7 @@
                     jcr:lastModified="{Date}2019-12-19T16:58:22.360+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Form Hidden&lt;sub>v2&lt;/sub>&lt;/h1>&#xd;&#xa;"
                     textIsRich="true"/>
                 <text_1408574198
@@ -38,7 +38,7 @@
                     jcr:lastModified="{Date}2019-12-12T14:18:37.297+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Form allows a user to create a form out of different form compontents to collect information and send it to a chosen adress.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -81,7 +81,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title
                     cq:styleIds="[1544759676459]"
@@ -91,14 +91,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Form Hidden field"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1910564414
                     jcr:created="{Date}2019-12-12T14:22:11.663+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-12-19T17:01:31.312+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Core Form Container with a Hidden form fiel as child element.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -117,14 +117,14 @@
                                 jcr:lastModified="{Date}2019-12-19T16:59:31.586+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/form/hidden/v2/hidden"
+                                sling:resourceType="core-components-examples/components/form/hidden"
                                 id="asset-url"
                                 name="Asset-URL"
                                 value="asset-url"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"

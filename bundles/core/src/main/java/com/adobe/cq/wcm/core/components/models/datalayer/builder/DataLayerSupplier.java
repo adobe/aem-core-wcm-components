@@ -15,14 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
-import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
 
 /**
  * Data layer field value supplier.
@@ -42,7 +43,7 @@ public interface DataLayerSupplier {
     */
     @NotNull
     default Supplier<@NotNull String> getId() {
-        throw new UnsupportedOperationException();
+        return () -> null;
     }
 
     /**

@@ -15,10 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
-
-import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code Separator} Sling Model used for the {@code /apps/core/wcm/components/separator} component.
@@ -27,13 +24,5 @@ import com.adobe.cq.export.json.ComponentExporter;
  */
 @ConsumerType
 public interface Separator extends Component {
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.7.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
+
 }

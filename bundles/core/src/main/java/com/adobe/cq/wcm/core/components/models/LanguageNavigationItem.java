@@ -35,7 +35,7 @@ public interface LanguageNavigationItem extends NavigationItem {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default Locale getLocale() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -45,7 +45,7 @@ public interface LanguageNavigationItem extends NavigationItem {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default String getCountry() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -55,7 +55,7 @@ public interface LanguageNavigationItem extends NavigationItem {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default String getLanguage() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 }

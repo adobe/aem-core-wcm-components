@@ -68,6 +68,13 @@
             if (component && component._elements && component._elements[itemType]) {
                 return component._elements[itemType][idx];
             }
+        },
+
+        /**
+         * Refreshes the page when the hash location has been changed.
+         */
+        locationHashChanged: function() {
+            window.location.reload();
         }
 
     };
