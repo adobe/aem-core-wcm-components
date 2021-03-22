@@ -19,7 +19,7 @@ AEM uses [OSGi configurations](https://experienceleague.adobe.com/docs/experienc
 | Configuration | Description |
 |---|---|
 | [FormParagraphPostProcessor](config/src/content/jcr_root/apps/core/wcm/config.author/com.day.cq.wcm.foundation.forms.impl.FormParagraphPostProcessor-core-components.config) | Enables functionality of [Core Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container) |
-| [MobileEmulatorProvider](config/src/content/jcr_root/apps/core/wcm/config.author/com.day.cq.wcm.mobile.core.impl.MobileEmulatorProvider-core-components.config) | Enables mobile devices emulation in the editor for [Page component](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page) |
+| [MobileEmulatorProvider](config/src/content/jcr_root/apps/core/wcm/config.author/com.day.cq.wcm.mobile.core.impl.MobileEmulatorProvider-core-components.config) | Enables mobile devices emulation in the editor for [Page component](content/src/content/jcr_root/apps/core/wcm/components/page/v3/page) |
 
 ## Context-Aware configurations
 
@@ -27,7 +27,7 @@ The following [context-aware configurations](https://sling.apache.org/documentat
 
 | Configuration | Description |
 |---|---|
-| [HtmlPageItemsConfig](bundles/core/src/main/java/com/adobe/cq/wcm/core/components/config/HtmlPageItemsConfig.java) | Holds information on items to be included by [Page component](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page): scripts, links, meta elements |
+| [HtmlPageItemsConfig](bundles/core/src/main/java/com/adobe/cq/wcm/core/components/config/HtmlPageItemsConfig.java) | Holds information on items to be included by [Page component](content/src/content/jcr_root/apps/core/wcm/components/page/v3/page): scripts, links, meta elements |
 | [PdfViewerCaConfig](bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/services/CaConfigReferenceProvider.java) | Holds configuration for [PDF Viewer component](content/src/content/jcr_root/apps/core/wcm/components/pdfviewer/v1/pdfviewer) | 
 | [DataLayerConfig](bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/DataLayerConfig.java) | Toggles the [Adobe Client Data Layer](https://github.com/adobe/adobe-client-data-layer) integration |
 
