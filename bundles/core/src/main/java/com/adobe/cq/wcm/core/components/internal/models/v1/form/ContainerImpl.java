@@ -48,6 +48,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.form.Container;
@@ -128,7 +129,7 @@ public class ContainerImpl implements Container {
     private void initModel() {
         FormStructureHelper formStructureHelper = formStructureHelperFactory.getFormStructureHelper(resource);
         request.setAttribute(FormsHelper.REQ_ATTR_FORM_STRUCTURE_HELPER, formStructureHelper);
-        this.action = linkHandler.getLink(currentPage).getURL();
+        this.action = linkHandler.getLink(currentPage).map(Link::getURL).orElse(null);
         if (StringUtils.isBlank(id)) {
             id = FormsHelper.getFormId(request);
         }

@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
@@ -33,8 +34,9 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
 
     @Override
     @JsonIgnore(false)
-    public @NotNull Link getLink() {
-        return link;
+    @Nullable
+    public Link getLink() {
+        return link.orElse(null);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     protected PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
                 .withTitle(this::getTitle)
-                .withLinkUrl(() -> link == null ? null : link.getURL())
+                .withLinkUrl(() -> link.map(Link::getURL).orElse(null))
                 .build();
     }
 }

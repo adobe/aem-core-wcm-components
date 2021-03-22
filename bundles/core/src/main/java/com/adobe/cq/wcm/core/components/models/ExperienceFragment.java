@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Collections;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -55,7 +56,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
     default String getLocalizedFragmentVariationPath() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -65,7 +66,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.11.0
      */
     default String getName() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -75,7 +76,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
      */
     @Nullable
     default String getCssClassNames()  {
-        throw new UnsupportedOperationException();
+        return null;
     }
     
     /**
@@ -84,7 +85,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
      * @return localizedFragmentVariationPath is configured and has entries
      * @since com.adobe.cq.wcm.core.components.models 12.15.0
      */
-    default boolean isConfigured()  {throw new UnsupportedOperationException(); }
+    default boolean isConfigured()  {return false; }
     
     /**
      * @see ComponentExporter#getExportedType()
@@ -93,7 +94,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
     @NotNull
     @Override
     default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return "";
     }
     
     /**
@@ -103,7 +104,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
     @NotNull
     @Override
     default String[] getExportedItemsOrder() {
-        throw new UnsupportedOperationException();
+        return new String[]{};
     }
     
     /**
@@ -113,7 +114,7 @@ public interface ExperienceFragment extends Component, ContainerExporter {
     @NotNull
     @Override
     default Map<String, ? extends ComponentExporter> getExportedItems() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
 }

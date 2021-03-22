@@ -24,7 +24,7 @@
                     jcr:lastModified="{Date}2019-06-06T11:03:30.637+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Navegación de idioma&lt;sub>v1&lt;/sub>&lt;/h1>&#xd;&#xa;"
                     textIsRich="true"/>
                 <text
@@ -34,7 +34,7 @@
                     jcr:lastModified="{Date}2019-06-06T11:03:43.400+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Navegación de idioma proporciona una navegación de idioma / país para un sitio, de modo que los visitantes puedan navegar a la misma página en una ubicación diferente.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -77,7 +77,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Ejemplos"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
@@ -87,7 +87,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Estándar"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -95,7 +95,7 @@
                     jcr:lastModified="{Date}2019-06-06T11:03:05.739+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Navegación de idioma simple con &lt;i>Profundidad de estructura de idioma&lt;/i> establecida en dos. Muestra una estructura de navegación de idioma creada a partir de un árbol de páginas con el país y la configuración regional mostrados en el resultado.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -114,7 +114,7 @@
                             jcr:lastModified="{Date}2019-06-06T11:03:10.029+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/languagenavigation/v1/languagenavigation"
+                            sling:resourceType="core-components-examples/components/languagenavigation"
                             navigationRoot="/content/core-components-examples/library/templating/language-navigation/language-structure"
                             structureDepth="2"/>
                     </component>
