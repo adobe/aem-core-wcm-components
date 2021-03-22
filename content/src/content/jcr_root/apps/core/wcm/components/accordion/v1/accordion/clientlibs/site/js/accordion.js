@@ -585,4 +585,6 @@
     } else {
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
+
+    window.addEventListener("hashchange", window.CQ.CoreComponents.container.utils.locationHashChanged, false);
 }());

@@ -28,7 +28,7 @@
                     jcr:lastModified="{Date}2019-05-21T12:23:47.906+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Download&lt;sub>v1&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text_442449340
@@ -38,7 +38,7 @@
                     jcr:lastModified="{Date}2019-05-27T18:12:38.654+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Download allows linking to an asset for download. Optionally displays a title, description, metadata and a download action.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser_copy
@@ -99,7 +99,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:32:55.756+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Simple Download with only an &lt;i>Action Text&lt;/i> and &lt;i>Download Asset&lt;/i> configured. The &lt;i>Title&lt;/i> and &lt;i>Description&lt;/i> are by default taken from the provided asset.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -160,7 +160,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:32:55.756+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>By default, the &lt;i>Title&lt;/i> and &lt;i>Description&lt;/i> are taken from the provided asset. In this example, we provide a custom title and description for the download.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_1197373359
@@ -224,7 +224,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:32:55.756+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>It is possible to upload an asset directly from a local file system rather than selecting an asset from DAM.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_68071479
@@ -289,7 +289,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:32:55.756+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>By default the asset is downloaded directly, but it is also possible to display it inline in the browser.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_69071411

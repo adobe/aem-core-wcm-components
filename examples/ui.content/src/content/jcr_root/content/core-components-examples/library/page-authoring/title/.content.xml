@@ -23,7 +23,7 @@
                     jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Title&lt;sub>v3&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
@@ -33,7 +33,7 @@
                     jcr:lastModified="{Date}2019-01-16T13:36:38.734+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Title can be used to create headings for a page or page sections.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -94,7 +94,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:49:23.934+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Default title without any configuration. The title is taken from the current page.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -151,7 +151,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:49:46.243+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Alternative title texts can be provided rather than the default of taking the title from the current page.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_1448137506
@@ -209,7 +209,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:50:01.818+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>The heading type can be configured (H1-H6).&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_1448137580
@@ -268,7 +268,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:50:14.362+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Titles can be linked&amp;nbsp;to internal relative AEM resources, external absolute URLs or&amp;nbsp;page anchors.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_1934630368
