@@ -32,7 +32,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Two Columns"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h2"/>
                 <container
                     jcr:created="{Date}2020-11-27T18:30:35.730+02:00"
@@ -108,7 +108,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Large Image"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h2"/>
                 <image
                     jcr:created="{Date}2020-11-27T18:37:45.587+02:00"
@@ -133,7 +133,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Aside"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <image
                     jcr:created="{Date}2020-11-27T18:32:54.918+02:00"

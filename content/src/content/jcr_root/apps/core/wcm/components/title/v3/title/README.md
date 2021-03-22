@@ -44,7 +44,7 @@ to the value defined by the component's policy
 4. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
-The component provides a `core.wcm.components.title.v2.editor` editor client library category that includes JavaScript
+The component leverages `core.wcm.components.title.v2.editor` editor client library category that includes JavaScript
 handling for dialog interaction. It is already included by its edit and design dialogs.
 
 ## BEM Description
