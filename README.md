@@ -57,7 +57,7 @@ Please help us making the Core Components better by responding to our **[short u
 8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
 9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
 10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
-11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
+11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v3/list)
 12. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
 13. [PDF Viewer](content/src/content/jcr_root/apps/core/wcm/components/pdfviewer/v1/pdfviewer)
 14. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
