@@ -19,5 +19,5 @@
     jcr:description="Collects a list of pages to display in a navigation tree."
     jcr:primaryType="cq:Component"
     jcr:title="Navigation"
-    sling:resourceSuperType="core/wcm/components/navigation/v1/navigation"
+    sling:resourceSuperType="core/wcm/components/navigation/v2/navigation"
     componentGroup="Core Components Examples"/>

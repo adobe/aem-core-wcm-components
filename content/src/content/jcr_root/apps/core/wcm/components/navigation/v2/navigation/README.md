@@ -50,7 +50,7 @@ The following properties are written to JCR for the Navigation component and are
 8. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
-The component provides a `core.wcm.components.navigation.v1.editor` editor client library category that includes
+The component leverages the `core.wcm.components.navigation.v1.editor` editor client library category that includes
 JavaScript handling for dialog interaction. It is already included by its edit and design dialogs.
 
 ## BEM Description
