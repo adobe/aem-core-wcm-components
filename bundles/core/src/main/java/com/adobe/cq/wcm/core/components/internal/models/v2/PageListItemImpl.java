@@ -33,7 +33,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     @Override
     @JsonIgnore(false)
     @Nullable
-    public Link getLink() {
+    public Link<Page> getLink() {
         return super.getLink();
     }
 
