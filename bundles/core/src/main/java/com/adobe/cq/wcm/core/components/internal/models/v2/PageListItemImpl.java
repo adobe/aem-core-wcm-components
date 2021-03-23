@@ -37,7 +37,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     @Override
     @Nullable
     public Link<Page> getLink() {
-        return link.orElse(null);
+        return super.getLink();
     }
 
     @Override
