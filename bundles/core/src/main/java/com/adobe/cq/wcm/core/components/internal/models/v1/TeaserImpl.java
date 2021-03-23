@@ -91,11 +91,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String description;
 
     /**
-     * The main teaser link.
-     */
-    private String linkURL;
-
-    /**
      * The title heading level.
      */
     private String titleType;
@@ -320,10 +315,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getLinkURL() {
-        if (this.linkURL == null) {
-            this.linkURL = link.get().getURL();
-        }
-        return linkURL;
+        return link.map(Link::getURL).orElse(null);
     }
 
     /**

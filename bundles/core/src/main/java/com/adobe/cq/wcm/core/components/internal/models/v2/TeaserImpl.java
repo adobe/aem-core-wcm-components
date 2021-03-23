@@ -62,7 +62,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
         @JsonIgnore(false)
         @Nullable
         public Link getLink() {
-            return ctaLink.orElse(null);
+            return super.getLink();
         }
 
         @Nullable
