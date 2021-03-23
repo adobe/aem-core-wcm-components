@@ -19,5 +19,5 @@
     jcr:description="Button"
     jcr:primaryType="cq:Component"
     jcr:title="Button"
-    sling:resourceSuperType="core/wcm/components/button/v1/button"
+    sling:resourceSuperType="core/wcm/components/button/v2/button"
     componentGroup="Core Components Examples"/>
