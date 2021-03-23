@@ -41,7 +41,7 @@ public class RedirectItemImpl extends com.adobe.cq.wcm.core.components.internal.
     @JsonIgnore
     @Deprecated
     public String getURL() {
-        return link.map(Link::getURL).orElse(null);
+        return super.getURL();
     }
 
 }
