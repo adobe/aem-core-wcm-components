@@ -21,7 +21,7 @@ import com.adobe.qe.selenium.pagewidgets.coral.CoralCheckbox;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class BreadCrumbConfigDialog {
+public class BreadcrumbConfigDialog {
 
     private static String startLevel = "input[name='./startLevel']";
 

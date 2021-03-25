@@ -17,10 +17,10 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.BreadCrumbConfigDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.BreadcrumbConfigDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.BreadcrumbItems;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.v1.BreadcrumbItemsV1;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.WCMSanityConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.qe.selenium.pageobject.PageEditorPage;
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        authorClient.deletePageWithRetry(testPages.get(0), true,false, WCMSanityConstants.TIMEOUT_TIME_MS, WCMSanityConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPages.get(0), true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         Commons.deleteProxyComponent(adminClient, proxyPath);
     }
 
@@ -96,7 +96,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
 
         Commons.openConfigureDialog(testPages.get(4) + Commons.relParentCompPath + componentName);
 
-        BreadCrumbConfigDialog configDialog = new BreadCrumbConfigDialog();
+        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
         configDialog.setHideCurrent(true);
         Commons.saveConfigureDialog();
 
@@ -124,7 +124,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
 
         Commons.openConfigureDialog(testPages.get(4) + Commons.relParentCompPath + componentName);
-        BreadCrumbConfigDialog configDialog = new BreadCrumbConfigDialog();
+        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
         configDialog.setShowHidden(true);
         Commons.saveConfigureDialog();
 
@@ -145,7 +145,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
         Commons.openConfigureDialog(testPages.get(4) + Commons.relParentCompPath + componentName);
 
-        BreadCrumbConfigDialog configDialog = new BreadCrumbConfigDialog();
+        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
         assertTrue(configDialog.getStartLevelValue() == 2,"Start level should be 2");
         configDialog.setStartLevelValue("4");
         Commons.saveConfigureDialog();
@@ -169,7 +169,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
         Commons.openConfigureDialog(testPages.get(4) + Commons.relParentCompPath + componentName);
 
-        BreadCrumbConfigDialog configDialog = new BreadCrumbConfigDialog();
+        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
         assertTrue(configDialog.getStartLevelValue() == 2,"Start level should be 2");
         configDialog.setStartLevelValue("0");
         assertTrue(configDialog.checkInvalidStartLevel(), "Setting Start Level value to 0 is not allowed");
@@ -188,7 +188,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
         Commons.openConfigureDialog(testPages.get(4) + Commons.relParentCompPath + componentName);
 
-        BreadCrumbConfigDialog configDialog = new BreadCrumbConfigDialog();
+        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
         assertTrue(configDialog.getStartLevelValue() == 2,"Start level should be 2");
         configDialog.setStartLevelValue("100");
         Commons.saveConfigureDialog();
