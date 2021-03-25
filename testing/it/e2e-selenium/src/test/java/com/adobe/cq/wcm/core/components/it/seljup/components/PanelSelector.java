@@ -29,10 +29,20 @@ public class PanelSelector extends BaseComponent {
         super(".cmp-panelselector");
     }
 
+    /**
+     * Returns the items in panel select
+     * @return items in panel select
+     */
     public ElementsCollection getItems() {
         return items;
     }
 
+    /**
+     * re-orders the items in panel select
+     * @param dragElement element to be moved
+     * @param targetElement element at which location the dragElement to be moved
+     * @throws InterruptedException
+     */
     public void reorderItems(int dragElement,int targetElement) throws InterruptedException {
         ElementsCollection items = this.getItems();
         items.get(dragElement).find("[coral-table-roworder='true']").dragAndDropTo(items.get(targetElement));

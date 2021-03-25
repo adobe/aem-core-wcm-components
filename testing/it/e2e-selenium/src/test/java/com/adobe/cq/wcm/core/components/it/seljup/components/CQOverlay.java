@@ -26,12 +26,20 @@ public class CQOverlay extends BaseComponent {
         super(".cq-Overlay");
     }
 
+    /**
+     * Opens the page overlay responsive grid
+     * @param pagePath path of the page
+     */
     public void openPlaceholder(String pagePath) {
         String placeholder = ".cq-Overlay[data-path='" + pagePath + "/jcr:content/root/responsivegrid/*']";
          $(placeholder).click();
     }
 
 
+    /**
+     * Opens the component's responsive grid
+     * @param componentPath path of the component
+     */
     public void openComponentOverlay(String componentPath) {
         String placeholder = ".cq-Overlay[data-path='" + componentPath + "']";
         $(placeholder).click();
