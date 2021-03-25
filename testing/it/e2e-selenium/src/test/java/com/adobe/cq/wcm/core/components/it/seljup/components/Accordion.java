@@ -190,19 +190,6 @@ public class Accordion extends BaseComponent {
                 return (Boolean) ((JavascriptExecutor) webDriver).executeScript("return arguments[0].hasAttribute(\"disabled\");", $(expandedSelectSingle));
             }
 
-           /* public SelenideElement getExpandedSelectSingle(String suffix) {
-                return $(expandedSelectSingle + suffix);
-            }
-
-            public ElementsCollection getExpandedSelectItems(String suffix) {
-                return $$(expandedSelect + suffix);
-            }
-
-
-            public void selectitem(String item) {
-                $x(String.format(selectItem, item)).click();
-            }*/
-
             /**
              * Returns single expansion checkbox
              * @return single expansion checkbox

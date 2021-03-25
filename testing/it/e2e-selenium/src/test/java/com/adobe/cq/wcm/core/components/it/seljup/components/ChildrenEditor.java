@@ -89,9 +89,6 @@ public class ChildrenEditor extends BaseComponent {
     }
 
     public void moveItems(int dragElement,int targetElement) throws InterruptedException {
-        //$$(item + " " + moveButton).get(dragElement).dragAndDropTo($$(item + " " + moveButton).get(targetElement));
-        //actions().dragAndDrop($$(item + " " + moveButton).get(dragElement), $$(item).get(targetElement)).perform();
-        //$$(item + " " + moveButton).get(dragElement).dragAndDropTo($$(item).get(targetElement));
         SelenideElement dragElementMoveButton = $$(item + " " + moveButton).get(dragElement);
         SelenideElement targetElement1 = $$(item).get(targetElement);
         int yOffset = (targetElement1.getSize().getHeight() / 2  + 1) * (-1);
