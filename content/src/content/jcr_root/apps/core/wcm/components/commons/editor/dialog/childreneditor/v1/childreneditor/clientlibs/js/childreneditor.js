@@ -20,6 +20,7 @@
     var NN_PREFIX = "item_";
     var PN_PANEL_TITLE = "cq:panelTitle";
     var PN_RESOURCE_TYPE = "sling:resourceType";
+    var PN_COPY_FROM = "./@CopyFrom";
     var POST_SUFFIX = ".container.html";
 
     var selectors = {
@@ -32,7 +33,8 @@
         item: {
             icon: "[data-cmp-hook-childreneditor='itemIcon']",
             input: "[data-cmp-hook-childreneditor='itemTitle']",
-            hiddenInput: "[data-cmp-hook-childreneditor='itemResourceType']"
+            hiddenItemResourceType: "[data-cmp-hook-childreneditor='itemResourceType']",
+            hiddenItemTemplatePath: "[data-cmp-hook-childreneditor='itemTemplatePath']"
         }
     };
 
@@ -190,6 +192,7 @@
                                     selectList.on("coral-selectlist:change" + NS, function(event) {
                                         var resourceType = "";
                                         var componentTitle = "";
+                                        var templatePath = "";
 
                                         insertComponentDialog.hide();
 
@@ -197,10 +200,12 @@
                                         if (components.length > 0) {
                                             resourceType = components[0].getResourceType();
                                             componentTitle = components[0].getTitle();
+                                            templatePath = components[0].getTemplatePath();
 
                                             var item = that._elements.self.items.add(new Coral.Multifield.Item());
 
                                             // next frame to ensure the item template is rendered in the DOM
+
                                             Coral.commons.nextFrame(function() {
                                                 var name = NN_PREFIX + Date.now();
                                                 item.dataset["name"] = name;
@@ -209,9 +214,14 @@
                                                 input.name = "./" + name + "/" + PN_PANEL_TITLE;
                                                 input.placeholder = Granite.I18n.get(componentTitle);
 
-                                                var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
-                                                hiddenInput.value = resourceType;
-                                                hiddenInput.name = "./" + name + "/" + PN_RESOURCE_TYPE;
+                                                var hiddenItemResourceType = item.querySelectorAll(selectors.item.hiddenItemResourceType)[0];
+                                                hiddenItemResourceType.value = resourceType;
+                                                hiddenItemResourceType.name = "./" + name + "/" + PN_RESOURCE_TYPE;
+                                                if (templatePath) {
+                                                    var hiddenItemTemplatePath = item.querySelectorAll(selectors.item.hiddenItemTemplatePath)[0];
+                                                    hiddenItemTemplatePath.value = templatePath;
+                                                    hiddenItemTemplatePath.name = "./" + name + "/" + PN_COPY_FROM;
+                                                }
 
                                                 var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
                                                 var icon = that._renderIcon(components[0]);
@@ -222,7 +232,6 @@
                                         }
                                     });
                                 });
-
                                 // unbind events on dialog close
                                 channel.one("dialog-closed", function() {
                                     selectList.off("coral-selectlist:change" + NS);
