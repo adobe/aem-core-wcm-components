@@ -21,7 +21,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAsser
 import com.adobe.cq.wcm.core.components.it.seljup.components.Accordion;
 import com.adobe.cq.wcm.core.components.it.seljup.components.ChildrenEditor;
 import com.adobe.cq.wcm.core.components.it.seljup.components.PanelSelector;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.WCMSanityConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.qe.selenium.pageobject.PageEditorPage;
 import com.adobe.qe.selenium.pagewidgets.coral.CoralCheckbox;
@@ -143,7 +143,7 @@ public class AccordionIT extends AuthorBaseUITest {
         Commons.deleteProxyComponent(adminClient, proxyPath);
 
         // 2.
-        authorClient.deletePageWithRetry(testPage, true,false, WCMSanityConstants.TIMEOUT_TIME_MS, WCMSanityConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
 
         // 3.
         String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
