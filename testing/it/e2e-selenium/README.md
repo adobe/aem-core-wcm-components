@@ -2,7 +2,7 @@
 
 This is the E2E for WCM Launches UI testing, it is mainly based on Selenide, Selenium Jupiter, and Sling Testing Client.
 
-PageObjects (Page, Component etc..) are defined in the common library [selenium-it-base](https://git.corp.adobe.com/QE/selenium-it-base)
+PageObjects (Page, Component etc..) are defined in the common library [selenium-it-base](https://github.com/adobe/aem-selenium-it-base)
 
 # Requirement
 
@@ -42,12 +42,12 @@ Running test using your local chrome browser
 mvn clean verify -Ptest-all -Dsel.jup.default.browser=chrome
 ```
 
-Running specific test using docker 
+Running specific test using docker
 
 ```
  mvn clean verify failsafe:integration-test -Dsel.jup.vnc=true -DuseIP=<ip address> -Dit.test=<classname>#testName
 ```
- 
+
 Running against a non local AEM (Skyline for example)
 
 Simply use the usual Sling Test Client parameters
@@ -67,7 +67,7 @@ Simply use the usual Sling Test Client parameters
 # Running released test using generated jar with dependencies
 Make sure to download latest junit-platform-console-standalone-<version>.jar
 ```
-java -jar junit-platform-console-standalone-<version>.jar -cp 'target/cq-ui-wcm-launches-it-e2e-seljup-0.0.1-SNAPSHOT-it-jar-with-dependencies.jar' --select-package "com.adobe.cq.wcm.launches.sites.it.seljup" --include-classname "^.*IT?$" --include-tag 'sanity'
+java -jar junit-platform-console-standalone-<version>.jar -cp 'target/core.wcm.components.it.e2e-selenium-<version>-it-jar-with-dependencies.jar' --select-package "com.adobe.cq.wcm.core.components.it.seljup" --include-classname "^.*IT?$"
 ```
 
 For more details on Selenium Jupiter parameters, check [selenium-jupiter user guide](https://bonigarcia.github.io/selenium-jupiter/)
