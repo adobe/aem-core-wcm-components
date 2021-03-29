@@ -55,46 +55,53 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
 
     @Override
     public void process(SlingHttpServletRequest request, List<Modification> list) throws Exception {
-        Modification lastFileReferenceModification = getLastPropertyModification(request, list, DownloadResource.PN_REFERENCE);
-        if (lastFileReferenceModification != null) {
-            switch (lastFileReferenceModification.getType()) {
-                case CREATE:
-                case MODIFY:
-                    ValueMap valueMap = request.getResource().getValueMap();
-                    String fileReference = valueMap.get(DownloadResource.PN_REFERENCE, String.class);
-                    if (fileReference != null) {
-                        Resource assetResource = request.getResourceResolver().getResource(fileReference);
-                        if (assetResource != null) {
-                            Asset asset = assetResource.adaptTo(Asset.class);
-                            if (asset != null) {
-                                if(isDmAsset(asset)) {
-                                    String[] productionAssetUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
-                                    String imageServerUrl = productionAssetUrls[0] + IMAGE_SERVER_PATH;
-                                    checkSetProperty(request.getResource(), Image.PN_IMAGE_SERVER_URL, imageServerUrl, list);
-                                } else {
-                                    checkSetProperty(request.getResource(), Image.PN_IMAGE_SERVER_URL, null, list);
-                                }
 
-                                Modification lastFileModification = getLastPropertyModification(request, list, "file");
-                                if ((lastFileModification != null) && (lastFileModification.getType() == ModificationType.DELETE)) {
-                                    checkSetProperty(request.getResource(), "smartCropRendition", null, list);
+        Modification lastFileReferenceModification = getLastPropertyModification(list, DownloadResource.PN_REFERENCE);
+        if (lastFileReferenceModification != null) {
+            String pathToComponent =  lastFileReferenceModification.getSource().split("/" + DownloadResource.PN_REFERENCE)[0];
+            if (pathToComponent != null){
+                Resource componentResource = request.getResourceResolver().getResource(pathToComponent);
+                if (componentResource != null) {
+                    switch (lastFileReferenceModification.getType()) {
+                        case CREATE:
+                        case MODIFY:
+                            ValueMap valueMap = componentResource.getValueMap();
+                            String fileReference = valueMap.get(DownloadResource.PN_REFERENCE, String.class);
+                            if (fileReference != null) {
+                                Resource assetResource = request.getResourceResolver().getResource(fileReference);
+                                if (assetResource != null) {
+                                    Asset asset = assetResource.adaptTo(Asset.class);
+                                    if (asset != null) {
+                                        if (isDmAsset(asset)) {
+                                            String[] productionAssetUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
+                                            String imageServerUrl = productionAssetUrls[0] + IMAGE_SERVER_PATH;
+                                            checkSetProperty(componentResource, Image.PN_IMAGE_SERVER_URL, imageServerUrl, list);
+                                        } else {
+                                            checkSetProperty(componentResource, Image.PN_IMAGE_SERVER_URL, null, list);
+                                        }
+
+                                        Modification lastFileModification = getLastPropertyModification(request, list, "file");
+                                        if ((lastFileModification != null) && (lastFileModification.getType() == ModificationType.DELETE)) {
+                                            checkSetProperty(componentResource, "smartCropRendition", null, list);
+                                        }
+                                    } else {
+                                        LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, componentResource.getPath());
+                                    }
+                                } else {
+                                    LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, componentResource.getPath());
                                 }
                             } else {
-                                LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, request.getResource().getPath());
+                                LOGGER.warn("File reference was null despite '{}' modification type.", lastFileReferenceModification.getType());
                             }
-                        } else {
-                            LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
-                        }
-                    } else {
-                        LOGGER.warn("File reference was null despite '{}' modification type.", lastFileReferenceModification.getType());
+                            break;
+                        case DELETE:
+                            checkSetProperty(componentResource, Image.PN_IMAGE_SERVER_URL, null, list);
+                            checkSetProperty(componentResource, "smartCropRendition", null, list);
+                            break;
+                        default:
+                            //noop
                     }
-                    break;
-                case DELETE:
-                    checkSetProperty(request.getResource(), Image.PN_IMAGE_SERVER_URL, null, list);
-                    checkSetProperty(request.getResource(), "smartCropRendition", null, list);
-                    break;
-                default:
-                    //noop
+                }
             }
         }
     }
@@ -131,6 +138,17 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
         Modification lastPropertyModification = null;
         for (Modification modification : list) {
             if (expectedModificationSource.equals(modification.getSource())) {
+                lastPropertyModification = modification;
+            }
+        }
+        return lastPropertyModification;
+    }
+
+    private static Modification getLastPropertyModification(List<Modification> list, String propertyName) {
+        String expectedModificationSource = "/" + propertyName;
+        Modification lastPropertyModification = null;
+        for (Modification modification : list) {
+            if (modification.getSource().endsWith(expectedModificationSource)) {
                 lastPropertyModification = modification;
             }
         }
