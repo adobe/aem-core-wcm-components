@@ -58,8 +58,8 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
 
         Modification lastFileReferenceModification = getLastPropertyModification(list, DownloadResource.PN_REFERENCE);
         if (lastFileReferenceModification != null) {
-            String pathToComponent =  lastFileReferenceModification.getSource().split("/" + DownloadResource.PN_REFERENCE)[0];
-            if (pathToComponent != null){
+            String pathToComponent = lastFileReferenceModification.getSource().substring(0, lastFileReferenceModification.getSource().indexOf("/" + DownloadResource.PN_REFERENCE));
+            if (!pathToComponent.isEmpty()) {
                 Resource componentResource = request.getResourceResolver().getResource(pathToComponent);
                 if (componentResource != null) {
                     switch (lastFileReferenceModification.getType()) {
@@ -102,7 +102,11 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
                             //noop
                     }
                 }
+            } else {
+                LOGGER.error("Unable to find path to component used by modification '{}'", lastFileReferenceModification.getSource());
             }
+        } else {
+            LOGGER.warn("Last file reference modification was null for '{}' property name.", DownloadResource.PN_REFERENCE);
         }
     }
 
