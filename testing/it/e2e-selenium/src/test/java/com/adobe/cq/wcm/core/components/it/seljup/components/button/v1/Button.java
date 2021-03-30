@@ -21,6 +21,8 @@ import com.adobe.qe.selenium.pagewidgets.coral.Dialog;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
+import static com.codeborne.selenide.Selenide.$;
+
 public class Button extends BaseComponent {
 
 
@@ -37,4 +39,11 @@ public class Button extends BaseComponent {
         return buttonText.getText().trim();
     }
 
+    public boolean checkLinkPresent(String link) {
+        return $("a[href='" + link + "']").isDisplayed();
+    }
+
+    public boolean iconPresent(String icon) {
+        return $(".cmp-button__icon--" + icon).exists();
+    }
 }

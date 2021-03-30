@@ -18,6 +18,14 @@ package com.adobe.cq.wcm.core.components.it.seljup.components.button.v1;
 
 import com.adobe.qe.selenium.pagewidgets.coral.Dialog;
 import com.codeborne.selenide.SelenideElement;
+import com.adobe.qe.selenium.pagewidgets.cq.AutoCompleteField;
+import com.codeborne.selenide.WebDriverRunner;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public class ButtonConfigureDialog extends Dialog {
     private static final String CSS_SELECTOR = "coral-dialog";
@@ -34,12 +42,15 @@ public class ButtonConfigureDialog extends Dialog {
         return content().find("input[name='./jcr:title']");
     }
 
-    public SelenideElement getLinkField() {
-        return content().find("[name='./link']");
+    public void setLinkField(String value) {
+        AutoCompleteField autoCompleteField = new AutoCompleteField("./link");
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, 5).until(ExpectedConditions.elementToBeClickable(By.cssSelector(autoCompleteField.getCssSelector())));
+        autoCompleteField.sendKeys(value);
     }
 
     public SelenideElement getIcon() {
-        return content().find("[name='./icon']");
+        return content().find("input[name='./icon']");
     }
 
 }
