@@ -196,7 +196,11 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     public String getBackgroundStyle() {
         if (this.backgroundStyle == null) {
             StringBuilder styleBuilder = new StringBuilder();
-            getBackgroundImage().ifPresent(image -> styleBuilder.append("background-image:url(").append(image).append(");background-size:cover;background-repeat:no-repeat;"));
+            getBackgroundImage().ifPresent(image -> {
+                styleBuilder.append("background-image:url(")
+                    .append(image.replace(" ","%20"))
+                    .append(");background-size:cover;background-repeat:no-repeat;");
+            });
             getBackgroundColor().ifPresent(color -> styleBuilder.append("background-color:").append(color).append(";"));
             this.backgroundStyle = styleBuilder.toString();
         }
