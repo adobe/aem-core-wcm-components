@@ -34,6 +34,8 @@ import java.util.Iterator;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Commons {
 
@@ -293,12 +295,24 @@ public class Commons {
     }
 
     /**
+     * Helper method to assert a resource exist on backend using await as it can take some time the resource is updated on the AEM instance
+     *
+     * @param client:       The CQClient to be used for the request to the AEM instance
+     * @param resourcePath: The path of the resource to test if it exist
+     * @param message:      The message for the failed assert
+     */
+    public static void assertResourceExist(CQClient client, String resourcePath, String message) {
+        await().untilAsserted(() -> {
+            assertTrue(client.exists(resourcePath), message);
+        });
+    }
+
+    /**
      * Open configuration of component
      *
      * @param dataPath datapath of the component to open the configuration dialog
      * @throws InterruptedException
      */
-
     public static void openConfigureDialog(String dataPath) throws InterruptedException {
         String component = "[data-type='Editable'][data-path='" + dataPath +"']";
         SelenideElement comp = $(component);
