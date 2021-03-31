@@ -207,11 +207,6 @@
         var self = this;
 
         switch (event.keyCode) {
-            case keyCodes.TAB:
-                if (self._resultsOpen()) {
-                    event.preventDefault();
-                }
-                break;
             case keyCodes.ENTER:
                 event.preventDefault();
                 if (self._resultsOpen()) {
