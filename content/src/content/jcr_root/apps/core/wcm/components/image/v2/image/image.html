@@ -23,7 +23,7 @@
      data-cmp-src="${image.srcUriTemplate ? image.srcUriTemplate : image.src}"
      data-cmp-widths="${image.widths}"
      data-cmp-dmimage="${image.dmImage}"
-     data-cmp-smartcroprendition="${image.smartCropRendition}"     
+     data-cmp-smartcroprendition="${image.smartCropRendition}"
      data-asset="${image.fileReference}"
      data-asset-id="${image.uuid}"
      data-title="${image.title || image.alt}"
@@ -39,7 +39,7 @@
             <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
             <img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
                  data-sly-attribute.usemap="${image.areas ? usemap : ''}"
-                 alt="${image.alt}" title="${image.displayPopupTitle && image.title}"/>
+                 alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
             <map data-sly-test="${image.areas}"
                  data-sly-list.area="${image.areas}"
                  name="${resource.path}"
