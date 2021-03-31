@@ -22,7 +22,7 @@ import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.Component;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
  */
 @ConsumerType
-public interface ContentFragmentList extends ComponentExporter {
+public interface ContentFragmentList  extends Component {
 
     /**
      * Name of the property (in JSON export) that provides the content fragment items.
