@@ -16,6 +16,7 @@
 <template data-sly-template.responsiveGrid="${ @ container}">
     <div id="${container.id}"
          class="cmp-container"
+         aria-label="${container.accessibilityLabel}"
          style="${container.backgroundStyle @ context='styleString'}">
         <sly data-sly-resource="${resource @ resourceType='wcm/foundation/components/responsivegrid'}"></sly>
     </div>
