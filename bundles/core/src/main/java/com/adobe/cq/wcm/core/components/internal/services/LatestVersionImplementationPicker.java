@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 public class LatestVersionImplementationPicker implements ImplementationPicker {
 
     private static final Pattern pattern = Pattern.compile("\\.v(\\d+)\\.");
-    private static final Logger LOG = LoggerFactory.getLogger(LatestVersionImplementationPicker.class);
 
     @Override
     public Class<?> pick(Class<?> adapterType, Class<?>[] implementationsTypes, Object adaptable) {
@@ -45,11 +44,7 @@ public class LatestVersionImplementationPicker implements ImplementationPicker {
                     Matcher m1 = pattern.matcher(o1.getName());
                     Matcher m2 = pattern.matcher(o2.getName());
                     if (m1.find() && m2.find()) {
-                        try {
-                            return Integer.parseInt(m2.group(1)) - Integer.parseInt(m1.group(1));
-                        } catch (NumberFormatException e) {
-                            LOG.error("Couldn't parse integer", e);
-                        }
+                        return Integer.parseInt(m2.group(1)) - Integer.parseInt(m1.group(1));
                     }
                     return 0;
                 }
