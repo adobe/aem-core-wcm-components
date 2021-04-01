@@ -44,6 +44,7 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
     service = { Servlet.class },
     property = {
         "sling.servlet.resourceTypes=" + EmbeddableOptionsDataSourceServlet.RESOURCE_TYPE_V1,
+        "sling.servlet.resourceTypes=" + EmbeddableOptionsDataSourceServlet.RESOURCE_TYPE_V2,
         "sling.servlet.methods=GET",
         "sling.servlet.extensions=html"
     }
@@ -51,6 +52,7 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 public class EmbeddableOptionsDataSourceServlet extends SlingSafeMethodsServlet {
 
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/embed/v1/datasources/embeddableoptions";
+    public static final String RESOURCE_TYPE_V2 = "core/wcm/components/embed/v2/datasources/embeddableoptions";
 
     private static final long serialVersionUID = 7672484310019288602L;
     private static final String NN_DIALOG = "cq:dialog";
