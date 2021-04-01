@@ -103,7 +103,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
     private int maxInputWidth;
-    
+
     private AdaptiveImageServletMetrics metrics;
 
     @SuppressFBWarnings(justification = "This field needs to be transient")
@@ -112,7 +112,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
-    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics, 
+    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics,
             int defaultResizeWidth, int maxInputWidth) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
@@ -506,6 +506,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         SortedSet<Rendition> renditions = new TreeSet<>((o1, o2) -> Long.valueOf(o1.getSize() - o2.getSize()).intValue());
         renditions.addAll(asset.getRenditions());
         EnhancedRendition bestRendition = null;
+        boolean assetSizeExceedsMaxSize = false;
         // Find first rendition that has a width larger or equal than wanted
         for (Rendition rendition : renditions) {
             EnhancedRendition enhancedRendition = new EnhancedRendition(rendition);
@@ -514,12 +515,21 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (dimension.getWidth() >= width) {
                     bestRendition = enhancedRendition;
                     if (StringUtils.equals(bestRendition.getPath(), asset.getOriginal().getPath())) {
+                        assetSizeExceedsMaxSize = Integer.parseInt(asset.getMetadataValue(DamConstants.TIFF_IMAGEWIDTH)) > AdaptiveImageServlet.DEFAULT_MAX_SIZE;
                         metrics.markOriginalRenditionUsed();
                     }
                     break;
                 }
             }
         }
+        // Avoid memory issues with portrait and large image, attempt to use biggest rendition
+        if (assetSizeExceedsMaxSize) {
+            if(asset.getRenditions().size() > 1) {
+                // Get the second to last largest rendition
+                return new EnhancedRendition(asset.getRenditions().get(asset.getRenditions().size()-2));
+            }
+        }
+
         // If no rendition was found, attempt to use original
         if (bestRendition == null) {
             return getOriginal(asset);
