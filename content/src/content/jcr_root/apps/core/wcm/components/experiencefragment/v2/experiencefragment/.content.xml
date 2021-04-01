@@ -18,6 +18,5 @@
     cq:icon="experience"
     jcr:description="Displays an experience fragment variation"
     jcr:primaryType="cq:Component"
-    jcr:title="Experience Fragment"
-    sling:resourceSuperType="core/wcm/components/experiencefragment/v2/experiencefragment"
-    componentGroup="Core Components Examples"/>
+    jcr:title="Experience Fragment (v2)"
+    componentGroup=".core-wcm"/>

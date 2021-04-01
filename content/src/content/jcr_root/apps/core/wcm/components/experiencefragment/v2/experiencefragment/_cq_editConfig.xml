@@ -14,10 +14,24 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    cq:icon="experience"
-    jcr:description="Displays an experience fragment variation"
-    jcr:primaryType="cq:Component"
-    jcr:title="Experience Fragment"
-    sling:resourceSuperType="core/wcm/components/experiencefragment/v2/experiencefragment"
-    componentGroup="Core Components Examples"/>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:EditConfig"
+    cq:actions="[EDIT,DELETE,INSERT,COPYMOVE]">
+    <cq:dropTargets
+        jcr:primaryType="nt:unstructured">
+        <experiencefragment
+            jcr:primaryType="cq:DropTargetConfig"
+            accept="[text/html]"
+            propertyName="./fragmentVariationPath"
+            groups="[content]"/>
+    </cq:dropTargets>
+    <cq:actionConfigs
+        jcr:primaryType="nt:unstructured">
+        <editInNewTab
+            jcr:primaryType="nt:unstructured"
+            text="Edit"
+            handler="CQ.CoreComponents.experiencefragment.v2.actions.edit"
+            icon="edit"/>
+    </cq:actionConfigs>
+</jcr:root>
+
