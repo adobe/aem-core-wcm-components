@@ -207,6 +207,11 @@
         var self = this;
 
         switch (event.keyCode) {
+            case keyCodes.TAB:
+                if (self._resultsOpen()) {
+                    toggleShow(self._elements.results, false);
+                }
+                break;
             case keyCodes.ENTER:
                 event.preventDefault();
                 if (self._resultsOpen()) {
