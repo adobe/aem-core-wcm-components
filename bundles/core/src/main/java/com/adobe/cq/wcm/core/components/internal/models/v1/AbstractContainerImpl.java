@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -177,7 +178,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     private Optional<String> getBackgroundImage() {
         return Optional.ofNullable(this.currentStyle)
             .filter(style -> style.get(PN_BACKGROUND_IMAGE_ENABLED, Boolean.FALSE))
-            .flatMap(style -> Optional.ofNullable(this.resource.getValueMap().get(PN_BACKGROUND_IMAGE_REFERENCE, String.class)))
+            .flatMap(style -> linkHandler.getLink(resource, PN_BACKGROUND_IMAGE_REFERENCE).map(Link::getURL))
             .filter(StringUtils::isNotEmpty);
     }
 
