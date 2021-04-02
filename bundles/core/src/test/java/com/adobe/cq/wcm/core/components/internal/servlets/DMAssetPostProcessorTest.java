@@ -337,7 +337,7 @@ public class DMAssetPostProcessorTest {
     }
 
     /*
-    Unlikely case when modifications report fileReferene setting but no fileReference is found in request
+    Unlikely case when modifications report fileReference setting but no fileReference is found in request
      */
     @Test
     public void lostFileReferenceModification() throws Exception {
@@ -361,7 +361,29 @@ public class DMAssetPostProcessorTest {
             assertEquals(actualModification.getType(), expectedModification.type);
         }
     }
+//
+    /*
+     The case when DM asset drug-n-drop on empty page. This scenario creates Image component with assigned asset.
+     Post processor should write image server url property
+     */
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void drugNdropDMimageToEmptyPage(ModificationType modificationType) throws Exception {
+        String expectingComponent = "/content/test/jcr:content/root/container/image40";
+        prepareResource(expectingComponent, null);
+        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/container/image40", true);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(3, modifications.size());
+    }
 
+
+//
     /**
      * Prepares test resource for the scenario when the existing component is being changed to use the new asset path
      * @param existingComponent existing component path
