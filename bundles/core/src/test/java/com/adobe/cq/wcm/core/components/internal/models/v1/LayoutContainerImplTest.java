@@ -44,6 +44,7 @@ public class LayoutContainerImplTest {
     private static final String CONTAINER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-1";
     private static final String CONTAINER_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-2";
     private static final String CONTAINER_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-3";
+    private static final String CONTAINER_4 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-4";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     public final AemContext context = CoreComponentTestContext.newAemContext();
@@ -105,6 +106,18 @@ public class LayoutContainerImplTest {
         LayoutContainer container = getContainerUnderTest(CONTAINER_3);
         assertEquals("container-d7eba9c61f", container.getId(), "ID mismatch");
         assertNull(container.getBackgroundStyle(), "Style");
+    }
+
+    @Test
+    public void testSpaceEscapingInBackgroundImage() {
+        context.contentPolicyMapping(LayoutContainerImpl.RESOURCE_TYPE_V1, new HashMap<String, Object>() {{
+            put(Container.PN_BACKGROUND_IMAGE_ENABLED, true);
+            put(Container.PN_BACKGROUND_COLOR_ENABLED, true);
+            put(LayoutContainer.PN_LAYOUT, "simple");
+        }});
+        LayoutContainer container = getContainerUnderTest(CONTAINER_4);
+        assertEquals("container-ece469fc8b", container.getId(), "ID mismatch");
+        assertEquals("background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain%20range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;", container.getBackgroundStyle(), "Style mismatch");
     }
 
     private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {
