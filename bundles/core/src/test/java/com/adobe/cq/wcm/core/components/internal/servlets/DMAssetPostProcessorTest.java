@@ -361,7 +361,7 @@ public class DMAssetPostProcessorTest {
             assertEquals(actualModification.getType(), expectedModification.type);
         }
     }
-//
+
     /*
      The case when DM asset drug-n-drop on empty page. This scenario creates Image component with assigned asset.
      Post processor should write image server url property
@@ -372,9 +372,16 @@ public class DMAssetPostProcessorTest {
         names = {"CREATE", "MODIFY"}
     )
     public void drugNdropDMimageToEmptyPage(ModificationType modificationType) throws Exception {
-        String expectingComponent = "/content/test/jcr:content/root/container/image40";
-        prepareResource(expectingComponent, null);
-        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/container/image40", true);
+        String expectingComponent = "/content/test/jcr:content/root/container";
+        Hashtable<String, String> params = new Hashtable<String, String>();
+        params.put("order","last");
+        params.put("nameHint","image");
+        params.put("./sling:resourceType","core/wcm/components/image/v2/image");
+        params.put("parentResourceType", "wcm/foundation/components/responsivegrid");
+        params.put("./fileReference", "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png");
+
+        prepareResourceWithParameters(expectingComponent, params);
+        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/container", true);
         servlet.process(context.request(), modifications);
         Resource resource = context.currentResource();
         assertNotNull(resource);
@@ -382,8 +389,25 @@ public class DMAssetPostProcessorTest {
         assertEquals(3, modifications.size());
     }
 
+    /**
+     * Prepares test resource for the scenario when the existing component is being changed to use the new parameters
+     * @param existingComponent existing component path
+     * @param requestParameters new values for request
+     */
+    private void prepareResourceWithParameters(String existingComponent, Hashtable requestParameters) {
+        Resource resource = context.currentResource(existingComponent);
+        assertNotNull(resource);
+        if (requestParameters != null) {
+            ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
+            if (map != null) {
+                Set<String> keys = requestParameters.keySet();
+                for(String key: keys){
+                    map.put(key, requestParameters.get(key));
+                }
+            }
+        }
+    }
 
-//
     /**
      * Prepares test resource for the scenario when the existing component is being changed to use the new asset path
      * @param existingComponent existing component path
