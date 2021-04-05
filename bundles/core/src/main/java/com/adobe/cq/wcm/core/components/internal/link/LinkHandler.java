@@ -160,7 +160,22 @@ public class LinkHandler {
     private String getLinkURL(@NotNull String path) {
         return getPage(path)
                 .map(page -> getPageLinkURL(page))
-                .orElse(path);
+                .orElse(map(path));
+    }
+
+    /**
+     * Tries to map the provided {@code path}.
+     *
+     * @param path the path to map
+     * @return the mapped path or the original one, in case mapping fails.
+     */
+    @NotNull
+    private String map(@NotNull String path) {
+        try {
+            return StringUtils.defaultString(request.getResourceResolver().map(request, path), path);
+        } catch (Exception e) {
+            return path;
+        }
     }
 
     /**
@@ -179,7 +194,7 @@ public class LinkHandler {
         } else {
             pageLinkURL = vanityURL;
         }
-        return StringUtils.defaultString(request.getResourceResolver().map(request, pageLinkURL));
+        return map(pageLinkURL);
     }
 
     /**
