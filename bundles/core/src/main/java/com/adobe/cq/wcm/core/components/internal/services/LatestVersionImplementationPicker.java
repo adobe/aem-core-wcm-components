@@ -32,7 +32,7 @@ import org.osgi.service.component.propertytypes.ServiceRanking;
 @ServiceRanking(value = 1)// this must come after ResourceTypeBasedResourcePicker
 public class LatestVersionImplementationPicker implements ImplementationPicker {
 
-    private static final Pattern INTERNAL_MODEL_PATTERN = Pattern.compile("com\\.adobe\\.cq\\.wcm\\.core\\.components\\.internal\\.models\\.v(\\d+)\\.");
+    private static final Pattern INTERNAL_MODEL_PATTERN = Pattern.compile("^com\\.adobe\\.cq\\.wcm\\.core\\.components\\.internal\\.models\\.v(\\d+)\\.\\S*$");
     private static final String CORE_COMPONENTS_MODELS = "com.adobe.cq.wcm.core.components.models";
 
     @Override
