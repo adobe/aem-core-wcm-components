@@ -372,18 +372,11 @@ public class DMAssetPostProcessorTest {
         names = {"CREATE", "MODIFY"}
     )
     public void drugNdropDMimageToEmptyPage(ModificationType modificationType) throws Exception {
-        String expectingComponent = "/content/test/jcr:content/root/container";
-        Hashtable<String, String> params = new Hashtable<String, String>();
-        params.put("order","last");
-        params.put("nameHint","image");
-        params.put("./sling:resourceType","core/wcm/components/image/v2/image");
-        params.put("parentResourceType", "wcm/foundation/components/responsivegrid");
-        params.put("./fileReference", "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png");
-
-        prepareResourceWithParameters(expectingComponent, params);
-        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/container", true);
+        String existingComponent = "/content/test/jcr:content/root/container";
+        prepareResource(existingComponent, null);
+        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/container/image40", true);
         servlet.process(context.request(), modifications);
-        Resource resource = context.currentResource();
+        Resource resource = context.currentResource("/content/test/jcr:content/root/container/image40");
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
         assertEquals(3, modifications.size());
