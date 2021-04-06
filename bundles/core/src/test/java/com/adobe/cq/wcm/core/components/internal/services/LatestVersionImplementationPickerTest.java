@@ -15,9 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
 import org.apache.sling.models.spi.ImplementationPicker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.adobe.cq.wcm.core.components.models.Page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -39,6 +45,19 @@ class LatestVersionImplementationPickerTest {
         Class<?>[] implementations = new Class<?>[] { com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl.class,
                 com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl.class };
         assertEquals(com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl.class, underTest.pick(SAMPLE_ADAPTER, implementations, SAMPLE_ADAPTABLE));
+    }
+
+    @Test
+    void testPickExternalModel() {
+        Object customPage = Proxy.newProxyInstance(Page.class.getClassLoader(), new Class[]{Page.class}, new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                return null;
+            }
+        });
+        Class<?>[] implementations = new Class<?>[] { com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl.class,
+                com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl.class, customPage.getClass() };
+        assertEquals(customPage.getClass(), underTest.pick(SAMPLE_ADAPTER, implementations, SAMPLE_ADAPTABLE));
     }
 
     @Test
