@@ -45,7 +45,7 @@ public class LatestVersionImplementationPicker implements ImplementationPicker {
                 if (m1.matches() && m2.matches()) {
                     return Integer.parseInt(m2.group(1)) - Integer.parseInt(m1.group(1));
                 } else {
-                    return (m1.find() ? 1 : (m2.find() ? -1 : 0));
+                    return (m1.matches() ? 1 : (m2.matches() ? -1 : 0));
                 }
             }).orElse(implementationsTypes[0]);
         }
