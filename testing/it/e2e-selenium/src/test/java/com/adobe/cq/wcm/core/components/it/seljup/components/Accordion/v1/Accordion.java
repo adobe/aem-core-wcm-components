@@ -14,9 +14,12 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.components;
+package com.adobe.cq.wcm.core.components.it.seljup.components.Accordion.v1;
 
 
+import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEditor;
+import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.CQOverlay;
+import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.PanelSelector;
 import com.adobe.qe.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.qe.selenium.pagewidgets.coral.CoralPopOver;
 import com.adobe.qe.selenium.pagewidgets.coral.CoralSelectList;

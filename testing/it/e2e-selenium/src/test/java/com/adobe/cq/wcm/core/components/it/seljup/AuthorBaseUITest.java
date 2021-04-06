@@ -20,19 +20,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import com.adobe.qe.selenium.junit.annotations.Author;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ArrayNode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,11 +47,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.adobe.qe.selenium.Constants.DEFAULT_SMALL_SIZE;
-import static com.adobe.qe.selenium.Constants.GROUPID_CONTENT_AUTHORS;
-
-
-import static com.adobe.qe.selenium.Constants.RUNMODE_AUTHOR;
-import static com.adobe.qe.selenium.pagewidgets.Helpers.setAffinityCookie;
 import static com.adobe.qe.selenium.Constants.GROUPID_CONTENT_AUTHORS;
 
 

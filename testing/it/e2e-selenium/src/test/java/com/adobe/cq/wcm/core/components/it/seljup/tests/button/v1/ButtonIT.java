@@ -42,7 +42,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ButtonIT extends AuthorBaseUITest {
 
     final String COMPONENT_RESOURCE_TYPE = "core/wcm/components/button/v1/button";
-    private static final String CONTENT_FRAME = "ContentFrame";
 
     private String testPage;
     private String proxyCompoenetPath;

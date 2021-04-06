@@ -25,7 +25,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static com.codeborne.selenide.Selenide.$;
 
 public class ButtonConfigureDialog extends Dialog {
     private static final String CSS_SELECTOR = "coral-dialog";

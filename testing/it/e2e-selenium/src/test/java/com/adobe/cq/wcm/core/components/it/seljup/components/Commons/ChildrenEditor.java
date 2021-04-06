@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.components;
+package com.adobe.cq.wcm.core.components.it.seljup.components.Commons;
 
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.qe.selenium.pagewidgets.common.BaseComponent;

@@ -18,9 +18,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.accordion.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Accordion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.ChildrenEditor;
-import com.adobe.cq.wcm.core.components.it.seljup.components.PanelSelector;
+import com.adobe.cq.wcm.core.components.it.seljup.components.Accordion.v1.Accordion;
+import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEditor;
+import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.PanelSelector;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.qe.selenium.pageobject.PageEditorPage;
