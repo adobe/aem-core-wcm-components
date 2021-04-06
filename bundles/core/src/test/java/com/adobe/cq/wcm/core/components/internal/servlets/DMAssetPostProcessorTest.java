@@ -51,6 +51,7 @@ public class DMAssetPostProcessorTest {
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET = PAGE + "/jcr:content/root/image32";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_IMAGE_PRESET = PAGE + "/jcr:content/root/image33";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_SMART_CROP_RENDITION = PAGE + "/jcr:content/root/image36";
+    private static final String RESPONSIVE_GRID__EMPTY = PAGE + "/jcr:content/root/container";
 
     private static final String EXPECTED_IMAGE_SERVER_URL = "https://s7d9.scene7.com/is/image/";
 
@@ -363,7 +364,7 @@ public class DMAssetPostProcessorTest {
     }
 
     /*
-     The case when DM asset drug-n-drop on empty page. This scenario creates Image component with assigned asset.
+     The case when DM asset drag-n-drop on empty page. This scenario creates Image component with assigned asset.
      Post processor should write image server url property
      */
     @ParameterizedTest
@@ -371,34 +372,17 @@ public class DMAssetPostProcessorTest {
         value = ModificationType.class,
         names = {"CREATE", "MODIFY"}
     )
-    public void drugNdropDMimageToEmptyPage(ModificationType modificationType) throws Exception {
-        String existingComponent = "/content/test/jcr:content/root/container";
+    public void dragNdropDMimageToEmptyPage(ModificationType modificationType) throws Exception {
+        String existingComponent = RESPONSIVE_GRID__EMPTY;
         prepareResource(existingComponent, null);
-        List<Modification> modifications = prepareModifications(modificationType, "/content/test/jcr:content/root/container/image40", true);
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent + "/image", true);
         servlet.process(context.request(), modifications);
-        Resource resource = context.currentResource("/content/test/jcr:content/root/container/image40");
+        Resource resource = context.currentResource().getResourceResolver().getResource(existingComponent + "/image");
+        Resource containerResource = context.currentResource().getResourceResolver().getResource(existingComponent);
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(null, containerResource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
         assertEquals(3, modifications.size());
-    }
-
-    /**
-     * Prepares test resource for the scenario when the existing component is being changed to use the new parameters
-     * @param existingComponent existing component path
-     * @param requestParameters new values for request
-     */
-    private void prepareResourceWithParameters(String existingComponent, Hashtable requestParameters) {
-        Resource resource = context.currentResource(existingComponent);
-        assertNotNull(resource);
-        if (requestParameters != null) {
-            ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
-            if (map != null) {
-                Set<String> keys = requestParameters.keySet();
-                for(String key: keys){
-                    map.put(key, requestParameters.get(key));
-                }
-            }
-        }
     }
 
     /**

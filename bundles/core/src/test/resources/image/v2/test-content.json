@@ -536,7 +536,7 @@
                 "container"             : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "sling:resourceType": "wcm/foundation/components/responsivegrid",
-                    "image40"            : {
+                    "image"            : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:createdBy"     : "admin",
                         "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
