@@ -21,15 +21,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.sling.models.spi.ImplementationPicker;
-import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.propertytypes.ServiceRanking;
 
 /**
  * Picks latest model version of a core component model
  */
-@Component(property=Constants.SERVICE_RANKING+":Integer=1") // this must come after ResourceTypeBasedResourcePicker
+@Component
+@ServiceRanking(value = 1)// this must come after ResourceTypeBasedResourcePicker
 public class LatestVersionImplementationPicker implements ImplementationPicker {
 
     private static final Pattern pattern = Pattern.compile("\\.v(\\d+)\\.");
@@ -38,18 +37,14 @@ public class LatestVersionImplementationPicker implements ImplementationPicker {
     public Class<?> pick(Class<?> adapterType, Class<?>[] implementationsTypes, Object adaptable) {
         // make sure picker is only responsible for core component models
         if (adapterType.getPackage().getName().equals("com.adobe.cq.wcm.core.components.models")) {
-            Arrays.sort(implementationsTypes, new Comparator<Class<?>>() {
-                @Override
-                public int compare(Class<?> o1, Class<?> o2) {
-                    Matcher m1 = pattern.matcher(o1.getName());
-                    Matcher m2 = pattern.matcher(o2.getName());
-                    if (m1.find() && m2.find()) {
-                        return Integer.parseInt(m2.group(1)) - Integer.parseInt(m1.group(1));
-                    }
-                    return 0;
+            return Arrays.stream(implementationsTypes).min((Class<?> o1, Class<?> o2) -> {
+                Matcher m1 = pattern.matcher(o1.getName());
+                Matcher m2 = pattern.matcher(o2.getName());
+                if (m1.find() && m2.find()) {
+                    return Integer.parseInt(m2.group(1)) - Integer.parseInt(m1.group(1));
                 }
-            });
-            return implementationsTypes[0];
+                return 0;
+            }).orElse(implementationsTypes[0]);
         }
         return null;
     }
