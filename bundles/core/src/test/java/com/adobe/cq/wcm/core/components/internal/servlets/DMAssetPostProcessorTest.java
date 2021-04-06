@@ -381,7 +381,8 @@ public class DMAssetPostProcessorTest {
         Resource containerResource = context.currentResource().getResourceResolver().getResource(existingComponent);
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
-        assertEquals(null, containerResource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNotNull(containerResource);
+        assertNull(containerResource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
         assertEquals(3, modifications.size());
     }
 
