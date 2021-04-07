@@ -15,12 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.util;
 
-import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
-import com.adobe.cq.wcm.core.components.models.Component;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Template;
-import com.day.cq.wcm.api.components.ComponentContext;
+import java.util.Optional;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -28,7 +24,12 @@ import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
+import com.adobe.cq.wcm.core.components.models.Component;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.components.ComponentContext;
 
 /**
  * Utility helper functions for components.
@@ -71,8 +72,7 @@ public final class ComponentUtils {
     }
 
     /**
-     * Get the ID property value if set (using {@link #getPropertyId(Resource)},
-     * otherwise generate a new ID (using {@link #generateId(Resource, Page, ComponentContext)}.
+     * Defers to {@link #getId(Resource, Page, Resource, ComponentContext)}.
      *
      * @param resource The resource for which to get or generate an ID.
      * @param currentPage The current request page.
@@ -83,8 +83,26 @@ public final class ComponentUtils {
     public static String getId(@NotNull final Resource resource,
                                                   @Nullable final Page currentPage,
                                                   @Nullable final ComponentContext componentContext) {
+        return getId(resource, currentPage, null, componentContext);
+    }
+
+    /**
+     * Get the ID property value if set (using {@link #getPropertyId(Resource)},
+     * otherwise generate a new ID (using {@link #generateId(Resource, Page, Resource, ComponentContext)}.
+     *
+     * @param resource The resource for which to get or generate an ID.
+     * @param currentPage The current request page.
+     * @param parentResource The parent resource (for Experience Fragments that include other resources)
+     * @param componentContext The current component context.
+     * @return The ID property value for the specified resource, or a generated ID if not set.
+     */
+    @NotNull
+    public static String getId(@NotNull final Resource resource,
+                               @Nullable final Page currentPage,
+                               @Nullable final Resource parentResource,
+                               @Nullable final ComponentContext componentContext) {
         return ComponentUtils.getPropertyId(resource)
-            .orElseGet(() -> ComponentUtils.generateId(resource, currentPage, componentContext));
+            .orElseGet(() -> ComponentUtils.generateId(resource, currentPage, parentResource, componentContext));
     }
 
     /**
@@ -127,6 +145,7 @@ public final class ComponentUtils {
     @NotNull
     private static String generateId(@NotNull final Resource resource,
                                     @Nullable final Page currentPage,
+                                    @Nullable final Resource parentResource,
                                     @Nullable final ComponentContext componentContext) {
         String resourceType = resource.getResourceType();
         String prefix = StringUtils.substringAfterLast(resourceType, "/");
@@ -137,7 +156,9 @@ public final class ComponentUtils {
             Template template = currentPage.getTemplate();
             boolean inCurrentPage = (resourcePage != null && StringUtils.equals(resourcePage.getPath(), currentPage.getPath()));
             boolean inTemplate = (template != null && path.startsWith(template.getPath()));
-            if (!inCurrentPage && !inTemplate) {
+            if (parentResource != null) {
+                path = parentResource.getPath().concat(resource.getPath());
+            } else if (!inCurrentPage && !inTemplate) {
                 ComponentContext parentContext = componentContext.getParent();
                 while (parentContext != null) {
                     Resource parentContextResource = parentContext.getResource();

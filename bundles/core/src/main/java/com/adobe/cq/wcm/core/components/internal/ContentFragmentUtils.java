@@ -30,6 +30,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -62,6 +63,12 @@ public class ContentFragmentUtils {
      * Name of the property of an optional {@link ContentPolicy content policy} holding the name of the grid type.
      */
     protected static final String PN_CFM_GRID_TYPE = "cfm-grid-type";
+
+    /**
+     *
+     */
+    public final static String ATTR_PARENT_RESOURCE = "parentResource";
+
 
     /* Hide the constructor of utility classes */
     private ContentFragmentUtils() {
@@ -251,13 +258,25 @@ public class ContentFragmentUtils {
     public static LinkedHashMap<String, ComponentExporter> getComponentExporters(
         @NotNull final Iterator<Resource> resourceIterator,
         @NotNull final ModelFactory modelFactory,
-        @NotNull final SlingHttpServletRequest slingHttpServletRequest) {
+        @NotNull final SlingHttpServletRequest slingHttpServletRequest,
+        @NotNull final Resource parentResource) {
         final LinkedHashMap<String, ComponentExporter> componentExporterMap = new LinkedHashMap<>();
+
+        SlingHttpServletRequest wrappedSlingHttpServletRequest = new SlingHttpServletRequestWrapper(slingHttpServletRequest) {
+
+            @Override
+            public Object getAttribute(String name) {
+                if (ATTR_PARENT_RESOURCE.equals(name)) {
+                    return parentResource;
+                }
+                return super.getAttribute(name);
+            }
+        };
 
         while (resourceIterator.hasNext()) {
             Resource resource = resourceIterator.next();
             ComponentExporter exporter =
-                modelFactory.getModelFromWrappedRequest(slingHttpServletRequest, resource, ComponentExporter.class);
+                modelFactory.getModelFromWrappedRequest(wrappedSlingHttpServletRequest, resource, ComponentExporter.class);
 
             if (exporter != null) {
                 String name = resource.getName();
