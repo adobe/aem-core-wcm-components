@@ -42,7 +42,6 @@ public class Accordion extends BaseComponent {
     private static String accordionItem = "[data-cmp-hook-accordion='item']";
     private static String itemExpanded = "[data-cmp-hook-accordion='item'][data-cmp-expanded]";
     private static String itemButton = "[data-cmp-hook-accordion='button']";
-    private static String configButton = "button[data-action='CONFIGURE']";
 
     public Accordion() {
         super(".cmp-accordion");
@@ -134,11 +133,10 @@ public class Accordion extends BaseComponent {
         //private EditableToolbar editableToolbar = new EditableToolbar(this); //will get from EditorPage
 
         public static final class EditDialogProperties {
-            private static SelenideElement properties = $x("//coral-tab-label[contains(text(),'Properties')]");
+            private static SelenideElement properties = $("coral-tab[data-foundation-tracking-event*='properties']");
             private static String expandedSelectSingle ="[data-cmp-accordion-v1-dialog-edit-hook='expandedSelectSingle']";
             private static String expandedSelect = "[data-cmp-accordion-v1-dialog-edit-hook='expandedSelect']";
             private static String singleExpansion = "[data-cmp-accordion-v1-dialog-edit-hook='singleExpansion']";
-            private static String selectItem = "//" + expandedSelect + "coral-selectlist-item[contains(text(),\"%s\")]";
 
             private EditDialogProperties() {
 

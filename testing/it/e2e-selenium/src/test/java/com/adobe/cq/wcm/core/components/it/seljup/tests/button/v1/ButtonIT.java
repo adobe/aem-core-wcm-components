@@ -19,12 +19,15 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.button.v1;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.button.v1.Button;
 import com.adobe.cq.wcm.core.components.it.seljup.components.button.v1.ButtonConfigureDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.qe.selenium.pageobject.PageEditorPage;
 import com.adobe.qe.selenium.pagewidgets.cq.EditableToolbar;
 import com.adobe.qe.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.WebDriverRunner;
 import java.util.concurrent.TimeoutException;
+
+import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +54,7 @@ public class ButtonIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBefore() throws Exception {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyCompoenetPath = creatProxyCompoenet(COMPONENT_RESOURCE_TYPE, "Proxy Button");
+        proxyCompoenetPath = Commons.creatProxyComponent(adminClient, COMPONENT_RESOURCE_TYPE, "Proxy Button", "button");
         addPathtoComponentPolicy(responsiveGridPath, proxyCompoenetPath);
         editorPage = new PageEditorPage(testPage);
         button = new Button();
@@ -59,8 +62,8 @@ public class ButtonIT extends AuthorBaseUITest {
     }
 
     @AfterEach
-    public void cleanup() throws ClientException {
-
+    public void cleanup() throws ClientException, InterruptedException {
+        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**
@@ -73,7 +76,7 @@ public class ButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button text")
-    void SetText() throws Exception {
+    void SetText() throws TimeoutException, InterruptedException {
         final String testTitle = "test button";
         String testComponentPath = testPage + "/jcr:content/root/responsivegrid/button";
         String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";

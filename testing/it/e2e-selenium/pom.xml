@@ -135,6 +135,7 @@
                         <!-- exclude comparison files -->
                         <exclude>**/resources/*.txt</exclude>
                         <exclude>**/*.md</exclude>
+                        <exclude>build/</exclude>
                     </excludes>
                 </configuration>
             </plugin>

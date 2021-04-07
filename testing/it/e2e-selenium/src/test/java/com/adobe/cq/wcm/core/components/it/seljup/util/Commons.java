@@ -21,6 +21,8 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
@@ -32,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 
+import static com.adobe.qe.selenium.Constants.DEFAULT_SMALL_SIZE;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static org.awaitility.Awaitility.await;
@@ -411,4 +414,16 @@ public class Commons {
         SlingHttpResponse status = client.doGet("/etc.clientlibs" + libraryPath, HttpUtils.getExpectedStatus(200, expectedStatus));
 
     }
+
+    public static String creatProxyComponent(CQClient client, String corecomponentPath, String proxyCompoentTitle, String componentName) throws ClientException {
+        FormEntityBuilder form = FormEntityBuilder.create()
+            .addParameter("./sling:resourceSuperType", corecomponentPath)
+            .addParameter("./jcr:title", proxyCompoentTitle)
+            .addParameter("./componentGroup", "test.site")
+            .addParameter("./jcr:primaryType", "cq:Component");
+
+        SlingHttpResponse exec = client.doPost("/apps/testsite" + RandomStringUtils.randomAlphabetic(DEFAULT_SMALL_SIZE) + "/components/" + componentName, form.build(), HttpStatus.SC_OK, HttpStatus.SC_CREATED);
+        return exec.getSlingPath();
+    }
+
 }

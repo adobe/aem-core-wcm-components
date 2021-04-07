@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.button.v1;
 
+import com.adobe.qe.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.qe.selenium.pagewidgets.coral.Dialog;
 import com.codeborne.selenide.SelenideElement;
 import com.adobe.qe.selenium.pagewidgets.cq.AutoCompleteField;
@@ -41,6 +42,14 @@ public class ButtonConfigureDialog extends Dialog {
         return content().find("input[name='./jcr:title']");
     }
 
+    public SelenideElement getNameField() {
+        return content().find("input[name='./name']");
+    }
+
+    public SelenideElement getValueField() {
+        return content().find("input[name='./value']");
+    }
+
     public void setLinkField(String value) {
         AutoCompleteField autoCompleteField = new AutoCompleteField("./link");
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
@@ -50,6 +59,11 @@ public class ButtonConfigureDialog extends Dialog {
 
     public SelenideElement getIcon() {
         return content().find("input[name='./icon']");
+    }
+
+    public void selectButtonType(String type) {
+        CoralSelect coralSelect = new CoralSelect("name='./type'");
+        coralSelect.selectItemByValue(type);
     }
 
 }

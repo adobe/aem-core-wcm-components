@@ -1,3 +1,19 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2020 Adobe
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.adobe.cq.wcm.core.components.it.seljup.tests.carousel.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
@@ -32,14 +48,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CarouselIT extends AuthorBaseUITest {
 
-    private Map<String, Integer> doubleBraceMap  = new HashMap<String, Integer>() {{
-        put("END", 35);
-        put("HOME", 36);
-        put("ARROW_LEFT", 37);
-        put("ARROW_UP", 38);
-        put("ARROW_RIGHT", 39);
-        put("ARROW_DOWN", 40);
-    }};
 
     private String policyPath;
     private String proxyPath;
@@ -146,7 +154,7 @@ public class CarouselIT extends AuthorBaseUITest {
      * 3. save the edit dialog
      */
 
-    private ElementsCollection createItems() throws TimeoutException, InterruptedException {
+    private ElementsCollection createItems() throws  InterruptedException {
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         Carousel.EditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
@@ -179,7 +187,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Edit Dialog: Add child items")
-    public void AddItem() throws TimeoutException, InterruptedException {
+    public void AddItem() throws InterruptedException {
         createItems();
     }
 
@@ -197,7 +205,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Edit Dialog : Remove items")
-    public void RemoveItem() throws TimeoutException, InterruptedException {
+    public void RemoveItem() throws InterruptedException {
         createItems();
         Carousel.EditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
@@ -230,7 +238,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Edit Dialog : Reorder items")
-    public void ReorderItem() throws TimeoutException, InterruptedException {
+    public void ReorderItem() throws InterruptedException {
         createItems();
         Carousel.EditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
@@ -251,7 +259,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Autoplay group toggle")
-    public void AutoplayGroup() throws TimeoutException, InterruptedException {
+    public void AutoplayGroup() throws InterruptedException {
         createItems();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         Carousel.EditDialog editDialog = carousel.getEditDialog();
@@ -277,7 +285,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Panel Select")
-    public void PanelSelect() throws TimeoutException, InterruptedException {
+    public void PanelSelect() throws InterruptedException {
         CQOverlay cqOverlay = carousel.getCQOverlay();
 
         String component = "[data-type='Editable'][data-path='" + testPage + Commons.relParentCompPath + componentName +"']";
@@ -328,7 +336,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Accessibility : Navigate Right")
-    public void AccessibilityNavigateRight() throws TimeoutException, InterruptedException {
+    public void AccessibilityNavigateRight() throws InterruptedException {
         createItems();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
@@ -345,7 +353,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Accessibility : Navigate Left")
-    public void AccessibilityNavigateLeft() throws TimeoutException, InterruptedException {
+    public void AccessibilityNavigateLeft() throws InterruptedException {
         createItems();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
@@ -362,7 +370,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Accessibility : Navigate Left")
-    public void AccessibilityNavigateEndStart() throws TimeoutException, InterruptedException {
+    public void AccessibilityNavigateEndStart() throws InterruptedException {
         createItems();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");

@@ -24,10 +24,7 @@ import java.util.List;
 
 import com.adobe.qe.selenium.junit.annotations.Author;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
-import org.apache.sling.testing.clients.SlingHttpResponse;
-import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.codehaus.jackson.JsonNode;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,7 +43,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.adobe.qe.selenium.Constants.DEFAULT_SMALL_SIZE;
 import static com.adobe.qe.selenium.Constants.GROUPID_CONTENT_AUTHORS;
 
 
@@ -68,23 +64,12 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
     public static CQClient adminClient;
     public  String label;
 
-    /**
-     * Author username with authoring privileges
-     */
-    private static final String AUTHOR_USERNAME = "it-sanity-author-" + RandomStringUtils.random(5, true, true);
-
-    /**
-     * Author user's password
-     */
-    private static final String AUTHOR_PASSWORD = RandomStringUtils.random(10, true, true);
-
-
     @RegisterExtension
     protected TestContentExtension testContentAuthor = new TestContentExtension(RUNMODE_AUTHOR);
 
     @BeforeEach
     public void loginBeforeEach(@Author final CQClient adminAuthor, final TestContentBuilder testContentBuilder, final URI baseURI)
-            throws ClientException, InterruptedException, UnsupportedEncodingException, URISyntaxException, Exception {
+            throws ClientException, InterruptedException, UnsupportedEncodingException {
         testContentBuilder.withUser(randomPassword, getUserGroupMembership());
         testContentBuilder.build();
 
@@ -112,31 +97,18 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
     }
 
 
-    public void addPathtoComponentPolicy(String componenPathtoUpdate, String pathToAdd) throws Exception {
+    public void addPathtoComponentPolicy(String componenPathtoUpdate, String pathToAdd) throws ClientException {
         String resourcePath = StringUtils.replaceOnce(componenPathtoUpdate, "structure", "policies");
         JsonNode existingPolicyNodePath = authorClient.doGetJson(resourcePath, 1, 200);
         String existingPolicy = configPath + "/settings/wcm/policies/" + existingPolicyNodePath.get("cq:policy").getValueAsText();
         JsonNode policyNode = authorClient.doGetJson(existingPolicy, 1, 200);
         JSONObject policyNodeJson = new JSONObject(policyNode.toString());
-        JSONArray jsonArray =policyNodeJson.getJSONArray("components");// new JSONArray(componentsList);
+        JSONArray jsonArray =policyNodeJson.getJSONArray("components");
         jsonArray.put(pathToAdd);
 
         adminClient.deletePath(existingPolicy, 200);
         adminClient.importContent(existingPolicy, "json", policyNodeJson.toString(), 201);
 
     }
-
-    //todo should move to util
-    public String creatProxyCompoenet(String corecomponentPath, String proxyCompoentTitle) throws Exception {
-        FormEntityBuilder form = FormEntityBuilder.create()
-            .addParameter("./sling:resourceSuperType", corecomponentPath)
-            .addParameter("./jcr:title", proxyCompoentTitle)
-            .addParameter("./componentGroup", "test.site")
-            .addParameter("./jcr:primaryType", "cq:Component");
-
-        SlingHttpResponse exec = adminClient.doPost("/apps/testsite" + RandomStringUtils.randomAlphabetic(DEFAULT_SMALL_SIZE) + "/components/button", form.build(), HttpStatus.SC_OK, HttpStatus.SC_CREATED);
-        return exec.getSlingPath();
-    }
-
 
 }
