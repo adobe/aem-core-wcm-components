@@ -209,7 +209,7 @@
         switch (event.keyCode) {
             case keyCodes.TAB:
                 if (self._resultsOpen()) {
-                    event.preventDefault();
+                    toggleShow(self._elements.results, false);
                 }
                 break;
             case keyCodes.ENTER:
