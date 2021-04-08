@@ -24,15 +24,19 @@ import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceDecorator;
+import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +71,7 @@ public class ContentFragmentUtils {
     /**
      *
      */
-    public final static String ATTR_PARENT_RESOURCE = "parentResource";
+    public final static String CALLER_RESOURCE = "callerResource";
 
 
     /* Hide the constructor of utility classes */
@@ -252,6 +256,7 @@ public class ContentFragmentUtils {
      * @param resourceIterator Iterator of resources for which to get the component exporters.
      * @param modelFactory Model factory service.
      * @param slingHttpServletRequest Current request.
+     * @param callerResource The caller (XF) resource.
      * @return Ordered map of resource names to {@link ComponentExporter} models.
      */
     @NotNull
@@ -259,24 +264,12 @@ public class ContentFragmentUtils {
         @NotNull final Iterator<Resource> resourceIterator,
         @NotNull final ModelFactory modelFactory,
         @NotNull final SlingHttpServletRequest slingHttpServletRequest,
-        @NotNull final Resource parentResource) {
+        @NotNull final Resource callerResource) {
         final LinkedHashMap<String, ComponentExporter> componentExporterMap = new LinkedHashMap<>();
 
-        SlingHttpServletRequest wrappedSlingHttpServletRequest = new SlingHttpServletRequestWrapper(slingHttpServletRequest) {
-
-            @Override
-            public Object getAttribute(String name) {
-                if (ATTR_PARENT_RESOURCE.equals(name)) {
-                    return parentResource;
-                }
-                return super.getAttribute(name);
-            }
-        };
-
         while (resourceIterator.hasNext()) {
-            Resource resource = resourceIterator.next();
-            ComponentExporter exporter =
-                modelFactory.getModelFromWrappedRequest(wrappedSlingHttpServletRequest, resource, ComponentExporter.class);
+            Resource resource = wrap(resourceIterator.next(), callerResource);
+            ComponentExporter exporter = modelFactory.getModelFromWrappedRequest(slingHttpServletRequest, resource, ComponentExporter.class);
 
             if (exporter != null) {
                 String name = resource.getName();
@@ -287,5 +280,17 @@ public class ContentFragmentUtils {
         }
 
         return componentExporterMap;
+    }
+
+    private static Resource wrap(@NotNull Resource calledResource, @Nullable Resource callerResource) {
+        ResourceMetadata resourceMetadata = new ResourceMetadata();
+        resourceMetadata.put(CALLER_RESOURCE, callerResource);
+        Resource wrapper = new ResourceWrapper(calledResource) {
+            @Override
+            public ResourceMetadata getResourceMetadata() {
+                return resourceMetadata;
+            }
+        };
+        return wrapper;
     }
 }

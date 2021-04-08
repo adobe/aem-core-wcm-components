@@ -56,6 +56,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public abstract class AbstractContainerImpl extends AbstractComponentImpl implements Container {
 
+    /**
+     * The current request.
+     */
+    @Self
+    protected SlingHttpServletRequest request;
+
     @Self
     protected LinkHandler linkHandler;
 

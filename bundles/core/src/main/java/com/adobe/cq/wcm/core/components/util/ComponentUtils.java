@@ -72,7 +72,8 @@ public final class ComponentUtils {
     }
 
     /**
-     * Defers to {@link #getId(Resource, Page, Resource, ComponentContext)}.
+     * Get the ID property value if set (using {@link #getPropertyId(Resource)},
+     * otherwise generate a new ID (using {@link #generateId(Resource, Page, ComponentContext)}.
      *
      * @param resource The resource for which to get or generate an ID.
      * @param currentPage The current request page.
@@ -83,26 +84,8 @@ public final class ComponentUtils {
     public static String getId(@NotNull final Resource resource,
                                                   @Nullable final Page currentPage,
                                                   @Nullable final ComponentContext componentContext) {
-        return getId(resource, currentPage, null, componentContext);
-    }
-
-    /**
-     * Get the ID property value if set (using {@link #getPropertyId(Resource)},
-     * otherwise generate a new ID (using {@link #generateId(Resource, Page, Resource, ComponentContext)}.
-     *
-     * @param resource The resource for which to get or generate an ID.
-     * @param currentPage The current request page.
-     * @param parentResource The parent resource (for Experience Fragments that include other resources)
-     * @param componentContext The current component context.
-     * @return The ID property value for the specified resource, or a generated ID if not set.
-     */
-    @NotNull
-    public static String getId(@NotNull final Resource resource,
-                               @Nullable final Page currentPage,
-                               @Nullable final Resource parentResource,
-                               @Nullable final ComponentContext componentContext) {
         return ComponentUtils.getPropertyId(resource)
-            .orElseGet(() -> ComponentUtils.generateId(resource, currentPage, parentResource, componentContext));
+            .orElseGet(() -> ComponentUtils.generateId(resource, currentPage, componentContext));
     }
 
     /**
@@ -145,7 +128,6 @@ public final class ComponentUtils {
     @NotNull
     private static String generateId(@NotNull final Resource resource,
                                     @Nullable final Page currentPage,
-                                    @Nullable final Resource parentResource,
                                     @Nullable final ComponentContext componentContext) {
         String resourceType = resource.getResourceType();
         String prefix = StringUtils.substringAfterLast(resourceType, "/");
@@ -156,8 +138,14 @@ public final class ComponentUtils {
             Template template = currentPage.getTemplate();
             boolean inCurrentPage = (resourcePage != null && StringUtils.equals(resourcePage.getPath(), currentPage.getPath()));
             boolean inTemplate = (template != null && path.startsWith(template.getPath()));
-            if (parentResource != null) {
-                path = parentResource.getPath().concat(resource.getPath());
+            Resource callerResource = (Resource)resource.getResourceMetadata().get("callerResource");
+            boolean isCalled = callerResource != null;
+            if (isCalled) {
+                path = resource.getPath();
+                while (callerResource != null) {
+                    path = callerResource.getPath().concat(path);
+                    callerResource = (Resource)callerResource.getResourceMetadata().get("callerResource");
+                }
             } else if (!inCurrentPage && !inTemplate) {
                 ComponentContext parentContext = componentContext.getParent();
                 while (parentContext != null) {

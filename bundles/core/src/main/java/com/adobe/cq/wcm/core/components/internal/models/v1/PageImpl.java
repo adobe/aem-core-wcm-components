@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -93,6 +92,9 @@ public class PageImpl extends AbstractComponentImpl implements Page {
 
     @Inject
     private SlingModelFilter slingModelFilter;
+
+    @Self
+    private SlingHttpServletRequest request;
 
     @Self
     protected LinkHandler linkHandler;
