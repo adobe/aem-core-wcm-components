@@ -31,6 +31,8 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
 
+import static com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils.CALLER_RESOURCE;
+
 /**
  * Utility helper functions for components.
  */
@@ -138,13 +140,13 @@ public final class ComponentUtils {
             Template template = currentPage.getTemplate();
             boolean inCurrentPage = (resourcePage != null && StringUtils.equals(resourcePage.getPath(), currentPage.getPath()));
             boolean inTemplate = (template != null && path.startsWith(template.getPath()));
-            Resource callerResource = (Resource)resource.getResourceMetadata().get("callerResource");
+            Resource callerResource = (Resource)resource.getResourceMetadata().get(CALLER_RESOURCE);
             boolean isCalled = callerResource != null;
             if (isCalled) {
                 path = resource.getPath();
                 while (callerResource != null) {
                     path = callerResource.getPath().concat(path);
-                    callerResource = (Resource)callerResource.getResourceMetadata().get("callerResource");
+                    callerResource = (Resource)callerResource.getResourceMetadata().get(CALLER_RESOURCE);
                 }
             } else if (!inCurrentPage && !inTemplate) {
                 ComponentContext parentContext = componentContext.getParent();

@@ -24,12 +24,10 @@ import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceDecorator;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceWrapper;
@@ -284,6 +282,11 @@ public class ContentFragmentUtils {
 
     private static Resource wrap(@NotNull Resource calledResource, @Nullable Resource callerResource) {
         ResourceMetadata resourceMetadata = new ResourceMetadata();
+        try { // This is failing during tests because sling testing mocks throw UnsupportedOperationException
+            resourceMetadata.putAll(calledResource.getResourceMetadata());
+        } catch (Exception e) {
+            LOG.error("Error while copying resource metadata", e);
+        }
         resourceMetadata.put(CALLER_RESOURCE, callerResource);
         Resource wrapper = new ResourceWrapper(calledResource) {
             @Override
