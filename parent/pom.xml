@@ -307,7 +307,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>4.2.1</version>
                     <configuration>
                         <instructions>
                             <Bundle-RequiredExecutionEnvironment>JavaSE-1.${aem.java.version}</Bundle-RequiredExecutionEnvironment>
@@ -635,19 +635,19 @@
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>osgi.annotation</artifactId>
-                <version>6.0.1</version>
+                <version>7.0.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>osgi.core</artifactId>
-                <version>6.0.0</version>
+                <version>7.0.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>osgi.cmpn</artifactId>
-                <version>6.0.0</version>
+                <version>7.0.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
