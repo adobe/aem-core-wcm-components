@@ -36,7 +36,9 @@
                     "container-2"       : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:title"         : "Container 1",
-                        "sling:resourceType": "core/wcm/components/container/v1/container"
+                        "sling:resourceType": "core/wcm/components/container/v1/container",
+                        "roleAttribute": "main",
+                        "accessibilityLabel": "container"
                     },
                     "container-3"       : {
                         "jcr:primaryType"   : "nt:unstructured",

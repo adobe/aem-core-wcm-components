@@ -46,6 +46,9 @@ It is also possible to define the allowed components for the Container.
 ### Edit Dialog Properties
 The following properties are written to JCR for this Container component and are expected to be available as `Resource` properties:
 
+1. `./accessibilityLabel` - defines an accessibility label for the container.
+2. `./roleAttribute` - defines a role attribute for the container.
+
 #### Container Properties
 1. `./layout` - defines the layout type, either `simple` (default) or `responsiveGrid`; if no value is defined, the component will fallback to the value defined by the component's policy
 
