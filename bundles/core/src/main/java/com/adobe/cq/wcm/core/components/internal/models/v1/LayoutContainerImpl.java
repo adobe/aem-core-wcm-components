@@ -62,6 +62,13 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     private String accessibilityLabel;
 
     /**
+     * The role attribute.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private String roleAttribute;
+
+    /**
      * Initialize the model.
      */
     @PostConstruct
@@ -99,5 +106,11 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     @Nullable
     public String getAccessibilityLabel() {
         return accessibilityLabel;
+    }
+
+    @Override
+    @Nullable
+    public String getRoleAttribute() {
+        return roleAttribute;
     }
 }

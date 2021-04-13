@@ -126,4 +126,24 @@ public class LayoutContainerImplTest {
         context.currentResource(resource);
         return context.request().adaptTo(LayoutContainer.class);
     }
+
+    @Test
+    protected void testGetAccessibilityLabel() {
+        context.contentPolicyMapping(LayoutContainerImpl.RESOURCE_TYPE_V1, new HashMap<String, Object>() {{
+            put(LayoutContainer.PN_LAYOUT, "responsiveGrid");
+        }});
+        LayoutContainer container = getContainerUnderTest(CONTAINER_2);
+        assertEquals("container", container.getAccessibilityLabel());
+        Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, "container2"));
+    }
+
+    @Test
+    protected void testGetRoleAttribute() {
+        context.contentPolicyMapping(LayoutContainerImpl.RESOURCE_TYPE_V1, new HashMap<String, Object>() {{
+            put(LayoutContainer.PN_LAYOUT, "responsiveGrid");
+        }});
+        LayoutContainer container = getContainerUnderTest(CONTAINER_2);
+        assertEquals("main", container.getRoleAttribute());
+        Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, "container2"));
+    }
 }
