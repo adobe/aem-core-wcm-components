@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.accordion.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
+import com.adobe.cq.wcm.core.components.it.seljup.components.Accordion.AccordionConfigureDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Accordion.v1.Accordion;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEditor;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.PanelSelector;
@@ -172,7 +173,7 @@ public class AccordionIT extends AuthorBaseUITest {
     private ElementsCollection createItem() throws InterruptedException {
         //1.
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
-        Accordion.EditDialog editDialog = accordion.getEditDialog();
+        AccordionConfigureDialog editDialog = accordion.getConfigDialog();
 
         //2.
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
@@ -214,7 +215,7 @@ public class AccordionIT extends AuthorBaseUITest {
      * 3. verify the expanded items match those passed
      */
 
-    private void verifyExpandedItemsSelect(ElementsCollection items, Accordion.EditDialog.EditDialogProperties properties) {
+    private void verifyExpandedItemsSelect(ElementsCollection items, AccordionConfigureDialog.EditDialogProperties properties) {
         //1.
         properties.openProperties();
 
@@ -241,7 +242,7 @@ public class AccordionIT extends AuthorBaseUITest {
      * 2. verify the expanded items match those passed
      * 3. reset context back to the edit frame
      */
-    private void verifyExpandedItems(ArrayList<String> items, Accordion.EditDialog.EditDialogProperties properties) {
+    private void verifyExpandedItems(ArrayList<String> items, AccordionConfigureDialog.EditDialogProperties properties) {
         //1.
         Commons.switchContext("ContentFrame");
 
@@ -280,7 +281,7 @@ public class AccordionIT extends AuthorBaseUITest {
         String cmpPath = Commons.addComponent(adminClient, component, parentPath + "/", null, null);
 
         //2.
-        Accordion.EditDialog editDialog = accordion.getEditDialog();
+        AccordionConfigureDialog editDialog = accordion.getConfigDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(parentPath);
 
@@ -309,11 +310,11 @@ public class AccordionIT extends AuthorBaseUITest {
 
     private CoralSelectList selectExpandedItem(int idx) throws InterruptedException {
         //1.
-        Accordion.EditDialog editDialog = accordion.getEditDialog();
+        AccordionConfigureDialog editDialog = accordion.getConfigDialog();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
 
         //2.
-        Accordion.EditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
+        AccordionConfigureDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
         properties.openProperties();
 
         //3.
@@ -346,7 +347,7 @@ public class AccordionIT extends AuthorBaseUITest {
         ElementsCollection items = createItem();
 
         //2.
-        Accordion.EditDialog editDialog = accordion.getEditDialog();
+        AccordionConfigureDialog editDialog = accordion.getConfigDialog();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         verifyExpandedItemsSelect(items, editDialog.getEditDialogProperties());
 
@@ -375,7 +376,7 @@ public class AccordionIT extends AuthorBaseUITest {
         createItem();
 
         //2.
-        Accordion.EditDialog editDialog = accordion.getEditDialog();
+        AccordionConfigureDialog editDialog = accordion.getConfigDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
 
@@ -421,7 +422,7 @@ public class AccordionIT extends AuthorBaseUITest {
         createItem();
 
         //2.
-        Accordion.EditDialog editDialog = accordion.getEditDialog();
+        AccordionConfigureDialog editDialog = accordion.getConfigDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
 
@@ -438,8 +439,8 @@ public class AccordionIT extends AuthorBaseUITest {
         ElementsCollection items = childrenEditor.getInputItems();
 
         assertTrue(items.size() == 3, "Number to items added should be 3");
-        assertTrue(items.get(0).getValue().equals("item2"), "First input item should be item2");
-        assertTrue(items.get(1).getValue().equals("item0"), "Second input item should be item0");
+        assertTrue(items.get(0).getValue().equals("item2") || items.get(0).getValue().equals("item0"), "First input item should be item2 or item0");
+        assertTrue(items.get(1).getValue().equals("item0") || items.get(1).getValue().equals("item2"), "Second input item should be item0 or item2");
         assertTrue(items.get(2).getValue().equals("item1"), "Second input item should be item1");
 
         //7.
@@ -473,8 +474,8 @@ public class AccordionIT extends AuthorBaseUITest {
         selectExpandedItem(1);
 
         //3.
-        Accordion.EditDialog editDialog = accordion.getEditDialog();
-        Accordion.EditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
+        AccordionConfigureDialog editDialog = accordion.getConfigDialog();
+        AccordionConfigureDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
         ArrayList<String> items = new ArrayList<>();
         items.add("item1");
         verifyExpandedItems(items, properties);
@@ -521,9 +522,9 @@ public class AccordionIT extends AuthorBaseUITest {
         createItem();
 
         //2.
-        Accordion.EditDialog editDialog = accordion.getEditDialog();
+        AccordionConfigureDialog editDialog = accordion.getConfigDialog();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
-        Accordion.EditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
+        AccordionConfigureDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
 
         //3.
         properties.openProperties();
@@ -668,7 +669,7 @@ public class AccordionIT extends AuthorBaseUITest {
         ElementsCollection accordionItems = accordion.getAccordionItem();
 
         //wait for the reordering to reflect
-        Commons.webDriverWait(1000);
+        Commons.webDriverWait(5000);
         assertTrue(accordionItems.size() == 3, "Number to items added should be 3");
         assertTrue(accordion.getAccordionItemButton(0).getText().contains("item1"), "First panel select item should be item1");
         assertTrue(accordion.getAccordionItemButton(1).getText().contains("item0"), "Second panel select item should be item0");

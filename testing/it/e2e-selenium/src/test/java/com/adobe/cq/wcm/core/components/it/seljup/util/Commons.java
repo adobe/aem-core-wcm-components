@@ -426,4 +426,28 @@ public class Commons {
         return exec.getSlingPath();
     }
 
+    /**
+     * Selects a value in a Granite UI autocomplete field
+     *
+     * @param selector {String} Specific selector for the autocomplete (ex. "[name='./myField']")
+     * @param value {String} The value to be selected
+     *
+     * @returns {TestCase} A test case that selects a value in an autocomplete field
+     */
+    public static void selectInAutocomplete(String selector, String value) throws InterruptedException {
+        $("foundation-autocomplete" + selector + " input:not([type='hidden']").sendKeys(value);
+        webDriverWait(1000);
+        $("foundation-autocomplete" + selector + " button[value^='" + value + "']").click();
+    }
+
+    /**
+     * Get the current browser URL
+     * @return current browser URL
+     */
+
+    public static String getCurrentUrl() {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        return webDriver.getCurrentUrl();
+    }
+
 }

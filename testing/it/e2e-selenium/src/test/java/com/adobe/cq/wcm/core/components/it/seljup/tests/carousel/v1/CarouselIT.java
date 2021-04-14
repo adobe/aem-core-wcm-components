@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.carousel.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.CQOverlay;
+import com.adobe.cq.wcm.core.components.it.seljup.components.Carousel.CarouselConfigureDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Carousel.v1.Carousel;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEditor;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.PanelSelector;
@@ -156,7 +157,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
     private ElementsCollection createItems() throws  InterruptedException {
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
-        Carousel.EditDialog editDialog = carousel.getEditDialog();
+        CarouselConfigureDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         childrenEditor.clickAddButton();
         InsertComponentDialog insertComponentDialog = editDialog.getInsertComponentDialog();
@@ -207,7 +208,7 @@ public class CarouselIT extends AuthorBaseUITest {
     @DisplayName("Test: Edit Dialog : Remove items")
     public void RemoveItem() throws InterruptedException {
         createItems();
-        Carousel.EditDialog editDialog = carousel.getEditDialog();
+        CarouselConfigureDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         childrenEditor.removeFirstItem();
@@ -240,7 +241,7 @@ public class CarouselIT extends AuthorBaseUITest {
     @DisplayName("Test: Edit Dialog : Reorder items")
     public void ReorderItem() throws InterruptedException {
         createItems();
-        Carousel.EditDialog editDialog = carousel.getEditDialog();
+        CarouselConfigureDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         childrenEditor.moveItems(2,0);
@@ -250,8 +251,8 @@ public class CarouselIT extends AuthorBaseUITest {
         ElementsCollection items = childrenEditor.getInputItems();
 
         assertTrue(items.size() == 3, "Number to items added should be 3");
-        assertTrue(items.get(0).getValue().equals("item2"), "First input item should be item2");
-        assertTrue(items.get(1).getValue().equals("item0"), "Second input item should be item0");
+        assertTrue(items.get(0).getValue().equals("item2") || items.get(0).getValue().equals("item0"), "First input item should be item2 or item0");
+        assertTrue(items.get(1).getValue().equals("item0") || items.get(1).getValue().equals("item2"), "Second input item should be item0 or item2  ");
         assertTrue(items.get(2).getValue().equals("item1"), "Second input item should be item1");
 
         Commons.saveConfigureDialog();
@@ -262,7 +263,7 @@ public class CarouselIT extends AuthorBaseUITest {
     public void AutoplayGroup() throws InterruptedException {
         createItems();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
-        Carousel.EditDialog editDialog = carousel.getEditDialog();
+        CarouselConfigureDialog editDialog = carousel.getEditDialog();
         editDialog.openEditDialogProperties();
 
         CoralCheckbox autoplay = editDialog.getAutoplay();

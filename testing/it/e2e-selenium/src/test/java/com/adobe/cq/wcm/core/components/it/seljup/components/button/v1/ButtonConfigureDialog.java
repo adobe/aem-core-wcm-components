@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.button.v1;
 
+import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.qe.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.qe.selenium.pagewidgets.coral.Dialog;
 import com.codeborne.selenide.SelenideElement;
@@ -39,15 +40,15 @@ public class ButtonConfigureDialog extends Dialog {
     }
 
     public SelenideElement getTitleField() {
-        return content().find("input[name='./jcr:title']");
+        return content().find(Selectors.SELECTOR_BUTTON_TITLE);
     }
 
     public SelenideElement getNameField() {
-        return content().find("input[name='./name']");
+        return content().find(Selectors.SELECTOR_BUTTON_NAME);
     }
 
     public SelenideElement getValueField() {
-        return content().find("input[name='./value']");
+        return content().find(Selectors.SELECTOR_BUTTON_VALUE);
     }
 
     public void setLinkField(String value) {
@@ -58,7 +59,7 @@ public class ButtonConfigureDialog extends Dialog {
     }
 
     public SelenideElement getIcon() {
-        return content().find("input[name='./icon']");
+        return content().find(Selectors.SELECTOR_ICON);
     }
 
     public void selectButtonType(String type) {
