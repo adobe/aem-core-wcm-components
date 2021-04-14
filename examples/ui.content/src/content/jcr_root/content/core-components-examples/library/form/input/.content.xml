@@ -29,7 +29,7 @@
                     jcr:lastModified="{Date}2019-12-19T15:31:07.263+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Form Text&lt;sub>v2&lt;/sub>&lt;/h1>&#xd;&#xa;"
                     textIsRich="true"/>
                 <text_1408574198
@@ -38,7 +38,7 @@
                     jcr:lastModified="{Date}2019-12-19T15:57:41.494+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Form Text allows a user to create different input fields to collect information the user can use later on.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -81,7 +81,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title
                     cq:styleIds="[1544759676459]"
@@ -91,14 +91,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Form Text Field"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1910564414
                     jcr:created="{Date}2019-12-12T14:22:11.663+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-12-19T15:54:57.069+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>&lt;span>This is a Core Form Container with the Form Texts: Text, Textarea, and Email as child elements.&lt;/span>&lt;br>&#xd;&#xa;&lt;/p>&#xd;&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -166,7 +166,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -192,14 +192,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Form Text Numbers"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1068966881
                     jcr:created="{Date}2019-12-12T15:10:07.890+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-12-19T15:50:59.279+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Core Form Container with Form Text variations: Phone Number, Date, Number fields as child elements.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_881795653
@@ -263,7 +263,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -289,14 +289,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Form Text Password"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_203677928
                     jcr:created="{Date}2019-12-12T15:42:55.336+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-12-19T15:52:00.596+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Core Form Container with Form Text Password. It hides the input from being visible.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_665944747
@@ -353,7 +353,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"

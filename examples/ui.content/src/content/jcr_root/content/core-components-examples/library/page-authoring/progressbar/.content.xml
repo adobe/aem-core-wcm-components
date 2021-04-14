@@ -27,7 +27,7 @@
                     jcr:lastModified="{Date}2020-04-13T10:51:25.307+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Progress Bar&lt;sub>v1&lt;/sub>&lt;/h1>&#xd;&#xa;"
                     textIsRich="true"/>
                 <text_806535487
@@ -36,7 +36,7 @@
                     jcr:lastModified="{Date}2020-04-13T10:52:04.907+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Progress bar can be used to display progress.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -79,7 +79,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_439265523
                     cq:styleIds="[1544759676459]"
@@ -89,7 +89,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Default"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1083667127
                     jcr:created="{Date}2020-04-13T10:50:28.188+03:00"
@@ -97,7 +97,7 @@
                     jcr:lastModified="{Date}2020-04-13T10:54:22.461+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Default progress bar with no configuration.&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -121,7 +121,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -147,7 +147,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Custom progress"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_700123026
                     jcr:created="{Date}2020-04-13T10:50:46.337+03:00"
@@ -155,7 +155,7 @@
                     jcr:lastModified="{Date}2020-04-13T10:54:42.793+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Progress bar with custom defined completion.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_1713048513
@@ -180,7 +180,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"

@@ -54,6 +54,10 @@ The following properties are written to JCR for this Container component and are
 2. `./backgroundColor` - defines the container background color.
 3. `./id` - defines the component HTML ID attribute.
 
+#### Accessibility
+1. `./accessibilityLabel` - defines an accessibility label for the container.
+2. `./roleAttribute` - defines a role attribute for the container.
+
 ## BEM Description
 ```
 BLOCK cmp-container

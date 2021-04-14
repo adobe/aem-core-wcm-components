@@ -23,7 +23,7 @@
                     jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Content Fragment List&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
@@ -33,7 +33,7 @@
                     jcr:lastModified="{Date}2019-04-01T16:43:26.346+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Content Fragment List allows the display of a list of content fragments on a page. Useful for authoring headless content that can be easily consumed by applications.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -76,7 +76,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_219202184
                     cq:styleIds="[1544759676459]"
@@ -86,7 +86,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h1"/>
                 <text_1424864129
                     jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
@@ -94,7 +94,7 @@
                     jcr:lastModified="{Date}2019-04-01T16:47:17.461+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Content fragment list component that displays content fragments based on a bespoke&amp;nbsp;&lt;i>Office&amp;nbsp;&lt;/i> model&amp;nbsp;which allows the output of structured data associated with a business location or office&lt;i>.&lt;/i>&amp;nbsp;A &lt;i>Parent Path&lt;/i>&amp;nbsp;is used as a root for looking up the content fragments to display.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_759741754
@@ -114,7 +114,7 @@
                             jcr:lastModified="{Date}2019-04-01T16:01:30.956+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+                            sling:resourceType="core-components-examples/components/contentfragmentlist"
                             modelPath="/conf/core-components-examples/settings/dam/cfm/models/office"
                             parentPath="/content/dam/core-components-examples/library/sample-assets"/>
                     </component>
@@ -146,14 +146,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Tags"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1424864129_copy
                     jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-04-01T16:33:44.930+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>The list can be filtered to display content fragments associated with a tag. In this example, the list is filtered by the &lt;i>core-components-examples:region/north-america&amp;nbsp;&lt;/i>tag - to show offices in North America.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -173,7 +173,7 @@
                             jcr:lastModified="{Date}2019-04-01T16:27:37.669+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+                            sling:resourceType="core-components-examples/components/contentfragmentlist"
                             modelPath="/conf/core-components-examples/settings/dam/cfm/models/office"
                             parentPath="/content/dam/core-components-examples/library/sample-assets"
                             tagNames="[core-components-examples:region/north-america]"/>
@@ -206,14 +206,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Order By and Sort Order"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1424864181
                     jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-04-01T16:41:35.465+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>The list can be ordered by element or property, ascending or descending. In this example, we order the offices by &lt;i>City&lt;/i>, ascending.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_1424864177
@@ -233,7 +233,7 @@
                             jcr:lastModified="{Date}2019-04-01T16:40:45.872+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+                            sling:resourceType="core-components-examples/components/contentfragmentlist"
                             modelPath="/conf/core-components-examples/settings/dam/cfm/models/office"
                             orderBy="jcr:content/data/master/city"
                             parentPath="/content/dam/core-components-examples/library/sample-assets"
@@ -267,14 +267,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Elements"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1424864129_copy_1972659711
                     jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-04-01T16:41:35.465+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>The content fragment elements to be displayed in the list can be configured by an author. In this example we again list the same offices, but filter the output to only show the &lt;i>title&lt;/i> and &lt;i>city&lt;/i>.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_copy
@@ -294,7 +294,7 @@
                             jcr:lastModified="{Date}2019-04-01T16:40:45.872+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+                            sling:resourceType="core-components-examples/components/contentfragmentlist"
                             elementNames="[title,city]"
                             modelPath="/conf/core-components-examples/settings/dam/cfm/models/office"
                             parentPath="/content/dam/core-components-examples/library/sample-assets"/>

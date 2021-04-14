@@ -257,6 +257,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     srcUriTemplate += imageModifiersCommand;
                     src += imageModifiersCommand;
                 }
+                //add "dpr=off" parameter to image source url
+                String dprOffParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=off";
+                srcUriTemplate += dprOffParameter;
+                src += dprOffParameter;
                 if (srcUriTemplate.equals(src)) {
                     srcUriTemplate = null;
                 }

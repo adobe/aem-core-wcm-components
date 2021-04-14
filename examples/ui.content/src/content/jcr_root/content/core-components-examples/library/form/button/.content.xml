@@ -29,7 +29,7 @@
                     jcr:lastModified="{Date}2019-12-19T15:58:55.529+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Form Button&lt;sub>v2&lt;/sub>&lt;/h1>&#xd;&#xa;"
                     textIsRich="true"/>
                 <text_1408574198
@@ -38,7 +38,7 @@
                     jcr:lastModified="{Date}2019-12-19T15:59:36.570+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Form Buttons allows a user to create a Button/ Submit Button to send collected Data to a chosen adress.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -81,7 +81,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_1975440126
                     cq:styleIds="[1544759676459]"
@@ -91,14 +91,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Form Button"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1068966881
                     jcr:created="{Date}2019-12-12T15:10:07.890+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-12-19T16:55:45.391+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Core Form Container Form Options and a Form Button as child elements.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_881795653
@@ -128,7 +128,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="How satisfied were you with our service?"
-                                sling:resourceType="core/wcm/components/form/options/v2/options"
+                                sling:resourceType="core-components-examples/components/form/options"
                                 name="satisfaction"
                                 source="local"
                                 type="radio">
@@ -167,14 +167,14 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Send"
-                                sling:resourceType="core/wcm/components/form/button/v2/button"
+                                sling:resourceType="core-components-examples/components/form/button"
                                 name="button"
                                 type="button"/>
                         </container>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -200,7 +200,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Form Submit Button"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h1"/>
                 <text_1910564414
                     jcr:created="{Date}2019-12-12T14:22:11.663+01:00"
@@ -208,7 +208,7 @@
                     jcr:lastModified="{Date}2019-12-19T16:07:21.903+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Core Form Container with two input fields who will be submited when you click on the Submit Button. Where it will be submitted is defined in the Form Container itself.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
@@ -264,14 +264,14 @@
                                 jcr:lastModified="{Date}2019-12-19T16:05:14.017+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/form/button/v2/button"
+                                sling:resourceType="core-components-examples/components/form/button"
                                 name="submit-demo-form-1"
                                 type="submit"/>
                         </container>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"

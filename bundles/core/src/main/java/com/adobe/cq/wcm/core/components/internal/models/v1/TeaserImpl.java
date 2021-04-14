@@ -91,11 +91,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String description;
 
     /**
-     * The main teaser link.
-     */
-    private String linkURL;
-
-    /**
      * The title heading level.
      */
     private String titleType;
@@ -233,7 +228,20 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         if (this.hasImage()) {
             this.setImageResource(component, request.getResource(), hiddenImageResourceProperties);
         }
-        link = linkHandler.getLink(resource, Link.PN_LINK_URL);
+        // use the target page as the link if it exists
+        link = this.getTargetPage()
+                .map(page -> Optional.of(linkHandler.getLink(page).orElse(null)))
+                .orElseGet(() -> {
+                    // target page doesn't exist
+                    if (this.isActionsEnabled()) {
+                        return this.getActions().stream().findFirst()
+                                .map(action -> Optional.ofNullable(linkHandler.getLink(action.getURL(), null).orElse(null)))
+                                .orElse(Optional.empty());
+                    } else {
+                        // use the property value if actions are not enabled
+                        return Optional.ofNullable(linkHandler.getLink(resource, Link.PN_LINK_URL).orElse(null));
+                    }
+                });
     }
 
     /**
@@ -307,22 +315,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getLinkURL() {
-        if (this.linkURL == null) {
-            // use the target page url if it exists
-            this.linkURL = this.getTargetPage().map(page -> linkHandler.getLink(page).map(Link::getURL).orElse(null))
-                .orElseGet(() -> {
-                    // target page doesn't exist
-                    if (this.isActionsEnabled()) {
-                        return this.getActions().stream().findFirst()
-                            .map(ListItem::getURL)
-                            .orElse(null);
-                    } else {
-                        // use the property value if actions are not enabled
-                        return link.map(Link::getURL).orElse(null);
-                    }
-                });
-        }
-        return linkURL;
+        return link.map(Link::getURL).orElse(null);
     }
 
     /**
