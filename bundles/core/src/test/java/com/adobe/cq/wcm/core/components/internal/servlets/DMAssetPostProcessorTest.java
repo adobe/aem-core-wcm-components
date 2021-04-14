@@ -53,6 +53,7 @@ public class DMAssetPostProcessorTest {
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_SMART_CROP_RENDITION = PAGE + "/jcr:content/root/image36";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_ANIMATED_GIF = PAGE + "/jcr:content/root/image40";
     private static final String CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET_ANIMATED_GIF = PAGE + "/jcr:content/root/image41";
+    private static final String RESPONSIVE_GRID__EMPTY = PAGE + "/jcr:content/root/container";
 
     private static final String EXPECTED_IMAGE_SERVER_URL = "https://s7d9.scene7.com/is/image/";
     private static final String EXPECTED_IMAGE_SERVER_CONTENT_URL = "https://s7d9.scene7.com/is/content/";
@@ -361,7 +362,7 @@ public class DMAssetPostProcessorTest {
     }
 
     /*
-    Unlikely case when modifications report fileReferene setting but no fileReference is found in request
+    Unlikely case when modifications report fileReference setting but no fileReference is found in request
      */
     @Test
     public void lostFileReferenceModification() throws Exception {
@@ -384,6 +385,29 @@ public class DMAssetPostProcessorTest {
             assertNull(actualModification.getDestination());
             assertEquals(actualModification.getType(), expectedModification.type);
         }
+    }
+
+    /*
+     The case when DM asset drag-n-drop on empty page. This scenario creates Image component with assigned asset.
+     Post processor should write image server url property
+     */
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void dragNdropDMimageToEmptyPage(ModificationType modificationType) throws Exception {
+        String existingComponent = RESPONSIVE_GRID__EMPTY;
+        prepareResource(existingComponent, null);
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent + "/image", true);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource().getResourceResolver().getResource(existingComponent + "/image");
+        Resource containerResource = context.currentResource().getResourceResolver().getResource(existingComponent);
+        assertNotNull(resource);
+        assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNotNull(containerResource);
+        assertNull(containerResource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertEquals(3, modifications.size());
     }
 
     /**
