@@ -41,33 +41,30 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FormComponentsV1IT extends AuthorBaseUITest {
 
-    private static final String clientlibs = "core.wcm.components.formcomponents.v1";
-    private static String formContainerRT_v1 = "core/wcm/components/form/container/v1/container";
-    private static String formTextRT = "core/wcm/components/form/text/v1/text";
-    private static String formHiddenRT = "core/wcm/components/form/hidden/v1/hidden";
-    private static String formOptionsRT = "core/wcm/components/form/options/v1/options";
-    private static String formButtonRT = "core/wcm/components/form/button/v1/button";
-    private static String userContent = "/content/usergenerated/core-components";
+    protected static String formContainerRT = "core/wcm/components/form/container/v1/container";
+    protected static String formTextRT = "core/wcm/components/form/text/v1/text";
+    protected static String formHiddenRT = "core/wcm/components/form/hidden/v1/hidden";
+    protected static String formOptionsRT = "core/wcm/components/form/options/v1/options";
+    protected static String formButtonRT = "core/wcm/components/form/button/v1/button";
+    protected static String userContent = "/content/usergenerated/core-components";
 
     private static String componentName = "formcomponents";
-    private String policyPath;
-    private String compPathContainer;
-    private String compPathText;
-    private String compPathHidden;
-    private String compPathOptions;
-    private String compPathButton;
+    protected String compPathContainer;
+    protected String compPathText;
+    protected String compPathHidden;
+    protected String compPathOptions;
+    protected String compPathButton;
     protected PageEditorPage editorPage;
     protected String containerPath;
     protected String testPage;
 
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    protected void setup() throws ClientException  {
         // create the test page, store page path in 'testPagePath'
         //testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
         testPage = Commons.createPage(adminClient,"testPage", "Test Page Title", rootPage, defaultPageTemplate,"core/wcm/tests/components/test-page-v2");
 
         // create a proxy component
-        compPathContainer = Commons.createProxyComponent(adminClient, formContainerRT_v1, Commons.proxyPath, null, null);
+        compPathContainer = Commons.createProxyComponent(adminClient, formContainerRT, Commons.proxyPath, null, null);
 
         // add the core form container component
         containerPath = Commons.addComponent(adminClient, compPathContainer,testPage + Commons.relParentCompPath, "container", null);
@@ -129,6 +126,12 @@ public class FormComponentsV1IT extends AuthorBaseUITest {
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
+    }
+
+
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setup();
     }
 
     @AfterEach

@@ -49,9 +49,9 @@ public class FormContainerV1IT extends AuthorBaseUITest {
     private static final String cc1 = "cc1@components.com";
     private static final String cc2 = "cc2@components.com";
 
-    private static String formContainerRT_v1 = "core/wcm/components/form/container/v1/container";
-    private static String formTextRT = "core/wcm/components/form/text/v1/text";
-    private static String formButtonRT = "core/wcm/components/form/button/v1/button";
+    protected static String formContainerRT = "core/wcm/components/form/container/v1/container";
+    protected static String formTextRT = "core/wcm/components/form/text/v1/text";
+    protected static String formButtonRT = "core/wcm/components/form/button/v1/button";
 
     private String compPathContainer;
     private String containerPath;
@@ -61,14 +61,14 @@ public class FormContainerV1IT extends AuthorBaseUITest {
 
     protected String testPage;
 
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+
+    protected void setup() throws ClientException {
         // create the test page, store page path in 'testPagePath'
         //testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
         testPage = Commons.createPage(adminClient,"testPage", "Test Page Title", rootPage, defaultPageTemplate,"core/wcm/tests/components/test-page-v2");
 
         // create a proxy component
-        compPathContainer = Commons.createProxyComponent(adminClient, formContainerRT_v1, Commons.proxyPath, null, null);
+        compPathContainer = Commons.createProxyComponent(adminClient, formContainerRT, Commons.proxyPath, null, null);
 
         // add the core form container component
         containerPath = Commons.addComponent(adminClient, compPathContainer,testPage + Commons.relParentCompPath, "container", null);
@@ -100,6 +100,11 @@ public class FormContainerV1IT extends AuthorBaseUITest {
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
+    }
+
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setup();
     }
 
     @AfterEach

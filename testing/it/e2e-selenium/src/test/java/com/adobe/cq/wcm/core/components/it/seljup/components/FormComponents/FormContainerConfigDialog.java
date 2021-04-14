@@ -28,8 +28,9 @@ public class FormContainerConfigDialog extends Dialog {
 
     private static String actionInput = "input[name='./action']";
 
-    public void selectActionType(String action) {
+    public void selectActionType(String action) throws InterruptedException {
         CoralSelect coralSelect = new CoralSelect("name='./actionType'");
+        Commons.webDriverWait(1000);
         coralSelect.selectItemByValue(action);
     }
 
@@ -73,7 +74,7 @@ public class FormContainerConfigDialog extends Dialog {
         $$(ccField).last().sendKeys(value);
     }
 
-    public void setMailActionFields(String from, String subject, String[] mailToList, String[] ccList) {
+    public void setMailActionFields(String from, String subject, String[] mailToList, String[] ccList) throws InterruptedException {
         selectActionType("foundation/components/form/actions/mail");
         setFromField(from);
         setSubjectField(subject);
