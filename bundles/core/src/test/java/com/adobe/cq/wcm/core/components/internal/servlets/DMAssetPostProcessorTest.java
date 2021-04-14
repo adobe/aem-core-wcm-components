@@ -51,9 +51,12 @@ public class DMAssetPostProcessorTest {
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_NO_PRESET = PAGE + "/jcr:content/root/image32";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_IMAGE_PRESET = PAGE + "/jcr:content/root/image33";
     private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_SMART_CROP_RENDITION = PAGE + "/jcr:content/root/image36";
+    private static final String CORE_IMAGE__DM_POLICY_ON__DM_ASSET_ANIMATED_GIF = PAGE + "/jcr:content/root/image40";
+    private static final String CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET_ANIMATED_GIF = PAGE + "/jcr:content/root/image41";
     private static final String RESPONSIVE_GRID__EMPTY = PAGE + "/jcr:content/root/container";
 
     private static final String EXPECTED_IMAGE_SERVER_URL = "https://s7d9.scene7.com/is/image/";
+    private static final String EXPECTED_IMAGE_SERVER_CONTENT_URL = "https://s7d9.scene7.com/is/content/";
 
     private DMAssetPostProcessor servlet = null;
 
@@ -86,6 +89,27 @@ public class DMAssetPostProcessorTest {
         Resource resource = context.currentResource();
         assertNotNull(resource);
         assertEquals(EXPECTED_IMAGE_SERVER_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
+        assertNewModification(existingComponent, modifications, 2, Collections.singletonList(new ExpectedModification(ModificationType.CREATE, Image.PN_IMAGE_SERVER_URL)));
+    }
+
+    /*
+    The case when component with non DM asset gets assigned a DM asset.
+    Special case for animated gif as this uses a different path on DM Image Serving Servlet
+    Post processor should write image server url property
+     */
+    @ParameterizedTest
+    @EnumSource(
+        value = ModificationType.class,
+        names = {"CREATE", "MODIFY"}
+    )
+    public void fromNonDMtoDMAssetAnimatedGif(ModificationType modificationType) throws Exception {
+        String existingComponent = CORE_IMAGE__DM_POLICY_ON__NON_DM_ASSET_ANIMATED_GIF;
+        prepareResource(existingComponent, getFileReference(CORE_IMAGE__DM_POLICY_ON__DM_ASSET_ANIMATED_GIF));
+        List<Modification> modifications = prepareModifications(modificationType, existingComponent, true);
+        servlet.process(context.request(), modifications);
+        Resource resource = context.currentResource();
+        assertNotNull(resource);
+        assertEquals(EXPECTED_IMAGE_SERVER_CONTENT_URL, resource.getValueMap().get(Image.PN_IMAGE_SERVER_URL, String.class));
         assertNewModification(existingComponent, modifications, 2, Collections.singletonList(new ExpectedModification(ModificationType.CREATE, Image.PN_IMAGE_SERVER_URL)));
     }
 
