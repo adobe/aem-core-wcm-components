@@ -49,8 +49,8 @@ import java.util.List;
 public final class DMAssetPostProcessor implements SlingPostProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContainerServlet.class);
 
-    private static final String IMAGE_SERVER_PATH = "/is/image/";
-    private static final String CONTENT_SERVER_PATH = "/is/content/";
+    public static final String IMAGE_SERVER_PATH = "/is/image/";
+    public static final String CONTENT_SERVER_PATH = "/is/content/";
 
     @Reference
     private PublishUtils publishUtils;

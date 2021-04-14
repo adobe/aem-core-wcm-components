@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.internal.servlets.DMAssetPostProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -175,15 +176,15 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         String dmServerUrl;
+                        // for Author
                         if (!isWCMDisabled) {
                             if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
-                                dmServerUrl = "/is/content/";
+                                dmServerUrl = DMAssetPostProcessor.CONTENT_SERVER_PATH;
                             } else {
-                                //for Author
-                                dmServerUrl = "/is/image/";
+                                dmServerUrl = DMAssetPostProcessor.IMAGE_SERVER_PATH;
                             }
                         } else {
-                            //for Publish
+                            // for Publish
                             dmServerUrl = (String) properties.get(PN_IMAGE_SERVER_URL);
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
