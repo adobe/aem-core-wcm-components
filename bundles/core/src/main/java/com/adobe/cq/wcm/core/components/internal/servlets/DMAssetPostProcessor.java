@@ -19,6 +19,7 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.s7dam.utils.PublishUtils;
+import com.day.cq.dam.scene7.api.constants.Scene7AssetType;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -48,7 +49,8 @@ import java.util.List;
 public final class DMAssetPostProcessor implements SlingPostProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContainerServlet.class);
 
-    private static final String IMAGE_SERVER_PATH = "/is/image/";
+    public static final String IMAGE_SERVER_PATH = "/is/image/";
+    public static final String CONTENT_SERVER_PATH = "/is/content/";
 
     @Reference
     private PublishUtils publishUtils;
@@ -74,7 +76,13 @@ public final class DMAssetPostProcessor implements SlingPostProcessor {
                                     if (asset != null) {
                                         if (isDmAsset(asset)) {
                                             String[] productionAssetUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
-                                            String imageServerUrl = productionAssetUrls[0] + IMAGE_SERVER_PATH;
+                                            String imageServerUrl = productionAssetUrls[0];
+                                            if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
+                                                imageServerUrl += CONTENT_SERVER_PATH;
+                                            } else {
+                                                imageServerUrl += IMAGE_SERVER_PATH;
+                                            }
+
                                             checkSetProperty(componentResource, Image.PN_IMAGE_SERVER_URL, imageServerUrl, list);
                                         } else {
                                             checkSetProperty(componentResource, Image.PN_IMAGE_SERVER_URL, null, list);
