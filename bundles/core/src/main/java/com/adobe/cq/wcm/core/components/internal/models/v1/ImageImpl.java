@@ -83,9 +83,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected static final String MIME_TYPE_IMAGE_SVG = "image/svg+xml";
     private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
 
-    @Self
-    protected SlingHttpServletRequest request;
-
     @ScriptVariable
     protected PageManager pageManager;
 

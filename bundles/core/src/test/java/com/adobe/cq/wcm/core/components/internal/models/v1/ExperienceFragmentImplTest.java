@@ -711,6 +711,17 @@ class ExperienceFragmentImplTest {
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf70"));
     }
 
+    /**
+     * Nested XFs
+     */
+    @Test
+    void testNestedXFs() {
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-72", LIVECOPY_PAGE);
+        assertEquals("parent", experienceFragment.getName());
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf72"));
+    }
+
 
     /* ------------------------------- private stuff -----------------------------------------  */
 

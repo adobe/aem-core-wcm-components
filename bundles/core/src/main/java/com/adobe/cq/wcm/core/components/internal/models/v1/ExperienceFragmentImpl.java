@@ -272,7 +272,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         if (this.children == null) {
             this.children = Optional.ofNullable(this.getLocalizedFragmentVariationPath())
                     .filter(StringUtils::isNotBlank)
-                    .map(this.request.getResourceResolver()::getResource)
+                    .map(this.resource.getResourceResolver()::getResource)
                     .map(Resource::listChildren)
                     .map(it -> ContentFragmentUtils.getComponentExporters(it, this.modelFactory, this.request, this.resource))
                     .orElseGet(LinkedHashMap::new);

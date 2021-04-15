@@ -23,6 +23,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.models.Component;
@@ -31,12 +33,12 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
 
-import static com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils.CALLER_RESOURCE;
-
 /**
  * Utility helper functions for components.
  */
 public final class ComponentUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentUtils.class);
 
     /**
      * Name of the node holding the context aware configurations below /conf/{site-name};
@@ -73,9 +75,9 @@ public final class ComponentUtils {
             .orElse(false);
     }
 
+
     /**
-     * Get the ID property value if set (using {@link #getPropertyId(Resource)},
-     * otherwise generate a new ID (using {@link #generateId(Resource, Page, ComponentContext)}.
+     * See {@link #getId(Resource, Page, String, ComponentContext)}.
      *
      * @param resource The resource for which to get or generate an ID.
      * @param currentPage The current request page.
@@ -84,10 +86,28 @@ public final class ComponentUtils {
      */
     @NotNull
     public static String getId(@NotNull final Resource resource,
+                               @Nullable final Page currentPage,
+                               @Nullable final ComponentContext componentContext) {
+        return getId(resource, currentPage, null, componentContext);
+    }
+
+    /**
+     * Get the ID property value if set (using {@link #getPropertyId(Resource)},
+     * otherwise generate a new ID (using {@link #generateId(Resource, Page, String, ComponentContext)}.
+     *
+     * @param resource The resource for which to get or generate an ID.
+     * @param currentPage The current request page.
+     * @param resourceCallerPath The resource caller path(s).
+     * @param componentContext The current component context.
+     * @return The ID property value for the specified resource, or a generated ID if not set.
+     */
+    @NotNull
+    public static String getId(@NotNull final Resource resource,
                                                   @Nullable final Page currentPage,
+                                                  @Nullable final String resourceCallerPath,
                                                   @Nullable final ComponentContext componentContext) {
         return ComponentUtils.getPropertyId(resource)
-            .orElseGet(() -> ComponentUtils.generateId(resource, currentPage, componentContext));
+            .orElseGet(() -> ComponentUtils.generateId(resource, currentPage, resourceCallerPath, componentContext));
     }
 
     /**
@@ -130,6 +150,7 @@ public final class ComponentUtils {
     @NotNull
     private static String generateId(@NotNull final Resource resource,
                                     @Nullable final Page currentPage,
+                                    @Nullable final String resourceCallerPath,
                                     @Nullable final ComponentContext componentContext) {
         String resourceType = resource.getResourceType();
         String prefix = StringUtils.substringAfterLast(resourceType, "/");
@@ -140,14 +161,8 @@ public final class ComponentUtils {
             Template template = currentPage.getTemplate();
             boolean inCurrentPage = (resourcePage != null && StringUtils.equals(resourcePage.getPath(), currentPage.getPath()));
             boolean inTemplate = (template != null && path.startsWith(template.getPath()));
-            Resource callerResource = (Resource)resource.getResourceMetadata().get(CALLER_RESOURCE);
-            boolean isCalled = callerResource != null;
-            if (isCalled) {
-                path = resource.getPath();
-                while (callerResource != null) {
-                    path = callerResource.getPath().concat(path);
-                    callerResource = (Resource)callerResource.getResourceMetadata().get(CALLER_RESOURCE);
-                }
+            if (resourceCallerPath != null) {
+                path = resourceCallerPath.concat(resource.getPath());
             } else if (!inCurrentPage && !inTemplate) {
                 ComponentContext parentContext = componentContext.getParent();
                 while (parentContext != null) {
@@ -179,6 +194,9 @@ public final class ComponentUtils {
      */
     @NotNull
     public static String generateId(@NotNull final String prefix, @NotNull final String path) {
+        if ("search".equals(prefix)) {
+            LOGGER.info("generateId: " + path);
+        }
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, ID_HASH_LENGTH));
     }
 }

@@ -32,6 +32,7 @@ import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,8 +70,7 @@ public class ContentFragmentUtils {
     /**
      *
      */
-    public final static String CALLER_RESOURCE = "callerResource";
-
+    public final static String ATTR_RESOURCE_CALLER_PATH = "resourceCallerPath";
 
     /* Hide the constructor of utility classes */
     private ContentFragmentUtils() {
@@ -265,9 +265,21 @@ public class ContentFragmentUtils {
         @NotNull final Resource callerResource) {
         final LinkedHashMap<String, ComponentExporter> componentExporterMap = new LinkedHashMap<>();
 
+        SlingHttpServletRequest wrappedSlingHttpServletRequest = new SlingHttpServletRequestWrapper(slingHttpServletRequest) {
+
+            @Override
+            public Object getAttribute(String name) {
+                if (ATTR_RESOURCE_CALLER_PATH.equals(name)) {
+                    String resourceCallerPath = (String)super.getAttribute(ATTR_RESOURCE_CALLER_PATH);
+                    return (resourceCallerPath != null) ? resourceCallerPath : callerResource.getPath();
+                }
+                return super.getAttribute(name);
+            }
+        };
+
         while (resourceIterator.hasNext()) {
-            Resource resource = wrap(resourceIterator.next(), callerResource);
-            ComponentExporter exporter = modelFactory.getModelFromWrappedRequest(slingHttpServletRequest, resource, ComponentExporter.class);
+            Resource resource = resourceIterator.next();
+            ComponentExporter exporter = modelFactory.getModelFromWrappedRequest(wrappedSlingHttpServletRequest, resource, ComponentExporter.class);
 
             if (exporter != null) {
                 String name = resource.getName();
@@ -287,7 +299,7 @@ public class ContentFragmentUtils {
         } catch (Exception e) {
             LOG.error("Error while copying resource metadata", e);
         }
-        resourceMetadata.put(CALLER_RESOURCE, callerResource);
+        resourceMetadata.put(ATTR_RESOURCE_CALLER_PATH, callerResource);
         Resource wrapper = new ResourceWrapper(calledResource) {
             @Override
             public ResourceMetadata getResourceMetadata() {
