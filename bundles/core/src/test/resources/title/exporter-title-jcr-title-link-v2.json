@@ -9,5 +9,7 @@
             "@type": "core/wcm/components/title/v2/title"
         }
     },
+    "linkAccessibilityLabel": "World",
+    "linkTitleAttribute": "World title",
     ":type": "core/wcm/components/title/v2/title"
 }

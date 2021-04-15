@@ -82,6 +82,14 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     @Nullable
     private String type;
 
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private String linkAccessibilityLabel;
+
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private String linkTitleAttribute;
+
     @Self
     private LinkHandler linkHandler;
     protected Optional<Link> link;
@@ -149,4 +157,15 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
             .build();
     }
 
+    @Override
+    @Nullable
+    public String getLinkAccessibilityLabel() {
+        return linkAccessibilityLabel;
+    }
+
+    @Override
+    @Nullable
+    public String getLinkTitleAttribute() {
+        return linkTitleAttribute;
+    }
 }

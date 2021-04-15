@@ -22,6 +22,8 @@
      class="cmp-title">
     <h1 class="cmp-title__text" data-sly-element="${title.type}"><a
             data-sly-unwrap="${!title.linkURL || title.linkDisabled}" class="cmp-title__link" href="${title.linkURL}"
+            aria-label="${title.linkAccessibilityLabel}"
+            title="${title.linkTitleAttribute}"
             data-cmp-clickable="${title.data ? true : false}">${text}</a></h1>
 </div>
 <sly data-sly-call="${template.placeholder @ isEmpty=!text, classAppend='cmp-title'}"></sly>

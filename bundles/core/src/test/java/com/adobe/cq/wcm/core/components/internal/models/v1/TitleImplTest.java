@@ -112,6 +112,22 @@ public class TitleImplTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
+    protected void testGetLinkAccessibilityLabel() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
+        assertEquals("World", title.getLinkAccessibilityLabel());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    protected void testGetLinkTitleAttribute() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
+        assertEquals("World title", title.getLinkTitleAttribute());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
+    }
+
+    @Test
     protected void testTitleWithLinksDisabled() {
         Utils.enableDataLayer(context, true);
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2,

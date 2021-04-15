@@ -81,4 +81,24 @@ public interface Title extends Component {
         return false;
     }
 
+    /**
+     * Returns an accessibility label that describes the title's link.
+     *
+     * @return an accessibility label for the title's link
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default String getLinkAccessibilityLabel() {
+        return null;
+    }
+
+    /**
+     * Returns a title attribute to be used on the title's link.
+     *
+     * @return a title attribute for the title's link
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default String getLinkTitleAttribute() {
+        return null;
+    }
+
 }
