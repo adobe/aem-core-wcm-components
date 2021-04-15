@@ -28,14 +28,11 @@ import javax.json.JsonObjectBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +65,8 @@ public class ContentFragmentUtils {
     protected static final String PN_CFM_GRID_TYPE = "cfm-grid-type";
 
     /**
-     *
+     * Name of request attribute that holds information about the calling resource path (used for JSON export when
+     * including other components via XFs).
      */
     public final static String ATTR_RESOURCE_CALLER_PATH = "resourceCallerPath";
 
@@ -290,22 +288,5 @@ public class ContentFragmentUtils {
         }
 
         return componentExporterMap;
-    }
-
-    private static Resource wrap(@NotNull Resource calledResource, @Nullable Resource callerResource) {
-        ResourceMetadata resourceMetadata = new ResourceMetadata();
-        try { // This is failing during tests because sling testing mocks throw UnsupportedOperationException
-            resourceMetadata.putAll(calledResource.getResourceMetadata());
-        } catch (Exception e) {
-            LOG.error("Error while copying resource metadata", e);
-        }
-        resourceMetadata.put(ATTR_RESOURCE_CALLER_PATH, callerResource);
-        Resource wrapper = new ResourceWrapper(calledResource) {
-            @Override
-            public ResourceMetadata getResourceMetadata() {
-                return resourceMetadata;
-            }
-        };
-        return wrapper;
     }
 }
