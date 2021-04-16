@@ -76,8 +76,8 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
      */
     pageV2.tcBlueprintPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Blueprint for a page", {
-            execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
+            execBefore: tcExecuteBeforeTest
+          //  execAfter: tcExecuteAfterTest
         })
 
             // create the live copy page, store page path in 'testLiveCopyPagePath'
@@ -104,8 +104,14 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
             // check the Rollout page and all sub pages
             .click("coral-checkbox.coral-Form-field")
             // save the configuration
-            .click(".cq-dialog-actions .cq-dialog-submit", { expectNav: true })
-
+            .ifElse(function() {
+                return h.find("coral-dialog#aem-sites-rollout-schedule-dialog").size() > 0;
+            }, new hobs.TestCase("Close schedule rollout modal and submit")
+                    .click(".cq-dialog-actions .cq-dialog-submit")
+                    .click("button.schedule-rollout-done", { expectedNav: true}),
+                new hobs.TestCase("Submit")
+                    .click(".cq-dialog-actions .cq-dialog-submit", { expectNav: true })
+            )
             // delete the test page we created for the live copy
             .execFct(function(opts, done) {
                 c.deletePage(h.param("testLiveCopyPagePath")(opts), done);
