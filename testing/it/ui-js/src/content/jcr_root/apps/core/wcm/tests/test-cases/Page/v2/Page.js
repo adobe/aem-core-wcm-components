@@ -76,8 +76,8 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
      */
     pageV2.tcBlueprintPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Blueprint for a page", {
-            execBefore: tcExecuteBeforeTest
-          //  execAfter: tcExecuteAfterTest
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
         })
 
             // create the live copy page, store page path in 'testLiveCopyPagePath'
