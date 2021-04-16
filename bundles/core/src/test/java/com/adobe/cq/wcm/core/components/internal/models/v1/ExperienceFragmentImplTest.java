@@ -350,6 +350,20 @@ class ExperienceFragmentImplTest {
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf13"));
     }
 
+    /**
+     * Site with language localization
+     * XF component is defined in the template
+     * XF component points to a different language branch as the page.
+     * fragmentVariationPath is undefined, but it is defined in the page language branch
+     */
+    @Test
+    void testUndefinedXFInTemplateWithLocalizationDefinedInPageLanguageBranch() {
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
+            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-14", EN_PAGE);
+        assertEquals(XF_NAME, experienceFragment.getName());
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf14"));
+    }
+
 
     /* ------------------------------- Tests for a site with country/language localization (us/en) -----------------  */
 
@@ -430,6 +444,19 @@ class ExperienceFragmentImplTest {
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf22"));
     }
 
+    /**
+     * Site with country-language localization
+     * XF component is defined in the template
+     * XF component points to a different language branch as the page.
+     * fragmentVariationPath is undefined, but it is defined in the page language branch
+     */
+    @Test
+    void testUndefinedXFInTemplateWithLocalizationWithDifferentCountryLanguageDefinedInPageLanguageBranch() {
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
+            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-23", US_EN_PAGE);
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf23"));
+    }
+
 
     /* ----------------- Tests for a site with country-language localization (eu/mysite/en) -----------------------  */
 
@@ -508,6 +535,19 @@ class ExperienceFragmentImplTest {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-32a", CH_MYSITE_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf32"));
+    }
+
+    /**
+     * Site with country-language localization (optional): eu/mysite/en
+     * XF component is defined in the template
+     * XF component points to a different language branch as the page.
+     * fragmentVariationPath is undefined, but it is defined in the page language branch
+     */
+    @Test
+    void testUndefinedXFInTemplateWithLocalizationWithDifferentCountrySiteLanguageDefinedInPageLanguageBranch() {
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
+            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-33", CH_MYSITE_FR_PAGE);
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf33"));
     }
 
 
@@ -696,6 +736,20 @@ class ExperienceFragmentImplTest {
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-61a", LIVECOPY_PAGE);
         assertEquals(XF_NAME, experienceFragment.getName());
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf61a"));
+    }
+
+    /**
+     * Site with region localization (current page is a livecopy)
+     * XF component is defined in the template
+     * XF component points to a different region branch as the page
+     * fragmentVariationPath is undefined, but it is defined in the livecopy page
+     */
+    @Test
+    void testUndefinedXFInTemplateWithLocalizationWithDifferentLivecopyDefinedInLivecopyPage() {
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
+            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-62", LIVECOPY_PAGE);
+        assertEquals(XF_NAME, experienceFragment.getName());
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf62"));
     }
 
 

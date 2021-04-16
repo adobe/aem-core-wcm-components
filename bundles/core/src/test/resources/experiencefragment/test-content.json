@@ -310,8 +310,16 @@
                             "jcr:content": {
                                 "cq:xfVariantType": "web",
                                 "jcr:primaryType": "cq:PageContent",
-                                "jcr:title": "English Test Footer Variation"}
-
+                                "jcr:title": "English Test Footer Variation"
+                            }
+                        },
+                        "definedInUsEn": {
+                            "jcr:primaryType": "cq:Page",
+                            "jcr:content": {
+                                "cq:xfVariantType": "web",
+                                "jcr:primaryType": "cq:PageContent",
+                                "jcr:title": "English Test Footer Variation - Defined in us/en but not in us/es"
+                            }
                         }
                     }
                 },
@@ -365,8 +373,16 @@
                                 "jcr:content": {
                                     "cq:xfVariantType": "web",
                                     "jcr:primaryType": "cq:PageContent",
-                                    "jcr:title": "English Test Footer Variation"}
-
+                                    "jcr:title": "English Test Footer Variation"
+                                }
+                            },
+                            "definedInChMysiteFr": {
+                                "jcr:primaryType": "cq:Page",
+                                "jcr:content": {
+                                    "cq:xfVariantType": "web",
+                                    "jcr:primaryType": "cq:PageContent",
+                                    "jcr:title": "English Test Footer Variation - Defined in ch/mysite/fr but not in ch/mysite/de"
+                                }
                             }
                         }
                     },
@@ -509,8 +525,15 @@
                         "jcr:content": {
                             "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
-                            "jcr:title": "English Test Footer Variation"}
-
+                            "jcr:title": "English Test Footer Variation"
+                        }
+                    },
+                    "definedInEn": {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content": {
+                            "cq:xfVariantType": "web",
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title": "English Test Footer Variation - Defined in en but not in es"}
                     }
                 }
             },
@@ -632,6 +655,14 @@
                             "cq:xfVariantType": "web",
                             "cq:xfMasterVariation": "true"
                         }
+                    },
+                    "definedInLiveCopy": {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content": {
+                            "cq:xfVariantType": "web",
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title": "English Test Footer Variation - Defined in Livecopy"}
+
                     }
                 }
             }

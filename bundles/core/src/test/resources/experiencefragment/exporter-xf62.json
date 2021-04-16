@@ -1,0 +1,8 @@
+{
+    "localizedFragmentVariationPath": "/content/experience-fragments/mysite/livecopy/footer/definedInLiveCopy/jcr:content",
+    "configured": false,
+    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+    "classNames": "aem-xf empty",
+    ":itemsOrder": [],
+    ":items": {}
+}
