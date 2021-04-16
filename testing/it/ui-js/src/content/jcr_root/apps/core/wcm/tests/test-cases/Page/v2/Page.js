@@ -107,10 +107,10 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
             .ifElse(function() {
                 return h.find("coral-dialog#aem-sites-rollout-schedule-dialog").size() > 0;
             }, new hobs.TestCase("Close schedule rollout modal and submit")
-                    .click(".cq-dialog-actions .cq-dialog-submit")
-                    .click("button.schedule-rollout-done", { expectedNav: true}),
-                new hobs.TestCase("Submit")
-                    .click(".cq-dialog-actions .cq-dialog-submit", { expectNav: true })
+                .click(".cq-dialog-actions .cq-dialog-submit")
+                .click("button.schedule-rollout-done", { expectedNav: true }),
+            new hobs.TestCase("Submit")
+                .click(".cq-dialog-actions .cq-dialog-submit", { expectNav: true })
             )
             // delete the test page we created for the live copy
             .execFct(function(opts, done) {
