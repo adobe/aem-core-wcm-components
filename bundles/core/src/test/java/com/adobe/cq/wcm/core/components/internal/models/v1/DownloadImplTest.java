@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
 class DownloadImplTest {
@@ -163,6 +164,17 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
         assertNull(download.getTitleType(), "Expected title type is not correct");
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
+    }
+
+    @Test
+    void testDownloadWithHiddenTitleLink() {
+        Resource mockResource = mock(Resource.class);
+        MockValueMap mockValueMap = new MockValueMap(mockResource);
+        mockValueMap.put(Download.PN_HIDE_TITLE_LINK, true);
+        Style mockStyle = new MockStyle(mockResource, mockValueMap);
+
+        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertTrue(download.hideTitleLink(), "Expected title link to be hidden");
     }
 
     @Test
