@@ -121,8 +121,10 @@ public class LinkHandler {
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
+        String resolvedLinkAccessibilityLabel = validateAndResolveLinkAccessibilityLabel(linkAccessibilityLabel);
+        String resolvedLinkTitleAttribute = validateAndResolveLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, linkAccessibilityLabel, linkTitleAttribute, targetPage));
+        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, resolvedLinkAccessibilityLabel, resolvedLinkTitleAttribute, targetPage));
     }
 
     /**
@@ -149,6 +151,36 @@ public class LinkHandler {
     private String validateAndResolveLinkTarget(String linkTarget) {
         if (linkTarget != null && VALID_LINK_TARGETS.contains(linkTarget)) {
             return linkTarget;
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Validates and resolves the link accessibility label.
+     * @param linkAccessibilityLabel Link accessibility label
+     *
+     * @return The validated link accessibility label or {@code null} if not valid
+     */
+    private String validateAndResolveLinkAccessibilityLabel(String linkAccessibilityLabel) {
+        if (!StringUtils.isBlank(linkAccessibilityLabel)) {
+            return linkAccessibilityLabel;
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Validates and resolves the link title attribute.
+     * @param linkTitleAttribute Link title attribute
+     *
+     * @return The validated link title attribute or {@code null} if not valid
+     */
+    private String validateAndResolveLinkTitleAttribute(String linkTitleAttribute) {
+        if (!StringUtils.isBlank(linkTitleAttribute)) {
+            return linkTitleAttribute;
         }
         else {
             return null;
