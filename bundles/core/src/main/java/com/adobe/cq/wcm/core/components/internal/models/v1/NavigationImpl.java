@@ -256,7 +256,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     private NavigationItem createNavigationItem(@NotNull final Page page, @NotNull final List<NavigationItem> children) {
         int level = page.getDepth() - (this.getNavigationRoot().getDepth() + structureStart);
         boolean current = checkCurrent(page);
-        boolean selected = checkSelected(page);
+        boolean selected = checkSelected(page, current);
         return newNavigationItem(page, selected, current, linkHandler, level, children, getId(), isShadowingDisabled, component);
     }
 
@@ -272,8 +272,8 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @param page The page to check.
      * @return True if the page is selected, false if not.
      */
-    private boolean checkSelected(@NotNull final Page page) {
-        return checkCurrent(page)
+    private boolean checkSelected(@NotNull final Page page, boolean current) {
+        return current
             || this.currentPage.getPath().startsWith(page.getPath() + "/");
     }
 
