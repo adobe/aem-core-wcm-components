@@ -21,8 +21,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import io.wcm.testing.mock.aem.junit5.AemContext;
+import javax.json.Json;
+import javax.json.JsonReader;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -41,11 +42,10 @@ import com.adobe.cq.dam.cfm.ContentElement;
 import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.FragmentTemplate;
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
-
-import javax.json.Json;
-import javax.json.JsonReader;
+import io.wcm.testing.mock.aem.junit5.AemContext;
 
 import static com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils.PN_CFM_GRID_TYPE;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
@@ -296,7 +296,7 @@ public class ContentFragmentUtilsTest {
         // WHEN
         Map<String, ComponentExporter> exporterMap =
                 ContentFragmentUtils.getComponentExporters(slingContext.resourceResolver()
-                        .getResource("/foo").listChildren(), modelFactory, slingHttpServletRequest);
+                        .getResource("/foo").listChildren(), modelFactory, slingHttpServletRequest, null);
 
         // THEN
         Assertions.assertEquals(componentExporter, exporterMap.get("bar"));
