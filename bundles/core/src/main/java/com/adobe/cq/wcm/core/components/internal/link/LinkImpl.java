@@ -41,7 +41,7 @@ public final class LinkImpl<T> implements Link<T> {
      * @param url Link URL
      */
     public LinkImpl(String url) {
-        this(url, null, null);
+        this(url, null, null, null, null);
     }
 
     /**
@@ -49,17 +49,39 @@ public final class LinkImpl<T> implements Link<T> {
      * @param target Target
      */
     public LinkImpl(String url, String target) {
-        this(url, target, null);
+        this(url, target, null, null, null);
     }
 
     /**
      * @param url Link URL
      * @param target Target
+     * @param linkAccessibilityLabel Accessibility Label
+     */
+    public LinkImpl(String url, String target, String linkAccessibilityLabel) {
+        this(url, target, linkAccessibilityLabel, null, null);
+    }
+
+    /**
+     * @param url Link URL
+     * @param target Target
+     * @param linkAccessibilityLabel Accessibility Label
+     * @param linkTitleAttribute Title attribute
+     */
+    public LinkImpl(String url, String target, String linkAccessibilityLabel, String linkTitleAttribute) {
+        this(url, target, linkAccessibilityLabel, linkTitleAttribute, null);
+    }
+
+
+    /**
+     * @param url Link URL
+     * @param target Target
+     * @param linkAccessibilityLabel Accessibility Label
+     * @param linkTitleAttribute Title attribute
      * @param reference Referenced WCM/DAM entity
      */
-    LinkImpl(String url, String target, T reference) {
+    LinkImpl(String url, String target, String linkAccessibilityLabel, String linkTitleAttribute, T reference) {
         this.url = url;
-        this.htmlAttributes = buildHtmlAttributes(url, target);
+        this.htmlAttributes = buildHtmlAttributes(url, target, linkAccessibilityLabel, linkTitleAttribute);
         this.reference = reference;
     }
 
@@ -110,16 +132,26 @@ public final class LinkImpl<T> implements Link<T> {
      *
      * @param linkURL Link URL
      * @param linkTarget Link target
+     * @param linkAccessibilityLabel Link accessibility label
+     * @param linkTitleAttribute Link title attribute
      *
      * @return {@link Map} of link attributes
      */
-    private static Map<String, String> buildHtmlAttributes(String linkURL, String linkTarget) {
+    private static Map<String, String> buildHtmlAttributes(String linkURL, String linkTarget, String linkAccessibilityLabel, String linkTitleAttribute) {
         Map<String,String> attributes = new HashMap<>();
         if (linkURL != null) {
             attributes.put("href", linkURL);
         }
         if (linkTarget != null) {
             attributes.put("target", linkTarget);
+        }
+
+        if (linkAccessibilityLabel != null) {
+            attributes.put("aria-label", linkAccessibilityLabel);
+        }
+
+        if (linkTitleAttribute != null) {
+            attributes.put("title", linkTitleAttribute);
         }
         return ImmutableMap.copyOf(attributes);
     }

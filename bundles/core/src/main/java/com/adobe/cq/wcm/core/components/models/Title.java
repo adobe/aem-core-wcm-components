@@ -16,7 +16,10 @@
 
 package com.adobe.cq.wcm.core.components.models;
 
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 
 /**
  * Defines the {@code Title} Sling Model used for the {@code /apps/core/wcm/components/title} component.
@@ -62,12 +65,13 @@ public interface Title extends Component {
     }
 
     /**
-     * Returns the Title's link URL, if one was set.
+     * Returns the Title's link, if one was set.
      *
-     * @return the title's link URL, if one was set, or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     * @return the title's link, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 13.0.0
      */
-    default String getLinkURL() {
+    @Nullable
+    default Link getLink() {
         return null;
     }
 
@@ -79,26 +83,6 @@ public interface Title extends Component {
      */
     default boolean isLinkDisabled() {
         return false;
-    }
-
-    /**
-     * Returns an accessibility label that describes the title's link.
-     *
-     * @return an accessibility label for the title's link
-     * @since com.adobe.cq.wcm.core.components.models 12.20.0
-     */
-    default String getLinkAccessibilityLabel() {
-        return null;
-    }
-
-    /**
-     * Returns a title attribute to be used on the title's link.
-     *
-     * @return a title attribute for the title's link
-     * @since com.adobe.cq.wcm.core.components.models 12.20.0
-     */
-    default String getLinkTitleAttribute() {
-        return null;
     }
 
 }

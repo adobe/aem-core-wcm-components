@@ -33,6 +33,8 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class LinkHandlerTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
-    
+
     private Page page;
     private LinkHandler underTest;
 
@@ -67,20 +69,22 @@ class LinkHandlerTest {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "http://myhost");
         Optional<Link> link = underTest.getLink(linkResource);
-        
+
         assertValidLink(link.get(), "http://myhost");
         assertNull(link.map(Link::getReference).orElse(null));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"_blank", "_parent", "_top"})
-    void testResourceExternalLinkWithAllowedTargets(String target) {
+    void testResourceExternalLinkWithAllowedTargetsAndAllAttributes(String target) {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "http://myhost",
-                PN_LINK_TARGET, target);
+                PN_LINK_TARGET, target,
+                PN_LINK_ACCESSIBILITY_LABEL, "My Host Label",
+                PN_LINK_TITLE_ATTRIBUTE, "My Host Title");
         Optional<Link> link = underTest.getLink(linkResource);
 
-        assertValidLink(link.get(), "http://myhost", target);
+        assertValidLink(link.get(), "http://myhost",  "My Host Label", "My Host Title", target);
         assertNull(link.map(Link::getReference).orElse(null));
     }
 
@@ -92,7 +96,7 @@ class LinkHandlerTest {
                 PN_LINK_TARGET, target);
         Optional<Link> link = underTest.getLink(linkResource);
 
-        // invalid target or _self target should be stripped away 
+        // invalid target or _self target should be stripped away
         assertValidLink(link.get(), "http://myhost");
         assertNull(link.map(Link::getReference).orElse(null));
     }
@@ -134,7 +138,7 @@ class LinkHandlerTest {
     @Test
     void testPageLink() {
         Optional<Link<Page>> link = underTest.getLink(page);
-        
+
         assertValidLink(link.get(), page.getPath() + ".html");
         assertEquals(page, link.map(Link::getReference).orElse(null));
     }
@@ -148,8 +152,8 @@ class LinkHandlerTest {
 
     @Test
     void testLinkURLPageLinkWithTarget() {
-        Optional<Link<Page>> link = underTest.getLink(page.getPath(), "_blank");
-        
+        Optional<Link<Page>> link = underTest.getLink(page.getPath(), "_blank", null, null);
+
         assertValidLink(link.get(), page.getPath() + ".html", "_blank");
         assertEquals(page, link.map(Link::getReference).orElse(null));
     }

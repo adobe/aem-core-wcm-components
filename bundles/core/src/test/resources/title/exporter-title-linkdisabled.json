@@ -1,7 +1,6 @@
 {
     "id": "title-6032c7e80a",
     "linkDisabled": true,
-    "linkURL": "https://www.adobe.com",
     "dataLayer": {
         "title-6032c7e80a": {
             "repo:modifyDate": "2016-01-13T15:14:51Z",
@@ -9,7 +8,9 @@
             "@type": "core/wcm/components/title/v2/title"
         }
     },
-    "linkAccessibilityLabel": "World",
-    "linkTitleAttribute": "World title",
+    "link": {
+        "valid": true,
+        "url": "https://www.adobe.com"
+    },
     ":type": "core/wcm/components/title/v2/title"
 }

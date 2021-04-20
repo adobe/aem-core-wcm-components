@@ -105,7 +105,6 @@
                                                     fieldDescription="Value of an aria-label attribute for the title's link, which describes the title's link."
                                                     fieldLabel="Link Label"
                                                     name="./linkAccessibilityLabel"
-                                                    disabled="{Boolean}true"
                                                     value="">
                                                     <granite:rendercondition
                                                         jcr:primaryType="nt:unstructured"
@@ -119,7 +118,6 @@
                                                     fieldDescription="HTML TITLE attribute to apply to the component's link."
                                                     fieldLabel="Link Title Attribute"
                                                     name="./linkTitleAttribute"
-                                                    disabled="{Boolean}true"
                                                     value="">
                                                     <granite:rendercondition
                                                         jcr:primaryType="nt:unstructured"

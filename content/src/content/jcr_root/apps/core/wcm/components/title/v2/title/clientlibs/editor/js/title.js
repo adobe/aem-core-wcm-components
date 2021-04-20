@@ -148,14 +148,13 @@
                 $(defaultSelect).parent().remove();
             }
         });
+        Coral.commons.ready($(LINK_URL_SELECTOR, LINK_LABEL_SELECTOR, LINK_TITLE_SELECTOR), function(component) {
+            toggleDisableAttributeOnLinkLabelAndTitleInputs();
+        });
     });
 
     $(document).on("input", LINK_URL_SELECTOR, function(input) {
         $(LINK_URL_SELECTOR).val(input.target.value);
-        toggleDisableAttributeOnLinkLabelAndTitleInputs();
-    });
-
-    $(document).on("dialog-loaded", function() {
         toggleDisableAttributeOnLinkLabelAndTitleInputs();
     });
 

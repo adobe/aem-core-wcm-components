@@ -327,7 +327,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     String href = StringUtils.removeAll(remainingTokens[0], "\"");
                     String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
 
-                    Link link = linkHandler.getLink(href, target).orElse(null);
+                    Link link = linkHandler.getLink(href, target, null, null).orElse(null);
                     if (link == null || !link.isValid()) {
                         break;
                     }

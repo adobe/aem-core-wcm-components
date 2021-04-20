@@ -19,11 +19,10 @@
      data-sly-test.text="${title.text}"
      data-cmp-data-layer="${title.data.json}"
      id="${component.id}"
-     class="cmp-title">
+    class="cmp-title">
     <h1 class="cmp-title__text" data-sly-element="${title.type}"><a
-            data-sly-unwrap="${!title.linkURL || title.linkDisabled}" class="cmp-title__link" href="${title.linkURL}"
-            aria-label="${title.linkAccessibilityLabel}"
-            title="${title.linkTitleAttribute}"
+            data-sly-unwrap="${!title.link.htmlAttributes['href'] || title.linkDisabled}" class="cmp-title__link"
+            data-sly-attribute="${title.link.htmlAttributes}"
             data-cmp-clickable="${title.data ? true : false}">${text}</a></h1>
 </div>
 <sly data-sly-call="${template.placeholder @ isEmpty=!text, classAppend='cmp-title'}"></sly>
