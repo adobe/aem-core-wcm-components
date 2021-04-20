@@ -252,7 +252,7 @@ public class ContentFragmentUtils {
      * @param resourceIterator Iterator of resources for which to get the component exporters.
      * @param modelFactory Model factory service.
      * @param slingHttpServletRequest Current request.
-     * @param callerResource The caller (XF) resource.
+     * @param callerResource The page or template resource that references the experience fragment or content fragment.
      * @return Ordered map of resource names to {@link ComponentExporter} models.
      */
     @NotNull
@@ -269,6 +269,10 @@ public class ContentFragmentUtils {
             public Object getAttribute(String name) {
                 if (ATTR_RESOURCE_CALLER_PATH.equals(name)) {
                     String resourceCallerPath = (String)super.getAttribute(ATTR_RESOURCE_CALLER_PATH);
+                    // If the attribute is already defined then we're in a nested situation.
+                    // The code for computing the components id uses the root-most resource path
+                    // (because of how componentContext is handled in HTML rendering, so we return
+                    // that.
                     return (resourceCallerPath != null) ? resourceCallerPath : callerResource.getPath();
                 }
                 return super.getAttribute(name);

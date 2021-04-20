@@ -23,8 +23,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.models.Component;
@@ -37,8 +35,6 @@ import com.day.cq.wcm.api.components.ComponentContext;
  * Utility helper functions for components.
  */
 public final class ComponentUtils {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentUtils.class);
 
     /**
      * Name of the node holding the context aware configurations below /conf/{site-name};
@@ -97,7 +93,7 @@ public final class ComponentUtils {
      *
      * @param resource The resource for which to get or generate an ID.
      * @param currentPage The current request page.
-     * @param resourceCallerPath The resource caller path(s).
+     * @param resourceCallerPath The path of the page or template resource that references this component.
      * @param componentContext The current component context.
      * @return The ID property value for the specified resource, or a generated ID if not set.
      */
@@ -194,9 +190,6 @@ public final class ComponentUtils {
      */
     @NotNull
     public static String generateId(@NotNull final String prefix, @NotNull final String path) {
-        if ("search".equals(prefix)) {
-            LOGGER.info("generateId: " + path);
-        }
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, ID_HASH_LENGTH));
     }
 }
