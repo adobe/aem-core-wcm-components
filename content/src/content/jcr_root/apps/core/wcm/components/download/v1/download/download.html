@@ -20,7 +20,7 @@
      id="${component.id}"
      class="cmp-download${!wcmmode.disabled ? ' cq-dd-file' : ''}">
     <h3 class="cmp-download__title" data-sly-test.title="${download.title}" data-sly-element="${download.titleType}">
-        <a data-sly-unwrap="${!download.url}" class="cmp-download__title-link" href="${download.url}">${title}</a>
+        <a data-sly-unwrap="${!download.url || download.hideTitleLink}" class="cmp-download__title-link" href="${download.url}" aria-hidden="true" role="presentation">${title}</a>
     </h3>
     <div class="cmp-download__description" data-sly-test.description="${download.description}">${description @ context="html"}</div>
     <dl data-sly-test="${(download.displayFilename && download.filename) || (download.displaySize && download.size) || (download.displayFormat && download.format)}" class="cmp-download__properties">
@@ -37,7 +37,7 @@
             <dd class="cmp-download__property-content">${download.format}</dd>
         </div>
     </dl>
-    <a data-sly-test="${download.url && download.actionText}" class="cmp-download__action" href="${download.url}">
+    <a data-sly-test="${download.url && download.actionText}" class="cmp-download__action" href="${download.url}" aria-label="${'Download' @ i18n} ${download.filename}">
         <span class="cmp-download__action-text">${download.actionText}</span>
     </a>
 </div>
