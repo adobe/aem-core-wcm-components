@@ -287,7 +287,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Nullable
     private String getXfLocalizationRoot(@Nullable final String xfPath, @Nullable final String currentPageRoot) {
         if (StringUtils.isNotEmpty(xfPath) && StringUtils.isNotEmpty(currentPageRoot)
-                && this.request.getResourceResolver().getResource(xfPath) != null
                 && this.request.getResourceResolver().getResource(currentPageRoot) != null) {
             String[] xfPathTokens = Text.explode(xfPath, PATH_DELIMITER_CHAR);
             int xfRootDepth = Text.explode(currentPageRoot, PATH_DELIMITER_CHAR).length + 1;
