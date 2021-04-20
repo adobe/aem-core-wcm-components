@@ -166,6 +166,17 @@ class DownloadImplTest {
     }
 
     @Test
+    void testDownloadWithHiddenTitleLink() {
+        Resource mockResource = mock(Resource.class);
+        MockValueMap mockValueMap = new MockValueMap(mockResource);
+        mockValueMap.put(Download.PN_HIDE_TITLE_LINK, true);
+        Style mockStyle = new MockStyle(mockResource, mockValueMap);
+
+        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertTrue(download.hideTitleLink(), "Expected title link to be hidden");
+    }
+
+    @Test
     void testDownloadWithCustomActionText() {
         Download download = getDownloadUnderTest(DOWNLOAD_1,
                 Download.PN_ACTION_TEXT, STYLE_ACTION_TEST);
