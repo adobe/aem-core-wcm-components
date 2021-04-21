@@ -51,7 +51,7 @@ public interface Carousel extends Container {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.20.0
      */
-    String PN_PREPEND_CONTROLS = "prependControls";
+    String PN_CONTROLS_PREPENDED = "controlsPrepended";
 
     /**
      * Indicates whether the carousel should automatically transition between slides or not.
@@ -99,7 +99,7 @@ public interface Carousel extends Container {
      * @return {@code true} if the control elements should be placed in front of the items, {@code false} if they should be appended
      * @since com.adobe.cq.wcm.core.components.models 12.20.0
      */
-    default boolean getPrependControls() {
+    default boolean isControlsPrepended() {
         return false;
     }
 }

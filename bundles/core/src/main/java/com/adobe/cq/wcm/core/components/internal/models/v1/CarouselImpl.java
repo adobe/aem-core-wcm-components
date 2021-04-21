@@ -85,7 +85,7 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
      */
     protected boolean autopauseDisabled;
 
-    private boolean prependControls = false;
+    private boolean controlsPrepended = false;
 
     /**
      * Initialize the model.
@@ -109,7 +109,7 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
             .orElseGet(() -> optionalStyle.map(style -> style.get(PN_AUTOPAUSE_DISABLED, Boolean.class))
                 .orElse(false));
 
-        prependControls = optionalStyle.map(style -> style.get(PN_PREPEND_CONTROLS, Boolean.class))
+        controlsPrepended = optionalStyle.map(style -> style.get(PN_PREPEND_CONTROLS, Boolean.class))
                 .orElse(false);
     }
 
@@ -135,8 +135,8 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     }
 
     @Override
-    public boolean getPrependControls() {
-        return prependControls;
+    public boolean isControlsPrepended() {
+        return controlsPrepended;
     }
 
     /*
