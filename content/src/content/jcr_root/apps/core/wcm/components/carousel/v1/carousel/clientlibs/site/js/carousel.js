@@ -271,6 +271,9 @@
                 that._elements.self.addEventListener("mouseenter", onMouseEnter);
                 that._elements.self.addEventListener("mouseleave", onMouseLeave);
             }
+            // for accessibility we pause animation when a element get focused
+            that._elements.self.addEventListener("focusin", onMouseEnter);
+            that._elements.self.addEventListener("focusout", onMouseLeave);
         }
 
         /**
