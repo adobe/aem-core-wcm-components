@@ -47,6 +47,13 @@ public interface Carousel extends Container {
     String PN_AUTOPAUSE_DISABLED = "autopauseDisabled";
 
     /**
+     * Name of the policy property that defines whether the control elements should be placed in front of the carousel items.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    String PN_PREPEND_CONTROLS = "prependControls";
+
+    /**
      * Indicates whether the carousel should automatically transition between slides or not.
      *
      * @return {@code true} if the carousel should automatically transition slides; {@code false} otherwise
@@ -84,5 +91,15 @@ public interface Carousel extends Container {
      */
     default String getAccessibilityLabel() {
         return null;
+    }
+
+    /**
+     * Checks if the control elements should be placed in front of the carousel items.
+     *
+     * @return {@code true} if the control elements should be placed in front of the items, {@code false} if they should be appended
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default boolean getPrependControls() {
+        return false;
     }
 }

@@ -3,6 +3,7 @@
     "autoplay": true,
     "delay": 7000,
     "autopauseDisabled": true,
+    "prependControls": false,
     "dataLayer": {
         "carousel-c39ba25916": {
             "@type": "core/wcm/components/carousel/v1/carousel",
