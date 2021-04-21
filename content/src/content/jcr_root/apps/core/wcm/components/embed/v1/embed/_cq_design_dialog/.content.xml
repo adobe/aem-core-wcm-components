@@ -80,9 +80,6 @@
                                         <datasource
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="core/wcm/components/embed/v1/datasources/embeddables"/>
-                                        <granite:data
-                                            jcr:primaryType="nt:unstructured"
-                                            cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-youtube\]"/>
                                     </allowedEmbeddables>
                                 </items>
                             </column>
