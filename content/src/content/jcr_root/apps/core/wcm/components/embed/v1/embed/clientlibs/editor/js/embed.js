@@ -240,10 +240,10 @@
      * @param {String[]} values The values of the target to enable and show
      */
     function toggleShowHideTabs(values) {
-        var panelElement = document.querySelectorAll("[data-cmp-embed-dialog-edit-embeddableoptions]");
-        for (var i = 0; i < panelElement.length; i++) {
-            var showHideTargetValue = getShowHideTargetValue(panelElement[i]);
-            var tabElement = getTabElementForPanel(panelElement[i]);
+        var panelElements = document.querySelectorAll("[data-cmp-embed-dialog-edit-embeddableoptions]");
+        for (var i = 0; i < panelElements.length; i++) {
+            var showHideTargetValue = getShowHideTargetValue(panelElements[i]);
+            var tabElement = getTabElementForPanel(panelElements[i]);
             if (values.includes(showHideTargetValue)) {
                 toggleTarget($(tabElement), true);
             } else {
