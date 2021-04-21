@@ -109,7 +109,7 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
             .orElseGet(() -> optionalStyle.map(style -> style.get(PN_AUTOPAUSE_DISABLED, Boolean.class))
                 .orElse(false));
 
-        controlsPrepended = optionalStyle.map(style -> style.get(PN_PREPEND_CONTROLS, Boolean.class))
+        controlsPrepended = optionalStyle.map(style -> style.get(PN_CONTROLS_PREPENDED, Boolean.class))
                 .orElse(false);
     }
 
