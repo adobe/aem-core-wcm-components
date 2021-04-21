@@ -29,7 +29,7 @@
      data-cmp-autopause-disabled="${carousel.autopauseDisabled}"
      data-cmp-data-layer="${carousel.data.json}"
      data-placeholder-text="${wcmmode.edit && 'Please add Carousel components here' @ i18n}">
-    <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${carousel.prependControls}"></sly>
+    <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${carousel.controlsPrepended}"></sly>
     <div data-sly-test="${carousel.items && carousel.items.size > 0}"
          class="cmp-carousel__content"
          aria-atomic="false"
@@ -44,7 +44,7 @@
              aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
              data-cmp-data-layer="${item.data.json}"
              data-cmp-hook-carousel="item"></div>
-        <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${!carousel.prependControls}"></sly>
+        <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${!carousel.controlsPrepended}"></sly>
         <ol class="cmp-carousel__indicators"
             role="tablist"
             aria-label="${'Choose a slide to display' @ i18n}"
