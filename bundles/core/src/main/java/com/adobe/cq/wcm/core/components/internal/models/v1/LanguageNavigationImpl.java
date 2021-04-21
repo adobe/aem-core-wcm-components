@@ -111,8 +111,7 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
             Iterator<Page> it = root.listChildren(new PageFilter());
             while (it.hasNext()) {
                 Page page = it.next();
-                boolean current = currentPage.getPath().equals(page.getPath());
-                boolean active = current || currentPage.getPath().startsWith(page.getPath() + "/");
+                boolean active = currentPage.getPath().equals(page.getPath()) || currentPage.getPath().startsWith(page.getPath() + "/");
                 String title = page.getNavigationTitle();
                 if (title == null) {
                     title = page.getTitle();
@@ -123,6 +122,7 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
                 if (localizedPage != null) {
                     page = localizedPage;
                 }
+                boolean current = currentPage.getPath().equals(page.getPath());
                 pages.add(newLanguageNavigationItem(page, active, current, linkHandler, level, children, title, getId(),
                         isShadowingDisabled, component));
             }

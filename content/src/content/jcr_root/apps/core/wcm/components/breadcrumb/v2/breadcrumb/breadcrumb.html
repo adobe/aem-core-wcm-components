@@ -31,8 +31,7 @@
                class="cmp-breadcrumb__item-link"
                itemprop="item"
                data-cmp-clickable="${breadcrumb.data ? true : false}"
-               data-sly-unwrap="${navItem.active}"
-               aria-current="${item.current && 'page'}">
+               data-sly-unwrap="${navItem.active}">
                 <span itemprop="name">${navItem.title}</span>
             </a>
             <meta itemprop="position" content="${navItemList.count}" />
