@@ -24,6 +24,20 @@
                         "/content/list/pages/page_1",
                         "/content/list/pages/page_2"
                     ]
+                },
+                "staticWithVanityPaths": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v2/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "orderBy": "title",
+                    "pages": [
+                        "/content/list/pages/page_3",
+                        "/content/list/pages/page_4"
+                    ]
                 }
             }
         },
@@ -80,6 +94,22 @@
                     "jcr:primaryType": "cq:PageContent",
                     "jcr:title": "Page 2",
                     "cq:lastModified": "2016-09-21T16:12:45.000-07:00"
+                }
+            },
+            "page_3": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content": {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Page 3",
+                    "sling:vanityPath": "/page_3.html"
+                }
+            },
+            "page_4": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content": {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Page 4",
+                    "sling:vanityPath": "/4_page.html"
                 }
             }
         }
