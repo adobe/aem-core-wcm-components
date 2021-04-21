@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -23,5 +23,12 @@ public class Selectors {
 
     public static String SELECTOR_ICON = "input[name='./icon']";
 
+    public static String SELECTOR_CONFIG_BUTTON = "button[data-action='CONFIGURE']";
     public static String SELECTOR_SUBMIT_BUTTON = "button[type='submit']";
+    public static String SELECTOR_SAVE_CONFIG_BUTTON = "button[is='coral-button'][title='Done']";
+    public static String SELECTOR_CONFIG_DIALOG = ".cq-dialog.foundation-form.foundation-layout-form";
+
+    public static final String SELECTOR_ITEM_ELEMENT_CONTENT = "coral-selectlist-item-content";
+
+    public static final String SELECTOR_PANEL_SELECT = ".cq-editable-action[data-action='PANEL_SELECT']";
 }

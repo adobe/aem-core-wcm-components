@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.button.v1;
 
-import com.adobe.qe.selenium.pagewidgets.common.BaseComponent;
+import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 

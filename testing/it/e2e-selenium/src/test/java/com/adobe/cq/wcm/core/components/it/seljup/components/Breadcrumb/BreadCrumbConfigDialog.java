@@ -17,7 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb;
 
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 
 import static com.codeborne.selenide.Selenide.$;
 

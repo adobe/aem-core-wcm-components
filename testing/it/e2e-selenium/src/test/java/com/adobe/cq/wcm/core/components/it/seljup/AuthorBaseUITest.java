@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,13 +16,12 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
-import com.adobe.qe.selenium.junit.annotations.Author;
+import com.adobe.cq.testing.selenium.junit.annotations.Author;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.testing.clients.ClientException;
 import org.codehaus.jackson.JsonNode;
@@ -34,20 +33,20 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import com.adobe.cq.testing.client.CQClient;
-import com.adobe.qe.selenium.UIAbstractTest;
-import com.adobe.qe.selenium.pageobject.granite.LoginPage;
-import com.adobe.qe.selenium.utils.DisableTour;
-import com.adobe.qe.selenium.junit.extensions.TestContentExtension;
-import com.adobe.qe.selenium.utils.TestContentBuilder;
+import com.adobe.cq.testing.selenium.UIAbstractTest;
+import com.adobe.cq.testing.selenium.pageobject.granite.LoginPage;
+import com.adobe.cq.testing.selenium.utils.DisableTour;
+import com.adobe.cq.testing.selenium.junit.extensions.TestContentExtension;
+import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.adobe.qe.selenium.Constants.GROUPID_CONTENT_AUTHORS;
+import static com.adobe.cq.testing.selenium.Constants.GROUPID_CONTENT_AUTHORS;
 
 
-import static com.adobe.qe.selenium.Constants.RUNMODE_AUTHOR;
-import static com.adobe.qe.selenium.pagewidgets.Helpers.setAffinityCookie;
+import static com.adobe.cq.testing.selenium.Constants.RUNMODE_AUTHOR;
+import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.setAffinityCookie;
 
 @Execution(ExecutionMode.CONCURRENT)
 public abstract class AuthorBaseUITest extends UIAbstractTest {
@@ -69,7 +68,7 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
 
     @BeforeEach
     public void loginBeforeEach(@Author final CQClient adminAuthor, final TestContentBuilder testContentBuilder, final URI baseURI)
-            throws ClientException, InterruptedException, UnsupportedEncodingException {
+        throws ClientException, InterruptedException, IOException {
         testContentBuilder.withUser(randomPassword, getUserGroupMembership());
         testContentBuilder.build();
 

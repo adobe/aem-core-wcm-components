@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.Breadcru
 import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.v2.BreadcrumbList;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pageobject.PageEditorPage;
-import com.adobe.qe.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
@@ -59,9 +59,8 @@ public class BreadcrumbTests {
         String parentPage = rootPage;
         testPages = new ArrayList<String>();
         for(int i = 1; i <= maxLevel; i++) {
-            String pageLabel = "testPage_L" + i;
-            String pageTitle = "Test Page L" + i + " Title";
-            String testPage = Commons.createPage(client, pageLabel, pageTitle, parentPage, defaultPageTemplate,"core/wcm/tests/components/test-page-v2");
+            String pageTitle = "testPage_L" + i;
+            String testPage = client.createPage(pageTitle, pageTitle, parentPage, defaultPageTemplate).getSlingPath();
             testPages.add(testPage);
             parentPage = testPage;
         }
@@ -99,7 +98,7 @@ public class BreadcrumbTests {
         editableToolbar.clickConfigure();
     }
 
-    public void testHideCurrent() throws TimeoutException {
+    public void testHideCurrent() throws TimeoutException, InterruptedException {
         Commons.switchContext("ContentFrame");
         assertTrue(breadcrumbItems.isItemActive("testPage_L5"), "testPage_L5 should be active");
         Commons.switchToDefaultContext();
@@ -114,7 +113,7 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
     }
 
-    public void testShowHidden(CQClient client) throws  ClientException, TimeoutException {
+    public void testShowHidden(CQClient client) throws ClientException, TimeoutException, InterruptedException {
         HashMap<String, String> data = new HashMap<String, String>();
         Commons.hidePage(client, testPages.get(2));
         editorPage.refresh();

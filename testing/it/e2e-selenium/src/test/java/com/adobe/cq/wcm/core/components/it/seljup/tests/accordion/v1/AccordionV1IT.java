@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -23,12 +23,13 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.Accordion.v1.Accord
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEditor;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.PanelSelector;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pageobject.PageEditorPage;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralSelectList;
-import com.adobe.qe.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.qe.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.WebDriverRunner;
 import java.util.ArrayList;
@@ -44,20 +45,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class AccordionIT extends AuthorBaseUITest {
-
-    private static final Logger LOG = LoggerFactory.getLogger(AccordionIT.class);
+public class AccordionV1IT extends AuthorBaseUITest {
 
     protected String testPage;
-    private static final String accordionRT = "core/wcm/components/accordion/v1/accordion";
     private static final String clientlibs = "core.wcm.components.accordion.v1";
-    private static String rtAccordion_v1 = "core/wcm/components/accordion/v1/accordion";
-    private static String rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
     private static String componentName = "accordion";
 
     private String policyPath;
@@ -84,8 +78,7 @@ public class AccordionIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         // 1.
-        //testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
-        testPage = Commons.createPage(adminClient,"testPage", "Test Page Title", rootPage, defaultPageTemplate,"core/wcm/tests/components/test-page-v2");
+        testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // 2.
         String policySuffix = "/structure/page/new_policy";
@@ -106,7 +99,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
 
         // 4.
-        proxyPath = Commons.createProxyComponent(adminClient, rtAccordion_v1, Commons.proxyPath, null, null);
+        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtAccordion_v1, Commons.proxyPath, null, null);
 
         // 5.
         data.clear();
@@ -227,7 +220,7 @@ public class AccordionIT extends AuthorBaseUITest {
         assertTrue(selectedItems.items().size() == items.size(), "Number of items in property config should be equal to added items number");
 
         for(int i = 0; i < items.size(); i++) {
-            assertTrue(selectedItems.items().get(i).find(Commons.SELECTOR_ITEM_ELEMENT_CONTENT).getText().contains(items.get(i).getValue())
+            assertTrue(selectedItems.items().get(i).find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).getText().contains(items.get(i).getValue())
                 , "Selected item should be same as added item");
         }
     }
@@ -493,6 +486,8 @@ public class AccordionIT extends AuthorBaseUITest {
         //6.
         Commons.saveConfigureDialog();
 
+        //wait for configuration changes to reflect
+        Commons.webDriverWait(1000);
         //7.
         items.clear();
         items.add("item1");

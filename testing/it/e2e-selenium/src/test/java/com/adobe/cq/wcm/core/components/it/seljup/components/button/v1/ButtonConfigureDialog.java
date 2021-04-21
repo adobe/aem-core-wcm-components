@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.button.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralSelect;
-import com.adobe.qe.selenium.pagewidgets.coral.Dialog;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.codeborne.selenide.SelenideElement;
-import com.adobe.qe.selenium.pagewidgets.cq.AutoCompleteField;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,14 +19,12 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v2;
 import com.adobe.cq.wcm.core.components.it.seljup.components.FormButton.v2.FormButtonV2;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v1.FormButtonV1IT;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 
 public class FormButtonV2IT extends FormButtonV1IT {
-
-    final String COMPONENT_RESOURCE_TYPE = "core/wcm/components/form/button/v2/button";
 
     /**
      * Before Test Case
@@ -34,7 +32,7 @@ public class FormButtonV2IT extends FormButtonV1IT {
     @BeforeEach
     public void setupBefore() throws ClientException {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyCompoenetPath = Commons.creatProxyComponent(adminClient, COMPONENT_RESOURCE_TYPE, "Proxy Form Button", "formbutton");
+        proxyCompoenetPath = Commons.creatProxyComponent(adminClient, Commons.rtFormButton_v2, "Proxy Form Button", "formbutton");
         addPathtoComponentPolicy(responsiveGridPath, proxyCompoenetPath);
         formButton = new FormButtonV2();
         editorPage = new PageEditorPage(testPage);

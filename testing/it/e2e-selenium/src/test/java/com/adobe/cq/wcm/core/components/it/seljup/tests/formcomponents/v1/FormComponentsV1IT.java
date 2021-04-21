@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.FormComponents.Form
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
@@ -41,27 +41,38 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FormComponentsV1IT extends AuthorBaseUITest {
 
-    protected static String formContainerRT = "core/wcm/components/form/container/v1/container";
-    protected static String formTextRT = "core/wcm/components/form/text/v1/text";
-    protected static String formHiddenRT = "core/wcm/components/form/hidden/v1/hidden";
-    protected static String formOptionsRT = "core/wcm/components/form/options/v1/options";
-    protected static String formButtonRT = "core/wcm/components/form/button/v1/button";
-    protected static String userContent = "/content/usergenerated/core-components";
-
     private static String componentName = "formcomponents";
-    protected String compPathContainer;
-    protected String compPathText;
-    protected String compPathHidden;
-    protected String compPathOptions;
-    protected String compPathButton;
-    protected PageEditorPage editorPage;
-    protected String containerPath;
-    protected String testPage;
+    // root location where form content will be stored
+    private static final String userContent = "/content/usergenerated/core-components";
+
+    private String compPathContainer;
+    private String compPathText;
+    private String compPathHidden;
+    private String compPathOptions;
+    private String compPathButton;
+    private PageEditorPage editorPage;
+    private String containerPath;
+    private String testPage;
+    protected String formContainerRT;
+    protected String formTextRT;
+    protected String formHiddenRT;
+    protected String formOptionsRT;
+    protected String formButtonRT;
+
+
+
+    public void setComponentResources() {
+        formContainerRT = Commons.rtFormContainer_v1;
+        formTextRT = Commons.rtFormText_v1;
+        formHiddenRT = Commons.rtFormHidden_v1;
+        formOptionsRT = Commons.rtFormOptions_v1;
+        formButtonRT = Commons.rtFormButton_v1;
+    }
+
 
     protected void setup() throws ClientException  {
         // create the test page, store page path in 'testPagePath'
-        //testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
-        testPage = Commons.createPage(adminClient,"testPage", "Test Page Title", rootPage, defaultPageTemplate,"core/wcm/tests/components/test-page-v2");
+        testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // create a proxy component
         compPathContainer = Commons.createProxyComponent(adminClient, formContainerRT, Commons.proxyPath, null, null);
@@ -131,6 +142,7 @@ public class FormComponentsV1IT extends AuthorBaseUITest {
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
+        setComponentResources();
         setup();
     }
 

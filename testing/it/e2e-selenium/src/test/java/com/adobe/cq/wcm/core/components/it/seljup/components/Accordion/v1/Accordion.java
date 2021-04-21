@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.components.Accordion.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.components.Accordion.AccordionConfigureDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.CQOverlay;
-import com.adobe.qe.selenium.pagewidgets.common.BaseComponent;
+import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Selenide.$$;

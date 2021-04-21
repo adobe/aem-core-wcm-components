@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.Carousel;
 
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEditor;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.qe.selenium.pagewidgets.coral.Dialog;
-import com.adobe.qe.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -27,8 +27,6 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class CarouselConfigureDialog extends Dialog {
 
-    private static String tabItems = ".cmp-carousel__editor coral-tab:eq(0)";
-    private static String tabProperties = ".cmp-carousel__editor coral-tab:eq(1)";
     private static String autoplay = "[data-cmp-carousel-v1-dialog-hook='autoplay']";
     private static String autoplayGroup = "[data-cmp-carousel-v1-dialog-hook='autoplayGroup']";
     private static String delay = "[data-cmp-carousel-v1-dialog-hook='delay']";
@@ -43,7 +41,7 @@ public class CarouselConfigureDialog extends Dialog {
     }
 
     public ChildrenEditor getChildrenEditor() { return new ChildrenEditor(); }
-    public com.adobe.qe.selenium.pagewidgets.cq.InsertComponentDialog getInsertComponentDialog() {
+    public InsertComponentDialog getInsertComponentDialog() {
         return new InsertComponentDialog();
     }
 

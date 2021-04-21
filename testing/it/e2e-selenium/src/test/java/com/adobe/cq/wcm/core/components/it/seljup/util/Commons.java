@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util;
 
 import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
@@ -27,14 +28,15 @@ import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
-import com.adobe.qe.selenium.pagewidgets.Helpers;
+import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import org.openqa.selenium.WebDriver;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 
-import static com.adobe.qe.selenium.Constants.DEFAULT_SMALL_SIZE;
+import static com.adobe.cq.testing.selenium.Constants.DEFAULT_SMALL_SIZE;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static org.awaitility.Awaitility.await;
@@ -51,15 +53,61 @@ public class Commons {
     // relative path from page node to the root layout container
     public static String relParentCompPath = "/jcr:content/root/responsivegrid/";
 
-    private static String doneButton = "button[is='coral-button'][title='Done']";
+    // core component resource types
+    // accordion component
+    public static String  rtAccordion_v1 = "core/wcm/components/accordion/v1/accordion";
+    // embed component
+    public static String rtEmbed_v1 = "core/wcm/components/embed/v1/embed";
+    // text component
+    public static String  rtText_v1 = "core/wcm/components/text/v1/text";
+    public static String  rtText_v2 = "core/wcm/components/text/v2/text";
+    // title component
+    public static String rtTitle_v1 = "core/wcm/components/title/v1/title";
+    public static String rtTitle_v2 = "core/wcm/components/title/v2/title";
+    // list component
+    public static String rtList_v1 = "core/wcm/components/list/v1/list";
+    public static String rtList_v2 = "core/wcm/components/list/v2/list";
+    // image component
+    public static String rtImage_v1 = "core/wcm/components/image/v1/image";
+    public static String rtImage_v2 = "core/wcm/components/image/v2/image";
+    // breadcrumb component
+    public static String rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
+    public static String rtBreadcrumb_v2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
+    // button component
+    public static String rtButton_v1 = "core/wcm/components/button/v1/button";
+    // navigation component
+    public static String rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
+    // language navigation component
+    public static String rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
+    // search component
+    public static String rtSearch_v1 = "core/wcm/components/search/v1/search";
+    // teaser component
+    public static String rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
+    // carousel component
+    public static String rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
+    // tabs component
+    public static String rtTabs_v1 = "core/wcm/components/tabs/v1/tabs";
+    // content fragment component
+    public static String rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
+    // content fragment list component
+    public static String rtContentFragmentList_v1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
+    // core form container
+    public static String rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
+    public static String rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
+    // form button
+    public static String rtFormButton_v1 = "core/wcm/components/form/button/v1/button";
+    public static String rtFormButton_v2 = "core/wcm/components/form/button/v2/button";
+    // form button
+    public static String rtFormText_v1 = "core/wcm/components/form/text/v1/text";
+    public static String rtFormText_v2 = "core/wcm/components/form/text/v2/text";
+    // form option
+    public static String rtFormOptions_v1 = "core/wcm/components/form/options/v1/options";
+    public static String rtFormOptions_v2 = "core/wcm/components/form/options/v2/options";
+    // hidden field
+    public static String rtFormHidden_v1 = "core/wcm/components/form/hidden/v1/hidden";
+    public static String rtFormHidden_v2 = "core/wcm/components/form/hidden/v2/hidden";
 
-    private static String configButton = "button[data-action='CONFIGURE']";
 
-    public static final String SELECTOR_ITEM_ELEMENT_CONTENT = "coral-selectlist-item-content";
-
-    public static final String selConfigDialog = ".cq-dialog.foundation-form.foundation-layout-form";
-
-    public static final String panelSelect = ".cq-editable-action[data-action='PANEL_SELECT']";
 
     /**
      * Creates form entity builder
@@ -77,25 +125,6 @@ public class Commons {
         return feb;
     }
 
-    /**
-     * Creates a CQ page via POST request, the same as send by the create page wizard.
-     *
-     * @param client CQClient
-     * @param pageLabel Mandatory. Page label to be set for the page.
-     * @param pageTitle Mandatory. Page title to be set for the page.
-     * @param templatePath Mandatory. Path to the template e.g. "/conf/coretest/settings/wcm/templates/content-page"
-     * @param parentPath Mandatory. Path to the parent page e.g. "/content/coretest/language-masters/en"
-     * @param testPageRT the resource type of the test page
-     * @param expectedStatus expected http status code
-     * @throws ClientException
-     */
-    public static String createPage(CQClient client, String pageLabel, String pageTitle, String parentPath, String templatePath, String testPageRT, int... expectedStatus) throws ClientException {
-        String pageResType = testPageRT != null ? testPageRT : "core/wcm/tests/components/test-page";
-        FormEntityBuilder feb = FormEntityBuilder.create().addParameter("cmd", "createPage").addParameter("parentPath", parentPath)
-            .addParameter("pageName", pageLabel).addParameter("title", pageTitle).addParameter("template", templatePath)
-            .addParameter("./sling:resourceType",pageResType).addParameter("_charset_", "utf-8").addParameter("./jcr:description", "");
-        return client.doPost("/libs/wcm/core/content/sites/createpagewizard/_jcr_content", feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus)).getSlingPath();
-    }
 
     /**
      * Create a policy
@@ -314,28 +343,17 @@ public class Commons {
      * Open configuration of component
      *
      * @param dataPath datapath of the component to open the configuration dialog
-     * @throws InterruptedException
      */
-    public static void openConfigureDialog(String dataPath) throws InterruptedException {
-        String component = "[data-type='Editable'][data-path='" + dataPath +"']";
-        SelenideElement comp = $(component);
-        Helpers.waitForElementAnimationFinished(comp);
-        comp.shouldBe(Condition.visible);
-        int offset =  (comp.getSize().getHeight() * 85) / 200;
-        Selenide.actions()
-            .moveToElement(comp, 0, offset)
-            .click()
-            .build()
-            .perform();
-        $("button[data-action='CONFIGURE']").click();
-        Helpers.waitForElementAnimationFinished($(selConfigDialog));
+    public static void openConfigureDialog(String dataPath) {
+        openEditableToolbar(dataPath);
+        $(Selectors.SELECTOR_CONFIG_BUTTON).click();
+        Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_CONFIG_DIALOG));
     }
 
     /**
      * Open editabletoolbar of component
      *
      * @param dataPath datapath of the component to open the configuration dialog
-     * @throws InterruptedException
      */
     public static void openEditableToolbar(String dataPath) {
         String component = "[data-type='Editable'][data-path='" + dataPath +"']";
@@ -354,16 +372,18 @@ public class Commons {
      * Save configuration for component
      */
 
-    public static void saveConfigureDialog() {
-        $(doneButton).click();
+    public static void saveConfigureDialog() throws InterruptedException {
+        $(Selectors.SELECTOR_SAVE_CONFIG_BUTTON).click();
+        //wait for
+        webDriverWait(1000);
     }
 
     /**
      * Open panel selector
      * @throws  InterruptedException
      */
-    public static void openPanelSelect() throws InterruptedException {
-        $(panelSelect).click();
+    public static void openPanelSelect() {
+        $(Selectors.SELECTOR_PANEL_SELECT).click();
     }
 
     /**
@@ -371,7 +391,7 @@ public class Commons {
      */
 
     public static boolean isPanelSelectPresent() {
-        return $(panelSelect).isDisplayed();
+        return $(Selectors.SELECTOR_PANEL_SELECT).isDisplayed();
     }
 
     /**
@@ -435,16 +455,15 @@ public class Commons {
      * @returns {TestCase} A test case that selects a value in an autocomplete field
      */
     public static void selectInAutocomplete(String selector, String value) throws InterruptedException {
-        $("foundation-autocomplete" + selector + " input:not([type='hidden']").sendKeys(value);
-        webDriverWait(1000);
-        $("foundation-autocomplete" + selector + " button[value^='" + value + "']").click();
+        AutoCompleteField autoCompleteField = new AutoCompleteField("css:" + selector);
+        autoCompleteField.sendKeys(value);
+        autoCompleteField.suggestions().selectByValue(value);
     }
 
     /**
      * Get the current browser URL
      * @return current browser URL
      */
-
     public static String getCurrentUrl() {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         return webDriver.getCurrentUrl();

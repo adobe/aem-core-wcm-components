@@ -17,15 +17,11 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.Commons;
 
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pagewidgets.common.BaseComponent;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralMultiField;
+import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralMultiField;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Selenide.Wait;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.actions;

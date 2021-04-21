@@ -16,7 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.assertion;
 
-import com.adobe.qe.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
 import com.codeborne.selenide.SelenideElement;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,17 +17,17 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.Accordion;
 
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEditor;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralPopOver;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralSelectList;
-import com.adobe.qe.selenium.pagewidgets.coral.Dialog;
-import com.adobe.qe.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
-import static com.adobe.qe.selenium.pagewidgets.Helpers.waitForElementAnimationFinished;
+import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.waitForElementAnimationFinished;
 import static com.codeborne.selenide.Selenide.$;
 
 /**
@@ -134,7 +134,6 @@ public class AccordionConfigureDialog extends Dialog  {
          * @return list of the related coral popover that is opened.
          */
         public CoralSelectList selectList() {
-            CoralSelectList list = null;
             CoralPopOver popOver = CoralPopOver.firstOpened();
             popOver.waitVisible();
             waitForElementAnimationFinished(popOver.getCssSelector());

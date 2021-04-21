@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.FormButton.FormButt
 import com.adobe.cq.wcm.core.components.it.seljup.components.button.v1.ButtonConfigureDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pageobject.PageEditorPage;
-import com.adobe.qe.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.qe.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.WebDriverRunner;
 import java.util.concurrent.TimeoutException;
 
@@ -44,8 +44,6 @@ import org.openqa.selenium.WebElement;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FormButtonV1IT extends AuthorBaseUITest {
-
-    final String COMPONENT_RESOURCE_TYPE = "core/wcm/components/form/button/v1/button";
 
     protected String testPage;
     protected String proxyCompoenetPath;
@@ -73,7 +71,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBefore() throws ClientException {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyCompoenetPath = Commons.creatProxyComponent(adminClient, COMPONENT_RESOURCE_TYPE, "Proxy Form Button", "formbutton");
+        proxyCompoenetPath = Commons.creatProxyComponent(adminClient, Commons.rtFormButton_v1, "Proxy Form Button", "formbutton");
         addPathtoComponentPolicy(responsiveGridPath, proxyCompoenetPath);
         formButton = new FormButtonV1();
         editorPage = new PageEditorPage(testPage);
@@ -106,7 +104,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Create a button")
-    public void createButton() throws TimeoutException {
+    public void createButton() throws TimeoutException, InterruptedException {
         String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";
         addComponentInPage();
         ButtonConfigureDialog buttonConfigureDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonConfigureDialog.class);
@@ -124,7 +122,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button text")
-    public void setButtonText() throws TimeoutException {
+    public void setButtonText() throws TimeoutException, InterruptedException {
         String buttonLabel = "Test Button";
         String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";
         addComponentInPage();
@@ -141,7 +139,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button name")
-    public void setButtonName() throws TimeoutException {
+    public void setButtonName() throws TimeoutException, InterruptedException {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonName = "button1";
         String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";
@@ -161,7 +159,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button value")
-    public void setButtonValue() throws TimeoutException {
+    public void setButtonValue() throws TimeoutException, InterruptedException {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonName = "button1";
         String buttonValue = "thisisthevalue";
@@ -183,7 +181,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button value without name")
-    public void setButtonValueWithoutName() throws TimeoutException {
+    public void setButtonValueWithoutName() throws TimeoutException, InterruptedException {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonValue = "thisisthevalue";
         String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";

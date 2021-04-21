@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.button.v1.Button;
 import com.adobe.cq.wcm.core.components.it.seljup.components.button.v1.ButtonConfigureDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pageobject.PageEditorPage;
-import com.adobe.qe.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.qe.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.WebDriverRunner;
 import java.util.concurrent.TimeoutException;
 
@@ -42,9 +42,7 @@ import org.openqa.selenium.WebElement;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ButtonIT extends AuthorBaseUITest {
-
-    final String COMPONENT_RESOURCE_TYPE = "core/wcm/components/button/v1/button";
+public class ButtonV1IT extends AuthorBaseUITest {
 
     private String testPage;
     private String proxyCompoenetPath;
@@ -54,7 +52,7 @@ public class ButtonIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBefore() throws Exception {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyCompoenetPath = Commons.creatProxyComponent(adminClient, COMPONENT_RESOURCE_TYPE, "Proxy Button", "button");
+        proxyCompoenetPath = Commons.creatProxyComponent(adminClient, Commons.rtButton_v1, "Proxy Button", "button");
         addPathtoComponentPolicy(responsiveGridPath, proxyCompoenetPath);
         editorPage = new PageEditorPage(testPage);
         button = new Button();

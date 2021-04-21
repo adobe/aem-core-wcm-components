@@ -20,6 +20,8 @@ import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.v1.BreadcrumbItemsV1;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.BreadcrumbTests;
 import java.util.concurrent.TimeoutException;
+
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,15 +30,12 @@ import org.junit.jupiter.api.Test;
 
 public class BreadcrumbV1IT extends AuthorBaseUITest {
 
-    private static String rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
-
     protected BreadcrumbTests breadcrumbTests;
-
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         breadcrumbTests = new BreadcrumbTests();
-        breadcrumbTests.setup(adminClient, rtBreadcrumb_v1, rootPage, defaultPageTemplate, "/core/wcm/components/breadcrumb/v1/breadcrumb/clientlibs/site.css", new BreadcrumbItemsV1());
+        breadcrumbTests.setup(adminClient, Commons.rtBreadcrumb_v1, rootPage, defaultPageTemplate, "/core/wcm/components/breadcrumb/v1/breadcrumb/clientlibs/site.css", new BreadcrumbItemsV1());
     }
 
     @AfterEach
@@ -49,7 +48,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set the Hide Current flag")
-    public void testHideCurrent() throws  TimeoutException {
+    public void testHideCurrent() throws TimeoutException, InterruptedException {
         breadcrumbTests.testHideCurrent();
     }
 
@@ -67,7 +66,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Change the start level")
-    public void changeStartLevel() throws InterruptedException, ClientException, TimeoutException {
+    public void changeStartLevel() throws InterruptedException, TimeoutException {
         breadcrumbTests.changeStartLevel();
     }
 
@@ -77,7 +76,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set the start level to invalid value of 0.")
-    public void setZeroStartLevel() throws InterruptedException, ClientException, TimeoutException {
+    public void setZeroStartLevel() throws InterruptedException, TimeoutException {
         breadcrumbTests.setZeroStartLevel();
     }
 
@@ -87,7 +86,7 @@ public class BreadcrumbV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set the start level to the highest possible value 100")
-    public void set100StartLevel() throws InterruptedException, ClientException, TimeoutException {
+    public void set100StartLevel() throws InterruptedException, TimeoutException {
         breadcrumbTests.set100StartLevel();
     }
 

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,17 +16,13 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.Carousel.v1;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEditor;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Carousel.CarouselConfigureDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.CQOverlay;
-import com.adobe.qe.selenium.pagewidgets.common.BaseComponent;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.qe.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 
-import static com.adobe.qe.selenium.pagewidgets.Helpers.waitForElementAnimationFinished;
-import static com.codeborne.selenide.Selenide.*;
+
+import static com.codeborne.selenide.Selenide.$$;
 
 public class Carousel extends BaseComponent {
 
@@ -60,6 +56,4 @@ public class Carousel extends BaseComponent {
     public boolean isIndicatorActive(int idx) {
         return getIndicators().get(idx).getAttribute("class").contains("cmp-carousel__indicator--active");
     }
-
-
 }

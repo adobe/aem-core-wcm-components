@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -24,10 +24,10 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEdi
 import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.PanelSelector;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pageobject.PageEditorPage;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.qe.selenium.pagewidgets.cq.InsertComponentDialog;
-import com.adobe.qe.selenium.utils.KeyboardShortCuts;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.testing.selenium.utils.KeyboardShortCuts;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.http.HttpStatus;
@@ -42,19 +42,17 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
+
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CarouselIT extends AuthorBaseUITest {
+public class CarouselV1IT extends AuthorBaseUITest {
 
 
     private String policyPath;
     private String proxyPath;
     private static String componentName = "carousel";
     protected Carousel carousel;
-    private static String rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
     protected PageEditorPage editorPage;
     protected String cmpPath;
     protected String testPage;
@@ -76,8 +74,7 @@ public class CarouselIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         // 1.
-        //testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
-        testPage = Commons.createPage(adminClient,"testPage", "Test Page Title", rootPage, defaultPageTemplate,"core/wcm/tests/components/test-page-v2");
+        testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // 2.
         String policySuffix = "/structure/page/new_policy";
@@ -98,7 +95,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
 
         // 4.
-        proxyPath = Commons.createProxyComponent(adminClient, rtCarousel_v1, Commons.proxyPath, null, null);
+        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtCarousel_v1, Commons.proxyPath, null, null);
 
         // 5.
         data.clear();

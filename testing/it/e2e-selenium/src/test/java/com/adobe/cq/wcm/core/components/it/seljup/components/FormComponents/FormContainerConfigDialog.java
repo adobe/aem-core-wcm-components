@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.FormComponents;
 
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.qe.selenium.pagewidgets.coral.CoralSelect;
-import com.adobe.qe.selenium.pagewidgets.coral.Dialog;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
