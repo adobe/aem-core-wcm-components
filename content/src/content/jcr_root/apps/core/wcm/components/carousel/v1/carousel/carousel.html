@@ -15,6 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.carousel="com.adobe.cq.wcm.core.components.models.Carousel"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     data-sly-use.controlsTemplate="controls.html"
      data-panelcontainer="${wcmmode.edit && 'carousel'}"
      id="${carousel.id}"
      class="cmp-carousel"
@@ -28,6 +29,7 @@
      data-cmp-autopause-disabled="${carousel.autopauseDisabled}"
      data-cmp-data-layer="${carousel.data.json}"
      data-placeholder-text="${wcmmode.edit && 'Please add Carousel components here' @ i18n}">
+    <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${carousel.controlsPrepended}"></sly>
     <div data-sly-test="${carousel.items && carousel.items.size > 0}"
          class="cmp-carousel__content"
          aria-atomic="false"
@@ -42,38 +44,7 @@
              aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
              data-cmp-data-layer="${item.data.json}"
              data-cmp-hook-carousel="item"></div>
-        <div class="cmp-carousel__actions">
-            <button class="cmp-carousel__action cmp-carousel__action--previous"
-                    type="button"
-                    aria-label="${'Previous' @ i18n}"
-                    data-cmp-hook-carousel="previous">
-                <span class="cmp-carousel__action-icon"></span>
-                <span class="cmp-carousel__action-text">${'Previous' @ i18n}</span>
-            </button>
-            <button class="cmp-carousel__action cmp-carousel__action--next"
-                    type="button"
-                    aria-label="${'Next' @ i18n}"
-                    data-cmp-hook-carousel="next">
-                <span class="cmp-carousel__action-icon"></span>
-                <span class="cmp-carousel__action-text">${'Next' @ i18n}</span>
-            </button>
-            <button data-sly-test="${carousel.autoplay}"
-                    class="cmp-carousel__action cmp-carousel__action--pause"
-                    type="button"
-                    aria-label="${'Pause' @ i18n}"
-                    data-cmp-hook-carousel="pause">
-                <span class="cmp-carousel__action-icon"></span>
-                <span class="cmp-carousel__action-text">${'Pause' @ i18n}</span>
-            </button>
-            <button data-sly-test="${carousel.autoplay}"
-                    class="cmp-carousel__action cmp-carousel__action--play cmp-carousel__action--disabled"
-                    type="button"
-                    aria-label="${'Play' @ i18n}"
-                    data-cmp-hook-carousel="play">
-                <span class="cmp-carousel__action-icon"></span>
-                <span class="cmp-carousel__action-text">${'Play' @ i18n}</span>
-            </button>
-        </div>
+        <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${!carousel.controlsPrepended}"></sly>
         <ol class="cmp-carousel__indicators"
             role="tablist"
             aria-label="${'Choose a slide to display' @ i18n}"
