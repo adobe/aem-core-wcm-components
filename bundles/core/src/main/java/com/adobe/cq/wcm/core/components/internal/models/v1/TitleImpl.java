@@ -125,7 +125,6 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     }
 
     @Override
-    @JsonIgnore
     @Deprecated
     public String getLinkURL() {
         return link.map(Link::getURL).orElse(null);
