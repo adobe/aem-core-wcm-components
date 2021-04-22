@@ -61,6 +61,8 @@
                 "jcr:primaryType"   : "nt:unstructured",
                 "jcr:createdBy"     : "admin",
                 "linkURL"           : "https://www.adobe.com",
+                "linkAccessibilityLabel": "World",
+                "linkTitleAttribute": "World title",
                 "jcr:lastModifiedBy": "admin",
                 "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
                 "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
