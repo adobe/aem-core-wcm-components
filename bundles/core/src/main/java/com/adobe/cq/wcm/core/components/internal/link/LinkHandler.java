@@ -142,7 +142,7 @@ public class LinkHandler {
         String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
         String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, targetPage, validatedLinkAccessibilityLabel, validatedLinkTitleAttribute));
+        return Optional.of(new LinkImpl<>(targetPage, resolvedLinkURL, resolvedLinkTarget, validatedLinkAccessibilityLabel, validatedLinkTitleAttribute));
     }
 
     /**
