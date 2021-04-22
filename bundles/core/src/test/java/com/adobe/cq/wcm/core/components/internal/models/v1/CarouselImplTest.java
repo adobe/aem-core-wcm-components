@@ -87,6 +87,14 @@ class CarouselImplTest {
         assertTrue(carousel.getAutopauseDisabled());
     }
 
+    @Test
+    void testControlsPrepended() {
+        context.contentPolicyMapping(CarouselImpl.RESOURCE_TYPE, "controlsPrepended", true);
+        Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
+        assertTrue(carousel.isControlsPrepended());
+        Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1a"));
+    }
+
     private Carousel getCarouselUnderTest(@NotNull final String resourcePath) {
         Utils.enableDataLayer(context, true);
         context.currentResource(Objects.requireNonNull(context.resourceResolver().getResource(resourcePath)));

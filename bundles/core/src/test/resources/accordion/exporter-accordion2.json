@@ -131,6 +131,7 @@
                                 "item_1_2_2_2": {
                                     "id": "carousel-8c88179066",
                                     "autoplay": true,
+                                    "controlsPrepended": false,
                                     "delay": 7000,
                                     "autopauseDisabled": false,
                                     "dataLayer": {
