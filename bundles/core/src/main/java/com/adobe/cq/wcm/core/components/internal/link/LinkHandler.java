@@ -87,6 +87,9 @@ public class LinkHandler {
     public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
+        if (linkURL == null) {
+            return Optional.empty();
+        }
         String linkTarget = props.get(PN_LINK_TARGET, String.class);
         String linkAccessibilityLabel = props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class);
         String linkTitleAttribute = props.get(PN_LINK_TITLE_ATTRIBUTE, String.class);
@@ -105,7 +108,22 @@ public class LinkHandler {
             return Optional.empty();
         }
         String linkURL = getPageLinkURL(page);
-        return Optional.of(new LinkImpl<>(linkURL, null, null, null, page));
+        return Optional.of(new LinkImpl<>(linkURL, null, page));
+    }
+
+    /**
+     * Builds a link with the given Link URL and target.
+     * @param linkURL Link URL
+     * @param target Target
+     *
+     * @return {@link Optional} of  {@link Link<Page>}
+     */
+    @NotNull
+    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
+        String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
+        String resolvedLinkTarget = validateAndResolveLinkTarget(target);
+        Page targetPage = getPage(linkURL).orElse(null);
+        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, targetPage));
     }
 
     /**
@@ -121,10 +139,10 @@ public class LinkHandler {
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        String resolvedLinkAccessibilityLabel = validateAndResolveLinkAccessibilityLabel(linkAccessibilityLabel);
-        String resolvedLinkTitleAttribute = validateAndResolveLinkTitleAttribute(linkTitleAttribute);
+        String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
+        String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, resolvedLinkAccessibilityLabel, resolvedLinkTitleAttribute, targetPage));
+        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, targetPage, validatedLinkAccessibilityLabel, validatedLinkTitleAttribute));
     }
 
     /**
@@ -158,12 +176,12 @@ public class LinkHandler {
     }
 
     /**
-     * Validates and resolves the link accessibility label.
+     * Validates the link accessibility label.
      * @param linkAccessibilityLabel Link accessibility label
      *
      * @return The validated link accessibility label or {@code null} if not valid
      */
-    private String validateAndResolveLinkAccessibilityLabel(String linkAccessibilityLabel) {
+    private String validateLinkAccessibilityLabel(String linkAccessibilityLabel) {
         if (!StringUtils.isBlank(linkAccessibilityLabel)) {
             return linkAccessibilityLabel;
         }
@@ -173,12 +191,12 @@ public class LinkHandler {
     }
 
     /**
-     * Validates and resolves the link title attribute.
+     * Validates the link title attribute.
      * @param linkTitleAttribute Link title attribute
      *
      * @return The validated link title attribute or {@code null} if not valid
      */
-    private String validateAndResolveLinkTitleAttribute(String linkTitleAttribute) {
+    private String validateLinkTitleAttribute(String linkTitleAttribute) {
         if (!StringUtils.isBlank(linkTitleAttribute)) {
             return linkTitleAttribute;
         }

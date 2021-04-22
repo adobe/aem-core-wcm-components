@@ -170,7 +170,7 @@ public class DownloadImpl implements Download {
                         extension = mimeTypeService.getExtension(format);
                     }
 
-                    url = linkHandler.getLink(getDownloadUrl(file) + "/" + filename, null, null, null).map(Link::getURL).orElse(null);
+                    url = linkHandler.getLink(getDownloadUrl(file) + "/" + filename, null).map(Link::getURL).orElse(null);
                     size = FileUtils.byteCountToDisplaySize(getFileSize(fileContent));
                 }
             }
@@ -203,7 +203,7 @@ public class DownloadImpl implements Download {
                         extension = FilenameUtils.getExtension(filename);
                     }
 
-                    url = linkHandler.getLink(getDownloadUrl(downloadResource), null, null, null).map(Link::getURL).orElse(null);
+                    url = linkHandler.getLink(getDownloadUrl(downloadResource), null).map(Link::getURL).orElse(null);
 
                     if (titleFromAsset) {
                         title = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);

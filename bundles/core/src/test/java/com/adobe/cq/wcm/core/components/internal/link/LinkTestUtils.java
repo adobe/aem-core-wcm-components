@@ -46,13 +46,13 @@ public final class LinkTestUtils {
         assertEquals(ImmutableMap.of("href", linkURL, "target", linkTarget), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
-    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @NotNull String linkAccessibilityLabel, @NotNull String linkTitleAttribute) {
         assertTrue(link.isValid(), "linkValid");
         assertEquals(linkURL, link.getURL(), "linkURL");
         assertEquals(ImmutableMap.of("href", linkURL, "aria-label", linkAccessibilityLabel, "title", linkTitleAttribute), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
-    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute, @Nullable String linkTarget) {
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @NotNull String linkAccessibilityLabel, @NotNull String linkTitleAttribute, @Nullable String linkTarget) {
         if (linkTarget == null) {
             assertValidLink(link,  linkURL, linkAccessibilityLabel, linkTitleAttribute);
             return;

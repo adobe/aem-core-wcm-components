@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -55,31 +55,20 @@ public final class LinkImpl<T> implements Link<T> {
     /**
      * @param url Link URL
      * @param target Target
-     * @param linkAccessibilityLabel Accessibility Label
-     */
-    public LinkImpl(String url, String target, String linkAccessibilityLabel) {
-        this(url, target, linkAccessibilityLabel, null, null);
-    }
-
-    /**
-     * @param url Link URL
-     * @param target Target
-     * @param linkAccessibilityLabel Accessibility Label
-     * @param linkTitleAttribute Title attribute
-     */
-    public LinkImpl(String url, String target, String linkAccessibilityLabel, String linkTitleAttribute) {
-        this(url, target, linkAccessibilityLabel, linkTitleAttribute, null);
-    }
-
-
-    /**
-     * @param url Link URL
-     * @param target Target
-     * @param linkAccessibilityLabel Accessibility Label
-     * @param linkTitleAttribute Title attribute
      * @param reference Referenced WCM/DAM entity
      */
-    LinkImpl(String url, String target, String linkAccessibilityLabel, String linkTitleAttribute, T reference) {
+    LinkImpl(String url, String target, T reference) {
+        this(url, target, reference, null, null);
+    }
+
+    /**
+     * @param url Link URL
+     * @param target Target
+     * @param reference Referenced WCM/DAM entity
+     * @param linkAccessibilityLabel Accessibility Label
+     * @param linkTitleAttribute Title attribute
+     */
+    LinkImpl(String url, String target, T reference, String linkAccessibilityLabel, String linkTitleAttribute) {
         this.url = url;
         this.htmlAttributes = buildHtmlAttributes(url, target, linkAccessibilityLabel, linkTitleAttribute);
         this.reference = reference;
@@ -138,7 +127,7 @@ public final class LinkImpl<T> implements Link<T> {
      * @return {@link Map} of link attributes
      */
     private static Map<String, String> buildHtmlAttributes(String linkURL, String linkTarget, String linkAccessibilityLabel, String linkTitleAttribute) {
-        Map<String,String> attributes = new HashMap<>();
+        Map<String,String> attributes = new LinkedHashMap<>();
         if (linkURL != null) {
             attributes.put("href", linkURL);
         }

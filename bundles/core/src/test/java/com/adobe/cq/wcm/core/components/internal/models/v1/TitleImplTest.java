@@ -97,6 +97,22 @@ public class TitleImplTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
+    protected void testV2JSONExport() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_V2);
+        assertNull(title.getLinkURL());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_V2));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    protected void testGetLinkUrl() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
+        assertEquals("https://www.adobe.com", title.getLinkURL());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
+    }
+
+    @Test
     protected void testGetLink() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
         assertValidLink(title.getLink(), "https://www.adobe.com", "World", "World title");

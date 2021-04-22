@@ -158,6 +158,10 @@
         toggleDisableAttributeOnLinkLabelAndTitleInputs();
     });
 
+    $(document).on("change", LINK_URL_SELECTOR, function(input) {
+        toggleDisableAttributeOnLinkLabelAndTitleInputs();
+    });
+
     // Display an error if all checkboxes are empty
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: ALLOWED_SIZES_SELECTOR,

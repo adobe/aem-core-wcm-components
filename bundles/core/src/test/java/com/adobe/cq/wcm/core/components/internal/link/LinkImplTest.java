@@ -39,15 +39,6 @@ class LinkImplTest {
     }
 
     @Test
-    void testValidLinkWithTargetAndTargetPage() {
-        Page page = mock(Page.class);
-        Link<Page> link = new LinkImpl(URL, "_blank", null, null, page);
-
-        assertValidLink(link, URL, "_blank");
-        assertSame(page, link.getReference());
-    }
-
-    @Test
     void testValidLinkWithTarget() {
         Link link = new LinkImpl(URL, "_blank");
 
@@ -56,19 +47,38 @@ class LinkImplTest {
     }
 
     @Test
-    void testValidLinkWithAccessibilityLabelAndTitleAttributeWithoutTarget() {
-        Link link = new LinkImpl(URL, null, "Url Label", "Url Title");
+    void testValidLinkWithoutTarget() {
+        Link link = new LinkImpl(URL, null);
 
-        assertValidLink(link, URL, "Url Label", "Url Title", null);
+        assertValidLink(link, URL, null);
         assertNull(link.getReference());
     }
 
     @Test
-    void testValidLinkWithAccessibilityLabelAndTitleAttributeWithTarget() {
-        Link link = new LinkImpl(URL,"_blank", "Url Label", "Url Title");
+    void testValidLinkWithTargetAndTargetPage() {
+        Page page = mock(Page.class);
+        Link<Page> link = new LinkImpl(URL, "_blank", page);
+
+        assertValidLink(link, URL, "_blank");
+        assertSame(page, link.getReference());
+    }
+
+    @Test
+    void testValidLinkWithTargetTargetPageAccessibilityLabelAndTitleAttribute() {
+        Page page = mock(Page.class);
+        Link link = new LinkImpl(URL, "_blank", page, "Url Label", "Url Title");
 
         assertValidLink(link, URL, "Url Label", "Url Title", "_blank");
-        assertNull(link.getReference());
+        assertSame(page, link.getReference());
+    }
+
+    @Test
+    void testValidLinkWithTargetPageAccessibilityLabelTitleAttributeAndWithoutTarget() {
+        Page page = mock(Page.class);
+        Link link = new LinkImpl(URL, null, page, "Url Label", "Url Title");
+
+        assertValidLink(link, URL, "Url Label", "Url Title", null);
+        assertSame(page, link.getReference());
     }
 
     @Test

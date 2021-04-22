@@ -10,8 +10,5 @@
             "dc:title": "Hello World"
         }
     },
-    "link": {
-        "valid": false
-    },
     ":type": "core/wcm/components/title/v1/title"
 }

@@ -8,8 +8,5 @@
             "@type": "core/wcm/components/title/v1/title"
         }
     },
-    "link": {
-        "valid": false
-    },
     ":type": "core/wcm/components/title/v1/title"
 }

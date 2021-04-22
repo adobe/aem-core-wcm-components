@@ -60,8 +60,7 @@ class LinkHandlerTest {
     void testResourceEmpty() {
         Resource linkResource = context.create().resource(page, "link");
         Optional<Link> link = underTest.getLink(linkResource);
-        assertInvalidLink(link.get());
-        assertNull(link.get().getReference());
+        assertEquals(Optional.empty(), link);
     }
 
     @Test
@@ -84,7 +83,7 @@ class LinkHandlerTest {
                 PN_LINK_TITLE_ATTRIBUTE, "My Host Title");
         Optional<Link> link = underTest.getLink(linkResource);
 
-        assertValidLink(link.get(), "http://myhost",  "My Host Label", "My Host Title", target);
+        assertValidLink(link.get(), "http://myhost", "My Host Label", "My Host Title", target);
         assertNull(link.map(Link::getReference).orElse(null));
     }
 
@@ -148,6 +147,13 @@ class LinkHandlerTest {
         Optional<Link<Page>> link = underTest.getLink((Page)null);
 
         assertFalse(link.isPresent());
+    }
+
+    @Test
+    void testEmptyLink() {
+        Optional<Link<Page>> link = underTest.getLink("", "");
+
+        assertNull(link.get().getURL());
     }
 
     @Test
