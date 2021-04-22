@@ -24,8 +24,11 @@ import javax.annotation.PostConstruct;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 
@@ -50,6 +53,20 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
      * The layout type.
      */
     private LayoutType layout;
+
+    /**
+     * The accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private String accessibilityLabel;
+
+    /**
+     * The role attribute.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private String roleAttribute;
 
     /**
      * Initialize the model.
@@ -83,5 +100,17 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     @Override
     public @NotNull LayoutType getLayout() {
         return layout;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityLabel() {
+        return accessibilityLabel;
+    }
+
+    @Override
+    @Nullable
+    public String getRoleAttribute() {
+        return roleAttribute;
     }
 }

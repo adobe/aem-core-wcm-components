@@ -93,8 +93,10 @@ See also:
    cmp-embed-dialog-edit-embeddableoptions="true"
    cmp-embed-dialog-edit-showhidetargetvalue="<embeddableResourceType>"
    ```
-   where `<embeddableResourceType>` is the resource type of your custom embeddable. See [YouTube embeddable options](./embeddable/youtube/_cq_dialog/.content.xml#L42) for an example!
-5. The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes. 
+   where `<embeddableResourceType>` is the resource type of your custom embeddable. See [YouTube embeddable options](./embeddable/youtube/_cq_dialog/.content.xml#L122-123) for an example!
+5. The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes.
+6. (Optional) Create a cq:design_dialog node if the custom embeddable should also extend the content policy configuration for the 
+   embeddable. Make sure to also add the properties which are required for the edit dialog. See step 4 and  [YouTube embeddable options](./embeddable/youtube/_cq_design_dialog/.content.xml#L23) for an example!
 
 Example:
 
