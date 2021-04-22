@@ -275,9 +275,9 @@
             // for accessibility we pause animation when a element get focused
             var items = that._elements["item"];
             if (items) {
-                for (var i = 0; i < items.length; i++) {
-                    items[i].addEventListener("focusin", onMouseEnter);
-                    items[i].addEventListener("focusout", onMouseLeave);
+                for (var j = 0; j < items.length; j++) {
+                    items[j].addEventListener("focusin", onMouseEnter);
+                    items[j].addEventListener("focusout", onMouseLeave);
                 }
             }
         }
