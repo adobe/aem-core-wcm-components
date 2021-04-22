@@ -49,7 +49,6 @@ class CarouselImplTest {
     private static final String TEST_ROOT_PAGE = "/content/carousel";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-1";
-    private static final String CAROUSEL_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-2";
     private static final String CAROUSEL_EMPTY = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-empty";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
