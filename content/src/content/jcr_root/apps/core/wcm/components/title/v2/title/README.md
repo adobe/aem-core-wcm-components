@@ -42,6 +42,8 @@ The following properties are written to JCR for this Title component and are exp
 to the value defined by the component's policy
 3. `./linkURL` - will allow definition of a content page path, external URL or page anchor for linking the title.
 4. `./id` - defines the component HTML ID attribute.
+5. `./linkAccessibilityLabel` - defines an accessibility label for the the title's link.
+6. `./linkTitleAttribute` - defines a title attribute for the the title's link.
 
 ## Client Libraries
 The component provides a `core.wcm.components.title.v2.editor` editor client library category that includes JavaScript
