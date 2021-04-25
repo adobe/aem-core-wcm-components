@@ -67,6 +67,7 @@ public class ChildrenEditor extends BaseComponent {
      * @throws InterruptedException
      */
     public void moveItems(int dragElement,int targetElement) throws InterruptedException {
+        Commons.webDriverWait(1000);
         SelenideElement dragElementMoveButton = $$(item + " " + moveButton).get(dragElement);
         SelenideElement targetElement1 = $$(item).get(targetElement);
         int yOffset = (targetElement1.getSize().getHeight() / 2  + 1) * (-1);
