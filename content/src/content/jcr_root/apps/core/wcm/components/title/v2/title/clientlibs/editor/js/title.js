@@ -32,6 +32,9 @@
     var ALLOWED_SIZES_SELECTOR      = ".core-title-sizes-allowed coral-checkbox";
     var DATA_ATTR_VALIDATION_STATE  = "checkboxes.validation.state";
     var SIZES_SELECTOR              = "coral-select.core-title-sizes";
+    var LINK_URL_SELECTOR           = ".cmp-title-link-url";
+    var LINK_LABEL_SELECTOR         = ".cmp-title-link-label";
+    var LINK_TITLE_SELECTOR         = ".cmp-title-link-title";
 
     // Update the select field that defines the default value
     function updateDefaultSizeSelect(checkboxToggled) {
@@ -89,6 +92,12 @@
         });
     }
 
+    // toggles the disable attribute of the Link Label and Link Title Attribute inputs, based on the Link Url existence
+    function toggleDisableAttributeOnLinkLabelAndTitleInputs() {
+        $(LINK_LABEL_SELECTOR).prop("disabled", !$(LINK_URL_SELECTOR).val());
+        $(LINK_TITLE_SELECTOR).prop("disabled", !$(LINK_URL_SELECTOR).val());
+    }
+
     // temporary workaround until CQ-4206495 and CUI-1818 are fixed:
     // add a margin when opening the dropdown
     $document.on("coral-select:showitems", DEFAULT_SIZE_SELECTOR, function(e) {
@@ -139,6 +148,18 @@
                 $(defaultSelect).parent().remove();
             }
         });
+        Coral.commons.ready($(LINK_URL_SELECTOR, LINK_LABEL_SELECTOR, LINK_TITLE_SELECTOR), function(component) {
+            toggleDisableAttributeOnLinkLabelAndTitleInputs();
+        });
+    });
+
+    $(document).on("input", LINK_URL_SELECTOR, function(input) {
+        $(LINK_URL_SELECTOR).val(input.target.value);
+        toggleDisableAttributeOnLinkLabelAndTitleInputs();
+    });
+
+    $(document).on("change", LINK_URL_SELECTOR, function(input) {
+        toggleDisableAttributeOnLinkLabelAndTitleInputs();
     });
 
     // Display an error if all checkboxes are empty

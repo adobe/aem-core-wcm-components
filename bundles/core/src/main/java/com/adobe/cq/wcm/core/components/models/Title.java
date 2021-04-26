@@ -88,6 +88,17 @@ public interface Title extends Component {
     }
 
     /**
+     * Returns the Title's link.
+     *
+     * @return the title's link
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    @Nullable
+    default Link getLink() {
+        return null;
+    }
+
+    /**
      * Checks if link is disabled on the title.
      *
      * @return {@code true} if link is disabled on the title, {@code false} otherwise

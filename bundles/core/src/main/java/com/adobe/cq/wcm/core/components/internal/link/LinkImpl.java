@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public final class LinkImpl<T> implements Link<T> {
      * @param url Link URL
      */
     public LinkImpl(String url) {
-        this(url, null, null);
+        this(url, null, null, null, null);
     }
 
     /**
@@ -49,7 +49,7 @@ public final class LinkImpl<T> implements Link<T> {
      * @param target Target
      */
     public LinkImpl(String url, String target) {
-        this(url, target, null);
+        this(url, target, null, null, null);
     }
 
     /**
@@ -58,8 +58,19 @@ public final class LinkImpl<T> implements Link<T> {
      * @param reference Referenced WCM/DAM entity
      */
     LinkImpl(String url, String target, T reference) {
+        this(url, target, reference, null, null);
+    }
+
+    /**
+     * @param url Link URL
+     * @param target Target
+     * @param reference Referenced WCM/DAM entity
+     * @param linkAccessibilityLabel Accessibility Label
+     * @param linkTitleAttribute Title attribute
+     */
+    LinkImpl(String url, String target, T reference, String linkAccessibilityLabel, String linkTitleAttribute) {
         this.url = url;
-        this.htmlAttributes = buildHtmlAttributes(url, target);
+        this.htmlAttributes = buildHtmlAttributes(url, target, linkAccessibilityLabel, linkTitleAttribute);
         this.reference = reference;
     }
 
@@ -110,16 +121,26 @@ public final class LinkImpl<T> implements Link<T> {
      *
      * @param linkURL Link URL
      * @param linkTarget Link target
+     * @param linkAccessibilityLabel Link accessibility label
+     * @param linkTitleAttribute Link title attribute
      *
      * @return {@link Map} of link attributes
      */
-    private static Map<String, String> buildHtmlAttributes(String linkURL, String linkTarget) {
-        Map<String,String> attributes = new HashMap<>();
+    private static Map<String, String> buildHtmlAttributes(String linkURL, String linkTarget, String linkAccessibilityLabel, String linkTitleAttribute) {
+        Map<String,String> attributes = new LinkedHashMap<>();
         if (linkURL != null) {
             attributes.put("href", linkURL);
         }
         if (linkTarget != null) {
             attributes.put("target", linkTarget);
+        }
+
+        if (linkAccessibilityLabel != null) {
+            attributes.put("aria-label", linkAccessibilityLabel);
+        }
+
+        if (linkTitleAttribute != null) {
+            attributes.put("title", linkTitleAttribute);
         }
         return ImmutableMap.copyOf(attributes);
     }
