@@ -19,6 +19,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util;
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
@@ -467,6 +468,18 @@ public class Commons {
     public static String getCurrentUrl() {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         return webDriver.getCurrentUrl();
+    }
+
+    public static boolean isConfigDialogVisible() {
+        return $(Selectors.SELECTOR_CONFIG_DIALOG).isDisplayed();
+    }
+
+    public static SelenideElement getVisibleElement(ElementsCollection list) {
+        for(int i = 0; i < list.size(); i++) {
+            if(list.get(i).isDisplayed())
+                return list.get(i);
+        }
+        return null;
     }
 
 }

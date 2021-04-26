@@ -16,24 +16,28 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.FormHidden;
 
-import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
-public class FormHiddenConfigDialog extends Dialog {
-    public void setMandatoryFields(String value) {
-        $("[name='./name']").sendKeys(value);
+public class FormHidden extends BaseComponent {
+    public FormHidden() {
+        super("");
     }
 
-    public boolean isMandatoryFieldsInvalid() {
-        return $("[name='./name']").getAttribute("invalid").equals("true");
+    public FormHiddenConfigDialog getConfigDialog() {
+        return new FormHiddenConfigDialog();
     }
 
-    public void setValue(String value) {
-        $("[name='./value']").sendKeys(value);
+    public boolean isNameSet(String elemName) {
+        return $$("input[type='hidden'][name='" + elemName + "']").size() == 1;
     }
 
-    public void setId(String value) {
-        $("[name='./id']").sendKeys(value);
+    public boolean isValueSet(String elemValue) {
+        return $$("input[type='hidden'][value='" + elemValue + "']").size() == 1;
+    }
+
+    public boolean isIdSet(String elemId) {
+        return $$("input[type='hidden'][id='" + elemId + "']").size() == 1;
     }
 }

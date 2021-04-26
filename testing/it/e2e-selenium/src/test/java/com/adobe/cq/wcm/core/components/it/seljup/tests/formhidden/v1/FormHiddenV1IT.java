@@ -17,6 +17,8 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formhidden.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.components.FormHidden.FormHidden;
+import com.adobe.cq.wcm.core.components.it.seljup.components.FormHidden.FormHiddenConfigDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
@@ -28,6 +30,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class FormHiddenV1IT extends AuthorBaseUITest {
 
     // element name
@@ -37,14 +41,18 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
     // element id
     public static String elemId = "hiddenComponent_id";
 
-    protected static String formHiddenRT = "core/wcm/components/form/hidden/v1/hidden";
+    protected static String formHiddenRT;
 
     protected String testPage;
     protected String hiddenPath;
     protected String compPathHidden;
     private EditorPage editorPage;
+    private FormHidden formHidden;
 
-    @BeforeEach
+    public void setComponentResources() {
+        formHiddenRT = Commons.rtFormHidden_v1;
+    }
+
     protected void setup() throws ClientException {
         // create the test page, store page path in 'testPagePath'
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
@@ -55,9 +63,16 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
         // add the core form container component
         hiddenPath = Commons.addComponent(adminClient, compPathHidden, testPage + Commons.relParentCompPath, "container", null);
 
+        formHidden = new FormHidden();
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
+    }
+
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setComponentResources();
+        setup();
     }
 
     @AfterEach
@@ -69,12 +84,62 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
         Commons.deleteProxyComponent(adminClient, compPathHidden);
     }
 
-    @Test
-    @DisplayName("Check if Label is mandatory")
+
     /**
      * Test: Check if Label is mandatory
      */
-    public void checkMandatoryFields() {
+    @Test
+    @DisplayName("Check if Label is mandatory")
+    public void checkMandatoryFields() throws InterruptedException {
+        Commons.openConfigureDialog(hiddenPath);
+        Commons.saveConfigureDialog();
+        assertTrue(Commons.isConfigDialogVisible(),"Config Dialog should be visible");
+        assertTrue(formHidden.getConfigDialog().isMandatoryFieldsInvalid(),"Mandatory field Name should be invalid");
+    }
 
+    /**
+     * Test: Set element name
+     */
+    @Test
+    @DisplayName("Test: Set element name")
+    public void setElementName() throws InterruptedException {
+        Commons.openConfigureDialog(hiddenPath);
+        formHidden.getConfigDialog().setMandatoryFields(elemName);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(formHidden.isNameSet(elemName),"Name should be set");
+        Commons.switchToDefaultContext();
+    }
+
+    /**
+     * Test: Set element value
+     */
+    @Test
+    @DisplayName("Test: Set element value")
+    public void setElementValue() throws InterruptedException {
+        Commons.openConfigureDialog(hiddenPath);
+        FormHiddenConfigDialog dialog = formHidden.getConfigDialog();
+        dialog.setMandatoryFields(elemName);
+        dialog.setValue(elemValue);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        formHidden.isValueSet(elemName);
+        Commons.switchToDefaultContext();
+    }
+
+    /**
+     * Test: Set element identifier
+     */
+    @Test
+    @DisplayName("Test: Set element identifier")
+    public void setElementId() throws InterruptedException {
+        Commons.openConfigureDialog(hiddenPath);
+        FormHiddenConfigDialog dialog = formHidden.getConfigDialog();
+        dialog.setMandatoryFields(elemName);
+        dialog.setId(elemId);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        formHidden.isIdSet(elemId);
+        Commons.switchToDefaultContext();
     }
 }
