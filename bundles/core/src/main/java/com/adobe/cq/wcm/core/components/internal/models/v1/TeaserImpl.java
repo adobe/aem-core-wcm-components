@@ -230,16 +230,16 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
         // use the target page as the link if it exists
         link = this.getTargetPage()
-                .map(page -> Optional.of(linkHandler.getLink(page, false).orElse(null)))
+                .map(page -> Optional.of(linkHandler.getLink(page).orElse(null)))
                 .orElseGet(() -> {
                     // target page doesn't exist
                     if (this.isActionsEnabled()) {
                         return this.getActions().stream().findFirst()
-                                .map(action -> Optional.ofNullable(linkHandler.getLink(action.getURL(), false, null).orElse(null)))
+                                .map(action -> Optional.ofNullable(linkHandler.getLink(action.getURL(), null).orElse(null)))
                                 .orElse(Optional.empty());
                     } else {
                         // use the property value if actions are not enabled
-                        return Optional.ofNullable(linkHandler.getLink(resource, Link.PN_LINK_URL, false).orElse(null));
+                        return Optional.ofNullable(linkHandler.getLink(resource, Link.PN_LINK_URL).orElse(null));
                     }
                 });
     }
@@ -460,7 +460,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             ctaResource = actionRes;
             ValueMap ctaProperties = actionRes.getValueMap();
             ctaTitle = ctaProperties.get(PN_ACTION_TEXT, String.class);
-            ctaLink = Optional.ofNullable(linkHandler.getLink(actionRes, PN_ACTION_LINK, false).orElse(null));
+            ctaLink = Optional.ofNullable(linkHandler.getLink(actionRes, PN_ACTION_LINK).orElse(null));
             if (component != null) {
                 this.dataLayerType = component.getResourceType() + "/" + CTA_ID_PREFIX;
             }

@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,6 +39,9 @@ import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSI
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_ARIA_LABEL;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TARGET;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE;
 
 /**
  * Simple implementation for resolving and validating links from model's resources.
@@ -73,8 +77,8 @@ public class LinkHandler {
      * @return {@link Optional} of  {@link Link}
      */
     @NotNull
-    public Optional<Link> getLink(@NotNull Resource resource, final boolean mapped) {
-        return getLink(resource, PN_LINK_URL, mapped);
+    public Optional<Link> getLink(@NotNull Resource resource) {
+        return getLink(resource, PN_LINK_URL);
     }
 
     /**
@@ -85,7 +89,7 @@ public class LinkHandler {
      * @return {@link Optional} of  {@link Link}
      */
     @NotNull
-    public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName, final boolean mapped) {
+    public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
         if (linkURL == null) {
@@ -94,7 +98,7 @@ public class LinkHandler {
         String linkTarget = props.get(PN_LINK_TARGET, String.class);
         String linkAccessibilityLabel = props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class);
         String linkTitleAttribute = props.get(PN_LINK_TITLE_ATTRIBUTE, String.class);
-        return Optional.ofNullable(getLink(linkURL, mapped, linkTarget, linkAccessibilityLabel, linkTitleAttribute).orElse(null));
+        return Optional.ofNullable(getLink(linkURL, linkTarget, linkAccessibilityLabel, linkTitleAttribute).orElse(null));
     }
 
     /**
@@ -104,12 +108,12 @@ public class LinkHandler {
      * @return {@link Optional} of  {@link Link<Page>}
      */
     @NotNull
-    public Optional<Link<Page>> getLink(@Nullable Page page, final boolean mapped) {
+    public Optional<Link<Page>> getLink(@Nullable Page page) {
         if (page == null) {
             return Optional.empty();
         }
-        String linkURL = getPageLinkURL(page, mapped);
-        return Optional.of(new LinkImpl<>(linkURL, null, page));
+        String linkURL = getPageLinkURL(page);
+        return Optional.of(new LinkImpl<>(linkURL, page, new MappingLinkProcessor(request.getResourceResolver()), null));
     }
 
     /**
@@ -120,11 +124,12 @@ public class LinkHandler {
      * @return {@link Optional} of  {@link Link<Page>}
      */
     @NotNull
-    public Optional<Link<Page>> getLink(@Nullable String linkURL, final boolean mapped, @Nullable String target) {
-        String resolvedLinkURL = validateAndResolveLinkURL(linkURL, mapped);
+    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
+        String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, targetPage));
+        return Optional.of(new LinkImpl<>(resolvedLinkURL, targetPage, new MappingLinkProcessor(request.getResourceResolver()),
+                new HashMap<String, String>() {{ put(ATTR_TARGET, resolvedLinkTarget); }}));
     }
 
     /**
@@ -137,13 +142,18 @@ public class LinkHandler {
      * @return {@link Optional} of  {@link Link<Page>}
      */
     @NotNull
-    public Optional<Link<Page>> getLink(@Nullable String linkURL, final boolean mapped, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
-        String resolvedLinkURL = validateAndResolveLinkURL(linkURL, mapped);
+    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
+        String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
         String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
         String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, targetPage, validatedLinkAccessibilityLabel, validatedLinkTitleAttribute));
+        return Optional.of(new LinkImpl<>(resolvedLinkURL, targetPage, new MappingLinkProcessor(request.getResourceResolver()),
+                new HashMap<String, String>() {{
+                    put(ATTR_TARGET, resolvedLinkTarget);
+                    put(ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel);
+                    put(ATTR_TITLE, validatedLinkTitleAttribute);
+        }}));
     }
 
     /**
@@ -152,9 +162,9 @@ public class LinkHandler {
      *
      * @return The validated link URL or {@code null} if not valid
      */
-    private String validateAndResolveLinkURL(String linkURL, final boolean mapped) {
+    private String validateAndResolveLinkURL(String linkURL) {
         if (!StringUtils.isEmpty(linkURL)) {
-            return getLinkURL(linkURL, mapped);
+            return getLinkURL(linkURL);
         }
         else {
             return null;
@@ -214,38 +224,10 @@ public class LinkHandler {
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
      */
     @NotNull
-    private String getLinkURL(@NotNull String path, final boolean mapped) {
+    private String getLinkURL(@NotNull String path) {
         return getPage(path)
-                .map(page -> getPageLinkURL(page, mapped))
-                .orElse(map(path, mapped));
-    }
-
-    /**
-     * Tries to map the provided {@code path}.
-     *
-     * @param path the path to map
-     * @return the mapped path or the original one, in case mapping fails.
-     */
-    @NotNull
-    private String map(@NotNull String path, final boolean mapped) {
-        if (!mapped) {
-
-            String cp = request.getContextPath();
-            if (!StringUtils.isEmpty(cp) && path.startsWith("/") && !path.startsWith(cp + "/")) {
-                path = cp + path;
-            }
-            try {
-                final URI uri = new URI(path, false);
-                return uri.toString();
-            } catch (Exception e) {
-                return path;
-            }
-        }
-        try {
-            return StringUtils.defaultString(request.getResourceResolver().map(request, path), path);
-        } catch (Exception e) {
-            return path;
-        }
+                .map(page -> getPageLinkURL(page))
+                .orElse(fixPath(path));
     }
 
     /**
@@ -256,7 +238,7 @@ public class LinkHandler {
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
      */
     @NotNull
-    private String getPageLinkURL(@NotNull Page page, final boolean mapped) {
+    private String getPageLinkURL(@NotNull Page page) {
         String vanityURL = page.getVanityUrl();
         String pageLinkURL;
         if (StringUtils.isEmpty(vanityURL)) {
@@ -264,7 +246,28 @@ public class LinkHandler {
         } else {
             pageLinkURL = vanityURL;
         }
-        return map(pageLinkURL, mapped);
+        return fixPath(pageLinkURL);
+    }
+
+    /**
+     * Fix the path by prepending the context-path and escaping.
+     *
+     * @param path The path to fix
+     *
+     * @return Fixed path
+     */
+    @NotNull
+    private String fixPath(@NotNull String path) {
+        String cp = request.getContextPath();
+        if (!StringUtils.isEmpty(cp) && path.startsWith("/") && !path.startsWith(cp + "/")) {
+            path = cp + path;
+        }
+        try {
+            final URI uri = new URI(path, false);
+            return uri.toString();
+        } catch (Exception e) {
+            return path;
+        }
     }
 
     /**

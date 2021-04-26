@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.link;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +59,9 @@ public interface Link<T> {
      * @return {@code true} if component has a valid link defined
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
-    boolean isValid();
+    default boolean isValid() {
+        return false;
+    }
 
     /**
      * The link URL, supports context path and vanity paths.
@@ -66,7 +69,20 @@ public interface Link<T> {
      * @return Link URL or {@code null} if link is invalid
      */
     @Nullable
-    String getURL();
+    default String getURL() {
+        return null;
+    }
+
+    /**
+     * The processed URL, in case any extra processing can be done.
+     * This usually is resource resolver mapping.
+     *
+     * @return Process link URL or {@code null} if link is invalid or no processing can be done
+     */
+    @Nullable
+    default String getProcessedURL() {
+        return null;
+    }
 
     /**
      * Map with Attributes for HTML Anchor tag for this link.
@@ -77,7 +93,9 @@ public interface Link<T> {
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @NotNull
-    Map<String, String> getHtmlAttributes();
+    default Map<String, String> getHtmlAttributes() {
+        return Collections.emptyMap();
+    }
 
     /**
      * Returns the referenced WCM/DAM object.
@@ -86,6 +104,8 @@ public interface Link<T> {
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @Nullable
-    T getReference();
+    default T getReference() {
+        return null;
+    }
 
 }

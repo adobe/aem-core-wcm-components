@@ -104,7 +104,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
             }
         }
 
-        link = linkHandler.getLink(resource, false);
+        link = linkHandler.getLink(resource);
 
         if(currentStyle != null) {
             linkDisabled = currentStyle.get(Title.PN_TITLE_LINK_DISABLED, linkDisabled);

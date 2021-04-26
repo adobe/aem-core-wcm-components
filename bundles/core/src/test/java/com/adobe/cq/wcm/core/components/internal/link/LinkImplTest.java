@@ -15,6 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.HashMap;
+
+import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_ARIA_LABEL;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TARGET;
+
+import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -32,7 +38,7 @@ class LinkImplTest {
 
     @Test
     void testValidLink() {
-        Link link = new LinkImpl(URL);
+        Link link = new LinkImpl(URL, null, null, null);
 
         assertValidLink(link, URL);
         assertNull(link.getReference());
@@ -40,7 +46,7 @@ class LinkImplTest {
 
     @Test
     void testValidLinkWithTarget() {
-        Link link = new LinkImpl(URL, "_blank");
+        Link link = new LinkImpl(URL, null, null, new HashMap<String, String>() {{ put(ATTR_TARGET,"_blank"); }});
 
         assertValidLink(link, URL, "_blank");
         assertNull(link.getReference());
@@ -48,7 +54,7 @@ class LinkImplTest {
 
     @Test
     void testValidLinkWithoutTarget() {
-        Link link = new LinkImpl(URL, null);
+        Link link = new LinkImpl(URL, null, null, null);
 
         assertValidLink(link, URL, null);
         assertNull(link.getReference());
@@ -57,7 +63,7 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetAndTargetPage() {
         Page page = mock(Page.class);
-        Link<Page> link = new LinkImpl(URL, "_blank", page);
+        Link<Page> link = new LinkImpl(URL, page, null, new HashMap<String, String>() {{ put(ATTR_TARGET, "_blank"); }});
 
         assertValidLink(link, URL, "_blank");
         assertSame(page, link.getReference());
@@ -66,7 +72,12 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetTargetPageAccessibilityLabelAndTitleAttribute() {
         Page page = mock(Page.class);
-        Link link = new LinkImpl(URL, "_blank", page, "Url Label", "Url Title");
+        Link link = new LinkImpl(URL, page, null,
+                new HashMap<String, String>() {{
+                    put(ATTR_TARGET,"_blank");
+                    put(ATTR_ARIA_LABEL,  "Url Label");
+                    put(ATTR_TITLE, "Url Title");
+        }});
 
         assertValidLink(link, URL, "Url Label", "Url Title", "_blank");
         assertSame(page, link.getReference());
@@ -75,7 +86,11 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetPageAccessibilityLabelTitleAttributeAndWithoutTarget() {
         Page page = mock(Page.class);
-        Link link = new LinkImpl(URL, null, page, "Url Label", "Url Title");
+        Link link = new LinkImpl(URL, page, null,
+                new HashMap<String, String>() {{
+                    put(ATTR_ARIA_LABEL,  "Url Label");
+                    put(ATTR_TITLE, "Url Title");
+                }});
 
         assertValidLink(link, URL, "Url Label", "Url Title", null);
         assertSame(page, link.getReference());
@@ -83,7 +98,7 @@ class LinkImplTest {
 
     @Test
     void testInvalidLink() {
-        Link link = new LinkImpl(null, null, null);
+        Link link = new LinkImpl(null, null, null, null);
 
         assertInvalidLink(link);
         assertNull(link.getReference());

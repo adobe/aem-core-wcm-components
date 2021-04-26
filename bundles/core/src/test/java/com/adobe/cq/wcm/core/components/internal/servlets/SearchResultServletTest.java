@@ -342,6 +342,9 @@ public class SearchResultServletTest {
         }
 
         @Override
+        public @Nullable String getProcessedURL() { return null; }
+
+        @Override
         public @NotNull Map<String, String> getHtmlAttributes() {
             return htmlAttributes;
         }

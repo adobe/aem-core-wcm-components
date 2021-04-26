@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,19 +13,11 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components;
+package com.adobe.cq.wcm.core.components.internal.link;
 
-import org.junit.jupiter.api.Test;
+import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.testing.AbstractModelTest;
+public interface LinkProcessor {
 
-public class ModelsCommonsTest extends AbstractModelTest {
-
-    @Test
-    public void testDefaultBehaviour() throws Exception {
-        testDefaultBehaviour(new String[] {
-                "com.adobe.cq.wcm.core.components.models",
-                "com.adobe.cq.wcm.core.components.commons.link"
-       });
-    }
+    @Nullable String process(@Nullable String linkUrl);
 }

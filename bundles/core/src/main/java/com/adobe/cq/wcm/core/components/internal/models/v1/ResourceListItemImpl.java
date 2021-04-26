@@ -70,7 +70,7 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
         lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
         path = resource.getPath();
         name = resource.getName();
-        link = linkHandler.getLink(resource, false);
+        link = linkHandler.getLink(resource);
     }
 
 

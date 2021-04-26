@@ -91,7 +91,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
                 .orElse(page);
         }
 
-        this.link = linkHandler.getLink(this.page, false);
+        this.link = linkHandler.getLink(this.page);
     }
 
     @Override

@@ -172,7 +172,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     private Optional<String> getBackgroundImage() {
         return Optional.ofNullable(this.currentStyle)
             .filter(style -> style.get(PN_BACKGROUND_IMAGE_ENABLED, Boolean.FALSE))
-            .flatMap(style -> linkHandler.getLink(resource, PN_BACKGROUND_IMAGE_REFERENCE, false).map(Link::getURL))
+            .flatMap(style -> linkHandler.getLink(resource, PN_BACKGROUND_IMAGE_REFERENCE).map(Link::getURL))
             .filter(StringUtils::isNotEmpty);
     }
 
