@@ -100,7 +100,6 @@ public final class LinkImpl<T> implements Link<T> {
      * @return {@link Map} of HTML attributes, may include the URL as {@code href}
      */
     @Override
-    @JsonIgnore  // exclude HTML-specific attributes in JSON
     public @NotNull Map<String, String> getHtmlAttributes() {
         return htmlAttributes;
     }
