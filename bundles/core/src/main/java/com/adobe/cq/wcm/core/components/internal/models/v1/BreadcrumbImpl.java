@@ -19,21 +19,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Via;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.via.ForcedResourceType;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
 import com.adobe.cq.wcm.core.components.models.Breadcrumb;
+import com.adobe.cq.wcm.core.components.models.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
@@ -65,6 +67,7 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
     private SlingHttpServletRequest request;
 
     @Self
+    @Via(type = ForcedResourceType.class, value = LinkHandlerImpl.RESOURCE_TYPE)
     protected LinkHandler linkHandler;
 
     private boolean showHidden;

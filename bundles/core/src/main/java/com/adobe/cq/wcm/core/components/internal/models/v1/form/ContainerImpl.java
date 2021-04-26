@@ -50,7 +50,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
 import com.adobe.cq.wcm.core.components.models.form.Container;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
@@ -105,7 +105,7 @@ public class ContainerImpl implements Container {
     private String redirect;
     
     @Self
-    private LinkHandler linkHandler;
+    private LinkHandlerImpl linkHandler;
 
     private String name;
     private String action;

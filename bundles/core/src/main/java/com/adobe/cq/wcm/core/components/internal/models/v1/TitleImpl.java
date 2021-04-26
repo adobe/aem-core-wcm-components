@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Optional;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,10 +24,12 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Via;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.models.annotations.via.ForcedResourceType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +37,8 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Heading;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
+import com.adobe.cq.wcm.core.components.models.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -83,6 +85,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     private String type;
 
     @Self
+    @Via(type = ForcedResourceType.class, value = LinkHandlerImpl.RESOURCE_TYPE)
     private LinkHandler linkHandler;
     protected Optional<Link> link;
 

@@ -49,7 +49,7 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -131,7 +131,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private String redirectTargetValue;
 
     @Self
-    private LinkHandler linkHandler;
+    private LinkHandlerImpl linkHandler;
 
     /**
      * The proxy path of the first client library listed in the style under the
@@ -169,7 +169,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 .orElse(null);
     }
 
-    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
+    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandlerImpl linkHandler) {
         return new RedirectItemImpl(redirectTarget, request, linkHandler);
     }
 

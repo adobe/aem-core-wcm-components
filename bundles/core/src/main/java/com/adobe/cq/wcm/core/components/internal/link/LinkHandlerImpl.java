@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.link;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.httpclient.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -29,21 +30,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.models.LinkHandler;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableSet;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.*;
 
 /**
  * Simple implementation for resolving and validating links from model's resources.
- * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
-@Model(adaptables=SlingHttpServletRequest.class)
-public class LinkHandler {
+@Model(adaptables=SlingHttpServletRequest.class, adapters = LinkHandler.class, resourceType = LinkHandlerImpl.RESOURCE_TYPE)
+public class LinkHandlerImpl implements LinkHandler {
+
+    public static final String RESOURCE_TYPE = "core/wcm/components/linkHandler/simple";
 
     /**
      * List of allowed/supported values for link target.
@@ -56,7 +56,7 @@ public class LinkHandler {
      * The current {@link SlingHttpServletRequest}.
      */
     @Self
-    private SlingHttpServletRequest request;
+    protected SlingHttpServletRequest request;
 
     /**
      * Reference to {@link PageManager}
@@ -65,24 +65,11 @@ public class LinkHandler {
     @org.apache.sling.models.annotations.Optional
     private PageManager pageManager;
 
-    /**
-     * Resolves a link from the properties of the given resource.
-     * @param resource Resource
-     *
-     * @return {@link Optional} of  {@link Link}
-     */
     @NotNull
     public Optional<Link> getLink(@NotNull Resource resource) {
         return getLink(resource, PN_LINK_URL);
     }
 
-    /**
-     * Resolves a link from the properties of the given resource.
-     * @param resource Resource
-     * @param linkURLPropertyName Property name to read link URL from.
-     *
-     * @return {@link Optional} of  {@link Link}
-     */
     @NotNull
     public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
@@ -96,13 +83,8 @@ public class LinkHandler {
         return Optional.ofNullable(getLink(linkURL, linkTarget, linkAccessibilityLabel, linkTitleAttribute).orElse(null));
     }
 
-    /**
-     * Builds a link pointing to the given target page.
-     * @param page Target page
-     *
-     * @return {@link Optional} of  {@link Link<Page>}
-     */
     @NotNull
+    @Override
     public Optional<Link<Page>> getLink(@Nullable Page page) {
         if (page == null) {
             return Optional.empty();
@@ -111,14 +93,8 @@ public class LinkHandler {
         return Optional.of(new LinkImpl<>(linkURL, null, page));
     }
 
-    /**
-     * Builds a link with the given Link URL and target.
-     * @param linkURL Link URL
-     * @param target Target
-     *
-     * @return {@link Optional} of  {@link Link<Page>}
-     */
     @NotNull
+    @Override
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
@@ -136,6 +112,7 @@ public class LinkHandler {
      * @return {@link Optional} of  {@link Link<Page>}
      */
     @NotNull
+    @Override
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
@@ -226,9 +203,14 @@ public class LinkHandler {
      * @return the mapped path or the original one, in case mapping fails.
      */
     @NotNull
-    private String map(@NotNull String path) {
+    protected String map(@NotNull String path) {
+        String cp = request.getContextPath();
+        if (!StringUtils.isEmpty(cp) && path.startsWith("/") && !path.startsWith(cp + "/")) {
+            path = cp + path;
+        }
         try {
-            return StringUtils.defaultString(request.getResourceResolver().map(request, path), path);
+            final URI uri = new URI(path, false);
+            return uri.toString();
         } catch (Exception e) {
             return path;
         }

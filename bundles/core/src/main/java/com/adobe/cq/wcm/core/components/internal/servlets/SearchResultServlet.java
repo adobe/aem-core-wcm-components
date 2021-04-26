@@ -47,7 +47,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.cq.wcm.core.components.internal.LocalizationUtils;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -286,7 +286,7 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
         }
         SearchResult searchResult = query.getResult();
 
-        LinkHandler linkHandler = request.adaptTo(LinkHandler.class);
+        LinkHandlerImpl linkHandler = request.adaptTo(LinkHandlerImpl.class);
         // Query builder has a leaking resource resolver, so the following work around is required.
         ResourceResolver leakingResourceResolver = null;
         try {

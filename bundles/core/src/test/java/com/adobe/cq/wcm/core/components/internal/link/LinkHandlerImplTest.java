@@ -35,25 +35,24 @@ import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(AemContextExtension.class)
-class LinkHandlerTest {
+class LinkHandlerImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
     private Page page;
-    private LinkHandler underTest;
+    private LinkHandlerImpl underTest;
 
     @BeforeEach
     void setUp() {
         page = context.create().page("/content/site1/en");
         context.currentPage(page);
-        underTest = context.request().adaptTo(LinkHandler.class);
+        underTest = context.request().adaptTo(LinkHandlerImpl.class);
     }
 
     @Test

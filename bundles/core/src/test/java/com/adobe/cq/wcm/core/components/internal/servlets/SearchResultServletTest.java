@@ -44,7 +44,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.search.PredicateGroup;
@@ -52,7 +52,6 @@ import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.eval.PathPredicateEvaluator;
 import com.day.cq.search.result.SearchResult;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -103,9 +102,9 @@ public class SearchResultServletTest {
         context.registerService(QueryBuilder.class, mockQueryBuilder);
         context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
         context.request().setContextPath(CONTEXT_PATH);
-        LinkHandler linkHandler = new LinkHandler();
+        LinkHandlerImpl linkHandler = new LinkHandlerImpl();
         Utils.setInternalState(linkHandler, "request", context.request());
-        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandler.class, linkHandler);
+        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandlerImpl.class, linkHandler);
         underTest = context.registerInjectActivateService(new SearchResultServlet());
     }
 
