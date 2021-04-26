@@ -18,23 +18,18 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v1;
 
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.FormOptions;
 import com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.FormOptionsConfigDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.codeborne.selenide.WebDriverRunner;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.util.concurrent.TimeoutException;
 
@@ -114,12 +109,6 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Set title text")
     public void setTitle() throws InterruptedException, TimeoutException {
-        //String component = "[data-type='Editable'][data-path='" + optionPath +"']";
-        //final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        //new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
-
-        //EditableToolbar editableToolbar = editorPage.openEditableToolbar(optionPath);
-        //editableToolbar.clickConfigure();
         Commons.openConfigureDialog(optionPath);
         FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
         configDialog.setMandatoryFields(elemName, title);
