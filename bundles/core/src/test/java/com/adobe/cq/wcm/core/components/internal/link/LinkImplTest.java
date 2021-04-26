@@ -66,7 +66,7 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetTargetPageAccessibilityLabelAndTitleAttribute() {
         Page page = mock(Page.class);
-        Link link = new LinkImpl(URL, "_blank", page, "Url Label", "Url Title");
+        Link link = new LinkImpl(page, URL, "_blank", "Url Label", "Url Title");
 
         assertValidLink(link, URL, "Url Label", "Url Title", "_blank");
         assertSame(page, link.getReference());
@@ -75,7 +75,7 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetPageAccessibilityLabelTitleAttributeAndWithoutTarget() {
         Page page = mock(Page.class);
-        Link link = new LinkImpl(URL, null, page, "Url Label", "Url Title");
+        Link link = new LinkImpl(page, URL, null,"Url Label", "Url Title");
 
         assertValidLink(link, URL, "Url Label", "Url Title", null);
         assertSame(page, link.getReference());
