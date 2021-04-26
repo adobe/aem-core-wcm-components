@@ -82,7 +82,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @PostConstruct
     private void initModel() {
-        link = linkHandler.getLink(resource, "link");
+        link = linkHandler.getLink(resource, "link", false);
     }
 
     @Override

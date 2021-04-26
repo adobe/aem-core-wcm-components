@@ -129,7 +129,7 @@ public class ContainerImpl implements Container {
     private void initModel() {
         FormStructureHelper formStructureHelper = formStructureHelperFactory.getFormStructureHelper(resource);
         request.setAttribute(FormsHelper.REQ_ATTR_FORM_STRUCTURE_HELPER, formStructureHelper);
-        this.action = linkHandler.getLink(currentPage).map(Link::getURL).orElse(null);
+        this.action = linkHandler.getLink(currentPage, false).map(Link::getURL).orElse(null);
         if (StringUtils.isBlank(id)) {
             id = FormsHelper.getFormId(request);
         }

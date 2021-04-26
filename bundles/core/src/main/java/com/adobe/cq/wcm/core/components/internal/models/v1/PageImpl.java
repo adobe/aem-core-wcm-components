@@ -331,7 +331,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
             .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
             .withDescription(() -> this.pageProperties.get(NameConstants.PN_DESCRIPTION, String.class))
             .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
-            .withUrl(() -> linkHandler.getLink(currentPage).map(Link::getURL).orElse(null))
+            .withUrl(() -> linkHandler.getLink(currentPage, false).map(Link::getURL).orElse(null))
             .withLanguage(this::getLanguage)
             .build();
     }

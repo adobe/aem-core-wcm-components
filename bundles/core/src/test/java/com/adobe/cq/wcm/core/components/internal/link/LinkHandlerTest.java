@@ -59,7 +59,7 @@ class LinkHandlerTest {
     @Test
     void testResourceEmpty() {
         Resource linkResource = context.create().resource(page, "link");
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = underTest.getLink(linkResource, false);
         assertEquals(Optional.empty(), link);
     }
 
@@ -67,7 +67,7 @@ class LinkHandlerTest {
     void testResourceExternalLink() {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "http://myhost");
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = underTest.getLink(linkResource, false);
 
         assertValidLink(link.get(), "http://myhost");
         assertNull(link.map(Link::getReference).orElse(null));
@@ -81,7 +81,7 @@ class LinkHandlerTest {
                 PN_LINK_TARGET, target,
                 PN_LINK_ACCESSIBILITY_LABEL, "My Host Label",
                 PN_LINK_TITLE_ATTRIBUTE, "My Host Title");
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = underTest.getLink(linkResource, false);
 
         assertValidLink(link.get(), "http://myhost", "My Host Label", "My Host Title", target);
         assertNull(link.map(Link::getReference).orElse(null));
@@ -93,7 +93,7 @@ class LinkHandlerTest {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "http://myhost",
                 PN_LINK_TARGET, target);
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = underTest.getLink(linkResource, false);
 
         // invalid target or _self target should be stripped away
         assertValidLink(link.get(), "http://myhost");
@@ -104,7 +104,7 @@ class LinkHandlerTest {
     void testResourcePageLink() {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, page.getPath());
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = underTest.getLink(linkResource, false);
         assertValidLink(link.get(), page.getPath() + ".html");
         assertEquals(page, link.map(Link::getReference).orElse(null));
     }
@@ -114,7 +114,7 @@ class LinkHandlerTest {
         Utils.setInternalState(underTest, "pageManager", null);
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, page.getPath());
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = underTest.getLink(linkResource, false);
 
         // TODO: this link should be handled as invalid. but we keep this behavior for now to keep backwards compatibility
         assertValidLink(link.get(), page.getPath() + ".html");
@@ -127,7 +127,7 @@ class LinkHandlerTest {
     void testResourceInvalidPageLink() {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "/content/non-existing");
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = underTest.getLink(linkResource, false);
 
         // TODO: this link should be handled as invalid. but we keep this behavior for now to keep backwards compatibility
         assertValidLink(link.get(), "/content/non-existing");
@@ -136,7 +136,7 @@ class LinkHandlerTest {
 
     @Test
     void testPageLink() {
-        Optional<Link<Page>> link = underTest.getLink(page);
+        Optional<Link<Page>> link = underTest.getLink(page, false);
 
         assertValidLink(link.get(), page.getPath() + ".html");
         assertEquals(page, link.map(Link::getReference).orElse(null));
@@ -144,21 +144,21 @@ class LinkHandlerTest {
 
     @Test
     void testPageLink_Null() {
-        Optional<Link<Page>> link = underTest.getLink((Page)null);
+        Optional<Link<Page>> link = underTest.getLink((Page)null, false);
 
         assertFalse(link.isPresent());
     }
 
     @Test
     void testEmptyLink() {
-        Optional<Link<Page>> link = underTest.getLink("", "");
+        Optional<Link<Page>> link = underTest.getLink("", false, "");
 
         assertNull(link.get().getURL());
     }
 
     @Test
     void testLinkURLPageLinkWithTarget() {
-        Optional<Link<Page>> link = underTest.getLink(page.getPath(), "_blank", null, null);
+        Optional<Link<Page>> link = underTest.getLink(page.getPath(), false, "_blank", null, null);
 
         assertValidLink(link.get(), page.getPath() + ".html", "_blank");
         assertEquals(page, link.map(Link::getReference).orElse(null));

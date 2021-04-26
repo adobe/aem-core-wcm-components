@@ -38,7 +38,7 @@ public class RedirectItemImpl implements NavigationItem {
     public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
         this.redirectTarget = redirectTarget;
         this.page = getRedirectPage(request);
-        this.link = linkHandler.getLink(this.page);
+        this.link = linkHandler.getLink(this.page, false);
     }
 
     private Page getRedirectPage(@NotNull SlingHttpServletRequest request) {
