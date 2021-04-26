@@ -26,7 +26,6 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.resource.Resource;
@@ -45,6 +44,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
+import com.adobe.cq.wcm.core.components.models.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.search.PredicateGroup;
@@ -64,10 +64,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class SearchResultServletTest {
@@ -102,9 +99,9 @@ public class SearchResultServletTest {
         context.registerService(QueryBuilder.class, mockQueryBuilder);
         context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
         context.request().setContextPath(CONTEXT_PATH);
-        LinkHandlerImpl linkHandler = new LinkHandlerImpl();
+        LinkHandler linkHandler = new LinkHandlerImpl();
         Utils.setInternalState(linkHandler, "request", context.request());
-        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandlerImpl.class, linkHandler);
+        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandler.class, linkHandler);
         underTest = context.registerInjectActivateService(new SearchResultServlet());
     }
 

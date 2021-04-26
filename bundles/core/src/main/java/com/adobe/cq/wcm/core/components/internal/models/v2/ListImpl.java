@@ -22,13 +22,16 @@ import java.util.stream.Collectors;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Via;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.via.ForcedResourceType;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
+import com.adobe.cq.wcm.core.components.models.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
@@ -42,7 +45,8 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v2/list";
 
     @Self
-    private LinkHandlerImpl linkHandler;
+    @Via(type = ForcedResourceType.class, value = LinkHandlerImpl.RESOURCE_TYPE)
+    private LinkHandler linkHandler;
 
     /**
      * Result list.
@@ -62,7 +66,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return this.listItems;
     }
 
-    protected ListItem newPageListItem(@NotNull LinkHandlerImpl linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
+    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
         return new PageListItemImpl(linkHandler, page, parentId, isShadowingDisabled, component);
     }
 

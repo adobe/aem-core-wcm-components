@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +51,7 @@ import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
+import com.adobe.cq.wcm.core.components.models.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.granite.license.ProductInfoProvider;
@@ -131,7 +131,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private String redirectTargetValue;
 
     @Self
-    private LinkHandlerImpl linkHandler;
+    private LinkHandler linkHandler;
 
     /**
      * The proxy path of the first client library listed in the style under the
@@ -169,7 +169,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 .orElse(null);
     }
 
-    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandlerImpl linkHandler) {
+    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
         return new RedirectItemImpl(redirectTarget, request, linkHandler);
     }
 

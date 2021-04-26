@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-
 import javax.jcr.Session;
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletResponse;
@@ -35,8 +34,10 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.factory.ModelFactory;
 import org.apache.sling.scripting.core.ScriptHelper;
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +51,7 @@ import com.adobe.cq.wcm.core.components.internal.LocalizationUtils;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
+import com.adobe.cq.wcm.core.components.models.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Search;
 import com.day.cq.search.PredicateConverter;
@@ -285,8 +287,7 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
             query.setStart(resultsOffset);
         }
         SearchResult searchResult = query.getResult();
-
-        LinkHandlerImpl linkHandler = request.adaptTo(LinkHandlerImpl.class);
+        LinkHandler linkHandler = getLinkHandler(request);
         // Query builder has a leaking resource resolver, so the following work around is required.
         ResourceResolver leakingResourceResolver = null;
         try {
@@ -312,6 +313,20 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
             }
         }
         return results;
+    }
+
+    private LinkHandler getLinkHandler(SlingHttpServletRequest request) {
+        return modelFactory.createModel(new SlingHttpServletRequestWrapper(request) {
+            @Override
+            public Resource getResource() {
+                return new ResourceWrapper(request.getResource()) {
+                    @Override
+                    public String getResourceType() {
+                        return LinkHandlerImpl.RESOURCE_TYPE;
+                    }
+                };
+            }
+        }, LinkHandler.class);
     }
 
     /**
