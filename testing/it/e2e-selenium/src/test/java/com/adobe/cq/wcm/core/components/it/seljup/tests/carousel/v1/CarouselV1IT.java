@@ -320,7 +320,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         //wait for the reordering to reflect
         Commons.webDriverWait(1000);
-        assertTrue(carousel.getIndicators().get(1).getText().contains("item0"),"Second indicator item should be item0 after re-order");
+        assertTrue(carousel.getIndicators().get(2).getText().contains("item0"),"Third indicator item should be item0 after re-order");
         Commons.switchToDefaultContext();
 
         carousel.getCQOverlay().openPlaceholder(testPage);
