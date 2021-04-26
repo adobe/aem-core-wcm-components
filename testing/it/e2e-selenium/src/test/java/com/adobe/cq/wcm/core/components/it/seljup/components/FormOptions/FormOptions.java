@@ -75,11 +75,7 @@ public class FormOptions extends BaseComponent {
 
     // check that the description is correctly set
     public boolean isDescriptionSet(String descriptionText) {
-        SelenideElement formGroup = $(".form-group");
-        if(checkbox != null) {
-            return  formGroup.find("span").getText().trim().equals(descriptionText);
-        }
-        return false;
+        return $(description).getText().trim().equals(descriptionText);
     }
 
     public boolean isCheckboxChecked(String value) {

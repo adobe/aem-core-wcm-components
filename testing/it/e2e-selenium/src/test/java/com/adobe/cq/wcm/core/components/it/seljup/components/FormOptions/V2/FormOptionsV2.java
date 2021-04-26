@@ -17,6 +17,9 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.V2;
 
 import com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.FormOptions;
+import com.codeborne.selenide.SelenideElement;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public class FormOptionsV2 extends FormOptions {
     public FormOptionsV2() {

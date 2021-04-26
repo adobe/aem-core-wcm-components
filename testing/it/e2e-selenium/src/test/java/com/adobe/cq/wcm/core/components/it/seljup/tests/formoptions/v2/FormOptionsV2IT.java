@@ -14,23 +14,24 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+package com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v2;
 
-package com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.V1;
+import com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.V2.FormOptionsV2;
+import com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v1.FormOptionsV1IT;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.BeforeEach;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.FormOptions;
-import com.codeborne.selenide.SelenideElement;
+public class FormOptionsV2IT extends FormOptionsV1IT {
 
-import static com.codeborne.selenide.Selenide.$;
-
-public class FormOptionsV1 extends FormOptions {
-
-    public FormOptionsV1() {
-        help = ".help-block";
-        description = ".form-group input ~ span";
-        checkbox = ".form-group.checkbox";
-        radio = ".form-group.radio";
-        dropDown = ".form-group.drop-down";
-        multiDropDown = ".form-group.multi-drop-down";
+    public void setComponentResources() {
+        formOptionsRT = Commons.rtFormOptions_v2;
     }
 
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setComponentResources();
+        formOptions = new FormOptionsV2();
+        setup();
+    }
 }
