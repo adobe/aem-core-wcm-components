@@ -16,8 +16,10 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions;
 
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Selenide.$;
@@ -49,9 +51,15 @@ public class FormOptionsConfigDialog extends Dialog {
      * Set the option type
      */
     public void setOptionType(String optionType) {
-        $("coral-select[name='./type'] button").click();
-        CoralSelectList selectList = new CoralSelectList("name='./type");
-        selectList.selectByValue(optionType);
+        CoralSelect selectList = new CoralSelect("name='./type'");
+        selectList.selectItemByValue(optionType);
+    }
+
+    /**
+     * Set help message
+     */
+    public void setHelpMessage(String helpMessage) {
+        $("[name='./helpMessage']").sendKeys(helpMessage);
     }
 
     public boolean isMandatoryFieldsInvalid() {
@@ -64,5 +72,16 @@ public class FormOptionsConfigDialog extends Dialog {
 
     public boolean isTitleFieldsInvalid() {
          return $$("[name='./jcr:title'][invalid='']").size() == 1;
+    }
+
+    public void checkSelectedCheckbox() {
+        CoralCheckbox checkbox = new CoralCheckbox("[name$='selected']");
+        checkbox.click();
+    }
+
+
+    public void checkDisabledCheckbox() {
+        CoralCheckbox checkbox = new CoralCheckbox("[name$='disabled']");
+        checkbox.click();
     }
 }

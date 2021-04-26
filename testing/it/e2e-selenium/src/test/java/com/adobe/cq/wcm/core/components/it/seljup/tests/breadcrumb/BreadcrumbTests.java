@@ -66,8 +66,8 @@ public class BreadcrumbTests {
         }
     }
 
-    public void setup(CQClient client, String rtBreadcrumb,
-                             String rootPage, String defaultPageTemplate, String clientlib, BreadcrumbItems breadcrumbItems) throws ClientException {
+    public void setup(CQClient client, String rtBreadcrumb, String rootPage,
+                      String defaultPageTemplate, String clientlib, BreadcrumbItems breadcrumbItems) throws ClientException {
         createTestpages(client,rootPage, defaultPageTemplate, 5);
 
         proxyPath = Commons.createProxyComponent(client, rtBreadcrumb, Commons.proxyPath, null, null);
