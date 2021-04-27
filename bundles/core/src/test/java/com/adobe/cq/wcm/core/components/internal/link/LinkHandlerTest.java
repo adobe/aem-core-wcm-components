@@ -31,11 +31,10 @@ import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -125,7 +124,12 @@ class LinkHandlerTest {
         assertEquals(page, link.map(Link::getReference).orElse(null));
     }
 
-
+    @Test
+    void testMalformedURLLink() {
+        String malformedURL = "https://a:80:b/c";
+        Optional<Link<Page>> link = underTest.getLink("https://a:80:b/c", null);
+        assertEquals(malformedURL, link.get().getURL());
+    }
 
     @Test
     void testResourceInvalidPageLink() {
@@ -156,8 +160,8 @@ class LinkHandlerTest {
     @Test
     void testEmptyLink() {
         Optional<Link<Page>> link = underTest.getLink("", "");
-
         assertNull(link.get().getURL());
+        assertNull(link.get().getProcessedURL());
     }
 
     @Test
