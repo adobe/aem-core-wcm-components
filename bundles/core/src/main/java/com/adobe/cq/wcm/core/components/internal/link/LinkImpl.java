@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.services.link.LinkProcessor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -49,16 +50,14 @@ public final class LinkImpl<T> implements Link<T> {
     }};
 
     private final String url;
+    private final String processedUrl;
     private final T reference;
-    private final LinkProcessor linkProcessor;
     private final Map<String, String> htmlAttributes;
-    private String processedUrl;
-    private boolean processed = false;
 
-    public LinkImpl(String url, T reference, LinkProcessor linkProcessor, Map<String, String> htmlAttributes) {
+    public LinkImpl(String url, String processedUrl, T reference, Map<String, String> htmlAttributes) {
         this.url = url;
+        this.processedUrl = processedUrl;
         this.reference = reference;
-        this.linkProcessor = linkProcessor;
         this.htmlAttributes = buildHtmlAttributes(url, htmlAttributes);
     }
 
@@ -91,14 +90,6 @@ public final class LinkImpl<T> implements Link<T> {
     @Override
     @JsonProperty("url")
     public @Nullable String getProcessedURL() {
-        if (!processed) {
-            if (linkProcessor != null) {
-                processedUrl = linkProcessor.process(url);
-            } else {
-                processedUrl = url;
-            }
-            processed = true;
-        }
         return processedUrl;
     }
 

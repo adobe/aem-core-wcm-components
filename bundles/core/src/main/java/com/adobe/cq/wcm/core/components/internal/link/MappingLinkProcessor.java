@@ -15,23 +15,43 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.Collections;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
+import org.apache.sling.models.spi.ImplementationPicker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.framework.Constants;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.services.link.LinkProcessor;
+
+@Component(property= Constants.SERVICE_RANKING+":Integer="+Integer.MAX_VALUE, service= LinkProcessor.class)
 public class MappingLinkProcessor implements LinkProcessor {
 
-    private final ResourceResolver resourceResolver;
+    public static final String LINK_PROCESSOR = "link-processor";
 
-    public MappingLinkProcessor(@NotNull ResourceResolver resourceResolver) {
-        this.resourceResolver = resourceResolver;
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(MappingLinkProcessor.class);
+
+    @Reference
+    ResourceResolverFactory resourceResolverFactory;
 
     @Override
     public @Nullable String process(@Nullable String linkUrl) {
-        if (linkUrl == null) {
-            return null;
+        if (StringUtils.isNotEmpty(linkUrl)) {
+            try (ResourceResolver resourceResolver = resourceResolverFactory.getServiceResourceResolver(
+                    Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, LINK_PROCESSOR))) {
+                return resourceResolver.map(linkUrl);
+            } catch (LoginException e) {
+                LOG.error(e.getMessage());
+            }
         }
-        return resourceResolver.map(linkUrl);
+        return null;
     }
 }

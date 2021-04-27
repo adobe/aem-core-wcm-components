@@ -25,23 +25,21 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.services.link.LinkProcessor;
+import com.adobe.cq.wcm.core.components.services.link.LinkProcessorFactory;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableSet;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_ARIA_LABEL;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TARGET;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.*;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.*;
 
 /**
  * Simple implementation for resolving and validating links from model's resources.
@@ -69,6 +67,9 @@ public class LinkHandler {
     @ScriptVariable
     @org.apache.sling.models.annotations.Optional
     private PageManager pageManager;
+
+    @OSGiService
+    private LinkProcessorFactory linkProcessorFactory;
 
     /**
      * Resolves a link from the properties of the given resource.
@@ -113,7 +114,7 @@ public class LinkHandler {
             return Optional.empty();
         }
         String linkURL = getPageLinkURL(page);
-        return Optional.of(new LinkImpl<>(linkURL, page, new MappingLinkProcessor(request.getResourceResolver()), null));
+        return Optional.of(new LinkImpl<>(linkURL, processURL(linkURL), page, null));
     }
 
     /**
@@ -128,7 +129,7 @@ public class LinkHandler {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, targetPage, new MappingLinkProcessor(request.getResourceResolver()),
+        return Optional.of(new LinkImpl<>(resolvedLinkURL, processURL(resolvedLinkURL), targetPage,
                 new HashMap<String, String>() {{ put(ATTR_TARGET, resolvedLinkTarget); }}));
     }
 
@@ -148,12 +149,20 @@ public class LinkHandler {
         String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
         String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, targetPage, new MappingLinkProcessor(request.getResourceResolver()),
+        return Optional.of(new LinkImpl<>(resolvedLinkURL, processURL(resolvedLinkURL), targetPage,
                 new HashMap<String, String>() {{
                     put(ATTR_TARGET, resolvedLinkTarget);
                     put(ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel);
                     put(ATTR_TITLE, validatedLinkTitleAttribute);
         }}));
+    }
+
+    private String processURL(String linkURL) {
+        LinkProcessor processor = linkProcessorFactory.getProcessor(linkURL);
+        if (processor != null) {
+            return processor.process(linkURL);
+        }
+        return linkURL;
     }
 
     /**

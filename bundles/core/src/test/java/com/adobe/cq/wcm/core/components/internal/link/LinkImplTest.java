@@ -39,7 +39,7 @@ class LinkImplTest {
 
     @Test
     void testValidLink() {
-        Link link = new LinkImpl(URL, null, null, null);
+        Link link = new LinkImpl(URL, URL, null, null);
 
         assertValidLink(link, URL);
         assertNull(link.getReference());
@@ -65,7 +65,7 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetAndTargetPage() {
         Page page = mock(Page.class);
-        Link<Page> link = new LinkImpl(URL, page, null, new HashMap<String, String>() {{ put(ATTR_TARGET, "_blank"); }});
+        Link<Page> link = new LinkImpl(URL, URL, page, new HashMap<String, String>() {{ put(ATTR_TARGET, "_blank"); }});
 
         assertValidLink(link, URL, "_blank");
         assertSame(page, link.getReference());
@@ -74,7 +74,7 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetTargetPageAccessibilityLabelAndTitleAttribute() {
         Page page = mock(Page.class);
-        Link link = new LinkImpl(URL, page, null,
+        Link link = new LinkImpl(URL, URL, page,
                 new HashMap<String, String>() {{
                     put(ATTR_TARGET,"_blank");
                     put(ATTR_ARIA_LABEL,  "Url Label");
@@ -88,7 +88,7 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetPageAccessibilityLabelTitleAttributeAndWithoutTarget() {
         Page page = mock(Page.class);
-        Link link = new LinkImpl(URL, page, null,
+        Link link = new LinkImpl(URL, URL, page,
                 new HashMap<String, String>() {{
                     put(ATTR_ARIA_LABEL,  "Url Label");
                     put(ATTR_TITLE, "Url Title");
