@@ -71,6 +71,7 @@ class LinkHandlerTest {
 
         assertValidLink(link.get(), "http://myhost");
         assertNull(link.map(Link::getReference).orElse(null));
+        assertEquals("http://myhost", link.get().getProcessedURL());
     }
 
     @ParameterizedTest
@@ -107,6 +108,7 @@ class LinkHandlerTest {
         Optional<Link> link = underTest.getLink(linkResource);
         assertValidLink(link.get(), page.getPath() + ".html");
         assertEquals(page, link.map(Link::getReference).orElse(null));
+        assertEquals(page.getPath() + ".html", link.get().getProcessedURL());
     }
 
     @Test

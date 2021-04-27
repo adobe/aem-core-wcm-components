@@ -95,7 +95,7 @@ public final class LinkImpl<T> implements Link<T> {
             if (linkProcessor != null) {
                 processedUrl = linkProcessor.process(url);
             } else {
-                processedUrl = null;
+                processedUrl = url;
             }
             processed = true;
         }
