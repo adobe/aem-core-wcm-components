@@ -407,7 +407,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getTitle)
-            .withLinkUrl(this::getLinkURL)
+            .withLinkUrl(() -> link.map(Link::getProcessedURL).orElse(null))
             .withDescription(this::getDescription)
             .build();
     }

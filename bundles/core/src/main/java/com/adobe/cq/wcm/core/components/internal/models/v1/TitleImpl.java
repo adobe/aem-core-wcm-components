@@ -151,7 +151,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getText)
-            .withLinkUrl(() -> link.map(Link::getURL).orElse(null))
+            .withLinkUrl(() -> link.map(Link::getProcessedURL).orElse(null))
             .build();
     }
 }

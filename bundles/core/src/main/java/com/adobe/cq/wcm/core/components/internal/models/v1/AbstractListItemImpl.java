@@ -85,7 +85,7 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl impleme
             .asComponent()
             .withType(() -> Optional.ofNullable(this.dataLayerType).orElseGet(() -> super.getComponentData().getType()))
             .withTitle(this::getTitle)
-            .withLinkUrl(this::getURL)
+            .withLinkUrl(() -> Optional.ofNullable(this.getLink()).map(Link::getProcessedURL).orElse(null))
             .build();
     }
 

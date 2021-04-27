@@ -118,7 +118,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getText)
-            .withLinkUrl(this::getLink)
+            .withLinkUrl(() ->link.map(Link::getProcessedURL).orElse(null))
             .build();
     }
 }
