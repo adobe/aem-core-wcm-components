@@ -1,6 +1,14 @@
 {
   "id": "title-6032c7e80a",
-  "link": { "valid": true, "url": "https://www.adobe.com" },
+  "link": {
+    "valid": true,
+    "url": "https://www.adobe.com",
+    "htmlAttributes": {
+      "href":"https://www.adobe.com",
+      "aria-label":"World",
+      "title":"World title"
+    }
+  },
   "linkDisabled": false,
   "dataLayer": {
     "title-6032c7e80a": {
