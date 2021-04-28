@@ -22,9 +22,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.jackson.LinkHtmlAttributesSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -100,6 +102,8 @@ public final class LinkImpl<T> implements Link<T> {
      * @return {@link Map} of HTML attributes, may include the URL as {@code href}
      */
     @Override
+    @JsonInclude(Include.NON_EMPTY)
+    @JsonSerialize(using = LinkHtmlAttributesSerializer.class)
     public @NotNull Map<String, String> getHtmlAttributes() {
         return htmlAttributes;
     }

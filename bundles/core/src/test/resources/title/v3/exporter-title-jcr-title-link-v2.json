@@ -4,7 +4,6 @@
     "valid": true,
     "url": "https://www.adobe.com",
     "htmlAttributes": {
-      "href":"https://www.adobe.com",
       "aria-label":"World",
       "title":"World title"
     }
