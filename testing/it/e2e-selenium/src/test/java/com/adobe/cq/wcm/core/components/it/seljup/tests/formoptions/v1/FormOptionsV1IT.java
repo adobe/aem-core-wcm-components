@@ -31,9 +31,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
-import java.util.concurrent.TimeoutException;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FormOptionsV1IT extends AuthorBaseUITest {
@@ -109,7 +106,7 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set title text")
-    public void setTitle() throws InterruptedException, TimeoutException {
+    public void setTitle() throws InterruptedException {
         Commons.openConfigureDialog(optionPath);
         FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
         configDialog.setMandatoryFields(elemName, title);

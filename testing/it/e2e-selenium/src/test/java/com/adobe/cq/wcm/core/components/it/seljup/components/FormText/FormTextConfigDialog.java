@@ -14,12 +14,12 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions;
+package com.adobe.cq.wcm.core.components.it.seljup.components.FormText;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
@@ -31,7 +31,10 @@ import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class FormOptionsConfigDialog extends Dialog {
+public class FormTextConfigDialog extends Dialog {
+
+    private static SelenideElement aboutTab = $("coral-tab[data-foundation-tracking-event*='about']");
+    private static SelenideElement constraintsTab = $("coral-tab[data-foundation-tracking-event*='constraints']");
 
     /**
      * Set the mandatory fields
@@ -42,15 +45,6 @@ public class FormOptionsConfigDialog extends Dialog {
         SelenideElement el = Commons.getVisibleElement($$("[name='./jcr:title']"));
         if(el != null)
             el.sendKeys(title);
-    }
-
-    /**
-     * Add an option
-     */
-    public void addOption(String value, String text) {
-        $("button[coral-multifield-add='']").click();
-        $("input[name$='./value']").sendKeys(value);
-        $("input[name$='./text']").sendKeys(text);
     }
 
     /**
@@ -65,11 +59,21 @@ public class FormOptionsConfigDialog extends Dialog {
         list.selectByValue(optionType);
     }
 
-    /**
-     * Set help message
-     */
-    public void setHelpMessage(String helpMessage) {
-        $("[name='./helpMessage']").sendKeys(helpMessage);
+    public boolean checkAllConstraintsAvailable() {
+        CoralSelect selectList = new CoralSelect("name='./type'");
+        CoralSelectList list = selectList.openSelectList();
+        String [] constraints = {"text","textarea","email","tel","date", "number","password"};
+        Boolean present = true;
+        for(int i = 0; i < constraints.length; i++) {
+            if(!list.getItemByValue(constraints[i]).isDisplayed())
+                present = false;
+        }
+
+        return present;
+    }
+
+    public void setDefaultValue(String value) {
+        $("[name='./value']").sendKeys(value);
     }
 
     public boolean isMandatoryFieldsInvalid() {
@@ -81,17 +85,46 @@ public class FormOptionsConfigDialog extends Dialog {
     }
 
     public boolean isTitleFieldsInvalid() {
-         return $$("[name='./jcr:title'][invalid='']").size() == 1;
+        return $$("[name='./jcr:title'][invalid='']").size() == 1;
     }
 
-    public void checkSelectedCheckbox() {
-        CoralCheckbox checkbox = new CoralCheckbox("[name$='selected']");
+    public void hideTitle() {
+        CoralCheckbox checkbox = new CoralCheckbox("[name='./hideTitle']");
         checkbox.click();
     }
 
+    public void openAboutTab() {
+        $(aboutTab).click();
+    }
 
-    public void checkDisabledCheckbox() {
-        CoralCheckbox checkbox = new CoralCheckbox("[name$='disabled']");
+    public void openConstraintsTab() {
+        $(constraintsTab).click();
+    }
+
+    public void setHelpMessage(String message) {
+        $("input[name='./helpMessage']").sendKeys(message);
+    }
+
+    public void checkHelpAsPlaceHolder() {
+        CoralCheckbox checkbox = new CoralCheckbox("[name='./usePlaceholder']");
         checkbox.click();
+    }
+
+    public void setReadOnly() {
+        CoralCheckbox checkbox = new CoralCheckbox("[name='./readOnly']");
+        checkbox.click();
+    }
+
+    public void setRequired() {
+        CoralCheckbox checkbox = new CoralCheckbox("[name='./required']");
+        checkbox.click();
+    }
+
+    public void setRequiredMessage(String message) {
+        $("textarea[name='./requiredMessage']").sendKeys(message);
+    }
+
+    public void setConstraintMessage(String message) {
+        $("textarea[name='./constraintMessage']").sendKeys(message);
     }
 }
