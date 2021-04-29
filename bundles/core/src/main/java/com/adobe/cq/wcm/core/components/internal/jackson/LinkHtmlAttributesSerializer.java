@@ -19,14 +19,21 @@ package com.adobe.cq.wcm.core.components.internal.jackson;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.google.common.collect.ImmutableSet;
 
 public class LinkHtmlAttributesSerializer extends StdSerializer<Map<String, String>> {
+
+    /**
+     * List of the link's ignored html attributes from the Json export.
+     */
+    private static final Set<String> IGNORED_HTML_ATTRIBUTES = ImmutableSet.of("href");
 
     public LinkHtmlAttributesSerializer() { this(null); }
 
@@ -46,7 +53,7 @@ public class LinkHtmlAttributesSerializer extends StdSerializer<Map<String, Stri
     @Override
     public boolean isEmpty(SerializerProvider provider, Map<String, String> map) {
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (!entry.getKey().equals("href") && !StringUtils.isBlank(entry.getValue())) {
+            if (!IGNORED_HTML_ATTRIBUTES.contains(entry.getKey()) && !StringUtils.isBlank(entry.getValue())) {
                 filteredMap.put(entry.getKey(), entry.getValue());
             }
         }
