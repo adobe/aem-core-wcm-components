@@ -28,10 +28,10 @@ public interface LinkProcessorFactory {
 
     /**
      * Returns a {@link LinkProcessor} for a given link url
-     * @param linkURL the link url
+     * @param linkRequest the link request
      * @return a link processor which can process the given link
      */
     @Nullable
-    LinkProcessor getProcessor(String linkURL);
+    LinkProcessor getProcessor(LinkRequest linkRequest);
 
 }

@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.link;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.services.link.LinkProcessor;
+import com.adobe.cq.wcm.core.components.services.link.LinkRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -52,13 +54,28 @@ public final class LinkImpl<T> implements Link<T> {
     private final String url;
     private final String processedUrl;
     private final T reference;
+    private final LinkRequest<T> linkRequest;
     private final Map<String, String> htmlAttributes;
+    private final String fullUrl;
 
-    public LinkImpl(String url, String processedUrl, T reference, Map<String, String> htmlAttributes) {
+    public LinkImpl(@Nullable String url, @Nullable String processedUrl,  @Nullable String fullUrl, @Nullable T reference,
+                    @NotNull LinkRequest<T> linkRequest,
+                    @Nullable Map<String, Optional<String>> htmlAttributes) {
         this.url = url;
         this.processedUrl = processedUrl;
-        this.reference = reference;
+        this.fullUrl = fullUrl;
+        this.reference = linkRequest.getReference();
+        this.linkRequest = linkRequest;
         this.htmlAttributes = buildHtmlAttributes(url, htmlAttributes);
+    }
+
+    public LinkImpl(@NotNull LinkRequest<T> linkRequest) {
+        this.linkRequest = linkRequest;
+        this.reference = linkRequest.getReference();
+        this.url = linkRequest.getPath();
+        this.processedUrl = linkRequest.getPath();
+        this.fullUrl = linkRequest.getPath();
+        this.htmlAttributes = buildHtmlAttributes(url, linkRequest.getHtmlAttributes());
     }
 
     /**
@@ -93,6 +110,12 @@ public final class LinkImpl<T> implements Link<T> {
         return processedUrl;
     }
 
+    @Override
+    @JsonIgnore
+    public @Nullable String getFullURL() {
+        return fullUrl;
+    }
+
     /**
      * Getter for link HTML attributes.
      *
@@ -110,9 +133,15 @@ public final class LinkImpl<T> implements Link<T> {
      * @return Link referenced WCM/DAM entity or {@code null} if link does not point to one
      */
     @Override
-    @JsonIgnore  // exclude referenced object in jSON
+    @JsonIgnore
     public @Nullable T getReference() {
         return reference;
+    }
+
+    @Override
+    @JsonIgnore
+    public @NotNull LinkRequest<T> getLinkRequest() {
+        return linkRequest;
     }
 
     /**
@@ -123,15 +152,15 @@ public final class LinkImpl<T> implements Link<T> {
      *
      * @return {@link Map} of link attributes
      */
-    private static Map<String, String> buildHtmlAttributes(String linkURL, Map<String, String> htmlAttributes) {
+    private static Map<String, String> buildHtmlAttributes(String linkURL, Map<String, Optional<String>> htmlAttributes) {
         Map<String,String> attributes = new LinkedHashMap<>();
         if (linkURL != null) {
             attributes.put(ATTR_HREF, linkURL);
         }
         if (htmlAttributes != null) {
             Map<String, String> filteredAttributes = htmlAttributes.entrySet().stream()
-                    .filter(e -> ALLOWED_ATTRIBUTES.contains(e.getKey()) && e.getValue() != null)
-                    .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+                    .filter(e -> ALLOWED_ATTRIBUTES.contains(e.getKey()) && e.getValue().isPresent())
+                    .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get()));
             attributes.putAll(filteredAttributes);
         }
         return ImmutableMap.copyOf(attributes);

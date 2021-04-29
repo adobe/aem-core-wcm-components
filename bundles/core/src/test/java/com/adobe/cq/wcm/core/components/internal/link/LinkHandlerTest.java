@@ -31,14 +31,9 @@ import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.*;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(AemContextExtension.class)
 class LinkHandlerTest {

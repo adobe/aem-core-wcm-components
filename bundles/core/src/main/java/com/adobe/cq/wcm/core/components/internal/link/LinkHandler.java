@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 
@@ -32,10 +31,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.services.link.LinkProcessor;
 import com.adobe.cq.wcm.core.components.services.link.LinkProcessorFactory;
+import com.adobe.cq.wcm.core.components.services.link.LinkRequest;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import static com.adobe.cq.wcm.core.components.commons.link.Link.*;
@@ -114,7 +114,7 @@ public class LinkHandler {
             return Optional.empty();
         }
         String linkURL = getPageLinkURL(page);
-        return Optional.of(new LinkImpl<>(linkURL, processURL(linkURL), page, null));
+        return Optional.of(processLinkRequest(new LinkRequest(page, linkURL, null)));
     }
 
     /**
@@ -122,15 +122,16 @@ public class LinkHandler {
      * @param linkURL Link URL
      * @param target Target
      *
-     * @return {@link Optional} of  {@link Link<Page>}
+     * @return {@link Link}
      */
     @NotNull
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
-        String resolvedLinkTarget = validateAndResolveLinkTarget(target);
+        Optional <String> resolvedLinkTarget = validateAndResolveLinkTarget(target);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, processURL(resolvedLinkURL), targetPage,
-                new HashMap<String, String>() {{ put(ATTR_TARGET, resolvedLinkTarget); }}));
+        return Optional.of(processLinkRequest(new LinkRequest(targetPage, resolvedLinkURL, ImmutableMap.of(
+                ATTR_TARGET, resolvedLinkTarget
+        ))));
     }
 
     /**
@@ -140,29 +141,27 @@ public class LinkHandler {
      * @param linkAccessibilityLabel Link Accessibility Label
      * @param linkTitleAttribute Link Title Attribute
      *
-     * @return {@link Optional} of  {@link Link<Page>}
+     * @return {@link Link}
      */
     @NotNull
-    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
+    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel,
+                                   @Nullable String linkTitleAttribute) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
-        String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
-        String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
+        Optional<String> resolvedLinkTarget = validateAndResolveLinkTarget(target);
+        Optional <String> validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
+        Optional <String> validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, processURL(resolvedLinkURL), targetPage,
-                new HashMap<String, String>() {{
-                    put(ATTR_TARGET, resolvedLinkTarget);
-                    put(ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel);
-                    put(ATTR_TITLE, validatedLinkTitleAttribute);
-        }}));
+        return Optional.of(processLinkRequest(new LinkRequest<>(targetPage, resolvedLinkURL, ImmutableMap.of(
+                ATTR_TARGET, resolvedLinkTarget,
+                ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel,
+                ATTR_TITLE, validatedLinkTitleAttribute)
+        )));
     }
 
-    private String processURL(String linkURL) {
-        LinkProcessor processor = linkProcessorFactory.getProcessor(linkURL);
-        if (processor != null) {
-            return processor.process(linkURL);
-        }
-        return linkURL;
+    private Link processLinkRequest(LinkRequest<Page> linkRequest) {
+        return Optional.ofNullable(linkProcessorFactory.getProcessor(linkRequest))
+            .map(processor -> processor.process(linkRequest))
+                .orElse(new LinkImpl<>(linkRequest));
     }
 
     /**
@@ -184,30 +183,20 @@ public class LinkHandler {
      * Validates and resolves the link target.
      * @param linkTarget Link target
      *
-     * @return The validated link target or {@code null} if not valid
+     * @return {@link Optional} of the validated link target
      */
-    private String validateAndResolveLinkTarget(String linkTarget) {
-        if (linkTarget != null && VALID_LINK_TARGETS.contains(linkTarget)) {
-            return linkTarget;
-        }
-        else {
-            return null;
-        }
+    private Optional<String> validateAndResolveLinkTarget(String linkTarget) {
+        return Optional.ofNullable(linkTarget).filter(target -> VALID_LINK_TARGETS.contains(linkTarget));
     }
 
     /**
      * Validates the link accessibility label.
      * @param linkAccessibilityLabel Link accessibility label
      *
-     * @return The validated link accessibility label or {@code null} if not valid
+     * @return {@link Optional} of the validated link accessibility label
      */
-    private String validateLinkAccessibilityLabel(String linkAccessibilityLabel) {
-        if (!StringUtils.isBlank(linkAccessibilityLabel)) {
-            return linkAccessibilityLabel;
-        }
-        else {
-            return null;
-        }
+    private Optional<String> validateLinkAccessibilityLabel(String linkAccessibilityLabel) {
+        return Optional.ofNullable(linkAccessibilityLabel).filter(label -> !StringUtils.isBlank(label));
     }
 
     /**
@@ -216,13 +205,8 @@ public class LinkHandler {
      *
      * @return The validated link title attribute or {@code null} if not valid
      */
-    private String validateLinkTitleAttribute(String linkTitleAttribute) {
-        if (!StringUtils.isBlank(linkTitleAttribute)) {
-            return linkTitleAttribute;
-        }
-        else {
-            return null;
-        }
+    private Optional <String> validateLinkTitleAttribute(String linkTitleAttribute) {
+        return Optional.ofNullable(linkTitleAttribute).filter(linkAttribute -> !StringUtils.isBlank(linkAttribute));
     }
 
     /**

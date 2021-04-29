@@ -18,10 +18,12 @@ package com.adobe.cq.wcm.core.components.commons.link;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.services.link.LinkRequest;
 import com.day.cq.wcm.api.Page;
 
 /**
@@ -84,6 +86,17 @@ public interface Link<T> {
         return null;
     }
 
+
+    /**
+     * The full URL which also contains the scheme and host information.
+     * This is usually created with a {@link com.day.cq.commons.Externalizer} service
+     * @return Full link URL or {@code null} if link is invalid or can't be externalized.
+     */
+    @Nullable
+    default String getFullURL() {
+        return null;
+    }
+
     /**
      * Map with Attributes for HTML Anchor tag for this link.
      * This usually also contains the Link URL as <code>href</code> attribute,
@@ -106,6 +119,17 @@ public interface Link<T> {
     @Nullable
     default T getReference() {
         return null;
+    }
+
+    /**
+     * Returns the {@link LinkRequest} which was used to create the link
+     *
+     * @return Link Request
+     * @since com.adobe.cq.wcm.core.components.commons.link 1.2.0
+     */
+    @NotNull
+    default LinkRequest<T> getLinkRequest() {
+        return new LinkRequest<>(null, null, null);
     }
 
 }

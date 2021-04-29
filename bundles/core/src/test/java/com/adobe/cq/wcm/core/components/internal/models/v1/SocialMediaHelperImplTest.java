@@ -69,7 +69,6 @@ class SocialMediaHelperImplTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
-        context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
         context.registerService(AdapterFactory.class, new AdapterFactory() {
                     @Override
                     @SuppressWarnings("unchecked")

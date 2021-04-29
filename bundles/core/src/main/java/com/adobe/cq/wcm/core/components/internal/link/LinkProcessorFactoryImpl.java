@@ -24,8 +24,10 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.services.link.LinkProcessor;
 import com.adobe.cq.wcm.core.components.services.link.LinkProcessorFactory;
+import com.adobe.cq.wcm.core.components.services.link.LinkRequest;
 
 @Component(immediate = true, service = LinkProcessorFactory.class)
 public class LinkProcessorFactoryImpl implements LinkProcessorFactory {
@@ -46,10 +48,10 @@ public class LinkProcessorFactoryImpl implements LinkProcessorFactory {
     }
 
     @Override
-    public LinkProcessor getProcessor(String linkURL) {
+    public LinkProcessor getProcessor(LinkRequest linkRequest) {
         for (LinkProcessor linkProcessor: linkProcessors) {
-            String processedURL = linkProcessor.process(linkURL);
-            if (processedURL != null) {
+            Link link = linkProcessor.process(linkRequest);
+            if (link != null) {
                 return linkProcessor;
             }
         }

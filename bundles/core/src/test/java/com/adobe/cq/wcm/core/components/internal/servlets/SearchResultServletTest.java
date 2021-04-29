@@ -45,7 +45,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.link.LinkProcessorFactoryImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.services.link.LinkProcessorFactory;
+import com.adobe.cq.wcm.core.components.services.link.LinkRequest;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
@@ -103,9 +106,6 @@ public class SearchResultServletTest {
         context.registerService(QueryBuilder.class, mockQueryBuilder);
         context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
         context.request().setContextPath(CONTEXT_PATH);
-        LinkHandler linkHandler = new LinkHandler();
-        Utils.setInternalState(linkHandler, "request", context.request());
-        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandler.class, linkHandler);
         underTest = context.registerInjectActivateService(new SearchResultServlet());
     }
 
@@ -324,12 +324,12 @@ public class SearchResultServletTest {
         }
     }
 
-    private static class Link<Page> implements com.adobe.cq.wcm.core.components.commons.link.Link<Page> {
+    private static class Link implements com.adobe.cq.wcm.core.components.commons.link.Link {
 
         private boolean valid;
         private String url;
         private Map<String,String> htmlAttributes;
-        private Page reference;
+        private LinkRequest linkRequest;
 
         @Override
         public boolean isValid() {
@@ -350,10 +350,9 @@ public class SearchResultServletTest {
         }
 
         @Override
-        public @Nullable Page getReference() {
-            return reference;
+        public @NotNull LinkRequest getLinkRequest() {
+            return linkRequest;
         }
-
     }
 
 }

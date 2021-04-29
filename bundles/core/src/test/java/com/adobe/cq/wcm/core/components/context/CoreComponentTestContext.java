@@ -25,10 +25,16 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.impl.ResourceTypeBasedResourcePicker;
 import org.apache.sling.models.spi.ImplementationPicker;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
+import org.mockito.Mockito;
 
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.internal.link.DefaultLinkProcessor;
+import com.adobe.cq.wcm.core.components.internal.link.LinkProcessorFactoryImpl;
+import com.adobe.cq.wcm.core.components.internal.services.LatestVersionImplementationPicker;
+import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
+import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.msm.api.MSMNameConstants;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -59,6 +65,7 @@ public final class CoreComponentTestContext {
             .<AemContext>afterSetUp(context -> {
                     context.addModelsForClasses(MockResponsiveGrid.class);
                     context.addModelsForPackage("com.adobe.cq.wcm.core.components.models");
+                    context.addModelsForPackage("com.adobe.cq.wcm.core.components.internal.link");
                     context.registerService(SlingModelFilter.class, new MockSlingModelFilter() {
                         private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{
                             add(NameConstants.NN_RESPONSIVE_CONFIG);
@@ -80,6 +87,9 @@ public final class CoreComponentTestContext {
                         }
                     });
                     context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
+                    context.registerInjectActivateService(new LinkProcessorFactoryImpl());
+                    context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
+                    context.registerInjectActivateService(new DefaultLinkProcessor());
                 }
             )
             .build();

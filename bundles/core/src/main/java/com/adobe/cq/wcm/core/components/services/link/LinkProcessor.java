@@ -15,19 +15,22 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.services.link;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+
 /**
- * A service that can process a given link url
+ * A service that can process a given link
  *
  * @since com.adobe.cq.wcm.core.components.services.link 1.0.0
  */
-public interface LinkProcessor {
+public interface LinkProcessor<T> {
 
     /**
      * Process a given link
-     * @param linkUrl the link url
+     * @param  linkRequest The link request
      * @return the processed link if the processor can handle the link, otherwise null
      */
-    @Nullable String process(@Nullable String linkUrl);
+    @Nullable Link<T> process(@NotNull LinkRequest<T> linkRequest);
 }
