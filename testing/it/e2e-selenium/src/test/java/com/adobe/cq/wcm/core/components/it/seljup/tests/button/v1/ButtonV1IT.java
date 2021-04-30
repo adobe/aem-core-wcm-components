@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.button.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.button.v1.Button;
-import com.adobe.cq.wcm.core.components.it.seljup.components.button.v1.ButtonConfigureDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.button.ButtonEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
@@ -32,6 +32,7 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -42,6 +43,7 @@ import org.openqa.selenium.WebElement;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("group2")
 public class ButtonV1IT extends AuthorBaseUITest {
 
     private String testPage;
@@ -61,7 +63,7 @@ public class ButtonV1IT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanup() throws ClientException, InterruptedException {
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**
@@ -87,11 +89,11 @@ public class ButtonV1IT extends AuthorBaseUITest {
         insertComponentDialog.selectComponent(proxyCompoenetPath);
         assertTrue(editorPage.getComponentOverlay(testComponentPath).exists(), "new inserted text component should exist in UI");
         Commons.assertResourceExist(authorClient, testComponentPath, "new inserted text component should exist on backend");
-        ButtonConfigureDialog buttonConfigureDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonConfigureDialog.class);
-        buttonConfigureDialog.getTitleField().setValue(testTitle);
-        buttonConfigureDialog.clickPrimary();
+        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        buttonEditDialog.getTitleField().setValue(testTitle);
+        buttonEditDialog.clickPrimary();
         Commons.switchContext("ContentFrame");
-        Commons.webDriverWait(1000);
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(button.isVisible(), "Button should be visible in content frame");
         assertTrue(button.getTitle().trim().equals(testTitle), "Button Text should have been updated");
     }
@@ -119,12 +121,12 @@ public class ButtonV1IT extends AuthorBaseUITest {
         insertComponentDialog.selectComponent(proxyCompoenetPath);
         assertTrue(editorPage.getComponentOverlay(testComponentPath).exists(), "new inserted text component should exist in UI");
         Commons.assertResourceExist(authorClient, testComponentPath, "new inserted text component should exist on backend");
-        ButtonConfigureDialog buttonConfigureDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonConfigureDialog.class);
-        buttonConfigureDialog.setLinkField(link);
-        Commons.webDriverWait(2000);
-        buttonConfigureDialog.clickPrimary();
+        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        buttonEditDialog.setLinkField(link);
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        buttonEditDialog.clickPrimary();
         Commons.switchContext("ContentFrame");
-        Commons.webDriverWait(1000);
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(button.checkLinkPresent(link),"Button with link " + link + " should be present");
     }
 
@@ -151,11 +153,11 @@ public class ButtonV1IT extends AuthorBaseUITest {
         insertComponentDialog.selectComponent(proxyCompoenetPath);
         assertTrue(editorPage.getComponentOverlay(testComponentPath).exists(), "new inserted text component should exist in UI");
         Commons.assertResourceExist(authorClient, testComponentPath, "new inserted text component should exist on backend");
-        ButtonConfigureDialog buttonConfigureDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonConfigureDialog.class);
-        buttonConfigureDialog.getIcon().setValue(icon);
-        buttonConfigureDialog.clickPrimary();
+        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        buttonEditDialog.getIcon().setValue(icon);
+        buttonEditDialog.clickPrimary();
         Commons.switchContext("ContentFrame");
-        Commons.webDriverWait(1000);
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(button.iconPresent(icon),"Icon " + icon + " should be present");
     }
 }

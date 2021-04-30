@@ -19,9 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v1;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.FormOptions;
-import com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.FormOptionsConfigDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.V1.FormOptionsV1;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formoptions.BaseFormOptions;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formoptions.FormOptionsEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formoptions.v1.FormOptions;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.HttpStatus;
@@ -29,10 +29,12 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("group1")
 public class FormOptionsV1IT extends AuthorBaseUITest {
 
     protected String testPage;
@@ -52,7 +54,7 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     private String text = "text1";
 
     protected String formOptionsRT;
-    protected FormOptions formOptions;
+    protected BaseFormOptions formOptions;
 
     public void setComponentResources() {
         formOptionsRT = Commons.rtFormOptions_v1;
@@ -76,14 +78,14 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         setComponentResources();
-        formOptions = new FormOptionsV1();
+        formOptions = new FormOptions();
         setup();
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete the test page we created
-        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
 
         // delete the proxy component created
         Commons.deleteProxyComponent(adminClient, compPath);
@@ -97,8 +99,8 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     public void checkMandatoryFields() throws InterruptedException {
         Commons.openConfigureDialog(optionPath);
         Commons.saveConfigureDialog();
-        assertTrue(Commons.isConfigDialogVisible(),"Config Dialog should be visible");
-        assertTrue(formOptions.getConfigDialog().isMandatoryFieldsInvalid(),"Mandatory field Name should be invalid");
+        assertTrue(Commons.iseditDialogVisible(),"Config Dialog should be visible");
+        assertTrue(formOptions.geteditDialog().isMandatoryFieldsInvalid(),"Mandatory field Name should be invalid");
     }
 
     /**
@@ -108,9 +110,9 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set title text")
     public void setTitle() throws InterruptedException {
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
-        configDialog.setMandatoryFields(elemName, title);
-        configDialog.addOption(value, text);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isTitleRendered(title), "Title should be rendered");
@@ -123,9 +125,9 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set element name")
     public void setElementName() throws InterruptedException {
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
-        configDialog.setMandatoryFields(elemName, title);
-        configDialog.addOption(value, text);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isNameSet(elemName), "Name should be set");
@@ -138,10 +140,10 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set the help message")
     public void setHelpMessage() throws InterruptedException {
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
-        configDialog.setMandatoryFields(elemName, title);
-        configDialog.addOption(value, text);
-        configDialog.setHelpMessage(helpMessage);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        editDialog.setHelpMessage(helpMessage);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isHelpMessageSet(helpMessage), "Help Message should be set");
@@ -154,10 +156,10 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     @DisplayName("Test : Set the checkbox type")
     public void setCheckbox() throws InterruptedException {
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
-        configDialog.setMandatoryFields(elemName, title);
-        configDialog.addOption(value, text);
-        configDialog.setOptionType("checkbox");
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        editDialog.setOptionType("checkbox");
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isCheckboxTypeSet(), "Option type should be set to checkbox");
@@ -171,10 +173,10 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     @DisplayName("Test : Set the checkbox type")
     public void setRadioButton() throws InterruptedException {
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
-        configDialog.setMandatoryFields(elemName, title);
-        configDialog.addOption(value, text);
-        configDialog.setOptionType("radio");
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        editDialog.setOptionType("radio");
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isRadioButtonTypeSet(), "Option type should be set to radio button");
@@ -188,10 +190,10 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     @DisplayName("Test : Set the drop-down type")
     public void setDropDown()  throws InterruptedException {
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
-        configDialog.setMandatoryFields(elemName, title);
-        configDialog.addOption(value, text);
-        configDialog.setOptionType("drop-down");
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        editDialog.setOptionType("drop-down");
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isDropDownTypeSet(), "Option type should be set to drop-down");
@@ -204,10 +206,10 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     @DisplayName("Test : Set the multi-select drop-down type")
     public void setMultiSelectDropDown()  throws InterruptedException {
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
-        configDialog.setMandatoryFields(elemName, title);
-        configDialog.addOption(value, text);
-        configDialog.setOptionType("multi-drop-down");
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        editDialog.setOptionType("multi-drop-down");
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isMultiSelectDropDownTypeSet(), "Option type should be set to multi-select drop-down");
@@ -221,15 +223,15 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     public void setActiveOptionForCheckbox()  throws InterruptedException {
         // open the edit dialog
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
-        configDialog.setOptionType("checkbox");
+        editDialog.setOptionType("checkbox");
         // set the mandatory fields
-        configDialog.setMandatoryFields(elemName, title);
+        editDialog.setMandatoryFields(elemName, title);
         // add one option
-        configDialog.addOption(value, text);
+        editDialog.addOption(value, text);
         // check the 'Selected' option
-        configDialog.checkSelectedCheckbox();
+        editDialog.checkSelectedCheckbox();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isCheckboxChecked(value),"Checkbox should be checked");
@@ -243,15 +245,15 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     public void setActiveOptionForRadioButton()  throws InterruptedException {
         // open the edit dialog
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
-        configDialog.setOptionType("radio");
+        editDialog.setOptionType("radio");
         // set the mandatory fields
-        configDialog.setMandatoryFields(elemName, title);
+        editDialog.setMandatoryFields(elemName, title);
         // add one option
-        configDialog.addOption(value, text);
+        editDialog.addOption(value, text);
         // check the 'Selected' option
-        configDialog.checkSelectedCheckbox();
+        editDialog.checkSelectedCheckbox();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isRadioButtonSelected(value),"Radio button should be checked");
@@ -265,15 +267,15 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     public void setActiveOptionForDropDown()  throws InterruptedException {
         // open the edit dialog
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
-        configDialog.setOptionType("drop-down");
+        editDialog.setOptionType("drop-down");
         // set the mandatory fields
-        configDialog.setMandatoryFields(elemName, title);
+        editDialog.setMandatoryFields(elemName, title);
         // add one option
-        configDialog.addOption(value, text);
+        editDialog.addOption(value, text);
         // check the 'Selected' option
-        configDialog.checkSelectedCheckbox();
+        editDialog.checkSelectedCheckbox();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isDropDownSelected(value),"Dropdown should be checked");
@@ -287,15 +289,15 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     public void setDisabledOptionForCheckbox()  throws InterruptedException {
         // open the edit dialog
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
-        configDialog.setOptionType("checkbox");
+        editDialog.setOptionType("checkbox");
         // set the mandatory fields
-        configDialog.setMandatoryFields(elemName, title);
+        editDialog.setMandatoryFields(elemName, title);
         // add one option
-        configDialog.addOption(value, text);
+        editDialog.addOption(value, text);
         // check the 'Disabled' option
-        configDialog.checkDisabledCheckbox();
+        editDialog.checkDisabledCheckbox();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isCheckboxDisabled(value),"Checkbox should be disabled");
@@ -309,15 +311,15 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     public void setDisabledOptionForRadioButton()  throws InterruptedException {
         // open the edit dialog
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
-        configDialog.setOptionType("radio");
+        editDialog.setOptionType("radio");
         // set the mandatory fields
-        configDialog.setMandatoryFields(elemName, title);
+        editDialog.setMandatoryFields(elemName, title);
         // add one option
-        configDialog.addOption(value, text);
+        editDialog.addOption(value, text);
         // check the 'Disabled' option
-        configDialog.checkDisabledCheckbox();
+        editDialog.checkDisabledCheckbox();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isRadioButtonDisabled(value),"Checkbox should be disabled");
@@ -331,15 +333,15 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     public void setDisabledOptionForDropDown()  throws InterruptedException {
         // open the edit dialog
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
-        configDialog.setOptionType("drop-down");
+        editDialog.setOptionType("drop-down");
         // set the mandatory fields
-        configDialog.setMandatoryFields(elemName, title);
+        editDialog.setMandatoryFields(elemName, title);
         // add one option
-        configDialog.addOption(value, text);
+        editDialog.addOption(value, text);
         // check the 'Disabled' option
-        configDialog.checkDisabledCheckbox();
+        editDialog.checkDisabledCheckbox();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isDropDownDisabled(value),"Checkbox should be disabled");
@@ -353,15 +355,15 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     public void setDisabledOptionForMultiSelectDropDown()  throws InterruptedException {
         // open the edit dialog
         Commons.openConfigureDialog(optionPath);
-        FormOptionsConfigDialog configDialog = formOptions.getConfigDialog();
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
-        configDialog.setOptionType("multi-drop-down");
+        editDialog.setOptionType("multi-drop-down");
         // set the mandatory fields
-        configDialog.setMandatoryFields(elemName, title);
+        editDialog.setMandatoryFields(elemName, title);
         // add one option
-        configDialog.addOption(value, text);
+        editDialog.addOption(value, text);
         // check the 'Disabled' option
-        configDialog.checkDisabledCheckbox();
+        editDialog.checkDisabledCheckbox();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isMultiSelectDropDownDisabled(value),"Checkbox should be disabled");

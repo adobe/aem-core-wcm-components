@@ -17,8 +17,8 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formhidden.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.FormHidden.FormHidden;
-import com.adobe.cq.wcm.core.components.it.seljup.components.FormHidden.FormHiddenConfigDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formhidden.FormHidden;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formhidden.FormHiddenEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
@@ -28,10 +28,12 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("group1")
 public class FormHiddenV1IT extends AuthorBaseUITest {
 
     // element name
@@ -78,7 +80,7 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete the test page we created
-        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
 
         // delete the proxy component created
         Commons.deleteProxyComponent(adminClient, compPathHidden);
@@ -93,7 +95,7 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
     public void checkMandatoryFields() throws InterruptedException {
         Commons.openConfigureDialog(hiddenPath);
         Commons.saveConfigureDialog();
-        assertTrue(Commons.isConfigDialogVisible(),"Config Dialog should be visible");
+        assertTrue(Commons.iseditDialogVisible(),"Config Dialog should be visible");
         assertTrue(formHidden.getConfigDialog().isMandatoryFieldsInvalid(),"Mandatory field Name should be invalid");
     }
 
@@ -118,7 +120,7 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set element value")
     public void setElementValue() throws InterruptedException {
         Commons.openConfigureDialog(hiddenPath);
-        FormHiddenConfigDialog dialog = formHidden.getConfigDialog();
+        FormHiddenEditDialog dialog = formHidden.getConfigDialog();
         dialog.setMandatoryFields(elemName);
         dialog.setValue(elemValue);
         Commons.saveConfigureDialog();
@@ -134,7 +136,7 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set element identifier")
     public void setElementId() throws InterruptedException {
         Commons.openConfigureDialog(hiddenPath);
-        FormHiddenConfigDialog dialog = formHidden.getConfigDialog();
+        FormHiddenEditDialog dialog = formHidden.getConfigDialog();
         dialog.setMandatoryFields(elemName);
         dialog.setId(elemId);
         Commons.saveConfigureDialog();

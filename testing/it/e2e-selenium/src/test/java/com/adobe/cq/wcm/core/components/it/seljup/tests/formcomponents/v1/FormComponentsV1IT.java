@@ -17,7 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.FormComponents.FormContainerConfigDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.FormContainerEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
@@ -30,6 +30,7 @@ import org.codehaus.jackson.JsonNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -39,6 +40,7 @@ import java.util.Iterator;
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("group1")
 public class FormComponentsV1IT extends AuthorBaseUITest {
 
     private static String componentName = "formcomponents";
@@ -149,9 +151,9 @@ public class FormComponentsV1IT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete any user generated content
-        authorClient.deletePageWithRetry(userContent, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(userContent, true, false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
         // delete the test page we created
-        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
 
         // delete the proxy components created
         Commons.deleteProxyComponent(adminClient, compPathContainer);
@@ -168,7 +170,7 @@ public class FormComponentsV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Check if the action 'Store Content' works.")
     public void storeContent() throws InterruptedException, ClientException {
         Commons.openConfigureDialog(containerPath);
-        FormContainerConfigDialog  dialog = new FormContainerConfigDialog();
+        FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.selectActionType("foundation/components/form/actions/store");
         String actionInputValue = dialog.getActionInputValue();
         String contentJsonUrl_allForm = actionInputValue.substring(0, actionInputValue.length() - 1);

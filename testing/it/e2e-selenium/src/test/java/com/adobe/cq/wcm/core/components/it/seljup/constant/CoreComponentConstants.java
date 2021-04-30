@@ -27,5 +27,10 @@ public class CoreComponentConstants {
     /**
      * Timeout for path to exist or for uploading an asset in milliseconds
      */
-    public static final int TIMEOUT_TIME_MS = 300000;
+    public static final int TIMEOUT_TIME_SEC = 20;
+
+    /**
+     * Web driver wait to reflect UI changes
+     */
+    public static final int WEBDRIVER_WAIT_TIME_MS = 1000;
 }

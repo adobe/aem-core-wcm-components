@@ -17,6 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util;
 
 import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
@@ -345,7 +346,7 @@ public class Commons {
      *
      * @param dataPath datapath of the component to open the configuration dialog
      */
-    public static void openConfigureDialog(String dataPath) {
+    public static void openConfigureDialog(String dataPath) throws InterruptedException {
         openEditableToolbar(dataPath);
         $(Selectors.SELECTOR_CONFIG_BUTTON).click();
         Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_CONFIG_DIALOG));
@@ -470,7 +471,7 @@ public class Commons {
         return webDriver.getCurrentUrl();
     }
 
-    public static boolean isConfigDialogVisible() {
+    public static boolean iseditDialogVisible() {
         return $(Selectors.SELECTOR_CONFIG_DIALOG).isDisplayed();
     }
 
@@ -480,6 +481,19 @@ public class Commons {
                 return list.get(i);
         }
         return null;
+    }
+
+    /**
+     * Selects a tag in a Granite UI tags autocomplete field
+     *
+     * @param selector {String} Specific selector for the tags selector (ex. "[name='./tags']")
+     * @param value {String} The tag value
+     * @returns {TestCase} A test case that selects a tag in a tag selector field
+     */
+    public static void selectInTags(String selector, String value) {
+        AutoCompleteField autoCompleteField = new AutoCompleteField("css:" + selector);
+        autoCompleteField.sendKeys(value);
+        autoCompleteField.suggestions().selectByValue(value);
     }
 
 }

@@ -16,12 +16,14 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.FormOptions.V2.FormOptionsV2;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formoptions.v2.FormOptions;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v1.FormOptionsV1IT;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 
+@Tag("group1")
 public class FormOptionsV2IT extends FormOptionsV1IT {
 
     public void setComponentResources() {
@@ -31,7 +33,7 @@ public class FormOptionsV2IT extends FormOptionsV1IT {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         setComponentResources();
-        formOptions = new FormOptionsV2();
+        formOptions = new FormOptions();
         setup();
     }
 }

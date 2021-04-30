@@ -16,14 +16,16 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.FormButton.v2.FormButtonV2;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formbutton.v2.FormButton;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v1.FormButtonV1IT;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 
+@Tag("group1")
 public class FormButtonV2IT extends FormButtonV1IT {
 
     /**
@@ -32,9 +34,9 @@ public class FormButtonV2IT extends FormButtonV1IT {
     @BeforeEach
     public void setupBefore() throws ClientException {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyCompoenetPath = Commons.creatProxyComponent(adminClient, Commons.rtFormButton_v2, "Proxy Form Button", "formbutton");
-        addPathtoComponentPolicy(responsiveGridPath, proxyCompoenetPath);
-        formButton = new FormButtonV2();
+        proxyComponentPath = Commons.creatProxyComponent(adminClient, Commons.rtFormButton_v2, "Proxy Form Button", "formbutton");
+        addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
+        formButton = new FormButton();
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
     }
