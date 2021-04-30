@@ -151,6 +151,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
         buttonEditDialog.getNameField().setValue(buttonName);
         Commons.saveConfigureDialog();
 
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchContext("ContentFrame");
         assertTrue(formButton.isButtonPresentByName(buttonName), "Button should be present with name " + buttonName);
         assertTrue(formButton.getButtonText().contains(buttonLabel), "Button should contain " + buttonLabel + " text");

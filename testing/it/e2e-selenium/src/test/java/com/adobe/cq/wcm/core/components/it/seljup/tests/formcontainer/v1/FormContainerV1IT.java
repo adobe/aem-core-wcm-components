@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag("group1")
 public class FormContainerV1IT extends AuthorBaseUITest {
     // root location where form content will be stored
-    private static final String userContent = "/content/usergenerated/core-components";
+    private static final String userContent = "/content/usergenerated";
 
     // some test values
     private static final String from = "from@component.com";
