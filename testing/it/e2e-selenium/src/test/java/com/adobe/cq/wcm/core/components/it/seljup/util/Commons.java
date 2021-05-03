@@ -192,6 +192,16 @@ public class Commons {
         }
     }
 
+    public static void deletePolicyAssignment(CQClient client, String componentPath, String policyAssignmentPath, int... expectedStatus) throws ClientException {
+        FormEntityBuilder feb = FormEntityBuilder.create().addParameter(":operation","delete");
+
+        try {
+            client.doPost(policyAssignmentPath + componentPath, feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus));
+        } catch (Exception ex) {
+            throw new ClientException("Delete policy Assignment failed for component " + componentPath + " with error: " + ex, ex);
+        }
+    }
+
     /**
      * Adds a component to a page.
      *
