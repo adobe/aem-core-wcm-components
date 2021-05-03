@@ -20,9 +20,7 @@ import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.embed.UrlProcessors;
 import com.adobe.cq.wcm.core.components.it.seljup.components.embed.v1.Embed;
-import com.adobe.cq.wcm.core.components.it.seljup.components.embed.UrlProcessors;
 import com.adobe.cq.wcm.core.components.it.seljup.components.embed.UrlProcessors.OEmbed;
-import com.adobe.cq.wcm.core.components.it.seljup.components.embed.EmbedEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.embed.EmbedEditDialog.EditDialogProperties;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
@@ -39,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class EmbedV1IT extends AuthorBaseUITest {
 
     private static String componentName = "embed";
+    private static String youtubeEmbedField = "core/wcm/components/embed/v1/embed/embeddable/youtube";
     private String testPage;
     private String policyPath;
     private String proxyPath;
@@ -76,11 +75,11 @@ public class EmbedV1IT extends AuthorBaseUITest {
 
         // 3.
         String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid";
         data.clear();
         data.put("cq:policy", policyLocation + policySuffix);
         data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/embed",data, policyAssignmentPath, 200, 201);
+        Commons.assignPolicy(adminClient,"/core-component/components/embed",data, policyAssignmentPath, 200, 201);
 
         // 4.
         proxyPath = Commons.createProxyComponent(adminClient, Commons.rtEmbed_v1, Commons.proxyPath, null, null);
@@ -146,7 +145,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
 
         //5.
         Commons.switchContext("ContentFrame");
-        assertTrue(urlProcessor.isUrlProcessorExits(),"URL processor should be set");
+        assertTrue(urlProcessor.urlProcessorExits(),"URL processor should be set");
         Commons.switchToDefaultContext();
     }
 
@@ -159,7 +158,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
     @DisplayName("URL : oEmbed : Flickr")
     public void urlOEmbedFlickr() throws InterruptedException {
         OEmbed flickr = urlProcessors.getFlickr();
-        String [] urls = flickr.getUrls();
+        String[] urls = flickr.getUrls();
         for(int i = 0; i < urls.length; i++) {
             verifyUrl(urls[i],flickr);
         }
@@ -174,7 +173,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
     @DisplayName("URL : oEmbed : SoundCloud")
     public void urlOEmbedSoundCloud() throws InterruptedException {
         OEmbed soundCloud = urlProcessors.getSoundCloud();
-        String [] urls = soundCloud.getUrls();
+        String[] urls = soundCloud.getUrls();
         for(int i = 0; i < urls.length; i++) {
             verifyUrl(urls[i],soundCloud);
         }
@@ -189,7 +188,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
     @DisplayName("URL : oEmbed : Twitter")
     public void urlOEmbedTwitter() throws InterruptedException {
         OEmbed twitter = urlProcessors.getTwitter();
-        String [] urls = twitter.getUrls();
+        String[] urls = twitter.getUrls();
         for(int i = 0; i < urls.length; i++) {
             verifyUrl(urls[i],twitter);
         }
@@ -204,9 +203,103 @@ public class EmbedV1IT extends AuthorBaseUITest {
     @DisplayName("URL : oEmbed : YouTube")
     public void urlOEmbedYouTube() throws InterruptedException {
         OEmbed youTube = urlProcessors.getYouTube();
-        String [] urls = youTube.getUrls();
+        String[] urls = youTube.getUrls();
         for(int i = 0; i < urls.length; i++) {
             verifyUrl(urls[i],youTube);
         }
+    }
+
+    /**
+     * Embeddable : YouTube
+     *
+     * 1. open the edit dialog
+     * 2. switch type to embeddable
+     * 3. save the edit dialog, verifying it's possible to submit when no embeddable is selected
+     * 4. open the edit dialog
+     * 5. switch type to embeddable
+     * 6. select the YouTube embeddable
+     * 7. save the edit dialog
+     * 8. verify the dialog did not submit, as the Video ID field is required
+     * 9. add a Video ID
+     * 10. save the edit dialog
+     * 11. verify the YouTube video on the page
+     */
+    @Test
+    @DisplayName("Embeddable : YouTube")
+    public void embeddableYoutube() throws InterruptedException {
+        //1.
+        Commons.openConfigureDialog(cmpPath);
+
+        //2.
+        EditDialogProperties editDialogProperties = embed.getEmbedEditDialog().getProperties();
+        editDialogProperties.setTypeRadio("embeddable");
+
+        //3.
+        Commons.saveConfigureDialog();
+
+        //4.
+        Commons.openConfigureDialog(cmpPath);
+
+        //5.
+        editDialogProperties.setTypeRadio("embeddable");
+
+        //6.
+        editDialogProperties.setEmbeddableField(youtubeEmbedField);
+
+        //7.
+        Commons.saveConfigureDialog();
+
+        //8.
+        assertTrue(embed.getEmbedEditDialog().isVisible(),"Edit dialog should not be submit as the Video ID field is required");
+
+        //9.
+        editDialogProperties.setEmbeddableYoutubeVideoId("5vOOa3-fifY");
+
+        //10.
+        Commons.saveConfigureDialog();
+
+        //11.
+        Commons.switchContext("ContentFrame");
+        assertTrue(embed.isYoutubeEmbedVisible(),"Embed Youtube visible should be visible");
+        Commons.switchToDefaultContext();
+    }
+
+    /**
+     * HTML
+     *
+     * 1. open the edit dialog
+     * 2. switch type to html
+     * 3. save the edit dialog
+     * 4. verify the dialog did not submit, as the HTML field is required
+     * 5. add an HTML embed code
+     * 6. save the edit dialog
+     * 7. verify the HTML embed code is present on the page
+     */
+    @Test
+    @DisplayName("HTML")
+    public void htmlEmbed() throws InterruptedException {
+        //1.
+        Commons.openConfigureDialog(cmpPath);
+
+        //2.
+        EditDialogProperties editDialogProperties = embed.getEmbedEditDialog().getProperties();
+        editDialogProperties.setTypeRadio("html");
+
+        //3.
+        Commons.saveConfigureDialog();
+
+        //4.
+        assertTrue(embed.getEmbedEditDialog().isVisible(),"Edit dialog should not be submit as the Video ID field is required");
+
+        //5.
+        editDialogProperties.setHtmlField("<div id='CmpEmbedHtml'>HTML</div>");
+
+        //6.
+        Commons.saveConfigureDialog();
+
+        //7.
+        Commons.switchContext("ContentFrame");
+        embed.htmlElementExists("#CmpEmbedHtml");
+        Commons.switchToDefaultContext();
     }
 }

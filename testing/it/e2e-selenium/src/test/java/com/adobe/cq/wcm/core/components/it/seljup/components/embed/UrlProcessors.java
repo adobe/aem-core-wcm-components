@@ -16,26 +16,23 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.embed;
 
-import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
-
 import static com.codeborne.selenide.Selenide.$;
 
 public class UrlProcessors {
     public class OEmbed {
         private String name;
         private String selector;
-        private String [] urls;
+        private String[] urls;
 
         public String getName() {
             return name;
         }
 
-        public boolean isUrlProcessorExits() {
-            Helpers.waitForElementAnimationFinished(selector);
+        public boolean urlProcessorExits() throws InterruptedException {
             return $(selector).isDisplayed();
         }
 
-        public String []  getUrls() {
+        public String[] getUrls() {
             return urls;
         }
 

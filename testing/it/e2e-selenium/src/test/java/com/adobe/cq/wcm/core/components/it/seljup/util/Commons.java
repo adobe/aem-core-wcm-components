@@ -19,7 +19,6 @@ package com.adobe.cq.wcm.core.components.it.seljup.util;
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
-import com.adobe.cq.testing.selenium.utils.KeyboardShortCuts;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.codeborne.selenide.Condition;
@@ -504,11 +503,8 @@ public class Commons {
      * @returns {TestCase} A test case that selects a tag in a tag selector field
      */
     public static void selectInTags(String selector, String value) throws InterruptedException {
-        //AutoCompleteField autoCompleteField = new AutoCompleteField("css:" + selector);
-        //autoCompleteField.sendKeys(value);
-        //KeyboardShortCuts.keySpace();
         String tagPrefix = "/content/cq:tags";
-        String [] path = value.split("/");
+        String[] path = value.split("/");
         int i;
         String currentPath = tagPrefix;
         $("foundation-autocomplete" + selector).$("button[icon='FolderOpenOutline']").click();

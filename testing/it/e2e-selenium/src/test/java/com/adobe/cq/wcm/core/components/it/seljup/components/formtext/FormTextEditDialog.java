@@ -63,7 +63,7 @@ public class FormTextEditDialog extends Dialog {
     public boolean checkAllConstraintsAvailable() {
         CoralSelect selectList = new CoralSelect("name='./type'");
         CoralSelectList list = selectList.openSelectList();
-        String [] constraints = {"text","textarea","email","tel","date", "number","password"};
+        String[] constraints = {"text","textarea","email","tel","date", "number","password"};
         Boolean present = true;
         for(int i = 0; i < constraints.length; i++) {
             if(!list.getItemByValue(constraints[i]).isDisplayed())

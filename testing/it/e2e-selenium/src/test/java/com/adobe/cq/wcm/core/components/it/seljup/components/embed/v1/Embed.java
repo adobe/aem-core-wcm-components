@@ -19,6 +19,8 @@ package com.adobe.cq.wcm.core.components.it.seljup.components.embed.v1;
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.wcm.core.components.it.seljup.components.embed.EmbedEditDialog;
 
+import static com.codeborne.selenide.Selenide.$;
+
 public class Embed extends BaseComponent {
 
     private static String pinterest = ".cmp-embed [class^='PIN_']";
@@ -36,5 +38,13 @@ public class Embed extends BaseComponent {
 
     public EmbedEditDialog getEmbedEditDialog() {
         return new EmbedEditDialog();
+    }
+
+    public boolean isYoutubeEmbedVisible() {
+        return $(youtube).isDisplayed();
+    }
+
+    public boolean htmlElementExists(String selector) {
+        return $(selector).isDisplayed();
     }
 }

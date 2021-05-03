@@ -22,8 +22,6 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.button.ButtonEditDi
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.WebDriverRunner;
 import java.util.concurrent.TimeoutException;
 
@@ -37,9 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -47,15 +43,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ButtonV1IT extends AuthorBaseUITest {
 
     private String testPage;
-    private String proxyCompoenetPath;
+    private String proxyComponentPath;
     private PageEditorPage editorPage;
     private Button button;
+    private String cmpPath;
+    private String componentName = "button";
+
+    private ButtonEditDialog getButtonEditDialog() throws TimeoutException {
+        String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+    }
 
     @BeforeEach
     public void setupBefore() throws Exception {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyCompoenetPath = Commons.creatProxyComponent(adminClient, Commons.rtButton_v1, "Proxy Button", "button");
-        addPathtoComponentPolicy(responsiveGridPath, proxyCompoenetPath);
+        proxyComponentPath = Commons.creatProxyComponent(adminClient, Commons.rtButton_v1, "Proxy Button", "button");
+        addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
+        // 5.
+        cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
         editorPage = new PageEditorPage(testPage);
         button = new Button();
         editorPage.open();
@@ -78,18 +85,10 @@ public class ButtonV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set button text")
     void SetText() throws TimeoutException, InterruptedException {
         final String testTitle = "test button";
-        String testComponentPath = testPage + "/jcr:content/root/responsivegrid/button";
         String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
-        EditableToolbar layoutContainerEditableToolbar = editorPage.openEditableToolbar(testPage + "/jcr:content/root/responsivegrid/*");
-        InsertComponentDialog insertComponentDialog = layoutContainerEditableToolbar.clickInsertComponent();
-        WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + proxyCompoenetPath + "']"));
-        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
-        insertComponentDialog.selectComponent(proxyCompoenetPath);
-        assertTrue(editorPage.getComponentOverlay(testComponentPath).exists(), "new inserted text component should exist in UI");
-        Commons.assertResourceExist(authorClient, testComponentPath, "new inserted text component should exist on backend");
-        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.getTitleField().setValue(testTitle);
         buttonEditDialog.clickPrimary();
         Commons.switchContext("ContentFrame");
@@ -110,18 +109,7 @@ public class ButtonV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set button link")
     void SetLink() throws TimeoutException, InterruptedException {
         String link = "https://www.adobe.com";
-        String testComponentPath = testPage + "/jcr:content/root/responsivegrid/button";
-        String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
-        EditableToolbar layoutContainerEditableToolbar = editorPage.openEditableToolbar(testPage + "/jcr:content/root/responsivegrid/*");
-        InsertComponentDialog insertComponentDialog = layoutContainerEditableToolbar.clickInsertComponent();
-        WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + proxyCompoenetPath + "']"));
-        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
-        insertComponentDialog.selectComponent(proxyCompoenetPath);
-        assertTrue(editorPage.getComponentOverlay(testComponentPath).exists(), "new inserted text component should exist in UI");
-        Commons.assertResourceExist(authorClient, testComponentPath, "new inserted text component should exist on backend");
-        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.setLinkField(link);
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         buttonEditDialog.clickPrimary();
@@ -142,18 +130,7 @@ public class ButtonV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set button icon")
     void SetIcon() throws InterruptedException, TimeoutException {
         String icon = "email";
-        String testComponentPath = testPage + "/jcr:content/root/responsivegrid/button";
-        String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
-        EditableToolbar layoutContainerEditableToolbar = editorPage.openEditableToolbar(testPage + "/jcr:content/root/responsivegrid/*");
-        InsertComponentDialog insertComponentDialog = layoutContainerEditableToolbar.clickInsertComponent();
-        WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + proxyCompoenetPath + "']"));
-        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
-        insertComponentDialog.selectComponent(proxyCompoenetPath);
-        assertTrue(editorPage.getComponentOverlay(testComponentPath).exists(), "new inserted text component should exist in UI");
-        Commons.assertResourceExist(authorClient, testComponentPath, "new inserted text component should exist on backend");
-        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.getIcon().setValue(icon);
         buttonEditDialog.clickPrimary();
         Commons.switchContext("ContentFrame");
