@@ -17,14 +17,41 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.contentfragment.v1;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
+import com.adobe.cq.wcm.core.components.it.seljup.components.contentfragment.ContentFragmentEditDialog;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.$;
 
 public class ContentFragment extends BaseComponent {
-    public static String title = ".cmp-contentfragment__title";
-    public static String elements = ".cmp-contentfragment__elements";
-    public static String elementTitle = ".cmp-contentfragment__element-title";
-    public static String elementValue = ".cmp-contentfragment__element-value";
+    public static String contentFragment = ".cmp-contentfragment";
+    private static String title = ".cmp-contentfragment__title";
+    private static String elements = ".cmp-contentfragment__elements";
+    private static String elementTitle = ".cmp-contentfragment__element-title";
+    private static String elementValue = ".cmp-contentfragment__element-value";
     public ContentFragment() {
-        super(".cmp-contentfragment");
+        super(contentFragment);
+    }
+
+    public ContentFragmentEditDialog getEditDialog() {
+        return new ContentFragmentEditDialog();
+    }
+
+    public ElementsCollection getTitle() {
+        return $$(title);
+    }
+
+    public ElementsCollection getContentFragments() {
+        return $$(contentFragment);
+    }
+
+    public ElementsCollection getElementTitle() {
+        return $$(elementTitle);
+    }
+
+    public ElementsCollection getElementValue() {
+        return $$(elementValue);
     }
 
     public static class ContentFragmentElements {

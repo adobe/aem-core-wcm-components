@@ -83,7 +83,7 @@ public class BreadcrumbTests {
     }
 
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
-        client.deletePageWithRetry(testPages.get(0), true,false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        client.deletePageWithRetry(testPages.get(0), true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         Commons.deleteProxyComponent(client, proxyPath);
     }
 

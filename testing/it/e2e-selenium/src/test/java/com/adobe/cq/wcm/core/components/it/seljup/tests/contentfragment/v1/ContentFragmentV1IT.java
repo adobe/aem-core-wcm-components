@@ -18,8 +18,11 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.contentfragment.v1;
 
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.components.contentfragment.ContentFragmentEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.contentfragment.v1.ContentFragment;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.ElementsCollection;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -27,6 +30,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
 public class ContentFragmentV1IT extends AuthorBaseUITest {
@@ -44,6 +49,8 @@ public class ContentFragmentV1IT extends AuthorBaseUITest {
     private String proxyPath;
     private String cmpPath;
     private PageEditorPage editorPage;
+    private ContentFragment contentFragment;
+
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         // create the test page, store page path in 'testPagePath'
@@ -55,6 +62,8 @@ public class ContentFragmentV1IT extends AuthorBaseUITest {
         // add the core form container component
         cmpPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "formtext", null);
 
+        contentFragment = new ContentFragment();
+
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
@@ -62,7 +71,7 @@ public class ContentFragmentV1IT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        adminClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        adminClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         Commons.deleteProxyComponent(adminClient, proxyPath);
     }
 
@@ -71,8 +80,115 @@ public class ContentFragmentV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the fragment path")
-    public void setFragmentPath() {
+    public void setFragmentPath() throws InterruptedException {
+        Commons.openConfigureDialog(cmpPath);
+        contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
+        Commons.saveConfigureDialog();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+
+        Commons.switchContext("ContentFrame");
+        ElementsCollection contentFragmentTitle = contentFragment.getTitle();
+        ElementsCollection contentFragmentElementTitles = contentFragment.getElementTitle();
+        ElementsCollection contentFragmentElementValues = contentFragment.getElementValue();
+
+        assertTrue(contentFragmentTitle.size() == 1 && contentFragmentTitle.get(0).isDisplayed()
+            && contentFragmentTitle.get(0).innerHtml().trim().equals("Simple Fragment"), "Content Fragment title should be displayed");
+        assertTrue(contentFragmentElementTitles.size() == 1 && contentFragmentElementTitles.get(0).isDisplayed()
+            && contentFragmentElementTitles.get(0).innerHtml().trim().equals("Main"),"Content Fragment element title should be displayed");
+        assertTrue(contentFragmentElementValues.size() == 1 && contentFragmentElementValues.get(0).isDisplayed()
+            && contentFragmentElementValues.get(0).$("h2").innerHtml().trim().equals("Master variation"),"Content Fragment element value should be displayed");
+    }
+
+    /**
+     * Set the variation name
+     */
+    @Test
+    @DisplayName("Set the variation name")
+    public void setVariationName() throws InterruptedException {
+        Commons.openConfigureDialog(cmpPath);
+        contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
+        Commons.useDialogSelect(PN_VARIATION_NAME, variationName1);
+        Commons.saveConfigureDialog();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+
+        Commons.switchContext("ContentFrame");
+        ElementsCollection contentFragmentTitle = contentFragment.getTitle();
+        ElementsCollection contentFragmentElementTitles = contentFragment.getElementTitle();
+        ElementsCollection contentFragmentElementValues = contentFragment.getElementValue();
+
+        assertTrue(contentFragmentTitle.size() == 1 && contentFragmentTitle.get(0).isDisplayed()
+            && contentFragmentTitle.get(0).innerHtml().trim().equals("Simple Fragment"), "Content Fragment title should be displayed");
+        assertTrue(contentFragmentElementTitles.size() == 1 && contentFragmentElementTitles.get(0).isDisplayed()
+            && contentFragmentElementTitles.get(0).innerHtml().trim().equals("Main"),"Content Fragment element title should be displayed");
+        assertTrue(contentFragmentElementValues.size() == 1 && contentFragmentElementValues.get(0).isDisplayed()
+            && contentFragmentElementValues.get(0).$("h2").innerHtml().trim().equals("Short variation"),"Content Fragment element value should be displayed");
 
     }
 
+    /**
+     * Set a structured content fragment
+     */
+    @Test
+    @DisplayName("Set a structured content fragment")
+    public void setStructuredContentFragment() throws InterruptedException {
+        Commons.openConfigureDialog(cmpPath);
+        contentFragment.getEditDialog().setFragmentPath(fragmentPath2);
+        Commons.saveConfigureDialog();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+
+        Commons.switchContext("ContentFrame");
+        ElementsCollection contentFragmentTitle = contentFragment.getTitle();
+        ElementsCollection contentFragmentElementTitles = contentFragment.getElementTitle();
+        ElementsCollection contentFragmentElementValues = contentFragment.getElementValue();
+
+        assertTrue(contentFragmentTitle.size() == 1 && contentFragmentTitle.get(0).isDisplayed()
+            && contentFragmentTitle.get(0).innerHtml().trim().equals("Image Fragment"), "Content Fragment title should be displayed");
+        assertTrue(contentFragmentElementTitles.size() == 4 && contentFragmentElementValues.size() == 4,
+            "There should be 4 elements set");
+        assertTrue(contentFragmentElementTitles.get(0).isDisplayed() && contentFragmentElementTitles.get(0).innerHtml().trim().equals("Title"),
+            "Content Fragment first element title should be correctly displayed");
+        assertTrue(contentFragmentElementValues.get(0).isDisplayed() && contentFragmentElementValues.get(0).innerHtml().trim().equals("Image"),
+            "Content Fragment first element value should be correctly displayed");
+        assertTrue(contentFragmentElementTitles.get(1).isDisplayed() && contentFragmentElementTitles.get(1).innerHtml().trim().equals("Description"),
+            "Content Fragment Second element title should be correctly displayed");
+        assertTrue(contentFragmentElementTitles.get(2).isDisplayed() && contentFragmentElementTitles.get(2).innerHtml().trim().equals("Latest Version"),
+            "Content Fragment Third element title should be correctly displayed");
+        assertTrue(contentFragmentElementValues.get(2).isDisplayed() && contentFragmentElementValues.get(2).innerHtml().trim().equals("2"),
+            "Content Fragment first element value should be correctly displayed");
+        assertTrue(contentFragmentElementTitles.get(3).isDisplayed() && contentFragmentElementTitles.get(3).innerHtml().trim().equals("Type"),
+            "Content Fragment Fourth element title should be correctly displayed");
+    }
+
+    /**
+     * Set the element names
+     */
+    @Test
+    @DisplayName("Set the element names")
+    public void setElementNames() throws InterruptedException {
+        Commons.openConfigureDialog(cmpPath);
+        contentFragment.getEditDialog().setFragmentPath(fragmentPath2);
+        Commons.saveConfigureDialog();
+        Commons.openConfigureDialog(cmpPath);
+        ContentFragmentEditDialog editDialog = contentFragment.getEditDialog();
+        editDialog.addElement(TITLE);
+        editDialog.addElement(TYPE);
+        Commons.saveConfigureDialog();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+
+        Commons.switchContext("ContentFrame");
+        ElementsCollection contentFragmentTitle = contentFragment.getTitle();
+        ElementsCollection contentFragmentElementTitles = contentFragment.getElementTitle();
+        ElementsCollection contentFragmentElementValues = contentFragment.getElementValue();
+
+        assertTrue(contentFragmentTitle.size() == 1 && contentFragmentTitle.get(0).isDisplayed()
+            && contentFragmentTitle.get(0).innerHtml().trim().equals("Image Fragment"), "Content Fragment title should be displayed");
+        assertTrue(contentFragmentElementTitles.size() == 2 && contentFragmentElementValues.size() == 2,
+            "There should be 2 elements set");
+        assertTrue(contentFragmentElementTitles.get(0).isDisplayed() && contentFragmentElementTitles.get(0).innerHtml().trim().equals("Title"),
+            "Content Fragment first element title should be correctly displayed");
+        assertTrue(contentFragmentElementValues.get(0).isDisplayed() && contentFragmentElementValues.get(0).innerHtml().trim().equals("Image"),
+            "Content Fragment first element value should be correctly displayed");
+        assertTrue(contentFragmentElementTitles.get(1).isDisplayed() && contentFragmentElementTitles.get(1).innerHtml().trim().equals("Type"),
+            "Content Fragment Fourth element title should be correctly displayed");
+    }
 }

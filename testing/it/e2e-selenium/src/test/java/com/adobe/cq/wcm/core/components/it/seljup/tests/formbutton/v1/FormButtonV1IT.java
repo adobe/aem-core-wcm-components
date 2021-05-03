@@ -85,7 +85,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
      */
     @AfterEach
     public void cleanup() throws ClientException, InterruptedException {
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**

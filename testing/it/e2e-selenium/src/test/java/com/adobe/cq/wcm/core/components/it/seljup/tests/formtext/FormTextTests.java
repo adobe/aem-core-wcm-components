@@ -80,7 +80,7 @@ public class FormTextTests {
     }
 
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
-        client.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        client.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         Commons.deleteProxyComponent(client, compPath);
     }
 

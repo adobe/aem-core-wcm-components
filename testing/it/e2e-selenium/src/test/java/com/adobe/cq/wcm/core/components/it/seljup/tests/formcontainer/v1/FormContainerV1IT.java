@@ -118,9 +118,9 @@ public class FormContainerV1IT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete any user generated content
-        authorClient.deletePageWithRetry(userContent, true, false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(userContent, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
         // delete the test page we created
-        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_SEC  * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
 
         // delete the proxy components created
         Commons.deleteProxyComponent(adminClient, compPathContainer);

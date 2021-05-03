@@ -14,35 +14,35 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.components.contentfragment;
+package com.adobe.cq.wcm.core.components.it.seljup.components.contentfragmentlist;
 
 import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
-import com.adobe.cq.testing.selenium.utils.KeyboardShortCuts;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class ContentFragmentEditDialog extends Dialog {
+public class ContentFragmentListEditDialog extends Dialog {
 
-    private static String content = "cq-dialog-content";
+    private static String parentPath = "[name='./parentPath']";
     private static String fragmentPath = "[name='./fragmentPath']";
-    private static SelenideElement properties = $("coral-tab[data-foundation-tracking-event*='properties']");
     private static String tagNames = "[name='./tagNames']";
     private static String elementNameSelectButton = "coral-select[name='./elementNames']  > button";
-    private static String elementNames = "./elementNames";
+    private static SelenideElement elementTab = $("coral-tab[data-foundation-tracking-event*='elements']");
 
-    /**
-     * Opens the properties tab in editor dialog
-     */
-    public void openProperties() {
-        properties.click();
+    public String getParentPath() {
+        return parentPath;
+    }
+
+    public String getTagNames() {
+        return tagNames;
+    }
+
+    public void openElementTab() {
+        $(elementTab).click();
     }
 
     public void addElement(String value) {
@@ -54,17 +54,4 @@ public class ContentFragmentEditDialog extends Dialog {
         CoralSelectList selectList = new CoralSelectList(popOver.element());
         selectList.selectByValue(value);
     }
-
-    public String getFragmentPath() {
-        return fragmentPath;
-    }
-
-
-    public void setFragmentPath(String value) throws InterruptedException {
-        AutoCompleteField autoCompleteField = new AutoCompleteField("css:" + fragmentPath);
-        autoCompleteField.sendKeys(value);
-        KeyboardShortCuts.keySpace();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-    }
-
 }

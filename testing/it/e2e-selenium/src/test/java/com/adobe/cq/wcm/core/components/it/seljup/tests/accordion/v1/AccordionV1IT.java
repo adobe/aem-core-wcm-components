@@ -139,7 +139,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
         Commons.deleteProxyComponent(adminClient, proxyPath);
 
         // 2.
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_SEC * 1000, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
 
         // 3.
         String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
