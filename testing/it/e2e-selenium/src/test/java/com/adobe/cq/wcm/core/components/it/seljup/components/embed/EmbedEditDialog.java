@@ -20,7 +20,6 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -33,8 +32,6 @@ public class EmbedEditDialog extends Dialog {
 
     private static String dialog = ".cmp-embed__editor";
 
-    private static SelenideElement properties = $("coral-tab[data-foundation-tracking-event*='properties']");
-
     public EditDialogProperties getProperties() {
         return new EditDialogProperties();
     }
@@ -44,20 +41,22 @@ public class EmbedEditDialog extends Dialog {
     }
 
     public static final class EditDialogProperties {
-        private static String typeField = "[data-cmp-embed-dialog-edit-hook='typeField']";
         private static String typeRadio = "[data-cmp-embed-dialog-edit-hook='typeField'] coral-radio[value=\"%s\"]";
         private static String urlField = "[data-cmp-embed-dialog-edit-hook='urlField']";
         private static String urlStatus = "[data-cmp-embed-dialog-edit-hook='urlStatus']";
         private static String embeddableField = "data-cmp-embed-dialog-edit-hook='embeddableField'";
-        private static String embeddableFieldButton = "[data-cmp-embed-dialog-edit-hook='embeddableField'] button";
-        private static String embeddableFieldSelectList = "[data-cmp-embed-dialog-edit-hook='embeddableField'] coral-selectlist";
-        private static String embeddableFieldYoutubeItem = "[data-cmp-embed-dialog-edit-hook='embeddableField'] coral-selectlist-item[value='core/wcm/components/embed/v1/embed/embeddable/youtube']";
         private static String htmlField = "[data-cmp-embed-dialog-edit-showhidetargetvalue='html']";
         private static String embeddableYoutubeVideoId = "[name='./youtubeVideoId']";
+        private static String validUrl = "https://www.youtube.com/watch?v=5vOOa3-fifY";
+        private static String invalidUrl = "https://www.youtube.com/watch?v=5vOOa3-fifYinvalid";
+        private static String malformedUrl = "malformed";
 
-        public void setUrlField(String url) throws InterruptedException {
+        public void setUrlField(String url) {
             $(urlField).clear();
             $(urlField).sendKeys(url);
+        }
+
+        public void waitForUrlFieldToBeValid() throws InterruptedException {
             final WebDriver webDriver = WebDriverRunner.getWebDriver();
             Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
             new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".is-invalid" + urlField)));
@@ -66,7 +65,14 @@ public class EmbedEditDialog extends Dialog {
 
         public boolean isUrlStatusSet(String value) {
              return $(urlStatus).isDisplayed() && $(urlStatus).getText().trim().contains(value);
+        }
 
+        public boolean isUrlStatusVisible() {
+            return $(urlStatus).isDisplayed();
+        }
+
+        public boolean isUrlFieldInvalid() {
+            return $(urlField + ".is-invalid").isDisplayed();
         }
 
         public void setTypeRadio(String value) {
@@ -86,6 +92,22 @@ public class EmbedEditDialog extends Dialog {
         public void setHtmlField(String value) {
             $(htmlField).clear();
             $(htmlField).sendKeys(value);
+        }
+
+        public boolean isUrlStatusEmpty() {
+            return $(urlStatus).getText().trim().equals("");
+        }
+
+        public String getValidUrl() {
+            return validUrl;
+        }
+
+        public String getInvalidUrl() {
+            return invalidUrl;
+        }
+
+        public String getMalformedUrl() {
+            return malformedUrl;
         }
     }
 }

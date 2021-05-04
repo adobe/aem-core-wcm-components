@@ -136,6 +136,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
         //2.
         EditDialogProperties editDialogProperties = embed.getEmbedEditDialog().getProperties();
         editDialogProperties.setUrlField(url);
+        editDialogProperties.waitForUrlFieldToBeValid();
 
         //3.
         assertTrue(editDialogProperties.isUrlStatusSet(urlProcessor.getName()), "URL status should be set");
@@ -147,6 +148,79 @@ public class EmbedV1IT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertTrue(urlProcessor.urlProcessorExits(),"URL processor should be set");
         Commons.switchToDefaultContext();
+    }
+
+     /**
+     * URL Validation
+     *
+     * 1. open the edit dialog
+     * 2. verify no URL status is currently showing
+     * 3. enter a valid url
+     * 4. verify the status message
+     * 5. save the edit dialog
+     * 6. open the edit dialog
+     * 7. verify the status message
+     * 8. enter an invalid URL
+     * 9. verify field is marked invalid and the status message is not shown
+     * 10. enter a malformed URL
+     * 11. verify field is marked invalid and the status message is not shown
+     * 12. enter an empty URL
+     * 13. verify field is marked invalid and the status message is not shown
+     */
+    @Test
+    @DisplayName("URL Validation")
+    public void urlValidation() throws InterruptedException {
+        //1.
+        Commons.openConfigureDialog(cmpPath);
+
+        //2.
+        EditDialogProperties editDialogProperties = embed.getEmbedEditDialog().getProperties();
+        assertTrue(editDialogProperties.isUrlStatusEmpty(),"URL status should be empty");
+
+        //3.
+        editDialogProperties.setUrlField(editDialogProperties.getValidUrl());
+        editDialogProperties.waitForUrlFieldToBeValid();
+
+        //4.
+        assertTrue(editDialogProperties.isUrlStatusSet("YouTube"), "URL status should be set");
+
+        //5.
+        Commons.saveConfigureDialog();
+
+        //6.
+        Commons.openConfigureDialog(cmpPath);
+
+        //7.
+        assertTrue(editDialogProperties.isUrlStatusSet("YouTube"), "URL status should be set");
+
+        //8.
+        editDialogProperties.setUrlField(editDialogProperties.getInvalidUrl());
+        //wait for validation to finish
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+
+        //9.
+        assertTrue(!editDialogProperties.isUrlStatusVisible(), "URL status should not be visible");
+        assertTrue(editDialogProperties.isUrlFieldInvalid(), "URL field should be invalid");
+
+        //10.
+        editDialogProperties.setUrlField(editDialogProperties.getMalformedUrl());
+        //wait for validation to finish
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+
+        //11.
+        assertTrue(!editDialogProperties.isUrlStatusVisible(), "URL status should not be visible");
+        assertTrue(editDialogProperties.isUrlFieldInvalid(), "URL field should be invalid");
+
+        //12.
+        editDialogProperties.setUrlField("");
+        //wait for validation to finish
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+
+        //13.
+        assertTrue(!editDialogProperties.isUrlStatusVisible(), "URL status should not be visible");
+        assertTrue(editDialogProperties.isUrlFieldInvalid(), "URL field should be invalid");
+
+
     }
 
     /**
@@ -302,4 +376,5 @@ public class EmbedV1IT extends AuthorBaseUITest {
         embed.htmlElementExists("#CmpEmbedHtml");
         Commons.switchToDefaultContext();
     }
+
 }
