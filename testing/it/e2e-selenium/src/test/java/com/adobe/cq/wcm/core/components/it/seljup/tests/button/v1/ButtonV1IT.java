@@ -52,16 +52,15 @@ public class ButtonV1IT extends AuthorBaseUITest {
     private ButtonEditDialog getButtonEditDialog() throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
     }
 
     @BeforeEach
     public void setupBefore() throws Exception {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyComponentPath = Commons.creatProxyComponent(adminClient, Commons.rtButton_v1, "Proxy Button", "button");
+        proxyComponentPath = Commons.creatProxyComponent(adminClient, Commons.rtButton_v1, "Proxy Button", componentName);
         addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
-        // 5.
         cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
         editorPage = new PageEditorPage(testPage);
         button = new Button();
@@ -85,9 +84,6 @@ public class ButtonV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set button text")
     void SetText() throws TimeoutException, InterruptedException {
         final String testTitle = "test button";
-        String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.getTitleField().setValue(testTitle);
         buttonEditDialog.clickPrimary();

@@ -23,8 +23,6 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.button.ButtonEditDi
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.WebDriverRunner;
 import java.util.concurrent.TimeoutException;
 
@@ -38,9 +36,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,21 +47,17 @@ public class FormButtonV1IT extends AuthorBaseUITest {
     protected String proxyComponentPath;
     protected PageEditorPage editorPage;
     protected BaseFormButton formButton;
+    protected String cmpPath;
+    protected String componentName = "formbutton";
 
 
-    private void addComponentInPage() throws TimeoutException {
-        String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";
+    private ButtonEditDialog openButtonEditDialog() throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
-        EditableToolbar layoutContainerEditableToolbar = editorPage.openEditableToolbar(testPage + "/jcr:content/root/responsivegrid/*");
-        InsertComponentDialog insertComponentDialog = layoutContainerEditableToolbar.clickInsertComponent();
-        WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + proxyComponentPath + "']"));
-        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
-        insertComponentDialog.selectComponent(proxyComponentPath);
-        assertTrue(editorPage.getComponentOverlay(testComponentPath).exists(), "new inserted text component should exist in UI");
-        Commons.assertResourceExist(authorClient, testComponentPath, "new inserted text component should exist on backend");
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
     }
+
 
     /**
      * Before Test Case
@@ -73,8 +65,9 @@ public class FormButtonV1IT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBefore() throws ClientException {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyComponentPath = Commons.creatProxyComponent(adminClient, Commons.rtFormButton_v1, "Proxy Form Button", "formbutton");
+        proxyComponentPath = Commons.creatProxyComponent(adminClient, Commons.rtFormButton_v1, "Proxy Form Button", componentName);
         addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
+        cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
         formButton = new FormButton();
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
@@ -93,8 +86,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check the attributes of the default button rendered without any customisations via the edit dialog")
-    public void checkDefaultButtonAttributes() throws TimeoutException {
-        addComponentInPage();
+    public void checkDefaultButtonAttributes() {
         Commons.switchContext("ContentFrame");
         assertTrue(formButton.isButtonPresentByType("Submit"), "Submit button should be present");
         assertTrue(formButton.getButtonText().contains("Submit"), "Button should contain 'Submit' text");
@@ -107,9 +99,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Create a button")
     public void createButton() throws TimeoutException, InterruptedException {
-        String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";
-        addComponentInPage();
-        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        ButtonEditDialog buttonEditDialog = openButtonEditDialog();
         buttonEditDialog.selectButtonType("button");
         buttonEditDialog.getTitleField().setValue("Button");
         Commons.saveConfigureDialog();
@@ -126,9 +116,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Set button text")
     public void setButtonText() throws TimeoutException, InterruptedException {
         String buttonLabel = "Test Button";
-        String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";
-        addComponentInPage();
-        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        ButtonEditDialog buttonEditDialog = openButtonEditDialog();
         buttonEditDialog.getTitleField().setValue(buttonLabel);
         Commons.saveConfigureDialog();
 
@@ -144,9 +132,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
     public void setButtonName() throws TimeoutException, InterruptedException {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonName = "button1";
-        String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";
-        addComponentInPage();
-        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        ButtonEditDialog buttonEditDialog = openButtonEditDialog();
         buttonEditDialog.getTitleField().setValue(buttonLabel);
         buttonEditDialog.getNameField().setValue(buttonName);
         Commons.saveConfigureDialog();
@@ -166,9 +152,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonName = "button1";
         String buttonValue = "thisisthevalue";
-        String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";
-        addComponentInPage();
-        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        ButtonEditDialog buttonEditDialog = openButtonEditDialog();
         buttonEditDialog.getTitleField().setValue(buttonLabel);
         buttonEditDialog.getNameField().setValue(buttonName);
         buttonEditDialog.getValueField().setValue(buttonValue);
@@ -187,9 +171,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
     public void setButtonValueWithoutName() throws TimeoutException, InterruptedException {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonValue = "thisisthevalue";
-        String testComponentPath = testPage + "/jcr:content/root/responsivegrid/formbutton";
-        addComponentInPage();
-        ButtonEditDialog buttonEditDialog = editorPage.openEditableToolbar(testComponentPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        ButtonEditDialog buttonEditDialog = openButtonEditDialog();
         buttonEditDialog.getTitleField().setValue(buttonLabel);
         buttonEditDialog.getValueField().setValue(buttonValue);
         Commons.saveConfigureDialog();

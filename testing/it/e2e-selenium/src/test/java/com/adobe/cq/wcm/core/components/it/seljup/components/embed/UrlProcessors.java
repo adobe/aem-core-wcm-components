@@ -16,6 +16,13 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.embed;
 
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.codeborne.selenide.WebDriverRunner;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import static com.codeborne.selenide.Selenide.$;
 
 public class UrlProcessors {
@@ -28,7 +35,9 @@ public class UrlProcessors {
             return name;
         }
 
-        public boolean urlProcessorExits() throws InterruptedException {
+        public boolean urlProcessorExits() {
+            final WebDriver webDriver = WebDriverRunner.getWebDriver();
+            new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(selector)));
             return $(selector).isDisplayed();
         }
 

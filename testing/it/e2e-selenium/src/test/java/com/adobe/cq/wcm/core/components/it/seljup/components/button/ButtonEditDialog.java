@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.button;
 
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
@@ -54,7 +55,7 @@ public class ButtonEditDialog extends Dialog {
     public void setLinkField(String value) {
         AutoCompleteField autoCompleteField = new AutoCompleteField("./link");
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 5).until(ExpectedConditions.elementToBeClickable(By.cssSelector(autoCompleteField.getCssSelector())));
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(autoCompleteField.getCssSelector())));
         autoCompleteField.sendKeys(value);
     }
 

@@ -289,7 +289,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
 
         String component = "[data-type='Editable'][data-path='" + testPage + Commons.relParentCompPath + componentName +"']";
         WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         Commons.openEditableToolbar(testPage + Commons.relParentCompPath + componentName);
         assertTrue(!Commons.isPanelSelectPresent(), "Panel Select should not be present");
         createItems();
@@ -313,7 +313,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
 
         webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
 
         //4.
         panelSelector.reorderItems(0, 2);
