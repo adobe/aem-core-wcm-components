@@ -36,6 +36,7 @@ public class FormButtonV2IT extends FormButtonV1IT {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
         proxyComponentPath = Commons.creatProxyComponent(adminClient, Commons.rtFormButton_v2, "Proxy Form Button", "formbutton");
         addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
+        cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
         formButton = new FormButton();
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
