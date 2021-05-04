@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.embed;
 
+import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
@@ -38,6 +39,7 @@ public class UrlProcessors {
         public boolean urlProcessorExits() {
             final WebDriver webDriver = WebDriverRunner.getWebDriver();
             new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(selector)));
+            Helpers.waitForElementAnimationFinished($(selector));
             return $(selector).isDisplayed();
         }
 
