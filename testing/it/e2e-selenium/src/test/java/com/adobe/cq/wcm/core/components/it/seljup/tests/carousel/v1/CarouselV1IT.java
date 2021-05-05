@@ -17,11 +17,11 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.carousel.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.CQOverlay;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Carousel.CarouselConfigureDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Carousel.v1.Carousel;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.ChildrenEditor;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Commons.PanelSelector;
+import com.adobe.cq.wcm.core.components.it.seljup.components.commons.CQOverlay;
+import com.adobe.cq.wcm.core.components.it.seljup.components.carousel.CarouselEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.carousel.v1.Carousel;
+import com.adobe.cq.wcm.core.components.it.seljup.components.commons.ChildrenEditor;
+import com.adobe.cq.wcm.core.components.it.seljup.components.commons.PanelSelector;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
@@ -35,6 +35,7 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -43,9 +44,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.HashMap;
 
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("group2")
 public class CarouselV1IT extends AuthorBaseUITest {
 
 
@@ -154,7 +155,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
 
     private ElementsCollection createItems() throws  InterruptedException {
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
-        CarouselConfigureDialog editDialog = carousel.getEditDialog();
+        CarouselEditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         childrenEditor.clickAddButton();
         InsertComponentDialog insertComponentDialog = editDialog.getInsertComponentDialog();
@@ -205,7 +206,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Edit Dialog : Remove items")
     public void RemoveItem() throws InterruptedException {
         createItems();
-        CarouselConfigureDialog editDialog = carousel.getEditDialog();
+        CarouselEditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         childrenEditor.removeFirstItem();
@@ -238,7 +239,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
     @DisplayName("Test: Edit Dialog : Reorder items")
     public void ReorderItem() throws InterruptedException {
         createItems();
-        CarouselConfigureDialog editDialog = carousel.getEditDialog();
+        CarouselEditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         childrenEditor.moveItems(2,0);
@@ -260,7 +261,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
     public void AutoplayGroup() throws InterruptedException {
         createItems();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
-        CarouselConfigureDialog editDialog = carousel.getEditDialog();
+        CarouselEditDialog editDialog = carousel.getEditDialog();
         editDialog.openEditDialogProperties();
 
         CoralCheckbox autoplay = editDialog.getAutoplay();
@@ -288,7 +289,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
 
         String component = "[data-type='Editable'][data-path='" + testPage + Commons.relParentCompPath + componentName +"']";
         WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         Commons.openEditableToolbar(testPage + Commons.relParentCompPath + componentName);
         assertTrue(!Commons.isPanelSelectPresent(), "Panel Select should not be present");
         createItems();
@@ -299,7 +300,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
         PanelSelector panelSelector = new   PanelSelector();
         assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
 
-        Commons.webDriverWait(1000);
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         ElementsCollection items = panelSelector.getItems();
 
         assertTrue(items.size() == 3, "Number to items added should be 3");
@@ -312,15 +313,15 @@ public class CarouselV1IT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
 
         webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
 
         //4.
         panelSelector.reorderItems(0, 2);
 
         Commons.switchContext("ContentFrame");
         //wait for the reordering to reflect
-        Commons.webDriverWait(1000);
-        assertTrue(carousel.getIndicators().get(1).getText().contains("item0"),"Second indicator item should be item0 after re-order");
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(carousel.getIndicators().get(2).getText().contains("item0"),"Third indicator item should be item0 after re-order");
         Commons.switchToDefaultContext();
 
         carousel.getCQOverlay().openPlaceholder(testPage);

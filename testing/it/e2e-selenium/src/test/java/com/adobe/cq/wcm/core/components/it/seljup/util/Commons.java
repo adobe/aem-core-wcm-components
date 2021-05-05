@@ -17,8 +17,12 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util;
 
 import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
@@ -30,7 +34,7 @@ import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
 import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -184,6 +188,16 @@ public class Commons {
              client.doPost(plcyPath + componentPath, feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus));
         } catch (Exception ex) {
             throw new ClientException("Delete policy failed for component " + componentPath + " with error: " + ex, ex);
+        }
+    }
+
+    public static void deletePolicyAssignment(CQClient client, String componentPath, String policyAssignmentPath, int... expectedStatus) throws ClientException {
+        FormEntityBuilder feb = FormEntityBuilder.create().addParameter(":operation","delete");
+
+        try {
+            client.doPost(policyAssignmentPath + componentPath, feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus));
+        } catch (Exception ex) {
+            throw new ClientException("Delete policy Assignment failed for component " + componentPath + " with error: " + ex, ex);
         }
     }
 
@@ -344,7 +358,7 @@ public class Commons {
      *
      * @param dataPath datapath of the component to open the configuration dialog
      */
-    public static void openConfigureDialog(String dataPath) {
+    public static void openConfigureDialog(String dataPath) throws InterruptedException {
         openEditableToolbar(dataPath);
         $(Selectors.SELECTOR_CONFIG_BUTTON).click();
         Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_CONFIG_DIALOG));
@@ -375,7 +389,7 @@ public class Commons {
     public static void saveConfigureDialog() throws InterruptedException {
         $(Selectors.SELECTOR_SAVE_CONFIG_BUTTON).click();
         //wait for
-        webDriverWait(1000);
+        webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
     /**
@@ -454,7 +468,7 @@ public class Commons {
      *
      * @returns {TestCase} A test case that selects a value in an autocomplete field
      */
-    public static void selectInAutocomplete(String selector, String value) throws InterruptedException {
+    public static void selectInAutocomplete(String selector, String value) {
         AutoCompleteField autoCompleteField = new AutoCompleteField("css:" + selector);
         autoCompleteField.sendKeys(value);
         autoCompleteField.suggestions().selectByValue(value);
@@ -467,6 +481,51 @@ public class Commons {
     public static String getCurrentUrl() {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         return webDriver.getCurrentUrl();
+    }
+
+    public static boolean iseditDialogVisible() {
+        return $(Selectors.SELECTOR_CONFIG_DIALOG).isDisplayed();
+    }
+
+    public static SelenideElement getVisibleElement(ElementsCollection list) {
+        for(int i = 0; i < list.size(); i++) {
+            if(list.get(i).isDisplayed())
+                return list.get(i);
+        }
+        return null;
+    }
+
+    /**
+     * Selects a tag in a Granite UI tags autocomplete field
+     *
+     * @param selector {String} Specific selector for the tags selector (ex. "[name='./tags']")
+     * @param value {String} The tag value
+     * @returns {TestCase} A test case that selects a tag in a tag selector field
+     */
+    public static void selectInTags(String selector, String value) throws InterruptedException {
+        String tagPrefix = "/content/cq:tags";
+        String[] path = value.split("/");
+        int i;
+        String currentPath = tagPrefix;
+        $("foundation-autocomplete" + selector).$("button[icon='FolderOpenOutline']").click();
+        for(i = 0; i < path.length - 1; i++) {
+            currentPath = currentPath + "/" + path[i];
+            $("[data-foundation-collection-item-id='" + currentPath + "']").click();
+            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        }
+        currentPath = currentPath + "/"  + path[i];
+        $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").click();
+        $("button.granite-pickerdialog-submit[is='coral-button']").click();
+    }
+
+
+    public static void useDialogSelect(String name, String value) {
+        CoralSelect selectList = new CoralSelect("name='" +name+ "'");
+        CoralSelectList list = selectList.openSelectList();
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + value + "']"));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
+        list.selectByValue(value);
     }
 
 }

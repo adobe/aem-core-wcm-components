@@ -19,9 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb;
 
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.BreadcrumbConfigDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.BreadcrumbItems;
-import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.v2.BreadcrumbList;
+import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BreadcrumbEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BaseBreadcrumbItems;
+import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.v2.BreadcrumbList;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
@@ -52,7 +52,7 @@ public class BreadcrumbTests {
     private String proxyPath;
     private String cmpPath;
     private PageEditorPage editorPage;
-    private BreadcrumbItems breadcrumbItems;
+    private BaseBreadcrumbItems breadcrumbItems;
     private static String componentName = "breadcrumb";
 
     private void createTestpages(CQClient client,String rootPage, String defaultPageTemplate, int maxLevel) throws ClientException {
@@ -66,8 +66,8 @@ public class BreadcrumbTests {
         }
     }
 
-    public void setup(CQClient client, String rtBreadcrumb,
-                             String rootPage, String defaultPageTemplate, String clientlib, BreadcrumbItems breadcrumbItems) throws ClientException {
+    public void setup(CQClient client, String rtBreadcrumb, String rootPage,
+                      String defaultPageTemplate, String clientlib, BaseBreadcrumbItems breadcrumbItems) throws ClientException {
         createTestpages(client,rootPage, defaultPageTemplate, 5);
 
         proxyPath = Commons.createProxyComponent(client, rtBreadcrumb, Commons.proxyPath, null, null);
@@ -90,7 +90,7 @@ public class BreadcrumbTests {
     private void openConfiguration(String compPath) throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
         EditableToolbarAssertion editableToolbarAssertion = new EditableToolbarAssertion(editableToolbar,
             "editable toolbar of none style selector enabled component - %s button is not displayed while it should");
@@ -104,8 +104,8 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
 
         openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
-        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
-        configDialog.setHideCurrent(true);
+        BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
+        editDialog.setHideCurrent(true);
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
@@ -123,8 +123,8 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
 
         openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
-        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
-        configDialog.setShowHidden(true);
+        BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
+        editDialog.setShowHidden(true);
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
@@ -138,9 +138,9 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
         openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
 
-        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
-        assertTrue(configDialog.getStartLevelValue() == 2,"Start level should be 2");
-        configDialog.setStartLevelValue("4");
+        BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
+        assertTrue(editDialog.getStartLevelValue() == 2,"Start level should be 2");
+        editDialog.setStartLevelValue("4");
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
@@ -154,10 +154,10 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
         openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
 
-        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
-        assertTrue(configDialog.getStartLevelValue() == 2,"Start level should be 2");
-        configDialog.setStartLevelValue("0");
-        assertTrue(configDialog.checkInvalidStartLevel(), "Setting Start Level value to 0 is not allowed");
+        BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
+        assertTrue(editDialog.getStartLevelValue() == 2,"Start level should be 2");
+        editDialog.setStartLevelValue("0");
+        assertTrue(editDialog.checkInvalidStartLevel(), "Setting Start Level value to 0 is not allowed");
     }
 
     public void set100StartLevel() throws InterruptedException, TimeoutException {
@@ -167,9 +167,9 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
         openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
 
-        BreadcrumbConfigDialog configDialog = new BreadcrumbConfigDialog();
-        assertTrue(configDialog.getStartLevelValue() == 2,"Start level should be 2");
-        configDialog.setStartLevelValue("100");
+        BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
+        assertTrue(editDialog.getStartLevelValue() == 2,"Start level should be 2");
+        editDialog.setStartLevelValue("100");
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");

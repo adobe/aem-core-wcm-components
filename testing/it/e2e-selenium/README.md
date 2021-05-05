@@ -1,6 +1,6 @@
 # Purpose
 
-This is the E2E for WCM Launches UI testing, it is mainly based on Selenide, Selenium Jupiter, and Sling Testing Client.
+This is the E2E for WCM Core Components UI testing, it is mainly based on Selenide, Selenium Jupiter, and Sling Testing Client.
 
 PageObjects (Page, Component etc..) are defined in the common library [selenium-it-base](https://github.com/adobe/aem-selenium-it-base)
 
@@ -8,9 +8,6 @@ PageObjects (Page, Component etc..) are defined in the common library [selenium-
 
 ## Java version
 Use JDK 11 to compile
-
-## Docker login
-docker login  docker-aem-sp.dr.corp.adobe.com/aem-qe
 
 # Usage
 
@@ -33,7 +30,7 @@ mvn clean verify failsafe:integration-test -Dit.test=<classname>#testName
 Running specific test using 'groups' parameter (for Junit5 Tag selection)
 
 ```
-mvn clean verify -Ptest-all -Dgroups=set1
+mvn clean verify -Ptest-all -Dgroups=group1
 ```
 
 Running test using your local chrome browser

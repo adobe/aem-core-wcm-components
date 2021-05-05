@@ -16,7 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.Breadcrumb.v2.BreadcrumbItemsV2;
+import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.v2.BreadcrumbItems;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.BreadcrumbTests;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.v1.BreadcrumbV1IT;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
@@ -24,14 +24,16 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+@Tag("group2")
 public class BreadcrumbV2IT extends BreadcrumbV1IT {
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         breadcrumbTests = new BreadcrumbTests();
-        breadcrumbTests.setup(adminClient, Commons.rtBreadcrumb_v2, rootPage, defaultPageTemplate, "/core/wcm/components/breadcrumb/v2/breadcrumb/clientlibs/site.css", new BreadcrumbItemsV2());
+        breadcrumbTests.setup(adminClient, Commons.rtBreadcrumb_v2, rootPage, defaultPageTemplate, "/core/wcm/components/breadcrumb/v2/breadcrumb/clientlibs/site.css", new BreadcrumbItems());
     }
 
     @AfterEach
