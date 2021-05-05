@@ -26,8 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.services.link.LinkProcessor;
-import com.adobe.cq.wcm.core.components.services.link.LinkRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -52,30 +50,52 @@ public final class LinkImpl<T> implements Link<T> {
     }};
 
     private final String url;
-    private final String processedUrl;
+    private final String mappedUrl;
     private final T reference;
-    private final LinkRequest<T> linkRequest;
     private final Map<String, String> htmlAttributes;
-    private final String fullUrl;
+    private final String externalizedUrl;
 
-    public LinkImpl(@Nullable String url, @Nullable String processedUrl,  @Nullable String fullUrl, @Nullable T reference,
-                    @NotNull LinkRequest<T> linkRequest,
-                    @Nullable Map<String, Optional<String>> htmlAttributes) {
-        this.url = url;
-        this.processedUrl = processedUrl;
-        this.fullUrl = fullUrl;
-        this.reference = linkRequest.getReference();
-        this.linkRequest = linkRequest;
-        this.htmlAttributes = buildHtmlAttributes(url, htmlAttributes);
+    /**
+     * @param url Link URL
+     */
+    public LinkImpl(String url) {
+        this(url, null, null, null, null);
     }
 
-    public LinkImpl(@NotNull LinkRequest<T> linkRequest) {
-        this.linkRequest = linkRequest;
-        this.reference = linkRequest.getReference();
-        this.url = linkRequest.getPath();
-        this.processedUrl = linkRequest.getPath();
-        this.fullUrl = linkRequest.getPath();
-        this.htmlAttributes = buildHtmlAttributes(url, linkRequest.getHtmlAttributes());
+    /**
+     * @param url Link URL
+     * @param mappedUrl mapped Link URL
+     */
+    public LinkImpl(String url, String mappedUrl) {
+        this(url, mappedUrl, null, null, null);
+    }
+
+    /**
+     * @param url Link URL
+     * @param mappedUrl mapped Link URL
+     * @param externalizedUrl external Link URL
+     */
+    public LinkImpl(String url, String mappedUrl, String externalizedUrl) {
+        this(url, mappedUrl, externalizedUrl, null, null);
+    }
+
+    /**
+     * @param url Link URL
+     * @param mappedUrl mapped Link URL
+     * @param externalizedUrl external Link URL
+     * @param reference Referenced WCM/DAM entity
+     */
+    LinkImpl(String url, String mappedUrl, String externalizedUrl, T reference) {
+        this(url, mappedUrl, externalizedUrl, reference, null);
+    }
+
+    public LinkImpl(@Nullable String url, @Nullable String mappedUrl, @Nullable String externalizedUrl, @Nullable T reference,
+                    @Nullable Map<String, Optional<String>> htmlAttributes) {
+        this.url = url;
+        this.mappedUrl = mappedUrl;
+        this.externalizedUrl = externalizedUrl;
+        this.reference = reference;
+        this.htmlAttributes = buildHtmlAttributes(url, htmlAttributes);
     }
 
     /**
@@ -106,18 +126,19 @@ public final class LinkImpl<T> implements Link<T> {
      */
     @Override
     @JsonProperty("url")
-    public @Nullable String getProcessedURL() {
-        return processedUrl;
+    public @Nullable String getMappedURL() {
+        return mappedUrl;
     }
 
     @Override
     @JsonIgnore
-    public @Nullable String getFullURL() {
-        return fullUrl;
+    public @Nullable String getExternalizedURL() {
+        return externalizedUrl;
     }
 
     /**
      * Getter for link HTML attributes.
+     *
      *
      * @return {@link Map} of HTML attributes, may include the URL as {@code href}
      */
@@ -136,12 +157,6 @@ public final class LinkImpl<T> implements Link<T> {
     @JsonIgnore
     public @Nullable T getReference() {
         return reference;
-    }
-
-    @Override
-    @JsonIgnore
-    public @NotNull LinkRequest<T> getLinkRequest() {
-        return linkRequest;
     }
 
     /**

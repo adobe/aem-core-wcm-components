@@ -26,7 +26,6 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.resource.Resource;
@@ -44,18 +43,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
-import com.adobe.cq.wcm.core.components.internal.link.LinkProcessorFactoryImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.services.link.LinkProcessorFactory;
-import com.adobe.cq.wcm.core.components.services.link.LinkRequest;
-import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.eval.PathPredicateEvaluator;
 import com.day.cq.search.result.SearchResult;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,10 +61,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class SearchResultServletTest {
@@ -329,7 +319,6 @@ public class SearchResultServletTest {
         private boolean valid;
         private String url;
         private Map<String,String> htmlAttributes;
-        private LinkRequest linkRequest;
 
         @Override
         public boolean isValid() {
@@ -342,16 +331,11 @@ public class SearchResultServletTest {
         }
 
         @Override
-        public @Nullable String getProcessedURL() { return null; }
+        public @Nullable String getMappedURL() { return null; }
 
         @Override
         public @NotNull Map<String, String> getHtmlAttributes() {
             return htmlAttributes;
-        }
-
-        @Override
-        public @NotNull LinkRequest getLinkRequest() {
-            return linkRequest;
         }
     }
 

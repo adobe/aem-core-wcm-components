@@ -15,10 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.httpclient.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -31,8 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.services.link.LinkProcessorFactory;
-import com.adobe.cq.wcm.core.components.services.link.LinkRequest;
+import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableMap;
@@ -69,7 +69,7 @@ public class LinkHandler {
     private PageManager pageManager;
 
     @OSGiService
-    private LinkProcessorFactory linkProcessorFactory;
+    private List<PathProcessor> pathProcessors;
 
     /**
      * Resolves a link from the properties of the given resource.
@@ -78,6 +78,7 @@ public class LinkHandler {
      * @return {@link Optional} of  {@link Link}
      */
     @NotNull
+    @SuppressWarnings("rawtypes")
     public Optional<Link> getLink(@NotNull Resource resource) {
         return getLink(resource, PN_LINK_URL);
     }
@@ -90,6 +91,7 @@ public class LinkHandler {
      * @return {@link Optional} of  {@link Link}
      */
     @NotNull
+    @SuppressWarnings("rawtypes")
     public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
@@ -114,7 +116,7 @@ public class LinkHandler {
             return Optional.empty();
         }
         String linkURL = getPageLinkURL(page);
-        return Optional.of(processLinkRequest(new LinkRequest(page, linkURL, null)));
+        return buildLink(linkURL, request, page, null);
     }
 
     /**
@@ -129,9 +131,9 @@ public class LinkHandler {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         Optional <String> resolvedLinkTarget = validateAndResolveLinkTarget(target);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(processLinkRequest(new LinkRequest(targetPage, resolvedLinkURL, ImmutableMap.of(
+        return buildLink(resolvedLinkURL, request, targetPage, ImmutableMap.of(
                 ATTR_TARGET, resolvedLinkTarget
-        ))));
+        ));
     }
 
     /**
@@ -151,17 +153,19 @@ public class LinkHandler {
         Optional <String> validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
         Optional <String> validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(processLinkRequest(new LinkRequest<>(targetPage, resolvedLinkURL, ImmutableMap.of(
+        return Optional.of(buildLink(resolvedLinkURL, request, targetPage, ImmutableMap.of(
                 ATTR_TARGET, resolvedLinkTarget,
                 ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel,
                 ATTR_TITLE, validatedLinkTitleAttribute)
-        )));
+        )).orElse(null);
     }
 
-    private Link processLinkRequest(LinkRequest<Page> linkRequest) {
-        return Optional.ofNullable(linkProcessorFactory.getProcessor(linkRequest))
-            .map(processor -> processor.process(linkRequest))
-                .orElse(new LinkImpl<>(linkRequest));
+    private Optional<Link<Page>> buildLink(String path, SlingHttpServletRequest request, Page page,
+                                 Map<String, Optional<String>> htmlAttributes) {
+        return Optional.ofNullable(pathProcessors.stream()
+                .filter(pathProcessor -> pathProcessor.canHandle(path, request))
+                .findFirst().map(pathProcessor -> new LinkImpl<>(pathProcessor.fixPath(path, request), pathProcessor.mapPath(path,
+                        request), pathProcessor.externalizeLink(path, request), page, htmlAttributes)).orElse(null));
     }
 
     /**
@@ -219,8 +223,8 @@ public class LinkHandler {
     @NotNull
     private String getLinkURL(@NotNull String path) {
         return getPage(path)
-                .map(page -> getPageLinkURL(page))
-                .orElse(fixPath(path));
+                .map(this::getPageLinkURL)
+                .orElse(path);
     }
 
     /**
@@ -239,28 +243,7 @@ public class LinkHandler {
         } else {
             pageLinkURL = vanityURL;
         }
-        return fixPath(pageLinkURL);
-    }
-
-    /**
-     * Fix the path by prepending the context-path and escaping.
-     *
-     * @param path The path to fix
-     *
-     * @return Fixed path
-     */
-    @NotNull
-    private String fixPath(@NotNull String path) {
-        String cp = request.getContextPath();
-        if (!StringUtils.isEmpty(cp) && path.startsWith("/") && !path.startsWith(cp + "/")) {
-            path = cp + path;
-        }
-        try {
-            final URI uri = new URI(path, false);
-            return uri.toString();
-        } catch (Exception e) {
-            return path;
-        }
+        return pageLinkURL;
     }
 
     /**

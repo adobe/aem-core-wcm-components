@@ -65,7 +65,7 @@ class LinkHandlerTest {
 
         assertValidLink(link.get(), "http://myhost");
         assertNull(link.map(Link::getReference).orElse(null));
-        assertEquals("http://myhost", link.get().getProcessedURL());
+        assertEquals("http://myhost", link.get().getMappedURL());
     }
 
     @ParameterizedTest
@@ -102,7 +102,7 @@ class LinkHandlerTest {
         Optional<Link> link = underTest.getLink(linkResource);
         assertValidLink(link.get(), page.getPath() + ".html");
         assertEquals(page, link.map(Link::getReference).orElse(null));
-        assertEquals(page.getPath() + ".html", link.get().getProcessedURL());
+        assertEquals(page.getPath() + ".html", link.get().getMappedURL());
     }
 
     @Test
@@ -115,7 +115,7 @@ class LinkHandlerTest {
 
         // TODO: this link should be handled as invalid. but we keep this behavior for now to keep backwards compatibility
         assertValidLink(link.get(), "/core" + page.getPath() + ".html");
-        assertEquals("/core/content/site1/en.html", link.get().getProcessedURL());
+        assertEquals("/core/content/site1/en.html", link.get().getMappedURL());
         assertEquals(page, link.map(Link::getReference).orElse(null));
     }
 
@@ -156,7 +156,7 @@ class LinkHandlerTest {
     void testEmptyLink() {
         Optional<Link<Page>> link = underTest.getLink("", "");
         assertNull(link.get().getURL());
-        assertNull(link.get().getProcessedURL());
+        assertNull(link.get().getMappedURL());
     }
 
     @Test

@@ -25,12 +25,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.impl.ResourceTypeBasedResourcePicker;
 import org.apache.sling.models.spi.ImplementationPicker;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
-import org.mockito.Mockito;
 
 import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.wcm.core.components.internal.link.DefaultLinkProcessor;
-import com.adobe.cq.wcm.core.components.internal.link.LinkProcessorFactoryImpl;
-import com.adobe.cq.wcm.core.components.internal.services.LatestVersionImplementationPicker;
+import com.adobe.cq.wcm.core.components.internal.link.DefaultPathProcessor;
 import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
@@ -87,9 +84,8 @@ public final class CoreComponentTestContext {
                         }
                     });
                     context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
-                    context.registerInjectActivateService(new LinkProcessorFactoryImpl());
                     context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
-                    context.registerInjectActivateService(new DefaultLinkProcessor());
+                    context.registerInjectActivateService(new DefaultPathProcessor());
                 }
             )
             .build();

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -201,7 +202,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Self
     private LinkHandler linkHandler;
-    protected Optional<Link> link;
+    protected Optional<Link<Page>> link;
 
     /**
      * Initialize the model.
@@ -407,7 +408,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getTitle)
-            .withLinkUrl(() -> link.map(Link::getProcessedURL).orElse(null))
+            .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(getLinkURL()))
             .withDescription(this::getDescription)
             .build();
     }

@@ -191,7 +191,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     protected PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
             .withTitle(this::getTitle)
-            .withLinkUrl(() -> link.map(Link::getProcessedURL).orElse(null))
+            .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
             .build();
     }
 }
