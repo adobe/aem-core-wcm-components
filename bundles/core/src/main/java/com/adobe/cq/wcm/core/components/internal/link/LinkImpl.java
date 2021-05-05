@@ -26,6 +26,7 @@ import com.adobe.cq.wcm.core.components.internal.jackson.LinkHtmlAttributesSeria
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableMap;
 
@@ -104,6 +105,7 @@ public final class LinkImpl<T> implements Link<T> {
     @Override
     @JsonInclude(Include.NON_EMPTY)
     @JsonSerialize(using = LinkHtmlAttributesSerializer.class)
+    @JsonProperty("attributes")
     public @NotNull Map<String, String> getHtmlAttributes() {
         return htmlAttributes;
     }

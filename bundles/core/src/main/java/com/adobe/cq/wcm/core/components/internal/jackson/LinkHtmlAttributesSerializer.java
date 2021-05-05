@@ -17,9 +17,9 @@
 package com.adobe.cq.wcm.core.components.internal.jackson;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,12 +39,16 @@ public class LinkHtmlAttributesSerializer extends StdSerializer<Map<String, Stri
 
     protected LinkHtmlAttributesSerializer(Class<Map<String, String>> t) { super(t); }
 
-    private Map<String, String> filteredMap = new LinkedHashMap<>();
+    private Map<String, String> filter(Map<String, String> map) {
+        return map.entrySet().stream()
+                .filter(x -> !IGNORED_HTML_ATTRIBUTES.contains(x.getKey()) && !StringUtils.isBlank(x.getValue()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 
     @Override
-    public void serialize(Map map, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+    public void serialize(Map<String, String> map, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartObject();
-            for (Map.Entry<String, String> entry : filteredMap.entrySet()) {
+            for (Map.Entry<String, String> entry : filter(map).entrySet()) {
                 gen.writeStringField(entry.getKey(), entry.getValue());
             }
         gen.writeEndObject();
@@ -52,11 +56,6 @@ public class LinkHtmlAttributesSerializer extends StdSerializer<Map<String, Stri
 
     @Override
     public boolean isEmpty(SerializerProvider provider, Map<String, String> map) {
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (!IGNORED_HTML_ATTRIBUTES.contains(entry.getKey()) && !StringUtils.isBlank(entry.getValue())) {
-                filteredMap.put(entry.getKey(), entry.getValue());
-            }
-        }
-        return filteredMap.isEmpty();
+        return filter(map).isEmpty();
     }
 }
