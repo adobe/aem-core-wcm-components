@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Page (v3)
+Page (v3) Work in progress, do not use in production
 ====
 Extensible page component written in HTL.
 
@@ -137,15 +137,15 @@ icon-150x150.png|Internet Explorer, Edge and Windows Phone|150px x 150px
 icon-70x70.png|Internet Explorer, Edge and Windows Phone|70px x 70px
 
 ## Client Libraries
-The component leverages the `core.wcm.components.page.v2.sharing` client library category that contains the JavaScript
+The component provides a `core.wcm.components.page.v2.sharing` client library category that contains the JavaScript
 required to enable social sharing. It should be added to a relevant site client library using the `embed` property.
 
-It also leverages the `core.wcm.components.page.v2.editor` editor client library category that includes JavaScript
+It also provides a `core.wcm.components.page.v2.editor` editor client library category that includes JavaScript
 handling for dialog interaction. It is already included by its edit dialog.
 
 ## Information
 * **Vendor**: Adobe
 * **Version**: v3
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: work-in-progress
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_page\_v3](https://www.adobe.com/go/aem_cmp_page_v3)
