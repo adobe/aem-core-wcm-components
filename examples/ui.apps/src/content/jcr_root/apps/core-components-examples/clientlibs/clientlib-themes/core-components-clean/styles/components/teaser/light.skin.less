@@ -15,7 +15,7 @@
  */
 
 @cmp-clean-light-teaser-background-color: @cmp-clean-color-gray-100;
-@cmp-clean-light-teaser-content-overlay-background-color: fade(@cmp-clean-color-gray-600, 60%);
+@cmp-clean-light-teaser-content-overlay-background-color: fade(@cmp-clean-color-black, 50%);
 @cmp-clean-light-teaser-color: @cmp-clean-color-gray-700;
 @cmp-clean-light-teaser-content-overlay-color: @cmp-clean-color-gray-100;
 
@@ -27,8 +27,18 @@
 
     // image is present
     .cmp-teaser__image ~ .cmp-teaser__content  {
-        background-color: @cmp-clean-light-teaser-content-overlay-background-color;
         color: @cmp-clean-light-teaser-content-overlay-color;
+
+        .cmp-teaser__title, .cmp-teaser__description, .cmp-teaser__pretitle {
+            background-color: @cmp-clean-light-teaser-content-overlay-background-color;
+            font-weight: bolder;
+            display: table;
+            padding: 0.5rem;
+            width: fit-content;
+            -webkit-box-decoration-break: clone;
+            box-decoration-break: clone;
+            margin-bottom: 3px;
+        }
 
         .cmp-teaser__title-link {
             color: @cmp-clean-color-white;
@@ -41,6 +51,7 @@
         .cmp-teaser__action-link {
             border-color: @cmp-clean-color-white;
             color: @cmp-clean-color-white;
+            background-color: @cmp-clean-light-teaser-content-overlay-background-color;
 
             &:hover {
                 border-color: @cmp-clean-color-gray-300;

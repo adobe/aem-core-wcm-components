@@ -125,6 +125,7 @@
                                 "item_1_2_2_2": {
                                     "id": "carousel-21953a9100",
                                     "autoplay": true,
+                                    "controlsPrepended": false,
                                     "delay": 7000,
                                     "autopauseDisabled": false,
                                     "dataLayer": {

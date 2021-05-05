@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.internal.servlets.DMAssetPostProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -43,6 +44,7 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
+import com.day.cq.dam.scene7.api.constants.Scene7AssetType;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
 
 /**
@@ -174,11 +176,15 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         String dmServerUrl;
+                        // for Author
                         if (!isWCMDisabled) {
-                            //for Author
-                            dmServerUrl = "/is/image/";
+                            if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
+                                dmServerUrl = DMAssetPostProcessor.CONTENT_SERVER_PATH;
+                            } else {
+                                dmServerUrl = DMAssetPostProcessor.IMAGE_SERVER_PATH;
+                            }
                         } else {
-                            //for Publish
+                            // for Publish
                             dmServerUrl = (String) properties.get(PN_IMAGE_SERVER_URL);
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
@@ -252,6 +258,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     srcUriTemplate += imageModifiersCommand;
                     src += imageModifiersCommand;
                 }
+                //add "dpr=off" parameter to image source url
+                String dprOffParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=off";
+                srcUriTemplate += dprOffParameter;
+                src += dprOffParameter;
                 if (srcUriTemplate.equals(src)) {
                     srcUriTemplate = null;
                 }
@@ -293,7 +303,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     @Override
-    public List<ImageArea> getAreas() { return Collections.unmodifiableList(areas); }
+    public List<ImageArea> getAreas() {
+        if (areas == null) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(areas);
+    }
 
     @Override
     public String getUuid() {

@@ -249,7 +249,9 @@
 
         for (var i = 0; i < selects.length; i++) {
             var overlay = selects[i].querySelector("coral-overlay");
-            overlay.collision = Coral.Overlay.collision.NONE;
+            if (overlay) {
+                overlay.collision = Coral.Overlay.collision.NONE;
+            }
         }
 
         // adds a sufficient padding to the bottom of the wrapper such that selects

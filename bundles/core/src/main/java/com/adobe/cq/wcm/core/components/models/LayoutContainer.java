@@ -71,4 +71,24 @@ public interface LayoutContainer extends Container {
     default LayoutType getLayout() {
         return LayoutType.SIMPLE;
     }
+
+    /**
+     * Returns an accessibility label that describes the container.
+     *
+     * @return an accessibility label for the container
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default String getAccessibilityLabel() {
+        return null;
+    }
+
+    /**
+     * Returns a role attribute to be used on the container.
+     *
+     * @return a role attribute for the container
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default String getRoleAttribute() {
+        return null;
+    }
 }
