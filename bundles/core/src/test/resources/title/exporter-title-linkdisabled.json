@@ -12,7 +12,7 @@
     "link": {
         "valid": true,
         "url": "https://www.adobe.com",
-        "htmlAttributes": {
+        "attributes": {
             "aria-label":"World",
             "title":"World title"
         }
