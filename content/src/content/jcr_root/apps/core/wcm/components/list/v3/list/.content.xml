@@ -18,5 +18,5 @@
     cq:icon="textBulleted"
     jcr:description="Configurable collection of items or content"
     jcr:primaryType="cq:Component"
-    jcr:title="List (v3)"
-    componentGroup=".core-wcm"/>
+    jcr:title="List (v3) (work-in-progress)"
+    componentGroup=".wip"/>
