@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +36,6 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import static com.adobe.cq.wcm.core.components.commons.link.Link.*;
@@ -45,7 +45,7 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.*;
  * Simple implementation for resolving and validating links from model's resources.
  * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
-@Model(adaptables=SlingHttpServletRequest.class)
+@Model(adaptables = SlingHttpServletRequest.class)
 public class LinkHandler {
 
     /**
@@ -73,8 +73,8 @@ public class LinkHandler {
 
     /**
      * Resolves a link from the properties of the given resource.
-     * @param resource Resource
      *
+     * @param resource Resource
      * @return {@link Optional} of  {@link Link}
      */
     @NotNull
@@ -85,9 +85,9 @@ public class LinkHandler {
 
     /**
      * Resolves a link from the properties of the given resource.
-     * @param resource Resource
-     * @param linkURLPropertyName Property name to read link URL from.
      *
+     * @param resource            Resource
+     * @param linkURLPropertyName Property name to read link URL from.
      * @return {@link Optional} of  {@link Link}
      */
     @NotNull
@@ -124,16 +124,15 @@ public class LinkHandler {
      * @param linkURL Link URL
      * @param target Target
      *
-     * @return {@link Link}
+     * @return {@link Optional} of  {@link Link<Page>}
      */
     @NotNull
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
-        Optional <String> resolvedLinkTarget = validateAndResolveLinkTarget(target);
+        String resolvedLinkTarget = validateAndResolveLinkTarget(target);
         Page targetPage = getPage(linkURL).orElse(null);
-        return buildLink(resolvedLinkURL, request, targetPage, ImmutableMap.of(
-                ATTR_TARGET, resolvedLinkTarget
-        ));
+        return buildLink(resolvedLinkURL, request, targetPage,
+                new HashMap<String, String>() {{ put(ATTR_TARGET, resolvedLinkTarget); }});
     }
 
     /**
@@ -143,42 +142,47 @@ public class LinkHandler {
      * @param linkAccessibilityLabel Link Accessibility Label
      * @param linkTitleAttribute Link Title Attribute
      *
-     * @return {@link Link}
+     * @return {@link Optional} of  {@link Link<Page>}
      */
     @NotNull
-    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel,
-                                   @Nullable String linkTitleAttribute) {
+    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
-        Optional<String> resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        Optional <String> validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
-        Optional <String> validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
+        String resolvedLinkTarget = validateAndResolveLinkTarget(target);
+        String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
+        String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(buildLink(resolvedLinkURL, request, targetPage, ImmutableMap.of(
-                ATTR_TARGET, resolvedLinkTarget,
-                ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel,
-                ATTR_TITLE, validatedLinkTitleAttribute)
-        )).orElse(null);
+        return Optional.of(buildLink(resolvedLinkURL, request, targetPage,
+                new HashMap<String, String>() {{
+                    put(ATTR_TARGET, resolvedLinkTarget);
+                    put(ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel);
+                    put(ATTR_TITLE, validatedLinkTitleAttribute);
+                }}))
+                .orElse(null);
     }
 
     private Optional<Link<Page>> buildLink(String path, SlingHttpServletRequest request, Page page,
-                                 Map<String, Optional<String>> htmlAttributes) {
-        return Optional.ofNullable(pathProcessors.stream()
-                .filter(pathProcessor -> pathProcessor.canHandle(path, request))
-                .findFirst().map(pathProcessor -> new LinkImpl<>(pathProcessor.fixPath(path, request), pathProcessor.mapPath(path,
-                        request), pathProcessor.externalizeLink(path, request), page, htmlAttributes)).orElse(null));
+                                           Map<String, String> htmlAttributes) {
+        if (StringUtils.isNotEmpty(path)) {
+            return pathProcessors.stream()
+                    .filter(pathProcessor -> pathProcessor.accepts(path, request))
+                    .findFirst().map(pathProcessor -> new LinkImpl<>(pathProcessor.sanitize(path, request), pathProcessor.map(path,
+                            request), pathProcessor.externalize(path, request), page, htmlAttributes));
+        } else {
+            return Optional.of(new LinkImpl<>(path, path, path, page, htmlAttributes));
+        }
     }
 
     /**
      * Validates and resolves a link URL.
-     * @param linkURL Link URL
      *
+     * @param linkURL Link URL
      * @return The validated link URL or {@code null} if not valid
      */
+    @Nullable
     private String validateAndResolveLinkURL(String linkURL) {
         if (!StringUtils.isEmpty(linkURL)) {
             return getLinkURL(linkURL);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -187,20 +191,30 @@ public class LinkHandler {
      * Validates and resolves the link target.
      * @param linkTarget Link target
      *
-     * @return {@link Optional} of the validated link target
+     * @return The validated link target or {@code null} if not valid
      */
-    private Optional<String> validateAndResolveLinkTarget(String linkTarget) {
-        return Optional.ofNullable(linkTarget).filter(target -> VALID_LINK_TARGETS.contains(linkTarget));
+    private String validateAndResolveLinkTarget(String linkTarget) {
+        if (linkTarget != null && VALID_LINK_TARGETS.contains(linkTarget)) {
+            return linkTarget;
+        }
+        else {
+            return null;
+        }
     }
 
     /**
      * Validates the link accessibility label.
      * @param linkAccessibilityLabel Link accessibility label
      *
-     * @return {@link Optional} of the validated link accessibility label
+     * @return The validated link accessibility label or {@code null} if not valid
      */
-    private Optional<String> validateLinkAccessibilityLabel(String linkAccessibilityLabel) {
-        return Optional.ofNullable(linkAccessibilityLabel).filter(label -> !StringUtils.isBlank(label));
+    private String validateLinkAccessibilityLabel(String linkAccessibilityLabel) {
+        if (!StringUtils.isBlank(linkAccessibilityLabel)) {
+            return linkAccessibilityLabel;
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -209,8 +223,13 @@ public class LinkHandler {
      *
      * @return The validated link title attribute or {@code null} if not valid
      */
-    private Optional <String> validateLinkTitleAttribute(String linkTitleAttribute) {
-        return Optional.ofNullable(linkTitleAttribute).filter(linkAttribute -> !StringUtils.isBlank(linkAttribute));
+    private String validateLinkTitleAttribute(String linkTitleAttribute) {
+        if (!StringUtils.isBlank(linkTitleAttribute)) {
+            return linkTitleAttribute;
+        }
+        else {
+            return null;
+        }
     }
 
     /**

@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,42 +56,8 @@ public final class LinkImpl<T> implements Link<T> {
     private final Map<String, String> htmlAttributes;
     private final String externalizedUrl;
 
-    /**
-     * @param url Link URL
-     */
-    public LinkImpl(String url) {
-        this(url, null, null, null, null);
-    }
-
-    /**
-     * @param url Link URL
-     * @param mappedUrl mapped Link URL
-     */
-    public LinkImpl(String url, String mappedUrl) {
-        this(url, mappedUrl, null, null, null);
-    }
-
-    /**
-     * @param url Link URL
-     * @param mappedUrl mapped Link URL
-     * @param externalizedUrl external Link URL
-     */
-    public LinkImpl(String url, String mappedUrl, String externalizedUrl) {
-        this(url, mappedUrl, externalizedUrl, null, null);
-    }
-
-    /**
-     * @param url Link URL
-     * @param mappedUrl mapped Link URL
-     * @param externalizedUrl external Link URL
-     * @param reference Referenced WCM/DAM entity
-     */
-    LinkImpl(String url, String mappedUrl, String externalizedUrl, T reference) {
-        this(url, mappedUrl, externalizedUrl, reference, null);
-    }
-
     public LinkImpl(@Nullable String url, @Nullable String mappedUrl, @Nullable String externalizedUrl, @Nullable T reference,
-                    @Nullable Map<String, Optional<String>> htmlAttributes) {
+                    @Nullable Map<String, String> htmlAttributes) {
         this.url = url;
         this.mappedUrl = mappedUrl;
         this.externalizedUrl = externalizedUrl;
@@ -167,15 +134,15 @@ public final class LinkImpl<T> implements Link<T> {
      *
      * @return {@link Map} of link attributes
      */
-    private static Map<String, String> buildHtmlAttributes(String linkURL, Map<String, Optional<String>> htmlAttributes) {
+    private static Map<String, String> buildHtmlAttributes(String linkURL, Map<String, String> htmlAttributes) {
         Map<String,String> attributes = new LinkedHashMap<>();
         if (linkURL != null) {
             attributes.put(ATTR_HREF, linkURL);
         }
         if (htmlAttributes != null) {
             Map<String, String> filteredAttributes = htmlAttributes.entrySet().stream()
-                    .filter(e -> ALLOWED_ATTRIBUTES.contains(e.getKey()) && e.getValue().isPresent())
-                    .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get()));
+                    .filter(e -> ALLOWED_ATTRIBUTES.contains(e.getKey()) && StringUtils.isNotEmpty(e.getValue()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             attributes.putAll(filteredAttributes);
         }
         return ImmutableMap.copyOf(attributes);

@@ -19,6 +19,7 @@ import org.apache.commons.httpclient.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -34,12 +35,12 @@ public class DefaultPathProcessor implements PathProcessor {
     Externalizer externalizer;
 
     @Override
-    public boolean canHandle(@NotNull String path, @NotNull SlingHttpServletRequest request) {
+    public boolean accepts(@NotNull String path, @NotNull SlingHttpServletRequest request) {
         return true;
     }
 
     @Override
-    public @NotNull String fixPath(@NotNull String path, @NotNull SlingHttpServletRequest request) {
+    public @NotNull String sanitize(@NotNull String path, @NotNull SlingHttpServletRequest request) {
         String cp = request.getContextPath();
         if (!StringUtils.isEmpty(cp) && path.startsWith("/") && !path.startsWith(cp + "/")) {
             path = cp + path;
@@ -53,7 +54,7 @@ public class DefaultPathProcessor implements PathProcessor {
     }
 
     @Override
-    public @NotNull String mapPath(@NotNull String path, @NotNull SlingHttpServletRequest request) {
+    public @NotNull String map(@NotNull String path, @NotNull SlingHttpServletRequest request) {
         try {
             return StringUtils.defaultString(request.getResourceResolver().map(request, path));
         } catch (Exception e) {
@@ -62,7 +63,7 @@ public class DefaultPathProcessor implements PathProcessor {
     }
 
     @Override
-    public @NotNull String externalizeLink(@NotNull String path, @NotNull SlingHttpServletRequest request) {
+    public @NotNull String externalize(@NotNull String path, @NotNull SlingHttpServletRequest request) {
         try {
             return externalizer.publishLink(request.getResourceResolver(), path);
         } catch (Exception e) {

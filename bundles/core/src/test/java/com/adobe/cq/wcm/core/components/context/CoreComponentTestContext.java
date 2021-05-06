@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.impl.ResourceTypeBasedResourcePicker;
 import org.apache.sling.models.spi.ImplementationPicker;
@@ -34,6 +35,7 @@ import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.msm.api.MSMNameConstants;
+import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 
@@ -55,10 +57,17 @@ public final class CoreComponentTestContext {
         // only static methods
     }
 
+    private static final ImmutableMap<String, Object> PROPERTIES =
+            ImmutableMap.of("resource.resolver.mapping", ArrayUtils.toArray(
+                    "/:/",
+                    "^/content/links/site1/(.+)</content/site1/$1"
+            ));
+
     public static AemContext newAemContext() {
         return new AemContextBuilder()
                 .plugin(CACONFIG)
                 .resourceResolverType(ResourceResolverType.JCR_MOCK)
+                .resourceResolverFactoryActivatorProps(PROPERTIES)
             .<AemContext>afterSetUp(context -> {
                     context.addModelsForClasses(MockResponsiveGrid.class);
                     context.addModelsForPackage("com.adobe.cq.wcm.core.components.models");

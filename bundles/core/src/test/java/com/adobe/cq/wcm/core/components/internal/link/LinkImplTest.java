@@ -16,11 +16,11 @@
 package com.adobe.cq.wcm.core.components.internal.link;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.day.cq.wcm.api.Page;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.*;
@@ -35,7 +35,7 @@ class LinkImplTest {
 
     @Test
     void testValidLink() {
-        Link<Page> link = new LinkImpl<>(URL, URL);
+        Link<Page> link = new LinkImpl<>(URL, URL, MockExternalizerFactory.ROOT + URL, null, null);
         assertValidLink(link, URL);
         assertNull(link.getReference());
         assertEquals(URL, link.getMappedURL());
@@ -43,15 +43,15 @@ class LinkImplTest {
 
     @Test
     void testValidLinkWithTarget() {
-        Link<Page> link = new LinkImpl(URL, URL, URL, null,
-                new HashMap<String, Optional<String>>() {{ put(ATTR_TARGET, Optional.of("_blank")); }});
+        Link<Page> link = new LinkImpl(URL, URL, MockExternalizerFactory.ROOT + URL, null,
+                new HashMap<String, String>() {{ put(ATTR_TARGET, "_blank"); }});
         assertValidLink(link, URL, "_blank");
         assertNull(link.getReference());
     }
 
     @Test
     void testValidLinkWithoutTarget() {
-        Link link = new LinkImpl(URL, URL, URL,null, null);
+        Link link = new LinkImpl(URL, URL, MockExternalizerFactory.ROOT + URL,null, null);
 
         assertValidLink(link, URL, null);
         assertNull(link.getReference());
@@ -60,9 +60,9 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetAndTargetPage() {
         Page page = mock(Page.class);
-        Link<Page> link = new LinkImpl<>(URL, URL, URL, page, new HashMap<String, Optional<String>>() {{ put(ATTR_TARGET,
-                Optional.of(
-                "_blank")); }});
+        Link<Page> link = new LinkImpl<>(URL, URL, MockExternalizerFactory.ROOT + URL, page,
+                new HashMap<String, String>() {{ put(ATTR_TARGET,
+                "_blank"); }});
         assertValidLink(link, URL, "_blank");
         assertSame(page, link.getReference());
     }
@@ -70,10 +70,10 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetTargetPageAccessibilityLabelAndTitleAttribute() {
         Page page = mock(Page.class);
-        Link<Page> link = new LinkImpl(URL, URL, URL, page, new HashMap<String, Optional<String>>() {{
-            put(ATTR_TARGET,Optional.of("_blank"));
-            put(ATTR_ARIA_LABEL,  Optional.of("Url Label"));
-            put(ATTR_TITLE, Optional.of("Url Title"));
+        Link<Page> link = new LinkImpl<>(URL, URL, MockExternalizerFactory.ROOT + URL, page, new HashMap<String, String>() {{
+            put(ATTR_TARGET, "_blank");
+            put(ATTR_ARIA_LABEL,  "Url Label");
+            put(ATTR_TITLE, "Url Title");
         }});
 
         assertValidLink(link, URL, "Url Label", "Url Title", "_blank");
@@ -83,9 +83,9 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetPageAccessibilityLabelTitleAttributeAndWithoutTarget() {
         Page page = mock(Page.class);
-        Link<Page> link = new LinkImpl(URL, URL, URL, page, new HashMap<String, Optional<String>>() {{
-            put(ATTR_ARIA_LABEL, Optional.of("Url Label"));
-            put(ATTR_TITLE, Optional.of("Url Title"));
+        Link<Page> link = new LinkImpl<>(URL, URL, MockExternalizerFactory.ROOT + URL, page, new HashMap<String, String>() {{
+            put(ATTR_ARIA_LABEL, "Url Label");
+            put(ATTR_TITLE, "Url Title");
         }});
 
         assertValidLink(link, URL, "Url Label", "Url Title", null);
@@ -94,7 +94,7 @@ class LinkImplTest {
 
     @Test
     void testInvalidLink() {
-        Link<Page> link = new LinkImpl<>(null, null, null);
+        Link<Page> link = new LinkImpl<>(null, null, null, null, null);
         assertInvalidLink(link);
         assertNull(link.getReference());
         assertNull(link.getMappedURL());
