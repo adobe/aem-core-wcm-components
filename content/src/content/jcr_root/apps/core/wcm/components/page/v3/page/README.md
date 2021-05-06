@@ -137,10 +137,10 @@ icon-150x150.png|Internet Explorer, Edge and Windows Phone|150px x 150px
 icon-70x70.png|Internet Explorer, Edge and Windows Phone|70px x 70px
 
 ## Client Libraries
-The component provides a `core.wcm.components.page.v2.sharing` client library category that contains the JavaScript
+The component reuses the `core.wcm.components.page.v2.sharing` client library category that contains the JavaScript
 required to enable social sharing. It should be added to a relevant site client library using the `embed` property.
 
-It also provides a `core.wcm.components.page.v2.editor` editor client library category that includes JavaScript
+It also reuses the `core.wcm.components.page.v2.editor` editor client library category that includes JavaScript
 handling for dialog interaction. It is already included by its edit dialog.
 
 ## Information
