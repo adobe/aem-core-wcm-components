@@ -295,10 +295,11 @@ public class CarouselV1IT extends AuthorBaseUITest {
         assertTrue(!Commons.isPanelSelectPresent(), "Panel Select should not be present");
         createItems();
         Commons.openEditableToolbar(testPage + Commons.relParentCompPath + componentName);
-        assertTrue(Commons.isPanelSelectPresent(), "Panel Select should not be present");
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(Commons.isPanelSelectPresent(), "Panel Select should be present");
         Commons.openPanelSelect();
 
-        PanelSelector panelSelector = new   PanelSelector();
+        PanelSelector panelSelector = new PanelSelector();
         assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
 
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
