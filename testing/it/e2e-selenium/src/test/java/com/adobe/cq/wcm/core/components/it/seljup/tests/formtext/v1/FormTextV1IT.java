@@ -176,7 +176,7 @@ public class FormTextV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: check available constraints element name")
-    public void checkAvailableConstraints() throws TimeoutException {
+    public void checkAvailableConstraints() throws TimeoutException, InterruptedException {
         formTextTests.checkAvailableConstraints();
     }
 

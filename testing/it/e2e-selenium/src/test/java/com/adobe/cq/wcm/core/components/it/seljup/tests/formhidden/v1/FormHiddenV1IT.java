@@ -31,6 +31,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeoutException;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
@@ -92,8 +94,8 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Check if Label is mandatory")
-    public void checkMandatoryFields() throws InterruptedException {
-        Commons.openConfigureDialog(hiddenPath);
+    public void checkMandatoryFields() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, hiddenPath);
         Commons.saveConfigureDialog();
         assertTrue(Commons.iseditDialogVisible(),"Config Dialog should be visible");
         assertTrue(formHidden.getConfigDialog().isMandatoryFieldsInvalid(),"Mandatory field Name should be invalid");
@@ -104,8 +106,8 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set element name")
-    public void setElementName() throws InterruptedException {
-        Commons.openConfigureDialog(hiddenPath);
+    public void setElementName() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, hiddenPath);
         formHidden.getConfigDialog().setMandatoryFields(elemName);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
@@ -118,8 +120,8 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set element value")
-    public void setElementValue() throws InterruptedException {
-        Commons.openConfigureDialog(hiddenPath);
+    public void setElementValue() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, hiddenPath);
         FormHiddenEditDialog dialog = formHidden.getConfigDialog();
         dialog.setMandatoryFields(elemName);
         dialog.setValue(elemValue);
@@ -134,8 +136,8 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set element identifier")
-    public void setElementId() throws InterruptedException {
-        Commons.openConfigureDialog(hiddenPath);
+    public void setElementId() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, hiddenPath);
         FormHiddenEditDialog dialog = formHidden.getConfigDialog();
         dialog.setMandatoryFields(elemName);
         dialog.setId(elemId);

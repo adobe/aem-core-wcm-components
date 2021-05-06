@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.embed.v1;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.embed.UrlProcessors;
@@ -26,10 +27,15 @@ import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstant
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 
 import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,7 +47,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
     private String testPage;
     private String policyPath;
     private String proxyPath;
-    private PageEditorPage editorPage;
+    private EditorPage editorPage;
     private String cmpPath;
     private Embed embed;
     private UrlProcessors urlProcessors;
@@ -129,9 +135,9 @@ public class EmbedV1IT extends AuthorBaseUITest {
      * 4. save the edit dialog
      * 5. verify the embed object on the page
      */
-    public void verifyUrl(String url, OEmbed urlProcessor) throws InterruptedException {
+    public void verifyUrl(String url, OEmbed urlProcessor) throws InterruptedException, TimeoutException {
         //1.
-        Commons.openConfigureDialog(cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
 
         //2.
         EditDialogProperties editDialogProperties = embed.getEmbedEditDialog().getProperties();
@@ -169,9 +175,9 @@ public class EmbedV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL Validation")
-    public void urlValidation() throws InterruptedException {
+    public void urlValidation() throws InterruptedException, TimeoutException {
         //1.
-        Commons.openConfigureDialog(cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
 
         //2.
         EditDialogProperties editDialogProperties = embed.getEmbedEditDialog().getProperties();
@@ -188,7 +194,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //6.
-        Commons.openConfigureDialog(cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
 
         //7.
         assertTrue(editDialogProperties.isUrlStatusSet("YouTube"), "URL status should be set");
@@ -230,7 +236,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL : oEmbed : Flickr")
-    public void urlOEmbedFlickr() throws InterruptedException {
+    public void urlOEmbedFlickr() throws InterruptedException, TimeoutException {
         OEmbed flickr = urlProcessors.getFlickr();
         String[] urls = flickr.getUrls();
         for(int i = 0; i < urls.length; i++) {
@@ -245,7 +251,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL : oEmbed : SoundCloud")
-    public void urlOEmbedSoundCloud() throws InterruptedException {
+    public void urlOEmbedSoundCloud() throws InterruptedException, TimeoutException {
         OEmbed soundCloud = urlProcessors.getSoundCloud();
         String[] urls = soundCloud.getUrls();
         for(int i = 0; i < urls.length; i++) {
@@ -260,7 +266,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL : oEmbed : Twitter")
-    public void urlOEmbedTwitter() throws InterruptedException {
+    public void urlOEmbedTwitter() throws InterruptedException, TimeoutException {
         OEmbed twitter = urlProcessors.getTwitter();
         String[] urls = twitter.getUrls();
         for(int i = 0; i < urls.length; i++) {
@@ -275,7 +281,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL : oEmbed : YouTube")
-    public void urlOEmbedYouTube() throws InterruptedException {
+    public void urlOEmbedYouTube() throws InterruptedException, TimeoutException {
         OEmbed youTube = urlProcessors.getYouTube();
         String[] urls = youTube.getUrls();
         for(int i = 0; i < urls.length; i++) {
@@ -300,9 +306,9 @@ public class EmbedV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Embeddable : YouTube")
-    public void embeddableYoutube() throws InterruptedException {
+    public void embeddableYoutube() throws InterruptedException, TimeoutException {
         //1.
-        Commons.openConfigureDialog(cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
 
         //2.
         EditDialogProperties editDialogProperties = embed.getEmbedEditDialog().getProperties();
@@ -312,7 +318,7 @@ public class EmbedV1IT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //4.
-        Commons.openConfigureDialog(cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
 
         //5.
         editDialogProperties.setTypeRadio("embeddable");
@@ -351,9 +357,9 @@ public class EmbedV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("HTML")
-    public void htmlEmbed() throws InterruptedException {
+    public void htmlEmbed() throws InterruptedException, TimeoutException {
         //1.
-        Commons.openConfigureDialog(cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
 
         //2.
         EditDialogProperties editDialogProperties = embed.getEmbedEditDialog().getProperties();

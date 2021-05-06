@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v1;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.formbutton.v1.FormButton;
 import com.adobe.cq.wcm.core.components.it.seljup.components.formbutton.BaseFormButton;
@@ -45,7 +46,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
 
     protected String testPage;
     protected String proxyComponentPath;
-    protected PageEditorPage editorPage;
+    protected EditorPage editorPage;
     protected BaseFormButton formButton;
     protected String cmpPath;
     protected String componentName = "formbutton";

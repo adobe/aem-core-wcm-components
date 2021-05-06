@@ -17,12 +17,15 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.embed;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -79,9 +82,19 @@ public class EmbedEditDialog extends Dialog {
             $(String.format(typeRadio,value)).click();
         }
 
-        public void setEmbeddableField(String value) {
-            CoralSelect select = new CoralSelect(embeddableField);
-            select.selectItemByValue(value);
+        public void setEmbeddableField(String value) throws InterruptedException {
+            $( "["+embeddableField + "] > button").click();
+            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+            CoralSelectList coralSelectList = new CoralSelectList($("["+embeddableField + "]"));
+            if(!coralSelectList.isVisible()) {
+                CoralSelect selectList = new CoralSelect(embeddableField);
+                coralSelectList = selectList.openSelectList();
+            }
+
+            final WebDriver webDriver = WebDriverRunner.getWebDriver();
+            WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + value + "']"));
+            ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
+            coralSelectList.selectByValue(value);
         }
 
         public void setEmbeddableYoutubeVideoId(String videoId) {

@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.carousel.v1;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.commons.CQOverlay;
 import com.adobe.cq.wcm.core.components.it.seljup.components.carousel.CarouselEditDialog;
@@ -54,7 +55,7 @@ public class CarouselV1IT extends AuthorBaseUITest {
     private String proxyPath;
     private static String componentName = "carousel";
     protected Carousel carousel;
-    protected PageEditorPage editorPage;
+    protected EditorPage editorPage;
     protected String cmpPath;
     protected String testPage;
     private static final String clientlibs = "core.wcm.components.carousel.v1";

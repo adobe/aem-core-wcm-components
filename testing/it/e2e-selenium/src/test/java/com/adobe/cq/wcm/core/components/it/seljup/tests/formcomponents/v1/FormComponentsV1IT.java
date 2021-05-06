@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v1;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.FormContainerEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
@@ -52,7 +53,7 @@ public class FormComponentsV1IT extends AuthorBaseUITest {
     private String compPathHidden;
     private String compPathOptions;
     private String compPathButton;
-    private PageEditorPage editorPage;
+    private EditorPage editorPage;
     private String containerPath;
     private String testPage;
     protected String formContainerRT;
@@ -61,15 +62,6 @@ public class FormComponentsV1IT extends AuthorBaseUITest {
     protected String formOptionsRT;
     protected String formButtonRT;
 
-
-
-    public void setComponentResources() {
-        formContainerRT = Commons.rtFormContainer_v1;
-        formTextRT = Commons.rtFormText_v1;
-        formHiddenRT = Commons.rtFormHidden_v1;
-        formOptionsRT = Commons.rtFormOptions_v1;
-        formButtonRT = Commons.rtFormButton_v1;
-    }
 
 
     protected void setup() throws ClientException  {
@@ -139,6 +131,15 @@ public class FormComponentsV1IT extends AuthorBaseUITest {
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
+    }
+
+
+    public void setComponentResources() {
+        formContainerRT = Commons.rtFormContainer_v1;
+        formTextRT = Commons.rtFormText_v1;
+        formHiddenRT = Commons.rtFormHidden_v1;
+        formOptionsRT = Commons.rtFormOptions_v1;
+        formButtonRT = Commons.rtFormButton_v1;
     }
 
 

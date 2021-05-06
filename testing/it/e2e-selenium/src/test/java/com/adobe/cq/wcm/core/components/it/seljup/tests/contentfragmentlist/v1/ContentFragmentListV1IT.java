@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.contentfragmentlist.v1;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.contentfragment.v1.ContentFragment;
@@ -26,7 +27,14 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.ElementsCollection;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,9 +53,10 @@ public class ContentFragmentListV1IT extends AuthorBaseUITest {
     private String testPage;
     private String proxyPath;
     private String cmpPath;
-    private PageEditorPage editorPage;
+    private EditorPage editorPage;
     private ContentFragment contentFragment;
     private ContentFragmentList contentFragmentList;
+
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
@@ -79,8 +88,8 @@ public class ContentFragmentListV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the parent path")
-    public void setParentPath() throws InterruptedException {
-        Commons.openConfigureDialog(cmpPath);
+    public void setParentPath() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
         Commons.useDialogSelect(PN_MODEL_PATH, modelPath);
         Commons.selectInAutocomplete(contentFragmentList.getEditDialog().getParentPath(),parentPath);
         Commons.saveConfigureDialog();
@@ -113,8 +122,8 @@ public class ContentFragmentListV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the tag names")
-    public void setTagNames() throws InterruptedException {
-        Commons.openConfigureDialog(cmpPath);
+    public void setTagNames() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
         Commons.useDialogSelect(PN_MODEL_PATH, modelPath);
         Commons.selectInAutocomplete(contentFragmentList.getEditDialog().getParentPath(),parentPath);
         Commons.selectInTags(contentFragmentList.getEditDialog().getTagNames(), tagName);
@@ -145,8 +154,8 @@ public class ContentFragmentListV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the element names")
-    public void setElementNames() throws InterruptedException {
-        Commons.openConfigureDialog(cmpPath);
+    public void setElementNames() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
         Commons.useDialogSelect(PN_MODEL_PATH, modelPath);
         Commons.selectInAutocomplete(contentFragmentList.getEditDialog().getParentPath(),parentPath);
         ContentFragmentListEditDialog editDialog = contentFragmentList.getEditDialog();

@@ -32,6 +32,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeoutException;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
@@ -56,7 +58,7 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
     protected String formOptionsRT;
     protected BaseFormOptions formOptions;
 
-    public void setComponentResources() {
+    protected void setComponentResources() {
         formOptionsRT = Commons.rtFormOptions_v1;
     }
 
@@ -96,8 +98,8 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check the mandatory fields")
-    public void checkMandatoryFields() throws InterruptedException {
-        Commons.openConfigureDialog(optionPath);
+    public void checkMandatoryFields() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
         Commons.saveConfigureDialog();
         assertTrue(Commons.iseditDialogVisible(),"Config Dialog should be visible");
         assertTrue(formOptions.geteditDialog().isMandatoryFieldsInvalid(),"Mandatory field Name should be invalid");
@@ -108,8 +110,8 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set title text")
-    public void setTitle() throws InterruptedException {
-        Commons.openConfigureDialog(optionPath);
+    public void setTitle() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         editDialog.setMandatoryFields(elemName, title);
         editDialog.addOption(value, text);
@@ -123,8 +125,8 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set element name")
-    public void setElementName() throws InterruptedException {
-        Commons.openConfigureDialog(optionPath);
+    public void setElementName() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         editDialog.setMandatoryFields(elemName, title);
         editDialog.addOption(value, text);
@@ -138,8 +140,8 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set the help message")
-    public void setHelpMessage() throws InterruptedException {
-        Commons.openConfigureDialog(optionPath);
+    public void setHelpMessage() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         editDialog.setMandatoryFields(elemName, title);
         editDialog.addOption(value, text);
@@ -154,8 +156,8 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the checkbox type")
-    public void setCheckbox() throws InterruptedException {
-        Commons.openConfigureDialog(optionPath);
+    public void setCheckbox() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         editDialog.setMandatoryFields(elemName, title);
         editDialog.addOption(value, text);
@@ -171,8 +173,8 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the checkbox type")
-    public void setRadioButton() throws InterruptedException {
-        Commons.openConfigureDialog(optionPath);
+    public void setRadioButton() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         editDialog.setMandatoryFields(elemName, title);
         editDialog.addOption(value, text);
@@ -188,8 +190,8 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the drop-down type")
-    public void setDropDown()  throws InterruptedException {
-        Commons.openConfigureDialog(optionPath);
+    public void setDropDown()  throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         editDialog.setMandatoryFields(elemName, title);
         editDialog.addOption(value, text);
@@ -204,8 +206,8 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the multi-select drop-down type")
-    public void setMultiSelectDropDown()  throws InterruptedException {
-        Commons.openConfigureDialog(optionPath);
+    public void setMultiSelectDropDown()  throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         editDialog.setMandatoryFields(elemName, title);
         editDialog.addOption(value, text);
@@ -220,9 +222,9 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the Active Option For Checkbox")
-    public void setActiveOptionForCheckbox()  throws InterruptedException {
+    public void setActiveOptionForCheckbox()  throws InterruptedException, TimeoutException {
         // open the edit dialog
-        Commons.openConfigureDialog(optionPath);
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
         editDialog.setOptionType("checkbox");
@@ -242,9 +244,9 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the Active Option For radio button")
-    public void setActiveOptionForRadioButton()  throws InterruptedException {
+    public void setActiveOptionForRadioButton()  throws InterruptedException, TimeoutException {
         // open the edit dialog
-        Commons.openConfigureDialog(optionPath);
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
         editDialog.setOptionType("radio");
@@ -264,9 +266,9 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the Active Option For drop-down")
-    public void setActiveOptionForDropDown()  throws InterruptedException {
+    public void setActiveOptionForDropDown()  throws InterruptedException, TimeoutException {
         // open the edit dialog
-        Commons.openConfigureDialog(optionPath);
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
         editDialog.setOptionType("drop-down");
@@ -286,9 +288,9 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the Active Option For checkbox")
-    public void setDisabledOptionForCheckbox()  throws InterruptedException {
+    public void setDisabledOptionForCheckbox()  throws InterruptedException, TimeoutException {
         // open the edit dialog
-        Commons.openConfigureDialog(optionPath);
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
         editDialog.setOptionType("checkbox");
@@ -308,9 +310,9 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the Active Option For radio button")
-    public void setDisabledOptionForRadioButton()  throws InterruptedException {
+    public void setDisabledOptionForRadioButton()  throws InterruptedException, TimeoutException {
         // open the edit dialog
-        Commons.openConfigureDialog(optionPath);
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
         editDialog.setOptionType("radio");
@@ -330,9 +332,9 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the Active Option For drop-down")
-    public void setDisabledOptionForDropDown()  throws InterruptedException {
+    public void setDisabledOptionForDropDown()  throws InterruptedException, TimeoutException {
         // open the edit dialog
-        Commons.openConfigureDialog(optionPath);
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
         editDialog.setOptionType("drop-down");
@@ -352,9 +354,9 @@ public class FormOptionsV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Set the 'Disabled' option for the Multi select drop down type")
-    public void setDisabledOptionForMultiSelectDropDown()  throws InterruptedException {
+    public void setDisabledOptionForMultiSelectDropDown() throws InterruptedException, TimeoutException {
         // open the edit dialog
-        Commons.openConfigureDialog(optionPath);
+        Commons.openEditDialog(editorPage, optionPath);
         FormOptionsEditDialog editDialog = formOptions.geteditDialog();
         // set the option type to checkbox
         editDialog.setOptionType("multi-drop-down");

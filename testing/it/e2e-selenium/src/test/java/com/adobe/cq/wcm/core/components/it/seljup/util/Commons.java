@@ -17,8 +17,11 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util;
 
 import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.codeborne.selenide.Condition;
@@ -34,15 +37,21 @@ import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
 import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.concurrent.TimeoutException;
 
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_SMALL_SIZE;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.actions;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -358,7 +367,7 @@ public class Commons {
      *
      * @param dataPath datapath of the component to open the configuration dialog
      */
-    public static void openConfigureDialog(String dataPath) throws InterruptedException {
+    public static void openConfigureDialog(String dataPath) {
         openEditableToolbar(dataPath);
         $(Selectors.SELECTOR_CONFIG_BUTTON).click();
         Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_CONFIG_DIALOG));
@@ -374,7 +383,7 @@ public class Commons {
         SelenideElement comp = $(component);
         Helpers.waitForElementAnimationFinished(comp);
         comp.shouldBe(Condition.visible);
-        int offset =  (comp.getSize().getHeight() * 85) / 200;
+        int offset =  (comp.getSize().getHeight() * 90) / 200;
         Selenide.actions()
             .moveToElement(comp, 0, offset)
             .click()
@@ -382,6 +391,14 @@ public class Commons {
             .perform();
     }
 
+    public static void openEditDialog(EditorPage editorPage, String compPath) throws TimeoutException, InterruptedException {
+        String component = "[data-type='Editable'][data-path='" + compPath +"']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
+        editableToolbar.clickConfigure();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+    }
     /**
      * Save configuration for component
      */
@@ -507,25 +524,87 @@ public class Commons {
         String[] path = value.split("/");
         int i;
         String currentPath = tagPrefix;
-        $("foundation-autocomplete" + selector).$("button[icon='FolderOpenOutline']").click();
+        $("foundation-autocomplete" + selector).$("button").click();
         for(i = 0; i < path.length - 1; i++) {
             currentPath = currentPath + "/" + path[i];
             $("[data-foundation-collection-item-id='" + currentPath + "']").click();
             Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         }
         currentPath = currentPath + "/"  + path[i];
-        $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").click();
+        if($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").isDisplayed()) {
+            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").click();
+        }
+        else {
+            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-icon").click();
+        }
         $("button.granite-pickerdialog-submit[is='coral-button']").click();
     }
 
 
-    public static void useDialogSelect(String name, String value) {
-        CoralSelect selectList = new CoralSelect("name='" +name+ "'");
-        CoralSelectList list = selectList.openSelectList();
+    /**
+     * Selects a asset in a Granite UI autocomplete field
+     *
+     * @param selector {String} Specific selector for the tags selector (ex. "[name='./tags']")
+     * @param value {String} The tag value
+     * @returns {TestCase} A test case that selects a tag in a tag selector field
+     */
+    public static void selectInDam(String selector, String value) throws InterruptedException {
+        String tagPrefix = "/content/dam";
+        String[] path = value.split("/");
+        int i;
+        String currentPath = tagPrefix;
+        $("foundation-autocomplete" + selector).$("button").click();
+        for(i = 0; i < path.length - 1; i++) {
+            currentPath = currentPath + "/" + path[i];
+            $("[data-foundation-collection-item-id='" + currentPath + "']").click();
+            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        }
+        currentPath = currentPath + "/"  + path[i];
+        if($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").isDisplayed()) {
+            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").click();
+        }
+        else {
+            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-icon").click();
+        }
+        $("button.granite-pickerdialog-submit[is='coral-button']").click();
+    }
+
+
+    public static void useDialogSelect(String name, String value) throws InterruptedException {
+        $( "[name='" + name + "'] > button").click();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        CoralSelectList coralSelectList = new CoralSelectList($("[name='" + name + "']"));
+        if(!coralSelectList.isVisible()) {
+            CoralSelect selectList = new CoralSelect("name='" + name + "'");
+            coralSelectList = selectList.openSelectList();
+        }
+
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + value + "']"));
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
-        list.selectByValue(value);
+        coralSelectList.selectByValue(value);
+    }
+
+    public static void openSidePanel() {
+        SidePanel sidePanel = new SidePanel();
+        if(sidePanel.isHidden()) {
+            sidePanel.show();
+        }
+    }
+
+    public static void closeSidePanel() {
+        SidePanel sidePanel = new SidePanel();
+        if(sidePanel.isShown()) {
+            sidePanel.hide();
+        }
+    }
+
+    public static void dragAndDrop(String dragElement, String location) throws InterruptedException {
+        actions().clickAndHold($(dragElement)).build().perform();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        actions().moveToElement($(location)).build().perform();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        actions().release().build().perform();
     }
 
 }

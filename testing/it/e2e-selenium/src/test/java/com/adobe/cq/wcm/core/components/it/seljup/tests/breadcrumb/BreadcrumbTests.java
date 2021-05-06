@@ -18,6 +18,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb;
 
 import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
 import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BreadcrumbEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BaseBreadcrumbItems;
@@ -51,7 +52,7 @@ public class BreadcrumbTests {
     private List<String> testPages;
     private String proxyPath;
     private String cmpPath;
-    private PageEditorPage editorPage;
+    private EditorPage editorPage;
     private BaseBreadcrumbItems breadcrumbItems;
     private static String componentName = "breadcrumb";
 

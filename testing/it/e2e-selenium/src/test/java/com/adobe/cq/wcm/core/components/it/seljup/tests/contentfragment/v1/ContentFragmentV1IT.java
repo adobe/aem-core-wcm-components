@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.contentfragment.v1;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.contentfragment.ContentFragmentEditDialog;
@@ -30,6 +31,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -48,7 +51,7 @@ public class ContentFragmentV1IT extends AuthorBaseUITest {
     private String testPage;
     private String proxyPath;
     private String cmpPath;
-    private PageEditorPage editorPage;
+    private EditorPage editorPage;
     private ContentFragment contentFragment;
 
     @BeforeEach
@@ -80,8 +83,8 @@ public class ContentFragmentV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the fragment path")
-    public void setFragmentPath() throws InterruptedException {
-        Commons.openConfigureDialog(cmpPath);
+    public void setFragmentPath() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
         Commons.saveConfigureDialog();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
@@ -104,8 +107,8 @@ public class ContentFragmentV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the variation name")
-    public void setVariationName() throws InterruptedException {
-        Commons.openConfigureDialog(cmpPath);
+    public void setVariationName() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
         Commons.useDialogSelect(PN_VARIATION_NAME, variationName1);
         Commons.saveConfigureDialog();
@@ -130,8 +133,8 @@ public class ContentFragmentV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set a structured content fragment")
-    public void setStructuredContentFragment() throws InterruptedException {
-        Commons.openConfigureDialog(cmpPath);
+    public void setStructuredContentFragment() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath2);
         Commons.saveConfigureDialog();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
@@ -164,11 +167,11 @@ public class ContentFragmentV1IT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the element names")
-    public void setElementNames() throws InterruptedException {
-        Commons.openConfigureDialog(cmpPath);
+    public void setElementNames() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath2);
         Commons.saveConfigureDialog();
-        Commons.openConfigureDialog(cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
         ContentFragmentEditDialog editDialog = contentFragment.getEditDialog();
         editDialog.addElement(TITLE);
         editDialog.addElement(TYPE);

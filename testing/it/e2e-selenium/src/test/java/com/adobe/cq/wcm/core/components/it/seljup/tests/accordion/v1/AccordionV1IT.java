@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.accordion.v1;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
 import com.adobe.cq.wcm.core.components.it.seljup.components.accordion.AccordionEditDialog;
@@ -23,7 +24,6 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.accordion.v1.Accord
 import com.adobe.cq.wcm.core.components.it.seljup.components.commons.ChildrenEditor;
 import com.adobe.cq.wcm.core.components.it.seljup.components.commons.PanelSelector;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
@@ -59,7 +59,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
     private String policyPath;
     private String proxyPath;
     protected Accordion accordion;
-    protected PageEditorPage editorPage;
+    protected EditorPage editorPage;
     protected String cmpPath;
 
     /**
@@ -169,6 +169,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
         //1.
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         AccordionEditDialog editDialog = accordion.getEditDialog();
+        editDialog.openItemsTab();
 
         //2.
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
@@ -188,6 +189,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
 
         //4.
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
         assertTrue(items.size() == 3, "Number to items added should be 3");
         assertTrue(items.get(0).getValue().equals("item0"), "First input item should be item0");
@@ -222,8 +224,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
         assertTrue(selectedItems.items().size() == items.size(), "Number of items in property config should be equal to added items number");
 
         for(int i = 0; i < items.size(); i++) {
-            assertTrue(selectedItems.items().get(i).find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).getText().contains(items.get(i).getValue())
-                , "Selected item should be same as added item");
+                assertTrue(properties.getSelectedItemValue(i).contains(items.get(i).getValue()),  "Selected item should be same as added item");
         }
     }
 
@@ -279,6 +280,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
         AccordionEditDialog editDialog = accordion.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(parentPath);
+        editDialog.openItemsTab();
 
         //3.
         childrenEditor.getInputItems().last().sendKeys(itemName);
@@ -374,6 +376,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
         AccordionEditDialog editDialog = accordion.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        editDialog.openItemsTab();
 
         //3.
         childrenEditor.removeFirstItem();
@@ -381,6 +384,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
 
         //4.
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
 
         //5.
@@ -420,6 +424,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
         AccordionEditDialog editDialog = accordion.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        editDialog.openItemsTab();
 
         //3.
         childrenEditor.moveItems(2,0);
@@ -429,6 +434,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
 
         //5.
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        editDialog.openItemsTab();
 
         //6.
         ElementsCollection items = childrenEditor.getInputItems();

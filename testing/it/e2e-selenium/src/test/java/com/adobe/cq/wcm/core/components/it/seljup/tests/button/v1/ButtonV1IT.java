@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.button.v1;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.button.v1.Button;
 import com.adobe.cq.wcm.core.components.it.seljup.components.button.ButtonEditDialog;
@@ -44,7 +45,7 @@ public class ButtonV1IT extends AuthorBaseUITest {
 
     private String testPage;
     private String proxyComponentPath;
-    private PageEditorPage editorPage;
+    private EditorPage editorPage;
     private Button button;
     private String cmpPath;
     private String componentName = "button";
@@ -86,7 +87,7 @@ public class ButtonV1IT extends AuthorBaseUITest {
         final String testTitle = "test button";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.getTitleField().setValue(testTitle);
-        buttonEditDialog.clickPrimary();
+        Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(button.isVisible(), "Button should be visible in content frame");
@@ -108,7 +109,7 @@ public class ButtonV1IT extends AuthorBaseUITest {
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.setLinkField(link);
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        buttonEditDialog.clickPrimary();
+        Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(button.checkLinkPresent(link),"Button with link " + link + " should be present");
@@ -128,7 +129,7 @@ public class ButtonV1IT extends AuthorBaseUITest {
         String icon = "email";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.getIcon().setValue(icon);
-        buttonEditDialog.clickPrimary();
+        Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(button.iconPresent(icon),"Icon " + icon + " should be present");

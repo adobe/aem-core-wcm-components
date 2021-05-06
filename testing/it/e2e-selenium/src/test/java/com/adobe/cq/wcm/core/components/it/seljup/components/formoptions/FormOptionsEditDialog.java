@@ -58,12 +58,18 @@ public class FormOptionsEditDialog extends Dialog {
      * Set the option type
      */
     public void setOptionType(String optionType) {
-        CoralSelect selectList = new CoralSelect("name='./type'");
-        CoralSelectList list = selectList.openSelectList();
+        //Open selectlist
+        $( "[name='./type'] > button").click();
+        CoralSelectList coralSelectList = new CoralSelectList($("[name='./type']"));
+        if(!coralSelectList.isVisible()) {
+            CoralSelect selectList = new CoralSelect("name='./type'");
+            coralSelectList = selectList.openSelectList();
+        }
+
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + optionType + "']"));
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
-        list.selectByValue(optionType);
+         coralSelectList.selectByValue(optionType);
     }
 
     /**

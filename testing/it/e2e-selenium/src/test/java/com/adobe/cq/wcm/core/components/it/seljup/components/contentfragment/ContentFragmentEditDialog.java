@@ -20,11 +20,14 @@ import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
-import com.adobe.cq.testing.selenium.utils.KeyboardShortCuts;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -48,11 +51,18 @@ public class ContentFragmentEditDialog extends Dialog {
     public void addElement(String value) {
         $("[coral-multifield-add]").click();
         $$("coral-multifield-item").last().$(elementNameSelectButton).click();
-        CoralPopOver popOver =  CoralPopOver.firstOpened();
-        popOver.waitVisible();
-        Helpers.waitForElementAnimationFinished(popOver.getCssSelector());
-        CoralSelectList selectList = new CoralSelectList(popOver.element());
-        selectList.selectByValue(value);
+        CoralSelectList coralSelectList = new CoralSelectList($$("coral-multifield-item").last().$("coral-select[name='./elementNames']"));
+        if(!coralSelectList.isVisible()) {
+            CoralPopOver popOver =  CoralPopOver.firstOpened();
+            popOver.waitVisible();
+            Helpers.waitForElementAnimationFinished(popOver.getCssSelector());
+            coralSelectList = new CoralSelectList(popOver.element());
+        }
+
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + value + "']"));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
+        coralSelectList.selectByValue(value);
     }
 
     public String getFragmentPath() {
@@ -60,10 +70,9 @@ public class ContentFragmentEditDialog extends Dialog {
     }
 
 
-    public void setFragmentPath(String value) throws InterruptedException {
-        AutoCompleteField autoCompleteField = new AutoCompleteField("css:" + fragmentPath);
-        autoCompleteField.sendKeys(value);
-        KeyboardShortCuts.keySpace();
+    public void setFragmentPath(String path) throws InterruptedException {
+        String relativePath = path.replace("/content/dam/","");
+        Commons.selectInDam(fragmentPath, relativePath);
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
