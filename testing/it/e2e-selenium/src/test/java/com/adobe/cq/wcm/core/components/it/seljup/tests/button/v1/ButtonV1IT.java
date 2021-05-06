@@ -86,7 +86,7 @@ public class ButtonV1IT extends AuthorBaseUITest {
     void SetText() throws TimeoutException, InterruptedException {
         final String testTitle = "test button";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
-        buttonEditDialog.getTitleField().setValue(testTitle);
+        buttonEditDialog.setTitleField(testTitle);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);

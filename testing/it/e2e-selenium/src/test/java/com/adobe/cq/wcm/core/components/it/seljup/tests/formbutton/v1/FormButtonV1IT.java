@@ -102,7 +102,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
     public void createButton() throws TimeoutException, InterruptedException {
         ButtonEditDialog buttonEditDialog = openButtonEditDialog();
         buttonEditDialog.selectButtonType("button");
-        buttonEditDialog.getTitleField().setValue("Button");
+        buttonEditDialog.setTitleField("Button");
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
@@ -118,7 +118,7 @@ public class FormButtonV1IT extends AuthorBaseUITest {
     public void setButtonText() throws TimeoutException, InterruptedException {
         String buttonLabel = "Test Button";
         ButtonEditDialog buttonEditDialog = openButtonEditDialog();
-        buttonEditDialog.getTitleField().setValue(buttonLabel);
+        buttonEditDialog.setTitleField(buttonLabel);
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
@@ -134,8 +134,8 @@ public class FormButtonV1IT extends AuthorBaseUITest {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonName = "button1";
         ButtonEditDialog buttonEditDialog = openButtonEditDialog();
-        buttonEditDialog.getTitleField().setValue(buttonLabel);
-        buttonEditDialog.getNameField().setValue(buttonName);
+        buttonEditDialog.setTitleField(buttonLabel);
+        buttonEditDialog.setNameField(buttonName);
         Commons.saveConfigureDialog();
 
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
@@ -154,11 +154,12 @@ public class FormButtonV1IT extends AuthorBaseUITest {
         String buttonName = "button1";
         String buttonValue = "thisisthevalue";
         ButtonEditDialog buttonEditDialog = openButtonEditDialog();
-        buttonEditDialog.getTitleField().setValue(buttonLabel);
-        buttonEditDialog.getNameField().setValue(buttonName);
-        buttonEditDialog.getValueField().setValue(buttonValue);
+        buttonEditDialog.setTitleField(buttonLabel);
+        buttonEditDialog.setNameField(buttonName);
+        buttonEditDialog.setValueField(buttonValue);
         Commons.saveConfigureDialog();
 
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchContext("ContentFrame");
         assertTrue(formButton.isButtonPresentByValue(buttonValue), "Button should be present with value " + buttonValue);
         assertTrue(formButton.getButtonText().contains(buttonLabel), "Button should contain " + buttonLabel + "text");
@@ -173,10 +174,10 @@ public class FormButtonV1IT extends AuthorBaseUITest {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonValue = "thisisthevalue";
         ButtonEditDialog buttonEditDialog = openButtonEditDialog();
-        buttonEditDialog.getTitleField().setValue(buttonLabel);
-        buttonEditDialog.getValueField().setValue(buttonValue);
+        buttonEditDialog.setTitleField(buttonLabel);
+        buttonEditDialog.setValueField(buttonValue);
         Commons.saveConfigureDialog();
 
-        assertTrue(buttonEditDialog.getNameField().getAttribute("invalid").equals("true"),"Name field should be invalid");
+        assertTrue(buttonEditDialog.isNameFieldInvalid(),"Name field should be invalid");
     }
 }

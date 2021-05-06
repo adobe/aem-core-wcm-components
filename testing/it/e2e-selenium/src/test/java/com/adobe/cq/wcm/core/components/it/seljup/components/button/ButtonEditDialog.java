@@ -21,6 +21,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstant
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.codeborne.selenide.WebDriverRunner;
@@ -45,16 +46,23 @@ public class ButtonEditDialog extends Dialog {
         super(element);
     }
 
-    public SelenideElement getTitleField() {
-        return content().find(Selectors.SELECTOR_BUTTON_TITLE);
+    public void setTitleField(String value) {
+        content().waitUntil(Condition.appear,CoreComponentConstants.TIMEOUT_TIME_SEC,CoreComponentConstants.RETRY_TIME_INTERVAL)
+            .find(Selectors.SELECTOR_BUTTON_TITLE).sendKeys(value);
     }
 
-    public SelenideElement getNameField() {
-        return content().find(Selectors.SELECTOR_BUTTON_NAME);
+    public void setNameField(String value) {
+        content().waitUntil(Condition.appear,CoreComponentConstants.TIMEOUT_TIME_SEC,CoreComponentConstants.RETRY_TIME_INTERVAL)
+            .find(Selectors.SELECTOR_BUTTON_NAME).sendKeys(value);
     }
 
-    public SelenideElement getValueField() {
-        return content().find(Selectors.SELECTOR_BUTTON_VALUE);
+    public void setValueField(String value) {
+        content().waitUntil(Condition.appear,CoreComponentConstants.TIMEOUT_TIME_SEC,CoreComponentConstants.RETRY_TIME_INTERVAL)
+            .find(Selectors.SELECTOR_BUTTON_VALUE).sendKeys(value);
+    }
+
+    public boolean isNameFieldInvalid() {
+        return content().find(Selectors.SELECTOR_BUTTON_NAME).getAttribute("invalid").equals("true");
     }
 
     public void setLinkField(String value) {
