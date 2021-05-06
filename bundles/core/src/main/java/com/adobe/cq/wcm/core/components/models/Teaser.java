@@ -152,7 +152,7 @@ public interface Teaser extends Component {
      * Returns the primary link of this teaser.
      *
      * @return the primary link of this teaser
-     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
      */
     @Nullable
     default Link getLink() {

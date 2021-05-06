@@ -27,13 +27,10 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith(AemContextExtension.class)
 public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImplTest {
@@ -81,7 +78,7 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertThat(testLogger.getLoggingEvents(),
                 hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
          */
-        assertInvalidLink(teaser.getLink());
+        assertNull(teaser.getLink(), "The link should be null");
     }
 
     @Test
