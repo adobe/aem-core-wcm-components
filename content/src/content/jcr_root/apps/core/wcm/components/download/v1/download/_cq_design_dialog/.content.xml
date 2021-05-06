@@ -93,6 +93,15 @@
                                 text="Display Filename"
                                 uncheckedValue="false"
                                 value="{Boolean}true"/>
+                            <hideTitleLink
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="When checked, the title link will be hidden."
+                                name="./hideTitleLink"
+                                checked="{Boolean}false"
+                                text="Hide Title Link"
+                                uncheckedValue="false"
+                                value="{Boolean}true"/>
                         </items>
                     </properties>
                     <styletab

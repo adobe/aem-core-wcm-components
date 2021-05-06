@@ -38,6 +38,7 @@ The following configuration properties are used:
 1. `./autoplay` - defines whether or not the carousel should automatically transition between slides.
 2. `./delay` - defines the delay (in milliseconds) when automatically transitioning between slides.
 3. `./autopauseDisabled` - defines whether or not automatic pause when hovering the carousel is disabled.
+4. `./controlsPrepended` - defines whether the carousel controls should be arranged before the carousel items or not.
 
 It is also possible to define the allowed components for the Carousel.
 

@@ -43,6 +43,16 @@ public interface Link<T> {
     String PN_LINK_TARGET = "linkTarget";
 
     /**
+     * Property name for storing link accessibility label.
+     */
+    String PN_LINK_ACCESSIBILITY_LABEL = "linkAccessibilityLabel";
+
+    /**
+     * Property name for storing link title attribute.
+     */
+    String PN_LINK_TITLE_ATTRIBUTE = "linkTitleAttribute";
+
+    /**
      * Check if the link defined for the component is valid.
      *
      * @return {@code true} if component has a valid link defined

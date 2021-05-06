@@ -9,5 +9,9 @@
             "@type": "core/wcm/components/title/v2/title"
         }
     },
+    "link": {
+        "valid": true,
+        "url": "https://www.adobe.com"
+    },
     ":type": "core/wcm/components/title/v2/title"
 }

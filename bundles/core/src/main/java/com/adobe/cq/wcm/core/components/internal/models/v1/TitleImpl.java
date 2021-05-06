@@ -125,8 +125,14 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     }
 
     @Override
+    @Deprecated
     public String getLinkURL() {
         return link.map(Link::getURL).orElse(null);
+    }
+
+    @Override
+    public Link getLink() {
+        return link.orElse(null);
     }
 
     @Override
@@ -145,8 +151,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getText)
-            .withLinkUrl(this::getLinkURL)
+            .withLinkUrl(() -> link.map(Link::getURL).orElse(null))
             .build();
     }
-
 }

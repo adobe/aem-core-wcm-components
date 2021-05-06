@@ -35,6 +35,8 @@ import com.google.common.collect.ImmutableSet;
 
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
 
 /**
  * Simple implementation for resolving and validating links from model's resources.
@@ -62,7 +64,7 @@ public class LinkHandler {
     @ScriptVariable
     @org.apache.sling.models.annotations.Optional
     private PageManager pageManager;
-    
+
     /**
      * Resolves a link from the properties of the given resource.
      * @param resource Resource
@@ -85,8 +87,13 @@ public class LinkHandler {
     public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
+        if (linkURL == null) {
+            return Optional.empty();
+        }
         String linkTarget = props.get(PN_LINK_TARGET, String.class);
-        return Optional.ofNullable(getLink(linkURL, linkTarget).orElse(null));
+        String linkAccessibilityLabel = props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class);
+        String linkTitleAttribute = props.get(PN_LINK_TITLE_ATTRIBUTE, String.class);
+        return Optional.ofNullable(getLink(linkURL, linkTarget, linkAccessibilityLabel, linkTitleAttribute).orElse(null));
     }
 
     /**
@@ -120,6 +127,25 @@ public class LinkHandler {
     }
 
     /**
+     * Builds a link with the given Link URL, target, accessibility label, title.
+     * @param linkURL Link URL
+     * @param target Target
+     * @param linkAccessibilityLabel Link Accessibility Label
+     * @param linkTitleAttribute Link Title Attribute
+     *
+     * @return {@link Optional} of  {@link Link<Page>}
+     */
+    @NotNull
+    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
+        String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
+        String resolvedLinkTarget = validateAndResolveLinkTarget(target);
+        String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
+        String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
+        Page targetPage = getPage(linkURL).orElse(null);
+        return Optional.of(new LinkImpl<>(resolvedLinkURL, resolvedLinkTarget, targetPage, validatedLinkAccessibilityLabel, validatedLinkTitleAttribute));
+    }
+
+    /**
      * Validates and resolves a link URL.
      * @param linkURL Link URL
      *
@@ -150,6 +176,36 @@ public class LinkHandler {
     }
 
     /**
+     * Validates the link accessibility label.
+     * @param linkAccessibilityLabel Link accessibility label
+     *
+     * @return The validated link accessibility label or {@code null} if not valid
+     */
+    private String validateLinkAccessibilityLabel(String linkAccessibilityLabel) {
+        if (!StringUtils.isBlank(linkAccessibilityLabel)) {
+            return linkAccessibilityLabel;
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Validates the link title attribute.
+     * @param linkTitleAttribute Link title attribute
+     *
+     * @return The validated link title attribute or {@code null} if not valid
+     */
+    private String validateLinkTitleAttribute(String linkTitleAttribute) {
+        if (!StringUtils.isBlank(linkTitleAttribute)) {
+            return linkTitleAttribute;
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
      * If the provided {@code path} identifies a {@link Page}, this method will generate the correct URL for the page. Otherwise the
      * original {@code String} is returned.
      * @param path the page path
@@ -160,7 +216,22 @@ public class LinkHandler {
     private String getLinkURL(@NotNull String path) {
         return getPage(path)
                 .map(page -> getPageLinkURL(page))
-                .orElse(path);
+                .orElse(map(path));
+    }
+
+    /**
+     * Tries to map the provided {@code path}.
+     *
+     * @param path the path to map
+     * @return the mapped path or the original one, in case mapping fails.
+     */
+    @NotNull
+    private String map(@NotNull String path) {
+        try {
+            return StringUtils.defaultString(request.getResourceResolver().map(request, path), path);
+        } catch (Exception e) {
+            return path;
+        }
     }
 
     /**
@@ -179,7 +250,7 @@ public class LinkHandler {
         } else {
             pageLinkURL = vanityURL;
         }
-        return StringUtils.defaultString(request.getResourceResolver().map(request, pageLinkURL));
+        return map(pageLinkURL);
     }
 
     /**
