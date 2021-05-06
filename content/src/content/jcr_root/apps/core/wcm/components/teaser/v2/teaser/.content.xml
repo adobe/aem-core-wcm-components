@@ -3,7 +3,7 @@
     cq:icon="card"
     jcr:description="Teaser block allowing a combination of an image, title, rich text description and actions/links"
     jcr:primaryType="cq:Component"
-    jcr:title="Teaser (v2)"
+    jcr:title="Teaser (v2) (work-in-progress)"
     sling:resourceSuperType="core/wcm/components/image"
     imageDelegate="core/wcm/components/image/v2/image"
     componentGroup=".wip"/>
