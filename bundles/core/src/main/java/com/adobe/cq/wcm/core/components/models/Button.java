@@ -41,7 +41,7 @@ public interface Button extends Component {
      * Returns the button link.
      *
      * @return the button link
-     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
      */
     default Link getButtonLink() {
         return null;
