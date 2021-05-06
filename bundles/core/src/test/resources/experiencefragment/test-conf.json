@@ -131,6 +131,16 @@
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
                             "fragmentVariationPath": "/content/experience-fragments/mysite/blueprint/footer/master"
+                        },
+                        "xf-component-70": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/en/header/master"
+                        },
+                        "xf-component-72": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/en/parent/master"
                         }
                     }
                 }

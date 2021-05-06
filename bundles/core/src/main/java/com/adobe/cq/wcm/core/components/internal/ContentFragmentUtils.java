@@ -30,6 +30,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -62,6 +63,12 @@ public class ContentFragmentUtils {
      * Name of the property of an optional {@link ContentPolicy content policy} holding the name of the grid type.
      */
     protected static final String PN_CFM_GRID_TYPE = "cfm-grid-type";
+
+    /**
+     * Name of request attribute that holds information about the calling resource path (used for JSON export when
+     * including other components via XFs).
+     */
+    public final static String ATTR_RESOURCE_CALLER_PATH = "resourceCallerPath";
 
     /* Hide the constructor of utility classes */
     private ContentFragmentUtils() {
@@ -245,19 +252,36 @@ public class ContentFragmentUtils {
      * @param resourceIterator Iterator of resources for which to get the component exporters.
      * @param modelFactory Model factory service.
      * @param slingHttpServletRequest Current request.
+     * @param callerResource The page or template resource that references the experience fragment or content fragment.
      * @return Ordered map of resource names to {@link ComponentExporter} models.
      */
     @NotNull
     public static LinkedHashMap<String, ComponentExporter> getComponentExporters(
         @NotNull final Iterator<Resource> resourceIterator,
         @NotNull final ModelFactory modelFactory,
-        @NotNull final SlingHttpServletRequest slingHttpServletRequest) {
+        @NotNull final SlingHttpServletRequest slingHttpServletRequest,
+        @NotNull final Resource callerResource) {
         final LinkedHashMap<String, ComponentExporter> componentExporterMap = new LinkedHashMap<>();
+
+        SlingHttpServletRequest wrappedSlingHttpServletRequest = new SlingHttpServletRequestWrapper(slingHttpServletRequest) {
+
+            @Override
+            public Object getAttribute(String name) {
+                if (ATTR_RESOURCE_CALLER_PATH.equals(name)) {
+                    String resourceCallerPath = (String)super.getAttribute(ATTR_RESOURCE_CALLER_PATH);
+                    // If the attribute is already defined then we're in a nested situation.
+                    // The code for computing the components id uses the root-most resource path
+                    // (because of how componentContext is handled in HTML rendering, so we return
+                    // that.
+                    return (resourceCallerPath != null) ? resourceCallerPath : callerResource.getPath();
+                }
+                return super.getAttribute(name);
+            }
+        };
 
         while (resourceIterator.hasNext()) {
             Resource resource = resourceIterator.next();
-            ComponentExporter exporter =
-                modelFactory.getModelFromWrappedRequest(slingHttpServletRequest, resource, ComponentExporter.class);
+            ComponentExporter exporter = modelFactory.getModelFromWrappedRequest(wrappedSlingHttpServletRequest, resource, ComponentExporter.class);
 
             if (exporter != null) {
                 String name = resource.getName();

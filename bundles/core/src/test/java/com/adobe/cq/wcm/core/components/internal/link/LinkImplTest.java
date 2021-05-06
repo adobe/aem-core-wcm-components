@@ -32,9 +32,25 @@ class LinkImplTest {
 
     @Test
     void testValidLink() {
-        Link link = new LinkImpl(URL, null, null);
+        Link link = new LinkImpl(URL);
 
         assertValidLink(link, URL);
+        assertNull(link.getReference());
+    }
+
+    @Test
+    void testValidLinkWithTarget() {
+        Link link = new LinkImpl(URL, "_blank");
+
+        assertValidLink(link, URL, "_blank");
+        assertNull(link.getReference());
+    }
+
+    @Test
+    void testValidLinkWithoutTarget() {
+        Link link = new LinkImpl(URL, null);
+
+        assertValidLink(link, URL, null);
         assertNull(link.getReference());
     }
 
@@ -48,11 +64,28 @@ class LinkImplTest {
     }
 
     @Test
+    void testValidLinkWithTargetTargetPageAccessibilityLabelAndTitleAttribute() {
+        Page page = mock(Page.class);
+        Link link = new LinkImpl(URL, "_blank", page, "Url Label", "Url Title");
+
+        assertValidLink(link, URL, "Url Label", "Url Title", "_blank");
+        assertSame(page, link.getReference());
+    }
+
+    @Test
+    void testValidLinkWithTargetPageAccessibilityLabelTitleAttributeAndWithoutTarget() {
+        Page page = mock(Page.class);
+        Link link = new LinkImpl(URL, null, page, "Url Label", "Url Title");
+
+        assertValidLink(link, URL, "Url Label", "Url Title", null);
+        assertSame(page, link.getReference());
+    }
+
+    @Test
     void testInvalidLink() {
         Link link = new LinkImpl(null, null, null);
 
         assertInvalidLink(link);
         assertNull(link.getReference());
     }
-
 }
