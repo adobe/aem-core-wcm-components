@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.day.cq.wcm.api.Page;
+import com.google.common.collect.ImmutableMap;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.*;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
@@ -98,5 +99,15 @@ class LinkImplTest {
         assertInvalidLink(link);
         assertNull(link.getReference());
         assertNull(link.getMappedURL());
+    }
+
+    @Test
+    void testValidLikWithFilteredHtmlAttributes() {
+        Page page = mock(Page.class);
+        String invalidAttribute = "invalidAttribute";
+        Link<Page> link = new LinkImpl<>(URL, URL, MockExternalizerFactory.ROOT + URL, page, ImmutableMap.of(invalidAttribute,
+                "invalidValue"));
+        assertValidLink(link, URL);
+        assertNull(link.getHtmlAttributes().get(invalidAttribute));
     }
 }

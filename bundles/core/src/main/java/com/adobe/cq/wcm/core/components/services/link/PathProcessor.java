@@ -42,15 +42,15 @@ public interface PathProcessor {
     boolean accepts(@NotNull String path, @NotNull SlingHttpServletRequest request);
 
     /**
-     * Sanitize the given path by doing proper escaping and prepend the context path if needed.
+     * Sanitizes the given path by doing proper escaping and prepends the context path if needed.
      * @param path the path which needs to be sanitized
      * @param request the current request
-     * @return the escaped absolut path with optional context path information
+     * @return the escaped absolute path with optional context path information
      */
     @NotNull String sanitize(@NotNull String path, @NotNull SlingHttpServletRequest request);
 
     /**
-     * Apply mappings to the given path. Usually this is done with the {@link ResourceResolver#map(String)} method.
+     * Applies mappings to the given path. Usually this is done with the {@link ResourceResolver#map(String)} method.
      * @param path the path which should be mapped
      * @param request the current request
      * @return the mapped path
@@ -58,7 +58,7 @@ public interface PathProcessor {
     @NotNull String map(@NotNull String path, @NotNull SlingHttpServletRequest request);
 
     /**
-     * Externalize the given path.
+     * Externalizes the given path.
      * @param path the resource path
      * @param request the current request
      * @return the external link of the given path
