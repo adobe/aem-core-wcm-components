@@ -17,6 +17,12 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.formbutton;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.codeborne.selenide.WebDriverRunner;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -37,10 +43,16 @@ public class BaseFormButton extends BaseComponent {
     }
 
     public boolean isButtonPresentByName(String name) {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(button +"[name='" + name + "']")));
         return $(button +"[name='" + name + "']").isDisplayed();
     }
 
     public boolean isButtonPresentByValue(String value) {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(button +"[value='" + value + "']")));
         return $(button +"[value='" + value + "']").isDisplayed();
     }
 }
