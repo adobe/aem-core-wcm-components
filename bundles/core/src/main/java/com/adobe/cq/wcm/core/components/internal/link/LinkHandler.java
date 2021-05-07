@@ -16,38 +16,36 @@
 package com.adobe.cq.wcm.core.components.internal.link;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.httpclient.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableSet;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_ARIA_LABEL;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TARGET;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.*;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.*;
 
 /**
  * Simple implementation for resolving and validating links from model's resources.
  * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
-@Model(adaptables=SlingHttpServletRequest.class)
+@Model(adaptables = SlingHttpServletRequest.class)
 public class LinkHandler {
 
     /**
@@ -70,25 +68,30 @@ public class LinkHandler {
     @org.apache.sling.models.annotations.Optional
     private PageManager pageManager;
 
+    @OSGiService
+    private List<PathProcessor> pathProcessors;
+
     /**
      * Resolves a link from the properties of the given resource.
-     * @param resource Resource
      *
+     * @param resource Resource
      * @return {@link Optional} of  {@link Link}
      */
     @NotNull
+    @SuppressWarnings("rawtypes")
     public Optional<Link> getLink(@NotNull Resource resource) {
         return getLink(resource, PN_LINK_URL);
     }
 
     /**
      * Resolves a link from the properties of the given resource.
-     * @param resource Resource
-     * @param linkURLPropertyName Property name to read link URL from.
      *
+     * @param resource            Resource
+     * @param linkURLPropertyName Property name to read link URL from.
      * @return {@link Optional} of  {@link Link}
      */
     @NotNull
+    @SuppressWarnings("rawtypes")
     public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
@@ -113,7 +116,7 @@ public class LinkHandler {
             return Optional.empty();
         }
         String linkURL = getPageLinkURL(page);
-        return Optional.of(new LinkImpl<>(linkURL, page, new MappingLinkProcessor(request.getResourceResolver()), null));
+        return buildLink(linkURL, request, page, null);
     }
 
     /**
@@ -128,8 +131,8 @@ public class LinkHandler {
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, targetPage, new MappingLinkProcessor(request.getResourceResolver()),
-                new HashMap<String, String>() {{ put(ATTR_TARGET, resolvedLinkTarget); }}));
+        return buildLink(resolvedLinkURL, request, targetPage,
+                new HashMap<String, String>() {{ put(ATTR_TARGET, resolvedLinkTarget); }});
     }
 
     /**
@@ -148,25 +151,38 @@ public class LinkHandler {
         String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
         String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(new LinkImpl<>(resolvedLinkURL, targetPage, new MappingLinkProcessor(request.getResourceResolver()),
+        return Optional.of(buildLink(resolvedLinkURL, request, targetPage,
                 new HashMap<String, String>() {{
                     put(ATTR_TARGET, resolvedLinkTarget);
                     put(ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel);
                     put(ATTR_TITLE, validatedLinkTitleAttribute);
-        }}));
+                }}))
+                .orElse(null);
+    }
+
+    private Optional<Link<Page>> buildLink(String path, SlingHttpServletRequest request, Page page,
+                                           Map<String, String> htmlAttributes) {
+        if (StringUtils.isNotEmpty(path)) {
+            return pathProcessors.stream()
+                    .filter(pathProcessor -> pathProcessor.accepts(path, request))
+                    .findFirst().map(pathProcessor -> new LinkImpl<>(pathProcessor.sanitize(path, request), pathProcessor.map(path,
+                            request), pathProcessor.externalize(path, request), page, htmlAttributes));
+        } else {
+            return Optional.of(new LinkImpl<>(path, path, path, page, htmlAttributes));
+        }
     }
 
     /**
      * Validates and resolves a link URL.
-     * @param linkURL Link URL
      *
+     * @param linkURL Link URL
      * @return The validated link URL or {@code null} if not valid
      */
+    @Nullable
     private String validateAndResolveLinkURL(String linkURL) {
         if (!StringUtils.isEmpty(linkURL)) {
             return getLinkURL(linkURL);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -226,8 +242,8 @@ public class LinkHandler {
     @NotNull
     private String getLinkURL(@NotNull String path) {
         return getPage(path)
-                .map(page -> getPageLinkURL(page))
-                .orElse(fixPath(path));
+                .map(this::getPageLinkURL)
+                .orElse(path);
     }
 
     /**
@@ -246,28 +262,7 @@ public class LinkHandler {
         } else {
             pageLinkURL = vanityURL;
         }
-        return fixPath(pageLinkURL);
-    }
-
-    /**
-     * Fix the path by prepending the context-path and escaping.
-     *
-     * @param path The path to fix
-     *
-     * @return Fixed path
-     */
-    @NotNull
-    private String fixPath(@NotNull String path) {
-        String cp = request.getContextPath();
-        if (!StringUtils.isEmpty(cp) && path.startsWith("/") && !path.startsWith(cp + "/")) {
-            path = cp + path;
-        }
-        try {
-            final URI uri = new URI(path, false);
-            return uri.toString();
-        } catch (Exception e) {
-            return path;
-        }
+        return pageLinkURL;
     }
 
     /**

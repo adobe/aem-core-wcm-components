@@ -13,25 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.link;
+@Version("1.0.0")
+package com.adobe.cq.wcm.core.components.services.link;
 
-import org.apache.sling.api.resource.ResourceResolver;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-public class MappingLinkProcessor implements LinkProcessor {
-
-    private final ResourceResolver resourceResolver;
-
-    public MappingLinkProcessor(@NotNull ResourceResolver resourceResolver) {
-        this.resourceResolver = resourceResolver;
-    }
-
-    @Override
-    public @Nullable String process(@Nullable String linkUrl) {
-        if (linkUrl == null) {
-            return null;
-        }
-        return resourceResolver.map(linkUrl);
-    }
-}
+import org.osgi.annotation.versioning.Version;

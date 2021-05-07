@@ -22,8 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.day.cq.wcm.api.Page;
-
 /**
  * Describes a link target.
  *
@@ -64,7 +62,7 @@ public interface Link<T> {
     }
 
     /**
-     * The link URL, supports context path and vanity paths.
+     * The link URL, supports context path and escaping.
      *
      * @return Link URL or {@code null} if link is invalid
      */
@@ -74,13 +72,24 @@ public interface Link<T> {
     }
 
     /**
-     * The processed URL, in case any extra processing can be done.
+     * The mapped URL, which supports mapping and vanity path.
      * This usually is resource resolver mapping.
      *
-     * @return Process link URL or {@code null} if link is invalid or no processing can be done
+     * @return Mapped link URL or {@code null} if link is invalid or no processing can be done
      */
     @Nullable
-    default String getProcessedURL() {
+    default String getMappedURL() {
+        return null;
+    }
+
+
+    /**
+     * The externalized URL which also contains the scheme and host information.
+     * This is usually created with a {@link com.day.cq.commons.Externalizer} service
+     * @return Full link URL or {@code null} if link is invalid or can't be externalized.
+     */
+    @Nullable
+    default String getExternalizedURL() {
         return null;
     }
 
@@ -107,5 +116,4 @@ public interface Link<T> {
     default T getReference() {
         return null;
     }
-
 }

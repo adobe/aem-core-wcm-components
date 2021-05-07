@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,16 +50,17 @@ public final class LinkImpl<T> implements Link<T> {
     }};
 
     private final String url;
+    private final String mappedUrl;
     private final T reference;
-    private final LinkProcessor linkProcessor;
     private final Map<String, String> htmlAttributes;
-    private String processedUrl;
-    private boolean processed = false;
+    private final String externalizedUrl;
 
-    public LinkImpl(String url, T reference, LinkProcessor linkProcessor, Map<String, String> htmlAttributes) {
+    public LinkImpl(@Nullable String url, @Nullable String mappedUrl, @Nullable String externalizedUrl, @Nullable T reference,
+                    @Nullable Map<String, String> htmlAttributes) {
         this.url = url;
+        this.mappedUrl = mappedUrl;
+        this.externalizedUrl = externalizedUrl;
         this.reference = reference;
-        this.linkProcessor = linkProcessor;
         this.htmlAttributes = buildHtmlAttributes(url, htmlAttributes);
     }
 
@@ -90,20 +92,19 @@ public final class LinkImpl<T> implements Link<T> {
      */
     @Override
     @JsonProperty("url")
-    public @Nullable String getProcessedURL() {
-        if (!processed) {
-            if (linkProcessor != null) {
-                processedUrl = linkProcessor.process(url);
-            } else {
-                processedUrl = url;
-            }
-            processed = true;
-        }
-        return processedUrl;
+    public @Nullable String getMappedURL() {
+        return mappedUrl;
+    }
+
+    @Override
+    @JsonIgnore
+    public @Nullable String getExternalizedURL() {
+        return externalizedUrl;
     }
 
     /**
      * Getter for link HTML attributes.
+     *
      *
      * @return {@link Map} of HTML attributes, may include the URL as {@code href}
      */
@@ -119,7 +120,7 @@ public final class LinkImpl<T> implements Link<T> {
      * @return Link referenced WCM/DAM entity or {@code null} if link does not point to one
      */
     @Override
-    @JsonIgnore  // exclude referenced object in jSON
+    @JsonIgnore
     public @Nullable T getReference() {
         return reference;
     }
@@ -139,8 +140,8 @@ public final class LinkImpl<T> implements Link<T> {
         }
         if (htmlAttributes != null) {
             Map<String, String> filteredAttributes = htmlAttributes.entrySet().stream()
-                    .filter(e -> ALLOWED_ATTRIBUTES.contains(e.getKey()) && e.getValue() != null)
-                    .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+                    .filter(e -> ALLOWED_ATTRIBUTES.contains(e.getKey()) && StringUtils.isNotEmpty(e.getValue()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             attributes.putAll(filteredAttributes);
         }
         return ImmutableMap.copyOf(attributes);
