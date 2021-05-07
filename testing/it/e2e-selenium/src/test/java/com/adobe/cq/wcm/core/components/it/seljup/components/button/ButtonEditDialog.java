@@ -47,21 +47,30 @@ public class ButtonEditDialog extends Dialog {
     }
 
     public void setTitleField(String value) {
-        content().waitUntil(Condition.appear,CoreComponentConstants.TIMEOUT_TIME_SEC,CoreComponentConstants.RETRY_TIME_INTERVAL)
-            .find(Selectors.SELECTOR_BUTTON_TITLE).sendKeys(value);
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
+        content().find(Selectors.SELECTOR_BUTTON_TITLE).sendKeys(value);
     }
 
     public void setNameField(String value) {
-        content().waitUntil(Condition.appear,CoreComponentConstants.TIMEOUT_TIME_SEC,CoreComponentConstants.RETRY_TIME_INTERVAL)
-            .find(Selectors.SELECTOR_BUTTON_NAME).sendKeys(value);
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_HEADER, this.getCssSelector()))));
+        content().find(Selectors.SELECTOR_BUTTON_NAME).sendKeys(value);
     }
 
     public void setValueField(String value) {
-        content().waitUntil(Condition.appear,CoreComponentConstants.TIMEOUT_TIME_SEC,CoreComponentConstants.RETRY_TIME_INTERVAL)
-            .find(Selectors.SELECTOR_BUTTON_VALUE).sendKeys(value);
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_HEADER, this.getCssSelector()))));
+        content().find(Selectors.SELECTOR_BUTTON_VALUE).sendKeys(value);
     }
 
     public boolean isNameFieldInvalid() {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_HEADER, this.getCssSelector()))));
         return content().find(Selectors.SELECTOR_BUTTON_NAME).getAttribute("invalid").equals("true");
     }
 
