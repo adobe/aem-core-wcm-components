@@ -65,7 +65,7 @@ public class FormHiddenV1IT extends AuthorBaseUITest {
         compPathHidden = Commons.createProxyComponent(adminClient, formHiddenRT, Commons.proxyPath, null, null);
 
         // add the core form container component
-        hiddenPath = Commons.addComponent(adminClient, compPathHidden, testPage + Commons.relParentCompPath, "container", null);
+        hiddenPath = Commons.addComponent(adminClient, compPathHidden, testPage + Commons.relParentCompPath, "formhidden", null);
 
         formHidden = new FormHidden();
         // open the page in the editor

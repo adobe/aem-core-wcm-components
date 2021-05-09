@@ -195,7 +195,7 @@ public class FormContainerV1IT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
         Commons.switchToDefaultContext();
-        assertTrue(Commons.getCurrentUrl().endsWith(rootPage+".html"),"");
+        assertTrue(Commons.getCurrentUrl().endsWith(rootPage+".html"),"Current page should be thank you page set after redirection");
     }
 
     /**

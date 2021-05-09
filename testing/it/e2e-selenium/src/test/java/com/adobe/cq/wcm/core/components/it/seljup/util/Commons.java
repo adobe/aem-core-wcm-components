@@ -405,7 +405,6 @@ public class Commons {
 
     public static void saveConfigureDialog() throws InterruptedException {
         $(Selectors.SELECTOR_SAVE_CONFIG_BUTTON).click();
-        //wait for
         webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 

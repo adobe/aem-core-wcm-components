@@ -145,12 +145,6 @@ public class AccordionV1IT extends AuthorBaseUITest {
         String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
         Commons.deletePolicy(adminClient,"/structure/page", policyPath1);
 
-        // 4.
-        HashMap<String, String> data = new HashMap<String, String>();
-        String policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content";
-        data.put("cq:policy", "wcm/foundation/components/page/default");
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"",data, policyAssignmentPath);
     }
 
 
