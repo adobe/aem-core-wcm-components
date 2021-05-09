@@ -29,7 +29,7 @@
                     jcr:lastModified="{Date}2019-12-19T15:29:18.138+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Form Options&lt;sub>v2&lt;/sub>&lt;/h1>&#xd;&#xa;"
                     textIsRich="true"/>
                 <text_1408574198
@@ -38,7 +38,7 @@
                     jcr:lastModified="{Date}2019-12-19T17:12:31.382+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Form Options allows a user to create a form with different option layouts.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
@@ -81,7 +81,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title
                     cq:styleIds="[1544759676459]"
@@ -91,14 +91,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Checkbox"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1910564414
                     jcr:created="{Date}2019-12-12T14:22:11.663+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-12-19T13:55:45.471+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Core Form Container with Form Option Checkboxes.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_1594702855
@@ -128,7 +128,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Venue Planning"
-                                sling:resourceType="core/wcm/components/form/options/v2/options"
+                                sling:resourceType="core-components-examples/components/form/options"
                                 helpMessage="We like to plan our events and prepare the meals in advance, please help us by choosing your preferences"
                                 name="venue-planning"
                                 source="local"
@@ -170,7 +170,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -196,7 +196,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Radio Button"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h1"/>
                 <text_1068966881
                     jcr:created="{Date}2019-12-12T15:10:07.890+01:00"
@@ -204,7 +204,7 @@
                     jcr:lastModified="{Date}2019-12-19T14:56:36.993+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Core Form Container with Form Option Radio Button displayed.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_881795653
@@ -234,7 +234,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Gender"
-                                sling:resourceType="core/wcm/components/form/options/v2/options"
+                                sling:resourceType="core-components-examples/components/form/options"
                                 name="gender"
                                 source="local"
                                 type="radio">
@@ -260,7 +260,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -286,7 +286,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Drop-Down"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core-components-examples/components/title"
                     type="h1"/>
                 <text_203677928
                     jcr:created="{Date}2019-12-12T15:42:55.336+01:00"
@@ -294,7 +294,7 @@
                     jcr:lastModified="{Date}2019-12-19T15:08:55.386+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Core Form Container with Form Option Drop-Down as child element.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_665944747
@@ -324,7 +324,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Nationality"
-                                sling:resourceType="core/wcm/components/form/options/v2/options"
+                                sling:resourceType="core-components-examples/components/form/options"
                                 name="nationality"
                                 source="local"
                                 type="drop-down">
@@ -360,7 +360,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -386,14 +386,14 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Multi-select Drop-Down"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    sling:resourceType="core-components-examples/components/title"/>
                 <text_1221698802
                     jcr:created="{Date}2019-12-19T14:57:49.048+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-12-19T15:08:45.739+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
+                    sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Core Form Container with Multi-Select Drop-Down as child element.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <container_837771016
@@ -424,7 +424,7 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Countries you've lived in"
-                            sling:resourceType="core/wcm/components/form/options/v2/options"
+                            sling:resourceType="core-components-examples/components/form/options"
                             name="countries"
                             source="local"
                             type="multi-drop-down">
@@ -454,7 +454,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"

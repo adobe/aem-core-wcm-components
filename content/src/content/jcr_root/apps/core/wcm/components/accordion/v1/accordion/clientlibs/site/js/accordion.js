@@ -18,6 +18,7 @@
 
     var dataLayerEnabled;
     var dataLayer;
+    var delay = 100;
 
     var NS = "cmp";
     var IS = "accordion";
@@ -447,7 +448,11 @@
                 var button = that._elements["button"][index];
                 var panel = that._elements["panel"][index];
                 button.classList.add(cssClasses.button.expanded);
-                button.setAttribute("aria-expanded", true);
+                // used to fix some known screen readers issues in reading the correct state of the 'aria-expanded' attribute
+                // e.g. https://bugs.webkit.org/show_bug.cgi?id=210934
+                setTimeout(function() {
+                    button.setAttribute("aria-expanded", true);
+                }, delay);
                 panel.classList.add(cssClasses.panel.expanded);
                 panel.classList.remove(cssClasses.panel.hidden);
                 panel.setAttribute("aria-hidden", false);
@@ -474,7 +479,11 @@
                 button.classList.remove(cssClasses.button.disabled);
                 button.classList.remove(cssClasses.button.expanded);
                 button.removeAttribute("aria-disabled");
-                button.setAttribute("aria-expanded", false);
+                // used to fix some known screen readers issues in reading the correct state of the 'aria-expanded' attribute
+                // e.g. https://bugs.webkit.org/show_bug.cgi?id=210934
+                setTimeout(function() {
+                    button.setAttribute("aria-expanded", false);
+                }, delay);
                 panel.classList.add(cssClasses.panel.hidden);
                 panel.classList.remove(cssClasses.panel.expanded);
                 panel.setAttribute("aria-hidden", true);
@@ -585,4 +594,6 @@
     } else {
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
+
+    window.addEventListener("hashchange", window.CQ.CoreComponents.container.utils.locationHashChanged, false);
 }());

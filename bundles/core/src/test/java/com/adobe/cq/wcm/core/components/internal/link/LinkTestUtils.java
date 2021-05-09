@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 
@@ -32,7 +33,9 @@ public final class LinkTestUtils {
 
     public static void assertValidLink(@NotNull Link link, @NotNull String linkURL) {
         assertTrue(link.isValid(), "linkValid");
-        assertEquals(linkURL, link.getURL(), "linkURL");
+        assertEquals(linkURL, link.getURL(), "linkUrl");
+        assertEquals(linkURL.replaceAll("^\\/content\\/links\\/site1\\/(.+)","/content/site1/$1"), link.getMappedURL(), "linkMappedUrl");
+        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
         assertEquals(ImmutableMap.of("href", linkURL), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
@@ -42,8 +45,30 @@ public final class LinkTestUtils {
             return;
         }
         assertTrue(link.isValid(), "linkValid");
-        assertEquals(linkURL, link.getURL(), "linkURL");
+        assertEquals(linkURL, link.getURL(), "linkUrl");
+        assertEquals(linkURL.replaceAll("^\\/content\\/links\\/site1\\/(.+)","/content/site1/$1"), link.getMappedURL(), "linkMappedUrl");
+        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
         assertEquals(ImmutableMap.of("href", linkURL, "target", linkTarget), link.getHtmlAttributes(), "linkHtmlAttributes");
+    }
+
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @NotNull String linkAccessibilityLabel, @NotNull String linkTitleAttribute) {
+        assertTrue(link.isValid(), "linkValid");
+        assertEquals(linkURL, link.getURL(), "linkUrl");
+        assertEquals(linkURL, link.getMappedURL(), "linkMappedUrl");
+        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
+        assertEquals(ImmutableMap.of("href", linkURL, "aria-label", linkAccessibilityLabel, "title", linkTitleAttribute), link.getHtmlAttributes(), "linkHtmlAttributes");
+    }
+
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @NotNull String linkAccessibilityLabel, @NotNull String linkTitleAttribute, @Nullable String linkTarget) {
+        if (linkTarget == null) {
+            assertValidLink(link,  linkURL, linkAccessibilityLabel, linkTitleAttribute);
+            return;
+        }
+        assertTrue(link.isValid(), "linkValid");
+        assertEquals(linkURL, link.getURL(), "linkUrl");
+        assertEquals(linkURL, link.getMappedURL(), "linkMappedUrl");
+        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
+        assertEquals(ImmutableMap.of("href", linkURL, "aria-label", linkAccessibilityLabel, "title", linkTitleAttribute, "target", linkTarget), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
     public static void assertInvalidLink(@NotNull Link link) {

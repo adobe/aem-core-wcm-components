@@ -19,13 +19,16 @@ import java.util.Calendar;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
 import com.adobe.cq.wcm.core.components.models.Component;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -39,6 +42,12 @@ import com.day.cq.wcm.api.components.ComponentContext;
  * Abstract class that can be used as a base class for {@link Component} implementations.
  */
 public abstract class AbstractComponentImpl implements Component {
+
+    /**
+     * The current request.
+     */
+    @Self
+    protected SlingHttpServletRequest request;
 
     /**
      * The current resource.
@@ -103,7 +112,8 @@ public abstract class AbstractComponentImpl implements Component {
     @Override
     public String getId() {
         if (id == null) {
-            this.id = ComponentUtils.getId(this.resource, this.currentPage, this.componentContext);
+            String resourceCallerPath = (String)request.getAttribute(ContentFragmentUtils.ATTR_RESOURCE_CALLER_PATH);
+            this.id = ComponentUtils.getId(this.resource, this.currentPage, resourceCallerPath, this.componentContext);
         }
         return id;
     }
