@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 import java.io.InputStream;
 import java.util.List;
 
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -45,7 +46,7 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 public class ModelElementsDataSourceServletTest {
 
     public final AemContext context = CoreComponentTestContext.newAemContext();

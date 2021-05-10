@@ -28,6 +28,7 @@ import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.form.OptionItem;
@@ -45,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 public class OptionsImplTest {
 
     private static final String TEST_BASE = "/form/options";

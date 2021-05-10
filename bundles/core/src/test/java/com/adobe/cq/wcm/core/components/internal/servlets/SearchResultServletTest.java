@@ -42,6 +42,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.search.PredicateGroup;
@@ -63,7 +64,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith({AemContextExtension.class, MockitoExtension.class})
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class, MockitoExtension.class})
 public class SearchResultServletTest {
 
     private static final String TEST_BASE = "/search";

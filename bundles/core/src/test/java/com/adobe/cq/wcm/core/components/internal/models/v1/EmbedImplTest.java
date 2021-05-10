@@ -24,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Embed;
@@ -35,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 class EmbedImplTest {
 
     private static final String BASE = "/embed";

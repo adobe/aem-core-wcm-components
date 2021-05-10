@@ -34,6 +34,7 @@ import org.mockito.Mockito;
 
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.AbstractContentFragmentTest;
 import com.adobe.granite.ui.components.Config;
@@ -52,7 +53,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 abstract class AbstractContentFragmentDataSourceServletTest {
 
     private static final String TEST_BASE = "/contentfragment";

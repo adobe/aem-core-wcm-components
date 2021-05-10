@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.PageImplTest {
 
     private static final String TEST_BASE = "/page/v3";

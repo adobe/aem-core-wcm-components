@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Component;
 import com.day.cq.wcm.api.Page;
@@ -34,7 +35,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 public class ComponentImplTest {
 
     private static final String TEST_BASE = "/experiencefragment";

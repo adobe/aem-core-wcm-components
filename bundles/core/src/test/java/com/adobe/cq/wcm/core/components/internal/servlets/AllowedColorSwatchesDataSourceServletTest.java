@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.Arrays;
 
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.google.common.collect.ImmutableMap;
 import org.apache.sling.api.resource.ValueMap;
 
@@ -30,7 +31,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 public class AllowedColorSwatchesDataSourceServletTest {
 
     private static final String COLOR_VALUE_1 = "#FF0000";

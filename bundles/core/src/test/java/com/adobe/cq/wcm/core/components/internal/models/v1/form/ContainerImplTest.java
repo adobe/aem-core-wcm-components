@@ -31,6 +31,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
@@ -45,7 +46,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@ExtendWith({AemContextExtension.class, MockitoExtension.class})
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class, MockitoExtension.class})
 public class ContainerImplTest {
 
     private static final String TEST_BASE = "/form/container";

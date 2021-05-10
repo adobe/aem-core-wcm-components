@@ -24,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.testing.Utils;
@@ -35,7 +36,7 @@ import static com.adobe.cq.wcm.core.components.commons.link.Link.*;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 class LinkHandlerTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();

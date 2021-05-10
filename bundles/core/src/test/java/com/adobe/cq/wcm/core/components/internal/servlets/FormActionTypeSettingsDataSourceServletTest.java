@@ -21,6 +21,7 @@ import java.util.function.Function;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.day.cq.wcm.foundation.forms.FormsManager;
@@ -36,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
-@ExtendWith({AemContextExtension.class, MockitoExtension.class})
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class, MockitoExtension.class})
 public class FormActionTypeSettingsDataSourceServletTest {
 
     private static final String TEST_BASE = "/form/container/datasource/actiontypesettingsdatasource";

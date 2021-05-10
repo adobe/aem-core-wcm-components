@@ -21,6 +21,7 @@ import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.commons.Externalizer;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -32,7 +33,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 class DefaultPathProcessorTest {
 
     public static final String PATH = "/some/path";

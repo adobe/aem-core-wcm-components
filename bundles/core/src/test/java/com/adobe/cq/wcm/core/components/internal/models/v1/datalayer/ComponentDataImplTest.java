@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Title;
@@ -41,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * The tests are based on the Title component but it could be written with any other component
  * supporting the data layer feature.
  */
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
 class ComponentDataImplTest {
 
     private static final String TEST_BASE = "/title";

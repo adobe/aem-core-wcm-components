@@ -29,6 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -41,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-@ExtendWith({AemContextExtension.class, MockitoExtension.class})
+@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class, MockitoExtension.class})
 public class FormStructureHelperImplTest {
 
     private static final String TEST_BASE = "/form/form-structure-helper";
