@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import javax.json.Json;
@@ -33,6 +35,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
 
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.jackson.DefaultMethodSkippingModuleProvider;
@@ -42,6 +45,7 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -161,6 +165,30 @@ public class Utils {
         when(dataLayerConfig.enabled()).thenReturn(enabled);
         when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
         context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
+    }
+
+    /**
+     * Mock the {@code static final Logger} field of a class to allow asserting log messages
+     *
+     * @param clazz The class for which the {@link Logger} should be mocked
+     * @param fieldName The name of the {@code static final Logger} field
+     *
+     * @return Mocked {@link Logger} that will be used by the class
+     *
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    public static Logger mockLogger(Class<?> clazz, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        Field field = clazz.getDeclaredField(fieldName);
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        field.setAccessible(true);
+        // remove final modifier from field
+
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        Logger logger = mock(Logger.class);
+        field.set(null, logger);
+        return logger;
     }
 
 }
