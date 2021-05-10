@@ -259,7 +259,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             .orElseGet(() -> request.getResource().getChild(DownloadResource.NN_FILE)) != null;
     }
 
-    protected ListItem newAction(Resource actionRes, Component component) {
+    protected Action newAction(Resource actionRes, Component component) {
         return new Action(actionRes, getId(), component);
     }
 
@@ -303,7 +303,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 .map(Iterable::spliterator)
                 .map(s -> StreamSupport.stream(s, false))
                 .orElseGet(Stream::empty)
-                .map(action -> new Action(action, this.getId(), component))
+                .map(action -> newAction(action, component))
                 .collect(Collectors.toList());
         }
         return this.actions;
@@ -455,7 +455,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          * @param actionRes The action resource.
          * @param parentId The ID of the containing Teaser.
          */
-        private Action(@NotNull final Resource actionRes, final String parentId, Component component) {
+        public Action(@NotNull final Resource actionRes, final String parentId, Component component) {
             super(parentId, actionRes, component);
             ctaParentId = parentId;
             ctaResource = actionRes;
@@ -469,7 +469,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         @Override
         @JsonIgnore
-        public @NotNull Link getLink() {
+        @Nullable
+        public Link getLink() {
             return ctaLink.orElse(null);
         }
 
