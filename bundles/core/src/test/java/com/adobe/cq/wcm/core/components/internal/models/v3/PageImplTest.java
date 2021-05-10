@@ -48,7 +48,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertNotNull(redirectTarget);
         assertEquals("Templated Page", redirectTarget.getPage().getTitle());
         assertEquals("/core/content/page/templated-page.html", redirectTarget.getURL());
-        assertEquals("/core/content/page/templated-page.html", redirectTarget.getLink().getURL());
+        assertValidLink(redirectTarget.getLink(), "/content/page/templated-page.html", context.request());
     }
 
 }
