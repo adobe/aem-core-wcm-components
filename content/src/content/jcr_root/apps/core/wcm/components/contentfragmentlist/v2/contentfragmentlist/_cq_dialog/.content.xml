@@ -3,7 +3,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Content Fragment List"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.contentfragmentlist.v2.editor]"
+    extraClientlibs="[core.wcm.components.contentfragmentlist.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_cflist_v2"
     trackingFeature="core-components:contentfragmentlist:v2">
     <content

@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Content Fragment List (v2)
+Content Fragment List (v2) Work in progress, do not use in production
 ====
 Content Fragment List component written in HTL that renders a list of Content Fragments. Useful for authoring headless content that can be easily consumed by applications. 
 
@@ -40,7 +40,7 @@ The following properties are written to JCR for the Content Fragment List compon
 8. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
-The component provides a `core.wcm.components.contentfragmentlist.v2.editor` editor client library category that includes JavaScript
+The component reuses the `core.wcm.components.contentfragmentlist.v1.editor` editor client library category that includes JavaScript
 handling for dialog interaction. It is already included by its edit dialog.
 
 ## BEM Description
@@ -52,6 +52,7 @@ BLOCK cmp-contentfragmentlist
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: work-in-progress
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_cflist\_v2](https://www.adobe.com/go/aem_cmp_cflist_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_cflist](https://www.adobe.com/go/aem_cmp_library_cflist)
+* **Authors**: [Burkhard Pauli](https://github.com/bpauli)
