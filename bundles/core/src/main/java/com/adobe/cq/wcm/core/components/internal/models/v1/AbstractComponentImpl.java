@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.Calendar;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -32,6 +33,7 @@ import com.adobe.cq.wcm.core.components.models.Component;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.adobe.cq.wcm.style.ComponentStyleInfo;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
@@ -73,7 +75,7 @@ public abstract class AbstractComponentImpl implements Component {
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private Page currentPage;
-
+    
     /**
      * The ID for this component.
      */
@@ -145,7 +147,22 @@ public abstract class AbstractComponentImpl implements Component {
         }
         return componentData;
     }
-
+    
+    /**
+     * See {@link Component#getAppliedCssClasses()}
+     *
+     * @return The component styles/css class names
+     */
+    @Override
+    @Nullable
+	public String getAppliedCssClasses() {
+    	
+    	return Optional.ofNullable(this.resource.adaptTo(ComponentStyleInfo.class)) 
+    			.map(ComponentStyleInfo::getAppliedCssClasses) 
+    			.filter(StringUtils::isNotBlank) 
+    			.orElse(null);		// Returning null so sling model exporters don't return anything for this property if not configured
+	}
+    
     /**
      * Override this method to provide a different data model for your component. This will be called by
      * {@link AbstractComponentImpl#getData()} in case the datalayer is activated.
