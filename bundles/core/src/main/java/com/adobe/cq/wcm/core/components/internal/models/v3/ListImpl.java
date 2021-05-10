@@ -13,54 +13,27 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v2;
-
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Collectors;
+package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
-import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v2.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {List.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ListImpl implements List {
+public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.ListImpl implements List {
 
-    protected static final String RESOURCE_TYPE = "core/wcm/components/list/v2/list";
-
-    @Self
-    private LinkHandler linkHandler;
-
-    /**
-     * Result list.
-     */
-    private Collection<ListItem> listItems;
-
-    @Override
-    @NotNull
-    @JsonProperty("items")
-    public Collection<ListItem> getListItems() {
-        if (this.listItems == null) {
-            this.listItems = super.getItems().stream()
-                .filter(Objects::nonNull)
-                .map(page -> newPageListItem(linkHandler, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, component))
-                .collect(Collectors.toList());
-        }
-        return this.listItems;
-    }
+    protected static final String RESOURCE_TYPE = "core/wcm/components/list/v3/list";
 
     protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
         return new PageListItemImpl(linkHandler, page, parentId, isShadowingDisabled, component);

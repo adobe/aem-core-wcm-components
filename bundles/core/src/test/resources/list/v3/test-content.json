@@ -9,12 +9,12 @@
                 "sling:resourceType": "wcm/foundation/components/responsivegrid",
                 "illegalListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "nonExisting"
                 },
                 "staticListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -27,7 +27,7 @@
                 },
                 "staticMaxItemsListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -41,7 +41,7 @@
                 },
                 "staticOrderByTitleListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -55,7 +55,7 @@
                 },
                 "staticOrderByTitleListTypeWithNoTitle": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -69,7 +69,7 @@
                 },
                 "staticOrderByTitleListTypeWithNoTitleForOneItem": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -84,7 +84,7 @@
                 },
                 "staticOrderByTitleListTypeWithAccent": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -99,7 +99,7 @@
                 },
                 "staticOrderByModificationDateListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -113,7 +113,7 @@
                 },
                 "staticOrderByModificationDateListTypeWithNoModificationDate": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -127,7 +127,7 @@
                 },
                 "staticOrderByModificationDateListTypeWithNoModificationDateForOneItem": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -142,7 +142,7 @@
                 },
                 "staticOrderByModificationDateDescListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -157,7 +157,7 @@
                 },
                 "staticOrderByTitleDescListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "static",
                     "showThumbnail": "true",
                     "linkItems": "true",
@@ -172,20 +172,20 @@
                 },
                 "childrenListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "children",
                     "parentPage": "/content/list/pages/page_1"
                 },
                 "childrenListTypeWithDepth": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "children",
                     "parentPage": "/content/list/pages/page_1",
                     "childDepth": "2"
                 },
                 "tagsListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "tags",
                     "tagsSearchRoot": "/content/list/pages/page_1",
                     "tags": [
@@ -194,7 +194,7 @@
                 },
                 "searchListType": {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType": "core/wcm/components/list",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "search",
                     "query": "Page 1.2"
                 }

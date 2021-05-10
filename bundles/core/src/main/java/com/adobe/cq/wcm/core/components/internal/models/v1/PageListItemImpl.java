@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +97,8 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     @Override
     @JsonIgnore
-    public @NotNull Link<Page> getLink() {
+    @Nullable
+    public Link<Page> getLink() {
         return link.orElse(null);
     }
 
