@@ -283,7 +283,7 @@
                                         <replace file="target/jcr_root/libs/core/wcm/components/embed/v1/embed/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/experiencefragment/v1/experiencefragment/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/image/v2/image/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/list/v3/list/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/list/v2/list/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/pdfviewer/v1/pdfviewer/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/progressbar/v1/progressbar/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/separator/v1/separator/.content.xml" token=".core-wcm" value="Core Content" />
