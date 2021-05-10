@@ -39,6 +39,7 @@ public class LinkHtmlAttributesSerializer extends StdSerializer<Map<String, Stri
 
     protected LinkHtmlAttributesSerializer(Class<Map<String, String>> t) { super(t); }
 
+
     private Map<String, String> filter(Map<String, String> map) {
         return map.entrySet().stream()
                 .filter(x -> !IGNORED_HTML_ATTRIBUTES.contains(x.getKey()) && !StringUtils.isBlank(x.getValue()))

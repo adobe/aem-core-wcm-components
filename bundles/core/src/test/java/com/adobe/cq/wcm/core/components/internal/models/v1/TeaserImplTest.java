@@ -24,7 +24,6 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,8 +37,6 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -77,7 +74,6 @@ public class TeaserImplTest {
     protected static final String TEASER_13 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-13";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
-    protected TestLogger testLogger;
 
     protected String testBase;
 
@@ -91,12 +87,6 @@ public class TeaserImplTest {
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_DAM_JSON, "/content/dam/core/images");
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
-        testLogger = TestLoggerFactory.getTestLogger(TeaserImpl.class);
-    }
-
-    @AfterEach
-    protected void tearDown() {
-        TestLoggerFactory.clear();
     }
 
     @Test
@@ -219,14 +209,14 @@ public class TeaserImplTest {
         Teaser teaser = getTeaserUnderTest(TEASER_1,
             Teaser.PN_TITLE_TYPE, "h5");
         assertEquals("h5", teaser.getTitleType(), "Expected title type is not correct");
-        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser2"));
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser2"));
     }
 
     @Test
     protected void testTeaserWithDefaultTitleType() {
         Teaser teaser = getTeaserUnderTest(TEASER_1);
         assertNull(teaser.getTitleType(), "Expected the default title type is not correct");
-        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser1"));
     }
 
     @Test
@@ -234,7 +224,7 @@ public class TeaserImplTest {
         Teaser teaser = getTeaserUnderTest(TEASER_13,
             Teaser.PN_TITLE_TYPE, "h5", Teaser.PN_SHOW_TITLE_TYPE, true);
         assertEquals("h4", teaser.getTitleType(), "Expected title type is not correct");
-        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser13"));
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser13"));
     }
 
     @Test
@@ -282,7 +272,7 @@ public class TeaserImplTest {
         when(component.getProperties()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>() {{
             put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/components/image/v2/image");
         }}));
-        when(component.getResourceType()).thenReturn(TeaserImpl.RESOURCE_TYPE);
+        when(component.getResourceType()).thenReturn(resource.getResourceType());
         SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
