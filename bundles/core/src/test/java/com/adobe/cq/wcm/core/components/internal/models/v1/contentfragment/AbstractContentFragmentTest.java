@@ -135,17 +135,6 @@ public abstract class AbstractContentFragmentTest<T> {
         queryBuilderMock = Mockito.mock(QueryBuilder.class);
     }
 
-    void setFakeLoggerOnClass(Class<?> clazz, Logger logger) throws NoSuchFieldException, IllegalAccessException {
-        Field field = clazz.getDeclaredField("LOG");
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        field.setAccessible(true);
-        // remove final modifier from field
-
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, logger);
-    }
-
     /**
      * Adapts the specified (content fragment) component to the Sling Model and returns it.
      */

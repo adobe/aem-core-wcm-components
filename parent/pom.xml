@@ -869,12 +869,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>uk.org.lidalia</groupId>
-                <artifactId>slf4j-test</artifactId>
-                <version>1.2.0</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
                 <version>3.1.0</version>
