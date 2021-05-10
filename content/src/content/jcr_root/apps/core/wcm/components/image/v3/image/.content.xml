@@ -3,6 +3,6 @@
     cq:icon="image"
     jcr:description="Smart Adaptive Image"
     jcr:primaryType="cq:Component"
-    jcr:title="Image (v3)"
+    jcr:title="Image (v3) (work-in-progress)"
     sling:resourceSuperType="core/wcm/components/image"
-    componentGroup=".core-wcm"/>
+    componentGroup=".wip"/>
