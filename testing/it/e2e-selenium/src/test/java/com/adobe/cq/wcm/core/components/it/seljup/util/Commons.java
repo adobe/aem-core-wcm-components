@@ -31,6 +31,8 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
@@ -44,9 +46,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_SMALL_SIZE;
@@ -138,6 +138,25 @@ public class Commons {
         return feb;
     }
 
+    private static void selectInPicker(String prefix, String selector, String value) throws  InterruptedException {
+        String[] path = value.split("/");
+        int i;
+        String currentPath = prefix;
+        $("foundation-autocomplete" + selector).$("button").click();
+        for(i = 0; i < path.length - 1; i++) {
+            currentPath = currentPath + "/" + path[i];
+            $("[data-foundation-collection-item-id='" + currentPath + "']").click();
+            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        }
+        currentPath = currentPath + "/"  + path[i];
+        if($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").isDisplayed()) {
+            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").click();
+        }
+        else {
+            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-icon").click();
+        }
+        $("button.granite-pickerdialog-submit[is='coral-button']").click();
+    }
 
     /**
      * Create a policy
@@ -152,7 +171,7 @@ public class Commons {
         String plcyPath = policyPath != null ? policyPath : defaultPolicyPath;
         try {
              return client.doPost(plcyPath + componentPath, createFEB(data).build(), HttpUtils.getExpectedStatus(201, expectedStatus)).getSlingPath();
-        } catch (Exception ex) {
+        } catch (ClientException ex) {
             throw new ClientException("Policy creation failed for component " + componentPath + "with error : " + ex, ex);
         }
     }
@@ -172,7 +191,7 @@ public class Commons {
         String plcyAssignmentPath = policyAssignmentPath != null ? policyAssignmentPath : defaultPolicyAssignmentPath;
         try {
             client.doPost(plcyAssignmentPath + componentPath, createFEB(data).build(), HttpUtils.getExpectedStatus(200, expectedStatus));
-        } catch (Exception ex) {
+        } catch (ClientException ex) {
             throw new ClientException("Policy assignment failed for component " + componentPath, ex);
         }
     }
@@ -195,7 +214,7 @@ public class Commons {
         FormEntityBuilder feb = FormEntityBuilder.create().addParameter(":operation", "delete");
         try {
              client.doPost(plcyPath + componentPath, feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus));
-        } catch (Exception ex) {
+        } catch (ClientException ex) {
             throw new ClientException("Delete policy failed for component " + componentPath + " with error: " + ex, ex);
         }
     }
@@ -205,7 +224,7 @@ public class Commons {
 
         try {
             client.doPost(policyAssignmentPath + componentPath, feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus));
-        } catch (Exception ex) {
+        } catch (ClientException ex) {
             throw new ClientException("Delete policy Assignment failed for component " + componentPath + " with error: " + ex, ex);
         }
     }
@@ -241,7 +260,7 @@ public class Commons {
 
         try {
              return client.doPost(proxyCompPath, feb.build(), HttpUtils.getExpectedStatus(201,  expectedStatus)).getSlingPath();
-        } catch (Exception ex) {
+        } catch (ClientException ex) {
             throw new ClientException("Create Proxy failed for component " + component, ex);
         }
     }
@@ -264,7 +283,7 @@ public class Commons {
 
         try {
              client.doPost(proxyCompPath, feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus));
-        } catch (Exception ex) {
+        } catch (ClientException ex) {
             throw new ClientException("Delete  Proxy failed for component " + proxyPath, ex);
         }
     }
@@ -274,22 +293,40 @@ public class Commons {
      * Sets properties of a repository node.
      *
      * @param client            CQClient
-     * @param componentPath     Mandatory. absolute path to the node
+     * @param path     Mandatory. absolute path to the node
      * @param data              Mandatory. object with properties to be set on the node.
      * @throws ClientException
      */
 
-    public static void editNodeProperties(CQClient client, String componentPath, HashMap<String, String> data, int... expectedStatus) throws ClientException {
+    public static void editNodeProperties(CQClient client, String path, HashMap<String, String> data, int... expectedStatus) throws ClientException {
         // mandatory check
-        if (componentPath == null || data == null) {
+        if (path == null || data == null) {
             //throw core component error
         }
         try {
-            client.doPost( componentPath, createFEB(data).build(), HttpUtils.getExpectedStatus(200, expectedStatus));
-        } catch (Exception ex) {
-            throw new ClientException("Edit properties failed for component " + componentPath, ex);
+            client.doPost( path, createFEB(data).build(), HttpUtils.getExpectedStatus(200, expectedStatus));
+        } catch (ClientException ex) {
+            throw new ClientException("Edit properties failed for path " + path, ex);
         }
+    }
 
+    public static void setPageProperties(CQClient client, String pagePath, List<NameValuePair> props, int... expectedStatus) throws ClientException {
+        try {
+            client.setPageProperties(pagePath, props, HttpUtils.getExpectedStatus(200, expectedStatus));
+        } catch (ClientException ex) {
+            throw new ClientException("Set page properties failed for path " + pagePath, ex);
+        }
+    }
+
+    public static void setTagsToPage(CQClient client, String pagePath, String[] tags, int... expectedStatus) throws ClientException {
+        java.util.List<NameValuePair> props = new ArrayList();
+        for(int i = 0; i < tags.length; i++) {
+            props.add(new BasicNameValuePair("./cq:tags",tags[i]));
+        }
+        if(tags.length > 1) {
+            props.add(new BasicNameValuePair("./cq:tags@TypeHint", "String[]"));
+        }
+        setPageProperties(client, pagePath, props, 200);
     }
 
     /**
@@ -471,9 +508,32 @@ public class Commons {
             .addParameter("./jcr:title", proxyCompoentTitle)
             .addParameter("./componentGroup", "test.site")
             .addParameter("./jcr:primaryType", "cq:Component");
+        try {
+            SlingHttpResponse exec = client.doPost("/apps/testsite" + RandomStringUtils.randomAlphabetic(DEFAULT_SMALL_SIZE) + "/components/" + componentName, form.build(), HttpStatus.SC_OK, HttpStatus.SC_CREATED);
+            return exec.getSlingPath();
+        }catch (Exception ex) {
+            throw new ClientException(" failed to create proxy component for " + corecomponentPath + " component with error: " + ex, ex);
+        }
+    }
 
-        SlingHttpResponse exec = client.doPost("/apps/testsite" + RandomStringUtils.randomAlphabetic(DEFAULT_SMALL_SIZE) + "/components/" + componentName, form.build(), HttpStatus.SC_OK, HttpStatus.SC_CREATED);
-        return exec.getSlingPath();
+    /**
+     * Adds a tag in default namespace
+     *
+     * @param client CQClient
+     * @param tag   Mandatory. the tag to be added
+     * @throws ClientException
+     */
+    public static void addTag(CQClient client, String tag) throws ClientException {
+        FormEntityBuilder form = FormEntityBuilder.create()
+            .addParameter("cmd", "createTagByTitle")
+            .addParameter("tag", tag)
+            .addParameter("locale", "en")
+            .addParameter("_charset_", "utf-8");
+        try {
+            SlingHttpResponse exec = client.doPost("/bin/tagcommand" , form.build(), HttpStatus.SC_OK, HttpStatus.SC_CREATED);
+        } catch (Exception ex) {
+            throw new ClientException(" failed to add tag " + tag + " with error: " + ex, ex);
+        }
     }
 
     /**
@@ -511,6 +571,7 @@ public class Commons {
         return null;
     }
 
+
     /**
      * Selects a tag in a Granite UI tags autocomplete field
      *
@@ -520,25 +581,8 @@ public class Commons {
      */
     public static void selectInTags(String selector, String value) throws InterruptedException {
         String tagPrefix = "/content/cq:tags";
-        String[] path = value.split("/");
-        int i;
-        String currentPath = tagPrefix;
-        $("foundation-autocomplete" + selector).$("button").click();
-        for(i = 0; i < path.length - 1; i++) {
-            currentPath = currentPath + "/" + path[i];
-            $("[data-foundation-collection-item-id='" + currentPath + "']").click();
-            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        }
-        currentPath = currentPath + "/"  + path[i];
-        if($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").isDisplayed()) {
-            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").click();
-        }
-        else {
-            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-icon").click();
-        }
-        $("button.granite-pickerdialog-submit[is='coral-button']").click();
+        selectInPicker(tagPrefix, selector, value);
     }
-
 
     /**
      * Selects a asset in a Granite UI autocomplete field
@@ -549,23 +593,7 @@ public class Commons {
      */
     public static void selectInDam(String selector, String value) throws InterruptedException {
         String tagPrefix = "/content/dam";
-        String[] path = value.split("/");
-        int i;
-        String currentPath = tagPrefix;
-        $("foundation-autocomplete" + selector).$("button").click();
-        for(i = 0; i < path.length - 1; i++) {
-            currentPath = currentPath + "/" + path[i];
-            $("[data-foundation-collection-item-id='" + currentPath + "']").click();
-            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        }
-        currentPath = currentPath + "/"  + path[i];
-        if($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").isDisplayed()) {
-            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").click();
-        }
-        else {
-            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-icon").click();
-        }
-        $("button.granite-pickerdialog-submit[is='coral-button']").click();
+        selectInPicker(tagPrefix, selector, value);
     }
 
 

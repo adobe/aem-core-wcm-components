@@ -46,7 +46,6 @@ public class LanguageNavigationV1IT extends AuthorBaseUITest {
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
-
         // site root
         siteRoot = authorClient.createPage("site_root", "site_root", rootPage, defaultPageTemplate).getSlingPath();
         HashMap<String, String> data = new HashMap<String, String>();

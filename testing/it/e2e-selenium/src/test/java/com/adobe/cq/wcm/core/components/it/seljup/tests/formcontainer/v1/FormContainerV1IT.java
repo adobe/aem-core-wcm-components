@@ -55,13 +55,11 @@ public class FormContainerV1IT extends AuthorBaseUITest {
     private String compPathText;
     private String compPathButton;
     private EditorPage editorPage;
+    private String testPage;
 
     protected String formContainerRT;
     protected String formTextRT;
     protected String formButtonRT;
-
-
-    protected String testPage;
 
 
     public void setComponentResources() {
