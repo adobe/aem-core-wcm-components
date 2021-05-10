@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.testing.MockPublishUtils;
 import com.day.cq.dam.api.s7dam.utils.PublishUtils;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -32,7 +31,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
+@ExtendWith(AemContextExtension.class)
 public class AbstractImageTest {
 
     protected static String TEST_BASE = "/image";

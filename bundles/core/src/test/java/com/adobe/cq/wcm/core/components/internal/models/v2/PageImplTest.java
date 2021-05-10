@@ -31,7 +31,6 @@ import org.mockito.Mockito;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
-import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
@@ -48,7 +47,7 @@ import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
+@ExtendWith(AemContextExtension.class)
 public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
 
     private static final String TEST_BASE = "/page/v2";

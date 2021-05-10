@@ -23,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.PWA;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -42,7 +41,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
+@ExtendWith(AemContextExtension.class)
 public class PWAImplTest {
 
     private static final String SITES_PAGE_PATH = "/content/mysite";

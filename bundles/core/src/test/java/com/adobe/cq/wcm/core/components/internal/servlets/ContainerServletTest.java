@@ -23,7 +23,6 @@ import javax.servlet.ServletException;
 
 import org.apache.sling.api.resource.Resource;
 
-import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -36,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
+@ExtendWith(AemContextExtension.class)
 public class ContainerServletTest {
     // root folder in resources
     private static final String TEST_BASE = "/carousel";

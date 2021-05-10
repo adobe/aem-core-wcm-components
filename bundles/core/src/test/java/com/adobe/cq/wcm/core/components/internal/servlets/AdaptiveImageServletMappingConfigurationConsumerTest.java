@@ -29,7 +29,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
-import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.dam.api.handler.store.AssetStore;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -45,7 +44,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
+@ExtendWith(AemContextExtension.class)
 public class AdaptiveImageServletMappingConfigurationConsumerTest {
 
     public final AemContext context = CoreComponentTestContext.newAemContext();

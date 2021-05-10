@@ -19,7 +19,6 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 
-import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.day.cq.wcm.api.WCMMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
+@ExtendWith(AemContextExtension.class)
 public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImplTest {
 
     private static final String TEST_BASE = "/image/v2";

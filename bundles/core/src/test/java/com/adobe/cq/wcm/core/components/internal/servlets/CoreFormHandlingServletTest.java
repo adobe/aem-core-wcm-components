@@ -24,7 +24,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.wcm.foundation.forms.FormsHandlingServletHelper;
@@ -35,7 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class, MockitoExtension.class})
+@ExtendWith({AemContextExtension.class, MockitoExtension.class})
 public class CoreFormHandlingServletTest {
 
     private static final String[] NAME_WHITELIST = {"param-text", "param-button"};

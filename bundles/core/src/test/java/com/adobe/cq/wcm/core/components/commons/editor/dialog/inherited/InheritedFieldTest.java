@@ -18,27 +18,23 @@ package com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
 import static org.hamcrest.Matchers.hasItem;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
 
-@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
+@ExtendWith(AemContextExtension.class)
 class InheritedFieldTest {
 
     private static final String TEST_BASE = "/commons/inherited";
@@ -54,7 +50,11 @@ class InheritedFieldTest {
         context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
         context.load().json(TEST_BASE + "/test-apps.json", TEST_APPS);
         testLogger = TestLoggerFactory.getTestLogger(InheritedField.class);
-        testLogger.setEnabledLevels(Level.ERROR);
+    }
+
+    @AfterEach
+    void tearDown() {
+        TestLoggerFactory.clear();
     }
 
     @Test

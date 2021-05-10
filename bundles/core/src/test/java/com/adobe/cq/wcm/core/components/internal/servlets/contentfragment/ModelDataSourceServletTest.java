@@ -28,8 +28,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-
-import com.adobe.cq.wcm.core.components.Slf4jTestCleanupExtension;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -43,7 +41,7 @@ import com.day.cq.search.result.SearchResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@ExtendWith({AemContextExtension.class, Slf4jTestCleanupExtension.class})
+@ExtendWith(AemContextExtension.class)
 public class ModelDataSourceServletTest {
 
     private ModelDataSourceServlet modelDatasourceServlet;
