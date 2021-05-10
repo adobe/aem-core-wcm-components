@@ -44,7 +44,7 @@ Please help us making the Core Components better by responding to our **[short u
 
 ### Template Components
 
-1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v3/page)
+1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
 2. [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
 3. [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)

@@ -801,8 +801,7 @@
             <dependency>
                 <groupId>com.adobe.aem</groupId>
                 <artifactId>uber-jar</artifactId>
-                <version>6.4.0</version>
-                <classifier>apis</classifier>
+                <version>6.5.8</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -822,7 +821,7 @@
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-simple</artifactId>
+                <artifactId>slf4j-nop</artifactId>
                 <version>${slf4j.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -866,12 +865,6 @@
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
                 <version>3.23.1-GA</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>uk.org.lidalia</groupId>
-                <artifactId>slf4j-test</artifactId>
-                <version>1.2.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

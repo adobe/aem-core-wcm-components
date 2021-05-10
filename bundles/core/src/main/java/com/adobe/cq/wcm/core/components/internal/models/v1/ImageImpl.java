@@ -382,7 +382,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected ImageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
             .withTitle(this::getTitle)
-            .withLinkUrl(this::getLink)
+            .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
             .withAssetData(() ->
                 Optional.ofNullable(this.fileReference)
                     .map(reference -> this.request.getResourceResolver().getResource(reference))

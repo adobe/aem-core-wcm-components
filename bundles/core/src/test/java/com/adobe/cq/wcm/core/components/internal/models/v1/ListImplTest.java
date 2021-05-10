@@ -205,7 +205,6 @@ public class ListImplTest {
     @Test
     protected void testOrderByTitleWithNoTitleForOneItem() {
         List list = getListUnderTest(LIST_15);
-        list.getItems().stream().map(PageListItemImpl::getTitle).forEach(System.out::println);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_4", "/content/list/pages/page_1", "/content/list/pages/page_2" });
     }
 
@@ -219,7 +218,7 @@ public class ListImplTest {
         Utils.enableDataLayer(context, true);
         Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
-            throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
+            throw new IllegalStateException("Did you forget to define test resource " + resourcePath + "?");
         }
         context.currentResource(resource);
         return context.request().adaptTo(List.class);
