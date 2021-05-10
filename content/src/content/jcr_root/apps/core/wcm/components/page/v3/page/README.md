@@ -149,3 +149,4 @@ handling for dialog interaction. It is already included by its edit dialog.
 * **Compatibility**: AEM 6.3
 * **Status**: work-in-progress
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_page\_v3](https://www.adobe.com/go/aem_cmp_page_v3)
+* **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)
