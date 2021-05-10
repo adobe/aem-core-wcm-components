@@ -167,6 +167,17 @@ public class Utils {
         context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
     }
 
+    /**
+     * Mock the {@code static final Logger} field of a class to allow asserting log messages
+     *
+     * @param clazz The class for which the {@link Logger} should be mocked
+     * @param fieldName The name of the {@code static final Logger} field
+     *
+     * @return Mocked {@link Logger} that will be used by the class
+     *
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     public static Logger mockLogger(Class<?> clazz, String fieldName) throws NoSuchFieldException, IllegalAccessException {
         Field field = clazz.getDeclaredField(fieldName);
         Field modifiersField = Field.class.getDeclaredField("modifiers");
