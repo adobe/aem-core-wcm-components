@@ -121,7 +121,7 @@
                                                     fieldLabel="Link Label"
                                                     name="./linkAccessibilityLabel"
                                                     value="">
-                                                <granite:rendercondition
+                                                    <granite:rendercondition
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
                                                         expression="${!cqDesign.linkDisabled}"/>
@@ -134,7 +134,7 @@
                                                     fieldLabel="Link Title Attribute"
                                                     name="./linkTitleAttribute"
                                                     value="">
-                                                <granite:rendercondition
+                                                    <granite:rendercondition
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
                                                         expression="${!cqDesign.linkDisabled}"/>

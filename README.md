@@ -52,7 +52,7 @@ Please help us making the Core Components better by responding to our **[short u
 
 ### Page Authoring Components
 
-6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v3/title)
+6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 7. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
 8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
 9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v2/button)

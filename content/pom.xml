@@ -291,7 +291,7 @@
                                         <replace file="target/jcr_root/libs/core/wcm/components/tabs/v1/tabs/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/teaser/v1/teaser/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/text/v2/text/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/title/v3/title/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/title/v2/title/.content.xml" token=".core-wcm" value="Core Content" />
 
                                         <replace file="target/jcr_root/libs/core/wcm/components/form/container/v2/container/.content.xml" token=".core-wcm-form" value="Core Content" />
 
