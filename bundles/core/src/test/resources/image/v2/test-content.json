@@ -532,6 +532,83 @@
                             "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
                         }
                     }
+                },
+                "image40"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.gif",
+                    "imageServerUrl"    : "https://s7d9.scene7.com/is/content/",
+                    "dmpResetType"      : "smartCrop",
+                    "smartCropRendition": "SmartCrop:Auto",
+                    "imageModifiers"    : "op_invert=1&op_blur=10",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, DM image, Auto Smart Crop and Image Modifiers",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/gif",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image41"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "DM features on, uses nonDM image",
+                    "linkURL"           : "https://www.adobe.com",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/gif",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088",
+                            "metadata"          : {
+                                "dam:scene7Type"    : "AnimatedGif"
+                            }
+                        }
+                    }
+                },
+                "container"             : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "image"            : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:createdBy"     : "admin",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        "sling:resourceType": "core/wcm/components/image/v2/image",
+                        "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+                        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+                        "alt"               : "Adobe Logo",
+                        "jcr:title"         : "DM features on, DM image",
+                        "linkURL"           : "https://www.adobe.com",
+                        "file"              : {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:createdBy"  : "admin",
+                            "jcr:content"    : {
+                                "jcr:primaryType"   : "nt:resource",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:mimeType"      : "image/png",
+                                ":jcr:data"         : 10453365,
+                                "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                            }
+                        }
+                    }
                 }
             },
             "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"

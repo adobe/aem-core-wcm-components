@@ -81,6 +81,13 @@ public interface Download extends Component {
     String PN_DISPLAY_FILENAME = "displayFilename";
 
     /**
+     * Name of the policy property that defines whether the title links should be hidden.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    String PN_HIDE_TITLE_LINK = "hideTitleLink";
+
+    /**
      * Returns either the title configured in the dialog or the title of the DAM asset,
      * depending on the state of the titleFromAsset checkbox.
      *
@@ -201,6 +208,16 @@ public interface Download extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean displayFilename() {
+        return false;
+    }
+
+    /**
+     * Checks if the title link should be hidden.
+     *
+     * @return {@code true} if the title link should be hidden, {@code false} if it should be rendered
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default boolean hideTitleLink() {
         return false;
     }
 

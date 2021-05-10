@@ -51,7 +51,7 @@ import static org.mockito.Mockito.when;
 public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
 
     private static final String TEST_BASE = "/page/v2";
-    private static final String REDIRECT_PAGE = CONTENT_ROOT + "/redirect-page";
+    protected static final String REDIRECT_PAGE = CONTENT_ROOT + "/redirect-page";
     private static final String PN_CLIENT_LIBS = "clientlibs";
     private static final String SLING_CONFIGS_ROOT = "/conf/page/sling:configs";
 

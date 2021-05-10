@@ -1,0 +1,57 @@
+{
+    "core": {
+        "jcr:primaryType": "sling:Folder",
+        "wcm": {
+            "jcr:primaryType": "sling:Folder",
+            "components": {
+                "jcr:primaryType": "sling:Folder",
+                "image": {
+                    "jcr:primaryType": "sling:Folder",
+                    "v2": {
+                        "jcr:primaryType": "sling:Folder",
+                        "image": {
+                            "jcr:primaryType": "cq:Component",
+                            "jcr:createdBy": "admin",
+                            "jcr:title": "Image (v2)",
+                            "sling:resourceSuperType": "core/wcm/components/image",
+                            "jcr:description": "Smart Adaptive Image",
+                            "cq:icon": "image",
+                            "componentGroup": "Core Content"
+                        }
+                    }
+                },
+                "text": {
+                    "jcr:primaryType": "sling:Folder",
+                    "v2": {
+                        "jcr:primaryType": "sling:Folder",
+                        "text": {
+                            "jcr:primaryType": "cq:Component",
+                            "jcr:createdBy": "admin",
+                            "jcr:title": "Text (v2)",
+                            "jcr:description": "Rich Text Section",
+                            "cq:icon": "textLeft",
+                            "componentGroup": "Core Content"
+                        }
+                    }
+                }
+            }
+        }
+
+    },
+    "my": {
+        "jcr:primaryType": "sling:Folder",
+        "test"             : {
+            "jcr:primaryType": "sling:Folder",
+            "text"          : {
+                "jcr:primaryType"        : "cq:Component",
+                "sling:resourceSuperType": "core/wcm/components/text/v2/text",
+                "componentGroup"         : "Test"
+            },
+            "image"          : {
+                "jcr:primaryType"        : "cq:Component",
+                "sling:resourceSuperType": "core/wcm/components/image/v2/image",
+                "componentGroup"         : "Test"
+            }
+        }
+    }
+}

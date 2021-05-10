@@ -62,6 +62,13 @@
                     "navigationRoot"    : "/content/navigation-redirect",
                     "disableShadowing"  : false,
                     "skipNavigationRoot": false
+                },
+                "navigation-component-19": {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/navigation/v1/navigation",
+                    "navigationRoot"    : "/content/navigation-vanity-paths",
+                    "disableShadowing"  : false,
+                    "skipNavigationRoot": false
                 }
             }
         },
@@ -590,6 +597,30 @@
                 "jcr:primaryType": "cq:PageContent",
                 "jcr:title"      : "Navigation 2",
                 "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200"
+            }
+        }
+    },
+    "navigation-vanity-paths": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType" : "cq:PageContent",
+            "jcr:title"       : "Navigation",
+            "sling:vanityPath": "/nav0.html"
+        },
+        "navigation-1"   : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType" : "cq:PageContent",
+                "jcr:title"       : "Navigation 1",
+                "sling:vanityPath": "/nav1.html"
+            }
+        },
+        "navigation-2"   : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType" : "cq:PageContent",
+                "jcr:title"       : "Navigation 2",
+                "sling:vanityPath": "/nav2.html"
             }
         }
     }
