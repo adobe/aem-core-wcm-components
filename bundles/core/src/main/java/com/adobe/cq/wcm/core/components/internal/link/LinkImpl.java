@@ -22,9 +22,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.jackson.LinkHtmlAttributesSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -41,7 +44,7 @@ public final class LinkImpl<T> implements Link<T> {
      * @param url Link URL
      */
     public LinkImpl(String url) {
-        this(url, null, null, null, null);
+        this(null, url, null, null, null);
     }
 
     /**
@@ -49,7 +52,7 @@ public final class LinkImpl<T> implements Link<T> {
      * @param target Target
      */
     public LinkImpl(String url, String target) {
-        this(url, target, null, null, null);
+        this(null, url, target, null, null);
     }
 
     /**
@@ -58,7 +61,7 @@ public final class LinkImpl<T> implements Link<T> {
      * @param reference Referenced WCM/DAM entity
      */
     LinkImpl(String url, String target, T reference) {
-        this(url, target, reference, null, null);
+        this(reference, url, target, null, null);
     }
 
     /**
@@ -68,7 +71,7 @@ public final class LinkImpl<T> implements Link<T> {
      * @param linkAccessibilityLabel Accessibility Label
      * @param linkTitleAttribute Title attribute
      */
-    LinkImpl(String url, String target, T reference, String linkAccessibilityLabel, String linkTitleAttribute) {
+    LinkImpl(T reference, String url, String target, String linkAccessibilityLabel, String linkTitleAttribute) {
         this.url = url;
         this.htmlAttributes = buildHtmlAttributes(url, target, linkAccessibilityLabel, linkTitleAttribute);
         this.reference = reference;
@@ -100,7 +103,9 @@ public final class LinkImpl<T> implements Link<T> {
      * @return {@link Map} of HTML attributes, may include the URL as {@code href}
      */
     @Override
-    @JsonIgnore  // exclude HTML-specific attributes in JSON
+    @JsonInclude(Include.NON_EMPTY)
+    @JsonSerialize(using = LinkHtmlAttributesSerializer.class)
+    @JsonProperty("attributes")
     public @NotNull Map<String, String> getHtmlAttributes() {
         return htmlAttributes;
     }

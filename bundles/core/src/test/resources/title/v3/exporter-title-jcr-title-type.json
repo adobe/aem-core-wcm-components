@@ -3,7 +3,6 @@
   "type": "h2",
   "text": "Hello World",
   "linkDisabled": false,
-  "link": { "valid": false },
   "dataLayer": {
     "title-4a2e772be1": {
       "repo:modifyDate": "2016-01-13T15:14:51Z",
