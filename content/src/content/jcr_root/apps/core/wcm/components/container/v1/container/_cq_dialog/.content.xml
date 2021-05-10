@@ -123,6 +123,20 @@
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
                                                 name="./id"/>
+                                            <accessibilityLabel
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the container, which describes the container content."
+                                                fieldLabel="Label"
+                                                name="./accessibilityLabel"
+                                                value=""/>
+                                            <roleAttribute
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                    fieldDescription="HTML ROLE attribute to apply to the component."
+                                                    fieldLabel="Role"
+                                                    name="./roleAttribute"
+                                                    value=""/>
                                         </items>
                                     </column>
                                 </items>

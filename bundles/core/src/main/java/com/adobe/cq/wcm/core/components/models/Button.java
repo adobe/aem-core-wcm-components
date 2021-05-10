@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.models;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+
 /**
  * Defines the {@code Button} Sling Model used for the {@code /apps/core/wcm/components/button} component.
  *
@@ -39,8 +41,20 @@ public interface Button extends Component {
      * Returns the button link.
      *
      * @return the button link
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
      */
+    default Link getButtonLink() {
+        return null;
+    }
+
+    /**
+     * Returns the button link.
+     *
+     * @return the button link
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     * @deprecated Please use {@link #getButtonLink()}
+     */
+    @Deprecated
     default String getLink() {
         return null;
     }

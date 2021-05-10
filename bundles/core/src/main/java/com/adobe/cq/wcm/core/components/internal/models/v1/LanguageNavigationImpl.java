@@ -122,15 +122,20 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
                 if (localizedPage != null) {
                     page = localizedPage;
                 }
-                pages.add(newLanguageNavigationItem(page, active, linkHandler, level, children, title, getId(), isShadowingDisabled, component));
+                boolean current = currentPage.getPath().equals(page.getPath());
+                pages.add(newLanguageNavigationItem(page, active, current, linkHandler, level, children, title, getId(),
+                        isShadowingDisabled, component));
             }
         }
 
         return pages;
     }
 
-    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String title, String parentId, boolean isShadowingDisabled, Component component) {
-        return new LanguageNavigationItemImpl(page, active, linkHandler, level, children, title, parentId, isShadowingDisabled, component);
+    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler,
+                                                               int level, List<NavigationItem> children, String title, String parentId,
+                                                               boolean isShadowingDisabled, Component component) {
+        return new LanguageNavigationItemImpl(page, active, current, linkHandler, level, children, title, parentId, isShadowingDisabled,
+                component);
     }
 
     private Page getLocalizedPage(Page page, Page languageRoot) {

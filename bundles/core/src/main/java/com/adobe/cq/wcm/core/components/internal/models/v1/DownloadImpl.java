@@ -104,6 +104,8 @@ public class DownloadImpl implements Download {
 
     private boolean displayFilename;
 
+    private boolean hideTitleLink = false;
+
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_TITLE)
     @Nullable
     private String title;
@@ -139,6 +141,7 @@ public class DownloadImpl implements Download {
             displaySize = currentStyle.get(PN_DISPLAY_SIZE, true);
             displayFormat = currentStyle.get(PN_DISPLAY_FORMAT, true);
             displayFilename = currentStyle.get(PN_DISPLAY_FILENAME, true);
+            hideTitleLink = currentStyle.get(PN_HIDE_TITLE_LINK, false);
         }
         if (StringUtils.isNotBlank(fileReference)) {
             initAssetDownload(fileReference);
@@ -288,6 +291,11 @@ public class DownloadImpl implements Download {
     @Override
     public boolean displayFilename() {
         return displayFilename;
+    }
+
+    @Override
+    public boolean hideTitleLink() {
+        return hideTitleLink;
     }
 
     @Override

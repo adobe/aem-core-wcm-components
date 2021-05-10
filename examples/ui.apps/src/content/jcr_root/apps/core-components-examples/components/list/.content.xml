@@ -19,5 +19,5 @@
     jcr:description="Configurable collection of items or content"
     jcr:primaryType="cq:Component"
     jcr:title="List"
-    sling:resourceSuperType="core/wcm/components/list/v2/list"
+    sling:resourceSuperType="core/wcm/components/list/v3/list"
     componentGroup="Core Components Examples"/>

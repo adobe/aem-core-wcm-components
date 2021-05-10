@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -36,6 +37,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -92,9 +94,6 @@ public class PageImpl extends AbstractComponentImpl implements Page {
 
     @Inject
     private SlingModelFilter slingModelFilter;
-
-    @Self
-    private SlingHttpServletRequest request;
 
     @Self
     protected LinkHandler linkHandler;

@@ -15,19 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.ArrayList;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
-import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -49,8 +45,13 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
@@ -186,7 +187,7 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
-        return ContentFragmentUtils.getComponentExporters(resource.listChildren(), modelFactory, slingHttpServletRequest);
+        return ContentFragmentUtils.getComponentExporters(resource.listChildren(), modelFactory, slingHttpServletRequest, resource);
     }
 
     @NotNull
