@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Embed (v2)
+Embed (v2) Work in progress, do not use in production
 ====
 Embed component written in HTL that allows third-party widgets (e.g. chatbots, lead generation forms, social media posts, social pixels, videos etc.) to be added to a page.
 
@@ -93,8 +93,10 @@ See also:
    cmp-embed-dialog-edit-embeddableoptions="true"
    cmp-embed-dialog-edit-showhidetargetvalue="<embeddableResourceType>"
    ```
-   where `<embeddableResourceType>` is the resource type of your custom embeddable. See [YouTube embeddable options](./embeddable/youtube/_cq_dialog/.content.xml#L42) for an example!
-5. The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes. 
+   where `<embeddableResourceType>` is the resource type of your custom embeddable. See [YouTube embeddable options](./embeddable/youtube/_cq_dialog/.content.xml#L122-123) for an example!
+5. The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes.
+6. (Optional) Create a cq:design_dialog node if the custom embeddable should also extend the content policy configuration for the 
+   embeddable. Make sure to also add the properties which are required for the edit dialog. See step 4 and  [YouTube embeddable options](./embeddable/youtube/_cq_design_dialog/.content.xml#L23) for an example!
 
 Example:
 
@@ -110,10 +112,9 @@ Example:
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: work-in-progress
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_embed\_v2](https://www.adobe.com/go/aem_cmp_embed_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_embed](https://www.adobe.com/go/aem_cmp_library_embed)
-* **Author**: [Vivekanand Mishra](https://github.com/vivekanand-mishra)
-* **Co-authors**: [Jean-Christophe Kautzmann](https://github.com/jckautzmann), [Richard Hand](https://github.com/richardhand), [Vlad Bailescu](https://github.com/vladbailescu)
+* **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)
 
 _If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._

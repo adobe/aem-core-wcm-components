@@ -18,7 +18,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Embed"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.embed.v2.editor]"
+    extraClientlibs="[core.wcm.components.embed.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_embed_v2"
     trackingFeature="core-components:embed:v2">
     <content

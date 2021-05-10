@@ -19,7 +19,7 @@
      id="${embed.id}"
      class="cmp-embed">
     <sly data-sly-test="${embed.result && embed.result.processor}"
-         data-sly-use.processorTemplate="core/wcm/components/embed/v1/embed/processors/${embed.result.processor}.html"
+         data-sly-use.processorTemplate="processors/${embed.result.processor}.html"
          data-sly-call="${processorTemplate.render @ options=embed.result.options}"></sly>
     <sly data-sly-test="${embed.html}">${embed.html @context = 'html'}</sly>
     <sly data-sly-test="${embed.embeddableResourceType}"
