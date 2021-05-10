@@ -210,7 +210,7 @@ public class LinkHandler {
      */
     private String validateLinkAccessibilityLabel(String linkAccessibilityLabel) {
         if (!StringUtils.isBlank(linkAccessibilityLabel)) {
-            return linkAccessibilityLabel;
+            return linkAccessibilityLabel.trim();
         }
         else {
             return null;
@@ -225,7 +225,7 @@ public class LinkHandler {
      */
     private String validateLinkTitleAttribute(String linkTitleAttribute) {
         if (!StringUtils.isBlank(linkTitleAttribute)) {
-            return linkTitleAttribute;
+            return linkTitleAttribute.trim();
         }
         else {
             return null;
