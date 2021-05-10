@@ -15,13 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.link;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
-
-import com.day.cq.wcm.api.Page;
 
 /**
  * Describes a link target.
@@ -58,15 +57,41 @@ public interface Link<T> {
      * @return {@code true} if component has a valid link defined
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
-    boolean isValid();
+    default boolean isValid() {
+        return false;
+    }
 
     /**
-     * The link URL, supports context path and vanity paths.
+     * The link URL, supports context path and escaping.
      *
      * @return Link URL or {@code null} if link is invalid
      */
     @Nullable
-    String getURL();
+    default String getURL() {
+        return null;
+    }
+
+    /**
+     * The mapped URL, which supports mapping and vanity path.
+     * This usually is resource resolver mapping.
+     *
+     * @return Mapped link URL or {@code null} if link is invalid or no processing can be done
+     */
+    @Nullable
+    default String getMappedURL() {
+        return null;
+    }
+
+
+    /**
+     * The externalized URL which also contains the scheme and host information.
+     * This is usually created with a {@link com.day.cq.commons.Externalizer} service
+     * @return Full link URL or {@code null} if link is invalid or can't be externalized.
+     */
+    @Nullable
+    default String getExternalizedURL() {
+        return null;
+    }
 
     /**
      * Map with Attributes for HTML Anchor tag for this link.
@@ -77,7 +102,9 @@ public interface Link<T> {
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @NotNull
-    Map<String, String> getHtmlAttributes();
+    default Map<String, String> getHtmlAttributes() {
+        return Collections.emptyMap();
+    }
 
     /**
      * Returns the referenced WCM/DAM object.
@@ -86,6 +113,7 @@ public interface Link<T> {
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @Nullable
-    T getReference();
-
+    default T getReference() {
+        return null;
+    }
 }

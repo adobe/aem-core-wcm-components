@@ -17,22 +17,23 @@ package com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited;
 
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
 
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.jupiter.api.Assertions.*;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(AemContextExtension.class)
 class InheritedFieldTest {
@@ -42,19 +43,13 @@ class InheritedFieldTest {
     private static final String TEST_APPS = "/apps/dialog";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
-
-    private TestLogger testLogger;
+    private Logger logger;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
         context.load().json(TEST_BASE + "/test-apps.json", TEST_APPS);
-        testLogger = TestLoggerFactory.getTestLogger(InheritedField.class);
-    }
-
-    @AfterEach
-    void tearDown() {
-        TestLoggerFactory.clear();
+        logger = Utils.mockLogger(InheritedField.class, "log");
     }
 
     @Test
@@ -98,7 +93,7 @@ class InheritedFieldTest {
         context.currentResource(TEST_APPS + "/brandSlug");
         MockSlingHttpServletRequest request = context.request();
         request.adaptTo(InheritedField.class);
-        MatcherAssert.assertThat(testLogger.getLoggingEvents(), hasItem(error("Suffix and 'item' param are blank")));
+        verify(logger, times(1)).error("Suffix and 'item' param are blank");
     }
 
     @Test
@@ -107,6 +102,6 @@ class InheritedFieldTest {
         MockSlingHttpServletRequest request = context.request();
         request.setParameterMap(ImmutableMap.of("item", "/content/test/parent/child"));
         request.adaptTo(InheritedField.class);
-        MatcherAssert.assertThat(testLogger.getLoggingEvents(), hasItem(error("'prop' value is null")));
+        verify(logger, times(1)).error("'prop' value is null");
     }
 }
