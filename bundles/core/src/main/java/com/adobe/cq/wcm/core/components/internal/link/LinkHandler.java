@@ -151,7 +151,6 @@ public class LinkHandler {
         String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
         String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
         Page targetPage = getPage(linkURL).orElse(null);
-        // return Optional.of(new LinkImpl<>(targetPage, resolvedLinkURL, resolvedLinkTarget, validatedLinkAccessibilityLabel, validatedLinkTitleAttribute));
         return Optional.of(buildLink(resolvedLinkURL, request, targetPage,
                 new HashMap<String, String>() {{
                     put(ATTR_TARGET, resolvedLinkTarget);
@@ -211,7 +210,7 @@ public class LinkHandler {
      */
     private String validateLinkAccessibilityLabel(String linkAccessibilityLabel) {
         if (!StringUtils.isBlank(linkAccessibilityLabel)) {
-            return linkAccessibilityLabel;
+            return linkAccessibilityLabel.trim();
         }
         else {
             return null;
@@ -226,7 +225,7 @@ public class LinkHandler {
      */
     private String validateLinkTitleAttribute(String linkTitleAttribute) {
         if (!StringUtils.isBlank(linkTitleAttribute)) {
-            return linkTitleAttribute;
+            return linkTitleAttribute.trim();
         }
         else {
             return null;

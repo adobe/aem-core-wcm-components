@@ -71,7 +71,6 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetTargetPageAccessibilityLabelAndTitleAttribute() {
         Page page = mock(Page.class);
-        Link link = new LinkImpl(page, URL, "_blank", "Url Label", "Url Title");
         Link<Page> link = new LinkImpl<>(URL, URL, MockExternalizerFactory.ROOT + URL, page, new HashMap<String, String>() {{
             put(ATTR_TARGET, "_blank");
             put(ATTR_ARIA_LABEL,  "Url Label");
@@ -85,7 +84,6 @@ class LinkImplTest {
     @Test
     void testValidLinkWithTargetPageAccessibilityLabelTitleAttributeAndWithoutTarget() {
         Page page = mock(Page.class);
-        Link link = new LinkImpl(page, URL, null,"Url Label", "Url Title");
         Link<Page> link = new LinkImpl<>(URL, URL, MockExternalizerFactory.ROOT + URL, page, new HashMap<String, String>() {{
             put(ATTR_ARIA_LABEL, "Url Label");
             put(ATTR_TITLE, "Url Title");
