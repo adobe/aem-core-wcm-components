@@ -22,11 +22,14 @@
     <filter root="/conf/core-components-examples">
         <exclude pattern="/conf/core-components-examples/settings/cloudconfigs(/.*)?"/>
         <exclude pattern="/conf/core-components-examples/settings/wcm/templates/content-page/structure/jcr:content/root/sidebar/accordion/item_1579021109269"/>
+        <exclude pattern="/conf/core-components-examples/settings/wcm/templates/content-page/structure/jcr:content/root/sidebar/accordion/item_1579021109270"/>
     </filter>
     <filter root="/content/core-components-examples">
         <exclude pattern="/content/core-components-examples/library/jcr:content/root/responsivegrid/container_1589240807(/.*)?"/>
         <exclude pattern="/content/core-components-examples/library/commerce(/.*)?"/>
         <!-- forms specific -->
+        <exclude pattern="/content/core-components-examples/library/jcr:content/root/responsivegrid/container_1589240808(/.*)?"/>
+        <exclude pattern="/content/core-components-examples/library/forms-and-communications-portal(/.*)?"/>
         <exclude pattern="/content/core-components-examples/library/jcr:content/root/responsivegrid/container_40754488/teaser_1837085907"/>
         <exclude pattern="/content/core-components-examples/library/page-authoring/aemform"/>
     </filter>
@@ -34,6 +37,7 @@
     <filter root="/content/dam/core-components-examples">
         <exclude pattern="/content/dam/core-components-examples/library/cif-sample-assets(/.*)?"/>
         <exclude pattern="/content/dam/core-components-examples/library/cif-components(/.*)?"/>
+        <exclude pattern="/content/dam/core-components-examples/library/forms-components(/.*)?"/>
     </filter>
     <filter root="/content/experience-fragments/core-components-examples">
         <exclude pattern="/content/experience-fragments/core-components-examples/library/commerce(/.*)?"/>
