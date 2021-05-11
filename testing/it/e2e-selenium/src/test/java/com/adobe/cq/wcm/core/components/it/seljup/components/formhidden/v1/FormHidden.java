@@ -14,9 +14,10 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.components.formhidden;
+package com.adobe.cq.wcm.core.components.it.seljup.components.formhidden.v1;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formhidden.FormHiddenEditDialog;
 
 import static com.codeborne.selenide.Selenide.$$;
 

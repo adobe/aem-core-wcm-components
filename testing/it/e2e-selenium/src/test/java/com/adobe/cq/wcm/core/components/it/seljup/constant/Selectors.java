@@ -32,5 +32,5 @@ public class Selectors {
 
     public static final String SELECTOR_PANEL_SELECT = ".cq-editable-action[data-action='PANEL_SELECT']";
 
-    public static final String SELECTOR_CORAL_DIALOG_HEADER = "coral-dialog-header";
+    public static final String SELECTOR_CORAL_DIALOG_CONTENT = "coral-dialog-content";
 }

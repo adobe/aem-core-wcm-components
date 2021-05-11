@@ -17,7 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formhidden.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formhidden.FormHidden;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formhidden.v1.FormHidden;
 import com.adobe.cq.wcm.core.components.it.seljup.components.formhidden.FormHiddenEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;

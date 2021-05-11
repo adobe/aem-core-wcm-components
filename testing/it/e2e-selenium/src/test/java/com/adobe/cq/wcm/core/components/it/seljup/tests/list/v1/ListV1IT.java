@@ -28,7 +28,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 import org.apache.http.HttpStatus;
-
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -124,6 +123,7 @@ public class ListV1IT extends AuthorBaseUITest {
         // add the component to test page
         compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "list", null);
 
+        // open test page in page editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
 
