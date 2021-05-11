@@ -110,7 +110,7 @@ public class BreadcrumbImplTest {
     void testBreadcrumbItemsPageWithoutJcrContent() {
         Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_7);
         checkBreadcrumbConsistency(breadcrumb, new String[]{"Women", "Devi Sleeveless Shirt"});
-        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_7));
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(testBase, BREADCRUMB_7));
     }
 
     protected void checkBreadcrumbConsistency(Breadcrumb breadcrumb, String[] expectedPages) {

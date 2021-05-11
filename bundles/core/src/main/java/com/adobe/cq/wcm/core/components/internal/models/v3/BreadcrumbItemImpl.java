@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,45 +13,37 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v2;
+
+package com.adobe.cq.wcm.core.components.internal.models.v3;
+
+import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
-import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.internal.models.v2.NavigationItemImpl;
+import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl {
+import static org.apache.sling.api.SlingConstants.PROPERTY_PATH;
 
-    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
-        super(linkHandler, page, parentId, isShadowingDisabled, component);
+@JsonIgnoreProperties(value = {"page", "children", "level", "description", "lastModified",PROPERTY_PATH})
+public class BreadcrumbItemImpl extends NavigationItemImpl implements NavigationItem {
+
+    public BreadcrumbItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
+                              String parentId, boolean isShadowingDisabled, Component component) {
+        super(page, active, linkHandler, level, children, parentId, isShadowingDisabled, component);
     }
 
     @Override
     @JsonIgnore(false)
     @Nullable
-    public Link<Page> getLink() {
+    public Link getLink() {
         return super.getLink();
-    }
-
-    @Override
-    @JsonIgnore
-    @Deprecated
-    public String getURL() {
-        return super.getURL();
-    }
-
-    @Override
-    @NotNull
-    protected PageData getComponentData() {
-        return DataLayerBuilder.extending(super.getComponentData()).asPage()
-                .withTitle(this::getTitle)
-                .withLinkUrl(() -> link.map(Link::getURL).orElse(null))
-                .build();
     }
 }

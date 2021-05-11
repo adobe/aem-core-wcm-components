@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,43 +15,51 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.util.Collections;
+import java.util.List;
 
-import com.adobe.cq.wcm.core.components.commons.link.Link;
+import org.jetbrains.annotations.NotNull;
+
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
-import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl {
+public class NavigationItemImpl extends PageListItemImpl implements NavigationItem {
 
-    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
+    protected List<NavigationItem> children = Collections.emptyList();
+    protected int level;
+    protected boolean active;
+
+    public NavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
+                              String parentId, boolean isShadowingDisabled, Component component) {
         super(linkHandler, page, parentId, isShadowingDisabled, component);
-    }
-
-    @Override
-    @JsonIgnore(false)
-    @Nullable
-    public Link<Page> getLink() {
-        return super.getLink();
+        this.active = active;
+        this.level = level;
+        this.children = children;
     }
 
     @Override
     @JsonIgnore
     @Deprecated
-    public String getURL() {
-        return super.getURL();
+    public Page getPage() {
+        return page;
     }
 
     @Override
-    @NotNull
-    protected PageData getComponentData() {
-        return DataLayerBuilder.extending(super.getComponentData()).asPage()
-                .withTitle(this::getTitle)
-                .withLinkUrl(() -> link.map(Link::getURL).orElse(null))
-                .build();
+    public boolean isActive() {
+        return active;
     }
+
+    @Override
+    public List<NavigationItem> getChildren() {
+        return children;
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
+    }
+
 }
