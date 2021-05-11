@@ -3,5 +3,5 @@
     cq:icon="breadcrumbNavigation"
     jcr:description="Displays the position of the current page within the site hierarchy"
     jcr:primaryType="cq:Component"
-    jcr:title="Breadcrumb (v3)"
-    componentGroup=".core-wcm"/>
+    jcr:title="Breadcrumb (v3)) (work-in-progress)"
+    componentGroup=".wip"/>
