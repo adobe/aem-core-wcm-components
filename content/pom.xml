@@ -270,7 +270,7 @@
                                     <tasks>
                                         <replace file="target/jcr_root/libs/core/wcm/components/breadcrumb/v2/breadcrumb/.content.xml" token=".core-wcm" value="Core Structure" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/languagenavigation/v1/languagenavigation/.content.xml" token=".core-wcm" value="Core Structure" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/navigation/v2/navigation/.content.xml" token=".core-wcm" value="Core Structure" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/navigation/v1/navigation/.content.xml" token=".core-wcm" value="Core Structure" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/search/v1/search/.content.xml" token=".core-wcm" value="Core Structure" />
 
                                         <replace file="target/jcr_root/libs/core/wcm/components/accordion/v1/accordion/.content.xml" token=".core-wcm" value="Core Content" />

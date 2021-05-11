@@ -18,5 +18,5 @@
     cq:icon="compass"
     jcr:description="Collects a list of pages to display in a navigation tree."
     jcr:primaryType="cq:Component"
-    jcr:title="Navigation (v2)"
-    componentGroup=".core-wcm"/>
+    jcr:title="Navigation (v2)) (work-in-progress)"
+    componentGroup=".wip"/>

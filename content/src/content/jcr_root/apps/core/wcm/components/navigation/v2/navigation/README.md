@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-Navigation (v2)
+Navigation (v2) Work in progress, do not use in production
 ====
 Navigation component written in HTL that renders a website navigation tree.
 
@@ -50,7 +50,7 @@ The following properties are written to JCR for the Navigation component and are
 8. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
-The component leverages the `core.wcm.components.navigation.v1.editor` editor client library category that includes
+The component reuses the `core.wcm.components.navigation.v1.editor` editor client library category that includes
 JavaScript handling for dialog interaction. It is already included by its edit and design dialogs.
 
 ## BEM Description
@@ -67,6 +67,7 @@ BLOCK cmp-navigation
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: work-in-progress
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_navigation\_v2](https://www.adobe.com/go/aem_cmp_navigation_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_navigation](https://www.adobe.com/go/aem_cmp_library_navigation)
+* **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)
