@@ -84,7 +84,7 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_1);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
+        assertEquals(CONTEXT_PATH + PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
@@ -101,7 +101,7 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_4);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_WITHOUT_SIZE_PROP_PATH + "." + DownloadServlet.SELECTOR + ".pdf", download.getUrl());
+        assertEquals(CONTEXT_PATH + PDF_ASSET_WITHOUT_SIZE_PROP_PATH + "." + DownloadServlet.SELECTOR + ".pdf", download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
@@ -114,7 +114,7 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_3);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
-        assertEquals(PDF_FILE_DOWNLOAD_PATH, download.getUrl());
+        assertEquals(CONTEXT_PATH + PDF_FILE_DOWNLOAD_PATH, download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FORMAT_STRING, download.getFormat());
@@ -127,7 +127,7 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_2);
         assertEquals(DAM_TITLE, download.getTitle());
         assertEquals(DAM_DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
+        assertEquals(CONTEXT_PATH + PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
@@ -163,6 +163,17 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
         assertNull(download.getTitleType(), "Expected title type is not correct");
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
+    }
+
+    @Test
+    void testDownloadWithHiddenTitleLink() {
+        Resource mockResource = mock(Resource.class);
+        MockValueMap mockValueMap = new MockValueMap(mockResource);
+        mockValueMap.put(Download.PN_HIDE_TITLE_LINK, true);
+        Style mockStyle = new MockStyle(mockResource, mockValueMap);
+
+        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertTrue(download.hideTitleLink(), "Expected title link to be hidden");
     }
 
     @Test

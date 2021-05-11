@@ -128,7 +128,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .assert.exist("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag2 + "')")
 
             // delete a tag
-            .click("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag2 + "') > button")
+            .click("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag2 + "') button")
             .assert.exist("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag2 + "')", false)
 
             // set the Hide in Navigation

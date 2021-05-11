@@ -4,6 +4,7 @@
         {
             "id": "breadcrumb-9e309d498b-item-11c305ace0",
             "active": false,
+            "current": false,
             "url": "/content/breadcrumb/women.html",
             "title": "Women",
             "dataLayer": {
@@ -18,6 +19,7 @@
         {
             "id": "breadcrumb-9e309d498b-item-a66a50bca8",
             "active": true,
+            "current": true,
             "url": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
             "title": "Devi Sleeveless Shirt",
             "dataLayer": {

@@ -20,7 +20,7 @@
     sling:resourceType="granite/ui/components/coral/foundation/container">
     <granite:data
         jcr:primaryType="nt:unstructured"
-        cmp-embed-dialog-edit-youtube="true"
+        cmp-embed-dialog-edit-embeddableoptions="true"
         cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
     <items jcr:primaryType="nt:unstructured">
         <mute

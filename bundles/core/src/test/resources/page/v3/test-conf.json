@@ -1,0 +1,184 @@
+{
+  "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+  "jcr:createdBy": "admin",
+  "jcr:mixinTypes": [
+    "rep:AccessControllable"
+  ],
+  "jcr:primaryType": "sling:Folder",
+  "wcm": {
+    "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+    "jcr:createdBy": "admin",
+    "jcr:mixinTypes": [
+      "rep:AccessControllable"
+    ],
+    "jcr:primaryType": "cq:Page",
+    "policies": {
+      "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+      "jcr:createdBy": "admin",
+      "jcr:mixinTypes": [
+        "rep:AccessControllable"
+      ],
+      "jcr:primaryType": "cq:Page",
+      "coretest": {
+        "components": {
+          "content": {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType": "nt:unstructured"
+          },
+          "jcr:primaryType": "nt:unstructured",
+          "sling:resourceType": "nt:unstructured",
+          "structure": {
+            "jcr:primaryType": "nt:unstructured",
+            "page": {
+              "jcr:primaryType": "nt:unstructured",
+              "sling:resourceType": "nt:unstructured",
+              "coretest-product-page": {
+                "clientlibs": [
+                  "coretest.product-page",
+                  "coretest.product-page-js-head"
+                ],
+                "clientlibsJsHead": [
+                  "coretest.product-page-js-head"
+                ],
+                "appResourcesClientlib": "coretest.product-page.appResources",
+                "jcr:description": "Policy for product pages",
+                "jcr:lastModified": "Thu Mar 03 2016 18:52:44 GMT+0100",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "CoreTest Product Page",
+                "sling:resourceType": "wcm/core/components/policy/policy"
+              }
+            },
+            "sling:resourceType": "nt:unstructured"
+          }
+        },
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "nt:unstructured"
+      }
+    },
+    "templates": {
+      "jcr:primaryType": "cq:Page",
+      "product-page": {
+        "initial": {
+          "jcr:content": {
+            "cq:template": "/conf/coretest/settings/wcm/templates/product-page",
+            "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+            "jcr:createdBy": "admin",
+            "jcr:primaryType": "cq:PageContent",
+            "root": {
+              "responsivegrid": {
+                "jcr:created": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                "jcr:createdBy": "admin",
+                "jcr:lastModified": "2016-01-13T15:58:50.877+01:00",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+              },
+              "sling:resourceType": "wcm/foundation/components/responsivegrid"
+            },
+            "sling:resourceType": "coretest/components/structure/page"
+          },
+          "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+          "jcr:createdBy": "admin",
+          "jcr:primaryType": "cq:Page"
+        },
+        "jcr:content": {
+          "cq:lastModified": "Wed Jan 13 2016 15:57:47 GMT+0100",
+          "cq:lastModifiedBy": "admin",
+          "cq:templateType": "/conf/coretest/settings/wcm/template-types/empty-page",
+          "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+          "jcr:createdBy": "admin",
+          "jcr:primaryType": "cq:PageContent",
+          "jcr:title": "Product Page",
+          "status": "enabled"
+        },
+        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+        "jcr:createdBy": "admin",
+        "jcr:primaryType": "cq:Template",
+        "policies": {
+          "jcr:content": {
+            "cq:policy": "coretest/components/structure/page/coretest-product-page",
+            "jcr:lastModified": "Thu Mar 03 2016 18:46:02 GMT+0100",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:primaryType": "nt:unstructured",
+            "root": {
+              "cq:policy": "wcm/foundation/components/responsivegrid/coretest-structure",
+              "jcr:lastModified": "Tue Feb 16 2016 21:38:49 GMT+0100",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:primaryType": "nt:unstructured",
+              "responsivegrid": {
+                "cq:policy": "wcm/foundation/components/responsivegrid/coretest-default",
+                "jcr:lastModified": "Tue Feb 16 2016 21:39:02 GMT+0100",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "wcm/core/components/policies/mapping"
+              },
+              "sling:resourceType": "wcm/core/components/policies/mapping"
+            },
+            "sling:resourceType": "wcm/core/components/policies/mappings"
+          },
+          "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+          "jcr:createdBy": "admin",
+          "jcr:primaryType": "cq:Page"
+        },
+        "structure": {
+          "jcr:content": {
+            "cq:deviceGroups": [
+              "mobile/groups/responsive"
+            ],
+            "cq:responsive": {
+              "breakpoints": {
+                "jcr:primaryType": "nt:unstructured",
+                "phone": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "title": "Smaller Screen",
+                  "width": 650
+                },
+                "tablet": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "title": "Tablet",
+                  "width": 1200
+                }
+              },
+              "jcr:primaryType": "nt:unstructured"
+            },
+            "cq:template": "/conf/coretest/settings/wcm/templates/product-page",
+            "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+            "jcr:createdBy": "admin",
+            "jcr:primaryType": "cq:PageContent",
+            "root": {
+              "jcr:primaryType": "nt:unstructured",
+              "responsivegrid": {
+                "editable": true,
+                "jcr:created": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                "jcr:createdBy": "admin",
+                "jcr:lastModified": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+              },
+              "sling:resourceType": "wcm/foundation/components/responsivegrid"
+            },
+            "sling:resourceType": "coretest/components/structure/page"
+          },
+          "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+          "jcr:createdBy": "admin",
+          "jcr:primaryType": "cq:Page"
+        },
+        "thumbnail.png": {
+          "jcr:content": {
+            ":jcr:data": 13416,
+            "jcr:lastModified": "Mon Jul 18 2016 14:30:39 GMT+0200",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:mimeType": "image/png",
+            "jcr:primaryType": "nt:resource",
+            "jcr:uuid": "946d6c1e-1f8f-4257-9940-5185688f3ac5"
+          },
+          "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+          "jcr:createdBy": "admin",
+          "jcr:primaryType": "nt:file"
+        }
+      }
+    }
+  }
+}
