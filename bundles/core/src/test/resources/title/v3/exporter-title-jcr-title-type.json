@@ -1,0 +1,14 @@
+{
+  "id": "title-4a2e772be1",
+  "type": "h2",
+  "text": "Hello World",
+  "linkDisabled": false,
+  "dataLayer": {
+    "title-4a2e772be1": {
+      "repo:modifyDate": "2016-01-13T15:14:51Z",
+      "@type": "core/wcm/components/title/v3/title",
+      "dc:title": "Hello World"
+    }
+  },
+  ":type": "core/wcm/components/title/v3/title"
+}

@@ -65,6 +65,17 @@ public interface Title extends Component {
     }
 
     /**
+     * Returns the Title's link.
+     *
+     * @return the title's link
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    @Nullable
+    default Link getLink() {
+        return null;
+    }
+
+    /**
      * Returns the Title's link URL, if one was set.
      *
      * @return the title's link URL, if one was set, or {@code null}
@@ -73,17 +84,6 @@ public interface Title extends Component {
      */
     @Deprecated
     default String getLinkURL() {
-        return null;
-    }
-
-    /**
-     * Returns the Title's link.
-     *
-     * @return the title's link
-     * @since com.adobe.cq.wcm.core.components.models 12.20.0
-     */
-    @Nullable
-    default Link getLink() {
         return null;
     }
 

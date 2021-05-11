@@ -1,0 +1,73 @@
+{
+    "jcr:primaryType": "cq:Page",
+    "jcr:createdBy"  : "admin",
+    "jcr:created"    : "Wed Jan 13 2016 15:56:31 GMT+0100",
+    "jcr:content"    : {
+        "jcr:primaryType"   : "cq:PageContent",
+        "jcr:createdBy"     : "admin",
+        "jcr:created"       : "Wed Jan 13 2016 15:56:31 GMT+0100",
+        "cq:lastModified"   : "Wed Jan 13 2016 16:14:51 GMT+0100",
+        "sling:resourceType": "core/wcm/components/page/v1/page",
+        "cq:lastModifiedBy" : "admin",
+        "par"               : {
+            "jcr:primaryType"     : "nt:unstructured",
+            "sling:resourceType"  : "wcm/foundation/components/parsys",
+            "title-jcr-title"     : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "jcr:title"         : "Hello World",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
+                "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
+                "sling:resourceType": "core/wcm/components/title/v3/title"
+            },
+            "title-jcr-title-type": {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "jcr:title"         : "Hello World",
+                "type"              : "h2",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
+                "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
+                "sling:resourceType": "core/wcm/components/title/v3/title"
+            },
+            "title-noprops" : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
+                "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
+                "sling:resourceType": "core/wcm/components/title/v3/title"
+            },
+            "title-wrongtype" : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "jcr:lastModifiedBy": "admin",
+                "type"              : "section",
+                "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
+                "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
+                "sling:resourceType": "core/wcm/components/title/v3/title"
+            },
+            "title-jcr-title-v2"     : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "jcr:title"         : "Hello World",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
+                "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
+                "sling:resourceType": "core/wcm/components/title/v3/title"
+            },
+            "title-jcr-title-link-v2"     : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "linkURL"           : "https://www.adobe.com",
+                "linkAccessibilityLabel": "World",
+                "linkTitleAttribute": "World title",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
+                "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
+                "sling:resourceType": "core/wcm/components/title/v3/title"
+            }
+        }
+    }
+}
