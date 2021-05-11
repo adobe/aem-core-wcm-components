@@ -19,5 +19,5 @@
     jcr:description="Displays a list of Content Fragments"
     jcr:primaryType="cq:Component"
     jcr:title="Content Fragment List "
-    sling:resourceSuperType="core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+    sling:resourceSuperType="core/wcm/components/contentfragmentlist/v2/contentfragmentlist"
     componentGroup="Core Components Examples"/>
