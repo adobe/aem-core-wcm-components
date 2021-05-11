@@ -1,4 +1,5 @@
 {
+    "id":"embed-b1a9f09afe",
     "type": "HTML",
     "html": "<div>html</div>",
     ":type": "core/wcm/components/embed/v1/embed"
