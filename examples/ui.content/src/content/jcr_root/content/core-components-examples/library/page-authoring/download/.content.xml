@@ -29,7 +29,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Download&lt;sub>v1&lt;/sub>&lt;/h1>"
+                    text="&lt;h1>Download&lt;sub>v2&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text_442449340
                     cq:styleIds="[1544762734201]"
@@ -54,7 +54,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_tech_download_v1"
+                    linkURL="https://www.adobe.com/go/aem_cmp_tech_download_v2"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830_cop
@@ -70,7 +70,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_download_v1"
+                    linkURL="https://www.adobe.com/go/aem_cmp_download_v2"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <title

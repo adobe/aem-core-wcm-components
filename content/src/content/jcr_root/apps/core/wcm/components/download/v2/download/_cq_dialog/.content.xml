@@ -3,7 +3,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Download"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.download.v2.editor]">
+    extraClientlibs="[core.wcm.components.download.v1.editor]">
     <content
         granite:class="cmp-download__editor"
         jcr:primaryType="nt:unstructured"

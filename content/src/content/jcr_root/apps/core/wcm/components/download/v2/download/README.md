@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-Download (v2)
+Download (v2) Work in progress, do not use in production
 ====
 Download component written in HTL that displays a downloadable asset on the page.
 
@@ -72,10 +72,9 @@ BLOCK cmp-download
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: work-in-progress
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_download\_v2](https://www.adobe.com/go/aem_cmp_download_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_download](https://www.adobe.com/go/aem_cmp_library_download)
-* **Author**: [bkheadwire](https://github.com/bkheadwire)
-* **Co-authors**: [Burkhard Pauli](https://github.com/bpauli)
+* **Author**: [Burkhard Pauli](https://github.com/bpauli)
 
 _If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._
