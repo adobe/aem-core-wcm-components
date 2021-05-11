@@ -20,7 +20,9 @@ import com.adobe.cq.wcm.core.components.it.seljup.tests.list.v1.ListV1IT;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 
+@Tag("group2")
 public class ListV2IT extends ListV1IT {
 
     protected void setComponentResources() {

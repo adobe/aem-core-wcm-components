@@ -33,11 +33,12 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("group2")
 public class ListV1IT extends AuthorBaseUITest {
     private static String searchValue = "Victor Sullivan";
     private static String tag1 = "ellie";
