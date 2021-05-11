@@ -273,6 +273,7 @@ public class AccordionV1IT extends AuthorBaseUITest {
         //2.
         AccordionEditDialog editDialog = accordion.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.openConfigureDialog(parentPath);
         editDialog.openItemsTab();
 
