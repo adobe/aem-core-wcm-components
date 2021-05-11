@@ -96,7 +96,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         ContentFragmentList contentFragmentList = getModelInstanceUnderTest(NO_MODEL);
         assertNotNull(contentFragmentList);
         assertEquals(contentFragmentList.getListItems().size(), 0);
-        assertEquals(ContentFragmentListImpl.RESOURCE_TYPE, contentFragmentList.getExportedType());
+        assertEquals(ContentFragmentListImpl.RESOURCE_TYPE_V1, contentFragmentList.getExportedType());
         Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, NO_MODEL));
     }
 
@@ -129,7 +129,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
             when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class))).thenReturn(query);
 
             ContentFragmentList contentFragmentList = getModelInstanceUnderTest(listName);
-            assertEquals(ContentFragmentListImpl.RESOURCE_TYPE, contentFragmentList.getExportedType());
+            assertEquals(ContentFragmentListImpl.RESOURCE_TYPE_V1, contentFragmentList.getExportedType());
             assertEquals(contentFragmentList.getListItems().size(), 1);
             Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, listName));
 

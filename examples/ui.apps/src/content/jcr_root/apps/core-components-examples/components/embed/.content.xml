@@ -19,5 +19,5 @@
     jcr:description="Embed a third-party widget or safe free-form HTML."
     jcr:primaryType="cq:Component"
     jcr:title="Embed"
-    sling:resourceSuperType="core/wcm/components/embed/v1/embed"
+    sling:resourceSuperType="core/wcm/components/embed/v2/embed"
     componentGroup="Core Components Examples"/>

@@ -1,0 +1,131 @@
+{
+    "jcr:content"    : {
+        "cq:lastModified"  : "Wed Jun 29 2016 14:20:45 GMT+0200",
+        "cq:lastModifiedBy": "admin",
+        "jcr:created"      : "Mon Jul 18 2016 14:30:46 GMT+0200",
+        "jcr:createdBy"    : "admin",
+        "jcr:primaryType"  : "cq:PageContent",
+        "jcr:title"        : "Women"
+    },
+    "jcr:created"    : "Mon Jul 18 2016 14:30:46 GMT+0200",
+    "jcr:createdBy"  : "admin",
+    "jcr:primaryType": "cq:Page",
+  "shirts"         : {
+    "devi-sleeveless-shirt": {
+      "jcr:content"    : {
+        "cq:lastModified"   : "Wed Jun 29 2016 14:20:46 GMT+0200",
+        "cq:lastModifiedBy" : "admin",
+        "jcr:created"       : "Mon Jul 18 2016 14:30:46 GMT+0200",
+        "jcr:createdBy"     : "admin",
+        "jcr:language"      : "en",
+        "jcr:primaryType"   : "cq:PageContent",
+        "jcr:title"         : "Devi Sleeveless Shirt",
+        "sling:resourceType": "coretest/components/structure/page",
+        "header"            : {
+          "jcr:primaryType"        : "nt:unstructured",
+          "sling:resourceType"     : "foundation/components/parsys",
+          "breadcrumb"             : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:createdBy"     : "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+            "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v3/breadcrumb"
+          },
+          "breadcrumb-v2"             : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:createdBy"     : "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+            "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v2/breadcrumb"
+          },
+          "breadcrumb-start-level" : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:createdBy"     : "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+            "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v3/breadcrumb",
+            "startLevel"        : "3",
+            "showHidden"        : "true"
+          },
+          "breadcrumb-show-hidden" : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:createdBy"     : "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+            "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v3/breadcrumb",
+            "showHidden"        : "true"
+          },
+          "breadcrumb-hide-current": {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:createdBy"     : "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+            "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v3/breadcrumb",
+            "hideCurrent"       : "true"
+          },
+          "breadcrumb-style-based": {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:createdBy"     : "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+            "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v3/breadcrumb"
+          }
+        }
+      },
+      "jcr:created"    : "Mon Jul 18 2016 14:30:46 GMT+0200",
+      "jcr:createdBy"  : "admin",
+      "jcr:primaryType": "cq:Page"
+    },
+    "jcr:content"          : {
+      "cq:lastModified"   : "Wed Jun 29 2016 14:20:46 GMT+0200",
+      "cq:lastModifiedBy" : "admin",
+      "jcr:created"       : "Mon Jul 18 2016 14:30:46 GMT+0200",
+      "jcr:createdBy"     : "admin",
+      "jcr:primaryType"   : "cq:PageContent",
+      "jcr:title"         : "Shirts",
+      "hideInNav"         : "true",
+      "sling:resourceType": "coretest/components/structure/page"
+    },
+    "jcr:created"          : "Mon Jul 18 2016 14:30:46 GMT+0200",
+    "jcr:createdBy"        : "admin",
+    "jcr:primaryType"      : "cq:Page"
+  },
+  "shirts2"         : {
+    "devi-sleeveless-shirt": {
+      "jcr:content"    : {
+        "cq:lastModified"   : "Wed Jun 29 2016 14:20:46 GMT+0200",
+        "cq:lastModifiedBy" : "admin",
+        "jcr:created"       : "Mon Jul 18 2016 14:30:46 GMT+0200",
+        "jcr:createdBy"     : "admin",
+        "jcr:language"      : "en",
+        "jcr:primaryType"   : "cq:PageContent",
+        "jcr:title"         : "Devi Sleeveless Shirt",
+        "sling:resourceType": "coretest/components/structure/page",
+        "header"            : {
+          "jcr:primaryType"        : "nt:unstructured",
+          "sling:resourceType"     : "foundation/components/parsys",
+          "breadcrumb-page-without-jcrcontent" : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:createdBy"     : "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+            "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v3/breadcrumb"
+          }
+        }
+      },
+      "jcr:created"    : "Mon Jul 18 2016 14:30:46 GMT+0200",
+      "jcr:createdBy"  : "admin",
+      "jcr:primaryType": "cq:Page"
+    },
+    "jcr:created"          : "Mon Jul 18 2016 14:30:46 GMT+0200",
+    "jcr:createdBy"        : "admin",
+    "jcr:primaryType"      : "cq:Page"
+  }
+}

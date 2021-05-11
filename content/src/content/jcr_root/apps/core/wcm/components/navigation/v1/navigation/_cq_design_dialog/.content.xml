@@ -41,7 +41,7 @@
                             <navigationRoot
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="cq/gui/components/coral/common/form/pagefield"
-                                fieldDescription="The root page from which to build the navigation. Can be a blueprint master, language master or regular page."
+                                fieldDescription="The root page from which to build the navigation. Can be a blueprint source, language source or regular page."
                                 fieldLabel="Navigation Root"
                                 rootPath="/content"
                                 name="./navigationRoot"
