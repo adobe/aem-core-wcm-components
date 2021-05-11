@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.it.http;
 
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -81,5 +82,13 @@ public class PageIT {
         GraniteAssert.assertRegExFind(content, "<link rel=\"stylesheet\" href=\"/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.min.css\" type=\"text/css\">");
         GraniteAssert.assertRegExFind(content, "<meta name=\"cq:sw_path\" content=\"/core-components.simple-pagesw.js\"/>");
         GraniteAssert.assertRegExFind(content, "<script src=\"/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.min.js\"></script>");
+    }
+
+    @Test
+    public void testServiceWorkerConfiguration() throws ClientException {
+        String content = adminAuthor.doGet("/content/core-components/simple-page.sw.js", 200).getContent();
+
+        String swconfig = "const swconfig = {\"pwaCachestrategy\":\"staleWhileRevalidate\",\"pwaPrecache\":[\"/content/dam/foo/pwa-logo.png\",\"/content/foo/us/en.html\",\"/content/foo/us/en/manifest.webmanifest\"],\"pwaCachingpaths\":[\"http://fonts.gstatic.com\"],\"pwaOfflineClientlibs\":[\"/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.min.css\",\"/etc.clientlibs/clientlibs/granite/utils.min.js\",\"/etc.clientlibs/clientlibs/granite/jquery/granite.min.js\",\"/etc.clientlibs/clientlibs/granite/jquery.min.js\",\"/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.min.js\"]};";
+        Assert.assertTrue(content.contains(swconfig));
     }
 }
