@@ -56,21 +56,19 @@ public class PWAImpl implements PWA {
         Page page = pageManager.getContainingPage(resource);
         while (page != null) {
             Resource contentResource = page.getContentResource();
-            if (contentResource == null) {
-                page = page.getParent();
-                continue;
-            }
-            ValueMap valueMap = contentResource.getValueMap();
-            Boolean isPWAEnabled = valueMap.get(PN_PWA_ENABLED, Boolean.class);
-            if (isPWAEnabled != null && isPWAEnabled) {
-                this.isEnabled = true;
-                this.themeColor = colorToHex(valueMap.get(PN_PWA_THEME_COLOR, ""));
-                this.iconPath = valueMap.get(PN_PWA_ICON_PATH, "");
-                String startURL = valueMap.get(PN_PWA_START_URL, "");
-                this.manifestPath = replaceSuffix(startURL, MANIFEST_NAME);
-                String mappingName = page.getPath().replace(CONTENT_PATH, "").replace("/", ".");
-                this.serviceWorkerPath = "/" + mappingName + "sw.js";
-                break;
+            if (contentResource != null) {
+                ValueMap valueMap = contentResource.getValueMap();
+                Boolean isPWAEnabled = valueMap.get(PN_PWA_ENABLED, Boolean.class);
+                if (isPWAEnabled != null && isPWAEnabled) {
+                    this.isEnabled = true;
+                    this.themeColor = colorToHex(valueMap.get(PN_PWA_THEME_COLOR, ""));
+                    this.iconPath = valueMap.get(PN_PWA_ICON_PATH, "");
+                    String startURL = valueMap.get(PN_PWA_START_URL, "");
+                    this.manifestPath = replaceSuffix(startURL, MANIFEST_NAME);
+                    String mappingName = page.getPath().replace(CONTENT_PATH, "").replace("/", ".");
+                    this.serviceWorkerPath = "/" + mappingName + "sw.js";
+                    break;
+                }
             }
             page = page.getParent();
         }
