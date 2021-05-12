@@ -231,7 +231,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <slingUrl>http://${aem.host}:${aem.port}/system/console</slingUrl>
+                            <slingUrl>http://${aem.host}:${aem.port}${aem.contextPath}/system/console</slingUrl>
                             <failOnError>true</failOnError>
                         </configuration>
                     </plugin>
