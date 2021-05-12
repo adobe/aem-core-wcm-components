@@ -23,6 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.rules.ErrorCollector;
 
 import com.adobe.cq.testing.client.CQClient;
@@ -31,6 +32,7 @@ import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import static org.junit.Assert.assertEquals;
@@ -67,6 +69,7 @@ public class PageIT {
     }
 
     @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testPWAProperties() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/simple-page.html", 200).getContent();
         adminAuthor.getUrl("/");
@@ -95,6 +98,7 @@ public class PageIT {
     }
 
     @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testServiceWorkerConfiguration() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/simple-page.sw.js", 200).getContent();
         Pattern swconfigPattern = Pattern.compile("const swconfig = (?<swconfigjson>\\{.*})", Pattern.MULTILINE);
@@ -111,9 +115,9 @@ public class PageIT {
         JsonArray pwaPrecache = swconfigJson.get("pwaPrecache").getAsJsonArray();
         assertNotNull(pwaPrecache);
         assertEquals(3, pwaPrecache.size());
-        assertEquals("/content/dam/foo/pwa-logo.png", pwaPrecache.get(0).getAsString());
-        assertEquals("/content/foo/us/en.html", pwaPrecache.get(1).getAsString());
-        assertEquals("/content/foo/us/en/manifest.webmanifest", pwaPrecache.get(2).getAsString());
+        assertTrue(containsMatchingRegex(pwaPrecache, "/content/dam/foo/pwa-logo.png"));
+        assertTrue(containsMatchingRegex(pwaPrecache, "/content/foo/us/en.html"));
+        assertTrue(containsMatchingRegex(pwaPrecache, "/content/foo/us/en/manifest.webmanifest"));
 
         // Check for cache on first use items
         assertEquals("http://fonts.gstatic.com", swconfigJson.get("pwaCachingpaths").getAsJsonArray().getAsString());
@@ -122,7 +126,17 @@ public class PageIT {
         JsonArray pwaOfflineClientlibs = swconfigJson.get("pwaOfflineClientlibs").getAsJsonArray();
         assertNotNull(pwaOfflineClientlibs);
         assertEquals(2, pwaOfflineClientlibs.size());
-        GraniteAssert.assertRegExFind(pwaOfflineClientlibs.get(0).getAsString(), ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.css");
-        GraniteAssert.assertRegExFind(pwaOfflineClientlibs.get(1).getAsString(), ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.js");
+        assertTrue(containsMatchingRegex(pwaOfflineClientlibs, ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.css"));
+        assertTrue(containsMatchingRegex(pwaOfflineClientlibs, ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.js"));
+    }
+
+    boolean containsMatchingRegex(JsonArray jsonArray, String regex) {
+        Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
+        for (JsonElement jsonElement : jsonArray) {
+            if (pattern.matcher(jsonElement.getAsString()).find()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
