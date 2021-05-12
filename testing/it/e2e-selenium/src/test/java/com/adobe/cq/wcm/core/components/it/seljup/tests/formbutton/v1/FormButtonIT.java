@@ -42,7 +42,7 @@ import org.openqa.selenium.WebDriver;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
-public class FormButtonV1IT extends AuthorBaseUITest {
+public class FormButtonIT extends AuthorBaseUITest {
 
     protected String testPage;
     protected String proxyComponentPath;

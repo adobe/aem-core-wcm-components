@@ -36,7 +36,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
-public class FormHiddenV1IT extends AuthorBaseUITest {
+public class FormHiddenIT extends AuthorBaseUITest {
 
     // element name
     public static String elemName = "hiddenComponent_name";

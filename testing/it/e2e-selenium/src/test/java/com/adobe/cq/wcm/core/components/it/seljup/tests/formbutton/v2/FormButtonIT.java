@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v2;
 
 import com.adobe.cq.wcm.core.components.it.seljup.components.formbutton.v2.FormButton;
-import com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v1.FormButtonV1IT;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 
@@ -26,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
 @Tag("group1")
-public class FormButtonV2IT extends FormButtonV1IT {
+public class FormButtonIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v1.FormButtonIT {
 
     /**
      * Before Test Case

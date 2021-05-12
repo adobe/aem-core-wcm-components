@@ -14,20 +14,23 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2;
+package com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.tests.list.v1.ListV1IT;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
-@Tag("group2")
-public class ListV2IT extends ListV1IT {
+@Tag("group1")
+public class FormComponentsIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v1.FormComponentsIT {
 
-    protected void setComponentResources() {
-        textRT = Commons.rtText_v2;
-        listRT = Commons.rtList_v2;
+
+    public void setComponentResources() {
+        formContainerRT = Commons.rtFormContainer_v2;
+        formTextRT = Commons.rtFormText_v2;
+        formHiddenRT = Commons.rtFormHidden_v2;
+        formOptionsRT = Commons.rtFormOptions_v2;
+        formButtonRT = Commons.rtFormButton_v2;
     }
 
     @BeforeEach
@@ -35,4 +38,5 @@ public class ListV2IT extends ListV1IT {
         setComponentResources();
         setup();
     }
+
 }

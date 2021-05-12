@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.TimeoutException;
 
 @Tag("group1")
-public class FormTextV1IT extends AuthorBaseUITest {
+public class FormTextIT extends AuthorBaseUITest {
 
     protected FormTextTests formTextTests;
 

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.TimeoutException;
 
 @Tag("group2")
-public class ImageV2IT extends AuthorBaseUITest {
+public class ImageIT extends AuthorBaseUITest {
 
     private ImageTests imageTests;
     private static final String clientlibs = "core.wcm.components.image.v2";

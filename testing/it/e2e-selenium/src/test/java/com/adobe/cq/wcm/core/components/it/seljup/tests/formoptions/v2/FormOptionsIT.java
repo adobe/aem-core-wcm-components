@@ -14,28 +14,25 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v2;
+package com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.formtext.v2.FormText;
-import com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.FormTextTests;
-import com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v1.FormTextV1IT;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formoptions.v2.FormOptions;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
 @Tag("group1")
-public class FormTextV2IT extends FormTextV1IT {
+public class FormOptionsIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v1.FormOptionsIT {
+
+    public void setComponentResources() {
+        formOptionsRT = Commons.rtFormOptions_v2;
+    }
+
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
-        formTextTests = new FormTextTests();
-        formTextTests.setup(adminClient, Commons.rtFormText_v2, rootPage, defaultPageTemplate, new FormText());
+        setComponentResources();
+        formOptions = new FormOptions();
+        setup();
     }
-
-    @AfterEach
-    public void cleanupAfterEach() throws ClientException, InterruptedException {
-        formTextTests.cleanup(adminClient);
-    }
-
 }

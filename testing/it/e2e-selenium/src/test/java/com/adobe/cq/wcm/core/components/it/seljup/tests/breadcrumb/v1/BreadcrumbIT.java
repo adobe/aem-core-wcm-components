@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag("group2")
-public class BreadcrumbV1IT extends AuthorBaseUITest {
+public class BreadcrumbIT extends AuthorBaseUITest {
 
     protected BreadcrumbTests breadcrumbTests;
 

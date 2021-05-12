@@ -50,7 +50,7 @@ import org.openqa.selenium.WebDriver;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
-public class AccordionV1IT extends AuthorBaseUITest {
+public class AccordionIT extends AuthorBaseUITest {
 
     protected String testPage;
     private static final String clientlibs = "core.wcm.components.accordion.v1";

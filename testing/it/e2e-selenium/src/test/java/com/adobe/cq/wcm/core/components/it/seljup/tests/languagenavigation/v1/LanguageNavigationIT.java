@@ -36,7 +36,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
-public class LanguageNavigationV1IT extends AuthorBaseUITest {
+public class LanguageNavigationIT extends AuthorBaseUITest {
 
     private String proxyPath;
     private String siteRoot;

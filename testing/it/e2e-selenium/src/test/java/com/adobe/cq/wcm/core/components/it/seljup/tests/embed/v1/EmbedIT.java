@@ -40,7 +40,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
-public class EmbedV1IT extends AuthorBaseUITest {
+public class EmbedIT extends AuthorBaseUITest {
 
     private static String componentName = "embed";
     private static String youtubeEmbedField = "core/wcm/components/embed/v1/embed/embeddable/youtube";

@@ -37,7 +37,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
-public class FormOptionsV1IT extends AuthorBaseUITest {
+public class FormOptionsIT extends AuthorBaseUITest {
 
     protected String testPage;
     private String compPath;

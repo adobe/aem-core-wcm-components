@@ -37,7 +37,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
-public class ContentFragmentV1IT extends AuthorBaseUITest {
+public class ContentFragmentIT extends AuthorBaseUITest {
     private static String PN_VARIATION_NAME = "./variationName";
     private static String PN_ELEMENT_NAMES = "./elementNames";
     private static String DESCRIPTION = "component-description";

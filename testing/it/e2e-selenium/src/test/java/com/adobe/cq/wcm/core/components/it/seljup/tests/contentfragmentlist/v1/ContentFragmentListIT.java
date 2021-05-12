@@ -39,7 +39,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
-public class ContentFragmentListV1IT extends AuthorBaseUITest {
+public class ContentFragmentListIT extends AuthorBaseUITest {
     private static String PN_MODEL_PATH = "./modelPath";
     private static String PN_ELEMENT_NAMES = "./elementNames";
     private static String DESCRIPTION = "component-description";
