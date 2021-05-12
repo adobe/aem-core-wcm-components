@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2021-01-21T11:25:03.532+01:00"
+        cq:lastModified="{Date}2021-05-12T13:15:57.599+02:00"
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components/settings/wcm/templates/simple-template"
         jcr:primaryType="cq:PageContent"
@@ -93,13 +93,11 @@
                     </container_1128719348>
                 </container>
                 <title
-                    jcr:created="{Date}2020-11-27T19:40:06.841+02:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2020-11-27T19:42:16.601+02:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Large Image"
-                    sling:resourceType="core/wcm/components/title/v3/title"
+                    jcr:title="Linked Title"
+                    sling:resourceType="core/wcm/components/title/v2/title"
+                    id="linked-title"
+                    linkURL="/content/core-components/simple-page/simple-subpage"
                     type="h2"/>
                 <image
                     jcr:created="{Date}2020-11-27T19:42:34.014+02:00"
@@ -112,4 +110,5 @@
             </container>
         </root>
     </jcr:content>
+    <simple-subpage/>
 </jcr:root>
