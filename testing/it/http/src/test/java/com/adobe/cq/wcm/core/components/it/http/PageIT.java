@@ -30,6 +30,7 @@ import com.adobe.cq.testing.junit.assertion.GraniteAssert;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import static org.junit.Assert.assertEquals;
@@ -102,9 +103,26 @@ public class PageIT {
         Gson gson = new Gson();
         JsonObject swconfigJson = gson.fromJson(swconfigMatcher.group("swconfigjson"), JsonObject.class);
         assertNotNull(swconfigJson);
+
+        // Check caching strategy
         assertEquals("staleWhileRevalidate", swconfigJson.get("pwaCachestrategy").getAsString());
-        assertNotNull(swconfigJson.get("pwaPrecache").getAsJsonArray());
-        assertNotNull(swconfigJson.get("pwaCachingpaths").getAsJsonArray());
-        //assertNotNull(swconfigJson.get("pwaOfflineClientlibs").getAsJsonArray());
+
+        // Check precache / warm cache items
+        JsonArray pwaPrecache = swconfigJson.get("pwaPrecache").getAsJsonArray();
+        assertNotNull(pwaPrecache);
+        assertEquals(3, pwaPrecache.size());
+        assertEquals("/content/dam/foo/pwa-logo.png", pwaPrecache.get(0).getAsString());
+        assertEquals("/content/foo/us/en.html", pwaPrecache.get(1).getAsString());
+        assertEquals("/content/foo/us/en/manifest.webmanifest", pwaPrecache.get(2).getAsString());
+
+        // Check for cache on first use items
+        assertEquals("http://fonts.gstatic.com", swconfigJson.get("pwaCachingpaths").getAsJsonArray().getAsString());
+
+        // Check for clientlibs and static resources
+        JsonArray pwaOfflineClientlibs = swconfigJson.get("pwaOfflineClientlibs").getAsJsonArray();
+        assertNotNull(pwaOfflineClientlibs);
+        assertEquals(2, pwaOfflineClientlibs.size());
+        GraniteAssert.assertRegExFind(pwaOfflineClientlibs.get(0).getAsString(), ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.css");
+        GraniteAssert.assertRegExFind(pwaOfflineClientlibs.get(1).getAsString(), ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.js");
     }
 }

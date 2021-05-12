@@ -14,7 +14,7 @@
         pwaDisplay="standalone"
         pwaEnabled="{Boolean}true"
         pwaIconPath="/content/dam/foo/pwa-logo.png"
-        pwaOfflineClientlibs="[jquery,granite.jquery,core.wcm.components.page.v2.pwa]"
+        pwaOfflineClientlibs="[core.wcm.components.page.v2.pwa]"
         pwaOrientation="any"
         pwaPrecache="[/content/dam/foo/pwa-logo.png,/content/foo/us/en.html,/content/foo/us/en/manifest.webmanifest]"
         pwaStartURL="/content/foo/us/en.html"
