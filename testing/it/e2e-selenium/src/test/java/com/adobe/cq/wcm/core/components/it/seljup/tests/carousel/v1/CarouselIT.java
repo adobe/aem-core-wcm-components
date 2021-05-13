@@ -286,8 +286,6 @@ public class CarouselIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Panel Select")
     public void PanelSelect() throws InterruptedException {
-        CQOverlay cqOverlay = carousel.getCQOverlay();
-
         String component = "[data-type='Editable'][data-path='" + testPage + Commons.relParentCompPath + componentName +"']";
         WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
@@ -298,7 +296,7 @@ public class CarouselIT extends AuthorBaseUITest {
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.isPanelSelectPresent(), "Panel Select should be present");
         Commons.openPanelSelect();
-
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         PanelSelector panelSelector = new PanelSelector();
         assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
 
