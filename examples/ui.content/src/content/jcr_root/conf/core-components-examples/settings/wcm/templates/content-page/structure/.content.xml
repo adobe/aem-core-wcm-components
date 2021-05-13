@@ -62,7 +62,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/accordion"
-                    expandedItems="[item_1579021121673,item_1579021131667,item_1579021109267,item_1579021109268,item_1579021109269]"
+                    expandedItems="[item_1579021121673,item_1579021131667,item_1579021109267,item_1579021109268,item_1579021109269,item_1579021109270]"
                     singleExpansion="false">
                     <item_1579021121673
                         cq:panelTitle="Templating"
@@ -105,6 +105,7 @@
                         structureDepth="1"
                         structureStart="1"/>
                     <item_1579021109269/> <!-- Commerce menu items -->
+                    <item_1579021109270/> <!-- Forms And Communications Portal menu items -->
                 </accordion>
             </sidebar>
             <responsivegrid
