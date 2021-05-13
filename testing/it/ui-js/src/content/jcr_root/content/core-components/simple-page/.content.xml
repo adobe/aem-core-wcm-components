@@ -8,6 +8,17 @@
         jcr:primaryType="cq:PageContent"
         jcr:title="Simple Page"
         sling:resourceType="core/wcm/components/page/v2/page"
+        pwaBackgroundColor="#B10DC9"
+        pwaCachestrategy="staleWhileRevalidate"
+        pwaCachingpaths="[http://fonts.gstatic.com]"
+        pwaDisplay="standalone"
+        pwaEnabled="{Boolean}true"
+        pwaIconPath="/content/dam/foo/pwa-logo.png"
+        pwaOfflineClientlibs="[core.wcm.components.page.v2.pwa]"
+        pwaOrientation="any"
+        pwaPrecache="[/content/dam/foo/pwa-logo.png,/content/foo/us/en.html,/content/foo/us/en/manifest.webmanifest]"
+        pwaStartURL="/content/foo/us/en.html"
+        pwaThemeColor="#FF851B"
         brandSlug="Core Components"
         brandSlug_override="true">
         <root
