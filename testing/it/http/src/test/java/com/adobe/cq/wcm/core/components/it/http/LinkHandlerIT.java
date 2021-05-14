@@ -49,7 +49,7 @@ public class LinkHandlerIT {
     public ErrorCollector collector = new ErrorCollector();
 
     private static final String RESOURCE_RESOLVER_FACTORY_PID = "org.apache.sling.jcr.resource.internal.JcrResourceResolverFactoryImpl";
-    private static final int TIMEOUT = 120000;
+    private static final int TIMEOUT = 300000;
     private static final int DELAY = 1000;
 
     static CQClient adminAuthor;
