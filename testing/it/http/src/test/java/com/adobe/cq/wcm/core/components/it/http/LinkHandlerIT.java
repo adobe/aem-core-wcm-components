@@ -67,9 +67,9 @@ public class LinkHandlerIT {
     public void testMappedLinkedTitle() throws Exception {
         configs.add(new OsgiInstanceConfig(adminAuthor, RESOURCE_RESOLVER_FACTORY_PID));
         configureResourceResolverFactory();
-        new Polling(getLinkCallable("/simple-page/simple-subpage.html")).poll(TIMEOUT, DELAY);
+        new Polling(getLinkCallable(adminAuthor.getUrl().getPath() + "simple-page/simple-subpage.html")).poll(TIMEOUT, DELAY);
         configs.restore();
-        new Polling(getLinkCallable("/content/core-components/simple-page/simple-subpage.html")).poll(TIMEOUT, DELAY);
+        new Polling(getLinkCallable(adminAuthor.getUrl().getPath() + "content/core-components/simple-page/simple-subpage.html")).poll(TIMEOUT, DELAY);
     }
 
     private Callable<Boolean> getLinkCallable(String expectedLinkURL) {
