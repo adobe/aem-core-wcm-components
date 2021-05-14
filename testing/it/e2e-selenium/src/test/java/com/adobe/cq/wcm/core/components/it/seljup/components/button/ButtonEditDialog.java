@@ -50,6 +50,7 @@ public class ButtonEditDialog extends Dialog {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
+        content().find(Selectors.SELECTOR_BUTTON_TITLE).click();
         content().find(Selectors.SELECTOR_BUTTON_TITLE).sendKeys(value);
     }
 
@@ -57,6 +58,7 @@ public class ButtonEditDialog extends Dialog {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
+        content().find(Selectors.SELECTOR_BUTTON_NAME).click();
         content().find(Selectors.SELECTOR_BUTTON_NAME).sendKeys(value);
     }
 
@@ -64,6 +66,7 @@ public class ButtonEditDialog extends Dialog {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
+        content().find(Selectors.SELECTOR_BUTTON_VALUE).click();
         content().find(Selectors.SELECTOR_BUTTON_VALUE).sendKeys(value);
     }
 
