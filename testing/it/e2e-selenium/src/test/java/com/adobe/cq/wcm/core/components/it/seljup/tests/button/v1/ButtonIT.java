@@ -83,7 +83,7 @@ public class ButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button text")
-    void SetText() throws TimeoutException, InterruptedException {
+    void testSetText() throws TimeoutException, InterruptedException {
         final String testTitle = "test button";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.setTitleField(testTitle);
@@ -104,7 +104,7 @@ public class ButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button link")
-    void SetLink() throws TimeoutException, InterruptedException {
+    void testSetLink() throws TimeoutException, InterruptedException {
         String link = "https://www.adobe.com";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.setLinkField(link);
@@ -125,7 +125,7 @@ public class ButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button icon")
-    void SetIcon() throws InterruptedException, TimeoutException {
+    void testSetIcon() throws InterruptedException, TimeoutException {
         String icon = "email";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.getIcon().setValue(icon);

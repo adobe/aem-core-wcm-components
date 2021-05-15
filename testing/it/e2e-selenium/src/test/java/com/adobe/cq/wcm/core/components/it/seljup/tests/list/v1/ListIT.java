@@ -154,7 +154,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Build a list using direct child pages")
-    public void createListDirectChildren() throws ClientException, TimeoutException, InterruptedException {
+    public void testCreateListDirectChildren() throws ClientException, TimeoutException, InterruptedException {
         // create 3 direct sub pages
         String subpage1Path = authorClient.createPage("direct_1", "direct_1", testPage, defaultPageTemplate).getSlingPath();
         String subpage2Path = authorClient.createPage("direct_2", "direct_2", testPage, defaultPageTemplate).getSlingPath();
@@ -178,7 +178,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Build a list using child pages from a different location")
-    public void createListChildren() throws TimeoutException, InterruptedException {
+    public void testCreateListChildren() throws TimeoutException, InterruptedException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         // set parent page
@@ -199,7 +199,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Build a list using child pages and sub child pages")
-    public void listSubChildren() throws TimeoutException, InterruptedException {
+    public void testListSubChildren() throws TimeoutException, InterruptedException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -227,7 +227,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Build a fixed list")
-    public void createFixedList() throws TimeoutException, InterruptedException {
+    public void testCreateFixedList() throws TimeoutException, InterruptedException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -253,7 +253,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Build a list using search")
-    public void createListBySearch() throws InterruptedException, TimeoutException {
+    public void testCreateListBySearch() throws InterruptedException, TimeoutException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -278,7 +278,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Build a list matching any tags defined")
-    public void createListAnyTagsMatching() throws TimeoutException, InterruptedException {
+    public void testCreateListAnyTagsMatching() throws TimeoutException, InterruptedException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -307,7 +307,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Build a list matching all tags defined")
-    public void createListAllTagsMatching() throws InterruptedException, TimeoutException {
+    public void testCreateListAllTagsMatching() throws InterruptedException, TimeoutException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -334,7 +334,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: order list by title")
-    public void orderByTitle() throws TimeoutException, InterruptedException {
+    public void testOrderByTitle() throws TimeoutException, InterruptedException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -369,7 +369,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: change ordering of a list to descending")
-    public void changeOrderingTitle() throws InterruptedException, TimeoutException {
+    public void testChangeOrderingTitle() throws InterruptedException, TimeoutException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -404,7 +404,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: set max item")
-    public void setMaxItems() throws TimeoutException, InterruptedException {
+    public void testSetMaxItems() throws TimeoutException, InterruptedException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -438,7 +438,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: order list by last modified date")
-    public void orderByLastModifiedDate() throws ClientException, TimeoutException, InterruptedException {
+    public void testOrderByLastModifiedDate() throws ClientException, TimeoutException, InterruptedException {
         // modify page 5
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("jcr:title", "Modified Page 5");
@@ -476,7 +476,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: order list by last modified date")
-    public void changeOrderingDate() throws ClientException, TimeoutException, InterruptedException {
+    public void testChangeOrderingDate() throws ClientException, TimeoutException, InterruptedException {
         // modify page 3
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("jcr:title", "Modified Page 3");
@@ -514,7 +514,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: item settings - link items option")
-        public void linkItemsForList() throws InterruptedException, TimeoutException {
+        public void testLinkItemsForList() throws InterruptedException, TimeoutException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -535,7 +535,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: item settings - show description")
-    public void showDescriptionForList() throws InterruptedException, TimeoutException {
+    public void testShowDescriptionForList() throws InterruptedException, TimeoutException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();
@@ -556,7 +556,7 @@ public class ListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: item settings - show date")
-    public void showDateForList() throws InterruptedException, TimeoutException {
+    public void testShowDateForList() throws InterruptedException, TimeoutException {
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
         ListEditDialog editDialog = list.getEditDialog();

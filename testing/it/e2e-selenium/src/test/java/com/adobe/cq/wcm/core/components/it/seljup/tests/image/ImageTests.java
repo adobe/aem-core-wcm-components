@@ -106,7 +106,7 @@ public class ImageTests {
 
     }
 
-    public void addImageAndAltText() throws TimeoutException, InterruptedException {
+    public void testAddImageAndAltText() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         setMinimalProps();
         Commons.saveConfigureDialog();
@@ -116,7 +116,7 @@ public class ImageTests {
         assertTrue(image.isAltTextSet(altText),"Alternate text should be set");
     }
 
-    public void setLink() throws TimeoutException, InterruptedException {
+    public void testSetLink() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         setMinimalProps();
         image.getEditDialog().setLinkURL(redirectPage);
@@ -129,7 +129,7 @@ public class ImageTests {
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
     }
 
-    public void setCaption() throws TimeoutException, InterruptedException {
+    public void testSetCaption() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         setMinimalProps();
         image.getEditDialog().setTitle(captionText);
@@ -139,7 +139,7 @@ public class ImageTests {
         assertTrue(image.isTitleSet(captionText),"Title should be set");
     }
 
-    public void setCaptionAsPopup() throws TimeoutException, InterruptedException {
+    public void testSetCaptionAsPopup() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         setMinimalProps();
         ImageEditDialog editDialog = image.getEditDialog();
@@ -151,7 +151,7 @@ public class ImageTests {
         assertTrue(image.isImageWithTitle(captionText),"Title should be set");
     }
 
-    public void setImageAsDecorative() throws TimeoutException, InterruptedException {
+    public void testSetImageAsDecorative() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         setMinimalProps();
         ImageEditDialog editDialog = image.getEditDialog();
@@ -163,7 +163,7 @@ public class ImageTests {
         assertTrue(!image.isImageWithAltText(),"image should be rendered without alt text");
     }
 
-    public void dragImage() throws TimeoutException, InterruptedException {
+    private void dragImage() throws TimeoutException, InterruptedException {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.setAssetFilter(testAssetsPath);
         Commons.openEditDialog(editorPage, compPath);
@@ -171,7 +171,7 @@ public class ImageTests {
 
     }
 
-    public void addImage() throws TimeoutException, InterruptedException {
+    public void testAddImage() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();
         Commons.saveConfigureDialog();
@@ -181,7 +181,7 @@ public class ImageTests {
             + " and title " + originalDamTitle);
     }
 
-    public void addAltTextAndTitle() throws TimeoutException, InterruptedException {
+    public void testAddAltTextAndTitle() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();
         ImageEditDialog editDialog = image.getEditDialog();
@@ -197,7 +197,7 @@ public class ImageTests {
             + " and title " + captionText);
     }
 
-    public void disableCaptionAsPopup() throws TimeoutException, InterruptedException {
+    public void testDisableCaptionAsPopup() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();
         ImageEditDialog editDialog = image.getEditDialog();
@@ -210,7 +210,7 @@ public class ImageTests {
         assertTrue(image.isTitleSet(originalDamTitle),"Title should be set");
     }
 
-    public void setImageAsDecorativeV2() throws TimeoutException, InterruptedException {
+    public void testSetImageAsDecorativeV2() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();
         ImageEditDialog editDialog = image.getEditDialog();

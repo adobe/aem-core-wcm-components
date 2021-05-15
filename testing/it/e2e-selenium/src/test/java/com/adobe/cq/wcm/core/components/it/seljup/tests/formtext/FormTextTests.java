@@ -71,14 +71,14 @@ public class FormTextTests {
         Commons.deleteProxyComponent(client, compPath);
     }
 
-    public void checkLabelMandatory() throws InterruptedException, TimeoutException {
+    public void testCheckLabelMandatory() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         Commons.saveConfigureDialog();
         assertTrue(Commons.iseditDialogVisible(),"Config Dialog should be visible");
         assertTrue(formText.getConfigDialog().isMandatoryFieldsInvalid(),"Mandatory field Name should be invalid");
     }
 
-    public void setLabel() throws InterruptedException, TimeoutException {
+    public void testSetLabel() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -87,7 +87,7 @@ public class FormTextTests {
         assertTrue(formText.isLabelRendered(label), "Title should be rendered");
     }
 
-    public void hideLabel() throws InterruptedException, TimeoutException {
+    public void testHideLabel() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -104,7 +104,7 @@ public class FormTextTests {
         assertTrue(formText.isTextAreaAriaLabelSet(elemName,label),"aria-label attribute should be set on the textarea field");
     }
 
-    public void setElementName() throws InterruptedException, TimeoutException {
+    public void testSetElementName() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -119,7 +119,7 @@ public class FormTextTests {
         assertTrue(formText.isTextAreaSet(elemName),"Text input should be set");
     }
 
-    public void setValue() throws InterruptedException, TimeoutException {
+    public void testSetValue() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -135,7 +135,7 @@ public class FormTextTests {
         assertTrue(formText.isTextAreaDefaultValueSet(elemName, defaultValue),"textarea default value should be set correctly");
     }
 
-    public void createTextInput() throws InterruptedException, TimeoutException {
+    public void testCreateTextInput() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -145,7 +145,7 @@ public class FormTextTests {
         assertTrue(formText.isInputSet(elemName),"input should be rendered correctly");
     }
 
-    public void createTextarea() throws InterruptedException, TimeoutException {
+    public void testCreateTextarea() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -155,7 +155,7 @@ public class FormTextTests {
         assertTrue(formText.isTextAreaSet(elemName),"text area should be rendered correctly");
     }
 
-    public void createEmail() throws InterruptedException, TimeoutException {
+    public void testCreateEmail() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -165,7 +165,7 @@ public class FormTextTests {
         assertTrue(formText.isEmailSet(elemName),"email should be rendered correctly");
     }
 
-    public void createTel() throws InterruptedException, TimeoutException {
+    public void testCreateTel() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -175,7 +175,7 @@ public class FormTextTests {
         assertTrue(formText.isTelSet(elemName),"telephone input should be rendered correctly");
     }
 
-    public void createDate() throws InterruptedException, TimeoutException {
+    public void testCreateDate() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -185,7 +185,7 @@ public class FormTextTests {
         assertTrue(formText.isDateSet(elemName),"telephone input should be rendered correctly");
     }
 
-    public void createNumber() throws InterruptedException, TimeoutException {
+    public void testCreateNumber() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -195,7 +195,7 @@ public class FormTextTests {
         assertTrue(formText.isNumberSet(elemName),"number input should be rendered correctly");
     }
 
-    public void createPassword() throws InterruptedException, TimeoutException {
+    public void testCreatePassword() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -205,7 +205,7 @@ public class FormTextTests {
         assertTrue(formText.isPasswordSet(elemName),"password input should be rendered correctly");
     }
 
-    public void setHelpMessage() throws InterruptedException, TimeoutException {
+    public void testSetHelpMessage() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -216,7 +216,7 @@ public class FormTextTests {
         assertTrue(formText.isHelpMessageRendered(helpMessage),"Help message should be rendered correctly");
     }
 
-    public void setHelpMessageAsPlaceholder() throws InterruptedException, TimeoutException {
+    public void testSetHelpMessageAsPlaceholder() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -228,13 +228,13 @@ public class FormTextTests {
         assertTrue(formText.isHelpRenderedAsTooltip(elemName, helpMessage),"Help message should be rendered as tooltip");
     }
 
-    public void checkAvailableConstraints() throws TimeoutException, InterruptedException {
+    public void testCheckAvailableConstraints() throws TimeoutException, InterruptedException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         assertTrue(configDialog.checkAllConstraintsAvailable(),"All constraints should be available");
     }
 
-    public void setReadOnly() throws InterruptedException, TimeoutException {
+    public void testSetReadOnly() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -251,7 +251,7 @@ public class FormTextTests {
         assertTrue(formText.isTextAreaReadOnly(elemName), "textarea field should be set to read only");
     }
 
-    public void setRequired() throws TimeoutException, InterruptedException {
+    public void testSetRequired() throws TimeoutException, InterruptedException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);
@@ -270,7 +270,7 @@ public class FormTextTests {
         assertTrue(formText.isTextAreaRequiredMessageSet(elemName, requiredMessage), "Required message should be set");
     }
 
-    public void setConstraintMessage() throws InterruptedException, TimeoutException {
+    public void testSetConstraintMessage() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
         configDialog.setMandatoryFields(elemName, label);

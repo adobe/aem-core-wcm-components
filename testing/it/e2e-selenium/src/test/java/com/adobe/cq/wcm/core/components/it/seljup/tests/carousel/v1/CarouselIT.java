@@ -187,7 +187,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Edit Dialog: Add child items")
-    public void AddItem() throws InterruptedException {
+    public void testAddItem() throws InterruptedException {
         createItems();
     }
 
@@ -205,7 +205,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Edit Dialog : Remove items")
-    public void RemoveItem() throws InterruptedException {
+    public void testRemoveItem() throws InterruptedException {
         createItems();
         CarouselEditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
@@ -238,7 +238,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Edit Dialog : Reorder items")
-    public void ReorderItem() throws InterruptedException {
+    public void testReorderItem() throws InterruptedException {
         createItems();
         CarouselEditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
@@ -259,7 +259,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Autoplay group toggle")
-    public void AutoplayGroup() throws InterruptedException {
+    public void testAutoplayGroup() throws InterruptedException {
         createItems();
         Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         CarouselEditDialog editDialog = carousel.getEditDialog();
@@ -285,7 +285,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Panel Select")
-    public void PanelSelect() throws InterruptedException {
+    public void testPanelSelect() throws InterruptedException {
         String component = "[data-type='Editable'][data-path='" + testPage + Commons.relParentCompPath + componentName +"']";
         WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
@@ -335,7 +335,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Accessibility : Navigate Right")
-    public void AccessibilityNavigateRight() throws InterruptedException {
+    public void testAccessibilityNavigateRight() throws InterruptedException {
         createItems();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
@@ -352,7 +352,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Accessibility : Navigate Left")
-    public void AccessibilityNavigateLeft() throws InterruptedException {
+    public void testAccessibilityNavigateLeft() throws InterruptedException {
         createItems();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
@@ -369,7 +369,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Accessibility : Navigate Left")
-    public void AccessibilityNavigateEndStart() throws InterruptedException {
+    public void testAccessibilityNavigateEndStart() throws InterruptedException {
         createItems();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");

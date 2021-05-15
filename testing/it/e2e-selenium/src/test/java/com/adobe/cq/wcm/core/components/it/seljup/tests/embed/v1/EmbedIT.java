@@ -135,7 +135,7 @@ public class EmbedIT extends AuthorBaseUITest {
      * 4. save the edit dialog
      * 5. verify the embed object on the page
      */
-    public void verifyUrl(String url, OEmbed urlProcessor) throws InterruptedException, TimeoutException {
+    private void verifyUrl(String url, OEmbed urlProcessor) throws InterruptedException, TimeoutException {
         //1.
         Commons.openEditDialog(editorPage, cmpPath);
 
@@ -175,7 +175,7 @@ public class EmbedIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL Validation")
-    public void urlValidation() throws InterruptedException, TimeoutException {
+    public void testUrlValidation() throws InterruptedException, TimeoutException {
         //1.
         Commons.openEditDialog(editorPage, cmpPath);
 
@@ -236,7 +236,7 @@ public class EmbedIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL : oEmbed : Flickr")
-    public void urlOEmbedFlickr() throws InterruptedException, TimeoutException {
+    public void testUrlOEmbedFlickr() throws InterruptedException, TimeoutException {
         OEmbed flickr = urlProcessors.getFlickr();
         String[] urls = flickr.getUrls();
         for(int i = 0; i < urls.length; i++) {
@@ -251,7 +251,7 @@ public class EmbedIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL : oEmbed : SoundCloud")
-    public void urlOEmbedSoundCloud() throws InterruptedException, TimeoutException {
+    public void testUrlOEmbedSoundCloud() throws InterruptedException, TimeoutException {
         OEmbed soundCloud = urlProcessors.getSoundCloud();
         String[] urls = soundCloud.getUrls();
         for(int i = 0; i < urls.length; i++) {
@@ -266,7 +266,7 @@ public class EmbedIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL : oEmbed : Twitter")
-    public void urlOEmbedTwitter() throws InterruptedException, TimeoutException {
+    public void testUrlOEmbedTwitter() throws InterruptedException, TimeoutException {
         OEmbed twitter = urlProcessors.getTwitter();
         String[] urls = twitter.getUrls();
         for(int i = 0; i < urls.length; i++) {
@@ -281,7 +281,7 @@ public class EmbedIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("URL : oEmbed : YouTube")
-    public void urlOEmbedYouTube() throws InterruptedException, TimeoutException {
+    public void testUrlOEmbedYouTube() throws InterruptedException, TimeoutException {
         OEmbed youTube = urlProcessors.getYouTube();
         String[] urls = youTube.getUrls();
         for(int i = 0; i < urls.length; i++) {
@@ -306,7 +306,7 @@ public class EmbedIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Embeddable : YouTube")
-    public void embeddableYoutube() throws InterruptedException, TimeoutException {
+    public void testEmbeddableYoutube() throws InterruptedException, TimeoutException {
         //1.
         Commons.openEditDialog(editorPage, cmpPath);
 
@@ -357,7 +357,7 @@ public class EmbedIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("HTML")
-    public void htmlEmbed() throws InterruptedException, TimeoutException {
+    public void testHtmlEmbed() throws InterruptedException, TimeoutException {
         //1.
         Commons.openEditDialog(editorPage, cmpPath);
 

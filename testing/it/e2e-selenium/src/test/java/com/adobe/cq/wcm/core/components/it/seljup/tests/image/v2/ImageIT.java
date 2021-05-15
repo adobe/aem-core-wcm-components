@@ -51,8 +51,8 @@ public class ImageIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: add image")
-    public void addImage() throws TimeoutException, InterruptedException {
-        imageTests.addImage();
+    public void testAddImage() throws TimeoutException, InterruptedException {
+        imageTests.testAddImage();
     }
 
     /**
@@ -60,8 +60,8 @@ public class ImageIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: set Alt Text and Title")
-    public void addAltTextAndTitle() throws TimeoutException, InterruptedException {
-        imageTests.addAltTextAndTitle();
+    public void testAddAltTextAndTitle() throws TimeoutException, InterruptedException {
+        imageTests.testAddAltTextAndTitle();
     }
 
     /**
@@ -69,8 +69,8 @@ public class ImageIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Disable caption popup")
-    public void disableCaptionAsPopup() throws TimeoutException, InterruptedException {
-        imageTests.disableCaptionAsPopup();
+    public void testDisableCaptionAsPopup() throws TimeoutException, InterruptedException {
+        imageTests.testDisableCaptionAsPopup();
     }
 
     /**
@@ -78,8 +78,8 @@ public class ImageIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: set image as decorative")
-    public void setImageAsDecorative() throws TimeoutException, InterruptedException {
-        imageTests.setImageAsDecorativeV2();
+    public void testSetImageAsDecorative() throws TimeoutException, InterruptedException {
+        imageTests.testSetImageAsDecorativeV2();
     }
 
 }

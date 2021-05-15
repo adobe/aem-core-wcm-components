@@ -169,7 +169,7 @@ public class FormComponentsIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check if the action 'Store Content' works.")
-    public void storeContent() throws InterruptedException, ClientException {
+    public void testStoreContent() throws InterruptedException, ClientException {
         Commons.openConfigureDialog(containerPath);
         FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.selectActionType("foundation/components/form/actions/store");

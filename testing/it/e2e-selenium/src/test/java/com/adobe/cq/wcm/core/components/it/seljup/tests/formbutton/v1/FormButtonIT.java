@@ -87,7 +87,7 @@ public class FormButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check the attributes of the default button rendered without any customisations via the edit dialog")
-    public void checkDefaultButtonAttributes() {
+    public void testCheckDefaultButtonAttributes() {
         Commons.switchContext("ContentFrame");
         assertTrue(formButton.isButtonPresentByType("Submit"), "Submit button should be present");
         assertTrue(formButton.getButtonText().contains("Submit"), "Button should contain 'Submit' text");
@@ -99,7 +99,7 @@ public class FormButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Create a button")
-    public void createButton() throws TimeoutException, InterruptedException {
+    public void testCreateButton() throws TimeoutException, InterruptedException {
         ButtonEditDialog buttonEditDialog = openButtonEditDialog();
         buttonEditDialog.selectButtonType("button");
         buttonEditDialog.setTitleField("Button");
@@ -115,7 +115,7 @@ public class FormButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button text")
-    public void setButtonText() throws TimeoutException, InterruptedException {
+    public void testSetButtonText() throws TimeoutException, InterruptedException {
         String buttonLabel = "Test Button";
         ButtonEditDialog buttonEditDialog = openButtonEditDialog();
         buttonEditDialog.setTitleField(buttonLabel);
@@ -130,7 +130,7 @@ public class FormButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button name")
-    public void setButtonName() throws TimeoutException, InterruptedException {
+    public void testSetButtonName() throws TimeoutException, InterruptedException {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonName = "button1";
         ButtonEditDialog buttonEditDialog = openButtonEditDialog();
@@ -149,7 +149,7 @@ public class FormButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button value")
-    public void setButtonValue() throws TimeoutException, InterruptedException {
+    public void testSetButtonValue() throws TimeoutException, InterruptedException {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonName = "button1";
         String buttonValue = "thisisthevalue";
@@ -170,7 +170,7 @@ public class FormButtonIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set button value without name")
-    public void setButtonValueWithoutName() throws TimeoutException, InterruptedException {
+    public void testSetButtonValueWithoutName() throws TimeoutException, InterruptedException {
         String buttonLabel = "BUTTON WITH NAME";
         String buttonValue = "thisisthevalue";
         ButtonEditDialog buttonEditDialog = openButtonEditDialog();

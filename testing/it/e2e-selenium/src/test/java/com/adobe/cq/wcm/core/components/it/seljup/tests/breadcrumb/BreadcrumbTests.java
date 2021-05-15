@@ -133,7 +133,7 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
     }
 
-    public void changeStartLevel() throws InterruptedException, TimeoutException {
+    public void testChangeStartLevel() throws InterruptedException, TimeoutException {
         Commons.switchContext("ContentFrame");
         assertTrue(breadcrumbItems.getItems().size() == 5, "number of breadcrumb items should be 5");
         Commons.switchToDefaultContext();
@@ -149,7 +149,7 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
     }
 
-    public void setZeroStartLevel() throws InterruptedException, TimeoutException {
+    public void testSetZeroStartLevel() throws InterruptedException, TimeoutException {
         Commons.switchContext("ContentFrame");
         assertTrue(breadcrumbItems.getItems().size() == 5, "number of breadcrumb items should be 5");
         Commons.switchToDefaultContext();
@@ -161,7 +161,7 @@ public class BreadcrumbTests {
         assertTrue(editDialog.checkInvalidStartLevel(), "Setting Start Level value to 0 is not allowed");
     }
 
-    public void set100StartLevel() throws InterruptedException, TimeoutException {
+    public void testSet100StartLevel() throws InterruptedException, TimeoutException {
         Commons.switchContext("ContentFrame");
         assertTrue(breadcrumbItems.getItems().size() == 5, "number of breadcrumb items should be 5");
         assertTrue(breadcrumbItems.getActiveItems().size() == 1, "number of active breadcrumb items should be 1");

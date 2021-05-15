@@ -88,7 +88,7 @@ public class ContentFragmentListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the parent path")
-    public void setParentPath() throws InterruptedException, TimeoutException {
+    public void testSetParentPath() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, cmpPath);
         Commons.useDialogSelect(PN_MODEL_PATH, modelPath);
         Commons.selectInAutocomplete(contentFragmentList.getEditDialog().getParentPath(),parentPath);
@@ -122,7 +122,7 @@ public class ContentFragmentListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the tag names")
-    public void setTagNames() throws InterruptedException, TimeoutException {
+    public void testSetTagNames() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, cmpPath);
         Commons.useDialogSelect(PN_MODEL_PATH, modelPath);
         Commons.selectInAutocomplete(contentFragmentList.getEditDialog().getParentPath(),parentPath);
@@ -154,7 +154,7 @@ public class ContentFragmentListIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the element names")
-    public void setElementNames() throws InterruptedException, TimeoutException {
+    public void testSetElementNames() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, cmpPath);
         Commons.useDialogSelect(PN_MODEL_PATH, modelPath);
         Commons.selectInAutocomplete(contentFragmentList.getEditDialog().getParentPath(),parentPath);

@@ -83,7 +83,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the fragment path")
-    public void setFragmentPath() throws InterruptedException, TimeoutException {
+    public void testSetFragmentPath() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
         Commons.saveConfigureDialog();
@@ -107,7 +107,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the variation name")
-    public void setVariationName() throws InterruptedException, TimeoutException {
+    public void testSetVariationName() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
         Commons.useDialogSelect(PN_VARIATION_NAME, variationName1);
@@ -133,7 +133,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set a structured content fragment")
-    public void setStructuredContentFragment() throws InterruptedException, TimeoutException {
+    public void testSetStructuredContentFragment() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath2);
         Commons.saveConfigureDialog();
@@ -167,7 +167,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Set the element names")
-    public void setElementNames() throws InterruptedException, TimeoutException {
+    public void testSetElementNames() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath2);
         Commons.saveConfigureDialog();

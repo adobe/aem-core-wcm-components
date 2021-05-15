@@ -52,15 +52,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag("group2")
 public class AccordionIT extends AuthorBaseUITest {
 
-    protected String testPage;
+
     private static final String clientlibs = "core.wcm.components.accordion.v1";
     private static String componentName = "accordion";
 
     private String policyPath;
     private String proxyPath;
-    protected Accordion accordion;
-    protected EditorPage editorPage;
-    protected String cmpPath;
+    private String testPage;
+    private Accordion accordion;
+    private EditorPage editorPage;
+    private String cmpPath;
 
     /**
      * Before Test Case
@@ -126,8 +127,6 @@ public class AccordionIT extends AuthorBaseUITest {
      *
      * 1. delete the test proxy component
      * 2. delete the test page
-     * 3. delete the clientlib page policy
-     * 4. reassign the default policy
      *
      * @throws ClientException
      * @throws InterruptedException
@@ -140,11 +139,6 @@ public class AccordionIT extends AuthorBaseUITest {
 
         // 2.
         authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-
-        // 3.
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        Commons.deletePolicy(adminClient,"/structure/page", policyPath1);
-
     }
 
 
@@ -214,7 +208,7 @@ public class AccordionIT extends AuthorBaseUITest {
         properties.openExpandedSelect(" > button");
 
         //3.
-        CoralSelectList selectedItems = properties.selectList();//properties.getExpandedSelectItems(" coral-select-item");
+        CoralSelectList selectedItems = properties.selectList();
         assertTrue(selectedItems.items().size() == items.size(), "Number of items in property config should be equal to added items number");
 
         for(int i = 0; i < items.size(); i++) {
@@ -265,7 +259,7 @@ public class AccordionIT extends AuthorBaseUITest {
      * @throws InterruptedException
      */
 
-    private String AddAccordionItem(String component, String parentPath,  String itemName) throws ClientException, InterruptedException {
+    private String addAccordionItem(String component, String parentPath,  String itemName) throws ClientException, InterruptedException {
 
         //1.
         String cmpPath = Commons.addComponent(adminClient, component, parentPath + "/", null, null);
@@ -334,7 +328,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Edit Dialog: Add items")
-    public void AddItem() throws  InterruptedException {
+    public void testAddItem() throws  InterruptedException {
         //1.
         ElementsCollection items = createItem();
 
@@ -363,7 +357,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Edit Dialog : Remove items")
-    public void RemoveItem() throws  InterruptedException {
+    public void testRemoveItem() throws  InterruptedException {
         //1.
         createItem();
 
@@ -411,7 +405,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Edit Dialog : Reorder items")
-    public void ReorderItem() throws InterruptedException {
+    public void testReorderItem() throws InterruptedException {
         //1.
         createItem();
 
@@ -463,7 +457,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Edit Dialog : Set expanded items")
-    public void SetExpandedItems() throws InterruptedException {
+    public void testSetExpandedItems() throws InterruptedException {
         //1.
         createItem();
 
@@ -516,7 +510,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Edit Dialog : Single item expansion")
-    public void SingleItemExpansion() throws InterruptedException {
+    public void testSingleItemExpansion() throws InterruptedException {
         //1.
         createItem();
 
@@ -573,7 +567,7 @@ public class AccordionIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Panel Select: Check items")
-    public void PanelSelectItems() throws TimeoutException, InterruptedException {
+    public void testPanelSelectItems() throws TimeoutException, InterruptedException {
         //1.
         String component = "[data-type='Editable'][data-path='" + testPage + Commons.relParentCompPath + componentName +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
@@ -644,7 +638,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Panel Select: Reordering items")
-    public void PanelSelectReorder() throws TimeoutException, InterruptedException {
+    public void testPanelSelectReorder() throws TimeoutException, InterruptedException {
         //1.
         createItem();
 
@@ -690,14 +684,14 @@ public class AccordionIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Nested")
-    public void Nested() throws  InterruptedException, ClientException {
+    public void testNested() throws  InterruptedException, ClientException {
 
         //1.
-        String accordion1Path = AddAccordionItem(proxyPath, testPage + Commons.relParentCompPath + componentName,  "Accordion 1.1");
-        String accordion2Path = AddAccordionItem(proxyPath, testPage + Commons.relParentCompPath + componentName,  "Accordion 1.2");
+        String accordion1Path = addAccordionItem(proxyPath, testPage + Commons.relParentCompPath + componentName,  "Accordion 1.1");
+        String accordion2Path = addAccordionItem(proxyPath, testPage + Commons.relParentCompPath + componentName,  "Accordion 1.2");
         selectExpandedItem(1);
-        String accordion21Path = AddAccordionItem(proxyPath, accordion2Path,  "Accordion 2.1");
-        String accordion22Path = AddAccordionItem(proxyPath, accordion2Path,  "Accordion 2.2");
+        String accordion21Path = addAccordionItem(proxyPath, accordion2Path,  "Accordion 2.1");
+        String accordion22Path = addAccordionItem(proxyPath, accordion2Path,  "Accordion 2.2");
 
         //2.
         Commons.switchContext("ContentFrame");

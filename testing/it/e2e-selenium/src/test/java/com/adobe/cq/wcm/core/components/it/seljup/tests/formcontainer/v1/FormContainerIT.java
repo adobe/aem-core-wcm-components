@@ -133,7 +133,7 @@ public class FormContainerIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check if the action 'Store Content' works.")
-    public void storeContent() throws ClientException, InterruptedException {
+    public void testStoreContent() throws ClientException, InterruptedException {
         Commons.openConfigureDialog(containerPath);
         FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.selectActionType("foundation/components/form/actions/store");
@@ -163,7 +163,7 @@ public class FormContainerIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: set your own content path")
-    public void setContextPath() throws InterruptedException, ClientException {
+    public void testSetContextPath() throws InterruptedException, ClientException {
         Commons.openConfigureDialog(containerPath);
         FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.selectActionType("foundation/components/form/actions/store");
@@ -183,7 +183,7 @@ public class FormContainerIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: set the thank You page path")
-    public void setThankYouPage() throws InterruptedException {
+    public void testSetThankYouPage() throws InterruptedException {
         Commons.openConfigureDialog(containerPath);
         FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.selectActionType("foundation/components/form/actions/store");
@@ -202,7 +202,7 @@ public class FormContainerIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: check if 'Mail' action works.")
-    public void setMailAction() throws InterruptedException, ClientException {
+    public void testSetMailAction() throws InterruptedException, ClientException {
         Commons.openConfigureDialog(containerPath);
         FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.setMailActionFields(from,subject,new String[] {mailto1,mailto2}, new String[] {cc1, cc2});

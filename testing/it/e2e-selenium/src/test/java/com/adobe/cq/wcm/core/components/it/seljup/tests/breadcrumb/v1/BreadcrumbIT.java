@@ -68,8 +68,8 @@ public class BreadcrumbIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Change the start level")
-    public void changeStartLevel() throws InterruptedException, TimeoutException {
-        breadcrumbTests.changeStartLevel();
+    public void testChangeStartLevel() throws InterruptedException, TimeoutException {
+        breadcrumbTests.testChangeStartLevel();
     }
 
     /**
@@ -78,8 +78,8 @@ public class BreadcrumbIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set the start level to invalid value of 0.")
-    public void setZeroStartLevel() throws InterruptedException, TimeoutException {
-        breadcrumbTests.setZeroStartLevel();
+    public void testSetZeroStartLevel() throws InterruptedException, TimeoutException {
+        breadcrumbTests.testSetZeroStartLevel();
     }
 
     /**
@@ -88,8 +88,8 @@ public class BreadcrumbIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set the start level to the highest possible value 100")
-    public void set100StartLevel() throws InterruptedException, TimeoutException {
-        breadcrumbTests.set100StartLevel();
+    public void testSet100StartLevel() throws InterruptedException, TimeoutException {
+        breadcrumbTests.testSet100StartLevel();
     }
 
 }

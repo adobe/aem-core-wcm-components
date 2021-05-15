@@ -50,8 +50,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check the mandatory fields")
-    public void checkMandatoryFields() throws InterruptedException, TimeoutException {
-        formTextTests.checkLabelMandatory();
+    public void testCheckLabelMandatory() throws InterruptedException, TimeoutException {
+        formTextTests.testCheckLabelMandatory();
     }
 
     /**
@@ -59,8 +59,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set text input label")
-    public void setLabel() throws InterruptedException, TimeoutException {
-        formTextTests.setLabel();
+    public void testSetLabel() throws InterruptedException, TimeoutException {
+        formTextTests.testSetLabel();
     }
 
     /**
@@ -68,8 +68,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Hide input label")
-    public void hideLabel() throws InterruptedException, TimeoutException {
-        formTextTests.hideLabel();
+    public void testHideLabel() throws InterruptedException, TimeoutException {
+        formTextTests.testHideLabel();
     }
 
     /**
@@ -77,8 +77,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set element name")
-    public void setElementName() throws InterruptedException, TimeoutException {
-        formTextTests.setElementName();
+    public void testSetElementName() throws InterruptedException, TimeoutException {
+        formTextTests.testSetElementName();
     }
 
     /**
@@ -86,8 +86,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set element value")
-    public void setValue() throws InterruptedException, TimeoutException {
-        formTextTests.setValue();
+    public void testSetValue() throws InterruptedException, TimeoutException {
+        formTextTests.testSetValue();
     }
 
     /**
@@ -95,8 +95,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Create a text input field")
-    public void createTextInput() throws InterruptedException, TimeoutException {
-        formTextTests.createTextInput();
+    public void testCreateTextInput() throws InterruptedException, TimeoutException {
+        formTextTests.testCreateTextInput();
     }
 
     /**
@@ -104,8 +104,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Create a text area")
-    public void createTextarea() throws InterruptedException, TimeoutException {
-        formTextTests.createTextarea();
+    public void testCreateTextarea() throws InterruptedException, TimeoutException {
+        formTextTests.testCreateTextarea();
     }
 
     /**
@@ -113,8 +113,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Create a email input field")
-    public void createEmail() throws InterruptedException, TimeoutException {
-        formTextTests.createEmail();
+    public void testCreateEmail() throws InterruptedException, TimeoutException {
+        formTextTests.testCreateEmail();
     }
 
     /**
@@ -122,8 +122,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Create a telephone input field")
-    public void createTel() throws InterruptedException, TimeoutException {
-        formTextTests.createTel();
+    public void testCreateTel() throws InterruptedException, TimeoutException {
+        formTextTests.testCreateTel();
     }
 
     /**
@@ -131,8 +131,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Create a date input field")
-    public void createDate() throws InterruptedException, TimeoutException {
-        formTextTests.createDate();
+    public void testCreateDate() throws InterruptedException, TimeoutException {
+        formTextTests.testCreateDate();
     }
 
     /**
@@ -140,8 +140,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Create a number input field")
-    public void createNumber() throws InterruptedException, TimeoutException {
-        formTextTests.createNumber();
+    public void testCreateNumber() throws InterruptedException, TimeoutException {
+        formTextTests.testCreateNumber();
     }
 
     /**
@@ -149,8 +149,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : Create a password input field")
-    public void createPassword() throws InterruptedException, TimeoutException {
-        formTextTests.createPassword();
+    public void testCreatePassword() throws InterruptedException, TimeoutException {
+        formTextTests.testCreatePassword();
     }
 
     /**
@@ -158,8 +158,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : set Help message as tooltip")
-    public void setHelpMessage() throws InterruptedException, TimeoutException {
-        formTextTests.setHelpMessage();
+    public void testSetHelpMessage() throws InterruptedException, TimeoutException {
+        formTextTests.testSetHelpMessage();
     }
 
     /**
@@ -167,8 +167,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : set Help message as placeholder")
-    public void setHelpMessageAsPlaceholder() throws InterruptedException, TimeoutException {
-        formTextTests.setHelpMessageAsPlaceholder();
+    public void testSetHelpMessageAsPlaceholder() throws InterruptedException, TimeoutException {
+        formTextTests.testSetHelpMessageAsPlaceholder();
     }
 
     /**
@@ -176,8 +176,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: check available constraints element name")
-    public void checkAvailableConstraints() throws TimeoutException, InterruptedException {
-        formTextTests.checkAvailableConstraints();
+    public void testCheckAvailableConstraints() throws TimeoutException, InterruptedException {
+        formTextTests.testCheckAvailableConstraints();
     }
 
     /**
@@ -185,8 +185,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : test read only setting")
-    public void setReadOnly() throws TimeoutException, InterruptedException {
-        formTextTests.setReadOnly();
+    public void testSetReadOnly() throws TimeoutException, InterruptedException {
+        formTextTests.testSetReadOnly();
     }
 
     /**
@@ -194,8 +194,8 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : test required setting")
-    public void setRequired() throws TimeoutException, InterruptedException {
-        formTextTests.setRequired();
+    public void testSetRequired() throws TimeoutException, InterruptedException {
+        formTextTests.testSetRequired();
     }
 
     /**
@@ -203,7 +203,7 @@ public class FormTextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test : test constraint message")
-    public void setConstraintMessage() throws TimeoutException, InterruptedException {
-        formTextTests.setConstraintMessage();
+    public void testSetConstraintMessage() throws TimeoutException, InterruptedException {
+        formTextTests.testSetConstraintMessage();
     }
 }

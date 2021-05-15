@@ -94,7 +94,7 @@ public class FormHiddenIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Check if Label is mandatory")
-    public void checkMandatoryFields() throws InterruptedException, TimeoutException {
+    public void testCheckMandatoryFields() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, hiddenPath);
         Commons.saveConfigureDialog();
         assertTrue(Commons.iseditDialogVisible(),"Config Dialog should be visible");
@@ -106,7 +106,7 @@ public class FormHiddenIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set element name")
-    public void setElementName() throws InterruptedException, TimeoutException {
+    public void testSetElementName() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, hiddenPath);
         formHidden.getConfigDialog().setMandatoryFields(elemName);
         Commons.saveConfigureDialog();
@@ -120,7 +120,7 @@ public class FormHiddenIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set element value")
-    public void setElementValue() throws InterruptedException, TimeoutException {
+    public void testSetElementValue() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, hiddenPath);
         FormHiddenEditDialog dialog = formHidden.getConfigDialog();
         dialog.setMandatoryFields(elemName);
@@ -136,7 +136,7 @@ public class FormHiddenIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Set element identifier")
-    public void setElementId() throws InterruptedException, TimeoutException {
+    public void testSetElementId() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, hiddenPath);
         FormHiddenEditDialog dialog = formHidden.getConfigDialog();
         dialog.setMandatoryFields(elemName);
