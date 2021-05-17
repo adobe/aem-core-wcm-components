@@ -66,8 +66,3 @@ Make sure to download latest junit-platform-console-standalone-<version>.jar
 ```
 java -jar junit-platform-console-standalone-<version>.jar -cp 'target/core.wcm.components.it.e2e-selenium-<version>-it-jar-with-dependencies.jar' --select-package "com.adobe.cq.wcm.core.components.it.seljup" --include-classname "^.*IT?$"
 ```
-
-For more details on Selenium Jupiter parameters, check [selenium-jupiter user guide](https://bonigarcia.github.io/selenium-jupiter/)
-
-
-(1) https://github.com/bonigarcia/selenium-jupiter/issues/76
