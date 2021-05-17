@@ -72,8 +72,6 @@ public class PageIT {
     @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testPWAProperties() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/simple-page.html", 200).getContent();
-        adminAuthor.getUrl("/");
-
         // Manifest
         GraniteAssert.assertRegExFind(content, "<link rel=\"manifest\" href=\".*/content/foo/us/en/manifest.webmanifest\" crossorigin=\"use-credentials\"/>");
         // Theme Color
@@ -81,20 +79,20 @@ public class PageIT {
         // Apple Touch Icon
         GraniteAssert.assertRegExFind(content, "<link rel=\"apple-touch-icon\" href=\".*/content/dam/foo/pwa-logo.png\"/>");
         // Style sheet for messages
-        GraniteAssert.assertRegExFind(content, "<link rel=\"stylesheet\" href=\".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.css\" type=\"text/css\">");
+        GraniteAssert.assertRegExFind(content, "<link rel=\"stylesheet\" href=\".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.css\" type=\"text/css\">");
         // Path to service worker
         GraniteAssert.assertRegExFind(content, "<meta name=\"cq:sw_path\" content=\".*/core-components.simple-pagesw.js\"/>");
         // Reference to script that registers the service worker
-        GraniteAssert.assertRegExFind(content, "<script src=\".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.js\"></script>");
+        GraniteAssert.assertRegExFind(content, "<script src=\".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.js\"></script>");
 
         // validate that the sub page also has the PWA properties based on the parent.
         content = adminAuthor.doGet("/content/core-components/simple-page/simple-subpage.html", 200).getContent();
         GraniteAssert.assertRegExFind(content, "<link rel=\"manifest\" href=\".*/content/foo/us/en/manifest.webmanifest\" crossorigin=\"use-credentials\"/>");
         GraniteAssert.assertRegExFind(content, "<meta name=\"theme-color\" content=\"#FF851B\"/>");
         GraniteAssert.assertRegExFind(content, "<link rel=\"apple-touch-icon\" href=\".*/content/dam/foo/pwa-logo.png\"/>");
-        GraniteAssert.assertRegExFind(content, "<link rel=\"stylesheet\" href=\".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.css\" type=\"text/css\">");
+        GraniteAssert.assertRegExFind(content, "<link rel=\"stylesheet\" href=\".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.css\" type=\"text/css\">");
         GraniteAssert.assertRegExFind(content, "<meta name=\"cq:sw_path\" content=\".*/core-components.simple-pagesw.js\"/>");
-        GraniteAssert.assertRegExFind(content, "<script src=\".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.js\"></script>");
+        GraniteAssert.assertRegExFind(content, "<script src=\".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.js\"></script>");
     }
 
     @Test
@@ -126,8 +124,8 @@ public class PageIT {
         JsonArray pwaOfflineClientlibs = swconfigJson.get("pwaOfflineClientlibs").getAsJsonArray();
         assertNotNull(pwaOfflineClientlibs);
         assertEquals(2, pwaOfflineClientlibs.size());
-        assertTrue(containsMatchingRegex(pwaOfflineClientlibs, ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.css"));
-        assertTrue(containsMatchingRegex(pwaOfflineClientlibs, ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.min.js"));
+        assertTrue(containsMatchingRegex(pwaOfflineClientlibs, ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.css"));
+        assertTrue(containsMatchingRegex(pwaOfflineClientlibs, ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.js"));
     }
 
     boolean containsMatchingRegex(JsonArray jsonArray, String regex) {
