@@ -21,11 +21,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.Utils;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.List;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -37,6 +40,7 @@ public class ListImplTest {
     private static final String CURRENT_PAGE = "/content/list";
     private static final String CONTEXT_PATH = "/context";
     private static final String LIST_1 = CURRENT_PAGE + "/jcr:content/root/staticListType";
+    private static final String LIST_2 = CURRENT_PAGE + "/jcr:content/root/staticWithVanityPaths";
 
     public final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -57,6 +61,13 @@ public class ListImplTest {
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_1));
     }
 
+    @Test
+    public void testStaticWithVanityPaths() {
+        List list = getListUnderTest(LIST_2);
+        checkListConsistencyByLinkURL(list, new String[]{"/context/page_3.html", "/context/4_page.html"});
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_2));
+    }
+
     private List getListUnderTest(String resourcePath) {
         Utils.enableDataLayer(context, true);
         Resource resource = context.resourceResolver().getResource(resourcePath);
@@ -68,4 +79,8 @@ public class ListImplTest {
         return context.request().adaptTo(List.class);
     }
 
+
+    protected void checkListConsistencyByLinkURL(List list, String[] expectedPagePaths) {
+        assertArrayEquals(expectedPagePaths, list.getListItems().stream().map(ListItem::getLink).map(Link::getURL).toArray());
+    }
 }

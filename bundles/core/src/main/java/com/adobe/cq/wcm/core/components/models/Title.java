@@ -16,7 +16,10 @@
 
 package com.adobe.cq.wcm.core.components.models;
 
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 
 /**
  * Defines the {@code Title} Sling Model used for the {@code /apps/core/wcm/components/title} component.
@@ -62,11 +65,24 @@ public interface Title extends Component {
     }
 
     /**
+     * Returns the Title's link.
+     *
+     * @return the title's link
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    @Nullable
+    default Link getLink() {
+        return null;
+    }
+
+    /**
      * Returns the Title's link URL, if one was set.
      *
      * @return the title's link URL, if one was set, or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     * @deprecated Please use {@link #getLink()}
      */
+    @Deprecated
     default String getLinkURL() {
         return null;
     }

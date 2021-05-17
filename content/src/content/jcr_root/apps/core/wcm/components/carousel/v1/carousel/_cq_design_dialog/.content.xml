@@ -87,6 +87,15 @@
                                     jcr:primaryType="nt:unstructured"
                                     cmp-carousel-v1-dialog-hook="autoplayGroup"/>
                             </autoplayGroup>
+                            <controlsPrepended
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="When checked, the control elements will be placed in front of the carousel items to improve accessibility."
+                                name="./controlsPrepended"
+                                checked="{Boolean}false"
+                                text="Prepend control elements"
+                                uncheckedValue="false"
+                                value="{Boolean}true"/>
                         </items>
                     </properties>
                     <allowedcomponents

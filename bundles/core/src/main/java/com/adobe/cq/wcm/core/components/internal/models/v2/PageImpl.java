@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-import java.util.stream.Stream;
-
 
 import javax.annotation.PostConstruct;
 
@@ -118,12 +116,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     @OSGiService
     private ConfigurationResolver configurationResolver;
-
-    /**
-     * The current request.
-     */
-    @Self
-    protected SlingHttpServletRequest request;
 
     /**
      * The current component context.

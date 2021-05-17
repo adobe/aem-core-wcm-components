@@ -37,9 +37,9 @@
     </ol>
     <div data-sly-repeat.item="${tabs.items}"
          data-sly-resource="${item.name @ decorationTagName='div'}"
-         id="${item.id}"
+         id="${item.id}-tabpanel"
          role="tabpanel"
-         aria-labelledby="${item.id}"
+         aria-labelledby="${item.id}-tab"
          tabindex="0"
          class="cmp-tabs__tabpanel${item.name == tabs.activeItem ? ' cmp-tabs__tabpanel--active' : ''}"
          data-cmp-hook-tabs="tabpanel"

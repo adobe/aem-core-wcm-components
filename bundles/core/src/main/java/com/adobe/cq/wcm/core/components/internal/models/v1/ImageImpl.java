@@ -83,9 +83,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected static final String MIME_TYPE_IMAGE_SVG = "image/svg+xml";
     private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
 
-    @Self
-    protected SlingHttpServletRequest request;
-
     @ScriptVariable
     protected PageManager pageManager;
 
@@ -313,7 +310,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @Override
     public String getLink() {
-        return link.map(Link::getURL).orElse(null);
+        return link == null ? null : link.map(Link::getURL).orElse(null);
     }
 
     @Override
@@ -385,7 +382,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected ImageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
             .withTitle(this::getTitle)
-            .withLinkUrl(this::getLink)
+            .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
             .withAssetData(() ->
                 Optional.ofNullable(this.fileReference)
                     .map(reference -> this.request.getResourceResolver().getResource(reference))

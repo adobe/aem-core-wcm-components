@@ -18,6 +18,9 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.Nullable;
+
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 
 /**
  * Defines the {@code Teaser} Sling Model for the {@code /apps/core/wcm/components/teaser} component.
@@ -146,11 +149,24 @@ public interface Teaser extends Component {
     }
 
     /**
+     * Returns the primary link of this teaser.
+     *
+     * @return the primary link of this teaser
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    @Nullable
+    default Link getLink() {
+        return null;
+    }
+
+    /**
      * Returns the URL to which this teaser links, if one was defined.
      *
      * @return the URL to which teaser links or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     * @deprecated Please use {@link #getLink()}
      */
+    @Deprecated
     default String getLinkURL() {
         return null;
     }

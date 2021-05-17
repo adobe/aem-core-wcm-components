@@ -83,6 +83,7 @@ public class NavigationImplTest {
     private static final String NAV_COMPONENT_16 = TEST_ROOT + "/jcr:content/root/navigation-component-16";
     private static final String NAV_COMPONENT_17 = TEST_ROOT + "/jcr:content/root/navigation-component-17";
     private static final String NAV_COMPONENT_18 = "/content/navigation-redirect-chain/jcr:content/root/navigation-component-18";
+    private static final String NAV_COMPONENT_19 = TEST_ROOT + "/jcr:content/root/navigation-component-19";
 
 
     protected String testBase;
@@ -463,6 +464,18 @@ public class NavigationImplTest {
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation14"));
+    }
+
+    @Test
+    protected void testVanityPaths() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_19);
+        Object[][] expectedPages = {
+                {"/content/navigation-vanity-paths", 0, false, "/nav0.html"},
+                {"/content/navigation-vanity-paths/navigation-1", 1, false, "/nav1.html"},
+                {"/content/navigation-vanity-paths/navigation-2", 1, false, "/nav2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation19"));
     }
 
     protected Navigation getNavigationUnderTest(String resourcePath) {
