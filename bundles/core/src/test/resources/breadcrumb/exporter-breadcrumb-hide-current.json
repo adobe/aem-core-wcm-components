@@ -4,6 +4,7 @@
         {
             "id": "breadcrumb-8a0c707b3e-item-11c305ace0",
             "active": false,
+            "current": false,
             "url": "/content/breadcrumb/women.html",
             "title": "Women",
             "dataLayer": {

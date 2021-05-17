@@ -82,6 +82,7 @@
                                             <linkURL
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/coral/common/form/pagefield"
+                                                granite:class="cmp-title-link-url"
                                                 fieldDescription="Links the title. Path to a content page, external URL or page anchor."
                                                 fieldLabel="Link"
                                                 name="./linkURL"
@@ -97,6 +98,32 @@
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
                                                 name="./id"/>
+                                            <linkAccessibilityLabel
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                    granite:class="cmp-title-link-label"
+                                                    fieldDescription="Value of an aria-label attribute for the title's link, which describes the title's link."
+                                                    fieldLabel="Link Label"
+                                                    name="./linkAccessibilityLabel"
+                                                    value="">
+                                                    <granite:rendercondition
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                                                        expression="${!cqDesign.linkDisabled}"/>
+                                            </linkAccessibilityLabel>
+                                            <linkTitleAttribute
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                    granite:class="cmp-title-link-title"
+                                                    fieldDescription="HTML TITLE attribute to apply to the component's link."
+                                                    fieldLabel="Link Title Attribute"
+                                                    name="./linkTitleAttribute"
+                                                    value="">
+                                                    <granite:rendercondition
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                                                        expression="${!cqDesign.linkDisabled}"/>
+                                            </linkTitleAttribute>
                                         </items>
                                     </column>
                                 </items>

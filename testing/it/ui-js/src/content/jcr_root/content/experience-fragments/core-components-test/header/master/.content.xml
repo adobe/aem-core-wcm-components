@@ -17,7 +17,7 @@
             sling:resourceType="core/wcm/components/container/v1/container">
             <title
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="core/wcm/components/title/v2/title"/>
+                sling:resourceType="core/wcm/components/title/v3/title"/>
         </root>
     </jcr:content>
 </jcr:root>

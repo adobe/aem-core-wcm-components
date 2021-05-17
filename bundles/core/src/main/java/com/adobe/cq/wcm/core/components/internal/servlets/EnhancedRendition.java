@@ -18,6 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.awt.*;
 import java.io.InputStream;
 
+import javax.jcr.Binary;
+
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.ResourceWrapper;
@@ -129,4 +131,12 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
     public Asset getAsset() {
         return rendition.getAsset();
     }
+
+	/**
+	 *	See {@link Rendition#getBinary()}
+	 */
+	@Override
+	public Binary getBinary() {
+		return rendition.getBinary();
+	}
 }
