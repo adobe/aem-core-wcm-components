@@ -11,6 +11,7 @@
           "children": [],
           "level": 1,
           "active": false,
+          "current": false,
           "link": {
             "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
             "valid": true
@@ -35,6 +36,7 @@
               "children": [],
               "level": 2,
               "active": false,
+              "current": false,
               "link": {
                 "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
                 "valid": true
@@ -55,6 +57,7 @@
               "children": [],
               "level": 2,
               "active": false,
+              "current": false,
               "link": {
                 "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
                 "valid": true
@@ -72,6 +75,7 @@
           ],
           "level": 1,
           "active": false,
+          "current": false,
           "link": {
             "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
             "valid": true
@@ -89,6 +93,7 @@
       ],
       "level": 0,
       "active": false,
+      "current": false,
       "link": {
         "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
         "valid": true

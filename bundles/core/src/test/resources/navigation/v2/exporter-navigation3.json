@@ -9,6 +9,7 @@
         "title": "Navigation 1.1"
       },
       "active": true,
+      "current": true,
       "children": [],
       "level": 0,
       "link": {

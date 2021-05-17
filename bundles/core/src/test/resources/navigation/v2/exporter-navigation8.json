@@ -11,6 +11,7 @@
           "children": [],
           "level": 1,
           "active": true,
+          "current": false,
           "link": {
             "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
             "valid": true
@@ -28,6 +29,7 @@
       ],
       "level": 0,
       "active": true,
+      "current": false,
       "link": {
         "url": "/core/navigation-1-vanity",
         "valid": true
@@ -48,6 +50,7 @@
       "children": [],
       "level": 0,
       "active": false,
+      "current": false,
       "link": {
         "url": "/core/content/navigation/navigation-2.html",
         "valid": true

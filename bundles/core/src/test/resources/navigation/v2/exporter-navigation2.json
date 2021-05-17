@@ -9,6 +9,7 @@
         "title": "Navigation 1"
       },
       "active": true,
+      "current": true,
       "children": [
         {
           "page": {
@@ -19,6 +20,7 @@
             "title": "Navigation 1.1"
           },
           "active": true,
+          "current": true,
           "children": [],
           "level": 1,
           "link": {

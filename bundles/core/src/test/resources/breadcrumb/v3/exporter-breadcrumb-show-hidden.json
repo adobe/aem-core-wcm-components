@@ -8,6 +8,7 @@
         "valid": true
       },
       "active": false,
+      "current": false,
       "title": "Women",
       "dataLayer": {
         "breadcrumb-b32eadfd98-item-11c305ace0": {
@@ -25,6 +26,7 @@
         "valid": true
       },
       "active": false,
+      "current": false,
       "title": "Shirts",
       "dataLayer": {
         "breadcrumb-b32eadfd98-item-0b751aeddc": {
@@ -38,6 +40,7 @@
     {
       "id": "breadcrumb-b32eadfd98-item-a66a50bca8",
       "active": true,
+      "current": true,
       "link": {
         "valid": true,
         "url": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html"

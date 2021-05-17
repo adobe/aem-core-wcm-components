@@ -39,7 +39,7 @@ public class NavigationImplTest extends com.adobe.cq.wcm.core.components.interna
     @Override
     protected void verifyNavigationItem(Object[] expectedPage, NavigationItem item) {
         super.verifyNavigationItem(expectedPage, item);
-        assertValidLink(item.getLink(), CONTEXT_PATH + expectedPage[3]);
+        assertValidLink(item.getLink(), (String) expectedPage[3], context.request());
     }
 
 }

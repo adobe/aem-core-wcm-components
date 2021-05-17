@@ -55,7 +55,7 @@ public class NavigationImplTest {
 
     private static final String TEST_BASE = "/navigation";
 
-    private final AemContext context = CoreComponentTestContext.newAemContext();
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
     protected static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT = "/content/navigation";

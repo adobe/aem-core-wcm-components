@@ -35,9 +35,9 @@ import static org.apache.sling.api.SlingConstants.PROPERTY_PATH;
 @JsonIgnoreProperties(value = {"page", "children", "level", "description", "lastModified",PROPERTY_PATH})
 public class BreadcrumbItemImpl extends NavigationItemImpl implements NavigationItem {
 
-    public BreadcrumbItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
-                              String parentId, boolean isShadowingDisabled, Component component) {
-        super(page, active, linkHandler, level, children, parentId, isShadowingDisabled, component);
+    public BreadcrumbItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level,
+                              List<NavigationItem> children, String parentId, boolean isShadowingDisabled, Component component) {
+        super(page, active, active, linkHandler, level, children, parentId, isShadowingDisabled, component);
     }
 
     @Override

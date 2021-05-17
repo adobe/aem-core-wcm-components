@@ -33,11 +33,13 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     protected List<NavigationItem> children = Collections.emptyList();
     protected int level;
     protected boolean active;
+    private boolean current;
 
-    public NavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
+    public NavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
                               String parentId, boolean isShadowingDisabled, Component component) {
         super(linkHandler, page, parentId, isShadowingDisabled, component);
         this.active = active;
+        this.current = current;
         this.level = level;
         this.children = children;
     }
@@ -52,6 +54,11 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public boolean isCurrent() {
+        return current;
     }
 
     @Override
