@@ -1,9 +1,9 @@
 {
     "mysite": {
-        "jcr:primaryType": "sling:Folder", 
+        "jcr:primaryType": "sling:Folder",
         "jcr:content": {
-            "jcr:primaryType": "cq:PageContent", 
-            "jcr:title": "Language Structure", 
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Language Structure",
             "jcr:created": "Mon Apr 08 2019 20:21:55 GMT+0200"
         },
         "page": {
@@ -76,6 +76,25 @@
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
                             "fragmentVariationPath": "/content/experience-fragments/mysite/en/header_empty/master"
+                        },
+                        "title_core": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "jcr:createdBy": "admin",
+                            "jcr:title": "Welcome to AEM Core Components Demo !!",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created": "Thu Jan 21 2021 03:24:27 GMT-0600",
+                            "type": "h1",
+                            "jcr:lastModified": "Thu Jan 21 2021 05:05:03 GMT-0600",
+                            "sling:resourceType": "core/wcm/components/title/v2/title",
+                            "cq:styleIds": [
+                                "1614651105857",
+                                "1614651142305"
+                            ]
+                        },
+                        "xf-component-72": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/en/parent/master"
                         }
                     }
                 }
@@ -310,7 +329,8 @@
                             "jcr:content": {
                                 "cq:xfVariantType": "web",
                                 "jcr:primaryType": "cq:PageContent",
-                                "jcr:title": "English Test Footer Variation"}
+                                "jcr:title": "English Test Footer Variation"
+                            }
 
                         }
                     }
@@ -365,7 +385,8 @@
                                 "jcr:content": {
                                     "cq:xfVariantType": "web",
                                     "jcr:primaryType": "cq:PageContent",
-                                    "jcr:title": "English Test Footer Variation"}
+                                    "jcr:title": "English Test Footer Variation"
+                                }
 
                             }
                         }
@@ -509,8 +530,51 @@
                         "jcr:content": {
                             "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
-                            "jcr:title": "English Test Footer Variation"}
+                            "jcr:title": "English Test Footer Variation"
+                        }
 
+                    }
+                },
+                "parent": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Tue Oct 08 2019 21:16:23 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:createdBy": "admin",
+                        "jcr:title": "Experience Fragment parent test",
+                        "cq:template": "/libs/cq/experience-fragments/components/experiencefragment/template",
+                        "jcr:created": "Tue Oct 08 2019 21:16:23 GMT+0200",
+                        "cq:lastModified": "Mon Sep 30 2019 12:24:46 GMT+0200",
+                        "cq:tags": [],
+                        "sling:resourceType": "cq/experience-fragments/components/experiencefragment",
+                        "cq:lastModifiedBy": "admin"
+                    },
+                    "master": {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:createdBy": "admin",
+                        "jcr:created": "Tue Oct 08 2019 21:16:23 GMT+0200",
+                        "jcr:content": {
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:createdBy": "admin",
+                            "jcr:title": "Experience Fragment parent test",
+                            "cq:xfShowInEditor": "true",
+                            "cq:template": "/conf/we-retail-journal/settings/wcm/templates/xf-page",
+                            "cq:xfMasterVariation": true,
+                            "cq:xfSocialActionStatus": "Not Posted",
+                            "jcr:created": "Tue Oct 08 2019 21:16:23 GMT+0200",
+                            "cq:lastModified": "Fri Oct 04 2019 16:15:45 GMT+0200",
+                            "cq:xfVariantType": "web",
+                            "cq:tags": [],
+                            "sling:resourceType": "we-retail-journal/components/page/xfpage",
+                            "cq:lastModifiedBy": "admin",
+                            "isExperienceFragmentPage": true,
+                            "experiencefragment": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                                "fragmentVariationPath": "/content/experience-fragments/mysite/en/header/master"
+                            }
+                        }
                     }
                 }
             },
@@ -559,7 +623,8 @@
                         "jcr:content": {
                             "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
-                            "jcr:title": "English Test Footer Variation"}
+                            "jcr:title": "English Test Footer Variation"
+                        }
 
                     }
                 }
@@ -609,7 +674,8 @@
                         "jcr:content": {
                             "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
-                            "jcr:title": "English Test Footer Variation"}
+                            "jcr:title": "English Test Footer Variation"
+                        }
 
                     }
                 }

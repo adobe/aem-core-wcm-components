@@ -55,6 +55,10 @@
                             cq:policy="core-components-examples/components/container/policy_1559057070844"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <title
+                            cq:policy="core-components-examples/components/title/policy_1544759499870"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
                     </components>
                 </core-components-examples>
             </responsivegrid>

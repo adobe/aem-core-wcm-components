@@ -70,7 +70,7 @@ public class ModelElementsDataSourceServletTest {
         InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
         context.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
         Resource mockResource = Mockito.mock(Resource.class);
-        when(mockResource.isResourceType(ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY)).thenReturn(true);
+        when(mockResource.isResourceType(ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY_V1)).thenReturn(true);
         context.request().setResource(mockResource);
         context.request().setParameterMap(ImmutableMap.of(
                 PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));

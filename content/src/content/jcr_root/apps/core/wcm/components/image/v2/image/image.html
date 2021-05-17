@@ -39,7 +39,7 @@
             <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
             <img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
                  data-sly-attribute.usemap="${image.areas ? usemap : ''}"
-                 alt="${image.alt}" title="${image.displayPopupTitle && image.title}"/>
+                 alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
             <map data-sly-test="${image.areas}"
                  data-sly-list.area="${image.areas}"
                  name="${resource.path}"

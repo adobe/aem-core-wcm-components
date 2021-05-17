@@ -16,8 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
 import java.io.ByteArrayInputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.sling.api.resource.Resource;
@@ -27,7 +25,6 @@ import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
 
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
@@ -133,17 +130,6 @@ public abstract class AbstractContentFragmentTest<T> {
         context.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
 
         queryBuilderMock = Mockito.mock(QueryBuilder.class);
-    }
-
-    void setFakeLoggerOnClass(Class<?> clazz, Logger logger) throws NoSuchFieldException, IllegalAccessException {
-        Field field = clazz.getDeclaredField("LOG");
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        field.setAccessible(true);
-        // remove final modifier from field
-
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, logger);
     }
 
     /**

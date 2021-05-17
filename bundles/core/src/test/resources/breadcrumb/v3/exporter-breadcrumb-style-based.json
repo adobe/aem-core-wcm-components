@@ -1,0 +1,27 @@
+{
+  "id": "breadcrumb-b54972e1d3",
+  "items": [
+    {
+      "id": "breadcrumb-b54972e1d3-item-a66a50bca8",
+      "active": true,
+      "current": true,
+      "link": { "valid": true, "url": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html" },
+      "title": "Devi Sleeveless Shirt",
+      "dataLayer": {
+        "breadcrumb-b54972e1d3-item-a66a50bca8": {
+          "xdm:linkURL": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
+          "@type": "coretest/components/structure/page",
+          "dc:title": "Devi Sleeveless Shirt"
+        }
+      },
+      ":type": "coretest/components/structure/page"
+    }
+  ],
+  "dataLayer": {
+    "breadcrumb-b54972e1d3": {
+      "repo:modifyDate": "2016-01-11T15:21:45Z",
+      "@type": "core/wcm/components/breadcrumb/v3/breadcrumb"
+    }
+  },
+  ":type": "core/wcm/components/breadcrumb/v3/breadcrumb"
+}
