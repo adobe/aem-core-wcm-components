@@ -24,13 +24,13 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.16.1-SNAPSHOT</version>
+        <version>2.16.3-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.it.e2e</artifactId>
-    <version>2.16.1-SNAPSHOT</version>
+    <version>2.16.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Core Components End-to-End Tests</name>
 
