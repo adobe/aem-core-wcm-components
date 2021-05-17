@@ -19,8 +19,6 @@ package com.adobe.cq.wcm.core.components.it.seljup.components.formoptions.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.components.formoptions.BaseFormOptions;
 
-import static com.codeborne.selenide.Selenide.$;
-
 public class FormOptions extends BaseFormOptions {
 
     public FormOptions() {

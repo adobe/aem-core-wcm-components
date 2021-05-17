@@ -19,10 +19,8 @@ package com.adobe.cq.wcm.core.components.it.seljup.components.contentfragment.v1
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.wcm.core.components.it.seljup.components.contentfragment.ContentFragmentEditDialog;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.$;
 
 public class ContentFragment extends BaseComponent {
     public static String contentFragment = ".cmp-contentfragment";
@@ -54,7 +52,4 @@ public class ContentFragment extends BaseComponent {
         return $$(elementValue);
     }
 
-    public static class ContentFragmentElements {
-
-    }
 }

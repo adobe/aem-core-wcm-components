@@ -16,17 +16,23 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.button;
 
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import static com.codeborne.selenide.Selenide.$;
 
 
 public class ButtonEditDialog extends Dialog {
@@ -40,16 +46,35 @@ public class ButtonEditDialog extends Dialog {
         super(element);
     }
 
-    public SelenideElement getTitleField() {
-        return content().find(Selectors.SELECTOR_BUTTON_TITLE);
+    public void setTitleField(String value) {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
+        content().find(Selectors.SELECTOR_BUTTON_TITLE).click();
+        content().find(Selectors.SELECTOR_BUTTON_TITLE).sendKeys(value);
     }
 
-    public SelenideElement getNameField() {
-        return content().find(Selectors.SELECTOR_BUTTON_NAME);
+    public void setNameField(String value) {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
+        content().find(Selectors.SELECTOR_BUTTON_NAME).click();
+        content().find(Selectors.SELECTOR_BUTTON_NAME).sendKeys(value);
     }
 
-    public SelenideElement getValueField() {
-        return content().find(Selectors.SELECTOR_BUTTON_VALUE);
+    public void setValueField(String value) {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
+        content().find(Selectors.SELECTOR_BUTTON_VALUE).click();
+        content().find(Selectors.SELECTOR_BUTTON_VALUE).sendKeys(value);
+    }
+
+    public boolean isNameFieldInvalid() {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
+        return content().find(Selectors.SELECTOR_BUTTON_NAME).getAttribute("invalid").equals("true");
     }
 
     public void setLinkField(String value) {
@@ -64,8 +89,17 @@ public class ButtonEditDialog extends Dialog {
     }
 
     public void selectButtonType(String type) {
-        CoralSelect coralSelect = new CoralSelect("name='./type'");
-        coralSelect.selectItemByValue(type);
+        $( "[name='./type'] > button").click();
+        CoralSelectList coralSelectList = new CoralSelectList($("[name='./type']"));
+        if(!coralSelectList.isVisible()) {
+            CoralSelect selectList = new CoralSelect("name='./type'");
+            coralSelectList = selectList.openSelectList();
+        }
+
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + type + "']"));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
+        coralSelectList.selectByValue(type);
     }
 
 }

@@ -21,6 +21,11 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -48,10 +53,17 @@ public class ContentFragmentListEditDialog extends Dialog {
     public void addElement(String value) {
         $("[coral-multifield-add]").click();
         $$("coral-multifield-item").last().$(elementNameSelectButton).click();
-        CoralPopOver popOver =  CoralPopOver.firstOpened();
-        popOver.waitVisible();
-        Helpers.waitForElementAnimationFinished(popOver.getCssSelector());
-        CoralSelectList selectList = new CoralSelectList(popOver.element());
-        selectList.selectByValue(value);
+        CoralSelectList coralSelectList = new CoralSelectList($$("coral-multifield-item").last().$("coral-select[name='./elementNames']"));
+        if(!coralSelectList.isVisible()) {
+            CoralPopOver popOver =  CoralPopOver.firstOpened();
+            popOver.waitVisible();
+            Helpers.waitForElementAnimationFinished(popOver.getCssSelector());
+            coralSelectList = new CoralSelectList(popOver.element());
+        }
+
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + value + "']"));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
+        coralSelectList.selectByValue(value);
     }
 }

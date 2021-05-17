@@ -16,12 +16,13 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.accordion;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.commons.ChildrenEditor;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.commons.ChildrenEditor;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.JavascriptExecutor;
@@ -34,6 +35,8 @@ import static com.codeborne.selenide.Selenide.$;
  * Class for Accordion Configuration Dialog
  */
 public class AccordionEditDialog extends Dialog  {
+
+    private static SelenideElement itemsTab = $("coral-tab[data-foundation-tracking-event*='items']");
 
     public AccordionEditDialog() {
 
@@ -55,6 +58,9 @@ public class AccordionEditDialog extends Dialog  {
         return new ChildrenEditor();
     }
 
+    public void openItemsTab() {
+        $(itemsTab).click();
+    }
     /**
      * Returns InsertComponent dialog
      * @return InsertComponentDialog
@@ -134,10 +140,24 @@ public class AccordionEditDialog extends Dialog  {
          * @return list of the related coral popover that is opened.
          */
         public CoralSelectList selectList() {
-            CoralPopOver popOver = CoralPopOver.firstOpened();
-            popOver.waitVisible();
-            waitForElementAnimationFinished(popOver.getCssSelector());
-            return new CoralSelectList(popOver.element());
+            CoralSelectList coralSelectList = new CoralSelectList($(expandedSelect));
+            if(coralSelectList.isVisible()) {
+                return coralSelectList;
+            } else {
+                CoralPopOver popOver = CoralPopOver.firstOpened();
+                popOver.waitVisible();
+                waitForElementAnimationFinished(popOver.getCssSelector());
+                return new CoralSelectList(popOver.element());
+            }
+        }
+
+        public String getSelectedItemValue(int i) {
+            if(selectList().items().get(i).find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).isDisplayed()) {
+                return selectList().items().get(i).find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).getText().trim();
+            }
+            else {
+                return selectList().items().get(i).getText().trim();
+            }
         }
     }
 

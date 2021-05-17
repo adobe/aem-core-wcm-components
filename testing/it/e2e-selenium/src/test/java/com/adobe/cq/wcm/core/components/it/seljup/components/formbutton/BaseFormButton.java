@@ -17,6 +17,8 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.formbutton;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -36,11 +38,13 @@ public class BaseFormButton extends BaseComponent {
         return $(button).getText();
     }
 
-    public boolean isButtonPresentByName(String name) {
+    public boolean isButtonPresentByName(String name) throws InterruptedException {
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         return $(button +"[name='" + name + "']").isDisplayed();
     }
 
-    public boolean isButtonPresentByValue(String value) {
+    public boolean isButtonPresentByValue(String value) throws InterruptedException {
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         return $(button +"[value='" + value + "']").isDisplayed();
     }
 }

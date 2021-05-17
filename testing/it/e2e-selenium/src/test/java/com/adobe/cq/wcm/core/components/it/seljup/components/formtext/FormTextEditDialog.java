@@ -52,21 +52,31 @@ public class FormTextEditDialog extends Dialog {
      * Set the option type
      */
     public void setOptionType(String optionType) {
-        CoralSelect selectList = new CoralSelect("name='./type'");
-        CoralSelectList list = selectList.openSelectList();
+        //Open selectlist
+        $( "[name='./type'] > button").click();
+        CoralSelectList coralSelectList = new CoralSelectList($("[name='./type']"));
+        if(!coralSelectList.isVisible()) {
+            CoralSelect selectList = new CoralSelect("name='./type'");
+            coralSelectList = selectList.openSelectList();
+        }
+
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + optionType + "']"));
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
-        list.selectByValue(optionType);
+        coralSelectList.selectByValue(optionType);
     }
 
     public boolean checkAllConstraintsAvailable() {
-        CoralSelect selectList = new CoralSelect("name='./type'");
-        CoralSelectList list = selectList.openSelectList();
+        $( "[name='./type'] > button").click();
+        CoralSelectList coralSelectList = new CoralSelectList($("[name='./type']"));
+        if(!coralSelectList.isVisible()) {
+            CoralSelect selectList = new CoralSelect("name='./type'");
+            coralSelectList = selectList.openSelectList();
+        }
         String[] constraints = {"text","textarea","email","tel","date", "number","password"};
         Boolean present = true;
         for(int i = 0; i < constraints.length; i++) {
-            if(!list.getItemByValue(constraints[i]).isDisplayed())
+            if(!coralSelectList.getItemByValue(constraints[i]).isDisplayed())
                 present = false;
         }
 

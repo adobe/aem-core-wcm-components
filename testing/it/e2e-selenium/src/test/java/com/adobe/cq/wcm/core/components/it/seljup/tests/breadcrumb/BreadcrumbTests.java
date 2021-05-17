@@ -18,6 +18,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb;
 
 import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
 import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BreadcrumbEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BaseBreadcrumbItems;
@@ -51,7 +52,7 @@ public class BreadcrumbTests {
     private List<String> testPages;
     private String proxyPath;
     private String cmpPath;
-    private PageEditorPage editorPage;
+    private EditorPage editorPage;
     private BaseBreadcrumbItems breadcrumbItems;
     private static String componentName = "breadcrumb";
 
@@ -132,7 +133,7 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
     }
 
-    public void changeStartLevel() throws InterruptedException, TimeoutException {
+    public void testChangeStartLevel() throws InterruptedException, TimeoutException {
         Commons.switchContext("ContentFrame");
         assertTrue(breadcrumbItems.getItems().size() == 5, "number of breadcrumb items should be 5");
         Commons.switchToDefaultContext();
@@ -148,7 +149,7 @@ public class BreadcrumbTests {
         Commons.switchToDefaultContext();
     }
 
-    public void setZeroStartLevel() throws InterruptedException, TimeoutException {
+    public void testSetZeroStartLevel() throws InterruptedException, TimeoutException {
         Commons.switchContext("ContentFrame");
         assertTrue(breadcrumbItems.getItems().size() == 5, "number of breadcrumb items should be 5");
         Commons.switchToDefaultContext();
@@ -160,7 +161,7 @@ public class BreadcrumbTests {
         assertTrue(editDialog.checkInvalidStartLevel(), "Setting Start Level value to 0 is not allowed");
     }
 
-    public void set100StartLevel() throws InterruptedException, TimeoutException {
+    public void testSet100StartLevel() throws InterruptedException, TimeoutException {
         Commons.switchContext("ContentFrame");
         assertTrue(breadcrumbItems.getItems().size() == 5, "number of breadcrumb items should be 5");
         assertTrue(breadcrumbItems.getActiveItems().size() == 1, "number of active breadcrumb items should be 1");

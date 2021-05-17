@@ -38,11 +38,10 @@ public class UrlProcessors {
 
         public boolean urlProcessorExits() {
             final WebDriver webDriver = WebDriverRunner.getWebDriver();
-            new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(selector)));
+            new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
             Helpers.waitForElementAnimationFinished($(selector));
-            // TODO: isDisplayed() is not working for twitter embed.
-            //  Adding wait for 4-5 seconds is working but not a good solution
-            return $(selector).exists();
+            return $(selector).isDisplayed();
         }
 
         public String[] getUrls() {

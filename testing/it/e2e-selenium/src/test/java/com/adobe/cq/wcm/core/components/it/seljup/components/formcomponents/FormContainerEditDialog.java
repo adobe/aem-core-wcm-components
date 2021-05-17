@@ -16,10 +16,16 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents;
 
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.codeborne.selenide.WebDriverRunner;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -29,10 +35,19 @@ public class FormContainerEditDialog extends Dialog {
 
     private static String actionInput = "input[name='./action']";
 
-    public void selectActionType(String action) throws InterruptedException {
-        CoralSelect coralSelect = new CoralSelect("name='./actionType'");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        coralSelect.selectItemByValue(action);
+    public void selectActionType(String action) {
+        //Open selectlist
+        $( "[name='./actionType'] > button").click();
+        CoralSelectList coralSelectList = new CoralSelectList($("[name='./actionType']"));
+        if(!coralSelectList.isVisible()) {
+            CoralSelect selectList = new CoralSelect("name='./actionType'");
+            coralSelectList = selectList.openSelectList();
+        }
+
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + action + "']"));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);
+        coralSelectList.selectByValue(action);
     }
 
     public String getActionInputValue() {
