@@ -31,6 +31,9 @@
       "relativeCoordinates": "0.7164,0.4033,1.0000,0.9988,0.4156,0.9988",
       "link": {
         "url": "http://adobe.com",
+        "attributes": {
+          "target": "_blank"
+        },
         "valid": true
       },
       "alt": ""
