@@ -40,7 +40,7 @@ class LanguageNavigationImplTest extends com.adobe.cq.wcm.core.components.intern
     @Override
     protected void verifyLanguageNavigationItem(Object[] expectedPage, LanguageNavigationItem item) {
         super.verifyLanguageNavigationItem(expectedPage, item);
-        assertValidLink(item.getLink(), CONTEXT_PATH + expectedPage[6]);
+        assertValidLink(item.getLink(), (String) expectedPage[6], context.request());
     }
 
 }
