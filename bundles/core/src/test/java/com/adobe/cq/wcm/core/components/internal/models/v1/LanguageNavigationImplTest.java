@@ -68,7 +68,7 @@ public class LanguageNavigationImplTest {
                     "/content/languagenavigation/LOCALE-4/LOCALE-9.html"},
     };
 
-    private final AemContext context = CoreComponentTestContext.newAemContext();
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
     protected String testBase;
     protected String resourceType;

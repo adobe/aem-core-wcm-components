@@ -14,10 +14,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     cq:icon="globeGrid"
     jcr:description="Global language structure navigation"
     jcr:primaryType="cq:Component"
-    jcr:title="Language Navigation "
-    sling:resourceSuperType="core/wcm/components/languagenavigation/v2/languagenavigation"
-    componentGroup="Core Components Examples"/>
+    jcr:title="Language Navigation (v2) (work-in-progress)"
+    componentGroup=".wip"/>
