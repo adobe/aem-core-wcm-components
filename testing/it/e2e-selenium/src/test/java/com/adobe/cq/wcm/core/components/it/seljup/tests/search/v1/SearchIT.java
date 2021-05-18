@@ -100,7 +100,7 @@ public class SearchIT extends AuthorBaseUITest {
         page1Path = authorClient.createPage("page_1", "page_1", rootPage, defaultPageTemplate).getSlingPath();
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("_charset_", "UTF-8");
-        data.put("./jcr:content/jcr:title", "Page 1");
+        data.put("./jcr:content/jcr:title", "Parent Page 1");
         Commons.editNodeProperties(adminClient, page1Path, data);
 
         // create 20 pages
@@ -195,7 +195,7 @@ public class SearchIT extends AuthorBaseUITest {
         search.setInput("Page 1.1.1");
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isResultsVisible(), "Results should be displayed");
-        assertTrue(search.isPagePresentInSearch(page11Path +"/page_1_1_1"), "page_1_1_1 should be present in search results");
+        assertTrue(search.isPagePresentInSearch(page111Path), "page_1_1_1 should be present in search results");
     }
 
     /**
@@ -209,9 +209,9 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
-        search.setInput("Page");
+        search.setInput("Page 1");
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        assertTrue(!search.isPagePresentInSearch(page1Path ), "page_1 should not be present in search results");
+        assertTrue(!search.isPagePresentInSearch(page1Path), "Parent page 1 should not be present in search results");
     }
 
     /**

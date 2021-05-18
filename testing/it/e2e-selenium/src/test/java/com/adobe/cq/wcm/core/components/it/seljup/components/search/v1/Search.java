@@ -59,9 +59,6 @@ public class Search extends BaseComponent {
     }
 
     public boolean isPagePresentInSearch(String pagePath) {
-        String component = item + "[href='"+pagePath+".html']";
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(component)));
         return $(item + "[href='"+pagePath+".html']").isDisplayed();
     }
 
