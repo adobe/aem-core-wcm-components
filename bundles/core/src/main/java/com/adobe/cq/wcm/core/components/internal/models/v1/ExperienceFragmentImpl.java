@@ -91,7 +91,7 @@ public class ExperienceFragmentImpl extends AbstractComponentImpl implements Exp
     private static final String CONTENT_ROOT = "/content";
 
     /**
-     * Class name to be applied if tshe XF is empty or not configured.
+     * Class name to be applied if the XF is empty or not configured.
      */
     private static final String CSS_EMPTY_CLASS = "empty";
 
