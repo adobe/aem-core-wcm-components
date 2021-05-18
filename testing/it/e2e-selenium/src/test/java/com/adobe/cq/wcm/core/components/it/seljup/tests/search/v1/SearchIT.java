@@ -189,6 +189,7 @@ public class SearchIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Default configuration (search in current page tree)")
         public void testDefaultConfiguration() throws ClientException, InterruptedException {
+        editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
 
@@ -270,6 +271,7 @@ public class SearchIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Mark - search term marked")
     public void testMark() throws ClientException, InterruptedException {
+        editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
         assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
@@ -301,6 +303,7 @@ public class SearchIT extends AuthorBaseUITest {
         data.put("sling:resourceType", "wcm/core/components/policies/mappings");
         Commons.assignPolicy(adminClient,"/search",data, policyAssignmentPath, 200, 201);
 
+        editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         search.setInput("Page");
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
