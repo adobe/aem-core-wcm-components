@@ -1,0 +1,75 @@
+{
+  "id": "navigation-96ea7ce867",
+  "items": [
+    {
+      "id": "navigation-96ea7ce867-item-d8dc67d78b",
+      "path": "/content/navigation-vanity-paths",
+      "link": {
+        "valid": true,
+        "url": "/core/nav0.html"
+      },
+      "children": [
+        {
+          "id": "navigation-96ea7ce867-item-c504772c06",
+          "path": "/content/navigation-vanity-paths/navigation-1",
+          "link": {
+            "valid": true,
+            "url": "/core/nav1.html"
+          },
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "Navigation 1",
+          ":type": "cq:PageContent",
+          "dataLayer": {
+            "navigation-96ea7ce867-item-c504772c06": {
+              "@type": "core/wcm/components/navigation/v2/navigation/item",
+              "dc:title": "Navigation 1",
+              "xdm:linkURL": "/core/nav1.html"
+            }
+          }
+        },
+        {
+          "id": "navigation-96ea7ce867-item-e691a7caca",
+          "path": "/content/navigation-vanity-paths/navigation-2",
+          "link": {
+            "valid": true,
+            "url": "/core/nav2.html"
+          },
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "Navigation 2",
+          ":type": "cq:PageContent",
+          "dataLayer": {
+            "navigation-96ea7ce867-item-e691a7caca": {
+              "@type": "core/wcm/components/navigation/v2/navigation/item",
+              "dc:title": "Navigation 2",
+              "xdm:linkURL": "/core/nav2.html"
+            }
+          }
+        }
+      ],
+      "level": 0,
+      "active": false,
+      "current": false,
+      "title": "Navigation",
+      ":type": "cq:PageContent",
+      "dataLayer": {
+        "navigation-96ea7ce867-item-d8dc67d78b": {
+          "@type": "core/wcm/components/navigation/v2/navigation/item",
+          "dc:title": "Navigation",
+          "xdm:linkURL": "/core/nav0.html"
+        }
+      }
+    }
+  ],
+  ":type": "core/wcm/components/navigation/v2/navigation",
+  "dataLayer": {
+    "navigation-96ea7ce867": {
+      "@type": "core/wcm/components/navigation/v2/navigation"
+    }
+  }
+}

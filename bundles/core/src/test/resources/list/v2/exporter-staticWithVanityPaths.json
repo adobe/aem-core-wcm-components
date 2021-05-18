@@ -1,0 +1,43 @@
+{
+    "id": "list-d860131bb1",
+    "dateFormatString": "yyyy-MM-dd",
+    "items": [
+        {
+            "id": "list-d860131bb1-item-29f192d859",
+            "path": "/content/list/pages/page_3",
+            "title": "Page 3",
+            "url": "/context/page_3.html",
+            ":type": "cq:PageContent",
+            "dataLayer": {
+                "list-d860131bb1-item-29f192d859": {
+                    "@type": "cq:PageContent",
+                    "dc:title": "Page 3",
+                    "xdm:linkURL": "/context/page_3.html"
+                }
+            }
+        },
+        {
+            "id": "list-d860131bb1-item-86df63380b",
+            "path": "/content/list/pages/page_4",
+            "title": "Page 4",
+            "url": "/context/4_page.html",
+            ":type": "cq:PageContent",
+            "dataLayer": {
+                "list-d860131bb1-item-86df63380b": {
+                    "@type": "cq:PageContent",
+                    "dc:title": "Page 4",
+                    "xdm:linkURL": "/context/4_page.html"
+                }
+            }
+        }
+    ],
+    "showDescription": true,
+    "showModificationDate": true,
+    "linkItems": true,
+    ":type": "core/wcm/components/list/v2/list",
+    "dataLayer": {
+        "list-d860131bb1": {
+            "@type": "core/wcm/components/list/v2/list"
+        }
+    }
+}

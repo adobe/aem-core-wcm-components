@@ -55,7 +55,7 @@ public class NavigationImplTest {
 
     private static final String TEST_BASE = "/navigation";
 
-    private final AemContext context = CoreComponentTestContext.newAemContext();
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
     protected static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT = "/content/navigation";
@@ -83,6 +83,7 @@ public class NavigationImplTest {
     private static final String NAV_COMPONENT_16 = TEST_ROOT + "/jcr:content/root/navigation-component-16";
     private static final String NAV_COMPONENT_17 = TEST_ROOT + "/jcr:content/root/navigation-component-17";
     private static final String NAV_COMPONENT_18 = "/content/navigation-redirect-chain/jcr:content/root/navigation-component-18";
+    private static final String NAV_COMPONENT_19 = TEST_ROOT + "/jcr:content/root/navigation-component-19";
 
 
     protected String testBase;
@@ -343,7 +344,7 @@ public class NavigationImplTest {
             {"/content/navigation-redirect-chain", 1, true, "/content/navigation-redirect-chain.html"},
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation18"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation18"));
     }
     /**
      * Test to verify #945: if shadowing is disabled Redirecting pages should be displayed instead of redirect targets
@@ -465,13 +466,25 @@ public class NavigationImplTest {
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation14"));
     }
 
+    @Test
+    protected void testVanityPaths() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_19);
+        Object[][] expectedPages = {
+                {"/content/navigation-vanity-paths", 0, false, "/nav0.html"},
+                {"/content/navigation-vanity-paths/navigation-1", 1, false, "/nav1.html"},
+                {"/content/navigation-vanity-paths/navigation-2", 1, false, "/nav2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation19"));
+    }
+
     protected Navigation getNavigationUnderTest(String resourcePath) {
         Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath("/core");
         Component component = mock(Component.class);
-        when(component.getResourceType()).thenReturn(NavigationImpl.RESOURCE_TYPE);
+        when(component.getResourceType()).thenReturn(resourceType);
         SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);

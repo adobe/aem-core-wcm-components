@@ -64,6 +64,19 @@ public interface Component extends ComponentExporter {
     default ComponentData getData() {
         return null;
     }
+    
+    /**
+     * Returns the style system information associated with the component
+     *
+     * @return CSS classes selected by the content author delimited using a SPACE character
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    @Nullable
+    @JsonProperty("appliedCssClassNames")
+    default String getAppliedCssClasses() {
+        return null;
+    }
 
     /**
      * @see ComponentExporter#getExportedType()
@@ -74,4 +87,5 @@ public interface Component extends ComponentExporter {
     default String getExportedType() {
         return "";
     }
+
 }

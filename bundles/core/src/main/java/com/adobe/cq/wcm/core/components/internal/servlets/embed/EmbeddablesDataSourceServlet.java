@@ -51,6 +51,7 @@ import com.day.cq.commons.jcr.JcrConstants;
     service = { Servlet.class },
     property = {
         "sling.servlet.resourceTypes=" + EmbeddablesDataSourceServlet.RESOURCE_TYPE_V1,
+        "sling.servlet.resourceTypes=" + EmbeddablesDataSourceServlet.RESOURCE_TYPE_V2,
         "sling.servlet.methods=GET",
         "sling.servlet.extensions=html"
     }
@@ -58,6 +59,7 @@ import com.day.cq.commons.jcr.JcrConstants;
 public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
 
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/embed/v1/datasources/embeddables";
+    public static final String RESOURCE_TYPE_V2 = "core/wcm/components/embed/v2/datasources/embeddables";
 
     private static final long serialVersionUID = 1L;
     private static final String COMPONENT_PROPERTY_ENABLED = "enabled";

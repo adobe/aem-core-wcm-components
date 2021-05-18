@@ -233,7 +233,7 @@
                                     });
                                 });
                                 // unbind events on dialog close
-                                channel.one("dialog-closed", function() {
+                                channel.one("coral-overlay:beforeclose", function() {
                                     selectList.off("coral-selectlist:change" + NS);
                                 });
                             }

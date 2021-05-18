@@ -130,6 +130,13 @@
                                                 fieldLabel="Label"
                                                 name="./accessibilityLabel"
                                                 value=""/>
+                                            <roleAttribute
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                    fieldDescription="HTML ROLE attribute to apply to the component."
+                                                    fieldLabel="Role"
+                                                    name="./roleAttribute"
+                                                    value=""/>
                                         </items>
                                     </column>
                                 </items>

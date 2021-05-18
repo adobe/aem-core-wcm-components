@@ -33,6 +33,7 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -104,6 +105,12 @@ public class ExperienceFragmentImpl extends AbstractComponentImpl implements Exp
      */
     @Self
     private SlingHttpServletRequest request;
+
+    /**
+     * The current resource.
+     */
+    @SlingObject
+    protected Resource resource;
 
     /**
      * The current page.
@@ -266,9 +273,9 @@ public class ExperienceFragmentImpl extends AbstractComponentImpl implements Exp
         if (this.children == null) {
             this.children = Optional.ofNullable(this.getLocalizedFragmentVariationPath())
                     .filter(StringUtils::isNotBlank)
-                    .map(this.request.getResourceResolver()::getResource)
+                    .map(this.resource.getResourceResolver()::getResource)
                     .map(Resource::listChildren)
-                    .map(it -> ContentFragmentUtils.getComponentExporters(it, this.modelFactory, this.request))
+                    .map(it -> ContentFragmentUtils.getComponentExporters(it, this.modelFactory, this.request, this.resource))
                     .orElseGet(LinkedHashMap::new);
         }
         return this.children;

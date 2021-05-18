@@ -10,5 +10,7 @@
     ],
     ":items": {
     },
-    ":type": "core/wcm/components/container/v1/container"
+    ":type": "core/wcm/components/container/v1/container",
+    "roleAttribute": "main",
+    "accessibilityLabel": "container"
 }
