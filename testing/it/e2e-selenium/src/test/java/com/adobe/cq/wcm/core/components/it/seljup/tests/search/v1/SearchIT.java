@@ -194,7 +194,7 @@ public class SearchIT extends AuthorBaseUITest {
         assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
 
         search.setInput("Page 1.1.1");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS * 5);
         assertTrue(search.isResultsVisible(), "Results should be displayed");
         assertTrue(search.isPagePresentInSearch(page111Path), "page_1_1_1 should be present in search results");
     }
