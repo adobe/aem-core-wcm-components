@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright 2021 Adobe
   ~
@@ -13,11 +12,11 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
+  ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    cq:icon="compass"
-    jcr:description="Collects a list of pages to display in a navigation tree."
-    jcr:primaryType="cq:Component"
-    jcr:title="Navigation"
-    sling:resourceSuperType="core/wcm/components/navigation/v2/navigation"
-    componentGroup="Core Components Examples"/>
+<template data-sly-template.itemContent="${@ item='The navigation item'}">
+    <a data-sly-attribute="${item.link.htmlAttributes}" title="${item.title}" aria-current="${item.active && 'page'}"
+       data-sly-unwrap="${!item.link.valid}"
+       data-cmp-clickable="${item.data ? true : false}"
+       class="cmp-navigation__item-link">${item.title}</a>
+</template>

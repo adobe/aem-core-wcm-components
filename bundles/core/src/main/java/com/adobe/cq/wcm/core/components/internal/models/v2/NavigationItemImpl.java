@@ -19,7 +19,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
@@ -31,11 +33,13 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     protected List<NavigationItem> children = Collections.emptyList();
     protected int level;
     protected boolean active;
+    private boolean current;
 
-    public NavigationItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
+    public NavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
                               String parentId, boolean isShadowingDisabled, Component component) {
         super(linkHandler, page, parentId, isShadowingDisabled, component);
         this.active = active;
+        this.current = current;
         this.level = level;
         this.children = children;
     }
@@ -53,6 +57,11 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     }
 
     @Override
+    public boolean isCurrent() {
+        return current;
+    }
+
+    @Override
     public List<NavigationItem> getChildren() {
         return children;
     }
@@ -62,4 +71,10 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
         return level;
     }
 
+    @Override
+    @JsonIgnore(false)
+    @Nullable
+    public Link getLink() {
+        return super.getLink();
+    }
 }

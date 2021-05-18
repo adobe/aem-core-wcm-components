@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
-import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

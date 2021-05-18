@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe
+  ~ Copyright 2021 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,16 +13,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<nav data-sly-use.navigation="com.adobe.cq.wcm.core.components.models.Navigation"
-     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-use.groupTemplate="group.html"
-     data-sly-call="${groupTemplate.group @ items=navigation.items}"
-     data-sly-test.hasContent="${navigation.items.size > 0}"
-     id="${navigation.id}"
-     class="cmp-navigation"
-     role="navigation"
-     itemscope itemtype="http://schema.org/SiteNavigationElement"
-	 data-cmp-data-layer="${navigation.data.json}"
-     aria-label="${navigation.accessibilityLabel}">
-</nav>
-<sly data-sly-call="${template.placeholder @ isEmpty=!hasContent, classAppend='cmp-navigation'}"></sly>
+<template data-sly-template.group="${@ items='The navigation items for the current level'}" data-sly-use.itemTemplate="item.html">
+    <ul class="cmp-navigation__group" data-sly-list="${items}">
+        <sly data-sly-call="${itemTemplate.item @ item=item}"></sly>
+    </ul>
+</template>
