@@ -107,12 +107,6 @@ public class ExperienceFragmentImpl extends AbstractComponentImpl implements Exp
     private SlingHttpServletRequest request;
 
     /**
-     * The current resource.
-     */
-    @SlingObject
-    protected Resource resource;
-
-    /**
      * The current page.
      */
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
