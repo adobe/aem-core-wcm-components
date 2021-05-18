@@ -1,0 +1,43 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div data-sly-use.download="com.adobe.cq.wcm.core.components.models.Download"
+     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     data-sly-test.hasContent="${download.filename}"
+     id="${download.id}"
+     class="cmp-download${!wcmmode.disabled ? ' cq-dd-file' : ''}">
+    <h3 class="cmp-download__title" data-sly-test.title="${download.title}" data-sly-element="${download.titleType}">
+        <a data-sly-unwrap="${!download.url}" class="cmp-download__title-link" href="${download.url}">${title}</a>
+    </h3>
+    <div class="cmp-download__description" data-sly-test.description="${download.description}">${description @ context="html"}</div>
+    <dl data-sly-test="${(download.displayFilename && download.filename) || (download.displaySize && download.size) || (download.displayFormat && download.format)}" class="cmp-download__properties">
+        <div data-sly-test="${download.displayFilename && download.filename}" class="cmp-download__property cmp-download__property--filename">
+            <dt class="cmp-download__property-label">${'Filename' @ i18n}</dt>
+            <dd class="cmp-download__property-content">${download.filename}</dd>
+        </div>
+        <div data-sly-test="${download.displaySize && download.size}" class="cmp-download__property cmp-download__property--size">
+            <dt class="cmp-download__property-label">${'Size' @ i18n}</dt>
+            <dd class="cmp-download__property-content">${download.size}</dd>
+        </div>
+        <div data-sly-test="${download.displayFormat && download.format}" class="cmp-download__property cmp-download__property--format">
+            <dt class="cmp-download__property-label">${'Format' @ i18n}</dt>
+            <dd class="cmp-download__property-content">${download.format}</dd>
+        </div>
+    </dl>
+    <a data-sly-test="${download.url && download.actionText}" class="cmp-download__action" href="${download.url}">
+        <span class="cmp-download__action-text">${download.actionText}</span>
+    </a>
+</div>
+<sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-download cq-dd-file'}"></sly>
