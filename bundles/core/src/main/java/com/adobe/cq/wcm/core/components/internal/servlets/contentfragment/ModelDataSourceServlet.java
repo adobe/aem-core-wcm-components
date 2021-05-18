@@ -55,14 +55,16 @@ import static com.day.cq.wcm.api.NameConstants.NT_TEMPLATE;
 @Component(
         service = {Servlet.class},
         property = {
-                "sling.servlet.resourceTypes=" + ModelDataSourceServlet.RESOURCE_TYPE,
+                "sling.servlet.resourceTypes=" + ModelDataSourceServlet.RESOURCE_TYPE_V1,
+                "sling.servlet.resourceTypes=" + ModelDataSourceServlet.RESOURCE_TYPE_V2,
                 "sling.servlet.methods=GET",
                 "sling.servlet.extensions=html"
         }
 )
 public class ModelDataSourceServlet extends AbstractDataSourceServlet {
 
-    public static final String RESOURCE_TYPE = "core/wcm/components/contentfragmentlist/v1/datasource/models";
+    public static final String RESOURCE_TYPE_V1 = "core/wcm/components/contentfragmentlist/v1/datasource/models";
+    public static final String RESOURCE_TYPE_V2 = "core/wcm/components/contentfragmentlist/v2/datasource/models";
 
     @Reference
     private transient ExpressionResolver expressionResolver;

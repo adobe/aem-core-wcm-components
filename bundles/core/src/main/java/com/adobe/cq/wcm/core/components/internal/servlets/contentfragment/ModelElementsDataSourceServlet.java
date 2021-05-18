@@ -48,16 +48,20 @@ import com.day.cq.commons.jcr.JcrConstants;
 @Component(
         service = {Servlet.class},
         property = {
-                "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE,
-                "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY,
+                "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE_V1,
+                "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE_V2,
+                "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY_V1,
+                "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY_V2,
                 "sling.servlet.methods=GET",
                 "sling.servlet.extensions=html"
         }
 )
 public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
 
-    public static final String RESOURCE_TYPE = "core/wcm/components/contentfragmentlist/v1/datasource/elements";
-    public static final String RESOURCE_TYPE_ORDER_BY = "core/wcm/components/contentfragmentlist/v1/datasource/orderby";
+    public static final String RESOURCE_TYPE_V1 = "core/wcm/components/contentfragmentlist/v1/datasource/elements";
+    public static final String RESOURCE_TYPE_V2 = "core/wcm/components/contentfragmentlist/v2/datasource/elements";
+    public static final String RESOURCE_TYPE_ORDER_BY_V1 = "core/wcm/components/contentfragmentlist/v1/datasource/orderby";
+    public static final String RESOURCE_TYPE_ORDER_BY_V2 = "core/wcm/components/contentfragmentlist/v2/datasource/orderby";
 
     protected static final String PARAMETER_AND_PN_MODEL_PATH = ContentFragmentList.PN_MODEL_PATH;
 
@@ -76,7 +80,7 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
         // First try to get the model path from request parameters
         // otherwise determine model path from component resource.
         RequestParameter modelPathRequestParameter = request.getRequestParameter(PARAMETER_AND_PN_MODEL_PATH);
-        boolean isOrderBy = request.getResource().isResourceType(RESOURCE_TYPE_ORDER_BY);
+        boolean isOrderBy = request.getResource().isResourceType(RESOURCE_TYPE_ORDER_BY_V1);
 
         String modelPath;
         if (modelPathRequestParameter != null) {

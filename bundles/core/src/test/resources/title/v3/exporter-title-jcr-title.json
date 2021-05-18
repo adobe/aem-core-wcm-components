@@ -1,0 +1,13 @@
+{
+  "id": "title-7968bee19c",
+  "text": "Hello World",
+  "linkDisabled": false,
+  "dataLayer": {
+    "title-7968bee19c": {
+      "repo:modifyDate": "2016-01-13T15:14:51Z",
+      "@type": "core/wcm/components/title/v3/title",
+      "dc:title": "Hello World"
+    }
+  },
+  ":type": "core/wcm/components/title/v3/title"
+}

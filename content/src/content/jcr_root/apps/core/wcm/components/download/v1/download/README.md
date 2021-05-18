@@ -40,7 +40,7 @@ The following configuration properties are used:
 4. `./displaySize` - defines whether the file size should be displayed.
 5. `./displayFormat` - defines whether the file format should be displayed.
 6. `./displayFilename` - defines whether the filename should be displayed.
-7. `./id` - defines the component HTML ID attribute.
+7. `./hideTitleLink` - defines whether the title link should be hidden.
 
 ### Edit Dialog Properties
 The following JCR properties are used:
@@ -52,6 +52,7 @@ The following JCR properties are used:
 5. `./jcr:description` - defines the download description.
 6. `./descriptionFromAsset` - defines whether the description should be taken from the DAM asset description.
 7. `./actionText` - defines the action text.
+8. `./id` - defines the component HTML ID attribute.
 
 ## BEM Description
 ```

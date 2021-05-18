@@ -24,7 +24,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>List&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>List&lt;sub>v3&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
@@ -49,7 +49,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_tech_list_v2"
+                    linkURL="https://www.adobe.com/go/aem_cmp_tech_list_v3"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
@@ -65,7 +65,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_list_v2"
+                    linkURL="https://www.adobe.com/go/aem_cmp_list_v3"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <title_865328580

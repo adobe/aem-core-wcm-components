@@ -1,0 +1,42 @@
+{
+  "id": "breadcrumb-2f933fab4b",
+  "items": [
+    {
+      "id": "breadcrumb-2f933fab4b-item-11c305ace0",
+      "active": false,
+      "current": false,
+      "link": { "valid": true, "url": "/content/breadcrumb/women.html" },
+      "title": "Women",
+      "dataLayer": {
+        "breadcrumb-2f933fab4b-item-11c305ace0": {
+          "@type": "cq:PageContent",
+          "xdm:linkURL": "/content/breadcrumb/women.html",
+          "dc:title": "Women"
+        }
+      },
+      ":type": "cq:PageContent"
+    },
+    {
+      "id": "breadcrumb-2f933fab4b-item-4fa0220d48",
+      "active": true,
+      "current": true,
+      "link": { "valid": true, "url": "/content/breadcrumb/women/shirts2/devi-sleeveless-shirt.html" },
+      "title": "Devi Sleeveless Shirt",
+      "dataLayer": {
+        "breadcrumb-2f933fab4b-item-4fa0220d48": {
+          "@type": "coretest/components/structure/page",
+          "xdm:linkURL": "/content/breadcrumb/women/shirts2/devi-sleeveless-shirt.html",
+          "dc:title": "Devi Sleeveless Shirt"
+        }
+      },
+      ":type": "coretest/components/structure/page"
+    }
+  ],
+  ":type": "core/wcm/components/breadcrumb/v3/breadcrumb",
+  "dataLayer": {
+    "breadcrumb-2f933fab4b": {
+      "@type": "core/wcm/components/breadcrumb/v3/breadcrumb",
+      "repo:modifyDate": "2016-01-11T15:21:45Z"
+    }
+  }
+}
