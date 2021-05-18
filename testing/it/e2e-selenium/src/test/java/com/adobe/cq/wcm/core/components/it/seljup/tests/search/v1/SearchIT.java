@@ -49,6 +49,7 @@ public class SearchIT extends AuthorBaseUITest {
     private String page1Path;
     private String page11Path;
     private String page111Path;
+    private String page112Path;
     private String policyPath;
     private String proxyPath;
     private String compPath;
@@ -127,7 +128,7 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.editNodeProperties(adminClient, page111Path, data);
 
         // level 2 2
-        String page112Path = authorClient.createPage("page_1_1_2", "page_1_1_2", page11Path, defaultPageTemplate).getSlingPath();
+        page112Path = authorClient.createPage("page_1_1_2", "page_1_1_2", page11Path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Page 1.1.2");
@@ -193,10 +194,10 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
 
-        search.setInput("Page 1.1.1");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        search.setInput("Page 1.1.2");
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isResultsVisible(), "Results should be displayed");
-        assertTrue(search.isPagePresentInSearch(page111Path), "page_1_1_1 should be present in search results");
+        assertTrue(search.isPagePresentInSearch(page112Path), "page_1_1_1 should be present in search results");
     }
 
     /**
