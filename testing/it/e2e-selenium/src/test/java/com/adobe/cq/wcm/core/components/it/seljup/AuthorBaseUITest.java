@@ -60,6 +60,7 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
     public String testLabel;
     public String responsiveGridPath;
     public String configPath;
+    public String contextPath;
     public static CQClient adminClient;
     public  String label;
 
@@ -82,7 +83,7 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
         label = testContentBuilder.getLabel();
 
         testLabel = testContentBuilder.getLabel();
-
+        contextPath = adminClient.getUrl().getPath().substring(0,adminClient.getUrl().getPath().length()-1);
         new DisableTour(authorClient).disableDefaultTours();
 
         LoginPage loginPage = new LoginPage(baseURI);

@@ -183,6 +183,20 @@ public class SearchIT extends AuthorBaseUITest {
         authorClient.deletePageWithRetry(page1Path, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
+    /**
+     * Test: Default configuration (search in current page tree)
+     */
+    @Test
+    @DisplayName("Test: Default configuration (search in current page tree)")
+    public void testDefaultConfiguration() throws ClientException, InterruptedException {
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
+        search.setInput("Page 1.1.1");
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(search.isResultsVisible(), "Results should be displayed");
+        assertTrue(search.isPagePresentInSearch(contextPath + page111Path), "page_1_1_1 should be present in search results");
+    }
 
     /**
      * Test: Change search root (start level 4)
@@ -197,7 +211,7 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         search.setInput("Page 1");
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        assertTrue(!search.isPagePresentInSearch(page1Path), "Parent page 1 should not be present in search results");
+        assertTrue(!search.isPagePresentInSearch(contextPath + page1Path), "Parent page 1 should not be present in search results");
     }
 
     /**
