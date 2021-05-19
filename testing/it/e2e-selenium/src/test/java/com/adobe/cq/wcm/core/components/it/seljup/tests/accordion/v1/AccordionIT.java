@@ -155,7 +155,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
     private ElementsCollection createItem() throws InterruptedException {
         //1.
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         AccordionEditDialog editDialog = accordion.getEditDialog();
         editDialog.openItemsTab();
 
@@ -176,7 +176,7 @@ public class AccordionIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //4.
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
         assertTrue(items.size() == 3, "Number to items added should be 3");
@@ -297,7 +297,7 @@ public class AccordionIT extends AuthorBaseUITest {
     private CoralSelectList selectExpandedItem(int idx) throws InterruptedException {
         //1.
         AccordionEditDialog editDialog = accordion.getEditDialog();
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
 
         //2.
         AccordionEditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
@@ -334,7 +334,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
         //2.
         AccordionEditDialog editDialog = accordion.getEditDialog();
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         verifyExpandedItemsSelect(items, editDialog.getEditDialogProperties());
 
         //3.
@@ -364,7 +364,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //2.
         AccordionEditDialog editDialog = accordion.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         editDialog.openItemsTab();
 
         //3.
@@ -372,7 +372,7 @@ public class AccordionIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //4.
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
 
@@ -412,7 +412,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //2.
         AccordionEditDialog editDialog = accordion.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         editDialog.openItemsTab();
 
         //3.
@@ -422,7 +422,7 @@ public class AccordionIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //5.
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         editDialog.openItemsTab();
 
         //6.
@@ -472,7 +472,7 @@ public class AccordionIT extends AuthorBaseUITest {
         verifyExpandedItems(items, properties);
 
         //4.
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
 
         //5.
         properties =  editDialog.getEditDialogProperties();
@@ -516,7 +516,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
         //2.
         AccordionEditDialog editDialog = accordion.getEditDialog();
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         AccordionEditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
 
         //3.
@@ -569,10 +569,10 @@ public class AccordionIT extends AuthorBaseUITest {
     @DisplayName("Test: Panel Select: Check items")
     public void testPanelSelectItems() throws TimeoutException, InterruptedException {
         //1.
-        String component = "[data-type='Editable'][data-path='" + testPage + Commons.relParentCompPath + componentName +"']";
+        String component = "[data-type='Editable'][data-path='" + cmpPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
-        EditableToolbar editableToolbar = editorPage.openEditableToolbar(testPage + Commons.relParentCompPath + componentName);
+        EditableToolbar editableToolbar = editorPage.openEditableToolbar(cmpPath);
 
         //2.
         EditableToolbarAssertion editableToolbarAssertion = new EditableToolbarAssertion(editableToolbar,
@@ -583,7 +583,7 @@ public class AccordionIT extends AuthorBaseUITest {
         createItem();
 
         //4.
-        editableToolbar = editorPage.openEditableToolbar(testPage + Commons.relParentCompPath + componentName);
+        editableToolbar = editorPage.openEditableToolbar(cmpPath);
 
         //5.
         editableToolbarAssertion = new EditableToolbarAssertion(editableToolbar,
@@ -643,7 +643,7 @@ public class AccordionIT extends AuthorBaseUITest {
         createItem();
 
         //2.
-        EditableToolbar editableToolbar = editorPage.openEditableToolbar(testPage + Commons.relParentCompPath + componentName);
+        EditableToolbar editableToolbar = editorPage.openEditableToolbar(cmpPath);
         EditableToolbarAssertion editableToolbarAssertion = new EditableToolbarAssertion(editableToolbar,
             "editable toolbar of none style selector enabled component - %s button is not displayed while it should");
         editableToolbarAssertion.assertPanelSelectButton(true);
@@ -687,8 +687,8 @@ public class AccordionIT extends AuthorBaseUITest {
     public void testNested() throws  InterruptedException, ClientException {
 
         //1.
-        String accordion1Path = addAccordionItem(proxyPath, testPage + Commons.relParentCompPath + componentName,  "Accordion 1.1");
-        String accordion2Path = addAccordionItem(proxyPath, testPage + Commons.relParentCompPath + componentName,  "Accordion 1.2");
+        String accordion1Path = addAccordionItem(proxyPath, cmpPath,  "Accordion 1.1");
+        String accordion2Path = addAccordionItem(proxyPath, cmpPath,  "Accordion 1.2");
         selectExpandedItem(1);
         String accordion21Path = addAccordionItem(proxyPath, accordion2Path,  "Accordion 2.1");
         String accordion22Path = addAccordionItem(proxyPath, accordion2Path,  "Accordion 2.2");
@@ -707,5 +707,54 @@ public class AccordionIT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
     }
 
+    /**
+     * Test: Allowed components
+     */
+    @Test
+    @DisplayName("Test: Allowed components")
+    public void testAllowedComponents() throws ClientException, InterruptedException, TimeoutException {
+        String teaserProxyPath = Commons.createProxyComponent(adminClient, Commons.rtTeaser_v1, Commons.proxyPath, null, null);
+        String policySuffix = "/accordion/new_policy";
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.clear();
+        data.put("jcr:title", "New Policy");
+        data.put("sling:resourceType", "wcm/core/components/policy/policy");
+        data.put("components",teaserProxyPath);
+        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
+        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
+
+        // add a policy for accordion component
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
+        data.clear();
+        data.put("cq:policy", policyLocation + policySuffix);
+        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
+        Commons.assignPolicy(adminClient,"/accordion",data, policyAssignmentPath, 200, 201);
+
+        String testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
+
+        String compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "accordion", null);
+
+        // open test page in page editor
+        editorPage = new PageEditorPage(testPage);
+        editorPage.open();
+
+        String component = "[data-type='Editable'][data-path='" + compPath +"']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
+
+        //2.
+        EditableToolbarAssertion editableToolbarAssertion = new EditableToolbarAssertion(editableToolbar,
+            "editable toolbar of none style selector enabled component - %s button is displayed while it should not");
+
+        editableToolbarAssertion.assertInsertButton(true);
+
+        editableToolbar.getInsertButton().click();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(Commons.isComponentPresentInInsertDialog(teaserProxyPath), "teaser component should be present in insert dialog");
+
+        Commons.deleteProxyComponent(adminClient, teaserProxyPath);
+    }
 }
 
