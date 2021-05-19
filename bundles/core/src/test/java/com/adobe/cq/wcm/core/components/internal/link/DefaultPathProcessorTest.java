@@ -70,8 +70,8 @@ class DefaultPathProcessorTest {
         assertEquals(path, underTest.sanitize(path, request));
         path = PATH + path;
         assertEquals(path, underTest.sanitize(path, request));
-        path = "/some space#iternal";
-        assertEquals("/some%20space#iternal", underTest.sanitize(path, request));
+        path = "/some space#internal";
+        assertEquals("/some%20space#internal", underTest.sanitize(path, request));
     }
 
 
