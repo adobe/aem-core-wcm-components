@@ -23,6 +23,8 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.commons.Externalizer;
@@ -30,6 +32,8 @@ import com.day.cq.commons.Externalizer;
 @Component(property = Constants.SERVICE_RANKING + ":Integer=" + Integer.MIN_VALUE,
            service = PathProcessor.class)
 public class DefaultPathProcessor implements PathProcessor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultPathProcessor.class);
 
     @Reference
     Externalizer externalizer;
@@ -41,16 +45,34 @@ public class DefaultPathProcessor implements PathProcessor {
 
     @Override
     public @NotNull String sanitize(@NotNull String path, @NotNull SlingHttpServletRequest request) {
+        int fragmentQueryMark = path.indexOf('#');
+        if (fragmentQueryMark < 0) {
+            fragmentQueryMark = path.indexOf('?');
+        }
+
+        final String fragmentQuery;
+        if (fragmentQueryMark >= 0) {
+            fragmentQuery = path.substring(fragmentQueryMark);
+            path = path.substring(0, fragmentQueryMark);
+        } else {
+            fragmentQuery = null;
+        }
         String cp = request.getContextPath();
         if (!StringUtils.isEmpty(cp) && path.startsWith("/") && !path.startsWith(cp + "/")) {
             path = cp + path;
         }
+
         try {
             final URI uri = new URI(path, false);
-            return uri.toString();
+            path = uri.toString();
         } catch (Exception e) {
-            return path;
+            LOG.error(e.getMessage());
         }
+
+        if (fragmentQuery != null) {
+            path = path + fragmentQuery;
+        }
+        return path;
     }
 
     @Override
