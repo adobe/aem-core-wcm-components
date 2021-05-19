@@ -54,7 +54,7 @@ class LinkImplTest {
     void testValidLinkWithoutTarget() {
         Link link = new LinkImpl(URL, URL, MockExternalizerFactory.ROOT + URL,null, null);
 
-        assertValidLink(link, URL, null);
+        assertValidLink(link, URL, (String)null);
         assertNull(link.getReference());
     }
 

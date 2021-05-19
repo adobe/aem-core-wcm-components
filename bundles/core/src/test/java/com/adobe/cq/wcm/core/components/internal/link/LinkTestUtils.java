@@ -15,12 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
-import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,10 +33,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public final class LinkTestUtils {
 
     public static void assertValidLink(@NotNull Link link, @NotNull String linkURL) {
+        assertValidLink(link, linkURL, (SlingHttpServletRequest)null);
+    }
+
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL,
+                                       @Nullable SlingHttpServletRequest request) {
         assertTrue(link.isValid(), "linkValid");
+        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
+        if (request != null && StringUtils.isNotEmpty(request.getContextPath())) {
+            linkURL = request.getContextPath().concat(linkURL);
+        }
         assertEquals(linkURL, link.getURL(), "linkUrl");
         assertEquals(linkURL.replaceAll("^\\/content\\/links\\/site1\\/(.+)","/content/site1/$1"), link.getMappedURL(), "linkMappedUrl");
-        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
         assertEquals(ImmutableMap.of("href", linkURL), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
