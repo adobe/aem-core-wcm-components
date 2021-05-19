@@ -68,7 +68,7 @@ the proxy component and point it to the designated Image component.
 
 For example:
 ```
-imageDelegate="core/wcm/components/image/v2/image"
+imageDelegate="core/wcm/components/image/v3/image"
 ```
 
 ## BEM Description
