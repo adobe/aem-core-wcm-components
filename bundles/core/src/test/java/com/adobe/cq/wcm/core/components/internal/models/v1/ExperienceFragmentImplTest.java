@@ -197,7 +197,7 @@ class ExperienceFragmentImplTest {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-1a", NO_LOC_PAGE);
         assertEquals(XF_NAME, experienceFragment.getName());
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf1"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf1a"));
     }
 
     /**
@@ -221,7 +221,7 @@ class ExperienceFragmentImplTest {
     void testUndefinedXFInTemplateWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-2a", NO_LOC_PAGE);
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf2"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf2a"));
     }
 
     /**
@@ -245,7 +245,7 @@ class ExperienceFragmentImplTest {
     void testEmptyXFInTemplateWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-3a", NO_LOC_PAGE);
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf3"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf3a"));
     }
 
 
@@ -275,7 +275,7 @@ class ExperienceFragmentImplTest {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-10a", EN_PAGE);
         assertEquals(XF_NAME, experienceFragment.getName());
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf10"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf10a"));
     }
 
     /**
@@ -325,7 +325,7 @@ class ExperienceFragmentImplTest {
     void testUndefinedXFInTemplateWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-12a", EN_PAGE);
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf12"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf12a"));
     }
 
     /**
@@ -349,7 +349,7 @@ class ExperienceFragmentImplTest {
     void testEmptyXFInTemplateWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-13a", EN_PAGE);
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf13"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf13a"));
     }
 
 
@@ -379,7 +379,7 @@ class ExperienceFragmentImplTest {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-20a", US_EN_PAGE);
         assertEquals(XF_NAME, experienceFragment.getName());
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf20"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf20a"));
     }
 
     /**
@@ -429,7 +429,7 @@ class ExperienceFragmentImplTest {
     void testUndefinedXFInTemplateWithLocalizationWithDifferentCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-22a", US_EN_PAGE);
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf22"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf22a"));
     }
 
 
@@ -459,7 +459,7 @@ class ExperienceFragmentImplTest {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-30a", CH_MYSITE_FR_PAGE);
         assertEquals(XF_NAME, experienceFragment.getName());
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf30"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf30a"));
     }
 
     /**
@@ -509,7 +509,7 @@ class ExperienceFragmentImplTest {
     void testUndefinedXFInTemplateWithLocalizationWithDifferentCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-32a", CH_MYSITE_FR_PAGE);
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf32"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf32a"));
     }
 
 
@@ -539,7 +539,7 @@ class ExperienceFragmentImplTest {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-40a", CH_FR_PAGE);
         assertEquals(XF_NAME, experienceFragment.getName());
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf40"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf40a"));
     }
 
     /**
@@ -589,7 +589,7 @@ class ExperienceFragmentImplTest {
     void testUndefinedXFInTemplateWithLocalizationWithDifferentCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-42a", CH_FR_PAGE);
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf42"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf42a"));
     }
 
 
@@ -619,7 +619,7 @@ class ExperienceFragmentImplTest {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-50a", BLUEPRINT_PAGE);
         assertEquals(XF_NAME, experienceFragment.getName());
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf50"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf50a"));
     }
 
     /**
@@ -671,7 +671,7 @@ class ExperienceFragmentImplTest {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-60a", LIVECOPY_PAGE);
         assertEquals(XF_NAME, experienceFragment.getName());
-        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf60"));
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf60a"));
     }
 
     /**

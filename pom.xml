@@ -23,13 +23,13 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.16.1-SNAPSHOT</version>
+        <version>2.16.3-SNAPSHOT</version>
         <relativePath>parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.reactor</artifactId>
     <packaging>pom</packaging>
-    <version>2.16.1-SNAPSHOT</version>
+    <version>2.16.3-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Reactor</name>
 
@@ -68,6 +68,7 @@
         <module>testing/it/ui-js</module>
         <module>testing/it/http</module>
         <module>testing/it/e2e</module>
+        <module>testing/it/e2e-selenium</module>
         <module>content</module>
         <module>config</module>
         <module>all</module>

@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragmentList;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -58,14 +59,15 @@ import static com.day.cq.dam.api.DamConstants.NT_DAM_ASSET;
                 ContentFragmentList.class,
                 ComponentExporter.class
         },
-        resourceType = ContentFragmentListImpl.RESOURCE_TYPE
+        resourceType = {ContentFragmentListImpl.RESOURCE_TYPE_V1,ContentFragmentListImpl.RESOURCE_TYPE_V2}
 )
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ContentFragmentListImpl implements ContentFragmentList {
+public class ContentFragmentListImpl extends AbstractComponentImpl implements ContentFragmentList {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContentFragmentListImpl.class);
 
-    public static final String RESOURCE_TYPE = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
+    public static final String RESOURCE_TYPE_V1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
+    public static final String RESOURCE_TYPE_V2 = "core/wcm/components/contentfragmentlist/v2/contentfragmentlist";
 
     public static final String DEFAULT_DAM_PARENT_PATH = "/content/dam";
 

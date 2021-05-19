@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.models;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+
 /**
  * Interface for an image map area, used by the {@link Image} model.
  *
@@ -52,6 +54,16 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getRelativeCoordinates() {
+        return null;
+    }
+
+    /**
+     * Returns the link of the image area.
+     *
+     * @see Link of the image area.
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default Link getLink() {
         return null;
     }
 

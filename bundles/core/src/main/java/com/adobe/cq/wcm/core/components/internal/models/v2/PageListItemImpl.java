@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl {
-    
+
     public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
         super(linkHandler, page, parentId, isShadowingDisabled, component);
     }

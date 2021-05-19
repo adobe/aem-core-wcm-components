@@ -69,6 +69,7 @@ class DownloadImplTest {
     private static final String DOWNLOAD_WITH_DAM_PROPERTIES = "download-with-dam-properties";
     private static final String DOWNLOAD_FULLY_CONFIGURED_FILE = "download-fully-configured-file";
     private static final String DOWNLOAD_WITH_TITLE_TYPE = "download-with-title-type";
+    private static final String DOWNLOAD_WITHOUT_ACTION_TEXT = "download-without-action-text";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -188,7 +189,7 @@ class DownloadImplTest {
     void testDownloadWithoutActionText() {
         Download downloadWithoutActionText = getDownloadUnderTest(DOWNLOAD_2);
         assertNull(downloadWithoutActionText.getActionText(), "Expected action text is not correct");
-        Utils.testJSONExport(downloadWithoutActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITH_DAM_PROPERTIES));
+        Utils.testJSONExport(downloadWithoutActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITHOUT_ACTION_TEXT));
     }
 
     private Download getDownloadUnderTest(String resourcePath, Object ... properties) {
