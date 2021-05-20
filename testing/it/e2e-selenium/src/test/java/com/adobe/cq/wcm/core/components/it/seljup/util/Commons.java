@@ -634,4 +634,7 @@ public class Commons {
         actions().release().build().perform();
     }
 
+    public static boolean isComponentPresentInInsertDialog(String component) {
+        return $("coral-selectlist-item[value='" + component + "']").isDisplayed();
+    }
 }

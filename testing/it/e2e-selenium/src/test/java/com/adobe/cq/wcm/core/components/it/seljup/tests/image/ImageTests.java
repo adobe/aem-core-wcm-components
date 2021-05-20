@@ -221,5 +221,19 @@ public class ImageTests {
         assertTrue(!image.isLinkSet(), "Image link should not be set");
     }
 
+    public void testSetLinkV2() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.openMetadataTab();
+        image.getEditDialog().setLinkURL(redirectPage);
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        image.imageClick();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
+    }
 
 }

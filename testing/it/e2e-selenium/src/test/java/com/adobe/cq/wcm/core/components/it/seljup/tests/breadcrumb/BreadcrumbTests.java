@@ -104,7 +104,7 @@ public class BreadcrumbTests {
         assertTrue(breadcrumbItems.isItemActive("testPage_L5"), "testPage_L5 should be active");
         Commons.switchToDefaultContext();
 
-        openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
+        openConfiguration(cmpPath);
         BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
         editDialog.setHideCurrent(true);
         Commons.saveConfigureDialog();
@@ -123,7 +123,7 @@ public class BreadcrumbTests {
         assertTrue(!breadcrumbItems.isItemPresent("testPage_L3"), "testPage_L3 should not be visible");
         Commons.switchToDefaultContext();
 
-        openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
+        openConfiguration(cmpPath);
         BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
         editDialog.setShowHidden(true);
         Commons.saveConfigureDialog();
@@ -137,7 +137,7 @@ public class BreadcrumbTests {
         Commons.switchContext("ContentFrame");
         assertTrue(breadcrumbItems.getItems().size() == 5, "number of breadcrumb items should be 5");
         Commons.switchToDefaultContext();
-        openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
+        openConfiguration(cmpPath);
 
         BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
         assertTrue(editDialog.getStartLevelValue() == 2,"Start level should be 2");
@@ -153,7 +153,7 @@ public class BreadcrumbTests {
         Commons.switchContext("ContentFrame");
         assertTrue(breadcrumbItems.getItems().size() == 5, "number of breadcrumb items should be 5");
         Commons.switchToDefaultContext();
-        openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
+        openConfiguration(cmpPath);
 
         BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
         assertTrue(editDialog.getStartLevelValue() == 2,"Start level should be 2");
@@ -166,7 +166,7 @@ public class BreadcrumbTests {
         assertTrue(breadcrumbItems.getItems().size() == 5, "number of breadcrumb items should be 5");
         assertTrue(breadcrumbItems.getActiveItems().size() == 1, "number of active breadcrumb items should be 1");
         Commons.switchToDefaultContext();
-        openConfiguration(testPages.get(4) + Commons.relParentCompPath + componentName);
+        openConfiguration(cmpPath);
 
         BreadcrumbEditDialog editDialog = new BreadcrumbEditDialog();
         assertTrue(editDialog.getStartLevelValue() == 2,"Start level should be 2");

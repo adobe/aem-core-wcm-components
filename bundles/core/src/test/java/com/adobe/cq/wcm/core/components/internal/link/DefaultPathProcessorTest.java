@@ -21,7 +21,7 @@ import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.commons.Externalizer;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -32,21 +32,21 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(AemContextExtension.class)
+@ExtendWith({AemContextExtension.class})
 class DefaultPathProcessorTest {
 
     public static final String PATH = "/some/path";
-    private final AemContext context = new AemContext();
-    PathProcessor underTest;
+    private final AemContext context = CoreComponentTestContext.newAemContext();
+    private final AemContext localContext = new AemContext();
 
     @Test()
     void testExternalizeWithException() {
         Externalizer externalizer = mock(Externalizer.class);
         when(externalizer.publishLink(any(ResourceResolver.class), anyString())).thenThrow(IllegalArgumentException.class);
-        context.registerService(externalizer);
-        underTest = context.registerService(new DefaultPathProcessor());
+        localContext.registerService(externalizer);
+        DefaultPathProcessor underTest = localContext.registerService(new DefaultPathProcessor());
         String path = PATH;
-        assertEquals(path, underTest.externalize(path, context.request()));
+        assertEquals(path, underTest.externalize(path, localContext.request()));
     }
 
     @Test
@@ -54,7 +54,25 @@ class DefaultPathProcessorTest {
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
         when(resourceResolver.map(any(SlingHttpServletRequest.class), anyString())).thenThrow(IllegalStateException.class);
         MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(resourceResolver);
-        underTest = context.registerService(new DefaultPathProcessor());
+        DefaultPathProcessor underTest = localContext.registerService(new DefaultPathProcessor());
         assertEquals(PATH, underTest.map(PATH, request));
     }
+
+    @Test
+    void testSanitizeInternalLik() {
+        DefaultPathProcessor underTest = context.registerService(new DefaultPathProcessor());
+        String path = "#internal";
+        MockSlingHttpServletRequest request = context.request();
+        assertEquals(path, underTest.sanitize(path, request));
+        path = PATH + path;
+        assertEquals(path, underTest.sanitize(path, request));
+        path = "?request=value";
+        assertEquals(path, underTest.sanitize(path, request));
+        path = PATH + path;
+        assertEquals(path, underTest.sanitize(path, request));
+        path = "/some space#internal";
+        assertEquals("/some%20space#internal", underTest.sanitize(path, request));
+    }
+
+
 }

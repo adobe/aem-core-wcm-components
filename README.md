@@ -55,7 +55,7 @@ Please help us making the Core Components better by responding to our **[short u
 6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 7. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
 8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
-9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v2/button)
+9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
 10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
 11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
 12. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
@@ -97,7 +97,7 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 Core Components | AEM as a Cloud Service | AEM 6.5 | AEM 6.4 | Java SE | Maven
 ----------------|------------------------|---------|---------|---------|---------
-[2.16.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.16.2) | Continual | 6.5.5.0+ (*) | 6.4.8.1+ (*) | 8, 11 | 3.3.9+
+[2.16.4](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.16.4) | Continual | 6.5.5.0+ (*) | 6.4.8.1+ (*) | 8, 11 | 3.3.9+
 
 (*) - Since version 2.11.0 `org.apache.sling.models.impl` version 1.4.12 or higher is required (due to [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
 

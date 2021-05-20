@@ -65,6 +65,15 @@ public class ImageIT extends AuthorBaseUITest {
     }
 
     /**
+     * Test: set link on image
+     */
+    @Test
+    @DisplayName("Test: set link on image")
+    public void testSetLink() throws InterruptedException, TimeoutException {
+        imageTests.testSetLinkV2();
+    }
+
+    /**
      * Test: Disable caption popup
      */
     @Test
