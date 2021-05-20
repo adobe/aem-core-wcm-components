@@ -14,7 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.item="${@ list, item}">
-    <article>
+    <article data-sly-test="${!list.displayItemAsTeaser}">
         <a class="cmp-list__item-link" data-sly-attribute="${item.link.htmlAttributes}" data-sly-unwrap="${!list.linkItems || !item.link.valid}">
             data-cmp-clickable="${item.data ? true : false}">
             <span class="cmp-list__item-title">${item.title}</span>
@@ -23,4 +23,6 @@
         </a>
         <span data-sly-test="${list.showDescription}" class="cmp-list__item-description">${item.description}</span>
     </article>
+    <sly  data-sly-test="${list.displayItemAsTeaser}"
+          data-sly-resource="${item.teaserResource @ resourceType='core/wcm/components/teaser/v2/teaser'}"></sly>
 </template>

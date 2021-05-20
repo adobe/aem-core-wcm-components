@@ -341,6 +341,15 @@
                                                 text="Show date"
                                                 uncheckedValue="false"
                                                 value="true"/>
+                                            <displayItemAsTeaser
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="{Boolean}false"
+                                                fieldDescription="When checked, the item is displayed as a teaser."
+                                                name="./displayItemAsTeaser"
+                                                text="Display as teaser"
+                                                uncheckedValue="{Boolean}false"
+                                                value="{Boolean}true"/>
                                         </items>
                                     </column>
                                 </items>

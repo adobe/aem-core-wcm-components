@@ -15,10 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +39,36 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
+
+    /**
+     * The current component.
+     */
+    @ScriptVariable
+    private Component component;
+
+    /**
+     * The current resource.
+     */
+    @Inject
+    private Resource resource;
+
+    /**
+     * Flag indicating if the image should be inherited from the target page.
+     */
+    private boolean imageFromPage = false;
+
+    /**
+     * Initialize the model.
+     */
+    @PostConstruct
+    protected void initModel() {
+        super.initModel();
+        ValueMap properties = resource.getValueMap();
+        imageFromPage = properties.get(Teaser.PN_IMAGE_FROM_PAGE, imageFromPage);
+        if (!this.hasImage() && imageFromPage && this.getTargetPage().isPresent() && this.getTargetPage().get().getContentResource("cq:featuredimage") != null) {
+            this.setImageResource(component, this.getTargetPage().get().getContentResource("cq:featuredimage"), hiddenImageResourceProperties);
+        }
+    }
 
     @Override
     @Nullable

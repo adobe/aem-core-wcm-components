@@ -15,9 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +33,7 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
@@ -34,6 +41,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
+
+    @Inject
+    private ModelFactory modelFactory;
+
+    protected Image featuredImage;
+    protected boolean useFeaturedImage = false;
 
     @Override
     @Nullable
@@ -51,6 +64,36 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt ) {
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
+    }
+
+    /**
+     * Initialize the model.
+     */
+    @PostConstruct
+    protected void initModel() {
+        super.initModel();
+        if (!hasContent) {
+            Resource featuredImageResource = currentPage.getContentResource("cq:featuredimage");
+            if (featuredImageResource != null && !StringUtils.equals(resource.getPath(), featuredImageResource.getPath())) {
+                featuredImage = modelFactory.getModelFromWrappedRequest(this.request, featuredImageResource, Image.class);
+                if (featuredImage != null) {
+                    src = featuredImage.getSrc();
+                    alt = featuredImage.getAlt();
+                    disableLazyLoading = !featuredImage.isLazyEnabled();
+                }
+            }
+
+        }
+    }
+
+    @Override
+    @JsonIgnore
+    @NotNull
+    public ImageData getComponentData() {
+        if (useFeaturedImage) {
+            return featuredImage.getComponentData();
+        }
+        return super.getComponentData();
     }
 
 }

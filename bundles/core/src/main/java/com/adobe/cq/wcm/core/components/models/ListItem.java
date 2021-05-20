@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
 
+import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -29,6 +30,8 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
  */
 @ConsumerType
 public interface ListItem extends Component {
+
+    default Resource getTeaserResource() { return null;}
 
     /**
      * Returns the link of this {@code ListItem}.

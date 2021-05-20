@@ -100,6 +100,13 @@ public interface Teaser extends Component {
     String PN_TITLE_FROM_PAGE = "titleFromPage";
 
     /**
+     * Name of the resource property that defines whether or not the image is taken from the linked page.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    String PN_IMAGE_FROM_PAGE = "imageFromPage";
+
+    /**
      * Name of the policy property that defines whether or not the description is hidden.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.4.0

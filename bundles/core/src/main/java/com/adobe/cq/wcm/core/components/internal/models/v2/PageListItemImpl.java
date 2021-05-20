@@ -15,11 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.resource.TeaserResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.wcm.api.Page;
@@ -44,6 +46,19 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     @Deprecated
     public String getURL() {
         return super.getURL();
+    }
+
+    public Resource getTeaserResource() {
+        Resource featuredImageResource = page.getContentResource("cq:featuredimage");
+        if (featuredImageResource == null) {
+            return null;
+        }
+        // Teaser properties
+        String resourceType = "core/wcm/components/teaser/v1/teaser";
+        String title = getTitle();
+        String description = getDescription();
+        String linkURL = getPath();
+        return new TeaserResourceWrapper(featuredImageResource, resourceType, title, description, linkURL);
     }
 
     @Override

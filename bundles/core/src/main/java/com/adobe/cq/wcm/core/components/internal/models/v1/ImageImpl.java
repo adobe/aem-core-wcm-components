@@ -87,7 +87,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected PageManager pageManager;
 
     @ScriptVariable
-    private Page currentPage;
+    protected Page currentPage;
 
     @ScriptVariable
     protected Style currentStyle;
@@ -378,8 +378,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
 
     @Override
+    @JsonIgnore
     @NotNull
-    protected ImageData getComponentData() {
+    public ImageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
             .withTitle(this::getTitle)
             .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
