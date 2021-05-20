@@ -17,7 +17,9 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.carousel.v1;
 
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
 import com.adobe.cq.wcm.core.components.it.seljup.components.commons.CQOverlay;
 import com.adobe.cq.wcm.core.components.it.seljup.components.carousel.CarouselEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.carousel.v1.Carousel;
@@ -44,6 +46,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -155,7 +158,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
 
     private ElementsCollection createItems() throws  InterruptedException {
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         CarouselEditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         childrenEditor.clickAddButton();
@@ -170,7 +173,7 @@ public class CarouselIT extends AuthorBaseUITest {
         childrenEditor.getInputItems().last().sendKeys("item2");
         Commons.saveConfigureDialog();
 
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         ElementsCollection items = childrenEditor.getInputItems();
         assertTrue(items.size() == 3, "Number to items added should be 3");
         assertTrue(items.get(0).getValue().equals("item0"), "First input item should be item0");
@@ -209,11 +212,11 @@ public class CarouselIT extends AuthorBaseUITest {
         createItems();
         CarouselEditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         childrenEditor.removeFirstItem();
         Commons.saveConfigureDialog();
 
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         ElementsCollection items = childrenEditor.getInputItems();
 
         assertTrue(items.size() == 2, "Number to items added should be 2");
@@ -242,11 +245,11 @@ public class CarouselIT extends AuthorBaseUITest {
         createItems();
         CarouselEditDialog editDialog = carousel.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         childrenEditor.moveItems(2,0);
         Commons.saveConfigureDialog();
 
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         ElementsCollection items = childrenEditor.getInputItems();
 
         assertTrue(items.size() == 3, "Number to items added should be 3");
@@ -261,7 +264,7 @@ public class CarouselIT extends AuthorBaseUITest {
     @DisplayName("Test: Autoplay group toggle")
     public void testAutoplayGroup() throws InterruptedException {
         createItems();
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        Commons.openConfigureDialog(cmpPath);
         CarouselEditDialog editDialog = carousel.getEditDialog();
         editDialog.openEditDialogProperties();
 
@@ -286,13 +289,13 @@ public class CarouselIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Panel Select")
     public void testPanelSelect() throws InterruptedException {
-        String component = "[data-type='Editable'][data-path='" + testPage + Commons.relParentCompPath + componentName +"']";
+        String component = "[data-type='Editable'][data-path='" + cmpPath +"']";
         WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
-        Commons.openEditableToolbar(testPage + Commons.relParentCompPath + componentName);
+        Commons.openEditableToolbar(cmpPath);
         assertTrue(!Commons.isPanelSelectPresent(), "Panel Select should not be present");
         createItems();
-        Commons.openEditableToolbar(testPage + Commons.relParentCompPath + componentName);
+        Commons.openEditableToolbar(cmpPath);
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.isPanelSelectPresent(), "Panel Select should be present");
         Commons.openPanelSelect();
@@ -379,6 +382,56 @@ public class CarouselIT extends AuthorBaseUITest {
         assertTrue(carousel.isIndicatorActive(2),"Third element should be active");
         KeyboardShortCuts.keyStart();
         assertTrue(carousel.isIndicatorActive(0),"First element should be active");
+    }
+
+    /**
+     * Test: Allowed components
+     */
+    @Test
+    @DisplayName("Test: Allowed components")
+    public void testAllowedComponents() throws ClientException, InterruptedException, TimeoutException {
+        String teaserProxyPath = Commons.createProxyComponent(adminClient, Commons.rtTeaser_v1, Commons.proxyPath, null, null);
+        String policySuffix = "/carousel/new_policy";
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.clear();
+        data.put("jcr:title", "New Policy");
+        data.put("sling:resourceType", "wcm/core/components/policy/policy");
+        data.put("components",teaserProxyPath);
+        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
+        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
+
+        // add a policy for carousel component
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
+        data.clear();
+        data.put("cq:policy", policyLocation + policySuffix);
+        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
+        Commons.assignPolicy(adminClient,"/carousel",data, policyAssignmentPath, 200, 201);
+
+
+        String testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
+
+        String compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "carousel", null);
+
+        // open test page in page editor
+        editorPage = new PageEditorPage(testPage);
+        editorPage.open();
+
+        String component = "[data-type='Editable'][data-path='" + compPath +"']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
+
+        //2.
+        EditableToolbarAssertion editableToolbarAssertion = new EditableToolbarAssertion(editableToolbar,
+            "editable toolbar of none style selector enabled component - %s button is displayed while it should not");
+
+        editableToolbarAssertion.assertInsertButton(true);
+
+        editableToolbar.getInsertButton().click();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(Commons.isComponentPresentInInsertDialog(teaserProxyPath), "teaser component should be present in insert dialog");
+        Commons.deleteProxyComponent(adminClient, teaserProxyPath);
     }
 
 

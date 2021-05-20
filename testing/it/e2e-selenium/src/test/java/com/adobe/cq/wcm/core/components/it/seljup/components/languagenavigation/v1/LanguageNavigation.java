@@ -50,7 +50,7 @@ public class LanguageNavigation extends BaseComponent {
          for(int i = 0; i < items.size(); i++) {
              if(items.get(i).getText().trim().contains(value)) {
                  itemPresent = true;
-                 continue;
+                 break;
              }
          }
          return itemPresent;
@@ -66,7 +66,7 @@ public class LanguageNavigation extends BaseComponent {
         for(int i = 0; i < items.size(); i++) {
             if(items.get(i).getText().trim().contains(value)) {
                 itemPresent = true;
-                continue;
+                break;
             }
         }
         return itemPresent;
@@ -78,7 +78,7 @@ public class LanguageNavigation extends BaseComponent {
         for(int i = 0; i < items.size(); i++) {
             if(items.get(i).getText().trim().contains(value)) {
                 itemPresent = true;
-                continue;
+                break;
             }
         }
         return itemPresent;
