@@ -1,0 +1,15 @@
+{
+    "id": "video-684c9d715b",
+    "fileReference": "/content/dam/some/test/video/sample.mp4",
+    "posterImageReference": "/content/dam/core-components-examples/library/aem-corecomponents-logo.svg",
+    "hideControl": true,
+    "loopEnabled": true,
+    "autoplayEnabled": true,
+    ":type": "core/wcm/components/video/v1/video",
+    "dataLayer": {
+        "video-684c9d715b": {
+            "@type": "core/wcm/components/video/v1/video",
+            "repo:modifyDate": "2021-05-24T09:11:53Z"
+        }
+    }
+}

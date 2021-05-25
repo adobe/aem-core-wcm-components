@@ -1,0 +1,24 @@
+{
+    "jcr:primaryType": "cq:Page",
+    "jcr:createdBy"  : "admin",
+    "jcr:created"    : "Wed Jan 13 2016 15:56:31 GMT+0100",
+    "jcr:content"    : {
+        "jcr:primaryType"   : "cq:PageContent",
+        "jcr:createdBy"     : "admin",
+        "jcr:created"       : "Wed Jan 13 2016 15:56:31 GMT+0100",
+        "cq:lastModified"   : "Wed Jan 13 2016 16:14:51 GMT+0100",
+        "sling:resourceType": "core/wcm/components/page/v1/page",
+        "cq:lastModifiedBy" : "admin",
+        "videoComponent": {
+            "jcr:primaryType": "nt:unstructured",
+            "fileReference": "/content/dam/some/test/video/sample.mp4",
+            "posterImageReference": "/content/dam/core-components-examples/library/aem-corecomponents-logo.svg",
+            "alt": "Some alternative Text sample",
+            "autoplayEnabled": "true",
+            "hideControl": "true",
+            "jcr:lastModified": "Mon May 24 2021 11:11:53 GMT+0200",
+            "sling:resourceType": "core/wcm/components/video/v1/video",
+            "loopEnabled": "true"
+        }
+    }
+}
