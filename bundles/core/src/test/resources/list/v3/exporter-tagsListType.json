@@ -25,6 +25,7 @@
             "@type": "core/wcm/components/list/v3/list"
         }
     },
+    "displayItemAsTeaser": false,
     "showDescription": false,
     "showModificationDate": false,
     "linkItems": false,
