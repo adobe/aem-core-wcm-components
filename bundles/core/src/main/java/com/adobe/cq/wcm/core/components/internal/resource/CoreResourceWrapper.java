@@ -30,21 +30,21 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.export.json.ExporterConstants;
 
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TeaserResourceWrapper extends ResourceWrapper {
+public class CoreResourceWrapper extends ResourceWrapper {
 
     private ValueMap valueMap;
-    private String resourceType;
+    private String overriddenResourceType;
 
-    public TeaserResourceWrapper(@NotNull Resource resource, @NotNull String resourceType, @NotNull Map<String, String> inheritedProperties) {
+    public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType, @NotNull Map<String, String> overriddenProperties) {
         super(resource);
-        if (StringUtils.isEmpty(resourceType)) {
-            throw new IllegalArgumentException("The " + TeaserResourceWrapper.class.getName() + " needs to override the resource type of " +
+        if (StringUtils.isEmpty(overriddenResourceType)) {
+            throw new IllegalArgumentException("The " + CoreResourceWrapper.class.getName() + " needs to override the resource type of " +
                     "the wrapped resource, but the resourceType argument was null or empty.");
         }
-        this.resourceType = resourceType;
+        this.overriddenResourceType = overriddenResourceType;
         valueMap = new ValueMapDecorator(new HashMap<>(resource.getValueMap()));
-        valueMap.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, resourceType);
-        for (Map.Entry<String, String> entry : inheritedProperties.entrySet()) {
+        valueMap.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, overriddenResourceType);
+        for (Map.Entry<String, String> entry : overriddenProperties.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             if (StringUtils.isNotEmpty(value)) {
@@ -70,7 +70,7 @@ public class TeaserResourceWrapper extends ResourceWrapper {
     @Override
     @NotNull
     public String getResourceType() {
-        return resourceType;
+        return overriddenResourceType;
     }
 
     @Override

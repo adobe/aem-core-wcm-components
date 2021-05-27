@@ -67,7 +67,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     /**
      * List of properties that should be inherited when delegating to the featured image of the page.
      */
-    private Map<String, String> inheritedProperties = new HashMap<>();
+    private Map<String, String> overriddenProperties = new HashMap<>();
 
     /**
      * Initialize the model.
@@ -83,9 +83,9 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
             String linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
             if (StringUtils.isNotEmpty(linkURL)) {
                 // make the featured image inherit following properties from the teaser node
-                inheritedProperties.put(ImageResource.PN_LINK_URL, linkURL);
+                overriddenProperties.put(ImageResource.PN_LINK_URL, linkURL);
             }
-            this.setImageResource(component, featuredImageResource, hiddenImageResourceProperties, inheritedProperties);
+            this.setImageResource(component, featuredImageResource, hiddenImageResourceProperties, overriddenProperties);
         }
     }
 

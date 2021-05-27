@@ -54,9 +54,9 @@ public class ImageResourceWrapper extends ResourceWrapper {
         }
     }
 
-    public ImageResourceWrapper(@NotNull Resource resource, @NotNull String resourceType, List<String> hiddenProperties, Map<String, String> inheritedProperties) {
+    public ImageResourceWrapper(@NotNull Resource resource, @NotNull String resourceType, List<String> hiddenProperties, Map<String, String> overriddenProperties) {
         this(resource, resourceType, hiddenProperties);
-        for (Map.Entry<String, String> entry : inheritedProperties.entrySet()) {
+        for (Map.Entry<String, String> entry : overriddenProperties.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             if (StringUtils.isNotEmpty(value)) {

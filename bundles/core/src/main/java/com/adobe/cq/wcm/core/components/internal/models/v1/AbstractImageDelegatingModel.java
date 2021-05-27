@@ -44,20 +44,39 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
     private Resource toBeWrapped;
     private List<String> hiddenProperties;
     private Resource imageResource;
-    private Map<String, String> inheritedProperties;
+    private Map<String, String> overriddenProperties;
 
+    /**
+     * Sets a resource that will be used to render an image.
+     *
+     * @param component The component that holds the property of the image to delegate to.
+     * @param toBeWrapped The resource to be wrapped into an image resource.
+     * @param hiddenProperties The properties that should be be overridden.
+     */
     protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties) {
         this.toBeWrapped = toBeWrapped;
         this.component = component;
         this.hiddenProperties = new ArrayList<>(hiddenProperties);
-        this.inheritedProperties = new HashMap<>();
+        this.overriddenProperties = new HashMap<>();
     }
 
-    protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties, @NotNull Map<String, String> inheritedProperties) {
+    /**
+     * Sets a resource that will be used to render an image.
+     *
+     * @param component The component that holds the property of the image to delegate to.
+     * @param toBeWrapped The resource to be wrapped into an image resource.
+     * @param hiddenProperties The properties that should not be overridden.
+     * @param overriddenProperties The properties that should be overridden.
+     */
+    protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties, @NotNull Map<String, String> overriddenProperties) {
         setImageResource(component, toBeWrapped, hiddenProperties);
-        this.inheritedProperties = inheritedProperties;
+        this.overriddenProperties = overriddenProperties;
     }
 
+    /**
+     *
+     * @return The wrapped resource used to be rendered as an image.
+     */
     @JsonIgnore
     public Resource getImageResource() {
         if (imageResource == null && component != null) {
@@ -66,7 +85,7 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
                 LOGGER.error("In order for image rendering delegation to work correctly you need to set up the imageDelegate property on" +
                         " the {} component; its value has to point to the resource type of an image component.", component.getPath());
             } else {
-                imageResource = new ImageResourceWrapper(toBeWrapped, delegateResourceType, hiddenProperties, inheritedProperties);
+                imageResource = new ImageResourceWrapper(toBeWrapped, delegateResourceType, hiddenProperties, overriddenProperties);
             }
         }
         return imageResource;

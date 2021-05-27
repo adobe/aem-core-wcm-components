@@ -148,6 +148,13 @@ public interface List extends Component {
     String PN_DATE_FORMAT = "dateFormat";
 
     /**
+     * Name of the component property indicating to which teaser component the list items should be delegated.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    String PN_TEASER_DELEGATE = "teaserDelegate";
+
+    /**
      * Returns the list's items collection, as {@link Page} elements.
      *
      * @return {@link Collection} of {@link Page}s

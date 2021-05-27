@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
-import com.adobe.cq.wcm.core.components.internal.resource.TeaserResourceWrapper;
+import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
@@ -35,9 +35,9 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl {
+import static com.adobe.cq.wcm.core.components.models.List.PN_TEASER_DELEGATE;
 
-    public static final String TEASER_DELEGATE = "teaserDelegate";
+public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl {
 
     private Component component;
     private Resource teaserResource;
@@ -45,7 +45,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     /**
      * List of properties that should be inherited when delegating to the featured image of the page.
      */
-    private Map<String, String> inheritedProperties = new HashMap<>();
+    private Map<String, String> overriddenProperties = new HashMap<>();
 
     public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
         super(linkHandler, page, parentId, isShadowingDisabled, component);
@@ -73,16 +73,16 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
             if (featuredImageResource == null) {
                 return null;
             }
-            String delegateResourceType = component.getProperties().get(TEASER_DELEGATE, String.class);
+            String delegateResourceType = component.getProperties().get(PN_TEASER_DELEGATE, String.class);
             if (StringUtils.isEmpty(delegateResourceType)) {
                 LOGGER.error("In order for list rendering delegation to work correctly you need to set up the teaserDelegate property on" +
                         " the {} component; its value has to point to the resource type of a teaser component.", component.getPath());
             } else {
                 // make the featured image inherit following properties from the page item
-                inheritedProperties.put(JcrConstants.JCR_TITLE, this.getTitle());
-                inheritedProperties.put(JcrConstants.JCR_DESCRIPTION, this.getDescription());
-                inheritedProperties.put(ImageResource.PN_LINK_URL, this.getPath());
-                teaserResource = new TeaserResourceWrapper(featuredImageResource, delegateResourceType, inheritedProperties);
+                overriddenProperties.put(JcrConstants.JCR_TITLE, this.getTitle());
+                overriddenProperties.put(JcrConstants.JCR_DESCRIPTION, this.getDescription());
+                overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
+                teaserResource = new CoreResourceWrapper(featuredImageResource, delegateResourceType, overriddenProperties);
             }
         }
         return teaserResource;
