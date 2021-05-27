@@ -23,6 +23,6 @@
         </a>
         <span data-sly-test="${list.showDescription}" class="cmp-list__item-description">${item.description}</span>
     </article>
-    <sly  data-sly-test="${list.displayItemAsTeaser}"
-          data-sly-resource="${item.teaserResource @ resourceType='core/wcm/components/teaser/v2/teaser'}"></sly>
+    <sly  data-sly-test="${list.displayItemAsTeaser && item.teaserResource}"
+          data-sly-resource="${item.teaserResource}"></sly>
 </template>

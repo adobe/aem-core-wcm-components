@@ -16,7 +16,9 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -42,11 +44,18 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
     private Resource toBeWrapped;
     private List<String> hiddenProperties;
     private Resource imageResource;
+    private Map<String, String> inheritedProperties;
 
     protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties) {
         this.toBeWrapped = toBeWrapped;
         this.component = component;
-        this.hiddenProperties = new ArrayList<String>(hiddenProperties);
+        this.hiddenProperties = new ArrayList<>(hiddenProperties);
+        this.inheritedProperties = new HashMap<>();
+    }
+
+    protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties, @NotNull Map<String, String> inheritedProperties) {
+        setImageResource(component, toBeWrapped, hiddenProperties);
+        this.inheritedProperties = inheritedProperties;
     }
 
     @JsonIgnore
@@ -57,7 +66,7 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
                 LOGGER.error("In order for image rendering delegation to work correctly you need to set up the imageDelegate property on" +
                         " the {} component; its value has to point to the resource type of an image component.", component.getPath());
             } else {
-                imageResource = new ImageResourceWrapper(toBeWrapped, delegateResourceType, hiddenProperties);
+                imageResource = new ImageResourceWrapper(toBeWrapped, delegateResourceType, hiddenProperties, inheritedProperties);
             }
         }
         return imageResource;

@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -34,6 +36,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
@@ -73,13 +76,24 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     protected void initModel() {
         super.initModel();
         if (!hasContent) {
-            Resource featuredImageResource = currentPage.getContentResource("cq:featuredimage");
+            Resource featuredImageResource = ComponentUtils.getFeaturedImage(currentPage);
             if (featuredImageResource != null && !StringUtils.equals(resource.getPath(), featuredImageResource.getPath())) {
                 featuredImage = modelFactory.getModelFromWrappedRequest(this.request, featuredImageResource, Image.class);
                 if (featuredImage != null) {
+                    // use the properties of the featured image node
                     src = featuredImage.getSrc();
                     alt = featuredImage.getAlt();
+                    link = Optional.ofNullable(featuredImage.getImageLink());
+                    fileReference = featuredImage.getFileReference();
+                    isDecorative = featuredImage.isDecorative();
+
+                    srcUriTemplate = featuredImage.getSrcUriTemplate();
                     disableLazyLoading = !featuredImage.isLazyEnabled();
+                    dmImage = featuredImage.isDmImage();
+                    smartCropRendition = featuredImage.getSmartCropRendition();
+                    lazyThreshold = featuredImage.getLazyThreshold();
+                    areas = featuredImage.getAreas();
+                    uuid = featuredImage.getUuid();
                 }
             }
 

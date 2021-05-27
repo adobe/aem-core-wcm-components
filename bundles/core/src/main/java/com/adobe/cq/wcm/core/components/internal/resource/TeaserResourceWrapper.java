@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.resource;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -34,7 +35,7 @@ public class TeaserResourceWrapper extends ResourceWrapper {
     private ValueMap valueMap;
     private String resourceType;
 
-    public TeaserResourceWrapper(@NotNull Resource resource, @NotNull String resourceType, String title, String description, String linkURL) {
+    public TeaserResourceWrapper(@NotNull Resource resource, @NotNull String resourceType, @NotNull Map<String, String> inheritedProperties) {
         super(resource);
         if (StringUtils.isEmpty(resourceType)) {
             throw new IllegalArgumentException("The " + TeaserResourceWrapper.class.getName() + " needs to override the resource type of " +
@@ -43,9 +44,13 @@ public class TeaserResourceWrapper extends ResourceWrapper {
         this.resourceType = resourceType;
         valueMap = new ValueMapDecorator(new HashMap<>(resource.getValueMap()));
         valueMap.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, resourceType);
-        valueMap.put("jcr:title", title);
-        valueMap.put("jcr:description", description);
-        valueMap.put("linkURL", linkURL);
+        for (Map.Entry<String, String> entry : inheritedProperties.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (StringUtils.isNotEmpty(value)) {
+                valueMap.put(key, value);
+            }
+        }
     }
 
     @Override

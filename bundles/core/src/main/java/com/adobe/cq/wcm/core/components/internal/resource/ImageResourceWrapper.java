@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.resource;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -50,6 +51,17 @@ public class ImageResourceWrapper extends ResourceWrapper {
         this(resource, resourceType);
         for (String property : hiddenProperties) {
             valueMap.remove(property);
+        }
+    }
+
+    public ImageResourceWrapper(@NotNull Resource resource, @NotNull String resourceType, List<String> hiddenProperties, Map<String, String> inheritedProperties) {
+        this(resource, resourceType, hiddenProperties);
+        for (Map.Entry<String, String> entry : inheritedProperties.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (StringUtils.isNotEmpty(value)) {
+                valueMap.put(key, value);
+            }
         }
     }
 

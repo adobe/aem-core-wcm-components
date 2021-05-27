@@ -15,9 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -31,6 +35,9 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.Teaser;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.day.cq.commons.ImageResource;
+import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -58,6 +65,11 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     private boolean imageFromPage = false;
 
     /**
+     * List of properties that should be inherited when delegating to the featured image of the page.
+     */
+    private Map<String, String> inheritedProperties = new HashMap<>();
+
+    /**
      * Initialize the model.
      */
     @PostConstruct
@@ -65,8 +77,15 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
         super.initModel();
         ValueMap properties = resource.getValueMap();
         imageFromPage = properties.get(Teaser.PN_IMAGE_FROM_PAGE, imageFromPage);
-        if (!this.hasImage() && imageFromPage && this.getTargetPage().isPresent() && this.getTargetPage().get().getContentResource("cq:featuredimage") != null) {
-            this.setImageResource(component, this.getTargetPage().get().getContentResource("cq:featuredimage"), hiddenImageResourceProperties);
+        if (!this.hasImage() && imageFromPage && this.getTargetPage().isPresent()) {
+            Page targetPage = this.getTargetPage().get();
+            Resource featuredImageResource = ComponentUtils.getFeaturedImage(targetPage);
+            String linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
+            if (StringUtils.isNotEmpty(linkURL)) {
+                // make the featured image inherit following properties from the teaser node
+                inheritedProperties.put(ImageResource.PN_LINK_URL, linkURL);
+            }
+            this.setImageResource(component, featuredImageResource, hiddenImageResourceProperties, inheritedProperties);
         }
     }
 

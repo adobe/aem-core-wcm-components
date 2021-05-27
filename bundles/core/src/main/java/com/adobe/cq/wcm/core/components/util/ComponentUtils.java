@@ -31,6 +31,8 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
 
+import static com.adobe.cq.wcm.core.components.models.Page.NN_PAGE_FEATURED_IMAGE;
+
 /**
  * Utility helper functions for components.
  */
@@ -191,5 +193,15 @@ public final class ComponentUtils {
     @NotNull
     public static String generateId(@NotNull final String prefix, @NotNull final String path) {
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, ID_HASH_LENGTH));
+    }
+
+    /**
+     * Returns the resource holding the properties of the featured image of the page.
+     *
+     * @param page the page
+     * @return the featured image resource
+     */
+    public static Resource getFeaturedImage(@NotNull Page page) {
+        return page.getContentResource(NN_PAGE_FEATURED_IMAGE);
     }
 }

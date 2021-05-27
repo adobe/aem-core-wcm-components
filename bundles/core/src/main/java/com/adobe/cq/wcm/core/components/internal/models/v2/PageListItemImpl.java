@@ -15,6 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,14 +28,28 @@ import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.resource.TeaserResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.day.cq.commons.ImageResource;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl {
 
+    public static final String TEASER_DELEGATE = "teaserDelegate";
+
+    private Component component;
+    private Resource teaserResource;
+
+    /**
+     * List of properties that should be inherited when delegating to the featured image of the page.
+     */
+    private Map<String, String> inheritedProperties = new HashMap<>();
+
     public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
         super(linkHandler, page, parentId, isShadowingDisabled, component);
+        this.component = component;
     }
 
     @Override
@@ -48,17 +66,26 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
         return super.getURL();
     }
 
+    @JsonIgnore
     public Resource getTeaserResource() {
-        Resource featuredImageResource = page.getContentResource("cq:featuredimage");
-        if (featuredImageResource == null) {
-            return null;
+        if (teaserResource == null && component != null) {
+            Resource featuredImageResource = ComponentUtils.getFeaturedImage(page);
+            if (featuredImageResource == null) {
+                return null;
+            }
+            String delegateResourceType = component.getProperties().get(TEASER_DELEGATE, String.class);
+            if (StringUtils.isEmpty(delegateResourceType)) {
+                LOGGER.error("In order for list rendering delegation to work correctly you need to set up the teaserDelegate property on" +
+                        " the {} component; its value has to point to the resource type of a teaser component.", component.getPath());
+            } else {
+                // make the featured image inherit following properties from the page item
+                inheritedProperties.put(JcrConstants.JCR_TITLE, this.getTitle());
+                inheritedProperties.put(JcrConstants.JCR_DESCRIPTION, this.getDescription());
+                inheritedProperties.put(ImageResource.PN_LINK_URL, this.getPath());
+                teaserResource = new TeaserResourceWrapper(featuredImageResource, delegateResourceType, inheritedProperties);
+            }
         }
-        // Teaser properties
-        String resourceType = "core/wcm/components/teaser/v1/teaser";
-        String title = getTitle();
-        String description = getDescription();
-        String linkURL = getPath();
-        return new TeaserResourceWrapper(featuredImageResource, resourceType, title, description, linkURL);
+        return teaserResource;
     }
 
     @Override
