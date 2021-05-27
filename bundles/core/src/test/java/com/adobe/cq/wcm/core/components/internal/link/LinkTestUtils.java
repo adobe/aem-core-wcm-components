@@ -48,6 +48,17 @@ public final class LinkTestUtils {
         assertEquals(ImmutableMap.of("href", linkURL), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @NotNull String linkMappedURL, @Nullable SlingHttpServletRequest request) {
+        assertTrue(link.isValid(), "linkValid");
+        assertEquals(MockExternalizerFactory.ROOT + linkMappedURL, link.getExternalizedURL(), "externalizedUrl");
+        if (request != null && StringUtils.isNotEmpty(request.getContextPath())) {
+            linkURL = request.getContextPath().concat(linkURL);
+            linkMappedURL = request.getContextPath().concat(linkMappedURL);
+        }
+        assertEquals(linkURL, link.getURL(), "linkUrl");
+        assertEquals(linkMappedURL, link.getMappedURL(), "mappedUrl");
+    }
+
     public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @Nullable String linkTarget) {
         if (linkTarget == null) {
             assertValidLink(link,  linkURL);

@@ -105,7 +105,7 @@
           "level": 1,
           "active": false,
           "current": false,
-          "url": "/core/navigation-1-vanity",
+          "url": "/core/content/navigation-redirect/navigation-1.html",
           "title": "Navigation 1",
           "dataLayer": {
             "navigation-e6f3e5ac55-item-b318e48feb": {

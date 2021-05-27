@@ -64,7 +64,7 @@ public class ListImplTest {
     @Test
     public void testStaticWithVanityPaths() {
         List list = getListUnderTest(LIST_2);
-        checkListConsistencyByLinkURL(list, new String[]{"/context/page_3.html", "/context/4_page.html"});
+        checkListConsistencyByLinkURL(list, new String[]{"/context/content/list/pages/page_3.html", "/context/content/list/pages/page_4.html"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_2));
     }
 

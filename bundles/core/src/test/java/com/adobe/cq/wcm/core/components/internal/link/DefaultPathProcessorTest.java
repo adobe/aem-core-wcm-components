@@ -23,6 +23,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.commons.Externalizer;
+import com.day.cq.wcm.api.Page;
+import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -74,5 +76,12 @@ class DefaultPathProcessorTest {
         assertEquals("/some%20space#internal", underTest.sanitize(path, request));
     }
 
+    @Test
+    void testVanityUrl() {
+        Page page = context.create().page("/content/links/site1/en/", "/conf/example",
+                ImmutableMap.of("sling:vanityPath", "vanity.html"));
+        DefaultPathProcessor underTest = context.registerService(new DefaultPathProcessor());
+        assertEquals("vanity.html", underTest.map(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+    }
 
 }

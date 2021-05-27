@@ -51,7 +51,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     protected PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
                 .withTitle(this::getTitle)
-                .withLinkUrl(() -> link.map(Link::getURL).orElse(null))
+                .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
                 .build();
     }
 }

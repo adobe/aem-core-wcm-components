@@ -15,9 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.Optional;
+
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
@@ -28,6 +31,8 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.commons.Externalizer;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 
 @Component(property = Constants.SERVICE_RANKING + ":Integer=" + Integer.MIN_VALUE,
            service = PathProcessor.class)
@@ -77,19 +82,44 @@ public class DefaultPathProcessor implements PathProcessor {
 
     @Override
     public @NotNull String map(@NotNull String path, @NotNull SlingHttpServletRequest request) {
+        ResourceResolver resourceResolver = request.getResourceResolver();
         try {
-            return StringUtils.defaultString(request.getResourceResolver().map(request, path));
+            return StringUtils.defaultString(resourceResolver.map(request, getPathOrVanityUrl(path, resourceResolver)));
         } catch (Exception e) {
             return path;
         }
     }
 
+
     @Override
     public @NotNull String externalize(@NotNull String path, @NotNull SlingHttpServletRequest request) {
+        ResourceResolver resourceResolver = request.getResourceResolver();
         try {
-            return externalizer.publishLink(request.getResourceResolver(), path);
+            return externalizer.publishLink(resourceResolver, getPathOrVanityUrl(path, resourceResolver));
         } catch (Exception e) {
             return path;
         }
+    }
+
+    @NotNull
+    private String getPathOrVanityUrl(@NotNull String path, @NotNull ResourceResolver resourceResolver) {
+        return Optional.ofNullable(getVanityUrl(path, resourceResolver))
+                .filter(StringUtils::isNotBlank)
+                .orElse(path);
+    }
+
+    @Nullable
+    private String getVanityUrl(@NotNull String path, @NotNull ResourceResolver resourceResolver) {
+        String vanityUrl = null;
+        if (path.endsWith(LinkHandler.HTML_EXTENSION)) {
+            PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
+            if (pageManager != null) {
+                Page page = pageManager.getPage(path.substring(0, path.lastIndexOf(LinkHandler.HTML_EXTENSION)));
+                if (page != null) {
+                    vanityUrl = page.getVanityUrl();
+                }
+            }
+        }
+        return vanityUrl;
     }
 }
