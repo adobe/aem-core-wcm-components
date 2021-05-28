@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -33,6 +34,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
+import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
@@ -78,9 +80,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (!hasContent) {
             Resource featuredImageResource = ComponentUtils.getFeaturedImage(currentPage);
             if (featuredImageResource != null && !StringUtils.equals(resource.getPath(), featuredImageResource.getPath())) {
-                featuredImage = modelFactory.getModelFromWrappedRequest(this.request, featuredImageResource, Image.class);
+                // Use the resource type of the caller image to render the featured image
+                Resource wrappedFeaturedImageResource = new CoreResourceWrapper(featuredImageResource, resource.getResourceType(), new HashMap<>());
+                featuredImage = modelFactory.getModelFromWrappedRequest(this.request, wrappedFeaturedImageResource, Image.class);
                 if (featuredImage != null) {
-                    // use the properties of the featured image node
+                    // use the properties of the featured image node, except for the resource type and the ID
                     src = featuredImage.getSrc();
                     alt = featuredImage.getAlt();
                     link = Optional.ofNullable(featuredImage.getImageLink());

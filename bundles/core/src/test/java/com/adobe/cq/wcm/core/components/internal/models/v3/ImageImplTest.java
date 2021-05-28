@@ -30,14 +30,13 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(AemContextExtension.class)
 class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImplTest {
 
     private static String TEST_BASE = "/image/v3";
+    private static final String IMAGE50_PATH = PAGE + "/jcr:content/root/image50";
 
     @BeforeEach
     @Override
@@ -211,6 +210,17 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             index++;
         }
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE24_PATH));
+    }
+
+    @Test
+    protected void testEmptyImageWithFeaturedImage() {
+        Image image = getImageUnderTest(IMAGE50_PATH);
+        assertEquals("/core/content/test/_jcr_content/_cq_featuredimage.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png", image.getSrc(), "getSrc()");
+        assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", image.getFileReference(), "getFileReference()");
+        assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid(), "getUuid()");
+        assertEquals("image-cf7954fac5", image.getId(), "getId()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE50_PATH));
     }
 
 }
