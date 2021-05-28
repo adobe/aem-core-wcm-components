@@ -20,7 +20,6 @@ import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.commons.CQOverlay;
 import com.adobe.cq.wcm.core.components.it.seljup.components.carousel.CarouselEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.carousel.v1.Carousel;
 import com.adobe.cq.wcm.core.components.it.seljup.components.commons.ChildrenEditor;

@@ -91,4 +91,17 @@ public class ImageIT extends AuthorBaseUITest {
         imageTests.testSetImageAsDecorativeV2();
     }
 
+    /**
+     * Test: Check image map areas are rendered, navigate correctly and are responsively adjusted on window resize
+     *
+     * @throws ClientException
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check image map areas are rendered, navigate correctly and are responsively adjusted on window resize")
+    public void testCheckMapAreaNavigationAndResponsiveResize() throws ClientException, TimeoutException, InterruptedException {
+        imageTests.testCheckMapAreaNavigationAndResponsiveResize(adminClient);
+    }
+
 }

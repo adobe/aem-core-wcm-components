@@ -77,7 +77,6 @@ public class TabsIT extends AuthorBaseUITest {
      *
      * @throws ClientException
      */
-
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         // 1.

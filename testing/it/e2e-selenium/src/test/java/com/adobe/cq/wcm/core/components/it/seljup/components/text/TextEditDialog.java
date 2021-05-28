@@ -14,25 +14,21 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v2;
+package com.adobe.cq.wcm.core.components.it.seljup.components.text;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.codeborne.selenide.WebDriverRunner;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
-@Tag("group1")
-public class FormContainerIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v1.FormContainerIT {
+public class TextEditDialog extends Dialog {
+    private static String textBox = "input[name='./text']";
 
-    public void setComponentResources() {
-        formContainerRT = Commons.rtFormContainer_v2;
-        formTextRT = Commons.rtFormText_v2;
-        formButtonRT = Commons.rtFormButton_v2;
-    }
-
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
-        setComponentResources();
-        setup();
+    public void setText(String value) {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        WebElement element = webDriver.findElement(By.cssSelector(textBox));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].value=arguments[1];", element, value);
     }
 }

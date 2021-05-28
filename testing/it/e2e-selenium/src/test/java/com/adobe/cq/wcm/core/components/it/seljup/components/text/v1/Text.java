@@ -14,25 +14,16 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v2;
+package com.adobe.cq.wcm.core.components.it.seljup.components.text.v1;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
+import com.adobe.cq.wcm.core.components.it.seljup.components.text.BaseText;
 
-@Tag("group1")
-public class FormContainerIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v1.FormContainerIT {
+public class Text extends BaseText {
 
-    public void setComponentResources() {
-        formContainerRT = Commons.rtFormContainer_v2;
-        formTextRT = Commons.rtFormText_v2;
-        formButtonRT = Commons.rtFormButton_v2;
+    public Text() {
+        text=".cmp-text";
+        editor = ".cmp-text.aem-GridColumn p";
+        rendered = ".cmp-text.aem-GridColumn p";
     }
 
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
-        setComponentResources();
-        setup();
-    }
 }

@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 
 import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.components.image.BaseImage;
 import com.adobe.cq.wcm.core.components.it.seljup.components.image.ImageEditDialog;
@@ -30,7 +29,6 @@ import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static com.codeborne.selenide.Selenide.$;
 
 public class ImageTests {
 
@@ -46,7 +44,7 @@ public class ImageTests {
     private String proxyPath;
     private String compPath;
     private String policyPath;
-    private EditorPage editorPage;
+    private PageEditorPage editorPage;
     private BaseImage image;
     private String redirectPage;
 
@@ -234,6 +232,37 @@ public class ImageTests {
         image.imageClick();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
+    }
+
+    public void testCheckMapAreaNavigationAndResponsiveResize(CQClient client) throws ClientException, TimeoutException, InterruptedException {
+        // persist a test image map with a single map area
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("imageMap", "[rect(0,0,226,230)\""+redirectPage+"\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
+        data.put("fileReference", testImagePath);
+        Commons.editNodeProperties(client, compPath, data, 200);
+
+        // refresh the component
+        editorPage.refresh();
+
+        // verify the map area is available
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isAreaElementPresent(), "Area element should be present");
+        Commons.switchToDefaultContext();
+
+        // switch to the content frame, click the area link and verify navigation
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        image.clickAreaElement();
+        assertTrue(Commons.getCurrentUrl().contains(redirectPage),"redirection should happen");
+        Commons.switchToDefaultContext();
+
+        // navigate back to the test page
+        editorPage.open();
+        editorPage.enterEditMode();
+        Commons.switchContext("ContentFrame");
+        image.resizeImageElementWidth(300);
+
+        assertTrue(image.isAreaCoordinatesCorrectlySet(new String[]{"0","0","58","38"}), "Area coordinates should be correctly set");
     }
 
 }
