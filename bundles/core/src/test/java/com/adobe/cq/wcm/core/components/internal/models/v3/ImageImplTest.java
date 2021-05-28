@@ -213,7 +213,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     }
 
     @Test
-    protected void testEmptyImageWithFeaturedImage() {
+    protected void testEmptyImageDelegatingToFeaturedImage() {
         Image image = getImageUnderTest(IMAGE50_PATH);
         assertEquals("/core/content/test/_jcr_content/_cq_featuredimage.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png", image.getSrc(), "getSrc()");
         assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt(), "getAlt()");

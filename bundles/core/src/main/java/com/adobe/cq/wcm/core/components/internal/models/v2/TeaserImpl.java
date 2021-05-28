@@ -60,11 +60,6 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     private Resource resource;
 
     /**
-     * Flag indicating if the image should be inherited from the target page.
-     */
-    private boolean imageFromPage = false;
-
-    /**
      * List of properties that should be inherited when delegating to the featured image of the page.
      */
     private Map<String, String> overriddenProperties = new HashMap<>();
@@ -76,16 +71,17 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     protected void initModel() {
         super.initModel();
         ValueMap properties = resource.getValueMap();
-        imageFromPage = properties.get(Teaser.PN_IMAGE_FROM_PAGE, imageFromPage);
-        if (!this.hasImage() && imageFromPage && this.getTargetPage().isPresent()) {
+        if (!this.hasImage() && this.getTargetPage().isPresent()) {
             Page targetPage = this.getTargetPage().get();
             Resource featuredImageResource = ComponentUtils.getFeaturedImage(targetPage);
-            String linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
-            if (StringUtils.isNotEmpty(linkURL)) {
-                // make the featured image inherit following properties from the teaser node
-                overriddenProperties.put(ImageResource.PN_LINK_URL, linkURL);
+            if (featuredImageResource != null) {
+                String linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
+                if (StringUtils.isNotEmpty(linkURL)) {
+                    // make the featured image inherit following properties from the teaser node
+                    overriddenProperties.put(ImageResource.PN_LINK_URL, linkURL);
+                }
+                this.setImageResource(component, featuredImageResource, hiddenImageResourceProperties, overriddenProperties);
             }
-            this.setImageResource(component, featuredImageResource, hiddenImageResourceProperties, overriddenProperties);
         }
     }
 

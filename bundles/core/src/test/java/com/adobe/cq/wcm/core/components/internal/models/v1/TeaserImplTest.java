@@ -72,6 +72,7 @@ public class TeaserImplTest {
     protected static final String TEASER_11 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-11";
     protected static final String TEASER_12 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-12";
     protected static final String TEASER_13 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-13";
+    protected static final String TEASER_20 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-20";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
