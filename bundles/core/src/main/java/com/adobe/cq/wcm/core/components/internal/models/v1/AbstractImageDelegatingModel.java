@@ -47,11 +47,11 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
     private Map<String, String> overriddenProperties;
 
     /**
-     * Sets a resource that will be used to render an image.
+     * Sets the resource that is used for the image rendering of the delegating component.
      *
      * @param component The component that holds the property of the image to delegate to.
      * @param toBeWrapped The resource to be wrapped into an image resource.
-     * @param hiddenProperties The properties that should be be overridden.
+     * @param hiddenProperties The properties that are removed from the wrapped image resource.
      */
     protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties) {
         this.toBeWrapped = toBeWrapped;
@@ -61,12 +61,12 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
     }
 
     /**
-     * Sets a resource that will be used to render an image.
+     * Sets the resource that is used for the image rendering of the delegating component.
      *
      * @param component The component that holds the property of the image to delegate to.
      * @param toBeWrapped The resource to be wrapped into an image resource.
-     * @param hiddenProperties The properties that should not be overridden.
-     * @param overriddenProperties The properties that should be overridden.
+     * @param hiddenProperties The properties that are removed from the wrapped image resource.
+     * @param overriddenProperties The properties that are overridden in the wrapped image resource.
      */
     protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties, @NotNull Map<String, String> overriddenProperties) {
         setImageResource(component, toBeWrapped, hiddenProperties);
@@ -75,7 +75,7 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
 
     /**
      *
-     * @return The wrapped resource used to be rendered as an image.
+     * @return The wrapped resource used for the image rendering of the delegating component.
      */
     @JsonIgnore
     public Resource getImageResource() {
