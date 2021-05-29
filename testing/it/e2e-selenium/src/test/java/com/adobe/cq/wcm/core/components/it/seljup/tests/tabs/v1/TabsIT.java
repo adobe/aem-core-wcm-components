@@ -151,8 +151,7 @@ public class TabsIT extends AuthorBaseUITest {
      */
     private ElementsCollection createItems() throws InterruptedException {
         //1.
-        Commons.openConfigureDialog(cmpPath);
-        TabsEditDialog editDialog = tabs.getEditDialog();
+        TabsEditDialog editDialog = tabs.openEditDialog(cmpPath);
         editDialog.openItemsTab();
 
         //2.
@@ -172,7 +171,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //4.
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        tabs.openEditDialog(cmpPath);
         editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
         assertTrue(items.size() == 3, "Number to items added should be 3");
@@ -205,10 +204,9 @@ public class TabsIT extends AuthorBaseUITest {
         String cmpPath = Commons.addComponent(adminClient, component, parentPath + "/", null, null);
 
         //2.
-        TabsEditDialog editDialog = tabs.getEditDialog();
+        TabsEditDialog editDialog = tabs.openEditDialog(parentPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        Commons.openConfigureDialog(parentPath);
         editDialog.openItemsTab();
 
         //3.
@@ -248,9 +246,8 @@ public class TabsIT extends AuthorBaseUITest {
         createItems();
 
         //2.
-        TabsEditDialog editDialog = tabs.getEditDialog();
+        TabsEditDialog editDialog = tabs.openEditDialog(cmpPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(cmpPath);
         editDialog.openItemsTab();
 
         //3.
@@ -258,7 +255,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //4.
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        tabs.openEditDialog(cmpPath);
         editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
 
@@ -291,9 +288,8 @@ public class TabsIT extends AuthorBaseUITest {
         createItems();
 
         //2.
-        TabsEditDialog editDialog = tabs.getEditDialog();
+        TabsEditDialog editDialog = tabs.openEditDialog(cmpPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         editDialog.openItemsTab();
 
         //3.
@@ -303,7 +299,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //5.
-        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
+        tabs.openEditDialog(cmpPath);
         editDialog.openItemsTab();
 
         //6.
@@ -327,8 +323,7 @@ public class TabsIT extends AuthorBaseUITest {
     public void testSetActiveItem() throws InterruptedException {
         createItems();
 
-        TabsEditDialog editDialog = tabs.getEditDialog();
-        Commons.openConfigureDialog(cmpPath);
+        TabsEditDialog editDialog = tabs.openEditDialog(cmpPath);
 
         // switch to properties tab
         TabsEditDialog.EditDialogProperties editDialogProperties = editDialog.openPropertiesTab();
@@ -347,7 +342,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
 
         // open the edit dialog
-        Commons.openConfigureDialog(cmpPath);
+        tabs.openEditDialog(cmpPath);
         // switch to properties tab
         editDialogProperties = editDialog.openPropertiesTab();
         // select second item as active

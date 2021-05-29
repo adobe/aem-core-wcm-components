@@ -480,16 +480,6 @@ public class Commons {
         });
     }
 
-    /**
-     * Open configuration of component
-     *
-     * @param dataPath datapath of the component to open the configuration dialog
-     */
-    public static void openConfigureDialog(String dataPath) {
-        openEditableToolbar(dataPath);
-        $(Selectors.SELECTOR_CONFIG_BUTTON).click();
-        Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_CONFIG_DIALOG));
-    }
 
     /**
      * Open editabletoolbar of component

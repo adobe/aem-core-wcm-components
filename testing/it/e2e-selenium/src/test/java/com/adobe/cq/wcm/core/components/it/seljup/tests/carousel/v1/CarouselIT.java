@@ -157,8 +157,7 @@ public class CarouselIT extends AuthorBaseUITest {
      */
 
     private ElementsCollection createItems() throws  InterruptedException {
-        Commons.openConfigureDialog(cmpPath);
-        CarouselEditDialog editDialog = carousel.getEditDialog();
+        CarouselEditDialog editDialog = carousel.openEditDialog(cmpPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         childrenEditor.clickAddButton();
         InsertComponentDialog insertComponentDialog = editDialog.getInsertComponentDialog();
@@ -172,7 +171,7 @@ public class CarouselIT extends AuthorBaseUITest {
         childrenEditor.getInputItems().last().sendKeys("item2");
         Commons.saveConfigureDialog();
 
-        Commons.openConfigureDialog(cmpPath);
+        carousel.openEditDialog(cmpPath);
         ElementsCollection items = childrenEditor.getInputItems();
         assertTrue(items.size() == 3, "Number to items added should be 3");
         assertTrue(items.get(0).getValue().equals("item0"), "First input item should be item0");
@@ -209,13 +208,12 @@ public class CarouselIT extends AuthorBaseUITest {
     @DisplayName("Test: Edit Dialog : Remove items")
     public void testRemoveItem() throws InterruptedException {
         createItems();
-        CarouselEditDialog editDialog = carousel.getEditDialog();
+        CarouselEditDialog editDialog = carousel.openEditDialog(cmpPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(cmpPath);
         childrenEditor.removeFirstItem();
         Commons.saveConfigureDialog();
 
-        Commons.openConfigureDialog(cmpPath);
+        carousel.openEditDialog(cmpPath);
         ElementsCollection items = childrenEditor.getInputItems();
 
         assertTrue(items.size() == 2, "Number to items added should be 2");
@@ -242,13 +240,12 @@ public class CarouselIT extends AuthorBaseUITest {
     @DisplayName("Test: Edit Dialog : Reorder items")
     public void testReorderItem() throws InterruptedException {
         createItems();
-        CarouselEditDialog editDialog = carousel.getEditDialog();
+        CarouselEditDialog editDialog = carousel.openEditDialog(cmpPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(cmpPath);
         childrenEditor.moveItems(2,0);
         Commons.saveConfigureDialog();
 
-        Commons.openConfigureDialog(cmpPath);
+        carousel.openEditDialog(cmpPath);
         ElementsCollection items = childrenEditor.getInputItems();
 
         assertTrue(items.size() == 3, "Number to items added should be 3");
@@ -263,8 +260,7 @@ public class CarouselIT extends AuthorBaseUITest {
     @DisplayName("Test: Autoplay group toggle")
     public void testAutoplayGroup() throws InterruptedException {
         createItems();
-        Commons.openConfigureDialog(cmpPath);
-        CarouselEditDialog editDialog = carousel.getEditDialog();
+        CarouselEditDialog editDialog = carousel.openEditDialog(cmpPath);
         editDialog.openEditDialogProperties();
 
         CoralCheckbox autoplay = editDialog.getAutoplay();
