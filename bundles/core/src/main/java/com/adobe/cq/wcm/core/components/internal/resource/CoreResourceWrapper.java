@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.resource;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.annotations.Exporter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ExporterConstants;
 
@@ -35,7 +37,12 @@ public class CoreResourceWrapper extends ResourceWrapper {
     private ValueMap valueMap;
     private String overriddenResourceType;
 
-    public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType, @NotNull Map<String, String> overriddenProperties) {
+    public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType) {
+        this(resource, overriddenResourceType, null, null);
+    }
+
+    public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType,
+                               @Nullable List<String> hiddenProperties, @Nullable Map<String, String> overriddenProperties) {
         super(resource);
         if (StringUtils.isEmpty(overriddenResourceType)) {
             throw new IllegalArgumentException("The " + CoreResourceWrapper.class.getName() + " needs to override the resource type of " +
@@ -44,11 +51,14 @@ public class CoreResourceWrapper extends ResourceWrapper {
         this.overriddenResourceType = overriddenResourceType;
         valueMap = new ValueMapDecorator(new HashMap<>(resource.getValueMap()));
         valueMap.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, overriddenResourceType);
-        for (Map.Entry<String, String> entry : overriddenProperties.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            if (StringUtils.isNotEmpty(value)) {
-                valueMap.put(key, value);
+        if (overriddenProperties != null) {
+            for (Map.Entry<String, String> entry : overriddenProperties.entrySet()) {
+                valueMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+        if (hiddenProperties != null) {
+            for (String property : hiddenProperties) {
+                valueMap.remove(property);
             }
         }
     }

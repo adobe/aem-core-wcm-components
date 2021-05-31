@@ -227,7 +227,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
 
         if (this.hasImage()) {
-            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties);
+            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties, null);
         }
         // use the target page as the link if it exists
         link = this.getTargetPage()

@@ -15,18 +15,17 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.resource.ImageResourceWrapper;
+import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -52,24 +51,13 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
      * @param component The component that holds the property of the image to delegate to.
      * @param toBeWrapped The resource to be wrapped into an image resource.
      * @param hiddenProperties The properties that are removed from the wrapped image resource.
-     */
-    protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties) {
-        this.toBeWrapped = toBeWrapped;
-        this.component = component;
-        this.hiddenProperties = new ArrayList<>(hiddenProperties);
-        this.overriddenProperties = new HashMap<>();
-    }
-
-    /**
-     * Sets the resource that is used for the image rendering of the delegating component.
-     *
-     * @param component The component that holds the property of the image to delegate to.
-     * @param toBeWrapped The resource to be wrapped into an image resource.
-     * @param hiddenProperties The properties that are removed from the wrapped image resource.
      * @param overriddenProperties The properties that are overridden in the wrapped image resource.
      */
-    protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties, @NotNull Map<String, String> overriddenProperties) {
-        setImageResource(component, toBeWrapped, hiddenProperties);
+    protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped,
+                                    @Nullable List<String> hiddenProperties, @Nullable Map<String, String> overriddenProperties) {
+        this.toBeWrapped = toBeWrapped;
+        this.component = component;
+        this.hiddenProperties = hiddenProperties;
         this.overriddenProperties = overriddenProperties;
     }
 
@@ -85,7 +73,7 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
                 LOGGER.error("In order for image rendering delegation to work correctly you need to set up the imageDelegate property on" +
                         " the {} component; its value has to point to the resource type of an image component.", component.getPath());
             } else {
-                imageResource = new ImageResourceWrapper(toBeWrapped, delegateResourceType, hiddenProperties, overriddenProperties);
+                imageResource = new CoreResourceWrapper(toBeWrapped, delegateResourceType, hiddenProperties, overriddenProperties);
             }
         }
         return imageResource;

@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.util.HashMap;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -81,7 +80,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             Resource featuredImageResource = ComponentUtils.getFeaturedImage(currentPage);
             if (featuredImageResource != null && !StringUtils.equals(resource.getPath(), featuredImageResource.getPath())) {
                 // Use the resource type of the caller image to render the featured image
-                Resource wrappedFeaturedImageResource = new CoreResourceWrapper(featuredImageResource, resource.getResourceType(), new HashMap<>());
+                Resource wrappedFeaturedImageResource = new CoreResourceWrapper(featuredImageResource, resource.getResourceType());
                 featuredImage = modelFactory.getModelFromWrappedRequest(this.request, wrappedFeaturedImageResource, Image.class);
                 if (featuredImage != null) {
                     // use the properties of the featured image node, except for the resource type and the ID

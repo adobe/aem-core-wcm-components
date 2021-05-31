@@ -45,7 +45,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * Standard logger.
      */
-    protected static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
 
     /**
      * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.

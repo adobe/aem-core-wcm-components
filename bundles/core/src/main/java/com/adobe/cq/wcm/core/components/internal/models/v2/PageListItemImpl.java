@@ -22,6 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
@@ -39,7 +41,12 @@ import static com.adobe.cq.wcm.core.components.models.List.PN_TEASER_DELEGATE;
 
 public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl {
 
-    private Component component;
+    /**
+     * Standard logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
+
+    private final Component component;
     private Resource teaserResource;
 
     /**
@@ -86,7 +93,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                 overriddenProperties.put(JcrConstants.JCR_TITLE, this.getTitle());
                 overriddenProperties.put(JcrConstants.JCR_DESCRIPTION, this.getDescription());
                 overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
-                teaserResource = new CoreResourceWrapper(resourceToBeWrapped, delegateResourceType, overriddenProperties);
+                teaserResource = new CoreResourceWrapper(resourceToBeWrapped, delegateResourceType, null, overriddenProperties);
             }
         }
         return teaserResource;

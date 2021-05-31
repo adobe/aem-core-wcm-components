@@ -201,6 +201,7 @@ public final class ComponentUtils {
      * @param page the page
      * @return the featured image resource
      */
+    @Nullable
     public static Resource getFeaturedImage(@NotNull Page page) {
         return page.getContentResource(NN_PAGE_FEATURED_IMAGE);
     }
