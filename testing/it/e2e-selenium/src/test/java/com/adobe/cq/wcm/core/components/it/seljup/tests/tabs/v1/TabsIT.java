@@ -48,7 +48,7 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group2")
+@Tag("group3")
 public class TabsIT extends AuthorBaseUITest {
 
     private static String pageVar = "tabs_page";

@@ -31,7 +31,7 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group2")
+@Tag("group3")
 public class TextIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.text.v1.TextIT {
 
     private static String testXSS = "Hello World! <img =\"/\" onerror=\"alert(String.fromCharCode(88,83,83))\"></img>";

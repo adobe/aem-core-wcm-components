@@ -32,7 +32,7 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group2")
+@Tag("group3")
 public class NavigationIT extends AuthorBaseUITest {
 
     private String page1path;

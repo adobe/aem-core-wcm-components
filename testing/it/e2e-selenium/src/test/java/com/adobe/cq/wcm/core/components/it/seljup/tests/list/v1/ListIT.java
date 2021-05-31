@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group2")
+@Tag("group3")
 public class ListIT extends AuthorBaseUITest {
     private static String searchValue = "Victor Sullivan";
     private static String tag1 = "ellie";

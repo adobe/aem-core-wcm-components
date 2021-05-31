@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@Tag("group2")
+@Tag("group3")
 public class SearchIT extends AuthorBaseUITest {
 
     private static final String QUERY_BUILDER_URL = "/bin/querybuilder.json";

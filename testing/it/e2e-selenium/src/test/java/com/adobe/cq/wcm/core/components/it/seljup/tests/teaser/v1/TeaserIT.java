@@ -40,7 +40,7 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group2")
+@Tag("group3")
 public class TeaserIT extends AuthorBaseUITest {
     private static String  testAssetsPath                   = "/content/dam/core-components";
     private static String  testImagePath                    = testAssetsPath + "/core-comp-test-image.jpg";
