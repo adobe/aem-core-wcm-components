@@ -70,7 +70,7 @@ public class FormOptionsIT extends AuthorBaseUITest {
         compPath = Commons.createProxyComponent(adminClient, formOptionsRT, Commons.proxyPath, null, null);
 
         // add the core form container component
-        optionPath = Commons.addComponent(adminClient, compPath, testPage + Commons.relParentCompPath, "container", null);
+        optionPath = Commons.addComponent(adminClient, compPath, testPage + Commons.relParentCompPath, "formoption", null);
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);

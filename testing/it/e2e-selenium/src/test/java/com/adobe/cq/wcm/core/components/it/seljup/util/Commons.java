@@ -21,7 +21,9 @@ import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InlineEditor;
 import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
+import com.adobe.cq.testing.selenium.utils.ElementUtils;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.codeborne.selenide.Condition;
@@ -32,6 +34,7 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
@@ -46,12 +49,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_SMALL_SIZE;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selenide.actions;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.switchTo;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -65,7 +72,8 @@ public class Commons {
     public static String proxyPath =  "/apps/core-component/components/";
     // relative path from page node to the root layout container
     public static String relParentCompPath = "/jcr:content/root/responsivegrid/";
-
+    // the template defined in the test content package
+    public static String template = "/conf/core-components/settings/wcm/templates/core-components";
     // core component resource types
     // accordion component
     public static String  rtAccordion_v1 = "core/wcm/components/accordion/v1/accordion";
@@ -138,7 +146,10 @@ public class Commons {
         return feb;
     }
 
-    private static void selectInPicker(String prefix, String selector, String value) throws  InterruptedException {
+    public static void selectInPicker(String prefix, String selector, String value) throws  InterruptedException {
+        if(value.startsWith("/")) {
+            value = value.substring(1);
+        }
         String[] path = value.split("/");
         int i;
         String currentPath = prefix;
@@ -148,9 +159,10 @@ public class Commons {
             $("[data-foundation-collection-item-id='" + currentPath + "']").click();
             Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         }
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         currentPath = currentPath + "/"  + path[i];
         if($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").isDisplayed()) {
-            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").click();
+            ElementUtils.clickableClick($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox"));
         }
         else {
             $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-icon").click();
@@ -176,6 +188,75 @@ public class Commons {
         }
     }
 
+    /**
+     * Create a policy
+     *
+     * @param client          CQClient
+     * @param componentPath   Mandatory. the path to the component policy
+     * @param props           Tha policy's properties
+     * @param policyPath      Policy root path
+     * @throws ClientException
+     */
+    public static String createPolicy(CQClient client, String componentPath, List<NameValuePair> props, String policyPath, int... expectedStatus) throws ClientException {
+        String plcyPath = policyPath != null ? policyPath : defaultPolicyPath;
+        UrlEncodedFormEntity formEntry = FormEntityBuilder.create().addAllParameters(props).build();
+        try {
+            return client.doPost(plcyPath + componentPath, formEntry, HttpUtils.getExpectedStatus(201, expectedStatus)).getSlingPath();
+        } catch (ClientException ex) {
+            throw new ClientException("Policy creation failed for component " + componentPath + "with error : " + ex, ex);
+        }
+    }
+
+    /**
+     * Create page
+     *
+     * @param client
+     * @param templatePath
+     * @param parentPath
+     * @param pageName
+     * @param pageTitle
+     * @param pageRT
+     * @param description
+     * @param expectedStatus
+     * @return
+     * @throws ClientException
+     */
+    public static String createPage(CQClient client, String templatePath, String parentPath, String pageName, String pageTitle,String pageRT, String description, int... expectedStatus) throws ClientException {
+        if(pageRT == null || pageRT.isEmpty()) {
+            pageRT = "core/wcm/tests/components/test-page";
+        }
+        FormEntityBuilder feb = FormEntityBuilder.create();
+        feb.addParameter("template", templatePath);
+        feb.addParameter("parentPath", parentPath);
+        feb.addParameter("_charset_", "utf-8");
+        feb.addParameter("./jcr:title", pageTitle);
+        feb.addParameter("pageName", pageName);
+        feb.addParameter("./sling:resourceType", pageRT);
+        feb.addParameter("./jcr:description", description);
+
+        try {
+            return client.doPost("/libs/wcm/core/content/sites/createpagewizard/_jcr_content", feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus)).getSlingPath();
+        } catch(ClientException ex) {
+            throw new ClientException("Unable to create new page " + pageName + " at " + parentPath + " with error : " + ex, ex);
+        }
+    }
+
+    public static String createLiveCopy(CQClient client, String srcPath, String destPath, String title, String label, int... expectedStatus) throws ClientException {
+        FormEntityBuilder feb = FormEntityBuilder.create();
+
+        feb.addParameter("cmd", "createLiveCopy");
+        feb.addParameter("srcPath", srcPath);
+        feb.addParameter("destPath", destPath);
+        feb.addParameter("_charset_", "utf-8");
+        feb.addParameter("title", title);
+        feb.addParameter("label", label);
+
+        try {
+            return client.doPost("/bin/wcmcommand", feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus)).getSlingPath();
+        } catch(ClientException ex) {
+            throw new ClientException("Unable to create livecopy of " + srcPath + " at " + destPath + " with error : " + ex, ex);
+        }
+    }
 
     /**
      * Assign a policy to a core component
@@ -399,16 +480,6 @@ public class Commons {
         });
     }
 
-    /**
-     * Open configuration of component
-     *
-     * @param dataPath datapath of the component to open the configuration dialog
-     */
-    public static void openConfigureDialog(String dataPath) {
-        openEditableToolbar(dataPath);
-        $(Selectors.SELECTOR_CONFIG_BUTTON).click();
-        Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_CONFIG_DIALOG));
-    }
 
     /**
      * Open editabletoolbar of component
@@ -436,12 +507,36 @@ public class Commons {
         editableToolbar.clickConfigure();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
     }
+
+
+    /**
+     * Opens the inline editor for a component.
+     * @param editorPage
+     * @param compPath
+     * @return
+     * @throws TimeoutException
+     */
+    public static InlineEditor openInlineEditor(EditorPage editorPage, String compPath) throws TimeoutException {
+        String component = "[data-type='Editable'][data-path='" + compPath +"']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
+        return editableToolbar.clickEdit();
+    }
+
+    /**
+     * Closes any previously opened inline editor by clicking on the save button
+     */
+    public static void saveInlineEditor() {
+        $(Selectors.SELECTOR_SAVE_BUTTON).click();
+    }
+
     /**
      * Save configuration for component
      */
 
     public static void saveConfigureDialog() throws InterruptedException {
-        $(Selectors.SELECTOR_SAVE_CONFIG_BUTTON).click();
+        $(Selectors.SELECTOR_DONE_CONFIG_BUTTON).click();
         webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
@@ -523,14 +618,14 @@ public class Commons {
      * @param tag   Mandatory. the tag to be added
      * @throws ClientException
      */
-    public static void addTag(CQClient client, String tag) throws ClientException {
+    public static String addTag(CQClient client, String tag) throws ClientException {
         FormEntityBuilder form = FormEntityBuilder.create()
             .addParameter("cmd", "createTagByTitle")
             .addParameter("tag", tag)
             .addParameter("locale", "en")
             .addParameter("_charset_", "utf-8");
         try {
-            SlingHttpResponse exec = client.doPost("/bin/tagcommand" , form.build(), HttpStatus.SC_OK, HttpStatus.SC_CREATED);
+            return client.doPost("/bin/tagcommand" , form.build(), HttpStatus.SC_OK, HttpStatus.SC_CREATED).getSlingPath();
         } catch (Exception ex) {
             throw new ClientException(" failed to add tag " + tag + " with error: " + ex, ex);
         }
@@ -626,15 +721,12 @@ public class Commons {
         }
     }
 
-    public static void dragAndDrop(String dragElement, String location) throws InterruptedException {
-        actions().clickAndHold($(dragElement)).build().perform();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        actions().moveToElement($(location)).build().perform();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        actions().release().build().perform();
-    }
-
     public static boolean isComponentPresentInInsertDialog(String component) {
         return $("coral-selectlist-item[value='" + component + "']").isDisplayed();
+    }
+
+    public static void makeInlineEditorEditable() {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        ((JavascriptExecutor) webDriver).executeScript("document.getElementsByName('actionUpdate')[0].style.display='inline'");
     }
 }

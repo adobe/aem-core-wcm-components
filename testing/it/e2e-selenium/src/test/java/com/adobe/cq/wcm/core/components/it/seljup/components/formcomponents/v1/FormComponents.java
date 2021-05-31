@@ -14,24 +14,25 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2;
+package com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.v1;
 
+
+import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
+import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.FormContainerEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 
-@Tag("group3")
-public class ListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.list.v1.ListIT {
+import static com.codeborne.selenide.Selenide.$;
 
-    protected void setComponentResources() {
-        textRT = Commons.rtText_v2;
-        listRT = Commons.rtList_v2;
+public class FormComponents {
+    public FormComponents() {}
+
+    public FormContainerEditDialog  openEditDialog(String dataPath) {
+        Commons.openEditableToolbar(dataPath);
+        $(Selectors.SELECTOR_CONFIG_BUTTON).click();
+        Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_CONFIG_DIALOG));
+        return new FormContainerEditDialog();
+
     }
 
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
-        setComponentResources();
-        setup();
-    }
 }

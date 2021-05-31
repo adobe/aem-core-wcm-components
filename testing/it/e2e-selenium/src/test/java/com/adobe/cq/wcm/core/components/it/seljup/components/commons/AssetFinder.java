@@ -14,24 +14,19 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2;
+package com.adobe.cq.wcm.core.components.it.seljup.components.commons;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 
-@Tag("group3")
-public class ListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.list.v1.ListIT {
+public class AssetFinder {
+    private static String filtersPath = "[name='assetfilter_image_path']";
+    private static String textField = "foundation-autocomplete[name='assetfilter_image_path'] [is='coral-textfield']";
+    private static String buttonListItem = "foundation-autocomplete[name='assetfilter_image_path'] [is='coral-buttonlist-item']";
 
-    protected void setComponentResources() {
-        textRT = Commons.rtText_v2;
-        listRT = Commons.rtList_v2;
+    public void setFiltersPath(String filter) {
+        AutoCompleteField autoCompleteField = new AutoCompleteField("css:" + filtersPath);
+        autoCompleteField.sendKeys(filter);
+        autoCompleteField.suggestions().selectByValue(filter);
     }
 
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
-        setComponentResources();
-        setup();
-    }
 }

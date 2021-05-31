@@ -16,12 +16,16 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.carousel.v1;
 
+import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.wcm.core.components.it.seljup.components.carousel.CarouselEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.commons.CQOverlay;
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.ElementsCollection;
 
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class Carousel extends BaseComponent {
@@ -33,7 +37,10 @@ public class Carousel extends BaseComponent {
         super(".cmp-carousel");
     }
 
-    public CarouselEditDialog getEditDialog() {
+    public CarouselEditDialog openEditDialog(String dataPath) {
+        Commons.openEditableToolbar(dataPath);
+        $(Selectors.SELECTOR_CONFIG_BUTTON).click();
+        Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_CONFIG_DIALOG));
         return new CarouselEditDialog();
     }
 
