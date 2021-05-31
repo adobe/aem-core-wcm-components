@@ -66,11 +66,15 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
         return super.getURL();
     }
 
+    @Override
     @JsonIgnore
     public Resource getTeaserResource() {
         if (teaserResource == null && component != null) {
-            Resource featuredImageResource = ComponentUtils.getFeaturedImage(page);
-            if (featuredImageResource == null) {
+            Resource resourceToBeWrapped = ComponentUtils.getFeaturedImage(page);
+            if (resourceToBeWrapped == null) {
+                resourceToBeWrapped = page.getContentResource();
+            }
+            if (resourceToBeWrapped == null) {
                 return null;
             }
             String delegateResourceType = component.getProperties().get(PN_TEASER_DELEGATE, String.class);
@@ -82,7 +86,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                 overriddenProperties.put(JcrConstants.JCR_TITLE, this.getTitle());
                 overriddenProperties.put(JcrConstants.JCR_DESCRIPTION, this.getDescription());
                 overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
-                teaserResource = new CoreResourceWrapper(featuredImageResource, delegateResourceType, overriddenProperties);
+                teaserResource = new CoreResourceWrapper(resourceToBeWrapped, delegateResourceType, overriddenProperties);
             }
         }
         return teaserResource;

@@ -1,0 +1,17 @@
+{
+  "list": {
+    "jcr:primaryType": "sling:Folder",
+    "v3" : {
+      "jcr:primaryType": "nt:unstructured",
+      "list" : {
+        "jcr:primaryType" : "cq:Component",
+        "jcr:title" : "List (v3)",
+        "sling:resourceSuperType": "core/wcm/components/list",
+        "jcr:description" : "List Component",
+        "cq:icon" : "list",
+        "teaserDelegate": "core/wcm/components/teaser/v2/teaser",
+        "componentGroup" : ".core-wcm"
+      }
+    }
+  }
+}

@@ -31,8 +31,6 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 @ConsumerType
 public interface ListItem extends Component {
 
-    default Resource getTeaserResource() { return null;}
-
     /**
      * Returns the link of this {@code ListItem}.
      *
@@ -111,4 +109,19 @@ public interface ListItem extends Component {
     default String getName() {
         return null;
     }
+
+    /**
+     * Returns a wrapped resource of the item which is used to render the item as a Teaser component.
+     *
+     * The wrapped resource is either:
+     * - the featured image of the item page, if it exists
+     * - the content node of the item page, if it exists
+     * - null otherwise
+     *
+     * @return wrapped resource of the item which can be rendered as a Teaser component
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    @Nullable
+    default Resource getTeaserResource() { return null;}
+
 }

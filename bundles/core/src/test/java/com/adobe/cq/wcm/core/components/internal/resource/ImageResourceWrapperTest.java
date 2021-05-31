@@ -92,7 +92,7 @@ public class ImageResourceWrapperTest {
         verify(resourceResolver).isResourceType(wrappedResource, "a/b/c");
     }
 
-    private Resource prepareResourceToBeWrapped(Map<String, Object> properties) {
+    protected Resource prepareResourceToBeWrapped(Map<String, Object> properties) {
         Resource resource = mock(Resource.class);
         ValueMap valueMap = new ValueMapDecorator(properties);
         when(resource.getValueMap()).thenReturn(valueMap);

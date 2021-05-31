@@ -13,7 +13,7 @@
             "lastModified": 1474499565000,
             "dataLayer": {
                 "list-8fd5b645e5-item-a11dd78c1e": {
-                    "@type": "cq:PageContent",
+                    "@type": "cq:Component/item",
                     "dc:title": "Page 2",
                     "xdm:linkURL": "/content/list/pages/page_2.html"
                 }
@@ -31,7 +31,7 @@
             "lastModified": 1474672365000,
             "dataLayer": {
                 "list-8fd5b645e5-item-c1a450dfb3": {
-                    "@type": "cq:PageContent",
+                    "@type": "cq:Component/item",
                     "dc:title": "Page 1",
                     "xdm:linkURL": "/content/list/pages/page_1.html"
                 }
