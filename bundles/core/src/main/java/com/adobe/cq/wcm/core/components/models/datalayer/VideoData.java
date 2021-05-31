@@ -13,11 +13,20 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
- * This packages defines models for integration with
- * <a href="https://github.com/adobe/adobe-client-data-layer">Adobe Client Data Layer</a>
- */
-@Version("1.3.0")
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
-import org.osgi.annotation.versioning.Version;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public interface VideoData extends ComponentData {
+    /**
+     * Returns the asset associated with the video.
+     *
+     * @return Asset data model
+     *
+     * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
+     */
+    @JsonProperty("video")
+    default AssetData getAssetData() {
+        return null;
+    }
+}

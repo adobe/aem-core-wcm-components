@@ -14,7 +14,8 @@
   ~ limitations under the License./apps/digitals2/general/components/pages/basepage/deferCSSLoading.html
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.videoModel="com.adobe.cq.wcm.core.components.models.Video"
-     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
+     data-sly-test.video="${videoModel.fileReference}"
      class="cmp-video">
     <video class="cmp-video__video"
            poster="${videoModel.posterImageReference ? posterImageReference : false}"
@@ -26,3 +27,4 @@
         <source src="${videoModel.fileReference}"/>
     </video>
 </div>
+<sly data-sly-call="${template.placeholder @ isEmpty=!video , classAppend='cmp-video'}"></sly>
