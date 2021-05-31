@@ -11,7 +11,7 @@
         "cq:lastModifiedBy" : "admin",
         "videoComponent": {
             "jcr:primaryType": "nt:unstructured",
-            "fileReference": "/content/dam/some/test/video/sample.mp4",
+            "videoFileReference": "/content/dam/some/test/video/sample.mp4",
             "posterImageReference": "/content/dam/core-components-examples/library/aem-corecomponents-logo.svg",
             "alt": "Some alternative Text sample",
             "autoplayEnabled": "true",

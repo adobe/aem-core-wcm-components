@@ -18,10 +18,14 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Video;
+import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.commons.DownloadResource;
+import com.day.cq.dam.api.Asset;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
@@ -33,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -47,11 +53,11 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/video/v1/video";
 
-    @ValueMapValue(name = DownloadResource.PN_REFERENCE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = "videoFileReference", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String fileReference;
 
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = "posterImageReference", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String posterImageReference;
 
@@ -114,7 +120,9 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
     @Override
     @NotNull
     protected ComponentData getComponentData() {
-        return DataLayerBuilder.extending(super.getComponentData()).asComponent()
+        return DataLayerBuilder.extending(super.getComponentData())
+            .asVideoComponent()
+            .withAssetData(dataSupplier)
             .build();
     }
 
@@ -122,4 +130,12 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
     public @NotNull String getExportedType() {
         return resource.getResourceType();
     }
+
+    private final Supplier<AssetData> dataSupplier = () ->
+        Optional.ofNullable(this.fileReference)
+            .map(reference -> this.request.getResourceResolver().getResource(reference))
+            .map(assetResource -> assetResource.adaptTo(Asset.class))
+            .map(DataLayerBuilder::forAsset)
+            .map(AssetDataBuilder::build)
+            .orElse(null);
 }
