@@ -426,7 +426,7 @@
                         jcr:lastModified="{Date}2018-12-07T13:35:26.346+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Title and Description from Linked Page"
+                        jcr:title="Title, Description and Image from Linked Page"
                         sling:resourceType="core-components-examples/components/title"
                         type="h3"/>
                 <text_1337509001
@@ -436,7 +436,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/text"
-                        text="&lt;p>Teaser with a title, description and link - with the title and description taken from the linked page.&lt;/p>&#xa;"
+                        text="&lt;p>Teaser with an image, title, description and link - with the image, title and description taken from the linked page.&lt;/p>&#xa;"
                         textIsRich="true"/>
                 <demo_1257101605
                         jcr:created="{Date}2018-12-07T13:36:25.562+01:00"
@@ -458,7 +458,7 @@
                                 sling:resourceType="core-components-examples/components/teaser"
                                 actionsEnabled="false"
                                 descriptionFromPage="true"
-                                linkURL="/content/core-components-examples/library/page-authoring/teaser"
+                                linkURL="/content/core-components-examples/library/page-authoring/image"
                                 textIsRich="true"
                                 titleFromPage="true"/>
                     </component>
