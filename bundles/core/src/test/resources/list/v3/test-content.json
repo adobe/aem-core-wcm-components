@@ -197,6 +197,13 @@
                     "sling:resourceType": "core/wcm/components/list/v3/list",
                     "listFrom": "search",
                     "query": "Page 1.2"
+                },
+                "listRenderedAsTeaserItems": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "displayItemAsTeaser": "true",
+                    "listFrom": "children",
+                    "parentPage": "/content/list/pages/page_1"
                 }
             }
         },
@@ -212,14 +219,26 @@
                     "jcr:primaryType": "cq:Page",
                     "jcr:content": {
                         "jcr:primaryType": "cq:PageContent",
-                        "jcr:title": "Page 1.1"
+                        "jcr:title": "Page 1.1",
+                        "jcr:description": "Description for Page 1.1",
+                        "cq:featuredimage"    : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+                        }
                     }
                 },
                 "page_1_2": {
                     "jcr:primaryType": "cq:Page",
                     "jcr:content": {
                         "jcr:primaryType": "cq:PageContent",
-                        "jcr:title": "Page 1.2"
+                        "jcr:title": "Page 1.2",
+                        "jcr:description": "Description for Page 1.2",
+                        "cq:featuredimage"    : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+                        }
                     },
                     "page_1_2_1": {
                         "jcr:primaryType": "cq:Page",
@@ -241,6 +260,7 @@
                     "jcr:content": {
                         "jcr:primaryType": "cq:PageContent",
                         "jcr:title": "Page 1.3",
+                        "jcr:description": "Description for Page 1.3",
                         "cq:tags": [
                             "list:test_category/test_tag"
                         ]

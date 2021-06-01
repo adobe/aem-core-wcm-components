@@ -13,7 +13,7 @@
             "title": "Page 1",
             "dataLayer": {
                 "list-18e15834ab-item-c1a450dfb3": {
-                    "@type": "cq:PageContent",
+                    "@type": "cq:Component/item",
                     "dc:title": "Page 1",
                     "xdm:linkURL": "/content/list/pages/page_1.html"
                 }
@@ -31,7 +31,7 @@
             "title": "Page 2",
             "dataLayer": {
                 "list-18e15834ab-item-a11dd78c1e": {
-                    "@type": "cq:PageContent",
+                    "@type": "cq:Component/item",
                     "dc:title": "Page 2",
                     "xdm:linkURL": "/content/list/pages/page_2.html"
                 }
@@ -44,6 +44,7 @@
             "@type": "core/wcm/components/list/v3/list"
         }
     },
+    "displayItemAsTeaser": false,
     "showDescription": true,
     "showModificationDate": true,
     "linkItems": true,

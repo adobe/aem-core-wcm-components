@@ -111,6 +111,13 @@ public interface List extends Component {
     String PN_LINK_ITEMS = "linkItems";
 
     /**
+     * Name of the boolean resource property indication if the items should render a link to the page they represent.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
+     */
+    String PN_DISPLAY_ITEM_AS_TEASER = "displayItemAsTeaser";
+
+    /**
      * Name of the resource property storing where a search should be performed if the source of the list is <code>search</code>.
      *
      * @see #PN_SOURCE
@@ -141,6 +148,13 @@ public interface List extends Component {
     String PN_DATE_FORMAT = "dateFormat";
 
     /**
+     * Name of the component property indicating to which teaser component the list items should be delegated.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    String PN_TEASER_DELEGATE = "teaserDelegate";
+
+    /**
      * Returns the list's items collection, as {@link Page} elements.
      *
      * @return {@link Collection} of {@link Page}s
@@ -161,6 +175,16 @@ public interface List extends Component {
     @NotNull
     default Collection<ListItem> getListItems() {
         return Collections.emptyList();
+    }
+
+    /**
+     * Returns {@code true} if the list's items should be displayed as teasers.
+     *
+     * @return {@code true} if the items should be displayed as teasers, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    default boolean displayItemAsTeaser() {
+        return false;
     }
 
     /**

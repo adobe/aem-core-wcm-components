@@ -159,7 +159,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * List of properties that should be suppressed on image delegation.
      */
-    private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
+    protected final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
     }};
@@ -208,7 +208,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      * Initialize the model.
      */
     @PostConstruct
-    private void initModel() {
+    protected void initModel() {
         ValueMap properties = resource.getValueMap();
 
         pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
@@ -227,7 +227,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
 
         if (this.hasImage()) {
-            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties);
+            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties, null);
         }
         // use the target page as the link if it exists
         link = this.getTargetPage()
@@ -253,7 +253,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      *
      * @return True if the teaser has an image, false if it does not.
      */
-    private boolean hasImage() {
+    protected boolean hasImage() {
         return Optional.ofNullable(this.resource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
             .map(request.getResourceResolver()::getResource)
             .orElseGet(() -> request.getResource().getChild(DownloadResource.NN_FILE)) != null;
@@ -277,7 +277,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      * @return The target page if it exists, or empty if not.
      */
     @NotNull
-    private Optional<Page> getTargetPage() {
+    protected Optional<Page> getTargetPage() {
         if (this.targetPage == null) {
             if (this.isActionsEnabled()) {
                 this.targetPage = this.getTeaserActions().stream().findFirst().flatMap(Action::getCtaPage).orElse(null);

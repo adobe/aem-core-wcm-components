@@ -54,7 +54,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
-import com.adobe.cq.wcm.core.components.internal.resource.ImageResourceWrapper;
+import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
@@ -715,7 +715,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     String delegatingResourceType =
                             component.getProperties().get(AbstractImageDelegatingModel.IMAGE_DELEGATE, String.class);
                     if (StringUtils.isNotEmpty(delegatingResourceType)) {
-                        imageResource = new ImageResourceWrapper(imageResource, delegatingResourceType);
+                        imageResource = new CoreResourceWrapper(imageResource, delegatingResourceType);
                     }
                 }
             }

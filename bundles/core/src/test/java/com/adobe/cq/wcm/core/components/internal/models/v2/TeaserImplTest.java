@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Objects;
 
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -94,6 +95,20 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertEquals("http://www.adobe.com", action.getURL());
         assertValidLink(action.getLink(), "http://www.adobe.com");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser9"));
+    }
+
+    @Test
+    protected void testEmptyTeaserImageDelegatingToFeaturedImage() {
+        Teaser teaser = getTeaserUnderTest(TEASER_20);
+        Resource imageResource = teaser.getImageResource();
+        ValueMap imageProperties = imageResource.getValueMap();
+        String linkURL = imageProperties.get("linkURL", String.class);
+        String fileReference = imageProperties.get("fileReference", String.class);
+        assertEquals("/content/teasers/jcr:content/cq:featuredimage", imageResource.getPath(), "image resource: path");
+        assertEquals("core/wcm/components/image/v3/image", imageResource.getResourceType(), "image resource: resource type");
+        assertEquals("/content/teasers", linkURL, "image resource: linkURL");
+        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", fileReference, "image resource: fileReference");
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser20"));
     }
 
 }

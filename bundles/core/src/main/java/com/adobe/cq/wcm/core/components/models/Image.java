@@ -20,6 +20,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -341,4 +342,9 @@ public interface Image extends Component {
     default boolean isDmImage() {
         return false;
     }
+
+    default ImageData getComponentData() {
+        return null;
+    }
+
 }

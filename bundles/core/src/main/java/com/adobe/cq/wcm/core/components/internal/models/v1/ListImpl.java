@@ -40,11 +40,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -144,13 +140,13 @@ public class ListImpl extends AbstractComponentImpl implements List {
      * Component properties.
      */
     @ScriptVariable
-    private ValueMap properties;
+    protected ValueMap properties;
 
     /**
      * The current style.
      */
     @ScriptVariable
-    private Style currentStyle;
+    protected Style currentStyle;
 
     /**
      * The current page.
@@ -187,7 +183,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
      * Initialize the model.
      */
     @PostConstruct
-    private void initModel() {
+    protected void initModel() {
         // read design config properties
         showDescription = properties.get(PN_SHOW_DESCRIPTION, currentStyle.get(PN_SHOW_DESCRIPTION, SHOW_DESCRIPTION_DEFAULT));
         showModificationDate = properties.get(
