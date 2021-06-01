@@ -27,7 +27,6 @@ import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.PermissionsTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.SocialMediaTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.ThumbnailTab;
 import com.adobe.cq.wcm.core.components.it.seljup.AdminBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.categories.IgnoreOnSDK;
 import com.adobe.cq.wcm.core.components.it.seljup.components.page.v1.Page;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
@@ -36,7 +35,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
-import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -479,7 +477,7 @@ public class PageIT extends AdminBaseUITest {
     /**
      * Test: Check the Add Permissions options of a page properties.
      */
-    @Category(IgnoreOnSDK.class)
+    @Tag("IgnoreOnSDK")
     @Test
     @DisplayName("Test: Check the Add Permissions options of a page properties.")
     public void testAddPermissionsPageProperties() throws InterruptedException {
