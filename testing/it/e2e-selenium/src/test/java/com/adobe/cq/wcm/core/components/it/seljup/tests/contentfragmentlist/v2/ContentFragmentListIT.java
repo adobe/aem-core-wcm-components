@@ -14,24 +14,23 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2;
+package com.adobe.cq.wcm.core.components.it.seljup.tests.contentfragmentlist.v2;
 
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
-@Tag("group4")
-public class ListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.list.v1.ListIT {
+@Tag("group2")
+public class ContentFragmentListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.contentfragmentlist.v1.ContentFragmentListIT {
 
-    protected void setComponentResources() {
-        textRT = Commons.rtText_v2;
-        listRT = Commons.rtList_v2;
+    protected void setupResources() {
+        contentFragmentListRT = Commons.rtContentFragmentList_v2;
     }
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
-        setComponentResources();
+        setupResources();
         setup();
     }
 }

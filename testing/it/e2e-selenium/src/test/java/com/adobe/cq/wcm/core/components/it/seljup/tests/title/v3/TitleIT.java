@@ -14,7 +14,15 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.categories;
+package com.adobe.cq.wcm.core.components.it.seljup.tests.title.v3;
 
-public interface IgnoreOn64 {
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import org.junit.jupiter.api.Tag;
+
+@Tag("group3")
+public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.title.v2.TitleIT {
+    public void setupResources() {
+        clientlibs = "core.wcm.components.title.v2";
+        titleRT = Commons.rtTitle_v3;
+    }
 }

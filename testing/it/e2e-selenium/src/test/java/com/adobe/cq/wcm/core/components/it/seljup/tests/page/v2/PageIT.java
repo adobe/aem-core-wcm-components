@@ -20,13 +20,11 @@ import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.AdvancedTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.BlueprintTab;
-import com.adobe.cq.wcm.core.components.it.seljup.categories.IgnoreOn65;
 import com.adobe.cq.wcm.core.components.it.seljup.components.page.v1.Page;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
-import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -34,7 +32,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group3")
+@Tag("group4")
 public class PageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.page.v1.PageIT {
 
     private static String configuration = "/conf/core-components";
@@ -93,7 +91,7 @@ public class PageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.pag
      * @throws ClientException
      * @throws InterruptedException
      */
-    @Category(IgnoreOn65.class)
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Check the Blueprint options of a page properties.")
     public void testBlueprintPageProperties() throws ClientException, InterruptedException {

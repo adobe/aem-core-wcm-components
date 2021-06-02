@@ -14,7 +14,23 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.categories;
+package com.adobe.cq.wcm.core.components.it.seljup.tests.languagenavigation.v2;
 
-public interface IgnoreOnSDK {
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+
+@Tag("group2")
+public class LanguageNavigationIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.languagenavigation.v1.LanguageNavigationIT {
+
+    private void setupResources() {
+        languageNavigationRT = Commons.rtLanguageNavigation_v2;
+    }
+
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setupResources();
+        setup();
+    }
 }

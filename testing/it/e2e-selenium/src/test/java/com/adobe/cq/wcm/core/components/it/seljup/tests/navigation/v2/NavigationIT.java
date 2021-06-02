@@ -14,7 +14,26 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.categories;
+package com.adobe.cq.wcm.core.components.it.seljup.tests.navigation.v2;
 
-public class IgnoreOn65 {
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+
+@Tag("group3")
+public class NavigationIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.navigation.v1.NavigationIT {
+
+    private void setupResources() {
+        navigationRT = Commons.rtNavigation_v2;
+    }
+
+    /**
+     * Before Test Case
+     */
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setupResources();
+        setup();
+    }
 }

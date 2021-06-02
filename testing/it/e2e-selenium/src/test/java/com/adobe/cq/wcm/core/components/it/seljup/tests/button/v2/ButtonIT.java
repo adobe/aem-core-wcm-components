@@ -14,7 +14,22 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.categories;
+package com.adobe.cq.wcm.core.components.it.seljup.tests.button.v2;
 
-public interface IgnoreOnCloud {
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+
+@Tag("group2")
+public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.button.v1.ButtonIT {
+
+    private void setupResources() {
+        buttonRT = Commons.rtButton_v2;
+    }
+
+    @BeforeEach
+    public void setupBefore() throws Exception {
+        setupResources();
+        setup();
+    }
 }
