@@ -44,7 +44,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 
-@Tag("group3")
+@Tag("group4")
 public class PageIT extends AdminBaseUITest {
     private static String tag1 = "testTag1";
     private static String tag2 = "testTag2";

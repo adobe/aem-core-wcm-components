@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group3")
+@Tag("group4")
 public class PageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.page.v1.PageIT {
 
     private static String configuration = "/conf/core-components";
