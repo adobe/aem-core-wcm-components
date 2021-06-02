@@ -24,6 +24,9 @@ import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilde
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.dam.api.Asset;
+import com.day.cq.rewriter.linkchecker.LinkChecker;
+import com.day.cq.rewriter.linkchecker.LinkCheckerSettings;
+import com.day.cq.rewriter.linkchecker.LinkValidity;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -35,6 +38,7 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.service.component.annotations.Reference;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
@@ -52,6 +56,9 @@ import java.util.function.Supplier;
 public class VideoImpl extends AbstractComponentImpl implements Video {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/video/v1/video";
+
+    @Reference
+    private LinkChecker linkChecker;
 
     @ValueMapValue(name = "videoFileReference", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
@@ -93,7 +100,13 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
     @Override
     @Nullable
     public String getFileReference() {
-        return fileReference;
+        final LinkCheckerSettings linkCheckerSettings = new LinkCheckerSettings();
+        final LinkValidity validity = linkChecker.getLink(fileReference, linkCheckerSettings).getValidity();
+        if (validity.equals(LinkValidity.VALID)) {
+            return fileReference;
+        } else {
+            return null;
+        }
     }
 
     @Override
