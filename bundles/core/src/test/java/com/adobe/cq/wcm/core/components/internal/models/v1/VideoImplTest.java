@@ -19,6 +19,9 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Video;
+import com.day.cq.rewriter.linkchecker.Link;
+import com.day.cq.rewriter.linkchecker.LinkChecker;
+import com.day.cq.rewriter.linkchecker.LinkValidity;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.sling.api.resource.Resource;
@@ -26,6 +29,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,6 +49,12 @@ public class VideoImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
+    @Mock
+    private LinkChecker checker;
+
+    @InjectMocks
+    private Video video;
+
     protected String testBase;
     protected String resourceType;
 
@@ -49,6 +62,11 @@ public class VideoImplTest {
     protected void setUp() {
         resourceType = VideoImpl.RESOURCE_TYPE;
         internalSetup();
+        video = getVideoUnderTest();
+        MockitoAnnotations.initMocks(this);
+        final Link linkMock = Mockito.mock(Link.class);
+        Mockito.when(checker.getLink(Mockito.anyString(), Mockito.any())).thenReturn(linkMock);
+        Mockito.when(linkMock.getValidity()).thenReturn(LinkValidity.VALID);
     }
 
     protected void internalSetup() {
@@ -58,7 +76,6 @@ public class VideoImplTest {
     @Test
     @DisplayName("Video Component - Test video image reference")
     protected void testPosterImageReference() {
-        final Video video = getVideoUnderTest();
         assertEquals(VIDEO_POSTER_IMAGE_REFERENCE, video.getPosterImageReference());
         Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_ROOT_PAGE_GRID));
     }
@@ -66,7 +83,6 @@ public class VideoImplTest {
     @Test
     @DisplayName("Video Component - Test video file reference")
     protected void testFileReference() {
-        final Video video = getVideoUnderTest();
         assertEquals(VIDEO_FILE_REFERENCE, video.getFileReference());
         Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_ROOT_PAGE_GRID));
     }
@@ -74,7 +90,6 @@ public class VideoImplTest {
     @Test
     @DisplayName("Video Component - Test video autoplay enabled")
     protected void testVideoAutoplayEnabled() {
-        final Video video = getVideoUnderTest();
         assertTrue(video.isAutoplayEnabled());
         Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_ROOT_PAGE_GRID));
     }
@@ -82,7 +97,6 @@ public class VideoImplTest {
     @Test
     @DisplayName("Video Component - Test is loop enabled")
     protected void testIsLoopEnabled() {
-        final Video video = getVideoUnderTest();
         assertTrue(video.isLoopEnabled());
         Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_ROOT_PAGE_GRID));
     }
@@ -90,7 +104,6 @@ public class VideoImplTest {
     @Test
     @DisplayName("Video Component - Test get exported type")
     protected void testVideoExportedType() {
-        final Video video = getVideoUnderTest();
         assertEquals(VIDEO_RESOURCE_TYPE, video.getExportedType());
         Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_ROOT_PAGE_GRID));
     }
@@ -98,7 +111,6 @@ public class VideoImplTest {
     @Test
     @DisplayName("Video Component - Test hide control property")
     protected void testVideoHideControl() {
-        final Video video = getVideoUnderTest();
         assertTrue(video.isHideControl());
         Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_ROOT_PAGE_GRID));
     }
