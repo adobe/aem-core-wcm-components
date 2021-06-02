@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -31,6 +33,8 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -48,6 +52,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
 
     @ValueMapValue(name = "width", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
@@ -128,7 +133,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getSrcset() {
         String [] srcsetArray = new String[super.getWidths().length];
         if (super.getWidths().length > 0 && super.getSrcUriTemplate() != null) {
-            String srcUriTemplateDecoded = java.net.URLDecoder.decode(super.getSrcUriTemplate(), StandardCharsets.UTF_8);
+            String srcUriTemplateDecoded = "";
+            try {
+                srcUriTemplateDecoded  = URLDecoder.decode(super.getSrcUriTemplate(), StandardCharsets.UTF_8.name());
+            } catch (UnsupportedEncodingException e) {
+                LOGGER.error("Character Decoding failed.");
+            }
             if (srcUriTemplateDecoded.contains("{.width}")) {
                 for (int i = 0; i < super.getWidths().length; i++) {
                     if (srcUriTemplateDecoded.contains("={.width}")) {
