@@ -162,7 +162,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
     /**
      * Flag indicating if description should be shown.
      */
-    private boolean showDescription;
+    protected boolean showDescription;
 
     /**
      * Flag indicating if modification date should be shown.
@@ -172,7 +172,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
     /**
      * Flag indicating if items should be linked.
      */
-    private boolean linkItems;
+    protected boolean linkItems;
 
     /**
      * The list items.
