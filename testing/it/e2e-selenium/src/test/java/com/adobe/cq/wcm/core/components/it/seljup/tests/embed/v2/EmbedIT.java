@@ -21,7 +21,7 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
-@Tag("group2")
+@Tag("group3")
 public class EmbedIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.embed.v1.EmbedIT {
 
     private void setupResources() {
