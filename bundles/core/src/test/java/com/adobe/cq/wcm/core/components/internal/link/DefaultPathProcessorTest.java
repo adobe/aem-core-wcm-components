@@ -29,6 +29,7 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -78,10 +79,25 @@ class DefaultPathProcessorTest {
 
     @Test
     void testVanityUrl() {
-        Page page = context.create().page("/content/links/site1/en/", "/conf/example",
+        Page page = context.create().page("/content/links/site1/en", "/conf/example",
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));
-        DefaultPathProcessor underTest = context.registerService(new DefaultPathProcessor());
-        assertEquals("vanity.html", underTest.map(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
+                "vanityConfig", DefaultPathProcessor.VanityConfig.MAPPING.getValue()));
+        assertTrue(underTest.accepts(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        assertEquals("/vanity.html", underTest.map(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
     }
 
+    @Test
+    void testVanityConfig() {
+        Page page = context.create().page("/content/links/site1/en", "/conf/example",
+                ImmutableMap.of("sling:vanityPath", "vanity.html"));
+        DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
+                "vanityConfig", "shouldBeDefault"));
+        assertEquals("/content/site1/en.html", underTest.map(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        assertEquals("https://example.org/content/links/site1/en.html", underTest.externalize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        context.request().setContextPath("/cp");
+        underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
+                "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
+        assertEquals("/cp/vanity.html", underTest.sanitize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+    }
 }

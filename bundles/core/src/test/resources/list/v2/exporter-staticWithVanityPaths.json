@@ -6,7 +6,7 @@
             "id": "list-d860131bb1-item-29f192d859",
             "path": "/content/list/pages/page_3",
             "title": "Page 3",
-            "url": "/context/content/list/pages/page_3.html",
+            "url": "/context/page_3.html",
             ":type": "cq:PageContent",
             "dataLayer": {
                 "list-d860131bb1-item-29f192d859": {
@@ -20,7 +20,7 @@
             "id": "list-d860131bb1-item-86df63380b",
             "path": "/content/list/pages/page_4",
             "title": "Page 4",
-            "url": "/context/content/list/pages/page_4.html",
+            "url": "/context/4_page.html",
             ":type": "cq:PageContent",
             "dataLayer": {
                 "list-d860131bb1-item-86df63380b": {

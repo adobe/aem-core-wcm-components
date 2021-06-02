@@ -16,7 +16,7 @@
     2500
   ],
   "lazyEnabled": false,
-  "link": "/core/content/test.html",
+  "link": "/core/content/test-image.html",
   "dataLayer": {
     "image-7053df592f": {
       "xdm:linkURL": "/core/content/test-image.html",

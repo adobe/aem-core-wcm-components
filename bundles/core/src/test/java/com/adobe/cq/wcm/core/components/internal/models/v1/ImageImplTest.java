@@ -72,7 +72,7 @@ public class ImageImplTest extends AbstractImageTest {
                 ".2500.png/1490005239000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":true}";
         compareJSON(expectedJson, image.getJson());
         assertFalse(image.displayPopupTitle());
-        assertEquals(CONTEXT_PATH + "/content/test.html", image.getLink());
+        assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE0_PATH));
     }
@@ -175,7 +175,7 @@ public class ImageImplTest extends AbstractImageTest {
         "}";
         compareJSON(expectedJson, image.getJson());
         assertFalse(image.displayPopupTitle());
-        assertEquals(CONTEXT_PATH + "/content/test.html", image.getLink());
+        assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_PATH));
     }
 

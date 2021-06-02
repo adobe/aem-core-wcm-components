@@ -23,9 +23,15 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+import org.osgi.service.metatype.annotations.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,14 +40,61 @@ import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
+@Designate(ocd = DefaultPathProcessor.Config.class)
 @Component(property = Constants.SERVICE_RANKING + ":Integer=" + Integer.MIN_VALUE,
            service = PathProcessor.class)
 public class DefaultPathProcessor implements PathProcessor {
+    @ObjectClassDefinition(
+            name = "Default path processor configuration"
+    )
+    @interface Config {
+        @AttributeDefinition(
+                name = "Vanity path rewriting",
+                description = "Defines how the vanity url of a page is taking into account while generating the link URLs",
+                options = {
+                        @Option(label = "never", value = "never"),
+                        @Option(label = "always", value = "always"),
+                        @Option(label = "on path mapping and externalization", value = "mapping")
+                }
+        )
+        String vanityConfig() default "never";
+    }
+
+    public enum VanityConfig {
+        NEVER("never"),
+        ALWAYS("always"),
+        MAPPING("mapping");
+
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        VanityConfig(String value) {
+            this.value = value;
+        }
+
+        public static VanityConfig fromString(String value) {
+            for (VanityConfig config :VanityConfig.values()) {
+                if (StringUtils.equals(config.value, value)) {
+                    return config;
+                }
+            }
+            return NEVER;
+        }
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultPathProcessor.class);
 
     @Reference
     Externalizer externalizer;
+    private VanityConfig vanityConfig;
+
+    @Activate
+    protected void activate(final BundleContext bundleContext, final Config config) {
+        vanityConfig = VanityConfig.fromString(config.vanityConfig());
+    }
 
     @Override
     public boolean accepts(@NotNull String path, @NotNull SlingHttpServletRequest request) {
@@ -50,6 +103,9 @@ public class DefaultPathProcessor implements PathProcessor {
 
     @Override
     public @NotNull String sanitize(@NotNull String path, @NotNull SlingHttpServletRequest request) {
+        if (vanityConfig == VanityConfig.ALWAYS) {
+            path = getPathOrVanityUrl(path, request.getResourceResolver());
+        }
         int fragmentQueryMark = path.indexOf('#');
         if (fragmentQueryMark < 0) {
             fragmentQueryMark = path.indexOf('?');
@@ -83,22 +139,34 @@ public class DefaultPathProcessor implements PathProcessor {
     @Override
     public @NotNull String map(@NotNull String path, @NotNull SlingHttpServletRequest request) {
         ResourceResolver resourceResolver = request.getResourceResolver();
+        String mappedPath;
         try {
-            return StringUtils.defaultString(resourceResolver.map(request, getPathOrVanityUrl(path, resourceResolver)));
+            if (vanityConfig == VanityConfig.MAPPING || vanityConfig == VanityConfig.ALWAYS) {
+                mappedPath = StringUtils.defaultString(resourceResolver.map(request, getPathOrVanityUrl(path, resourceResolver)));
+            } else {
+                mappedPath = StringUtils.defaultString(resourceResolver.map(request, path));
+            }
         } catch (Exception e) {
-            return path;
+            mappedPath = path;
         }
+        return mappedPath;
     }
 
 
     @Override
     public @NotNull String externalize(@NotNull String path, @NotNull SlingHttpServletRequest request) {
         ResourceResolver resourceResolver = request.getResourceResolver();
+        String externalPath;
         try {
-            return externalizer.publishLink(resourceResolver, getPathOrVanityUrl(path, resourceResolver));
+            if (vanityConfig == VanityConfig.MAPPING || vanityConfig == VanityConfig.ALWAYS) {
+                externalPath = externalizer.publishLink(resourceResolver, getPathOrVanityUrl(path, resourceResolver));
+            } else {
+                externalPath = externalizer.publishLink(resourceResolver, path);
+            }
         } catch (Exception e) {
-            return path;
+            externalPath = path;
         }
+        return externalPath;
     }
 
     @NotNull
@@ -117,6 +185,9 @@ public class DefaultPathProcessor implements PathProcessor {
                 Page page = pageManager.getPage(path.substring(0, path.lastIndexOf(LinkHandler.HTML_EXTENSION)));
                 if (page != null) {
                     vanityUrl = page.getVanityUrl();
+                    if (StringUtils.isNotBlank(vanityUrl) && !vanityUrl.startsWith("/")) {
+                      vanityUrl = "/" +  vanityUrl;
+                    }
                 }
             }
         }

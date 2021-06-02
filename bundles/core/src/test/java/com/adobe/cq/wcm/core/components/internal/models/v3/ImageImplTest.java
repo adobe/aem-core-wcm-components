@@ -179,8 +179,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
                 ".2500.png/1490005239000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":false}";
         compareJSON(expectedJson, image.getJson());
         assertTrue(image.displayPopupTitle());
-        assertEquals(CONTEXT_PATH + "/content/test.html", image.getLink());
-        assertValidLink(image.getImageLink(), "/content/test.html", "/content/test-image.html", context.request());
+        assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
+        assertValidLink(image.getImageLink(), "/content/test-image.html", context.request());
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE0_PATH));
     }

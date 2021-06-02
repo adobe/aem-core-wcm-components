@@ -153,7 +153,7 @@ public class NavigationImplTest {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_1);
         Object[][] expectedPages = {
                 {"/content/navigation", 0, true, "/content/navigation.html"},
-                {"/content/navigation/navigation-1", 1, false, "/content/navigation/navigation-1.html", "/navigation-1-vanity"},
+                {"/content/navigation/navigation-1", 1, false, "/navigation-1-vanity"},
                 {"/content/navigation/navigation-1/navigation-1-1", 2, false, "/content/navigation/navigation-1/navigation-1-1.html"},
                 {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 3, false,
                         "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
@@ -212,7 +212,7 @@ public class NavigationImplTest {
     protected void testPartialNavigationTreeNotOnlyCurrentPage() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_4);
         Object[][] expectedPages = {
-                {"/content/navigation/navigation-1", 0, true, "/content/navigation/navigation-1.html", "/navigation-1-vanity"},
+                {"/content/navigation/navigation-1", 0, true, "/navigation-1-vanity"},
                 {"/content/navigation/navigation-1/navigation-1-1", 1, true, "/content/navigation/navigation-1/navigation-1-1.html"},
                 {"/content/navigation/navigation-2", 0, false, "/content/navigation/navigation-2.html"}
         };
@@ -228,7 +228,7 @@ public class NavigationImplTest {
                 "structureDepth", 2);
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_5);
         Object[][] expectedPages = {
-                {"/content/navigation/navigation-1", 0, true, "/content/navigation/navigation-1.html", "/navigation-1-vanity"},
+                {"/content/navigation/navigation-1", 0, true, "/navigation-1-vanity"},
                 {"/content/navigation/navigation-1/navigation-1-1", 1, true, "/content/navigation/navigation-1/navigation-1-1.html"},
                 {"/content/navigation/navigation-2", 0, false, "/content/navigation/navigation-2.html"}
         };
@@ -240,7 +240,7 @@ public class NavigationImplTest {
     protected void testCollectionOnTemplate() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_IN_TEMPLATE);
         Object[][] expectedPages = {
-                {"/content/navigation/navigation-1", 0, false, "/content/navigation/navigation-1.html", "/navigation-1-vanity"},
+                {"/content/navigation/navigation-1", 0, false, "/navigation-1-vanity"},
                 {"/content/navigation/navigation-1/navigation-1-1", 1, false, "/content/navigation/navigation-1/navigation-1-1.html"},
                 {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 2, false,
                         "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
@@ -313,7 +313,7 @@ public class NavigationImplTest {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_9);
         Object[][] expectedPages = {
                 {"/content/navigation", 0, true, "/content/navigation.html"},
-                {"/content/navigation-redirect/navigation-1", 1, false, "/content/navigation-redirect/navigation-1.html", "/navigation-1-vanity"},
+                {"/content/navigation-redirect/navigation-1", 1, false, "/navigation-1-vanity"},
                 {"/content/navigation-redirect/navigation-1/navigation-1-1", 2, false,
                         "/content/navigation-redirect/navigation-1/navigation-1-1.html"},
                 {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 3, false,
@@ -354,8 +354,7 @@ public class NavigationImplTest {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_16);
         Object[][] expectedPages = {
             {"/content/navigation-redirect", 0, true, "/content/navigation-redirect.html"},
-            {"/content/navigation-redirect/navigation-1", 1, false, "/content/navigation-redirect/navigation-1.html", "/navigation-1" +
-                    "-vanity"},
+            {"/content/navigation-redirect/navigation-1", 1, false, "/navigation-1-vanity"},
             {"/content/navigation-redirect/navigation-1/navigation-1-1", 2, false,
                 "/content/navigation-redirect/navigation-1/navigation-1-1.html"},
             {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-1", 3, false,
@@ -380,8 +379,7 @@ public class NavigationImplTest {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_17);
         Object[][] expectedPages = {
             {"/content/navigation", 0, true, "/content/navigation.html"},
-            {"/content/navigation-redirect/navigation-1", 1, false, "/content/navigation-redirect/navigation-1.html", "/navigation-1" +
-                    "-vanity"},
+            {"/content/navigation-redirect/navigation-1", 1, false, "/navigation-1-vanity"},
             {"/content/navigation-redirect/navigation-1/navigation-1-1", 2, false,
                 "/content/navigation-redirect/navigation-1/navigation-1-1.html"},
             {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 3, false,
@@ -414,7 +412,7 @@ public class NavigationImplTest {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_12);
         Object[][] expectedPages = {
             {"/content/navigation", 0, true, "/content/navigation.html"},
-            {"/content/navigation/navigation-1", 1, false, "/content/navigation/navigation-1.html", "/navigation-1-vanity"},
+            {"/content/navigation/navigation-1", 1, false, "/navigation-1-vanity"},
             {"/content/navigation/navigation-1/navigation-1-1", 2, false, "/content/navigation/navigation-1/navigation-1-1.html"},
             {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 3, false,
                 "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
@@ -434,7 +432,7 @@ public class NavigationImplTest {
     protected void testStructureStartOne() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_13);
         Object[][] expectedPages = {
-            {"/content/navigation/navigation-1", 0, false, "/content/navigation/navigation-1.html", "/navigation-1-vanity"},
+            {"/content/navigation/navigation-1", 0, false, "/navigation-1-vanity"},
             {"/content/navigation/navigation-1/navigation-1-1", 1, false, "/content/navigation/navigation-1/navigation-1-1.html"},
             {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 2, false,
                 "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
@@ -472,11 +470,9 @@ public class NavigationImplTest {
     protected void testVanityPaths() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_19);
         Object[][] expectedPages = {
-                {"/content/navigation-vanity-paths", 0, false, "/content/navigation-vanity-paths.html","/nav0.html"},
-                {"/content/navigation-vanity-paths/navigation-1", 1, false, "/content/navigation-vanity-paths/navigation-1.html", "/nav1" +
-                        ".html"},
-                {"/content/navigation-vanity-paths/navigation-2", 1, false, "/content/navigation-vanity-paths/navigation-2.html", "/nav2" +
-                        ".html"}
+                {"/content/navigation-vanity-paths", 0, false, "/nav0.html"},
+                {"/content/navigation-vanity-paths/navigation-1", 1, false, "/nav1.html"},
+                {"/content/navigation-vanity-paths/navigation-2", 1, false, "/nav2.html"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation19"));

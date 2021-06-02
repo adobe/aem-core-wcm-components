@@ -44,8 +44,7 @@ public class LanguageNavigationImplTest {
                     "/content/languagenavigation/LOCALE-1/LOCALE-5/about.html"},
             {"/content/languagenavigation/LOCALE-2/LOCALE-5/about", "LOCALE 2", false, 0, "CA", "en-CA",
                     "/content/languagenavigation/LOCALE-2/LOCALE-5/about.html"},
-            {"/content/languagenavigation/LOCALE-3", "LOCALE 3", false, 0, "CH", "de-CH", "/content/languagenavigation/LOCALE-3.html",
-                    "/LOCALE-3-vanity"},
+            {"/content/languagenavigation/LOCALE-3", "LOCALE 3", false, 0, "CH", "de-CH", "/LOCALE-3-vanity"},
             {"/content/languagenavigation/LOCALE-4", "LOCALE 4", false, 0, "DE", "de-DE", "/content/languagenavigation/LOCALE-4.html"},
     };
     private static final Object[][] EXPECTED_PAGES_DEPTH_2 = {
@@ -61,8 +60,7 @@ public class LanguageNavigationImplTest {
                     "/content/languagenavigation/LOCALE-2/LOCALE-5/about.html"},
             {"/content/languagenavigation/LOCALE-2/LOCALE-7", "LOCALE 7", false, 1, "CA", "fr-CA",
                     "/content/languagenavigation/LOCALE-2/LOCALE-7.html"},
-            {"/content/languagenavigation/LOCALE-3", "LOCALE 3", false, 0, "CH", "de-CH", "/content/languagenavigation/LOCALE-3.html",
-                    "/LOCALE-3-vanity"},
+            {"/content/languagenavigation/LOCALE-3", "LOCALE 3", false, 0, "CH", "de-CH", "/LOCALE-3-vanity"},
             {"/content/languagenavigation/LOCALE-3/LOCALE-8", "LOCALE 8", false, 1, "CH", "de-CH",
                     "/content/languagenavigation/LOCALE-3/LOCALE-8.html"},
             {"/content/languagenavigation/LOCALE-4", "LOCALE 4", false, 0, "DE", "de-DE", "/content/languagenavigation/LOCALE-4.html"},
@@ -143,7 +141,7 @@ public class LanguageNavigationImplTest {
                         "/content/languagenavigation/LOCALE-2/LOCALE-5.html"},
                 {"/content/languagenavigation/LOCALE-2/LOCALE-7", "LOCALE 7", false, 1, "CA", "fr-CA",
                         "/content/languagenavigation/LOCALE-2/LOCALE-7.html"},
-                {"/content/languagenavigation/LOCALE-3", "LOCALE 3", false, 0, "CH", "de-CH", "/content/languagenavigation/LOCALE-3.html", "/LOCALE-3-vanity"},
+                {"/content/languagenavigation/LOCALE-3", "LOCALE 3", false, 0, "CH", "de-CH", "/LOCALE-3-vanity"},
                 {"/content/languagenavigation/LOCALE-3/LOCALE-8", "LOCALE 8", false, 1, "CH", "de-CH",
                         "/content/languagenavigation/LOCALE-3/LOCALE-8.html"},
                 {"/content/languagenavigation/LOCALE-4", "LOCALE 4", false, 0, "DE", "de-DE", "/content/languagenavigation/LOCALE-4.html"},
