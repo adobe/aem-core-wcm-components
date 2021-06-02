@@ -56,23 +56,26 @@ public class TeaserIT extends AuthorBaseUITest {
     private static String  actionExternalLink               = "http://www.adobe.com";
     private static String  actionExternalText               = "Adobe";
     private static String componentName                     = "teaser";
-    private static String clientlibs                        = "core.wcm.components.teaser.v1";
+
 
     private String proxyPath;
-    private String testPage;
-    private String secondTestPage;
-    private String imageProxyPath;
-    private String cmpPath;
-    private EditorPage editorPage;
-    private Teaser teaser;
-    private AssetFinder assetFinder;
 
+    protected String clientlibs;
+    protected String teaserRT;
+    protected String testPage;
+    protected String secondTestPage;
+    protected String imageProxyPath;
+    protected String cmpPath;
+    protected EditorPage editorPage;
+    protected Teaser teaser;
+    protected AssetFinder assetFinder;
 
-    /**
-    * Before Test Case
-    **/
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    private void setupResources() {
+        teaserRT = Commons.rtTeaser_v1;
+        clientlibs = "core.wcm.components.teaser.v1";
+    }
+
+    protected void setup() throws ClientException {
 
         testPage = authorClient.createPage(pageName, pageTitle, rootPage, defaultPageTemplate).getSlingPath();
         secondTestPage = authorClient.createPage(secondPageName, secondPageTitle, rootPage, defaultPageTemplate).getSlingPath();
@@ -99,7 +102,7 @@ public class TeaserIT extends AuthorBaseUITest {
         Commons.assignPolicy(adminClient,"",data, policyAssignmentPath);
 
 
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtTeaser_v1, Commons.proxyPath, null, null);
+        proxyPath = Commons.createProxyComponent(adminClient, teaserRT, Commons.proxyPath, null, null);
         imageProxyPath = Commons.createProxyComponent(adminClient, Commons.rtImage_v2, Commons.proxyPath, null, null);
 
         data.clear();
@@ -113,6 +116,15 @@ public class TeaserIT extends AuthorBaseUITest {
 
         teaser = new Teaser();
         assetFinder = new AssetFinder();
+    }
+
+    /**
+    * Before Test Case
+    **/
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setupResources();
+        setup();
     }
 
     /**
@@ -233,7 +245,7 @@ public class TeaserIT extends AuthorBaseUITest {
         data.put("sling:resourceType", "wcm/core/components/policies/mappings");
         Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
 
-        Commons.openEditDialog(editorPage,cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openTextTab();
         assertTrue(!editDialog.isDescriptionFromPagePresent(), "Description from Page checkbox should not be present");
@@ -270,7 +282,7 @@ public class TeaserIT extends AuthorBaseUITest {
 
         Commons.openSidePanel();
         assetFinder.setFiltersPath(testAssetsPath);
-        Commons.openEditDialog(editorPage,cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinkAndActionsTab();
@@ -311,7 +323,7 @@ public class TeaserIT extends AuthorBaseUITest {
         Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
 
         Commons.openSidePanel();
-        Commons.openEditDialog(editorPage,cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
 
         editDialog.openLinkAndActionsTab();
@@ -330,7 +342,7 @@ public class TeaserIT extends AuthorBaseUITest {
     public void testWithActionsTeaser() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         assetFinder.setFiltersPath(testAssetsPath);
-        Commons.openEditDialog(editorPage,cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openTextTab();
@@ -362,7 +374,7 @@ public class TeaserIT extends AuthorBaseUITest {
     public void testWithExternalActionsTeaser() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         assetFinder.setFiltersPath(testAssetsPath);
-        Commons.openEditDialog(editorPage,cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinkAndActionsTab();
@@ -405,7 +417,7 @@ public class TeaserIT extends AuthorBaseUITest {
     @DisplayName("Test: Checkbox-Textfield Tuple")
     public void testCheckboxTextfieldTuple() throws TimeoutException, InterruptedException {
         // 1.
-        Commons.openEditDialog(editorPage,cmpPath);
+        Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
 
         // 2.

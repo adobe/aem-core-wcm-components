@@ -39,15 +39,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class LanguageNavigationIT extends AuthorBaseUITest {
 
     private String proxyPath;
-    private String siteRoot;
-    private String compPath;
-    private String noStructure;
-    private EditorPage editorPage;
-    private LanguageNavigation languageNavigation;
 
+    protected String siteRoot;
+    protected String compPath;
+    protected String noStructure;
+    protected EditorPage editorPage;
+    protected LanguageNavigation languageNavigation;
+    protected String languageNavigationRT;
 
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    private void setupResources() {
+        languageNavigationRT = Commons.rtLanguageNavigation_v1;
+    }
+
+    protected void setup() throws ClientException {
         // site root
         siteRoot = authorClient.createPage("site_root", "site_root", rootPage, defaultPageTemplate).getSlingPath();
         HashMap<String, String> data = new HashMap<String, String>();
@@ -127,7 +131,7 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
         Commons.editNodeProperties(adminClient, noStructure, data);
 
         // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtLanguageNavigation_v1, Commons.proxyPath, null, null);
+        proxyPath = Commons.createProxyComponent(adminClient, languageNavigationRT, Commons.proxyPath, null, null);
 
         compPath = Commons.addComponent(adminClient, proxyPath, about1 + Commons.relParentCompPath, "languagenavigation", null);
 
@@ -135,6 +139,12 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
         editorPage.open();
 
         languageNavigation = new LanguageNavigation();
+    }
+
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setupResources();
+        setup();
     }
 
     @AfterEach

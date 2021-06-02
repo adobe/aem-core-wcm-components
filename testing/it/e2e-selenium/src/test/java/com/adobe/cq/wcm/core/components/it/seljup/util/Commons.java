@@ -79,31 +79,40 @@ public class Commons {
     public static String  rtAccordion_v1 = "core/wcm/components/accordion/v1/accordion";
     // embed component
     public static String rtEmbed_v1 = "core/wcm/components/embed/v1/embed";
+    public static String rtEmbed_v2 = "core/wcm/components/embed/v2/embed";
     // text component
     public static String  rtText_v1 = "core/wcm/components/text/v1/text";
     public static String  rtText_v2 = "core/wcm/components/text/v2/text";
     // title component
     public static String rtTitle_v1 = "core/wcm/components/title/v1/title";
     public static String rtTitle_v2 = "core/wcm/components/title/v2/title";
+    public static String rtTitle_v3 = "core/wcm/components/title/v3/title";
     // list component
     public static String rtList_v1 = "core/wcm/components/list/v1/list";
     public static String rtList_v2 = "core/wcm/components/list/v2/list";
+    public static String rtList_v3 = "core/wcm/components/list/v3/list";
     // image component
     public static String rtImage_v1 = "core/wcm/components/image/v1/image";
     public static String rtImage_v2 = "core/wcm/components/image/v2/image";
+    public static String rtImage_v3 = "core/wcm/components/image/v3/image";
     // breadcrumb component
     public static String rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
     public static String rtBreadcrumb_v2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
+    public static String rtBreadcrumb_v3 = "core/wcm/components/breadcrumb/v3/breadcrumb";
     // button component
     public static String rtButton_v1 = "core/wcm/components/button/v1/button";
+    public static String rtButton_v2 = "core/wcm/components/button/v2/button";
     // navigation component
     public static String rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
+    public static String rtNavigation_v2 = "core/wcm/components/navigation/v2/navigation";
     // language navigation component
     public static String rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
+    public static String rtLanguageNavigation_v2 = "core/wcm/components/languagenavigation/v2/languagenavigation";
     // search component
     public static String rtSearch_v1 = "core/wcm/components/search/v1/search";
     // teaser component
     public static String rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
+    public static String rtTeaser_v2 = "core/wcm/components/teaser/v2/teaser";
     // carousel component
     public static String rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
     // tabs component
@@ -112,6 +121,7 @@ public class Commons {
     public static String rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
     // content fragment list component
     public static String rtContentFragmentList_v1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
+    public static String rtContentFragmentList_v2 = "core/wcm/components/contentfragmentlist/v2/contentfragmentlist";
     // core form container
     public static String rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
     public static String rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";

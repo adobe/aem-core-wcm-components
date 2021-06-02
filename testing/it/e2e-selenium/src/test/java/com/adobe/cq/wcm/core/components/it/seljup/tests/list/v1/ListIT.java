@@ -120,7 +120,7 @@ public class ListIT extends AuthorBaseUITest {
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtList_v1, Commons.proxyPath, null, null);
+        proxyPath = Commons.createProxyComponent(adminClient, listRT, Commons.proxyPath, null, null);
 
         // add the component to test page
         compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "list", null);
