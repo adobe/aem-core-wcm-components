@@ -402,7 +402,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     }
 
     private void initFeaturedImageBasedProperties() {
-        useFeaturedImage = StringUtils.isEmpty(fileReference) && resource.getChild(DownloadResource.NN_FILE) == null;
+        useFeaturedImage = StringUtils.isEmpty(fileReference) && fileResource == null;
         if (useFeaturedImage) {
             Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
             if (featuredImage != null) {
