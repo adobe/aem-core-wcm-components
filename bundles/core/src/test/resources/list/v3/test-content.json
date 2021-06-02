@@ -203,6 +203,8 @@
                     "sling:resourceType": "core/wcm/components/list/v3/list",
                     "displayItemAsTeaser": "true",
                     "listFrom": "children",
+                    "linkItems": "true",
+                    "showDescription": "true",
                     "parentPage": "/content/list/pages/page_1"
                 }
             }
