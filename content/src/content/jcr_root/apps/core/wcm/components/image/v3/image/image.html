@@ -37,8 +37,9 @@
        data-cmp-hook-image="link">
         <noscript data-sly-unwrap="${image.smartCropRendition != 'SmartCrop:Auto' && (!image.lazyEnabled && image.widths.length <= 1 && !image.areas)}" data-cmp-hook-image="noscript">
             <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
-            <img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
+            <img loading="${image.lazyEnabled ? 'lazy' : ''}" srcset="${image.srcset}" src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
                  data-sly-attribute.usemap="${image.areas ? usemap : ''}"
+                 width="${image.width}" height="${image.height}"
                  alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
             <map data-sly-test="${image.areas}"
                  data-sly-list.area="${image.areas}"

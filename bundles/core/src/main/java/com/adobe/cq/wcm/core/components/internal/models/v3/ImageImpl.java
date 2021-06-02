@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +26,8 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,6 +48,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
+
+    @ValueMapValue(name = "width", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String width;
+
+    @ValueMapValue(name="height", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String height;
 
     @Inject
     private ModelFactory modelFactory;
@@ -113,4 +124,38 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return super.getComponentData();
     }
 
+    @Override
+    public String getSrcset() {
+        String [] srcsetArray = new String[super.getWidths().length];
+        if (super.getWidths().length > 0 && super.getSrcUriTemplate() != null) {
+            String srcUriTemplateDecoded = java.net.URLDecoder.decode(super.getSrcUriTemplate(), StandardCharsets.UTF_8);
+            if (srcUriTemplateDecoded.contains("{.width}")) {
+                for (int i = 0; i < super.getWidths().length; i++) {
+                    if (srcUriTemplateDecoded.contains("={.width}")) {
+                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format("%s", super.getWidths()[i])) + " " + super.getWidths()[i] + "w";
+                    } else {
+                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format(".%s", super.getWidths()[i])) + " " + super.getWidths()[i] + "w";
+                    }
+                }
+                return StringUtils.join(srcsetArray, ',');
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String getWidth() {
+        return width;
+    }
+
+    @Nullable
+    @Override
+    public String getHeight() {
+        return height;
+    }
+
 }
+
+
+

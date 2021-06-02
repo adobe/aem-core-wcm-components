@@ -48,15 +48,17 @@ The following properties are written to JCR for this Image component and are exp
 2. `./isDecorative` - if set to `true`, then the image will be ignored by assistive technology
 3. `./alt` - defines the value of the HTML `alt` attribute (not needed if `./isDecorative` is set to `true`)
 4. `./linkURL` - allows defining a URL to which the image will link to
-5. `./jcr:title` - defines the value of the HTML `title` attribute or the value of the caption, depending on the value of
+5. `./width` - allows defining a HTML `width` attribute, useful for browser to calculate the aspect ratio of the image, preventing the layout shifts
+6  `./height` - allows defining a HTML `height` attribute, useful for browser to calculate the aspect ratio of the image, preventing the layout shifts
+7. `./jcr:title` - defines the value of the HTML `title` attribute or the value of the caption, depending on the value of
 `./displayPopupTitle`
-6. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,
+8. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,
 otherwise a caption will be rendered
-7. `./id` - defines the component HTML ID attribute.
-8. `./dmPresetType` - defines the type of Dynamic Media image rendering, possible values are `imagePreset`, `smartCrop`.
-9. `./imagePreset` - defines the name for the Dynamic Media Image Preset to apply to the Dynamic Media image URL.
-10. `./smartCropRendition` - defines how Dynamic Media Smart Crop image renders. `SmartCrop:Auto` means that the component will automatically select Smart Crop rendition which fits the container size better; the name of specific Smart Crop rendition will force the component to render that image rendition only.
-11. `./imageModifiers` - defines additional Dynamic Media Image Serving commands separated by '&amp;'. Field gives complete flexibility to change Dynamic Media image rendering.
+9. `./id` - defines the component HTML ID attribute.
+10. `./dmPresetType` - defines the type of Dynamic Media image rendering, possible values are `imagePreset`, `smartCrop`.
+11. `./imagePreset` - defines the name for the Dynamic Media Image Preset to apply to the Dynamic Media image URL.
+12. `./smartCropRendition` - defines how Dynamic Media Smart Crop image renders. `SmartCrop:Auto` means that the component will automatically select Smart Crop rendition which fits the container size better; the name of specific Smart Crop rendition will force the component to render that image rendition only.
+13. `./imageModifiers` - defines additional Dynamic Media Image Serving commands separated by '&amp;'. Field gives complete flexibility to change Dynamic Media image rendering.
 
 
 ## Extending from This Component
@@ -134,11 +136,17 @@ A hook attribute from the following should be added to the corresponding element
 
 The `img` and an optional image `map` should be placed inside a `noscript` element with the `data-cmp-hook-image="noscript"` attribute.
 They will be inserted into the DOM by the JavaScript component.
-
 To allow lazy loading it is expected that the `data-cmp-lazy` and `data-cmp-src` options are supplied.
+In this way a custom solution for lazy-loading is used for the browsers which don't support native lazy-loding.
 
-It is possible to configure the JavaScript component such that the most appropriate image url is built and applied to the `img`.
-The most appropriate width being the one which is at least as wide as the image's container.
+The browsers which support native lazy-loading will use it instead of the custom solution, with one exception. Because the custom solution is still in place, the usage of the 
+`noscript` element and the insertion of the `img` element via JS will cause the Firefox browser to preload all the images and not use the native lazy loading functionality.
+It is something relating to how the browser deals with the current implementation, because on Chrome and the on the rest of Chrome based browsers the native lazy-loading functionality works.
+For this reason, until the lazy-loading will be adopted by all major browsers by default (e.g on Safari it's an experimental feature which can be enabled), for Firefox will be used the custom lazy-loading implementation.
+
+If there are alternative widths defined in the Component Policy Configuration, the `srcset` attribute will be constructed and set to the Image.
+In this way the the browser will figure out based on its native adaptive capabilities which image to load from the `srcset` attribute in relation with the viewport width.
+
 The `data-cmp-widths` option must be provided with more than one width, as well as the `data-cmp-src` option,
 with a URI template representation of the source.
 
