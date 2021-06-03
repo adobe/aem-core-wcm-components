@@ -50,7 +50,7 @@ public class DefaultPathProcessor implements PathProcessor {
     @interface Config {
         @AttributeDefinition(
                 name = "Vanity path rewriting",
-                description = "Defines how the vanity url of a page is taking into account while generating the link URLs",
+                description = "Defines how the vanity url of a page is taken into account while generating the link URLs",
                 options = {
                         @Option(label = "never", value = "never"),
                         @Option(label = "always", value = "always"),
