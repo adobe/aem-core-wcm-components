@@ -236,8 +236,8 @@
             var urlTemplateParts = that._properties.src.split(SRC_URI_TEMPLATE_WIDTH_VAR);
             // check if image src was dynamically swapped meanwhile (e.g. by Target)
             var isImageRefSame = imgSrcAttribute.startsWith(urlTemplateParts[0]);
-            if (isImageRefSame && urlTemplateParts.length > 1){
-                isImageRefSame = imgSrcAttribute.endsWith(urlTemplateParts[urlTemplateParts.length-1]);
+            if (isImageRefSame && urlTemplateParts.length > 1) {
+                isImageRefSame = imgSrcAttribute.endsWith(urlTemplateParts[urlTemplateParts.length - 1]);
             }
 
             if ((isImageRefSame === true && imgSrcAttribute !== url) ||
