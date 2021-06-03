@@ -73,7 +73,7 @@ public class PageIT extends AdminBaseUITest {
     protected Page page;
 
     protected String segmentPath = "/etc/segmentation/contexthub/male";
-    protected String pageRT = "core/wcm/tests/components/test-page";
+    protected String pageRT = "core/wcm/components/page/v1/page";
 
 
     /**

@@ -38,7 +38,7 @@ public class PageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.pag
     private static String configuration = "/conf/core-components";
 
     public void setupResources() {
-        this.pageRT =  "core/wcm/tests/components/test-page-v2";
+        this.pageRT =  "core/wcm/components/page/v2/page";
         this.segmentPath = "/conf/we-retail/settings/wcm/segments";
     }
 
