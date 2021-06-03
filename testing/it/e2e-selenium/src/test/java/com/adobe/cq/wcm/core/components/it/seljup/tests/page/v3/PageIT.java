@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Tag;
 public class PageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.page.v2.PageIT {
 
     public void setupResources() {
-        this.pageRT =  "core/wcm/tests/components/test-page-v3";
+        this.pageRT =  "core/wcm/tests/components/test-page-v2";
         this.segmentPath = "/conf/we-retail/settings/wcm/segments";
     }
 
