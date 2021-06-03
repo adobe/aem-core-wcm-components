@@ -69,6 +69,7 @@
         <module>testing/it/http</module>
         <module>testing/it/e2e</module>
         <module>testing/it/e2e-selenium</module>
+        <module>testing/it/core-wcm-components-it-content</module>
         <module>content</module>
         <module>config</module>
         <module>all</module>
