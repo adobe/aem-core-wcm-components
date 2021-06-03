@@ -16,6 +16,7 @@
                         "jcr:title"         : "Adobe",
                         "sling:resourceType": "core/wcm/components/button/v2/button",
                         "link"              : "https://www.adobe.com",
+                        "linkTarget"        : "_blank",
                         "icon"              : "adobe"
                     }
                 }
