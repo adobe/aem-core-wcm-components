@@ -67,7 +67,7 @@ public class ButtonIT extends AuthorBaseUITest {
         editorPage.open();
     }
 
-    private ButtonEditDialog getButtonEditDialog() throws TimeoutException {
+    protected ButtonEditDialog getButtonEditDialog() throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));

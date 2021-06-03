@@ -16,9 +16,17 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.button.v2;
 
+import java.util.concurrent.TimeoutException;
+
+import com.adobe.cq.wcm.core.components.it.seljup.components.button.ButtonEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
 public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.button.v1.ButtonIT {
@@ -31,5 +39,29 @@ public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.
     public void setupBefore() throws Exception {
         setupResources();
         setup();
+    }
+
+    /**
+     * Test: Set button link with target
+     *
+     * 1. open the edit dialog
+     * 2. set the button link
+     * 3. set the button link target
+     * 4. close the edit dialog
+     * 5. verify the button is an anchor tag with the correct href attribute and link target
+     */
+    @Test
+    @DisplayName("Test: Set button link with target")
+    void testSetLinkWithTarget() throws TimeoutException, InterruptedException {
+        String link = "https://www.adobe.com";
+        String target = "_blank";
+        ButtonEditDialog buttonEditDialog = getButtonEditDialog();
+        buttonEditDialog.setLinkField(link);
+        buttonEditDialog.clickLinkTarget();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(button.checkLinkPresent(link),"Button with link " + link + " and target "+ target + " should be present");
     }
 }
