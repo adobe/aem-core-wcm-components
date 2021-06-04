@@ -91,6 +91,63 @@
                             </column>
                         </items>
                     </basic>
+                    <advanced
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Advanced"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <section1
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/section1"/>
+                                    <configuration
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/configuration"/>
+                                    <spa
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/spa"/>
+                                    <templates
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/templates"/>
+                                    <authenticationrequirement
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/authenticationrequirement"/>
+                                    <export
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/export"/>
+                                    <seo
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="SEO"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <sitemapRoot
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Generate Sitemap"
+                                                value="true"
+                                                name="./sitemapRoot"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox">
+                                                <granite:data
+                                                    cq-msm-lockable="./sitemapRoot"
+                                                    jcr:primaryType="nt:unstructured"/>
+                                            </sitemapRoot>
+                                            <sitemapDetailsPanel
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="cq/gui/components/siteadmin/admin/properties/sitemapdetails"/>
+                                        </items>
+                                    </seo>
+                                </items>
+                            </column>
+                        </items>
+                    </advanced>
                     <socialmedia
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"

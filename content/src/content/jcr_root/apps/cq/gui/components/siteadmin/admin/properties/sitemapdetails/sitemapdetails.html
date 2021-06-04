@@ -1,0 +1,50 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+
+<coral-panelstack class="coral-Well" id="panelListPreselectedItem"
+                  data-sly-use.sitemapDetails="com.adobe.cq.wcm.core.components.models.SitemapDetails"
+                  data-sly-test="${sitemapDetails.isSitemapRoot && sitemapDetails.details.size > 0}">
+    <coral-panel selected data-sly-test.generating="${sitemapDetails.generationPending}">
+        ${ 'Sitemap(s) are currently being generated. This may take a while.' @ i18n }
+    </coral-panel>
+    <coral-panel selected data-sly-test="${!generating}">
+        <coral-alert variant="warning" data-sly-test.warning="${sitemapDetails.hasWarning}">
+            <coral-alert-header>${ 'Warning' @ i18n }</coral-alert-header>
+            <coral-alert-content>
+                ${ 'At least one of the sitemaps exceeds the configured limits. Please consider splitting the sitemap(s) by making any of the descendant pages a sitemap root. Please refer to the documentation for more details.' @ i18n }
+            </coral-alert-content>
+        </coral-alert>
+        <sly data-sly-test="${!warning}">
+            ${ 'Sitemap generation completed. Please copy the link to the sitemap to your site\'s Search Administration Console(s) and/or add it to your site\'s robots.txt.' @ i18n }
+        </sly>
+        <table is="coral-table">
+            <thead is="coral-table-head">
+            <tr is="coral-table-row">
+                <th is="coral-table-headercell">${ 'Link' @ i18n }</th>
+                <th is="coral-table-headercell">${ 'Size' @ i18n }</th>
+                <th is="coral-table-headercell">${ 'URLs' @ i18n }</th>
+            </tr>
+            </thead>
+            <tbody is="coral-table-body" divider="cell">
+            <tr is="coral-table-row" data-sly-repeat="${sitemapDetails.details}">
+                <td is="coral-table-cell"><a href="${item.url}">${item.name}</a></td>
+                <td is="coral-table-cell">${item.size}</td>
+                <td is="coral-table-cell">${item.entries}</td>
+            </tr>
+            </tbody>
+        </table>
+    </coral-panel>
+</coral-panelstack>
