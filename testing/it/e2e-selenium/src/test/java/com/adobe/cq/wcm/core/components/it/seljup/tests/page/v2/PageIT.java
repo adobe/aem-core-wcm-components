@@ -16,41 +16,203 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.page.v2;
 
-import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.AdvancedTab;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.BlueprintTab;
-import com.adobe.cq.wcm.core.components.it.seljup.components.page.v1.Page;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import org.apache.http.HttpStatus;
+
+import com.adobe.cq.wcm.core.components.it.seljup.AdminBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.tests.page.PageTests;
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group4")
-public class PageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.page.v1.PageIT {
+public class PageIT extends AdminBaseUITest {
 
-    private static String configuration = "/conf/core-components";
-
-    public void setupResources() {
-        this.pageRT =  "core/wcm/components/page/v2/page";
-        this.segmentPath = "/conf/we-retail/settings/wcm/segments";
-    }
-
+    private PageTests pageTests;
+    private String segmentPath = "/conf/we-retail/settings/wcm/segments";
+    private String pageRT = "core/wcm/components/page/v2/page";
     /**
      * Before Test Case
      */
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
-        setupResources();
-        // create the test page
-        testPage = Commons.createPage(adminClient, Commons.template, rootPage, "testPage", pageTitle, pageRT, "Test Page", 200);
-        page = new Page();
+        pageTests = new PageTests();
+        pageTests.setupBeforeEach(adminClient, rootPage, pageRT, segmentPath);
+    }
+
+    /**
+     * After Test Case
+     */
+    @AfterEach
+    public void cleanupAfterEach() throws ClientException, InterruptedException {
+        pageTests.cleanupAfterEach();
+    }
+
+    /**
+     * Test: Check the Basic Title and Tags options of a page properties.
+     * @throws ClientException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Basic Title and Tags options of a page properties.")
+    public void testBasicTitleAndTagsPageProperties() throws ClientException, InterruptedException {
+        pageTests.testBasicTitleAndTagsPageProperties();
+    }
+
+    /**
+     * Test: Check the Basic More titles and descriptions options of a page properties.
+     */
+    @Test
+    @DisplayName("Test: Check the Basic More titles and descriptions options of a page properties.")
+    public void testBasicTitlesAndDescriptionsPageProperties() throws InterruptedException {
+        pageTests.testBasicTitlesAndDescriptionsPageProperties();
+    }
+
+    /**
+     * Test: Check the Basic On/Off time options of a page properties.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Basic On/Off time options of a page properties.")
+    public void testBasicOnOffTimePageProperties() throws InterruptedException {
+        pageTests.testBasicOnOffTimePageProperties();
+    }
+
+    /**
+     * Test: Check the Basic vanity URL options of a page properties.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Basic vanity URL options of a page properties.")
+    public void testBasicVanityUrlPageProperties() throws InterruptedException {
+        pageTests.testBasicVanityUrlPageProperties();
+    }
+
+    /**
+     * Test: Check the Advanced Settings options of a page properties.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Advanced Settings options of a page properties.")
+    public void testAdvancedSettingsPageProperties() throws InterruptedException {
+        pageTests.testAdvancedSettingsPageProperties();
+    }
+
+    /**
+     * Test: Check the Advanced Templates options of a page properties.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Advanced Templates options of a page properties.")
+    public void testAdvancedTemplatesSettingsPageProperties() throws InterruptedException {
+        pageTests.testAdvancedTemplatesSettingsPageProperties();
+    }
+
+    /**
+     * Test: Check the Advanced Authentication options of a page properties.
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Advanced Authentication options of a page properties.")
+    public void testAdvancedAuthenticationPageProperties() throws InterruptedException {
+        pageTests.testAdvancedAuthenticationPageProperties();
+    }
+
+    /**
+     * Test: Check the Advanced Export options of a page properties.
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Advanced Export options of a page properties.")
+    public void testAdvancedExportPageProperties() throws InterruptedException {
+        pageTests.testAdvancedExportPageProperties();
+    }
+
+    /**
+     * Test: Check the Thumbnail options of a page properties.
+     */
+    @Test
+    @DisplayName("Test: Check the Thumbnail options of a page properties.")
+    public void testThumbnailPageProperties() {
+        pageTests.testThumbnailPageProperties();
+    }
+
+    /**
+     * Test: Check the Social Media options of a page properties.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Social Media options of a page properties.")
+    public void testSocialMediaPageProperties() throws InterruptedException {
+        pageTests.testSocialMediaPageProperties();
+    }
+
+    /**
+     * Test: Check the Cloud Services options of a page properties.
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Cloud Services options of a page properties.")
+    public void testCloudServicesPageProperties() throws InterruptedException {
+        pageTests.testCloudServicesPageProperties();
+    }
+
+    /**
+     * Test: Check the Personalization options of a page properties.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Personalization options of a page properties.")
+    public void testPersonalizationPageProperties() throws InterruptedException {
+        pageTests.testPersonalizationPageProperties();
+    }
+
+    /**
+     * Test: Check the Add Permissions options of a page properties.
+     */
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test: Check the Add Permissions options of a page properties.")
+    public void testAddPermissionsPageProperties() throws InterruptedException {
+        pageTests.testAddPermissionsPageProperties();
+    }
+
+    /**
+     * Test: Check the Edit Closed User Group options of a page properties.
+     */
+    @Test
+    @DisplayName("Test: Check the Edit Closed User Group options of a page properties.")
+    public void testEditUserGroupPermissionsPageProperties() {
+        pageTests.testEditUserGroupPermissionsPageProperties();
+    }
+
+    /**
+     * Test: Check the Effective Permissions options of a page properties.
+     */
+    @Test
+    @DisplayName("Test: Check the Effective Permissions options of a page properties.")
+    public void testEffectivePermissionsPageProperties() throws InterruptedException {
+        pageTests.testEffectivePermissionsPageProperties();
+    }
+
+    /**
+     * Test: Check the Live Copy options of a page properties.
+     *
+     * @throws ClientException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the Live Copy options of a page properties.")
+    public void testLiveCopyPageProperties() throws ClientException, InterruptedException {
+        pageTests.testLiveCopyPageProperties();
     }
 
     /**
@@ -60,29 +222,7 @@ public class PageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.pag
     @Test
     @DisplayName("Test: Check the Advanced Configuration option of a page properties.")
     public void testdvancedConfigurationPageProperties() throws InterruptedException {
-        // Open properties page
-        PropertiesPage propertiesPage = new PropertiesPage(testPage);
-        propertiesPage.open();
-
-        // open the Advanced tab
-        AdvancedTab advancedTab = propertiesPage.clickTab("advanced", AdvancedTab.class);
-
-        // Uncheck the config inheritance
-        CoralCheckbox advanceConfigInheritance = advancedTab.advanceConfigInheritance();
-        if(advanceConfigInheritance.isChecked()) {
-            advanceConfigInheritance.click();
-        }
-        // set the configuration
-        page.setAdvanceConfig(configuration);
-
-        // save the configuration and open again the page property
-        propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        propertiesPage.open();
-        advancedTab = propertiesPage.clickTab("advanced", AdvancedTab.class);
-
-        // check the configuration
-        assertTrue(page.getAdvanceConfig().equals(configuration), "Advance configuration should be set");
+        pageTests.testdvancedConfigurationPageProperties();
     }
 
     /**
@@ -95,36 +235,7 @@ public class PageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.pag
     @Test
     @DisplayName("Test: Check the Blueprint options of a page properties.")
     public void testBlueprintPageProperties() throws ClientException, InterruptedException {
-        // create the live copy page, store page path in 'testLiveCopyPagePath'
-        String testLiveCopyPagePath = Commons.createLiveCopy(adminClient, testPage, rootPage, "testLiveCopy", "testLiveCopy", 200);
-
-        // Open properties page
-        PropertiesPage propertiesPage = new PropertiesPage(testPage);
-        propertiesPage.open();
-
-        // open the Blueprint tab
-        BlueprintTab blueprintTab = propertiesPage.clickTab("blueprint", BlueprintTab.class);
-
-        BlueprintTab.RolloutDialog rolloutDialog = blueprintTab.rollout();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        // check livecopy is present for rollout
-        assertTrue(rolloutDialog.numberOfLiveCopies() == 1, "There should be 1 livecopy");
-        assertTrue(rolloutDialog.isLiveCopySelected(testLiveCopyPagePath), "Livecopy should be selected");
-
-        // Check cancel rollout
-        rolloutDialog.close();
-
-        // Open Blueprint tab
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        propertiesPage.clickTab("blueprint", BlueprintTab.class);
-
-        rolloutDialog = blueprintTab.rollout();
-
-        // check rollout now
-        rolloutDialog.rolloutNow();
-
-        //Delete the created livecopy page
-        adminClient.deletePageWithRetry(testLiveCopyPagePath, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+       pageTests.testBlueprintPageProperties();
     }
 
 }
