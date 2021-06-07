@@ -22,13 +22,11 @@ import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
-import com.day.cq.commons.DownloadResource;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.rewriter.linkchecker.LinkChecker;
 import com.day.cq.rewriter.linkchecker.LinkCheckerSettings;
 import com.day.cq.rewriter.linkchecker.LinkValidity;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
@@ -38,10 +36,13 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.osgi.service.component.annotations.Reference;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @Model(
@@ -56,9 +57,6 @@ import java.util.function.Supplier;
 public class VideoImpl extends AbstractComponentImpl implements Video {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/video/v1/video";
-
-    @Reference
-    private LinkChecker linkChecker;
 
     @ValueMapValue(name = "videoFileReference", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
@@ -100,7 +98,9 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
     @Override
     @Nullable
     public String getFileReference() {
-        final LinkCheckerSettings linkCheckerSettings = new LinkCheckerSettings();
+        final LinkChecker linkChecker = linkCheckerServiceSupplier.get();
+        final LinkCheckerSettings linkCheckerSettings = linkChecker.createSettings(this.request);
+        fileReference = properties.get("videoFileReference", fileReference);
         final LinkValidity validity = linkChecker.getLink(fileReference, linkCheckerSettings).getValidity();
         if (validity.equals(LinkValidity.VALID)) {
             return fileReference;
@@ -151,4 +151,10 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
             .map(DataLayerBuilder::forAsset)
             .map(AssetDataBuilder::build)
             .orElse(null);
+
+    private final Supplier<LinkChecker> linkCheckerServiceSupplier = () -> {
+        final BundleContext bundleContext = FrameworkUtil.getBundle(VideoImpl.class).getBundleContext();
+        final ServiceReference<?> factoryReference = bundleContext.getServiceReference(LinkChecker.class.getName());
+        return (LinkChecker) bundleContext.getService(factoryReference);
+    };
 }
