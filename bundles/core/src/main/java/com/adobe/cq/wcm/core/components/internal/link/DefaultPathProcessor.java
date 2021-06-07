@@ -45,7 +45,7 @@ import com.day.cq.wcm.api.PageManager;
            service = PathProcessor.class)
 public class DefaultPathProcessor implements PathProcessor {
     @ObjectClassDefinition(
-            name = "Default path processor configuration"
+            name = "Core Components Default Path Processor"
     )
     @interface Config {
         @AttributeDefinition(
