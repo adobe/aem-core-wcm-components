@@ -51,10 +51,8 @@ public class VideoImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Mock
     private LinkChecker checker;
 
-    @InjectMocks
     private Video video;
 
     protected String testBase;
@@ -63,14 +61,14 @@ public class VideoImplTest {
     @BeforeEach
     protected void setUp() {
         resourceType = VideoImpl.RESOURCE_TYPE;
+        checker = Mockito.mock(LinkChecker.class);
+        context.registerService(checker);
         internalSetup();
         video = getVideoUnderTest();
+        assert video!=null;
         final Link linkMock = Mockito.mock(Link.class);
-        final BundleContext bundleContext = Mockito.mock(BundleContext.class);
         Mockito.when(checker.getLink(Mockito.anyString(), Mockito.any())).thenReturn(linkMock);
         Mockito.when(linkMock.getValidity()).thenReturn(LinkValidity.VALID);
-        Mockito.doReturn(bundleContext).when(FrameworkUtil.getBundle(VideoImpl.class).getBundleContext());
-        MockitoAnnotations.initMocks(this);
     }
 
     protected void internalSetup() {
