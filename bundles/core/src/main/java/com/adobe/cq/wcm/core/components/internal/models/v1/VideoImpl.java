@@ -27,6 +27,7 @@ import com.day.cq.rewriter.linkchecker.LinkChecker;
 import com.day.cq.rewriter.linkchecker.LinkCheckerSettings;
 import com.day.cq.rewriter.linkchecker.LinkValidity;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
@@ -39,9 +40,11 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.annotations.Reference;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -98,10 +101,11 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
     @Override
     @Nullable
     public String getFileReference() {
-        final LinkChecker linkChecker = linkCheckerServiceSupplier.get();
-        final LinkCheckerSettings linkCheckerSettings = linkChecker.createSettings(this.request);
-        fileReference = properties.get("videoFileReference", fileReference);
-        final LinkValidity validity = linkChecker.getLink(fileReference, linkCheckerSettings).getValidity();
+        final BundleContext bundleContext = FrameworkUtil.getBundle(VideoImpl.class).getBundleContext();
+        final ServiceReference<?> factoryReference = bundleContext.getServiceReference(LinkChecker.class.getName());
+        final LinkChecker checker = (LinkChecker) bundleContext.getService(factoryReference);
+        final LinkCheckerSettings linkCheckerSettings = checker.createSettings(this.request);
+        final LinkValidity validity = checker.getLink(fileReference, linkCheckerSettings).getValidity();
         if (validity.equals(LinkValidity.VALID)) {
             return fileReference;
         } else {
@@ -157,4 +161,7 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
         final ServiceReference<?> factoryReference = bundleContext.getServiceReference(LinkChecker.class.getName());
         return (LinkChecker) bundleContext.getService(factoryReference);
     };
+
+    private final Predicate<String> checkResource = value ->
+        Optional.ofNullable(this.request.getResourceResolver().getResource(value)).isPresent();
 }

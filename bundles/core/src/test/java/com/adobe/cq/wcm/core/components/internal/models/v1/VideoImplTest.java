@@ -33,6 +33,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -63,10 +65,12 @@ public class VideoImplTest {
         resourceType = VideoImpl.RESOURCE_TYPE;
         internalSetup();
         video = getVideoUnderTest();
-        MockitoAnnotations.initMocks(this);
         final Link linkMock = Mockito.mock(Link.class);
+        final BundleContext bundleContext = Mockito.mock(BundleContext.class);
         Mockito.when(checker.getLink(Mockito.anyString(), Mockito.any())).thenReturn(linkMock);
         Mockito.when(linkMock.getValidity()).thenReturn(LinkValidity.VALID);
+        Mockito.doReturn(bundleContext).when(FrameworkUtil.getBundle(VideoImpl.class).getBundleContext());
+        MockitoAnnotations.initMocks(this);
     }
 
     protected void internalSetup() {

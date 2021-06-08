@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-01-09T20:30:27.177+01:00"
+        cq:lastModified="{Date}2021-06-07T14:15:49.406+02:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/page-authoring]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
@@ -20,21 +20,21 @@
                     cq:styleIds="[1644862132301]"
                     jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
+                    jcr:lastModified="{Date}2021-06-07T14:12:05.745+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Button&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Video&lt;sub>v1&lt;/sub>&lt;/h1>&#xd;&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:32:37.460+01:00"
+                    jcr:lastModified="{Date}2021-06-07T14:12:22.849+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Button allows the display of a button or anchor button.&lt;/p>&#xa;"
+                    text="&lt;p>Video component allows user to play a video from dam&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
@@ -91,11 +91,11 @@
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:32:55.756+01:00"
+                    jcr:lastModified="{Date}2021-06-07T14:12:39.544+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Simple Button with only a text configured.&lt;/p>&#xa;"
+                    text="&lt;p>Simple Video Component&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
                     jcr:created="{Date}2018-12-07T13:36:02.946+01:00"
@@ -107,14 +107,19 @@
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
-                        <button
-                            jcr:created="{Date}2018-12-07T13:36:34.343+01:00"
+                        <video
+                            jcr:created="{Date}2021-06-07T14:12:59.863+02:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T13:37:57.049+01:00"
+                            jcr:lastModified="{Date}2021-06-07T14:13:34.764+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Button"
-                            sling:resourceType="core-components-examples/components/button"/>
+                            sling:resourceType="core-components-examples/components/video"
+                            alt="Some Alternative Text sample"
+                            autoplayEnabled="true"
+                            hideControl="false"
+                            loopEnabled="true"
+                            posterImageReference="/content/dam/core-components-examples/library/aem-corecomponents-logo.svg"
+                            videoFileReference="/content/dam/bmw/markethiresdeployed/video-gallery-demo-content/small.mp4"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -136,124 +141,6 @@
                             reference="../../component"/>
                     </info>
                 </demo>
-                <title_290385000
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:33:08.554+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Linked"
-                    sling:resourceType="core-components-examples/components/title"
-                    type="h3"/>
-                <text_1337505001
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:33:12.232+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Button linked to a page. Buttons with links provided are rendered as anchors.&lt;/p>&#xd;&#xa;"
-                    textIsRich="true"/>
-                <demo_1160408466
-                    jcr:created="{Date}2018-12-07T13:36:07.808+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:36:07.808+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
-                    <component
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <button
-                            jcr:created="{Date}2018-12-07T13:36:37.955+01:00"
-                            jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T13:38:48.047+01:00"
-                            jcr:lastModifiedBy="admin"
-                            jcr:primaryType="nt:unstructured"
-                            jcr:title="Anchor Button"
-                            sling:resourceType="core-components-examples/components/button"
-                            link="/content/core-components-examples/library/page-authoring/button"/>
-                    </component>
-                    <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/tabs">
-                        <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
-                        <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
-                        <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
-                    </info>
-                </demo_1160408466>
-                <title_290385001
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:33:08.554+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Icon"
-                    sling:resourceType="core-components-examples/components/title"
-                    type="h3"/>
-                <text_1337505003
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:33:12.232+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>An icon identifier can be provided for rendering an icon in the button.&lt;/p>&#xd;&#xa;"
-                    textIsRich="true"/>
-                <demo_1160408467
-                    jcr:created="{Date}2018-12-07T13:36:07.808+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:36:07.808+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
-                    <component
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <button
-                            jcr:created="{Date}2018-12-07T13:36:37.955+01:00"
-                            jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T13:38:48.047+01:00"
-                            jcr:lastModifiedBy="admin"
-                            jcr:primaryType="nt:unstructured"
-                            jcr:title="Contact Us"
-                            sling:resourceType="core-components-examples/components/button"
-                            icon="email"/>
-                    </component>
-                    <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/tabs">
-                        <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
-                        <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
-                        <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
-                    </info>
-                </demo_1160408467>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">
