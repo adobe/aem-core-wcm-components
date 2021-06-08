@@ -20,7 +20,6 @@
      data-cmp-lazy="${image.lazyEnabled}"
      data-cmp-lazythreshold="${image.lazyThreshold}"
      data-cmp-src="${image.srcUriTemplate ? image.srcUriTemplate : image.src}"
-     data-cmp-widths="${image.widths}"
      data-cmp-dmimage="${image.dmImage}"
      data-cmp-smartcroprendition="${image.smartCropRendition}"
      data-asset="${image.fileReference}"
@@ -35,22 +34,26 @@
        data-sly-attribute="${image.imageLink.htmlAttributes}"
        data-cmp-clickable="${image.data ? true : false}"
        data-cmp-hook-image="link">
-        <noscript data-sly-unwrap="${image.smartCropRendition != 'SmartCrop:Auto' && (!image.lazyEnabled && image.widths.length <= 1 && !image.areas)}" data-cmp-hook-image="noscript">
-            <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
-            <img loading="${image.lazyEnabled ? 'lazy' : ''}" srcset="${image.srcset}" src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
-                 data-sly-attribute.usemap="${image.areas ? usemap : ''}"
-                 width="${image.width}" height="${image.height}"
-                 alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
-            <map data-sly-test="${image.areas}"
-                 data-sly-list.area="${image.areas}"
-                 name="${resource.path}"
-                 data-cmp-hook-image="map">
-                <area shape="${area.shape}" coords="${area.coordinates}" data-sly-attribute="${area.link.htmlAttributes}" alt="${area.alt}"
-                      data-cmp-hook-image="area" data-cmp-relcoords="${area.relativeCoordinates}">
-            </map>
-        </noscript>
+        <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
+        <img data-sly-attribute.data-srcset="${image.lazyEnabled ? image.srcset : ''}" data-sly-attribute.data-src="${image.lazyEnabled ? image.src : ''}"
+             data-sly-attribute.srcset="${!image.lazyEnabled ? image.srcset : ''}" data-sly-attribute.src="${!image.lazyEnabled ? image.src : ''}"
+             class="cmp-image__image"
+             itemprop="contentUrl" data-cmp-hook-image="image"
+             data-sly-attribute.usemap="${image.areas ? usemap : ''}"
+             width="${image.width}" height="${image.height}"
+             alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+        <map data-sly-test="${image.areas}"
+             data-sly-list.area="${image.areas}"
+             name="${resource.path}"
+             data-cmp-hook-image="map">
+            <area shape="${area.shape}" coords="${area.coordinates}" data-sly-attribute="${area.link.htmlAttributes}" alt="${area.alt}"
+                  data-cmp-hook-image="area" data-cmp-relcoords="${area.relativeCoordinates}">
+        </map>
     </a>
     <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>
     <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"></sly>
+<sly data-sly-call="${clientlib.js @ categories='vanilla-lazyload'}"></sly>
+

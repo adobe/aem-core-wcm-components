@@ -19,7 +19,6 @@
     var NS = "cmp";
     var IS = "image";
 
-    var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     var LAZY_THRESHOLD_DEFAULT = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
 
@@ -30,36 +29,10 @@
         area: '[data-cmp-hook-image="area"]'
     };
 
-    var lazyLoader = {
-        "cssClass": "cmp-image__image--is-loading",
-        "style": {
-            "height": 0,
-            "padding-bottom": "" // will be replaced with % ratio
-        }
-    };
+    var isLazyLoadingEnabled = false;
+    var lazythreshold = 0;
 
     var properties = {
-        /**
-         * An array of alternative image widths (in pixels).
-         * Used to replace a {.width} variable in the src property with an optimal width if a URI template is provided.
-         *
-         * @memberof Image
-         * @type {Number[]}
-         * @default []
-         */
-        "widths": {
-            "default": [],
-            "transform": function(value) {
-                var widths = [];
-                value.split(",").forEach(function(item) {
-                    item = parseFloat(item);
-                    if (!isNaN(item)) {
-                        widths.push(item);
-                    }
-                });
-                return widths;
-            }
-        },
         /**
          * Indicates whether the image should be rendered lazily.
          *
@@ -68,19 +41,6 @@
          * @default false
          */
         "lazy": {
-            "default": false,
-            "transform": function(value) {
-                return !(value === null || typeof value === "undefined");
-            }
-        },
-        /**
-         * Indicates image is DynamicMedia image.
-         *
-         * @memberof Image
-         * @type {Boolean}
-         * @default false
-         */
-        "dmimage": {
             "default": false,
             "transform": function(value) {
                 return !(value === null || typeof value === "undefined");
@@ -136,15 +96,6 @@
         var that = this;
 
         var smartCrops = {};
-        var storedImgSrc = null;
-        var storedImgSrcset = null;
-        /*
-          Because the custom lazy-loading solution is still in place for the browsers which don't support native lazy-loading,
-          the usage of the `noscript` element and the insertion of the `img` element via JS will cause the Firefox browser (which supports native lazy-loading) to preload all the images and not use its native lazy-loading functionality.
-          It is something related to how the browser deals with the current implementation, because on Chrome and the on the rest of Chrome based browsers the native lazy-loading functionality works.
-          Until the custom solution will be removed, for Firefox will be used the custom lazy-loading implementation.
-         */
-        var isFirefox = typeof InstallTrigger !== "undefined";
 
         function init(config) {
             // prevents multiple initialization
@@ -188,136 +139,24 @@
                 request.send();
             }
 
-            if (!that._elements.noscript) {
-                return;
-            }
-
             that._elements.container = that._elements.link ? that._elements.link : that._elements.self;
-
-            unwrapNoScript();
-
-            if (that._properties.lazy && (!isNativeLazyLoadingSupportedByTheBrowser() || isFirefox)) {
-                addLazyLoader();
-            }
-
-            if (that._elements.map) {
-                that._elements.image.addEventListener("load", onLoad);
-            }
-
-            window.addEventListener("resize", onWindowResize);
-
-            if (!isNativeLazyLoadingSupportedByTheBrowser() || isFirefox) {
-                ["focus", "click", "load", "transitionend", "animationend", "scroll"].forEach(function(name) {
-                    document.addEventListener(name, that.update);
-                });
-
-                that._elements.image.addEventListener("cmp-image-redraw", that.update);
-                that.update();
-            }
-
-        }
-
-        function loadImage() {
-            if (!isNativeLazyLoadingSupportedByTheBrowser() || isFirefox) {
-                var hasWidths = (that._properties.widths && that._properties.widths.length > 0) || Object.keys(smartCrops).length > 0;
-                var imgSrcAttribute = that._elements.image.getAttribute("src");
-                var imgSrcsetAttribute = that._elements.image.getAttribute("srcset");
-
-                if (!imgSrcAttribute || imgSrcAttribute === EMPTY_PIXEL) {
-                    that._elements.image.setAttribute("src", storedImgSrc);
-                    if (!imgSrcsetAttribute && storedImgSrcset) {
-                        that._elements.image.setAttribute("srcset", storedImgSrcset);
-                    }
-                    if (!hasWidths) {
-                        window.removeEventListener("scroll", that.update);
-                    }
-                }
-                if (that._lazyLoaderShowing) {
-                    that._elements.image.addEventListener("load", removeLazyLoader);
-                }
-            }
-
-        }
-
-
-        function isNativeLazyLoadingSupportedByTheBrowser() {
-            return "loading" in HTMLImageElement.prototype;
-        }
-
-        function addLazyLoader() {
-            var width = that._elements.image.getAttribute("width");
-            var height = that._elements.image.getAttribute("height");
-
-            if (width && height) {
-                var ratio = (height / width) * 100;
-                var styles = lazyLoader.style;
-
-                styles["padding-bottom"] = ratio + "%";
-
-                for (var s in styles) {
-                    if (styles.hasOwnProperty(s)) {
-                        that._elements.image.style[s] = styles[s];
-                    }
-                }
-            }
-            that._elements.image.setAttribute("src", EMPTY_PIXEL);
-            that._elements.image.classList.add(lazyLoader.cssClass);
-            that._lazyLoaderShowing = true;
-        }
-
-        function unwrapNoScript() {
-            var markup = decodeNoscript(that._elements.noscript.textContent.trim());
-            var parser = new DOMParser();
-
-            // temporary document avoids requesting the image before removing its src
-            var temporaryDocument = parser.parseFromString(markup, "text/html");
-            var imageElement = temporaryDocument.querySelector(selectors.image);
-            if (!isNativeLazyLoadingSupportedByTheBrowser() || isFirefox) {
-                storedImgSrc = imageElement.getAttribute("src");
-                imageElement.removeAttribute("src");
-                storedImgSrcset = imageElement.getAttribute("srcset");
-                imageElement.removeAttribute("srcset");
-            }
-            that._elements.container.insertBefore(imageElement, that._elements.noscript);
-
-            var mapElement = temporaryDocument.querySelector(selectors.map);
-            if (mapElement) {
-                that._elements.container.insertBefore(mapElement, that._elements.noscript);
-            }
-
-            that._elements.noscript.parentNode.removeChild(that._elements.noscript);
-            if (that._elements.container.matches(selectors.image)) {
-                that._elements.image = that._elements.container;
-            } else {
-                that._elements.image = that._elements.container.querySelector(selectors.image);
-            }
 
             that._elements.map = that._elements.container.querySelector(selectors.map);
             that._elements.areas = that._elements.container.querySelectorAll(selectors.area);
-        }
 
-        function removeLazyLoader() {
-            that._elements.image.classList.remove(lazyLoader.cssClass);
-            for (var property in lazyLoader.style) {
-                if (lazyLoader.style.hasOwnProperty(property)) {
-                    that._elements.image.style[property] = "";
-                }
-            }
-            that._elements.image.removeEventListener("load", removeLazyLoader);
-            that._lazyLoaderShowing = false;
-        }
-
-        function isLazyVisible() {
-            if (that._elements.container.offsetParent === null) {
-                return false;
+            if (that._elements.map) {
+                that._elements.image.addEventListener("load", resizeAreas);
             }
 
-            var wt = window.pageYOffset;
-            var wb = wt + document.documentElement.clientHeight;
-            var et = that._elements.container.getBoundingClientRect().top + wt;
-            var eb = et + that._elements.container.clientHeight;
+            window.addEventListener("resize", resizeAreas);
 
-            return eb >= wt - that._properties.lazythreshold && et <= wb + that._properties.lazythreshold;
+            if (!isLazyLoadingEnabled && that._properties.lazy) {
+                isLazyLoadingEnabled = true;
+            }
+
+            if (!lazythreshold && that._properties.lazythreshold) {
+                lazythreshold = that._properties.lazythreshold;
+            }
         }
 
         function resizeAreas() {
@@ -380,34 +219,32 @@
             }
         }
 
-        function onWindowResize() {
-            that.update();
-            resizeAreas();
-        }
-
-        function onLoad() {
-            resizeAreas();
-        }
-
-        that.update = function() {
-            if (that._properties.lazy) {
-                if (isLazyVisible()) {
-                    loadImage();
-                }
-            } else {
-                loadImage();
-            }
-        };
-
         if (config && config.element) {
             init(config);
         }
+    }
+
+    function startLazyLoading() {
+        /* eslint-disable camelcase, no-undef, no-unused-vars */
+        var config = {
+            elements_selector: "img.cmp-image__image",
+            use_native: !lazythreshold
+        };
+        if (lazythreshold) {
+            config.threshold = lazythreshold;
+        }
+        var lazyLoad = new LazyLoad(config);
+        /* eslint-enable camelcase, no-undef, no-unused-vars */
     }
 
     function onDocumentReady() {
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new Image({ element: elements[i], options: readData(elements[i]) });
+        }
+
+        if (isLazyLoadingEnabled) {
+            startLazyLoading();
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -440,16 +277,6 @@
         onDocumentReady();
     } else {
         document.addEventListener("DOMContentLoaded", onDocumentReady);
-    }
-
-    /*
-        on drag & drop of the component into a parsys, noscript's content will be escaped multiple times by the editor which creates
-        the DOM for editing; the HTML parser cannot be used here due to the multiple escaping
-     */
-    function decodeNoscript(text) {
-        text = text.replace(/&(amp;)*lt;/g, "<");
-        text = text.replace(/&(amp;)*gt;/g, ">");
-        return text;
     }
 
 })();

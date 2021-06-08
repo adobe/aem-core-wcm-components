@@ -131,20 +131,22 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public String getSrcset() {
-        String [] srcsetArray = new String[super.getWidths().length];
-        if (super.getWidths().length > 0 && super.getSrcUriTemplate() != null) {
+        int[] widthsArray = super.getWidths();
+        String srcUritemplate = super.getSrcUriTemplate();
+        String [] srcsetArray = new String[widthsArray.length];
+        if (widthsArray.length > 0 && srcUritemplate != null) {
             String srcUriTemplateDecoded = "";
             try {
-                srcUriTemplateDecoded  = URLDecoder.decode(super.getSrcUriTemplate(), StandardCharsets.UTF_8.name());
+                srcUriTemplateDecoded  = URLDecoder.decode(srcUritemplate, StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {
                 LOGGER.error("Character Decoding failed.");
             }
             if (srcUriTemplateDecoded.contains("{.width}")) {
-                for (int i = 0; i < super.getWidths().length; i++) {
+                for (int i = 0; i < widthsArray.length; i++) {
                     if (srcUriTemplateDecoded.contains("={.width}")) {
-                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format("%s", super.getWidths()[i])) + " " + super.getWidths()[i] + "w";
+                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                     } else {
-                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format(".%s", super.getWidths()[i])) + " " + super.getWidths()[i] + "w";
+                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                     }
                 }
                 return StringUtils.join(srcsetArray, ',');

@@ -38,7 +38,9 @@ component; the actual size will be requested by the client device;
 3. `./disableLazyLoading` - if `true`, the lazy loading of images (loading only when the image is visible on the client
 device) is disabled.
 4. `./lazyThreshold` - defines the number of pixel an image is getting loaded before it gets visible and lazy loading is enabled. 
-Default is set to 0.
+Default is set to 0, meaning that the native threshold of the browser will be used if the browser supports native lazy loading functionality.
+For the browsers without native lazy loading support, the default threshold provided by the [vanilla-lazyload](https://github.com/verlok/vanilla-lazyload) library will be used, which is 300.
+If any other value than the default one is configured, that value will be used to define the number of pixel an image is getting loaded before it gets visible.
 5.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
 
 ### Edit Dialog Properties
@@ -120,31 +122,23 @@ The following attributes can be added to the same element to provide options:
 2. `data-cmp-src` - the image source. Can be a simple image source, or a URI template representation that can be variable expanded -
 useful for building an image configuration with an alternative width. Should contain a `{.width}` variable.
 e.g. '/path/to/image.coreimg{.width}.jpeg'
-3. `data-cmp-widths` - a comma-separated string of alternative image widths (in pixels).
-Populated with `allowedRenditionWidths` from the component's edit dialog.
-4. `data-cmp-dmimage` - if not `false`, indicates that the image is DM image.
+3. `data-cmp-dmimage` - if not `false`, indicates that the image is DM image.
 
 A hook attribute from the following should be added to the corresponding element so that the JavaScript is able to target it:
 
 ```
  data-cmp-hook-image="image"
  data-cmp-hook-image="link"
- data-cmp-hook-image="noscript"
  data-cmp-hook-image="map"
  data-cmp-hook-image="area"
 ```
 
-The `img` and an optional image `map` should be placed inside a `noscript` element with the `data-cmp-hook-image="noscript"` attribute.
-They will be inserted into the DOM by the JavaScript component.
-To allow lazy loading it is expected that the `data-cmp-lazy` and `data-cmp-src` options are supplied.
-In this way a custom solution for lazy-loading is used for the browsers which don't support native lazy-loding.
+To allow lazy loading it is expected that the `data-cmp-lazy` option is supplied.
+Hybrid lazy loading is supported, by using this library [vanilla-lazyload](https://github.com/verlok/vanilla-lazyload).
+Hybrid lazy loading is a technique which provides native lazy loading on browsers that support it, otherwise the custom lazy loading implementation provided by the library is used.
+If any other value than the default one is configured for `./lazyThreshold`, the custom lazy loading will be used by all browsers, because the native threshold of the browsers cannot be controlled.
 
-The browsers which support native lazy-loading will use it instead of the custom solution, with one exception. Because the custom solution is still in place, the usage of the 
-`noscript` element and the insertion of the `img` element via JS will cause the Firefox browser to preload all the images and not use the native lazy loading functionality.
-It is something relating to how the browser deals with the current implementation, because on Chrome and the on the rest of Chrome based browsers the native lazy-loading functionality works.
-For this reason, until the lazy-loading will be adopted by all major browsers by default (e.g on Safari it's an experimental feature which can be enabled), for Firefox will be used the custom lazy-loading implementation.
-
-If there are alternative widths defined in the Component Policy Configuration, the `srcset` attribute will be constructed and set to the Image.
+If there are alternative widths (`./allowedRenditionWidths`) defined in the Component Policy Configuration, the `srcset` attribute will be constructed and set to the `<img>`.
 In this way the the browser will figure out based on its native adaptive capabilities which image to load from the `srcset` attribute in relation with the viewport width.
 
 The `data-cmp-widths` option must be provided with more than one width, as well as the `data-cmp-src` option,
@@ -168,4 +162,4 @@ In addition, SVG image types have a more limited set of editing options availabl
 * **Status**: work-in-progress
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_image\_v3](https://www.adobe.com/go/aem_cmp_image_v3)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_image](https://www.adobe.com/go/aem_cmp_library_image)
-* **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)
+* **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann), [Vlad Coman](https://github.com/comanV)
