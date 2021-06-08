@@ -21,7 +21,7 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
-@Tag("group3")
+@Tag("group4")
 public class ListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.list.v1.ListIT {
 
     protected void setComponentResources() {

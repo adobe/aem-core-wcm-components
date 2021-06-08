@@ -39,22 +39,30 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group2")
+@Tag("group3")
 public class EmbedIT extends AuthorBaseUITest {
 
     private static String componentName = "embed";
     private static String youtubeEmbedField = "core/wcm/components/embed/v1/embed/embeddable/youtube";
-    private String testPage;
+
     private String policyPath;
     private String proxyPath;
-    private EditorPage editorPage;
-    private String cmpPath;
-    private Embed embed;
-    private UrlProcessors urlProcessors;
 
+    protected EditorPage editorPage;
+    protected Embed embed;
+    protected UrlProcessors urlProcessors;
+    protected String testPage;
+    protected String cmpPath;
+    protected String embedRT;
+    protected String clientlibs;
+
+    private void setupResources() {
+        clientlibs = "core.wcm.components.embed.v1";
+        embedRT = Commons.rtEmbed_v1;
+    }
 
     /**
-     * Before Test Case
+     * Setup Before Test Case
      *
      * 1. create test page
      * 2. create the policy
@@ -63,10 +71,7 @@ public class EmbedIT extends AuthorBaseUITest {
      * 5. add the component to the page
      * 6. open the new page in the editor
      */
-
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
-
+    protected void setup() throws ClientException {
         //1.
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
@@ -75,7 +80,8 @@ public class EmbedIT extends AuthorBaseUITest {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("jcr:title", "New Policy");
         data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("allowedEmbeddables", "core/wcm/components/embed/v1/embed/embeddable/youtube");
+        data.put("allowedEmbeddables", youtubeEmbedField);
+        data.put("clientlibs", clientlibs);
         String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
         policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
 
@@ -88,7 +94,7 @@ public class EmbedIT extends AuthorBaseUITest {
         Commons.assignPolicy(adminClient,"/core-component/components/embed",data, policyAssignmentPath, 200, 201);
 
         // 4.
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtEmbed_v1, Commons.proxyPath, null, null);
+        proxyPath = Commons.createProxyComponent(adminClient, embedRT, Commons.proxyPath, null, null);
 
         // 5.
         cmpPath = Commons.addComponent(adminClient, proxyPath,testPage + Commons.relParentCompPath, componentName, null);
@@ -99,6 +105,13 @@ public class EmbedIT extends AuthorBaseUITest {
         embed = new Embed();
         urlProcessors = new UrlProcessors();
 
+    }
+
+
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setupResources();
+        setup();
     }
 
     /**

@@ -30,9 +30,10 @@ The following properties are written to JCR for the Button component and are exp
 
 1. `./jcr:title` - defines the button text
 2. `./link` - defines the button link
-3. `./icon` - defines an icon identifier for rendering an icon
-4. `./accessibilityLabel` - defines an accessibility label for the button
-5. `./id` - defines the component HTML ID attribute.
+3. `./linkTarget` - defines if the link should be opened in a new browser tab
+4. `./icon` - defines an icon identifier for rendering an icon
+5. `./accessibilityLabel` - defines an accessibility label for the button
+6. `./id` - defines the component HTML ID attribute.
 
 ## BEM Description
 ```

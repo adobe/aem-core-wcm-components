@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -48,15 +50,27 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
 
     private final Component component;
     private Resource teaserResource;
+    private boolean showDescription;
+    private boolean linkItems;
 
     /**
      * List of properties that should be inherited when delegating to the featured image of the page.
      */
     private Map<String, String> overriddenProperties = new HashMap<>();
+    private List<String> hiddenProperties = new ArrayList<>();
 
-    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
+    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId,
+                            boolean isShadowingDisabled, Component component) {
         super(linkHandler, page, parentId, isShadowingDisabled, component);
         this.component = component;
+    }
+
+    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId,
+                            boolean isShadowingDisabled, Component component, boolean showDescription, boolean linkItems) {
+        super(linkHandler, page, parentId, isShadowingDisabled, component);
+        this.component = component;
+        this.showDescription = showDescription;
+        this.linkItems = linkItems;
     }
 
     @Override
@@ -77,23 +91,35 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     @JsonIgnore
     public Resource getTeaserResource() {
         if (teaserResource == null && component != null) {
-            Resource resourceToBeWrapped = ComponentUtils.getFeaturedImage(page);
-            if (resourceToBeWrapped == null) {
-                resourceToBeWrapped = page.getContentResource();
-            }
-            if (resourceToBeWrapped == null) {
-                return null;
-            }
             String delegateResourceType = component.getProperties().get(PN_TEASER_DELEGATE, String.class);
             if (StringUtils.isEmpty(delegateResourceType)) {
                 LOGGER.error("In order for list rendering delegation to work correctly you need to set up the teaserDelegate property on" +
                         " the {} component; its value has to point to the resource type of a teaser component.", component.getPath());
             } else {
-                // make the featured image inherit following properties from the page item
-                overriddenProperties.put(JcrConstants.JCR_TITLE, this.getTitle());
-                overriddenProperties.put(JcrConstants.JCR_DESCRIPTION, this.getDescription());
-                overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
-                teaserResource = new CoreResourceWrapper(resourceToBeWrapped, delegateResourceType, null, overriddenProperties);
+                Resource resourceToBeWrapped = ComponentUtils.getFeaturedImage(page);
+                if (resourceToBeWrapped != null) {
+                    // use the page featured image and inherit properties from the page item
+                    overriddenProperties.put(JcrConstants.JCR_TITLE, this.getTitle());
+                    if (showDescription) {
+                        overriddenProperties.put(JcrConstants.JCR_DESCRIPTION, this.getDescription());
+                    }
+                    if (linkItems) {
+                        overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
+                    }
+                } else {
+                    // use the page content node and inherit properties from the page item
+                    resourceToBeWrapped = page.getContentResource();
+                    if (resourceToBeWrapped == null) {
+                        return null;
+                    }
+                    if (!showDescription) {
+                        hiddenProperties.add(JcrConstants.JCR_DESCRIPTION);
+                    }
+                    if (linkItems) {
+                        overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
+                    }
+                }
+                teaserResource = new CoreResourceWrapper(resourceToBeWrapped, delegateResourceType, hiddenProperties, overriddenProperties);
             }
         }
         return teaserResource;
@@ -104,7 +130,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     protected PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
                 .withTitle(this::getTitle)
-                .withLinkUrl(() -> link.map(Link::getURL).orElse(null))
+                .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
                 .build();
     }
 }

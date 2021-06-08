@@ -32,8 +32,8 @@ import java.util.concurrent.TimeoutException;
 @Tag("group2")
 public class ImageIT extends AuthorBaseUITest {
 
-    private ImageTests imageTests;
-    private static final String clientlibs = "core.wcm.components.image.v2";
+    protected ImageTests imageTests;
+    protected String clientlibs = "core.wcm.components.image.v2";
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {

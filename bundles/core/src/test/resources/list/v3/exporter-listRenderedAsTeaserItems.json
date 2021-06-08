@@ -57,9 +57,9 @@
             ":type": "cq:PageContent"
         }
     ],
-    "showDescription": false,
+    "showDescription": true,
     "showModificationDate": false,
-    "linkItems": false,
+    "linkItems": true,
     "displayItemAsTeaser": true,
     "dataLayer": {
         "list-6ce5379d59": {
