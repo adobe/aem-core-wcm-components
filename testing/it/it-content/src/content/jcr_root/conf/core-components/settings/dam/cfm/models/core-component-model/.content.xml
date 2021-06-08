@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Template"
+    allowedPaths="[/content/entities(/.*)?]"
+    ranking="{Long}100">
+    <jcr:content
+        cq:lastModified="{Date}2019-01-15T16:03:49.338+01:00"
+        cq:lastModifiedBy="admin"
+        cq:scaffolding="/conf/core-components/settings/dam/cfm/models/core-component-model/jcr:content/model"
+        cq:templateType="/libs/settings/dam/cfm/model-types/fragment"
+        jcr:description="Sample structured content fragment model for the Adobe Experience Manager Core Components Library. Contains structured data for a component."
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Core Component Model"
+        sling:resourceSuperType="dam/cfm/models/console/components/data/entity"
+        sling:resourceType="dam/cfm/models/console/components/data/entity/default">
+        <model
+            cq:targetPath="/content/entities"
+            jcr:primaryType="cq:PageContent"
+            sling:resourceType="wcm/scaffolding/components/scaffolding"
+            dataTypesConfig="/mnt/overlay/settings/dam/cfm/models/formbuilderconfig/datatypes"
+            maxGeneratedOrder="20">
+            <cq:dialog
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="cq/gui/components/authoring/dialog">
+                <content
+                    jcr:lastModified="{Date}2019-01-15T16:03:49.338+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                    <items
+                        jcr:primaryType="nt:unstructured"
+                        maxGeneratedOrder="20">
+                        <_x0031_547563037833
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Title"
+                            listOrder="1"
+                            maxlength="255"
+                            metaType="text-single"
+                            name="component-title"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            valueType="string"/>
+                        <_x0031_547563080981
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="dam/cfm/admin/components/authoring/contenteditor/multieditor"
+                            fieldLabel="Description"
+                            listOrder="2"
+                            metaType="text-multi"
+                            name="component-description"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            valueType="string"/>
+                        <_x0031_547563135805
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                            fieldLabel="Latest Version"
+                            listOrder="3"
+                            metaType="number"
+                            name="component-latest-version"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            step="1"
+                            typeHint="long"
+                            valueType="long"/>
+                        <_x0031_547563167191
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="cq/gui/components/coral/common/form/tagfield"
+                            fieldLabel="Type"
+                            listOrder="7"
+                            metaType="tags"
+                            multiple="true"
+                            name="component-type"
+                            renderReadOnly="false"
+                            rootPath="/content/cq:tags/core-components/component-type"
+                            showEmptyInReadOnly="true"
+                            valueType="string[]"/>
+                    </items>
+                </content>
+            </cq:dialog>
+        </model>
+    </jcr:content>
+</jcr:root>

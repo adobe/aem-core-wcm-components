@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:deviceGroups="[mobile/groups/responsive]"
+        cq:lastModified="{Date}2020-11-27T17:44:27.447+02:00"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/core-components/settings/wcm/templates/responsive-template"
+        jcr:primaryType="cq:PageContent"
+        sling:resourceType="core/wcm/components/page/v2/page">
+        <root
+            jcr:lastModified="{Date}2020-11-27T10:57:22.077+02:00"
+            jcr:lastModifiedBy="admin"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="core/wcm/components/container/v1/container"
+            layout="responsiveGrid">
+            <header
+                jcr:created="{Date}2020-11-27T13:03:26.122+02:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2020-11-27T17:42:33.287+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/experiencefragment/v1/experiencefragment"
+                fragmentVariationPath="/content/experience-fragments/core-components-test/header/master"/>
+            <main
+                jcr:created="{Date}2020-11-27T13:03:40.192+02:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2020-11-27T13:04:20.639+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/container/v1/container"
+                editable="{Boolean}true">
+                <cq:responsive jcr:primaryType="nt:unstructured">
+                    <default
+                        jcr:primaryType="nt:unstructured"
+                        offset="0"
+                        width="9"/>
+                </cq:responsive>
+            </main>
+            <aside
+                jcr:created="{Date}2020-11-27T13:04:40.772+02:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2020-11-27T13:04:40.772+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/container/v1/container"
+                editable="{Boolean}true">
+                <cq:responsive jcr:primaryType="nt:unstructured">
+                    <default
+                        jcr:primaryType="nt:unstructured"
+                        offset="0"
+                        width="3"/>
+                </cq:responsive>
+            </aside>
+            <footer
+                jcr:created="{Date}2020-11-27T14:21:53.243+02:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2020-11-27T17:44:27.444+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/experiencefragment/v1/experiencefragment"
+                fragmentVariationPath="/content/experience-fragments/core-components-test/footer/master"/>
+            <experiencefragment
+                jcr:lastModified="{Date}2020-11-27T14:35:45.525+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/experiencefragment/v1/experiencefragment"
+                fragmentVariationPath="/content/experience-fragments/core-components-test/header/master"/>
+        </root>
+        <cq:responsive jcr:primaryType="nt:unstructured">
+            <breakpoints jcr:primaryType="nt:unstructured">
+                <phone
+                    jcr:primaryType="nt:unstructured"
+                    title="Smaller Screen"
+                    width="{Long}650"/>
+                <tablet
+                    jcr:primaryType="nt:unstructured"
+                    title="Tablet"
+                    width="{Long}1200"/>
+            </breakpoints>
+        </cq:responsive>
+    </jcr:content>
+</jcr:root>
