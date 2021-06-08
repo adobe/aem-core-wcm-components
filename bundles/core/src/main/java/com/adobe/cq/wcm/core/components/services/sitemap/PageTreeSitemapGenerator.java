@@ -36,6 +36,8 @@ public interface PageTreeSitemapGenerator extends SitemapGenerator {
 
     /**
      * Returns a mapping from {@link Locale} to {@link Page} for the language alternatives of the given {@link Page}.
+     * <p>
+     * Each path is checked with {@link SitemapGenerator#shouldInclude(Resource)} before being returned.
      *
      * @return
      */

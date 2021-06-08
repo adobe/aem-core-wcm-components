@@ -17,20 +17,22 @@ package com.adobe.cq.wcm.core.components.internal.services.sitemap;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.sitemap.common.Externalizer;
+import org.apache.sling.sitemap.common.SitemapLinkExternalizer;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import com.day.cq.commons.Externalizer;
+
 /**
- * An {@link Externalizer} to be used for sitemaps.
+ * An {@link SitemapLinkExternalizer} to be used for sitemaps.
  */
-@Component(property = Constants.SERVICE_RANKING + "=I\"100\"")
-public class SitemapExternalizerImpl implements Externalizer {
+@Component(property = Constants.SERVICE_RANKING + ":Integer=100")
+public class SitemapLinkExternalizerImpl implements SitemapLinkExternalizer {
 
     @Reference
-    private com.day.cq.commons.Externalizer externalizer;
+    private Externalizer externalizer;
 
     @Override
     @Nullable

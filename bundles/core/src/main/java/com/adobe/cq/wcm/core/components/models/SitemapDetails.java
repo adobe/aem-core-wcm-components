@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,10 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
- * Describes the details that can be returned for a sitemap root.
+ * Describes the details that can be returned for a sitemap root Resource.
  */
 public interface SitemapDetails {
 
@@ -27,38 +28,56 @@ public interface SitemapDetails {
      *
      * @return
      */
-    List<Detail> getDetails();
+    default List<Detail> getDetails() {
+        return Collections.emptyList();
+    }
 
     /**
      * Returns true when the current resource is a sitemap root.
      *
      * @return
      */
-    boolean isSitemapRoot();
+    default boolean isSitemapRoot() {
+        return false;
+    }
 
     /**
      * Returns true when the at least one of the current resource's sitemaps is currently being generated.
      *
      * @return
      */
-    boolean isGenerationPending();
+    default boolean isGenerationPending() {
+        return false;
+    }
 
     /**
      * Returns true when at least one of the current resource's sitemaps exceeds the configured limits.
      *
      * @return
      */
-    boolean hasWarning();
+    default boolean hasWarning() {
+        return false;
+    }
 
+    /**
+     * A Detail describing a sitemap for the model's Resource.
+     */
     interface Detail {
 
-        String getName();
+        default String getName() {
+            return null;
+        }
 
-        String getUrl();
+        default String getUrl() {
+            return null;
+        }
 
-        String getSize();
+        default String getSize() {
+            return null;
+        }
 
-        String getEntries();
-
+        default String getEntries() {
+            return null;
+        }
     }
 }

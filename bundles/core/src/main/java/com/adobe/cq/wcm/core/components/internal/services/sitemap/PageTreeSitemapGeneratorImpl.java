@@ -26,7 +26,7 @@ import org.apache.sling.sitemap.SitemapException;
 import org.apache.sling.sitemap.builder.Sitemap;
 import org.apache.sling.sitemap.builder.Url;
 import org.apache.sling.sitemap.builder.extensions.AlternateLanguageExtension;
-import org.apache.sling.sitemap.common.Externalizer;
+import org.apache.sling.sitemap.common.SitemapLinkExternalizer;
 import org.apache.sling.sitemap.generator.ResourceTreeSitemapGenerator;
 import org.apache.sling.sitemap.generator.SitemapGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +53,7 @@ public class PageTreeSitemapGeneratorImpl extends ResourceTreeSitemapGenerator i
     private final Logger LOG = LoggerFactory.getLogger(PageTreeSitemapGeneratorImpl.class);
 
     @Reference(policyOption = ReferencePolicyOption.GREEDY)
-    private Externalizer externalizer;
+    private SitemapLinkExternalizer externalizer;
     @Reference
     private SlingSettingsService slingSettingsService;
     @Reference

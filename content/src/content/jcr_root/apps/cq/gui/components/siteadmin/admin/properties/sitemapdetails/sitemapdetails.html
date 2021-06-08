@@ -24,7 +24,9 @@
         <coral-alert variant="warning" data-sly-test.warning="${sitemapDetails.hasWarning}">
             <coral-alert-header>${ 'Warning' @ i18n }</coral-alert-header>
             <coral-alert-content>
-                ${ 'At least one of the sitemaps exceeds the configured limits. Please consider splitting the sitemap(s) by making any of the descendant pages a sitemap root. Please refer to the documentation for more details.' @ i18n }
+                ${ 'At least one of the sitemaps exceeds the configured limits. Please consider splitting the sitemap(s) by making any of the descendant pages a sitemap root.' @ i18n }
+                <br/>
+                ${ 'Please refer to the documentation for more details.' @ i18n}
             </coral-alert-content>
         </coral-alert>
         <sly data-sly-test="${!warning}">
@@ -32,18 +34,18 @@
         </sly>
         <table is="coral-table">
             <thead is="coral-table-head">
-            <tr is="coral-table-row">
-                <th is="coral-table-headercell">${ 'Link' @ i18n }</th>
-                <th is="coral-table-headercell">${ 'Size' @ i18n }</th>
-                <th is="coral-table-headercell">${ 'URLs' @ i18n }</th>
-            </tr>
+                <tr is="coral-table-row">
+                    <th is="coral-table-headercell">${ 'Link' @ i18n }</th>
+                    <th is="coral-table-headercell">${ 'Size' @ i18n }</th>
+                    <th is="coral-table-headercell">${ 'URLs' @ i18n }</th>
+                </tr>
             </thead>
             <tbody is="coral-table-body" divider="cell">
-            <tr is="coral-table-row" data-sly-repeat="${sitemapDetails.details}">
-                <td is="coral-table-cell"><a href="${item.url}">${item.name}</a></td>
-                <td is="coral-table-cell">${item.size}</td>
-                <td is="coral-table-cell">${item.entries}</td>
-            </tr>
+                <tr is="coral-table-row" data-sly-repeat="${sitemapDetails.details}">
+                    <td is="coral-table-cell"><a href="${item.url}">${item.name}</a></td>
+                    <td is="coral-table-cell">${item.size}</td>
+                    <td is="coral-table-cell">${item.entries}</td>
+                </tr>
             </tbody>
         </table>
     </coral-panel>

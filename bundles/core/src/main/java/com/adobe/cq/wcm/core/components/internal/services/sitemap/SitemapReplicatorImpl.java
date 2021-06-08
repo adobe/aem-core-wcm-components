@@ -21,6 +21,7 @@ import org.apache.sling.jcr.api.SlingRepository;
 import org.apache.sling.serviceusermapping.ServiceUserMapped;
 import org.apache.sling.sitemap.generator.SitemapGenerator;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
@@ -40,8 +41,10 @@ import com.day.cq.replication.Replicator;
 @Component(
     service = EventHandler.class,
     property = {
-        EventConstants.EVENT_TOPIC + "=" + SitemapGenerator.EVENT_TOPIC_SITEMAP_UPDATED
-    }
+        EventConstants.EVENT_TOPIC + "=" + SitemapGenerator.EVENT_TOPIC_SITEMAP_UPDATED,
+        EventConstants.EVENT_TOPIC + "=" + SitemapGenerator.EVENT_TOPIC_SITEMAP_PURGED
+    },
+    configurationPolicy = ConfigurationPolicy.REQUIRE
 )
 public class SitemapReplicatorImpl implements EventHandler {
 
@@ -59,10 +62,18 @@ public class SitemapReplicatorImpl implements EventHandler {
         Session session = null;
         try {
             session = repository.loginService(Utils.COMPONENTS_SERVICE, repository.getDefaultWorkspace());
-            String storagePath = (String) event.getProperty(SitemapGenerator.EVENT_PROPERTY_SITEMAP_STORAGE_PATH);
+
+            String path = (String) event.getProperty(SitemapGenerator.EVENT_PROPERTY_SITEMAP_STORAGE_PATH);
+            ReplicationActionType actionType = event.getTopic().equals(SitemapGenerator.EVENT_TOPIC_SITEMAP_UPDATED)
+                ? ReplicationActionType.ACTIVATE
+                : ReplicationActionType.DELETE;
             ReplicationOptions opts = new ReplicationOptions();
+            opts.setSuppressStatusUpdate(true);
+            opts.setSuppressVersions(true);
+            opts.setUpdateAlias(false);
             opts.setFilter(AgentFilter.DEFAULT);
-            replicator.replicate(session, ReplicationActionType.ACTIVATE, storagePath, opts);
+
+            replicator.replicate(session, actionType, path, opts);
         } catch (Exception ex) {
             LOG.warn("Failed to queue replication of sitemap: {}", ex.getMessage(), ex);
         } finally {
