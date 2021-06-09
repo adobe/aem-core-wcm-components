@@ -16,6 +16,7 @@
 <div data-sly-use.videoModel="com.adobe.cq.wcm.core.components.models.Video"
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-test.video="${videoModel.fileReference}"
+     data-cmp-data-layer="${videoModel.data.json}"
      class="cmp-video">
     <video class="cmp-video__video"
            poster="${videoModel.posterImageReference ? posterImageReference : false}"
