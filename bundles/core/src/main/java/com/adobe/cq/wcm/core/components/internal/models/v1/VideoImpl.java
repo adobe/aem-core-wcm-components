@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Video;
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
@@ -30,16 +32,14 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.models.annotations.injectorspecific.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.service.component.annotations.Reference;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -56,7 +56,7 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/video/v1/video";
 
-    @Inject
+    @OSGiService
     private LinkChecker checker;
 
     @ValueMapValue(name = "videoFileReference", injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -102,9 +102,8 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
         final LinkValidity validity = checker.getLink(fileReference, checker.createSettings(this.request)).getValidity();
         if (validity.equals(LinkValidity.VALID)) {
             return fileReference;
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
