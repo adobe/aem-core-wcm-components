@@ -38,8 +38,7 @@ import org.osgi.framework.FrameworkUtil;
 
 import java.util.LinkedHashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(AemContextExtension.class)
 public class VideoImplTest {
@@ -47,13 +46,14 @@ public class VideoImplTest {
     private static final String TEST_BASE = "/video";
     private static final String TEST_ROOT_PAGE = "/content/video";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/videoComponent";
+    private static final String TEST_EXPORTER_NO_FILEREFERENCE = "/jcr:content/videoComponent-no-fileReference";
     private static final String VIDEO_POSTER_IMAGE_REFERENCE = "/content/dam/core-components-examples/library/aem-corecomponents-logo.svg";
     private static final String VIDEO_FILE_REFERENCE = "/content/dam/some/test/video/sample.mp4";
     private static final String VIDEO_RESOURCE_TYPE = "core/wcm/components/video/v1/video";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private LinkChecker checker;
+    private Link linkMock;
 
     private Video video;
 
@@ -63,12 +63,12 @@ public class VideoImplTest {
     @BeforeEach
     protected void setUp() {
         resourceType = VideoImpl.RESOURCE_TYPE;
-        checker = Mockito.spy(LinkChecker.class);
+        LinkChecker checker = Mockito.spy(LinkChecker.class);
         context.registerService(LinkChecker.class, checker);
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
         video = getVideoUnderTest();
         assert video != null;
-        final Link linkMock = Mockito.mock(Link.class);
+        linkMock = Mockito.mock(Link.class);
         Mockito.when(checker.getLink(Mockito.anyString(), Mockito.any())).thenReturn(linkMock);
         Mockito.when(linkMock.getValidity()).thenReturn(LinkValidity.VALID);
     }
@@ -85,6 +85,14 @@ public class VideoImplTest {
     protected void testFileReference() {
         assertEquals(VIDEO_FILE_REFERENCE, video.getFileReference());
         Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_ROOT_PAGE_GRID));
+    }
+
+    @Test
+    @DisplayName("Video Component - Video file reference is not valid test")
+    protected void testFileReferenceIsNotValid() {
+        Mockito.when(linkMock.getValidity()).thenReturn(LinkValidity.INVALID);
+        assertNull(video.getFileReference());
+        Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_EXPORTER_NO_FILEREFERENCE));
     }
 
     @Test
