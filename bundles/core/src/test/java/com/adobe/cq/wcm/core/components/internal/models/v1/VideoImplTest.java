@@ -36,6 +36,8 @@ import org.mockito.MockitoAnnotations;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 
+import java.util.LinkedHashMap;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -61,18 +63,14 @@ public class VideoImplTest {
     @BeforeEach
     protected void setUp() {
         resourceType = VideoImpl.RESOURCE_TYPE;
-        checker = Mockito.mock(LinkChecker.class);
-        context.registerService(checker);
-        internalSetup();
+        checker = Mockito.spy(LinkChecker.class);
+        context.registerService(LinkChecker.class, checker);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
         video = getVideoUnderTest();
-        assert video!=null;
+        assert video != null;
         final Link linkMock = Mockito.mock(Link.class);
         Mockito.when(checker.getLink(Mockito.anyString(), Mockito.any())).thenReturn(linkMock);
         Mockito.when(linkMock.getValidity()).thenReturn(LinkValidity.VALID);
-    }
-
-    protected void internalSetup() {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
     }
 
     @Test
