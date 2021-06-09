@@ -15,26 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.models.annotations.Exporter;
-import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
-import org.apache.sling.models.factory.ModelFactory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
@@ -42,6 +22,20 @@ import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.models.annotations.Exporter;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -54,7 +48,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     protected String width;
 
-    @ValueMapValue(name="height", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = "height", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected String height;
 
@@ -72,7 +66,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     @Override
-    protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt ) {
+    protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt) {
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }
 
@@ -81,11 +75,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getSrcset() {
         int[] widthsArray = super.getWidths();
         String srcUritemplate = super.getSrcUriTemplate();
-        String [] srcsetArray = new String[widthsArray.length];
+        String[] srcsetArray = new String[widthsArray.length];
         if (widthsArray.length > 0 && srcUritemplate != null) {
             String srcUriTemplateDecoded = "";
             try {
-                srcUriTemplateDecoded  = URLDecoder.decode(srcUritemplate, StandardCharsets.UTF_8.name());
+                srcUriTemplateDecoded = URLDecoder.decode(srcUritemplate, StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {
                 LOGGER.error("Character Decoding failed.");
             }
@@ -114,3 +108,4 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getHeight() {
         return height;
     }
+}
