@@ -232,6 +232,7 @@
             }
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
             var imgSrcAttribute = that._elements.image.getAttribute("src");
+
             if (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL) {
                 that._elements.image.setAttribute("src", url);
             } else {
@@ -241,9 +242,7 @@
                 if (isImageRefSame && urlTemplateParts.length > 1) {
                     isImageRefSame = imgSrcAttribute.endsWith(urlTemplateParts[urlTemplateParts.length - 1]);
                 }
-
-                if ((isImageRefSame === true && imgSrcAttribute !== url) ||
-                    (isImageRefSame === false && (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL))) {
+                if (isImageRefSame) {
                     that._elements.image.setAttribute("src", url);
                     if (!hasWidths) {
                         window.removeEventListener("scroll", that.update);
