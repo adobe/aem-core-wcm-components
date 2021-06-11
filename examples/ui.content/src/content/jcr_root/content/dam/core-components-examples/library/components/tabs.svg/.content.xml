@@ -5,8 +5,6 @@
     jcr:uuid="b8c8ad32-c550-480f-a68c-dd5cc1364981">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-05-24T12:27:20.450+02:00"
-        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:extracted="{Date}2019-05-24T12:27:18.634+02:00"
@@ -15,8 +13,6 @@
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-05-24T12:27:20.450+02:00"
             dc:title="Tabs"
-            jcr:lastModified="{Date}2019-05-24T12:27:20.450+02:00"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>

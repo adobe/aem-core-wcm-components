@@ -2,8 +2,6 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-05-29T18:00:48.270+03:00"
-        cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:primaryType="cq:PageContent"
         jcr:title="Level 2"
@@ -13,28 +11,16 @@
             sling:resourceType="wcm/foundation/components/responsivegrid">
             <responsivegrid
                 cq:styleIds="[1545309110033]"
-                jcr:created="{Date}2018-12-20T12:31:03.201Z"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2018-12-20T14:47:57.433Z"
-                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <text_1740702241_copy
                     cq:styleIds="[1644862132301]"
-                    jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-06-03T18:56:17.311+02:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Breadcrumb&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
-                    jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-06-03T18:52:42.339+02:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>This is a sample page representing a level in a breadcrumb hierarchy. For more information, return to the &lt;a href=&quot;/content/core-components-examples/library/templating/breadcrumb/hidden/level-1/level-2/breadcrumb.html&quot;>Breadcrumb example page&lt;/a>.&amp;nbsp;&lt;/p>&#xa;"
