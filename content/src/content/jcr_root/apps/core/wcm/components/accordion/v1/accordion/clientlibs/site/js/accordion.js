@@ -460,9 +460,9 @@
                 if (that._properties.singleExpansion) {
                     button.classList.add(cssClasses.button.disabled);
                     button.setAttribute("aria-disabled", true);
-                    that._elements["item"].forEach(function(item, itemIndex) {
+                    that._elements["item"].forEach(function(accordionItem, itemIndex) {
                         if (index !== itemIndex) {
-                            collapseItem(item);
+                            collapseItem(accordionItem);
                         }
                     });
                 }
@@ -508,7 +508,8 @@
     }
 
     /**
-     * Scrolls the browser when the URI fragment is changed to the item of the container Accordion component that corresponds to the deep link in the URL fragment, and displays its content.
+     * Scrolls the browser when the URI fragment is changed to the item of the container Accordion component that corresponds to the deep link in the URL fragment,
+       and displays its content.
      * This method fixes the issue existent with Chrome and related browsers, which are just scrolling to the item without displaying its content.
      */
     function onHashChange() {
