@@ -460,6 +460,11 @@
                 if (that._properties.singleExpansion) {
                     button.classList.add(cssClasses.button.disabled);
                     button.setAttribute("aria-disabled", true);
+                    that._elements["item"].forEach(function(item, itemIndex) {
+                        if (index !== itemIndex) {
+                            collapseItem(item);
+                        }
+                    });
                 }
             }
         }
@@ -499,6 +504,48 @@
         function focusButton(index) {
             var button = that._elements["button"][index];
             button.focus();
+        }
+    }
+
+    /**
+     * Scrolls the browser when the URI fragment is changed to the item of the container Accordion component that corresponds to the deep link in the URL fragment, and displays its content.
+     * This method fixes the issue existent with Chrome and related browsers, which are just scrolling to the item without displaying its content.
+     */
+    function onHashChange() {
+        if (location.hash && location.hash !== "#") {
+            var anchorLocation = decodeURIComponent(location.hash);
+            var anchorElement = document.querySelector(anchorLocation);
+            if (anchorElement && anchorElement.classList.contains("cmp-accordion__item")) {
+                var anchorElementButton = document.querySelector(anchorLocation + "-button");
+                var anchorElementPanel = document.querySelector(anchorLocation + "-panel");
+                anchorElementButton.classList.add(cssClasses.button.expanded);
+                anchorElementButton.setAttribute("aria-expanded", true);
+                anchorElementPanel.classList.add(cssClasses.panel.expanded);
+                anchorElementPanel.classList.remove(cssClasses.panel.hidden);
+                anchorElementPanel.setAttribute("aria-hidden", false);
+                var accordionContainer = anchorElement.parentElement;
+                var accordionChildrenItems = anchorElement.parentElement.children;
+                if (accordionContainer && accordionContainer.hasAttribute("data-cmp-single-expansion") && accordionChildrenItems) {
+                    if (Array.isArray(Array.prototype.slice.call(accordionChildrenItems))) {
+                        for (var i = 0; i < accordionChildrenItems.length; i++) {
+                            var itemButton = document.querySelector("#" + accordionChildrenItems[i].id + "-button");
+                            var itemPanel = document.querySelector("#" + accordionChildrenItems[i].id + "-panel");
+                            if (accordionChildrenItems[i].id !== anchorLocation.substring(1)) {
+                                itemButton.classList.remove(cssClasses.button.disabled);
+                                itemButton.classList.remove(cssClasses.button.expanded);
+                                itemButton.removeAttribute("aria-disabled");
+                                itemButton.setAttribute("aria-expanded", false);
+                                itemPanel.classList.add(cssClasses.panel.hidden);
+                                itemPanel.classList.remove(cssClasses.panel.expanded);
+                                itemPanel.setAttribute("aria-hidden", true);
+                            } else {
+                                itemButton.classList.add(cssClasses.button.disabled);
+                                itemButton.setAttribute("aria-disabled", true);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -595,5 +642,7 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    window.addEventListener("hashchange", window.CQ.CoreComponents.container.utils.locationHashChanged, false);
+    window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    window.addEventListener("hashchange", onHashChange, false);
+
 }());

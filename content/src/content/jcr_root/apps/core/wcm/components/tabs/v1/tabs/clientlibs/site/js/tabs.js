@@ -86,7 +86,7 @@
 
             // Show the tab based on deep-link-id if it matches with any existing tab item id
             var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tab");
-            if (deepLinkItemIdx) {
+            if (deepLinkItemIdx !== -1) {
                 var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
                 if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
                     navigateAndFocusTab(deepLinkItemIdx);
@@ -318,6 +318,55 @@
     }
 
     /**
+     * Scrolls the browser when the URI fragment is changed to the item of the container Tab component that corresponds to the deep link in the URI fragment, and displays its content.
+     * This method fixes the issue existent with Chrome and related browsers, which are just scrolling to the item without displaying its content.
+     */
+    function onHashChange() {
+        if (location.hash && location.hash !== "#") {
+            var anchorLocation = decodeURIComponent(location.hash);
+            var anchorElement = document.querySelector(anchorLocation);
+            if (anchorElement && anchorElement.classList.contains("cmp-tabs__tab")) {
+                anchorElement.classList.add(selectors.active.tab);
+                anchorElement.setAttribute("aria-selected", true);
+                anchorElement.setAttribute("tabindex", "0");
+                var childrenTabsOfTheSameParent = anchorElement.parentElement.children;
+                if (childrenTabsOfTheSameParent) {
+                    if (Array.isArray(Array.prototype.slice.call(childrenTabsOfTheSameParent))) {
+                        for (var i = 0; i < childrenTabsOfTheSameParent.length; i++) {
+                            if (childrenTabsOfTheSameParent[i].id !== anchorLocation.substring(1)) {
+                                if (childrenTabsOfTheSameParent[i].classList.contains(selectors.active.tab)) {
+                                    childrenTabsOfTheSameParent[i].classList.remove(selectors.active.tab);
+                                    childrenTabsOfTheSameParent[i].setAttribute("aria-selected", false);
+                                    childrenTabsOfTheSameParent[i].setAttribute("tabindex", "-1");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                var correspondingPanel = document.querySelector(anchorLocation + "panel");
+                if (correspondingPanel) {
+                    correspondingPanel.classList.add(selectors.active.tabpanel);
+                    correspondingPanel.removeAttribute("aria-hidden");
+                    var childrenPanelsOfTheSameParent = correspondingPanel.parentElement.children;
+                    if (childrenPanelsOfTheSameParent) {
+                        if (Array.isArray(Array.prototype.slice.call(childrenPanelsOfTheSameParent))) {
+                            for (var j = 0; j < childrenPanelsOfTheSameParent.length; j++) {
+                                if (childrenPanelsOfTheSameParent[j].id !== (anchorLocation + "panel").substring(1)) {
+                                    if (childrenPanelsOfTheSameParent[j].classList.contains(selectors.active.tabpanel)) {
+                                        childrenPanelsOfTheSameParent[j].classList.remove(selectors.active.tabpanel);
+                                        childrenPanelsOfTheSameParent[j].setAttribute("aria-hidden", true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Reads options data from the Tabs wrapper element, defined via {@code data-cmp-*} data attributes
      *
      * @private
@@ -410,6 +459,7 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    window.addEventListener("hashchange", window.CQ.CoreComponents.container.utils.locationHashChanged, false);
+    window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    window.addEventListener("hashchange", onHashChange, false);
 
 }());
