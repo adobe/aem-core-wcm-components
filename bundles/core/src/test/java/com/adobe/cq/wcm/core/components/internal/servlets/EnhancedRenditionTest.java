@@ -42,13 +42,11 @@ public class EnhancedRenditionTest {
         when(mockRendition.getProperties()).thenReturn(ValueMap.EMPTY);
         when(mockRendition.getSize()).thenReturn((long)Math.floor(Math.random() * 100));
         when(mockRendition.getStream()).thenReturn(mock(InputStream.class));
-        when(mockRendition.getBinary()).thenReturn(mock(Binary.class));
         when(mockRendition.getAsset()).thenReturn(mock(Asset.class));
         EnhancedRendition rendition = new EnhancedRendition(mockRendition);
         assertEquals(mockRendition.getMimeType(), rendition.getMimeType());
         assertEquals(mockRendition.getProperties(), rendition.getProperties());
         assertEquals(mockRendition.getSize(), rendition.getSize());
-        assertEquals(mockRendition.getBinary(), rendition.getBinary());
         assertEquals(mockRendition.getStream(), rendition.getStream());
         assertEquals(mockRendition.getAsset(), rendition.getAsset());
     }
