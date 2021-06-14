@@ -7,8 +7,7 @@
         jcr:title="Form Options"
         jcr:description="Display different options to choose from"
         sling:resourceType="core-components-examples/components/page"
-        navTitle="Options"
-        translated="{Boolean}false">
+        navTitle="Options">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">

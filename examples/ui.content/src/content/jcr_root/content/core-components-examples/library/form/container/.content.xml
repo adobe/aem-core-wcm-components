@@ -7,8 +7,7 @@
         jcr:title="Core Form Container"
         jcr:description="Group and Layout Form Components"
         sling:resourceType="core-components-examples/components/page"
-        navTitle="Container"
-        translated="{Boolean}false">
+        navTitle="Container">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">

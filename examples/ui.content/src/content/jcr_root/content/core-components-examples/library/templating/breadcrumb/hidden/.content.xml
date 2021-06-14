@@ -8,8 +8,7 @@
         jcr:primaryType="nt:unstructured"
         jcr:title="Hidden"
         sling:resourceType="core-components-examples/components/page"
-        hideInNav="true"
-        navTitle="Hidden">
+        hideInNav="true">
         <image jcr:primaryType="nt:unstructured">
             <file/>
         </image>

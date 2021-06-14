@@ -7,8 +7,7 @@
         jcr:title="Form Hidden"
         jcr:description="Hidden Form Component "
         sling:resourceType="core-components-examples/components/page"
-        navTitle="Hidden"
-        translated="{Boolean}false">
+        navTitle="Hidden">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
