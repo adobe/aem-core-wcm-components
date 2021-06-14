@@ -18,17 +18,17 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Title&lt;sub>v3&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Title&lt;sub>v3&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Title can be used to create headings for a page or page sections.&lt;/p>&#xa;"
+                    text="&lt;p>Title can be used to create headings for a page or page sections.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -40,7 +40,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -65,7 +65,7 @@
                 <text_1337506761
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Default title without any configuration. The title is taken from the current page.&lt;/p>&#xa;"
+                    text="&lt;p>Default title without any configuration. The title is taken from the current page.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -106,7 +106,7 @@
                 <text_1337508375
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Alternative title texts can be provided rather than the default of taking the title from the current page.&lt;/p>&#xa;"
+                    text="&lt;p>Alternative title texts can be provided rather than the default of taking the title from the current page.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1448137506
                     jcr:primaryType="nt:unstructured"
@@ -148,7 +148,7 @@
                 <text_1337502846
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>The heading type can be configured (H1-H6).&lt;/p>&#xa;"
+                    text="&lt;p>The heading type can be configured (H1-H6).&lt;/p>"
                     textIsRich="true"/>
                 <demo_1448137580
                     jcr:primaryType="nt:unstructured"
@@ -191,7 +191,7 @@
                 <text_1337504482
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Titles can be linked&amp;nbsp;to internal relative AEM resources, external absolute URLs or&amp;nbsp;page anchors.&lt;/p>&#xa;"
+                    text="&lt;p>Titles can be linked&amp;nbsp;to internal relative AEM resources, external absolute URLs or&amp;nbsp;page anchors.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1934630368
                     jcr:primaryType="nt:unstructured"

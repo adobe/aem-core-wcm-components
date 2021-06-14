@@ -20,16 +20,16 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Form Options&lt;sub>v2&lt;/sub>&lt;/h1>&#xd;&#xa;"
+                    text="&lt;h1>Form Options&lt;sub>v2&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text_1408574198
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Form Options allows a user to create a form with different option layouts.&amp;nbsp;&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Form Options allows a user to create a form with different option layouts.&amp;nbsp;&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -41,7 +41,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -65,7 +65,7 @@
                 <text_1910564414
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Core Form Container with Form Option Checkboxes.&amp;nbsp;&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Core Form Container with Form Option Checkboxes.&amp;nbsp;&lt;/p>"
                     textIsRich="true"/>
                 <demo_1594702855
                     jcr:primaryType="nt:unstructured"
@@ -151,7 +151,7 @@
                 <text_1068966881
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Core Form Container with Form Option Radio Button displayed.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Core Form Container with Form Option Radio Button displayed.&lt;/p>"
                     textIsRich="true"/>
                 <demo_881795653
                     jcr:primaryType="nt:unstructured"
@@ -221,7 +221,7 @@
                 <text_203677928
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Core Form Container with Form Option Drop-Down as child element.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Core Form Container with Form Option Drop-Down as child element.&lt;/p>"
                     textIsRich="true"/>
                 <demo_665944747
                     jcr:primaryType="nt:unstructured"
@@ -300,7 +300,7 @@
                 <text_1221698802
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Core Form Container with Multi-Select Drop-Down as child element.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Core Form Container with Multi-Select Drop-Down as child element.&lt;/p>"
                     textIsRich="true"/>
                 <container_837771016
                     jcr:primaryType="nt:unstructured"

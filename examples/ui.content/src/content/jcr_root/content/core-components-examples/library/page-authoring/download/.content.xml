@@ -25,11 +25,11 @@
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Download allows linking to an asset for download. Optionally displays a title, description, metadata and a download action.&lt;/p>&#xa;"
+                    text="&lt;p>Download allows linking to an asset for download. Optionally displays a title, description, metadata and a download action.&lt;/p>"
                     textIsRich="true"/>
                 <teaser_copy
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -41,7 +41,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830_cop
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -66,7 +66,7 @@
                 <text_1337506761
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Simple Download with only an &lt;i>Action Text&lt;/i> and &lt;i>Download Asset&lt;/i> configured. The &lt;i>Title&lt;/i> and &lt;i>Description&lt;/i> are by default taken from the provided asset.&lt;/p>&#xa;"
+                    text="&lt;p>Simple Download with only an &lt;i>Action Text&lt;/i> and &lt;i>Download Asset&lt;/i> configured. The &lt;i>Title&lt;/i> and &lt;i>Description&lt;/i> are by default taken from the provided asset.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -111,7 +111,7 @@
                 <text_1337506762
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>By default, the &lt;i>Title&lt;/i> and &lt;i>Description&lt;/i> are taken from the provided asset. In this example, we provide a custom title and description for the download.&lt;/p>&#xa;"
+                    text="&lt;p>By default, the &lt;i>Title&lt;/i> and &lt;i>Description&lt;/i> are taken from the provided asset. In this example, we provide a custom title and description for the download.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1197373359
                     jcr:primaryType="nt:unstructured"
@@ -120,7 +120,7 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <download
-                            jcr:description="&lt;p>Custom description&lt;/p>&#xd;&#xa;"
+                            jcr:description="&lt;p>Custom description&lt;/p>"
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Custom Title"
                             sling:resourceType="core-components-examples/components/download"
@@ -159,7 +159,7 @@
                 <text_1338806794
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>It is possible to upload an asset directly from a local file system rather than selecting an asset from DAM.&lt;/p>&#xa;"
+                    text="&lt;p>It is possible to upload an asset directly from a local file system rather than selecting an asset from DAM.&lt;/p>"
                     textIsRich="true"/>
                 <demo_68071479
                     jcr:primaryType="nt:unstructured"
@@ -168,7 +168,7 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <download
-                            jcr:description="&lt;p>Asset uploaded directly from a local file system&lt;/p>&#xd;&#xa;"
+                            jcr:description="&lt;p>Asset uploaded directly from a local file system&lt;/p>"
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Uploaded Asset"
                             sling:resourceType="core-components-examples/components/download"
@@ -208,7 +208,7 @@
                 <text_1337506794
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>By default the asset is downloaded directly, but it is also possible to display it inline in the browser.&lt;/p>&#xa;"
+                    text="&lt;p>By default the asset is downloaded directly, but it is also possible to display it inline in the browser.&lt;/p>"
                     textIsRich="true"/>
                 <demo_69071411
                     jcr:primaryType="nt:unstructured"

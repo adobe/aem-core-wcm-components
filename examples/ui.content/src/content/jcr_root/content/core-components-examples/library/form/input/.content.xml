@@ -20,16 +20,16 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Form Text&lt;sub>v2&lt;/sub>&lt;/h1>&#xd;&#xa;"
+                    text="&lt;h1>Form Text&lt;sub>v2&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text_1408574198
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Form Text allows a user to create different input fields to collect information the user can use later on.&amp;nbsp;&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Form Text allows a user to create different input fields to collect information the user can use later on.&amp;nbsp;&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -41,7 +41,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -65,7 +65,7 @@
                 <text_1910564414
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>&lt;span>This is a Core Form Container with the Form Texts: Text, Textarea, and Email as child elements.&lt;/span>&lt;br>&#xd;&#xa;&lt;/p>&#xd;&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>This is a Core Form Container with the Form Texts: Text, Textarea, and Email as child elements.&lt;p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -138,7 +138,7 @@
                 <text_1068966881
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Core Form Container with Form Text variations: Phone Number, Date, Number fields as child elements.&amp;nbsp;&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Core Form Container with Form Text variations: Phone Number, Date, Number fields as child elements.&amp;nbsp;&lt;/p>"
                     textIsRich="true"/>
                 <demo_881795653
                     jcr:primaryType="nt:unstructured"
@@ -207,7 +207,7 @@
                 <text_203677928
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Core Form Container with Form Text Password. It hides the input from being visible.&amp;nbsp;&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Core Form Container with Form Text Password. It hides the input from being visible.&amp;nbsp;&lt;/p>"
                     textIsRich="true"/>
                 <demo_665944747
                     jcr:primaryType="nt:unstructured"

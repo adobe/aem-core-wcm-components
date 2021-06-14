@@ -19,17 +19,17 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Breadcrumb&lt;sub>v3&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Breadcrumb&lt;sub>v3&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Breadcrumb allows navigation of the page hierarchy relative to the current page. It is commonly added to a page template, in the header or footer.&lt;/p>&#xa;"
+                    text="&lt;p>Breadcrumb allows navigation of the page hierarchy relative to the current page. It is commonly added to a page template, in the header or footer.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -41,7 +41,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -66,7 +66,7 @@
                 <text_1337506761
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Simple breadcrumb with no configuration applied. Shows the current page in relation to the page hierarchy.&lt;/p>&#xa;"
+                    text="&lt;p>Simple breadcrumb with no configuration applied. Shows the current page in relation to the page hierarchy.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -110,7 +110,7 @@
                 <text_1337506761_copy_1034941677
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>The &lt;i>Navigation Start Level &lt;/i>is set to two by default, which is typically the site root. In this example, we increase it to three to display a breadcrumb for a section one level lower.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>The &lt;i>Navigation Start Level &lt;/i>is set to two by default, which is typically the site root. In this example, we increase it to three to display a breadcrumb for a section one level lower.&lt;/p>"
                     textIsRich="true"/>
                 <demo_copy_copy
                     jcr:primaryType="nt:unstructured"
@@ -154,7 +154,7 @@
                 <text_1337506761_copy_1888023046
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>By default, pages that are marked as &lt;i>Hide in Navigation &lt;/i> are not displayed in the breadcrumb. It is possible to configure a breadcrumb so that they are shown.&lt;/p>&#xa;"
+                    text="&lt;p>By default, pages that are marked as &lt;i>Hide in Navigation &lt;/i> are not displayed in the breadcrumb. It is possible to configure a breadcrumb so that they are shown.&lt;/p>"
                     textIsRich="true"/>
                 <demo_copy
                     jcr:primaryType="nt:unstructured"
@@ -198,7 +198,7 @@
                 <text_1337506761_copy_1888023047
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>By default, the current page is&amp;nbsp;shown in the navigation. It is possible to configure a breadcrumb so that it is hidden.&lt;/p>&#xa;"
+                    text="&lt;p>By default, the current page is&amp;nbsp;shown in the navigation. It is possible to configure a breadcrumb so that it is hidden.&lt;/p>"
                     textIsRich="true"/>
                 <Copy_x0020_of_x0020_demo_copy
                     jcr:primaryType="nt:unstructured"
