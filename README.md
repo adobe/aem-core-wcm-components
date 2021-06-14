@@ -117,6 +117,10 @@ You can also install individual packages/bundles by issuing the following comman
 
     mvn clean install -PautoInstallPackage -pl <project_name(s)> -am
 
+With AEM as a Cloud Service SDK, use the `cloud` profile as follows to deploy the components into `/libs` instead of `/apps`:
+
+    mvn clean install -PautoInstallSinglePackage,cloud
+
 Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install
 * `-am/-also-make` options specifies that dependencies should also be built
