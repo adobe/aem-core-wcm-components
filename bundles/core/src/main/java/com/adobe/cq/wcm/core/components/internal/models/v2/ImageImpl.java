@@ -96,22 +96,22 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     /**
      * Placeholder for the SRC URI template.
      */
-    private String srcUriTemplate;
+    protected String srcUriTemplate;
 
     /**
      * Placeholder for the areas.
      */
-    private List<ImageArea> areas;
+    protected List<ImageArea> areas;
 
     /**
      * Placeholder for the number of pixels, in advance of becoming visible, at which point this image should load.
      */
-    private int lazyThreshold;
+    protected int lazyThreshold;
 
     /**
      * Placeholder for the SRC URI template.
      */
-    private boolean dmImage = false;
+    protected boolean dmImage = false;
 
     /**
      * Placeholder for the referenced assed ID.

@@ -50,21 +50,25 @@ public class ContentFragmentListIT extends AuthorBaseUITest {
     private static String parentPath = "/content/dam/core-components/contentfragments-tests";
     private static String tagName = "core-components/component-type/basic";
 
-    private String testPage;
     private String proxyPath;
-    private String cmpPath;
-    private EditorPage editorPage;
-    private ContentFragment contentFragment;
-    private ContentFragmentList contentFragmentList;
 
+    protected String testPage;
+    protected String cmpPath;
+    protected EditorPage editorPage;
+    protected ContentFragment contentFragment;
+    protected ContentFragmentList contentFragmentList;
+    protected String contentFragmentListRT;
 
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    protected void setupResources() {
+        contentFragmentListRT = Commons.rtContentFragmentList_v1;
+    }
+
+    protected void setup() throws ClientException {
         // create the test page, store page path in 'testPagePath'
         testPage = adminClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtContentFragmentList_v1, Commons.proxyPath, null, null);
+        proxyPath = Commons.createProxyComponent(adminClient, contentFragmentListRT, Commons.proxyPath, null, null);
 
         // add the core form container component
         cmpPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "formtext", null);
@@ -75,6 +79,12 @@ public class ContentFragmentListIT extends AuthorBaseUITest {
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
+    }
+
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setupResources();
+        setup();
     }
 
     @AfterEach

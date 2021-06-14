@@ -17,10 +17,12 @@ package com.adobe.cq.wcm.core.components.it.seljup.components.image;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.codeborne.selenide.WebDriverRunner;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
+
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -104,20 +106,24 @@ public class BaseImage extends BaseComponent {
         $(areaElement).click();
     }
 
-    public void resizeImageElementWidth(int size) {
-        /*SelenideElement comp = $(imageElement);
-        int height = $(imageElement).getSize().getHeight();
-        int width = $(imageElement).getSize().getWidth();
-        actions().moveToElement(comp, height / 2, width / 2); //moves to bottom right corner
-        actions().clickAndHold().build().perform();
-        actions().moveByOffset(size, 0).build().perform();
-        actions().release().build().perform();*/
-
+    public void resizeImageElementWidth(int size) throws InterruptedException {
+        String sizePx = size + "px";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector(imageElement));
-        ((JavascriptExecutor) webDriver).executeScript("arguments[0].setAttribute('col', arguments[1])", element, size);
-        ((JavascriptExecutor) webDriver).executeScript("window.dispatchEvent(new Event(\"resize\"));");
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].style.width= arguments[1]", element, sizePx);
+        webDriver.manage().window().setSize(new Dimension(size, size));
+        webDriver.manage().window().maximize();
     }
 
+    public boolean isAreaCoordinatesCorrectlySet(String [] coordinates) {
+        String [] currentCoords = $(areaElement).getAttribute("coords").split(",");
+        if(currentCoords.length != coordinates.length)
+            return false;
+        for(int i = 0; i < coordinates.length; i++) {
+            if(!currentCoords[i].equals(coordinates[i]))
+                return false;
+        }
+        return true;
+    }
 
 }

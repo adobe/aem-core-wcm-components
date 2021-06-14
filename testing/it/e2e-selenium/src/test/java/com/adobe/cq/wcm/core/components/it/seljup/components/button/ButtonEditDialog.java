@@ -16,12 +16,12 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.button;
 
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.codeborne.selenide.WebDriverRunner;
@@ -37,6 +37,7 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class ButtonEditDialog extends Dialog {
     private static final String CSS_SELECTOR = "coral-dialog";
+    private static String linkTarget = ".cmp-button__editor coral-checkbox[name='./linkTarget']";
 
     public ButtonEditDialog() {
         super(CSS_SELECTOR);
@@ -82,6 +83,11 @@ public class ButtonEditDialog extends Dialog {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(autoCompleteField.getCssSelector())));
         autoCompleteField.sendKeys(value);
+    }
+
+    public void clickLinkTarget() {
+        CoralCheckbox checkbox = new CoralCheckbox(linkTarget);
+        checkbox.click();
     }
 
     public SelenideElement getIcon() {

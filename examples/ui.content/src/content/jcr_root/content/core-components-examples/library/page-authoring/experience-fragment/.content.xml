@@ -2,8 +2,6 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-08-20T11:45:23.252+02:00"
-        cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/page-authoring]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display an experience fragment"
@@ -18,31 +16,19 @@
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <text_1740702241
                     cq:styleIds="[1644862132301]"
-                    jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Experience Fragment&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
-                    jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-15T15:15:11.838+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Experience Fragment allows an experience fragment variation to be presented on a page.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:created="{Date}2019-02-14T16:41:54.952+01:00"
-                    jcr:createdBy="admin"
                     jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
-                    jcr:lastModified="{Date}2019-02-14T16:49:57.290+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -54,11 +40,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:created="{Date}2019-02-14T16:41:59.595+01:00"
-                    jcr:createdBy="admin"
                     jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
-                    jcr:lastModified="{Date}2019-02-14T17:47:53.311+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -70,38 +52,22 @@
                     titleFromPage="false"/>
                 <title_865328580
                     cq:styleIds="[1544759664489]"
-                    jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
                     sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:08:25.684+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1424864129
-                    jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-16T14:19:16.662+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Experience Fragment component with an associated experience fragment variation that is composed of a Text and Image component.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_759741754
-                    jcr:created="{Date}2019-01-15T15:26:22.657+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-15T15:26:22.657+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo"
                     fullWidth="{Boolean}true">
@@ -109,10 +75,6 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <experiencefragment
-                            jcr:created="{Date}2019-01-15T15:21:48.208+01:00"
-                            jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-01-15T15:28:41.607+01:00"
-                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/experiencefragment"
                             fragmentVariationPath="/content/experience-fragments/core-components-examples/library/simple-experience-fragment/master"/>

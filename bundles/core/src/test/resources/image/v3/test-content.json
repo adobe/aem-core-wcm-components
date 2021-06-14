@@ -5,6 +5,11 @@
     "jcr:content"    : {
       "jcr:primaryType" : "cq:PageContent",
       "sling:vanityPath": "/content/test-image.html",
+      "cq:featuredimage"    : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "jcr:createdBy"     : "admin",
+        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+      },
       "root"            : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "wcm/foundation/components/responsivegrid",
@@ -583,6 +588,11 @@
               }
             }
           }
+        },
+        "image50"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
         },
         "container"             : {
           "jcr:primaryType"   : "nt:unstructured",

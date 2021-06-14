@@ -1,0 +1,47 @@
+/*
+ *  Copyright 2021 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+.cq-wcm-pagethumbnail {
+    position: relative;
+    max-width: 100%;
+    padding: 15px;
+    margin: 15px auto;
+    border: 1px dashed rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    text-align: center;
+}
+
+.foundation-layout-thumbnail {
+    display: block;
+    position: relative;
+    max-width: 200px;
+    margin: auto;
+    word-wrap: break-word;
+}
+
+.cq-wcm-pagethumbnail .foundation-layout-thumbnail .foundation-layout-thumbnail-image {
+    margin: 0 auto;
+    padding: 0 0 0 .9375rem;
+}
+
+.cq-wcm-pagethumbnail .foundation-layout-util-vmargin {
+    margin-bottom: 0;
+}
+
+// Set the color of the thumbnail button to the same color as the file upload widget
+.coral--light .cq-wcm-pagethumbnail ._coral-Button--secondary._coral-Button--quiet {
+    color: #4b4b4b;
+}

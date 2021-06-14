@@ -32,8 +32,8 @@ import java.util.concurrent.TimeoutException;
 @Tag("group2")
 public class ImageIT extends AuthorBaseUITest {
 
-    private ImageTests imageTests;
-    private static final String clientlibs = "core.wcm.components.image.v2";
+    protected ImageTests imageTests;
+    protected String clientlibs = "core.wcm.components.image.v2";
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
@@ -89,6 +89,19 @@ public class ImageIT extends AuthorBaseUITest {
     @DisplayName("Test: set image as decorative")
     public void testSetImageAsDecorative() throws TimeoutException, InterruptedException {
         imageTests.testSetImageAsDecorativeV2();
+    }
+
+    /**
+     * Test: Check image map areas are rendered, navigate correctly and are responsively adjusted on window resize
+     *
+     * @throws ClientException
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check image map areas are rendered, navigate correctly and are responsively adjusted on window resize")
+    public void testCheckMapAreaNavigationAndResponsiveResize() throws ClientException, TimeoutException, InterruptedException {
+        imageTests.testCheckMapAreaNavigationAndResponsiveResize(adminClient);
     }
 
 }

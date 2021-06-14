@@ -46,7 +46,7 @@ class ButtonImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1
     protected void testGetLink() {
         Button button = getButtonUnderTest();
         assertEquals("https://www.adobe.com", button.getLink());
-        assertValidLink(button.getButtonLink(), "https://www.adobe.com");
+        assertValidLink(button.getButtonLink(), "https://www.adobe.com", "_blank");
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(testBase, "button1"));
     }
 

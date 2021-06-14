@@ -155,8 +155,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
     private ElementsCollection createItem() throws InterruptedException {
         //1.
-        Commons.openConfigureDialog(cmpPath);
-        AccordionEditDialog editDialog = accordion.getEditDialog();
+        AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
         editDialog.openItemsTab();
 
         //2.
@@ -176,7 +175,7 @@ public class AccordionIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //4.
-        Commons.openConfigureDialog(cmpPath);
+        accordion.openEditDialog(cmpPath);
         editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
         assertTrue(items.size() == 3, "Number to items added should be 3");
@@ -220,13 +219,12 @@ public class AccordionIT extends AuthorBaseUITest {
      * Switches context to the content frame and verifies the passed (ordered) items
      *
      * @param items list of items in component to be verified
-     * @param properties editdialog properties object
      *
      * 1. switch to the content frame
      * 2. verify the expanded items match those passed
      * 3. reset context back to the edit frame
      */
-    private void verifyExpandedItems(ArrayList<String> items, AccordionEditDialog.EditDialogProperties properties) {
+    private void verifyExpandedItems(ArrayList<String> items) {
         //1.
         Commons.switchContext("ContentFrame");
 
@@ -265,10 +263,9 @@ public class AccordionIT extends AuthorBaseUITest {
         String cmpPath = Commons.addComponent(adminClient, component, parentPath + "/", null, null);
 
         //2.
-        AccordionEditDialog editDialog = accordion.getEditDialog();
+        AccordionEditDialog editDialog = accordion.openEditDialog(parentPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        Commons.openConfigureDialog(parentPath);
         editDialog.openItemsTab();
 
         //3.
@@ -296,8 +293,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
     private CoralSelectList selectExpandedItem(int idx) throws InterruptedException {
         //1.
-        AccordionEditDialog editDialog = accordion.getEditDialog();
-        Commons.openConfigureDialog(cmpPath);
+        AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
 
         //2.
         AccordionEditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
@@ -333,8 +329,7 @@ public class AccordionIT extends AuthorBaseUITest {
         ElementsCollection items = createItem();
 
         //2.
-        AccordionEditDialog editDialog = accordion.getEditDialog();
-        Commons.openConfigureDialog(cmpPath);
+        AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
         verifyExpandedItemsSelect(items, editDialog.getEditDialogProperties());
 
         //3.
@@ -362,9 +357,8 @@ public class AccordionIT extends AuthorBaseUITest {
         createItem();
 
         //2.
-        AccordionEditDialog editDialog = accordion.getEditDialog();
+        AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(cmpPath);
         editDialog.openItemsTab();
 
         //3.
@@ -372,7 +366,7 @@ public class AccordionIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //4.
-        Commons.openConfigureDialog(cmpPath);
+        accordion.openEditDialog(cmpPath);
         editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
 
@@ -410,9 +404,8 @@ public class AccordionIT extends AuthorBaseUITest {
         createItem();
 
         //2.
-        AccordionEditDialog editDialog = accordion.getEditDialog();
+        AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.openConfigureDialog(cmpPath);
         editDialog.openItemsTab();
 
         //3.
@@ -422,7 +415,7 @@ public class AccordionIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //5.
-        Commons.openConfigureDialog(cmpPath);
+        accordion.openEditDialog(cmpPath);
         editDialog.openItemsTab();
 
         //6.
@@ -465,17 +458,15 @@ public class AccordionIT extends AuthorBaseUITest {
         selectExpandedItem(1);
 
         //3.
-        AccordionEditDialog editDialog = accordion.getEditDialog();
-        AccordionEditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
         ArrayList<String> items = new ArrayList<>();
         items.add("item1");
-        verifyExpandedItems(items, properties);
+        verifyExpandedItems(items);
 
         //4.
-        Commons.openConfigureDialog(cmpPath);
+        AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
 
         //5.
-        properties =  editDialog.getEditDialogProperties();
+        AccordionEditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
         properties.openProperties();
         properties.openExpandedSelect(" > button");
         CoralSelectList selectedItems = properties.selectList();
@@ -490,7 +481,7 @@ public class AccordionIT extends AuthorBaseUITest {
         items.clear();
         items.add("item1");
         items.add("item2");
-        verifyExpandedItems(items, properties);
+        verifyExpandedItems(items);
     }
 
     /**
@@ -515,8 +506,7 @@ public class AccordionIT extends AuthorBaseUITest {
         createItem();
 
         //2.
-        AccordionEditDialog editDialog = accordion.getEditDialog();
-        Commons.openConfigureDialog(cmpPath);
+        AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
         AccordionEditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
 
         //3.
@@ -546,7 +536,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //8.
         ArrayList<String> items = new ArrayList<>();
         items.add("item0");
-        verifyExpandedItems(items, properties);
+        verifyExpandedItems(items);
     }
 
     /**

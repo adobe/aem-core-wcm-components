@@ -57,6 +57,14 @@
                                                 fieldDescription="Link to a content page, external URL or page anchor."
                                                 fieldLabel="Link"
                                                 name="./link"/>
+                                            <target
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="If checked the link will be opened in a new browser tab."
+                                                name="./linkTarget"
+                                                text="Open link in new tab"
+                                                uncheckedValue="_self"
+                                                value="_blank"/>
                                             <icon
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"

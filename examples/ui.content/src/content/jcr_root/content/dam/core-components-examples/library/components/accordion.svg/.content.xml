@@ -5,8 +5,6 @@
     jcr:uuid="58717266-185a-41d5-8ca3-d6b87bbfa2bf">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-05-29T13:19:08.709+02:00"
-        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:extracted="{Date}2019-05-29T13:18:43.829+02:00"
@@ -15,8 +13,6 @@
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-05-29T13:19:08.710+02:00"
             dc:title="Accordion"
-            jcr:lastModified="{Date}2019-05-29T13:19:08.709+02:00"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured">
             <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>

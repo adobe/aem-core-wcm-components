@@ -43,14 +43,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag("group2")
 public class ButtonIT extends AuthorBaseUITest {
 
-    private String testPage;
-    private String proxyComponentPath;
-    private EditorPage editorPage;
-    private Button button;
-    private String cmpPath;
-    private String componentName = "button";
+    private static String componentName = "button";
 
-    private ButtonEditDialog getButtonEditDialog() throws TimeoutException {
+    private String proxyComponentPath;
+
+    protected String testPage;
+    protected EditorPage editorPage;
+    protected Button button;
+    protected String cmpPath;
+    protected String buttonRT;
+
+    private void setupResources() {
+        buttonRT = Commons.rtButton_v1;
+    }
+
+    protected void setup() throws ClientException {
+        testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
+        proxyComponentPath = Commons.creatProxyComponent(adminClient, buttonRT, "Proxy Button", componentName);
+        addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
+        cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
+        editorPage = new PageEditorPage(testPage);
+        button = new Button();
+        editorPage.open();
+    }
+
+    protected ButtonEditDialog getButtonEditDialog() throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
@@ -59,13 +76,8 @@ public class ButtonIT extends AuthorBaseUITest {
 
     @BeforeEach
     public void setupBefore() throws Exception {
-        testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyComponentPath = Commons.creatProxyComponent(adminClient, Commons.rtButton_v1, "Proxy Button", componentName);
-        addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
-        cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
-        editorPage = new PageEditorPage(testPage);
-        button = new Button();
-        editorPage.open();
+        setupResources();
+        setup();
     }
 
     @AfterEach

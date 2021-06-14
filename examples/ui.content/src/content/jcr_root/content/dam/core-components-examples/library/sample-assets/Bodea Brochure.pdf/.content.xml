@@ -4,11 +4,7 @@
     jcr:primaryType="dam:Asset"
     jcr:uuid="6a2ca862-03a6-4456-b51f-bef0e09c6557">
     <jcr:content
-        cq:lastModified="{Date}2020-04-29T16:37:40.064-07:00"
-        cq:lastModifiedBy="admin"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2020-03-11T19:39:01.016-07:00"
-        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Author="James Lee"

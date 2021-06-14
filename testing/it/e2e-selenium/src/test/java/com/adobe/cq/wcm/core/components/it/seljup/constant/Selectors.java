@@ -25,7 +25,8 @@ public class Selectors {
 
     public static String SELECTOR_CONFIG_BUTTON = "button[data-action='CONFIGURE']";
     public static String SELECTOR_SUBMIT_BUTTON = "button[type='submit']";
-    public static String SELECTOR_SAVE_CONFIG_BUTTON = "button[is='coral-button'][title='Done']";
+    public static String SELECTOR_DONE_CONFIG_BUTTON = "button[is='coral-button'][title='Done']";
+    public static String SELECTOR_SAVE_BUTTON = "button[is='coral-button'][title='Save']";
     public static String SELECTOR_CONFIG_DIALOG = ".cq-dialog.foundation-form.foundation-layout-form";
 
     public static final String SELECTOR_ITEM_ELEMENT_CONTENT = "coral-selectlist-item-content";

@@ -19,7 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v2;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 
+@Tag("group1")
 public class FormContainerIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v1.FormContainerIT {
 
     public void setComponentResources() {

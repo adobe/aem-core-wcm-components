@@ -16,10 +16,14 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.components.tabs.v1;
 
+import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.wcm.core.components.it.seljup.components.tabs.TabsEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.ElementsCollection;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class Tabs extends BaseComponent {
@@ -34,10 +38,16 @@ public class Tabs extends BaseComponent {
     }
 
     /**
-     * Returns accordion edit dialog object
-     * @return Accordion EditDialog
+     * Open tabs edit dialog
+     *
+     * @param dataPath datapath of the component to open the configuration dialog
+     *
+     * @return Tabs EditDialog
      */
-    public TabsEditDialog getEditDialog() {
+    public TabsEditDialog openEditDialog(String dataPath) {
+        Commons.openEditableToolbar(dataPath);
+        $(Selectors.SELECTOR_CONFIG_BUTTON).click();
+        Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_CONFIG_DIALOG));
         return new TabsEditDialog();
     }
 
