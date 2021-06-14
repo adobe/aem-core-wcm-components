@@ -326,43 +326,8 @@
         if (location.hash && location.hash !== "#") {
             var anchorLocation = decodeURIComponent(location.hash);
             var anchorElement = document.querySelector(anchorLocation);
-            if (anchorElement && anchorElement.classList.contains("cmp-tabs__tab")) {
-                anchorElement.classList.add(selectors.active.tab);
-                anchorElement.setAttribute("aria-selected", true);
-                anchorElement.setAttribute("tabindex", "0");
-                var childrenTabsOfTheSameParent = anchorElement.parentElement.children;
-                if (childrenTabsOfTheSameParent) {
-                    if (Array.isArray(Array.prototype.slice.call(childrenTabsOfTheSameParent))) {
-                        for (var i = 0; i < childrenTabsOfTheSameParent.length; i++) {
-                            if (childrenTabsOfTheSameParent[i].id !== anchorLocation.substring(1)) {
-                                if (childrenTabsOfTheSameParent[i].classList.contains(selectors.active.tab)) {
-                                    childrenTabsOfTheSameParent[i].classList.remove(selectors.active.tab);
-                                    childrenTabsOfTheSameParent[i].setAttribute("aria-selected", false);
-                                    childrenTabsOfTheSameParent[i].setAttribute("tabindex", "-1");
-                                }
-                            }
-                        }
-                    }
-                }
-
-                var correspondingPanel = document.querySelector(anchorLocation + "panel");
-                if (correspondingPanel) {
-                    correspondingPanel.classList.add(selectors.active.tabpanel);
-                    correspondingPanel.removeAttribute("aria-hidden");
-                    var childrenPanelsOfTheSameParent = correspondingPanel.parentElement.children;
-                    if (childrenPanelsOfTheSameParent) {
-                        if (Array.isArray(Array.prototype.slice.call(childrenPanelsOfTheSameParent))) {
-                            for (var j = 0; j < childrenPanelsOfTheSameParent.length; j++) {
-                                if (childrenPanelsOfTheSameParent[j].id !== (anchorLocation + "panel").substring(1)) {
-                                    if (childrenPanelsOfTheSameParent[j].classList.contains(selectors.active.tabpanel)) {
-                                        childrenPanelsOfTheSameParent[j].classList.remove(selectors.active.tabpanel);
-                                        childrenPanelsOfTheSameParent[j].setAttribute("aria-hidden", true);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            if (anchorElement && anchorElement.classList.contains("cmp-tabs__tab") && !anchorElement.classList.contains("cmp-tabs__tab--active")) {
+                anchorElement.click();
             }
         }
     }
