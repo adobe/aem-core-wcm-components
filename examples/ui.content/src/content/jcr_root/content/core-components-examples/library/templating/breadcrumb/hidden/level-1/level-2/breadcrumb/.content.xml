@@ -65,7 +65,7 @@
                 <text_1337506761
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Simple breadcrumb with no configuration applied. Shows the current page in relation to the page hierarchy.&lt;/p>"
+                    text="&lt;p>Simple breadcrumb with no configuration applied. Shows the current page in relation to the page hierarchy. As the &lt;i>Navigation Start Level&lt;/i> defaults to 2, the first page listed is the &lt;i>Component Library&lt;/i> root page (0 = &lt;i>/&lt;/i>, and 1 = &lt;i>/content/&lt;/i>). For pages with a redirection target, the title and the link of the redirection target will be used. Because of that, the second item in the list is also shown as &lt;i>Component Library&lt;/i>, instead of &lt;i>Templating&lt;/i>, as that child page redirects to its parent. The next child page with the title &lt;i>Hidden&lt;/i> is not listed, because it is marked to be hidden from the navigation.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -75,10 +75,7 @@
                         sling:resourceType="core-components-examples/components/demo/component">
                         <breadcrumb
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/breadcrumb"
-                            hideCurrent="false"
-                            showHidden="false"
-                            startLevel="2"/>
+                            sling:resourceType="core-components-examples/components/breadcrumb"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -109,7 +106,7 @@
                 <text_1337506761_copy_1034941677
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>The &lt;i>Navigation Start Level &lt;/i>is set to two by default, which is typically the site root. In this example, we increase it to three to display a breadcrumb for a section one level lower.&lt;/p>"
+                    text="&lt;p>In this example, we increase the &lt;i>Navigation Start Level&lt;/i> to 3 to display a breadcrumb for a section one level lower in order to avoid the repeating &lt;i>Component Library&lt;/i> page.&lt;/p>"
                     textIsRich="true"/>
                 <demo_copy_copy
                     jcr:primaryType="nt:unstructured"
@@ -120,8 +117,6 @@
                         <breadcrumb
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/breadcrumb"
-                            hideCurrent="false"
-                            showHidden="false"
                             startLevel="3"/>
                     </component>
                     <info
@@ -144,6 +139,49 @@
                             reference="../../component"/>
                     </info>
                 </demo_copy_copy>
+                <title_290384410
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Hide Current Page"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337506772
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>By default, the current page is shown in the navigation. It is possible to configure a breadcrumb so that it is hidden.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_42
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <breadcrumb
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/breadcrumb"
+                            startLevel="3"
+                            hideCurrent="true"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_42>
                 <title_290384408_copy
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
@@ -153,7 +191,7 @@
                 <text_1337506761_copy_1888023046
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>By default, pages that are marked as &lt;i>Hide in Navigation &lt;/i> are not displayed in the breadcrumb. It is possible to configure a breadcrumb so that they are shown.&lt;/p>"
+                    text="&lt;p>By default, pages that are marked as &lt;i>Hide in Navigation&lt;/i> are not displayed in the breadcrumb. It is possible to configure a breadcrumb so that they are shown.&lt;/p>"
                     textIsRich="true"/>
                 <demo_copy
                     jcr:primaryType="nt:unstructured"
@@ -164,9 +202,9 @@
                         <breadcrumb
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/breadcrumb"
-                            hideCurrent="false"
-                            showHidden="true"
-                            startLevel="2"/>
+                            startLevel="3"
+                            hideCurrent="true"
+                            showHidden="true"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -188,18 +226,18 @@
                             reference="../../component"/>
                     </info>
                 </demo_copy>
-                <Copy_x0020_of_x0020_title_290384408_copy
+                <title_290384411
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Hide Current Page"
+                    jcr:title="Disable Shadowing"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
-                <text_1337506761_copy_1888023047
+                <text_1337506872
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>By default, the current page is&amp;nbsp;shown in the navigation. It is possible to configure a breadcrumb so that it is hidden.&lt;/p>"
+                    text="&lt;p>In the first example, notice how the second entry for the &lt;i>Templating&lt;/i> page was listed as &lt;i>Component Library&lt;/i> like the first entry, because that child page redirects to its parent page. If this shadowing behavior is undesired, it can be turned off like shown here.&lt;/p>"
                     textIsRich="true"/>
-                <Copy_x0020_of_x0020_demo_copy
+                <demo_43
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
@@ -209,8 +247,7 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/breadcrumb"
                             hideCurrent="true"
-                            showHidden="false"
-                            startLevel="2"/>
+                            disableShadowing="true"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -231,7 +268,7 @@
                             sling:resourceType="core-components-examples/components/demo/json"
                             reference="../../component"/>
                     </info>
-                </Copy_x0020_of_x0020_demo_copy>
+                </demo_43>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">

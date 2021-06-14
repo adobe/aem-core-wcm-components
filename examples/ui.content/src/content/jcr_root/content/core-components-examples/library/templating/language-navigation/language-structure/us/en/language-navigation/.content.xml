@@ -24,7 +24,7 @@
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>The Language Navigation component provides a language and country navigation for a site, so that visitors can navigate to the same page in a different locale.&lt;/p>"
+                    text="&lt;p>The Language Navigation component provides a language and country navigation for a site, so that visitors can navigate to the same page in a different locale. It is commonly added to a page template, in the header or footer.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"

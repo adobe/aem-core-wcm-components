@@ -24,7 +24,7 @@
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Navigation allows an author to build a site navigation. Navigation structures can be built from live copies of a blueprint, language copies of a language master or from a simple page tree.&lt;/p>"
+                    text="&lt;p>Navigation allows an author to build a site navigation. It is commonly added to a page template, in the header or footer.&lt;/p>&lt;p>When added to a page template, if the configured &lt;i>Navigation Root&lt;/i> is in a live copy blueprint or language copy master, then the navigation displayed on the pages resulting from this template will display the navigation structure that the accessed page is located in.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
