@@ -86,7 +86,7 @@
 
             // Show the tab based on deep-link-id if it matches with any existing tab item id
             var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tab");
-            if (deepLinkItemIdx) {
+            if (deepLinkItemIdx !== -1) {
                 var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
                 if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
                     navigateAndFocusTab(deepLinkItemIdx);
@@ -318,6 +318,21 @@
     }
 
     /**
+     * Scrolls the browser when the URI fragment is changed to the item of the container Tab component that corresponds to the deep link in the URI fragment,
+       and displays its content.
+     * This method fixes the issue existent with Chrome and related browsers, which are just scrolling to the item without displaying its content.
+     */
+    function onHashChange() {
+        if (location.hash && location.hash !== "#") {
+            var anchorLocation = decodeURIComponent(location.hash);
+            var anchorElement = document.querySelector(anchorLocation);
+            if (anchorElement && anchorElement.classList.contains("cmp-tabs__tab") && !anchorElement.classList.contains("cmp-tabs__tab--active")) {
+                anchorElement.click();
+            }
+        }
+    }
+
+    /**
      * Reads options data from the Tabs wrapper element, defined via {@code data-cmp-*} data attributes
      *
      * @private
@@ -410,6 +425,7 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    window.addEventListener("hashchange", window.CQ.CoreComponents.container.utils.locationHashChanged, false);
+    window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    window.addEventListener("hashchange", onHashChange, false);
 
 }());
