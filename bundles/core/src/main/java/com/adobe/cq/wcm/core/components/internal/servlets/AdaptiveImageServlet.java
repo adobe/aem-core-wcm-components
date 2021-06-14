@@ -428,6 +428,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     if (flipVertically) {
                         layer.flipVertically();
                     }
+                    if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
+                            ("jpg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
+                                    || "jpeg".equalsIgnoreCase(mimeTypeService.getExtension(imageType)))) {
+                        LOGGER.debug("Adding default (white) background to a transparent JPG: {}", imageFile.getPath());
+                        layer.setBackground(Color.white);
+                    }
                     resizeAndStreamLayer(response, layer, imageType, resizeWidth, quality);
                 } else {
                     LOGGER.debug("No need to perform any processing on file {}; rendering.", imageFile.getPath());
