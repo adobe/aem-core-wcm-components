@@ -2,6 +2,8 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
           jcr:primaryType="cq:Page">
     <jcr:content
+        cq:lastModified="{Date}2019-06-06T10:01:12.686+03:00"
+        cq:lastModifiedBy="admin"
         cq:redirectTarget="/content/core-components-examples/library/templating/language-navigation/language-structure/us/es/language-navigation"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:primaryType="cq:PageContent"

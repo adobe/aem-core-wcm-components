@@ -46,7 +46,6 @@ public class ListImplTest {
     private static final String TEST_BASE = "/list";
     private static final String CONTENT_ROOT = "/content";
     private static final String CURRENT_PAGE = "/content/list";
-    protected static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     private static final String TEST_PAGE_CONTENT_ROOT = CURRENT_PAGE + "/jcr:content/root";
     protected static final String LIST_1 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
@@ -65,7 +64,6 @@ public class ListImplTest {
     protected static final String LIST_14 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitle";
     protected static final String LIST_15 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitleForOneItem";
     protected static final String LIST_16 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithAccent";
-    protected static final String LIST_20 = TEST_PAGE_CONTENT_ROOT + "/listRenderedAsTeaserItems";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 

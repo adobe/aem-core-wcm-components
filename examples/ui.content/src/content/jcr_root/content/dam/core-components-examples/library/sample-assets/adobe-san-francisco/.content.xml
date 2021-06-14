@@ -7,6 +7,8 @@
     <jcr:content
         cq:name="adobe-san-francisco"
         cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        jcr:lastModified="{Date}2019-04-25T13:07:04.588+01:00"
+        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="Adobe San Francisco"
         contentFragment="{Boolean}true"

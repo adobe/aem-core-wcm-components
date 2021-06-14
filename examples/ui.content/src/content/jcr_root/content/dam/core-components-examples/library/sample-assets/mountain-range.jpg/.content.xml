@@ -8,6 +8,8 @@
         cq:name="mountain-range.jpg"
         cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
         dam:assetState="processed"
+        jcr:lastModified="{Date}2019-02-20T15:31:21.151+01:00"
+        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="Aerial photo of mountain range at dawn">
         <metadata
@@ -28,6 +30,8 @@
             dc:format="image/jpeg"
             dc:modified="{Date}2019-02-19T22:04:01.765+01:00"
             dc:title="Aerial photo of mountain range"
+            jcr:lastModified="{Date}2019-02-20T15:31:20.890+01:00"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
             jcr:title="Aerial photo of mountain range at dawn"

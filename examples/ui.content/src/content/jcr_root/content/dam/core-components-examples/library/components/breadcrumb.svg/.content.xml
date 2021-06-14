@@ -5,6 +5,8 @@
     jcr:uuid="99104768-166b-4a65-bc43-0e0291b968c8">
     <jcr:content
         dam:assetState="processed"
+        jcr:lastModified="{Date}2019-05-24T13:26:26.415+02:00"
+        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:extracted="{Date}2019-05-24T13:21:57.120+02:00"
@@ -13,6 +15,8 @@
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-05-24T13:26:26.415+02:00"
             dc:title="Breadcrumb"
+            jcr:lastModified="{Date}2019-05-24T13:26:26.415+02:00"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured">
             <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>

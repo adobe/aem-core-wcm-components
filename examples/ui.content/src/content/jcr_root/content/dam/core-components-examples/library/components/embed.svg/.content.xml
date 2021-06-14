@@ -8,6 +8,8 @@
         cq:name="embed.svg"
         cq:parentPath="/content/dam/core-components-examples/library/components"
         dam:assetState="processed"
+        jcr:lastModified="{Date}2019-07-30T15:51:22.276+02:00"
+        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:extracted="{Date}2019-07-30T15:51:09.847+02:00"
@@ -16,6 +18,8 @@
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-07-30T15:51:22.276+02:00"
             dc:title="Embed"
+            jcr:lastModified="{Date}2019-07-30T15:51:22.276+02:00"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured">
             <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>

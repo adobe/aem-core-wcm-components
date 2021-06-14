@@ -94,8 +94,7 @@ public final class CoreComponentTestContext {
                     });
                     context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
                     context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
-                    context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
-                            "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
+                    context.registerInjectActivateService(new DefaultPathProcessor());
                 }
             )
             .build();

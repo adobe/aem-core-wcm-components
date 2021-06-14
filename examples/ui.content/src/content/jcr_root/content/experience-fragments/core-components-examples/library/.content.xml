@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:lastModified="{Date}2019-01-15T15:46:26.858+01:00"
+    jcr:lastModifiedBy="admin"
     jcr:primaryType="sling:OrderedFolder">
     <simple-experience-fragment/>
 </jcr:root>

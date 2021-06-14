@@ -2,6 +2,8 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
+        cq:lastModified="{Date}2019-05-24T12:37:58.229+02:00"
+        cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/templating]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display a site navigation menu"
@@ -16,19 +18,31 @@
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <text_1740702241
                     cq:styleIds="[1644862132301]"
+                    jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Navigation&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
+                    jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-01-16T13:38:02.450+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Navigation allows an author to build a site navigation. Navigation structures can be built from live copies of a blueprint, language copies of a language master or from a simple page tree.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
+                    jcr:created="{Date}2019-02-14T16:41:54.952+01:00"
+                    jcr:createdBy="admin"
                     jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:lastModified="{Date}2019-02-14T16:49:57.290+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -40,7 +54,11 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
+                    jcr:created="{Date}2019-02-14T16:41:59.595+01:00"
+                    jcr:createdBy="admin"
                     jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:lastModified="{Date}2019-02-14T17:47:53.311+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -52,28 +70,48 @@
                     titleFromPage="false"/>
                 <title_865328580
                     cq:styleIds="[1544759664489]"
+                    jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
                     sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
+                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-22T11:01:40.926+03:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506761
+                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-22T11:26:32.604+03:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Simple navigation with no configuration applied. Shows a navigation structure built from a page tree. The navigation root is excluded by default.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
+                    jcr:created="{Date}2018-12-07T12:55:03.496+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2018-12-07T12:55:03.496+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <navigation
+                            jcr:created="{Date}2019-03-06T14:11:01.819+01:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-05-21T18:59:35.605+03:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/navigation"
                             collectAllPages="true"
@@ -105,22 +143,38 @@
                 </demo>
                 <title_290386545
                     cq:styleIds="[1544759676459]"
+                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-22T11:05:50.276+03:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Show Navigation Root"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337509867
+                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-22T11:27:13.954+03:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>By default, the navigation root is excluded in the navigation structure. In this example we display it.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_56474747
+                    jcr:created="{Date}2018-12-07T12:55:03.496+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2018-12-07T12:55:03.496+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <navigation
+                            jcr:created="{Date}2019-03-06T14:11:01.819+01:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-05-21T19:07:03.606+03:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/navigation"
                             collectAllPages="true"
@@ -151,22 +205,38 @@
                     </info>
                 </demo_56474747>
                 <title_2061144506
+                    jcr:created="{Date}2019-11-11T15:35:19.374+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-11-11T15:35:49.428+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Skip Multiple Levels"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_130342336
+                    jcr:created="{Date}2019-11-11T15:36:38.362+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-11-11T15:37:43.907+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Multiple root levels can be skipped. In this example we are skipping two, showing the main categories.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_1435920429
+                    jcr:created="{Date}2019-11-11T15:34:17.715+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-11-11T15:34:17.715+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <navigation
+                            jcr:created="{Date}2019-11-11T15:34:30.422+01:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-11-11T15:35:02.543+01:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/navigation"
                             collectAllPages="true"
@@ -194,22 +264,38 @@
                     </info>
                 </demo_1435920429>
                 <title
+                    jcr:created="{Date}2019-05-21T19:07:47.223+03:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-22T11:09:04.067+03:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Navigation Structure Depth"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_894947512
+                    jcr:created="{Date}2019-05-21T19:08:31.237+03:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-24T09:40:08.859+03:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>By default, the navigation is built from all child pages. In this example, we again display the navigation root and reduce the structure depth to one. As a result, only one level from the navigation root is shown.&amp;nbsp;&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_650088868
+                    jcr:created="{Date}2019-05-21T19:08:47.049+03:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-21T19:08:47.049+03:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <navigation
+                            jcr:created="{Date}2019-03-06T14:11:01.819+01:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-05-21T19:28:11.709+03:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/navigation"
                             collectAllPages="false"

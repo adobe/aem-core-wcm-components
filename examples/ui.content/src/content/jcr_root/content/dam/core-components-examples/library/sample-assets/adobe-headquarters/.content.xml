@@ -7,6 +7,8 @@
     <jcr:content
         cq:name="adobe-headquarters"
         cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        jcr:lastModified="{Date}2019-04-25T13:05:37.001+01:00"
+        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="Adobe Headquarters"
         contentFragment="{Boolean}true"

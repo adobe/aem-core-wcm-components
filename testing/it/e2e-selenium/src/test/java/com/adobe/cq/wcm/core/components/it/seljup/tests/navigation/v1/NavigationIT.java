@@ -32,22 +32,20 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group3")
+@Tag("group2")
 public class NavigationIT extends AuthorBaseUITest {
 
+    private String page1path;
     private String proxyPath;
+    private String compPath;
+    private EditorPage editorPage;
+    private Navigation navigation;
 
-    protected String page1path;
-    protected String compPath;
-    protected EditorPage editorPage;
-    protected Navigation navigation;
-    protected String navigationRT;
-
-    private void setupResources() {
-        navigationRT = Commons.rtNavigation_v1;
-    }
-
-    protected void setup() throws ClientException {
+    /**
+     * Before Test Case
+     */
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
         // level 1
         page1path = authorClient.createPage("page_1", "page_1", rootPage, defaultPageTemplate).getSlingPath();
         HashMap<String, String> data = new HashMap<String, String>();
@@ -85,7 +83,7 @@ public class NavigationIT extends AuthorBaseUITest {
         Commons.editNodeProperties(adminClient, page113path, data);
 
         // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, navigationRT, Commons.proxyPath, null, null);
+        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtNavigation_v1, Commons.proxyPath, null, null);
 
         // add the component to test page
         compPath = Commons.addComponent(adminClient, proxyPath, page11path + Commons.relParentCompPath, "navigation", null);
@@ -95,15 +93,6 @@ public class NavigationIT extends AuthorBaseUITest {
         editorPage.open();
 
         navigation = new Navigation();
-    }
-
-    /**
-     * Before Test Case
-     */
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
-        setupResources();
-        setup();
     }
 
     /**
@@ -135,7 +124,7 @@ public class NavigationIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertTrue(navigation.navigationItemsCount() == 3, "Total navigation items should be 3");
         assertTrue(navigation.isActiveItemContainValue("0", "Page 1.1"), "active Level 0 item should be Page 1.1");
-        assertTrue(navigation.isLinkItemPresentContainsValue("/page_1_1.html"), "Link item should be present for page_1_1.html");
+        assertTrue(navigation.isLinkItemPresentContainsValue("/page_1_1_vanity"), "Link item should be present for page_1_1_vanity");
         assertTrue(navigation.isItemPresentContainValue("1", "Page 1.1.1"), "Page 1.1.1 item should be present at Level 1");
         assertTrue(!navigation.isItemPresentContainValue("1", "Page 1.1.2"), "Page 1.1.2 item should not be present at Level 1");
         assertTrue(navigation.isItemPresentContainValue("1", "Page 1.1.3"), "Page 1.1.3 item should be present at Level 1");
@@ -163,7 +152,7 @@ public class NavigationIT extends AuthorBaseUITest {
         assertTrue(navigation.navigationItemsCount() == 4, "Total navigation items should be 4");
         assertTrue(navigation.isActiveItemContainValue("0","Page 1"), "active Level 0 item should be Page 1");
         assertTrue(navigation.isActiveItemContainValue("1","Page 1.1"), "active Level 1 item should be Page 1.1");
-        assertTrue(navigation.isLinkItemPresentContainsValue("/page_1_1.html"), "Link item should be present for page_1_1.html");
+        assertTrue(navigation.isLinkItemPresentContainsValue("/page_1_1_vanity"), "Link item should be present for page_1_1_vanity");
 
         assertTrue(navigation.isItemPresentContainValue("2", "Page 1.1.1"), "Page 1.1.1 item should be present at Level 2");
         assertTrue(!navigation.isItemPresentContainValue("2", "Page 1.1.2"), "Page 1.1.2 item should not be present at Level 2");

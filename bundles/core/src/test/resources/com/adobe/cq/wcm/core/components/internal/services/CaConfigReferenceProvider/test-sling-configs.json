@@ -1,13 +1,4 @@
 {
-    "com.adobe.cq.wcm.core.components.internal.DataLayerConfig": {
-        "jcr:primaryType"                                            : "cq:Page",
-        "jcr:content"                                                : {
-            "jcr:primaryType" : "cq:PageContent",
-            "cq:lastModified": "2021-06-07T15:56:53.696+02:00",
-            "enabled"         : true
-        }
-    },
-
     "com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig": {
         "jcr:primaryType": "nt:unstructured",
         "jcr:lastModified": "2020-10-14T15:56:53.696+02:00",

@@ -48,7 +48,7 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("group3")
+@Tag("group2")
 public class TabsIT extends AuthorBaseUITest {
 
     private static String pageVar = "tabs_page";
@@ -77,6 +77,7 @@ public class TabsIT extends AuthorBaseUITest {
      *
      * @throws ClientException
      */
+
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         // 1.
@@ -151,7 +152,8 @@ public class TabsIT extends AuthorBaseUITest {
      */
     private ElementsCollection createItems() throws InterruptedException {
         //1.
-        TabsEditDialog editDialog = tabs.openEditDialog(cmpPath);
+        Commons.openConfigureDialog(cmpPath);
+        TabsEditDialog editDialog = tabs.getEditDialog();
         editDialog.openItemsTab();
 
         //2.
@@ -171,7 +173,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //4.
-        tabs.openEditDialog(cmpPath);
+        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
         assertTrue(items.size() == 3, "Number to items added should be 3");
@@ -204,9 +206,10 @@ public class TabsIT extends AuthorBaseUITest {
         String cmpPath = Commons.addComponent(adminClient, component, parentPath + "/", null, null);
 
         //2.
-        TabsEditDialog editDialog = tabs.openEditDialog(parentPath);
+        TabsEditDialog editDialog = tabs.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.openConfigureDialog(parentPath);
         editDialog.openItemsTab();
 
         //3.
@@ -246,8 +249,9 @@ public class TabsIT extends AuthorBaseUITest {
         createItems();
 
         //2.
-        TabsEditDialog editDialog = tabs.openEditDialog(cmpPath);
+        TabsEditDialog editDialog = tabs.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
+        Commons.openConfigureDialog(cmpPath);
         editDialog.openItemsTab();
 
         //3.
@@ -255,7 +259,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //4.
-        tabs.openEditDialog(cmpPath);
+        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         editDialog.openItemsTab();
         ElementsCollection items = childrenEditor.getInputItems();
 
@@ -288,8 +292,9 @@ public class TabsIT extends AuthorBaseUITest {
         createItems();
 
         //2.
-        TabsEditDialog editDialog = tabs.openEditDialog(cmpPath);
+        TabsEditDialog editDialog = tabs.getEditDialog();
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
+        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         editDialog.openItemsTab();
 
         //3.
@@ -299,7 +304,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //5.
-        tabs.openEditDialog(cmpPath);
+        Commons.openConfigureDialog(testPage + Commons.relParentCompPath + componentName);
         editDialog.openItemsTab();
 
         //6.
@@ -323,7 +328,8 @@ public class TabsIT extends AuthorBaseUITest {
     public void testSetActiveItem() throws InterruptedException {
         createItems();
 
-        TabsEditDialog editDialog = tabs.openEditDialog(cmpPath);
+        TabsEditDialog editDialog = tabs.getEditDialog();
+        Commons.openConfigureDialog(cmpPath);
 
         // switch to properties tab
         TabsEditDialog.EditDialogProperties editDialogProperties = editDialog.openPropertiesTab();
@@ -342,7 +348,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
 
         // open the edit dialog
-        tabs.openEditDialog(cmpPath);
+        Commons.openConfigureDialog(cmpPath);
         // switch to properties tab
         editDialogProperties = editDialog.openPropertiesTab();
         // select second item as active

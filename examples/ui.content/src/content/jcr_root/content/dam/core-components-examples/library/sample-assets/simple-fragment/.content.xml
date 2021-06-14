@@ -8,6 +8,8 @@
         cq:name="simple-fragment"
         cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
         dam:assetState="processed"
+        jcr:lastModified="{Date}2019-01-22T17:58:25.686+01:00"
+        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="Simple Fragment"
         contentFragment="{Boolean}true"

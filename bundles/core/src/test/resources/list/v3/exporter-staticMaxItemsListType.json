@@ -13,7 +13,7 @@
             "lastModified": 1474672365000,
             "dataLayer": {
                 "list-b44597ab83-item-c1a450dfb3": {
-                    "@type": "cq:Component/item",
+                    "@type": "cq:PageContent",
                     "dc:title": "Page 1",
                     "xdm:linkURL": "/content/list/pages/page_1.html"
                 }
@@ -26,7 +26,6 @@
             "@type": "core/wcm/components/list/v3/list"
         }
     },
-    "displayItemAsTeaser": false,
     "showDescription": true,
     "showModificationDate": true,
     "linkItems": true,

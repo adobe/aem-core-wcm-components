@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.FormContainerEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.v1.FormComponents;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
@@ -61,7 +60,6 @@ public class FormContainerIT extends AuthorBaseUITest {
     protected String formContainerRT;
     protected String formTextRT;
     protected String formButtonRT;
-    protected FormComponents formComponents;
 
 
     public void setComponentResources() {
@@ -107,7 +105,6 @@ public class FormContainerIT extends AuthorBaseUITest {
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
-        formComponents = new FormComponents();
     }
 
     @BeforeEach
@@ -137,7 +134,8 @@ public class FormContainerIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Check if the action 'Store Content' works.")
     public void testStoreContent() throws ClientException, InterruptedException {
-        FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
+        Commons.openConfigureDialog(containerPath);
+        FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.selectActionType("foundation/components/form/actions/store");
         String actionInputValue = dialog.getActionInputValue();
         String contentJsonUrl_allForm = actionInputValue.substring(0, actionInputValue.length() - 1);
@@ -166,7 +164,8 @@ public class FormContainerIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: set your own content path")
     public void testSetContextPath() throws InterruptedException, ClientException {
-        FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
+        Commons.openConfigureDialog(containerPath);
+        FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.selectActionType("foundation/components/form/actions/store");
         String actionInputValue = userContent + "/xxx";
         dialog.setActionInputValue(actionInputValue);
@@ -185,7 +184,8 @@ public class FormContainerIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: set the thank You page path")
     public void testSetThankYouPage() throws InterruptedException {
-        FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
+        Commons.openConfigureDialog(containerPath);
+        FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.selectActionType("foundation/components/form/actions/store");
         Commons.selectInAutocomplete("[name='./redirect']", rootPage);
         Commons.saveConfigureDialog();
@@ -203,7 +203,8 @@ public class FormContainerIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: check if 'Mail' action works.")
     public void testSetMailAction() throws InterruptedException, ClientException {
-        FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
+        Commons.openConfigureDialog(containerPath);
+        FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.setMailActionFields(from,subject,new String[] {mailto1,mailto2}, new String[] {cc1, cc2});
         Commons.saveConfigureDialog();
         JsonNode formContentJson = adminClient.doGetJson(containerPath , 1, HttpStatus.SC_OK);

@@ -40,7 +40,11 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -140,13 +144,13 @@ public class ListImpl extends AbstractComponentImpl implements List {
      * Component properties.
      */
     @ScriptVariable
-    protected ValueMap properties;
+    private ValueMap properties;
 
     /**
      * The current style.
      */
     @ScriptVariable
-    protected Style currentStyle;
+    private Style currentStyle;
 
     /**
      * The current page.
@@ -162,7 +166,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
     /**
      * Flag indicating if description should be shown.
      */
-    protected boolean showDescription;
+    private boolean showDescription;
 
     /**
      * Flag indicating if modification date should be shown.
@@ -172,7 +176,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
     /**
      * Flag indicating if items should be linked.
      */
-    protected boolean linkItems;
+    private boolean linkItems;
 
     /**
      * The list items.
@@ -183,7 +187,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
      * Initialize the model.
      */
     @PostConstruct
-    protected void initModel() {
+    private void initModel() {
         // read design config properties
         showDescription = properties.get(PN_SHOW_DESCRIPTION, currentStyle.get(PN_SHOW_DESCRIPTION, SHOW_DESCRIPTION_DEFAULT));
         showModificationDate = properties.get(

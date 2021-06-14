@@ -5,6 +5,8 @@
     jcr:uuid="443851a2-ac4e-4c01-aa60-828da53c10e0">
     <jcr:content
         dam:assetState="processed"
+        jcr:lastModified="{Date}2020-01-16T18:09:17.287+01:00"
+        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:extracted="{Date}2020-01-16T18:09:06.232+01:00"
@@ -13,6 +15,8 @@
             dc:format="image/svg+xml"
             dc:modified="{Date}2020-01-16T18:09:17.287+01:00"
             dc:title="Form Button"
+            jcr:lastModified="{Date}2020-01-16T18:09:17.286+01:00"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>

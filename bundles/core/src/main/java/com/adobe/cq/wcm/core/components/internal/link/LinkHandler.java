@@ -54,7 +54,6 @@ public class LinkHandler {
      * want to render a target attribute at all when <code>_self</code> is selected.
      */
     private static final Set<String> VALID_LINK_TARGETS = ImmutableSet.of("_blank", "_parent", "_top");
-    protected static final String HTML_EXTENSION = ".html";
 
     /**
      * The current {@link SlingHttpServletRequest}.
@@ -248,14 +247,22 @@ public class LinkHandler {
     }
 
     /**
-     * Given a {@link Page}, this method returns the correct URL with the extension
+     * Given a {@link Page}, this method returns the correct URL, taking into account that the provided {@code page} might provide a
+     * vanity URL or can be mapped.
      * @param page the page
      *
-     * @return the URL of the provided (@code page}
+     * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
      */
     @NotNull
     private String getPageLinkURL(@NotNull Page page) {
-        return page.getPath() + HTML_EXTENSION;
+        String vanityURL = page.getVanityUrl();
+        String pageLinkURL;
+        if (StringUtils.isEmpty(vanityURL)) {
+            pageLinkURL = page.getPath() + ".html";
+        } else {
+            pageLinkURL = vanityURL;
+        }
+        return pageLinkURL;
     }
 
     /**

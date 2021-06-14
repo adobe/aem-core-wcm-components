@@ -142,13 +142,6 @@ public interface Page extends ContainerExporter, Component {
     String FN_TOUCH_ICON_152 = "touch-icon_152.png";
 
     /**
-     * Name of the node holding the properties of the featured image of the page.
-     *
-     * @since com.adobe.cq.wcm.core.components.models 12.21.0
-     */
-    String NN_PAGE_FEATURED_IMAGE = "cq:featuredimage";
-
-    /**
      * Returns the language of this page, if one has been defined. Otherwise the default {@link java.util.Locale} will be used.
      *
      * @return the language code (IETF BCP 47) for this page

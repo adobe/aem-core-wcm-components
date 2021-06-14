@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2021 Adobe
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -28,24 +28,24 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CoreResourceWrapperTest {
+public class ImageResourceWrapperTest {
 
     @Test
-    public void testWrappingWithSimpleResource() {
+    public void testBasicWrapping() {
         Map<String, Object> properties = new HashMap<String, Object>(){{
             put("a", 1);
             put("b", 2);
             put(ResourceResolver.PROPERTY_RESOURCE_TYPE, "a/b/c");
         }};
-        Resource wrappedResource = new CoreResourceWrapper(prepareResourceToBeWrapped(properties), "d/e/f");
+        Resource wrappedResource = new ImageResourceWrapper(prepareResourceToBeWrapped(properties), "d/e/f");
 
         Map<String, Object> expectedProperties = new HashMap<>(properties);
         expectedProperties.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, "d/e/f");
@@ -61,9 +61,9 @@ public class CoreResourceWrapperTest {
             put("b", 2);
             put(ResourceResolver.PROPERTY_RESOURCE_TYPE, "a/b/c");
         }};
-        Resource wrappedResource = new CoreResourceWrapper(prepareResourceToBeWrapped(properties), "d/e/f", new ArrayList<String>() {{
+        Resource wrappedResource = new ImageResourceWrapper(prepareResourceToBeWrapped(properties), "d/e/f", new ArrayList<String>() {{
             add("b");
-        }}, new HashMap<>());
+        }});
 
         Map<String, Object> expectedProperties = new HashMap<>(properties);
         expectedProperties.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, "d/e/f");
@@ -76,33 +76,8 @@ public class CoreResourceWrapperTest {
     }
 
     @Test
-    public void testWrappingWithOverridenProperties() {
-        Resource toBeWrapped = mock(Resource.class);
-        ResourceResolver resourceResolver = mock(ResourceResolver.class);
-        when(toBeWrapped.getValueMap()).thenReturn(new ValueMapDecorator(Collections.emptyMap()));
-        when(toBeWrapped.getResourceResolver()).thenReturn(resourceResolver);
-        when(resourceResolver.isResourceType(any(CoreResourceWrapper.class), any(String.class))).thenReturn(true);
-        Map<String, String> overriddenProperties = new HashMap<>();
-        overriddenProperties.put("a", "1");
-        overriddenProperties.put("b", "2");
-        Resource wrappedResource = new CoreResourceWrapper(toBeWrapped, "a/b/c", new ArrayList<>(), overriddenProperties);
-
-        // isResourceType()
-        assertTrue(wrappedResource.isResourceType("a/b/c"));
-        verify(resourceResolver).isResourceType(wrappedResource, "a/b/c");
-
-        // getResourceType()
-        assertEquals("a/b/c", wrappedResource.getResourceType(), "getResourceType()");
-
-        // getValueMap()
-        ValueMap properties = wrappedResource.getValueMap();
-        assertEquals("1", properties.get("a", String.class), "getValueMap()");
-        assertEquals("2", properties.get("b", String.class), "getValueMap()");
-    }
-
-    @Test
     public void testNulls() {
-        assertThrows(IllegalArgumentException.class, () -> new CoreResourceWrapper(null, null));
+        assertThrows(IllegalArgumentException.class, () -> new ImageResourceWrapper(null, null));
     }
 
     @Test
@@ -111,13 +86,13 @@ public class CoreResourceWrapperTest {
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
         when(toBeWrapped.getValueMap()).thenReturn(new ValueMapDecorator(Collections.emptyMap()));
         when(toBeWrapped.getResourceResolver()).thenReturn(resourceResolver);
-        when(resourceResolver.isResourceType(any(CoreResourceWrapper.class), any(String.class))).thenReturn(true);
-        Resource wrappedResource = new CoreResourceWrapper(toBeWrapped, "a/b/c");
+        when(resourceResolver.isResourceType(any(ImageResourceWrapper.class), any(String.class))).thenReturn(true);
+        Resource wrappedResource = new ImageResourceWrapper(toBeWrapped, "a/b/c");
         assertTrue(wrappedResource.isResourceType("a/b/c"));
         verify(resourceResolver).isResourceType(wrappedResource, "a/b/c");
     }
 
-    protected Resource prepareResourceToBeWrapped(Map<String, Object> properties) {
+    private Resource prepareResourceToBeWrapped(Map<String, Object> properties) {
         Resource resource = mock(Resource.class);
         ValueMap valueMap = new ValueMapDecorator(properties);
         when(resource.getValueMap()).thenReturn(valueMap);
@@ -130,4 +105,5 @@ public class CoreResourceWrapperTest {
             assertEquals(entry.getValue(), valueMap.get(entry.getKey()));
         }
     }
+
 }

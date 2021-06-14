@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2021 Adobe
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -30,7 +28,6 @@ import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {List.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -38,33 +35,8 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v3/list";
 
-    /**
-     * Default flag indicating if list items should be displayed as teasers.
-     */
-    private static final boolean DISPLAY_ITEM_AS_TEASER_DEFAULT = false;
-
-    /**
-     * Flag indicating if items should be displayed as teasers.
-     */
-    private boolean displayItemAsTeaser;
-
     protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
-        return new PageListItemImpl(linkHandler, page, parentId, isShadowingDisabled, component, showDescription, linkItems);
-    }
-
-    /**
-     * Initialize the model.
-     */
-    @PostConstruct
-    protected void initModel() {
-        super.initModel();
-        displayItemAsTeaser = properties.get(PN_DISPLAY_ITEM_AS_TEASER, currentStyle.get(PN_DISPLAY_ITEM_AS_TEASER, DISPLAY_ITEM_AS_TEASER_DEFAULT));
-    }
-
-    @Override
-    @JsonProperty("displayItemAsTeaser")
-    public boolean displayItemAsTeaser() {
-        return displayItemAsTeaser;
+        return new PageListItemImpl(linkHandler, page, parentId, isShadowingDisabled, component);
     }
 
 }

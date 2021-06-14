@@ -231,17 +231,9 @@
                 replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths) : "";
             }
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
+
             var imgSrcAttribute = that._elements.image.getAttribute("src");
-
-            var urlTemplateParts = that._properties.src.split(SRC_URI_TEMPLATE_WIDTH_VAR);
-            // check if image src was dynamically swapped meanwhile (e.g. by Target)
-            var isImageRefSame = imgSrcAttribute.startsWith(urlTemplateParts[0]);
-            if (isImageRefSame && urlTemplateParts.length > 1) {
-                isImageRefSame = imgSrcAttribute.endsWith(urlTemplateParts[urlTemplateParts.length - 1]);
-            }
-
-            if ((isImageRefSame === true && imgSrcAttribute !== url) ||
-                (isImageRefSame === false && (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL))) {
+            if (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL) {
                 that._elements.image.setAttribute("src", url);
                 if (!hasWidths) {
                     window.removeEventListener("scroll", that.update);

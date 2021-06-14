@@ -131,4 +131,12 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
     public Asset getAsset() {
         return rendition.getAsset();
     }
+
+	/**
+	 *	See {@link Rendition#getBinary()}
+	 */
+	@Override
+	public Binary getBinary() {
+		return rendition.getBinary();
+	}
 }

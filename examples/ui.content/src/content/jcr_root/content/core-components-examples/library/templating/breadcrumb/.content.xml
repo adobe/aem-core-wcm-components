@@ -5,6 +5,8 @@
     <jcr:content
         cq:allowedTemplates="/conf/core-components-examples/settings/wcm/templates/.*"
         cq:deviceGroups="[/etc/mobile/groups/responsive]"
+        cq:lastModified="{Date}2019-05-29T16:27:12.239+03:00"
+        cq:lastModifiedBy="admin"
         cq:redirectTarget="/content/core-components-examples/library/templating/breadcrumb/hidden/level-1/level-2/breadcrumb/"
         jcr:primaryType="nt:unstructured"
         jcr:title="Breadcrumb"

@@ -2,6 +2,8 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
+        cq:lastModified="{Date}2019-05-27T23:24:13.683+02:00"
+        cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/page-authoring]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display an asset for download"
@@ -13,23 +15,39 @@
             sling:resourceType="wcm/foundation/components/responsivegrid">
             <responsivegrid
                 cq:styleIds="[1545309110033]"
+                jcr:created="{Date}2018-12-20T12:31:03.201Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2018-12-20T14:47:57.433Z"
+                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <text
                     cq:styleIds="[1644862132301]"
+                    jcr:created="{Date}2019-05-21T12:23:37.787+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-21T12:23:47.906+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;h1>Download&lt;sub>v2&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text_442449340
                     cq:styleIds="[1544762734201]"
+                    jcr:created="{Date}2019-05-21T12:26:28.282+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-27T18:12:38.654+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Download allows linking to an asset for download. Optionally displays a title, description, metadata and a download action.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser_copy
                     cq:styleIds="[1550165685463]"
+                    jcr:created="{Date}2019-02-14T16:41:54.952+01:00"
+                    jcr:createdBy="admin"
                     jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:lastModified="{Date}2019-05-21T12:28:38.908+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -41,7 +59,11 @@
                     titleFromPage="false"/>
                 <teaser_556024830_cop
                     cq:styleIds="[1550165685463]"
+                    jcr:created="{Date}2019-02-14T16:41:59.595+01:00"
+                    jcr:createdBy="admin"
                     jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:lastModified="{Date}2019-05-21T14:18:25.781+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -53,28 +75,48 @@
                     titleFromPage="false"/>
                 <title
                     cq:styleIds="[1544759664489]"
+                    jcr:created="{Date}2019-05-21T12:29:24.433+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-21T12:29:34.511+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
                     sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_1640939841
                     cq:styleIds="[1544759676459]"
+                    jcr:created="{Date}2019-05-21T12:30:06.137+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-21T12:30:17.951+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506761
+                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2018-12-07T13:32:55.756+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>Simple Download with only an &lt;i>Action Text&lt;/i> and &lt;i>Download Asset&lt;/i> configured. The &lt;i>Title&lt;/i> and &lt;i>Description&lt;/i> are by default taken from the provided asset.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
+                    jcr:created="{Date}2019-05-21T12:30:58.953+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-21T12:30:58.953+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <download
+                            jcr:created="{Date}2019-05-21T12:49:52.210+02:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-05-21T14:14:48.583+02:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/download"
                             actionText="Download"
@@ -104,23 +146,39 @@
                     </info>
                 </demo>
                 <title_909599937
+                    jcr:created="{Date}2019-05-27T22:44:01.317+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-27T23:05:47.431+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Title and Description"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506762
+                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2018-12-07T13:32:55.756+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>By default, the &lt;i>Title&lt;/i> and &lt;i>Description&lt;/i> are taken from the provided asset. In this example, we provide a custom title and description for the download.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_1197373359
+                    jcr:created="{Date}2019-05-27T22:44:51.891+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-27T22:44:51.891+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <download
+                            jcr:created="{Date}2019-05-21T12:49:52.210+02:00"
+                            jcr:createdBy="admin"
                             jcr:description="&lt;p>Custom description&lt;/p>&#xd;&#xa;"
+                            jcr:lastModified="{Date}2019-05-27T23:22:10.786+02:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Custom Title"
                             sling:resourceType="core-components-examples/components/download"
@@ -152,23 +210,39 @@
                     </info>
                 </demo_1197373359>
                 <title_233487331
+                    jcr:created="{Date}2019-05-27T23:06:43.454+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-27T23:22:34.595+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Direct Upload"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1338806794
+                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2018-12-07T13:32:55.756+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>It is possible to upload an asset directly from a local file system rather than selecting an asset from DAM.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_68071479
+                    jcr:created="{Date}2019-05-27T23:07:59.121+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-27T23:07:59.121+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <download
+                            jcr:created="{Date}2019-05-21T12:49:52.210+02:00"
+                            jcr:createdBy="admin"
                             jcr:description="&lt;p>Asset uploaded directly from a local file system&lt;/p>&#xd;&#xa;"
+                            jcr:lastModified="{Date}2019-05-27T23:24:13.561+02:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Uploaded Asset"
                             sling:resourceType="core-components-examples/components/download"
@@ -201,22 +275,38 @@
                     </info>
                 </demo_68071479>
                 <title_233487320
+                    jcr:created="{Date}2019-05-27T23:06:43.454+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-27T23:22:34.595+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Display Inline"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506794
+                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2018-12-07T13:32:55.756+01:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>By default the asset is downloaded directly, but it is also possible to display it inline in the browser.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_69071411
+                    jcr:created="{Date}2019-05-27T23:07:59.121+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-27T23:07:59.121+02:00"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <download
+                            jcr:created="{Date}2019-05-21T12:49:52.210+02:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-05-27T23:24:13.561+02:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/download"
                             actionText="View"

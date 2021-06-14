@@ -19,9 +19,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formhidden.v2;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 
-@Tag("group1")
 public class FormHiddenIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formhidden.v1.FormHiddenIT {
 
     public void setComponentResources() {

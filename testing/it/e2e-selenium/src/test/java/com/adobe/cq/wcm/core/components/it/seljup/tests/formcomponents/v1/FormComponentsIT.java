@@ -19,7 +19,6 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v1;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.FormContainerEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.v1.FormComponents;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
@@ -62,7 +61,6 @@ public class FormComponentsIT extends AuthorBaseUITest {
     protected String formHiddenRT;
     protected String formOptionsRT;
     protected String formButtonRT;
-    protected FormComponents formComponents;
 
 
 
@@ -133,8 +131,6 @@ public class FormComponentsIT extends AuthorBaseUITest {
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
-
-        formComponents = new FormComponents();
     }
 
 
@@ -174,7 +170,8 @@ public class FormComponentsIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Check if the action 'Store Content' works.")
     public void testStoreContent() throws InterruptedException, ClientException {
-        FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
+        Commons.openConfigureDialog(containerPath);
+        FormContainerEditDialog dialog = new FormContainerEditDialog();
         dialog.selectActionType("foundation/components/form/actions/store");
         String actionInputValue = dialog.getActionInputValue();
         String contentJsonUrl_allForm = actionInputValue.substring(0, actionInputValue.length() - 1);
