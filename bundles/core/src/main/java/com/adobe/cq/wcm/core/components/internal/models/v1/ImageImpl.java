@@ -137,7 +137,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected boolean disableLazyLoading;
     protected int jpegQuality;
     protected String imageName;
-    private boolean useFeaturedImage;
     private Resource fileResource;
 
     public ImageImpl() {
@@ -151,7 +150,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
     @PostConstruct
     protected void initModel() {
-        fileResource = resource.getChild(DownloadResource.NN_FILE);
         initFeaturedImageBasedProperties();
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
@@ -226,9 +224,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 templateRelativePath = resource.getPath().substring(template.getPath().length());
             } else {
                 baseResourcePath = resource.getPath();
-                if (useFeaturedImage) {
-                    baseResourcePath = getFeaturedImagePath();
-                }
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
             if (smartSizesSupported()) {
@@ -412,8 +407,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     }
 
     private void initFeaturedImageBasedProperties() {
-        useFeaturedImage = StringUtils.isEmpty(fileReference) && fileResource == null;
-        if (useFeaturedImage) {
+        fileResource = resource.getChild(DownloadResource.NN_FILE);
+        if (StringUtils.isEmpty(fileReference) && fileResource == null) {
             Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
             if (featuredImage != null) {
                 fileResource = featuredImage.getChild(DownloadResource.NN_FILE);
@@ -421,14 +416,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 fileReference = featuredImageProps.get(DownloadResource.PN_REFERENCE, String.class);
             }
         }
-    }
-
-    private String getFeaturedImagePath() {
-        Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
-        if (featuredImage != null) {
-            return featuredImage.getPath();
-        }
-        return null;
     }
 
 }
