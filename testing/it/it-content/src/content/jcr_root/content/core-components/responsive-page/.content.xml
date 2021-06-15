@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2020-11-27T19:48:45.649+02:00"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/core-components/settings/wcm/templates/responsive-template"
+        jcr:isCheckedOut="{Boolean}true"
+        jcr:mixinTypes="[mix:versionable]"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Responsive Page"
+        jcr:uuid="3bba6924-d69c-4261-9fed-42874c13f164"
+        sling:resourceType="core/wcm/components/page/v2/page">
+        <root
+            jcr:lastModified="{Date}2020-11-27T10:57:22.077+02:00"
+            jcr:lastModifiedBy="admin"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="core/wcm/components/container/v1/container"
+            layout="responsiveGrid">
+            <main
+                jcr:created="{Date}2020-11-27T13:03:40.192+02:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2020-11-27T13:06:19.489+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/container/v1/container"
+                layout="responsiveGrid">
+                <title
+                    jcr:created="{Date}2020-11-27T18:25:13.253+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2020-11-27T19:48:45.645+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Two Columns"
+                    sling:resourceType="core/wcm/components/title/v3/title"
+                    type="h2"/>
+                <container
+                    jcr:created="{Date}2020-11-27T18:30:35.730+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2020-11-27T18:30:35.730+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/container/v1/container">
+                    <cq:responsive jcr:primaryType="nt:unstructured">
+                        <default
+                            jcr:primaryType="nt:unstructured"
+                            offset="0"
+                            width="4"/>
+                    </cq:responsive>
+                    <list
+                        jcr:created="{Date}2020-11-27T18:26:23.974+02:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2020-11-27T19:16:57.617+02:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/list/v2/list"
+                        childDepth="2"
+                        linkItems="true"
+                        listFrom="static"
+                        pages="[/content/core-components/responsive-page,/content/core-components/simple-page]"
+                        parentPage="/content/core-components/responsive-page"
+                        showDescription="false"
+                        showModificationDate="false"
+                        sortOrder="asc"
+                        tagsMatch="any"/>
+                </container>
+                <container_118198959
+                    jcr:created="{Date}2020-11-27T18:31:06.330+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2020-11-27T18:31:06.330+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/container/v1/container">
+                    <cq:responsive jcr:primaryType="nt:unstructured">
+                        <default
+                            jcr:primaryType="nt:unstructured"
+                            offset="0"
+                            width="5"/>
+                    </cq:responsive>
+                    <teaser
+                        jcr:created="{Date}2020-11-27T18:33:44.869+02:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2020-11-27T18:35:59.073+02:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="true"
+                        descriptionFromPage="false"
+                        fileReference="/content/dam/core-components/core-comp-test-image.jpg"
+                        textIsRich="true"
+                        titleFromPage="false">
+                        <actions jcr:primaryType="nt:unstructured">
+                            <item0
+                                jcr:primaryType="nt:unstructured"
+                                link="/content/core-components/responsive-page"
+                                text="Responsive Page"/>
+                            <item1
+                                jcr:primaryType="nt:unstructured"
+                                link="/content/core-components/simple-page"
+                                text="Simple Page"/>
+                        </actions>
+                    </teaser>
+                </container_118198959>
+                <title_304346777
+                    jcr:created="{Date}2020-11-27T19:18:18.367+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2020-11-27T19:18:33.402+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Large Image"
+                    sling:resourceType="core/wcm/components/title/v3/title"
+                    type="h2"/>
+                <image
+                    jcr:created="{Date}2020-11-27T18:37:45.587+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2020-11-27T18:38:08.110+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/image/v2/image"
+                    fileReference="/content/dam/core-components/Adobe_Systems_logo_and_wordmark.png"/>
+            </main>
+            <aside
+                jcr:created="{Date}2020-11-27T13:04:40.772+02:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2020-11-27T13:06:23.261+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/container/v1/container">
+                <title
+                    jcr:created="{Date}2020-11-27T18:25:36.012+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2020-11-27T18:25:46.824+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Aside"
+                    sling:resourceType="core/wcm/components/title/v3/title"
+                    type="h3"/>
+                <image
+                    jcr:created="{Date}2020-11-27T18:32:54.918+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2020-11-27T18:37:52.767+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/image/v2/image"
+                    altValueFromDAM="true"
+                    displayPopupTitle="true"
+                    fileReference="/content/dam/core-components/Adobe_Systems_logo_and_wordmark.png"
+                    isDecorative="false"
+                    titleValueFromDAM="true"/>
+            </aside>
+        </root>
+    </jcr:content>
+</jcr:root>

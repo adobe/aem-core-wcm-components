@@ -65,9 +65,9 @@ import static com.day.cq.wcm.api.NameConstants.NN_CONTENT;
  */
 @Model(adaptables = SlingHttpServletRequest.class,
     adapters = {ExperienceFragment.class, ComponentExporter.class, ContainerExporter.class },
-    resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1 })
+    resourceType = {ExperienceFragmentImpl.RESOURCE_TYPE_V1, ExperienceFragmentImpl.RESOURCE_TYPE_V2 })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ExperienceFragmentImpl implements ExperienceFragment {
+public class ExperienceFragmentImpl extends AbstractComponentImpl implements ExperienceFragment {
 
     /**
      * Logger.
@@ -78,6 +78,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * The experience fragment component resource type.
      */
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/experiencefragment/v1/experiencefragment";
+    public static final String RESOURCE_TYPE_V2 = "core/wcm/components/experiencefragment/v2/experiencefragment";
 
     /**
      * Sling path delimiter.
@@ -104,12 +105,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      */
     @Self
     private SlingHttpServletRequest request;
-
-    /**
-     * The current resource.
-     */
-    @SlingObject
-    protected Resource resource;
 
     /**
      * The current page.

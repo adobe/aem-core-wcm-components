@@ -49,7 +49,7 @@
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Two columns"
-                        sling:resourceType="core/wcm/components/title/v2/title"
+                        sling:resourceType="core/wcm/components/title/v3/title"
                         type="h2"/>
                     <container
                         jcr:created="{Date}2020-11-27T19:46:18.716+02:00"

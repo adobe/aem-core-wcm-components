@@ -18,5 +18,5 @@
           jcr:description="Download Component for the Core Components Library"
           jcr:primaryType="cq:Component"
           jcr:title="Download"
-          sling:resourceSuperType="core/wcm/components/download/v1/download"
+          sling:resourceSuperType="core/wcm/components/download/v2/download"
           componentGroup="Core Components Examples"/>

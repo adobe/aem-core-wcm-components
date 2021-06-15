@@ -1,0 +1,255 @@
+{
+  "id": "languagenavigation-ea70f301d0",
+  "items": [
+    {
+      "id": "languagenavigation-ea70f301d0-item-4892d4b418",
+      "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
+      "link": {
+        "url": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
+        "valid": true
+      },
+      "children": [
+        {
+          "id": "languagenavigation-ea70f301d0-item-4892d4b418",
+          "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
+          "link": {
+            "url": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
+            "valid": true
+          },
+          "children": [],
+          "level": 1,
+          "active": true,
+          "current": true,
+          "title": "LOCALE 5",
+          "locale": "en_US",
+          "country": "US",
+          "language": "en-US",
+          "dataLayer": {
+            "languagenavigation-ea70f301d0-item-4892d4b418": {
+              "@type": "cq:PageContent",
+              "dc:title": "LOCALE 5",
+              "xdm:linkURL": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html"
+            }
+          },
+          ":type": "cq:PageContent"
+        },
+        {
+          "id": "languagenavigation-ea70f301d0-item-0a1ea86443",
+          "path": "/content/languagenavigation/LOCALE-1/LOCALE-6",
+          "link": {
+            "url": "/core/content/languagenavigation/LOCALE-1/LOCALE-6.html",
+            "valid": true
+          },
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "LOCALE 6",
+          "locale": "es_US",
+          "country": "US",
+          "language": "es-US",
+          "dataLayer": {
+            "languagenavigation-ea70f301d0-item-0a1ea86443": {
+              "@type": "cq:PageContent",
+              "dc:title": "LOCALE 6",
+              "xdm:linkURL": "/core/content/languagenavigation/LOCALE-1/LOCALE-6.html"
+            }
+          },
+          ":type": "cq:PageContent"
+        }
+      ],
+      "level": 0,
+      "active": true,
+      "current": true,
+      "title": "LOCALE 1",
+      "locale": "en_US",
+      "country": "US",
+      "language": "en-US",
+      "dataLayer": {
+        "languagenavigation-ea70f301d0-item-4892d4b418": {
+          "@type": "cq:PageContent",
+          "dc:title": "LOCALE 1",
+          "xdm:linkURL": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html"
+        }
+      },
+      ":type": "cq:PageContent"
+    },
+    {
+      "id": "languagenavigation-ea70f301d0-item-ef2da5f3fb",
+      "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
+      "link": {
+        "url": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
+        "valid": true
+      },
+      "children": [
+        {
+          "id": "languagenavigation-ea70f301d0-item-ef2da5f3fb",
+          "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
+          "link": {
+            "url": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
+            "valid": true
+          },
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "LOCALE 5",
+          "locale": "en_CA",
+          "country": "CA",
+          "language": "en-CA",
+          "dataLayer": {
+            "languagenavigation-ea70f301d0-item-ef2da5f3fb": {
+              "@type": "cq:PageContent",
+              "dc:title": "LOCALE 5",
+              "xdm:linkURL": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html"
+            }
+          },
+          ":type": "cq:PageContent"
+        },
+        {
+          "id": "languagenavigation-ea70f301d0-item-64f7488895",
+          "path": "/content/languagenavigation/LOCALE-2/LOCALE-7",
+          "link": {
+            "url": "/core/content/languagenavigation/LOCALE-2/LOCALE-7.html",
+            "valid": true
+          },
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "LOCALE 7",
+          "locale": "fr_CA",
+          "country": "CA",
+          "language": "fr-CA",
+          "dataLayer": {
+            "languagenavigation-ea70f301d0-item-64f7488895": {
+              "@type": "cq:PageContent",
+              "dc:title": "LOCALE 7",
+              "xdm:linkURL": "/core/content/languagenavigation/LOCALE-2/LOCALE-7.html"
+            }
+          },
+          ":type": "cq:PageContent"
+        }
+      ],
+      "level": 0,
+      "active": false,
+      "current": false,
+      "title": "LOCALE 2",
+      "locale": "en_CA",
+      "country": "CA",
+      "language": "en-CA",
+      "dataLayer": {
+        "languagenavigation-ea70f301d0-item-ef2da5f3fb": {
+          "@type": "cq:PageContent",
+          "dc:title": "LOCALE 2",
+          "xdm:linkURL": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html"
+        }
+      },
+      ":type": "cq:PageContent"
+    },
+    {
+      "id": "languagenavigation-ea70f301d0-item-ae3df3ca12",
+      "path": "/content/languagenavigation/LOCALE-3",
+      "link": {
+        "url": "/core/LOCALE-3-vanity",
+        "valid": true
+      },
+      "children": [
+        {
+          "id": "languagenavigation-ea70f301d0-item-110455b323",
+          "path": "/content/languagenavigation/LOCALE-3/LOCALE-8",
+          "link": {
+            "url": "/core/content/languagenavigation/LOCALE-3/LOCALE-8.html",
+            "valid": true
+          },
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "LOCALE 8",
+          "locale": "de_CH",
+          "country": "CH",
+          "language": "de-CH",
+          "dataLayer": {
+            "languagenavigation-ea70f301d0-item-110455b323": {
+              "@type": "cq:PageContent",
+              "dc:title": "LOCALE 8",
+              "xdm:linkURL": "/core/content/languagenavigation/LOCALE-3/LOCALE-8.html"
+            }
+          },
+          ":type": "cq:PageContent"
+        }
+      ],
+      "level": 0,
+      "active": false,
+      "current": false,
+      "title": "LOCALE 3",
+      "locale": "de_CH",
+      "country": "CH",
+      "language": "de-CH",
+      "dataLayer": {
+        "languagenavigation-ea70f301d0-item-ae3df3ca12": {
+          "@type": "cq:PageContent",
+          "dc:title": "LOCALE 3",
+          "xdm:linkURL": "/core/LOCALE-3-vanity"
+        }
+      },
+      ":type": "cq:PageContent"
+    },
+    {
+      "id": "languagenavigation-ea70f301d0-item-ce10a8f9c0",
+      "path": "/content/languagenavigation/LOCALE-4",
+      "link": {
+        "url": "/core/content/languagenavigation/LOCALE-4.html",
+        "valid": true
+      },
+      "children": [
+        {
+          "id": "languagenavigation-ea70f301d0-item-4f897f9d61",
+          "path": "/content/languagenavigation/LOCALE-4/LOCALE-9",
+          "link": {
+            "url": "/core/content/languagenavigation/LOCALE-4/LOCALE-9.html",
+            "valid": true
+          },
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "LOCALE 9",
+          "locale": "de_DE",
+          "country": "DE",
+          "language": "de-DE",
+          "dataLayer": {
+            "languagenavigation-ea70f301d0-item-4f897f9d61": {
+              "@type": "cq:PageContent",
+              "dc:title": "LOCALE 9",
+              "xdm:linkURL": "/core/content/languagenavigation/LOCALE-4/LOCALE-9.html"
+            }
+          },
+          ":type": "cq:PageContent"
+        }
+      ],
+      "level": 0,
+      "active": false,
+      "current": false,
+      "title": "LOCALE 4",
+      "locale": "de_DE",
+      "country": "DE",
+      "language": "de-DE",
+      "dataLayer": {
+        "languagenavigation-ea70f301d0-item-ce10a8f9c0": {
+          "@type": "cq:PageContent",
+          "dc:title": "LOCALE 4",
+          "xdm:linkURL": "/core/content/languagenavigation/LOCALE-4.html"
+        }
+      },
+      ":type": "cq:PageContent"
+    }
+  ],
+  "dataLayer": {
+    "languagenavigation-ea70f301d0": {
+      "@type": "core/wcm/components/languagenavigation/v2/languagenavigation"
+    }
+  },
+  ":type": "core/wcm/components/languagenavigation/v2/languagenavigation"
+}

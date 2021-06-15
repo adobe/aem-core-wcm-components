@@ -46,6 +46,7 @@ public class ListImplTest {
     private static final String TEST_BASE = "/list";
     private static final String CONTENT_ROOT = "/content";
     private static final String CURRENT_PAGE = "/content/list";
+    protected static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     private static final String TEST_PAGE_CONTENT_ROOT = CURRENT_PAGE + "/jcr:content/root";
     protected static final String LIST_1 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
@@ -64,6 +65,7 @@ public class ListImplTest {
     protected static final String LIST_14 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitle";
     protected static final String LIST_15 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitleForOneItem";
     protected static final String LIST_16 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithAccent";
+    protected static final String LIST_20 = TEST_PAGE_CONTENT_ROOT + "/listRenderedAsTeaserItems";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -205,7 +207,6 @@ public class ListImplTest {
     @Test
     protected void testOrderByTitleWithNoTitleForOneItem() {
         List list = getListUnderTest(LIST_15);
-        list.getItems().stream().map(PageListItemImpl::getTitle).forEach(System.out::println);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_4", "/content/list/pages/page_1", "/content/list/pages/page_2" });
     }
 
@@ -219,7 +220,7 @@ public class ListImplTest {
         Utils.enableDataLayer(context, true);
         Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
-            throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
+            throw new IllegalStateException("Did you forget to define test resource " + resourcePath + "?");
         }
         context.currentResource(resource);
         return context.request().adaptTo(List.class);

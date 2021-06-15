@@ -58,14 +58,15 @@ import org.slf4j.LoggerFactory;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Download.class, ComponentExporter.class},
-       resourceType = DownloadImpl.RESOURCE_TYPE)
+       resourceType = {DownloadImpl.RESOURCE_TYPE_V1, DownloadImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class DownloadImpl implements Download {
+public class DownloadImpl extends AbstractComponentImpl implements Download {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DownloadImpl.class);
 
-    public final static String RESOURCE_TYPE = "core/wcm/components/download/v1/download";
+    public final static String RESOURCE_TYPE_V1 = "core/wcm/components/download/v1/download";
+    public final static String RESOURCE_TYPE_V2 = "core/wcm/components/download/v2/download";
 
     @Self
     private SlingHttpServletRequest request;
