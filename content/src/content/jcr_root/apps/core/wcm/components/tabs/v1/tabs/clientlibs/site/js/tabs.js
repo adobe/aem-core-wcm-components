@@ -86,7 +86,7 @@
 
             // Show the tab based on deep-link-id if it matches with any existing tab item id
             var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tab");
-            if (deepLinkItemIdx !== -1) {
+            if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
                 var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
                 if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
                     navigateAndFocusTab(deepLinkItemIdx);
