@@ -71,6 +71,9 @@ import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
+import static com.day.cq.commons.jcr.JcrConstants.JCR_MIMETYPE;
+
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageImpl extends AbstractComponentImpl implements Image {
@@ -134,7 +137,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected boolean disableLazyLoading;
     protected int jpegQuality;
     protected String imageName;
-    private boolean useFeaturedImage;
     private Resource fileResource;
 
     public ImageImpl() {
@@ -148,7 +150,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
     @PostConstruct
     protected void initModel() {
-        fileResource = resource.getChild(DownloadResource.NN_FILE);
         initFeaturedImageBasedProperties();
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
@@ -171,7 +172,14 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             }
         } else {
             if (fileResource != null) {
-                mimeType = PropertiesUtil.toString(fileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), MIME_TYPE_IMAGE_JPEG);
+                mimeType = PropertiesUtil.toString(fileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), null);
+                if (StringUtils.isEmpty(mimeType)) {
+                    Resource fileResourceContent = fileResource.getChild(JCR_CONTENT);
+                    if (fileResourceContent != null) {
+                        ValueMap fileProperties = fileResourceContent.getValueMap();
+                        mimeType = fileProperties.get(JCR_MIMETYPE, MIME_TYPE_IMAGE_JPEG);
+                    }
+                }
                 String fileName = properties.get(ImageResource.PN_FILE_NAME, String.class);
                 imageName = StringUtils.isNotEmpty(fileName) ? getSeoFriendlyName(FilenameUtils.getBaseName(fileName)) : "";
                 hasContent = true;
@@ -216,9 +224,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 templateRelativePath = resource.getPath().substring(template.getPath().length());
             } else {
                 baseResourcePath = resource.getPath();
-                if (useFeaturedImage) {
-                    baseResourcePath = getFeaturedImagePath();
-                }
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
             if (smartSizesSupported()) {
@@ -402,8 +407,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     }
 
     private void initFeaturedImageBasedProperties() {
-        useFeaturedImage = StringUtils.isEmpty(fileReference) && fileResource == null;
-        if (useFeaturedImage) {
+        fileResource = resource.getChild(DownloadResource.NN_FILE);
+        if (StringUtils.isEmpty(fileReference) && fileResource == null) {
             Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
             if (featuredImage != null) {
                 fileResource = featuredImage.getChild(DownloadResource.NN_FILE);
@@ -411,14 +416,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 fileReference = featuredImageProps.get(DownloadResource.PN_REFERENCE, String.class);
             }
         }
-    }
-
-    private String getFeaturedImagePath() {
-        Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
-        if (featuredImage != null) {
-            return featuredImage.getPath();
-        }
-        return null;
     }
 
 }

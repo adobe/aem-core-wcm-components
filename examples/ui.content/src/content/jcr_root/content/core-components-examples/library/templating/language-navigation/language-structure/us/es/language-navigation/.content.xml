@@ -2,15 +2,12 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-06-06T11:04:12.616+03:00"
-        cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/templating]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:primaryType="cq:PageContent"
-        jcr:title="Language Navigation"
-        sling:resourceType="core-components-examples/components/page"
-        navTitle="Navegación de idioma"
-        pageTitle="Navegación de idioma">
+        jcr:title="Navegación por idioma"
+        sling:alias="navegacion-por-idioma"
+        sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
@@ -19,33 +16,21 @@
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <text_1740702241
                     cq:styleIds="[1644862132301]"
-                    jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-06-06T11:03:30.637+03:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Navegación de idioma&lt;sub>v2&lt;/sub>&lt;/h1>&#xd;&#xa;"
+                    text="&lt;h1>Navegación por idiomas&lt;sub>v2&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
-                    jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-06-06T11:03:43.400+03:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Navegación de idioma proporciona una navegación de idioma / país para un sitio, de modo que los visitantes puedan navegar a la misma página en una ubicación diferente.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>El componente de navegación por idioma proporciona una navegación por idioma y país para un sitio, de modo que los visitantes puedan navegar a la misma página en una localización diferente.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:created="{Date}2019-02-14T16:41:54.952+01:00"
-                    jcr:createdBy="admin"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
-                    jcr:lastModified="{Date}2019-02-14T16:49:57.290+01:00"
-                    jcr:lastModifiedBy="admin"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Technical Documentation"
+                    jcr:title="Documentación técnica"
                     sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
@@ -55,13 +40,9 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:created="{Date}2019-02-14T16:41:59.595+01:00"
-                    jcr:createdBy="admin"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
-                    jcr:lastModified="{Date}2019-02-14T17:47:53.311+01:00"
-                    jcr:lastModifiedBy="admin"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Using Core Components"
+                    jcr:title="Uso de los componentes"
                     sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
@@ -71,63 +52,42 @@
                     titleFromPage="false"/>
                 <title_865328580
                     cq:styleIds="[1544759664489]"
-                    jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-06-06T11:04:02.808+03:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Ejemplos"
                     sling:resourceType="core-components-examples/components/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-06-06T11:04:12.614+03:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Estándar"
+                    jcr:title="Nivel único"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
                 <text_1337506761
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-06-06T11:03:05.739+03:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Navegación de idioma simple con &lt;i>Profundidad de estructura de idioma&lt;/i> establecida en dos. Muestra una estructura de navegación de idioma creada a partir de un árbol de páginas con el país y la configuración regional mostrados en el resultado.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Navegación lingüística simple que permite navegar a la misma página en otro idioma. Si la misma ruta no existe en la estructura de contenidos del otro idioma, la navegación muestra una ruta a la página madre más profunda que encuentra en el otro idioma. Para mantener enlazadas las páginas de diferentes idiomas (tanto para la navegación como para el proceso de traducción), la convención es que deben mantener la misma ruta. Por lo tanto, los autores no deben mover o renombrar las páginas, y en su lugar utilizar la propiedad &lt;i>Alias&lt;/i> si se desea localizar el nombre de la página. El texto que muestra la navegación por el idioma para cada enlace listado es el &lt;i>Título de navegación&lt;/i> de la página raíz del idioma, o el &lt;i>Título&lt;/i> de la página principal cuando no se establece ningún título de navegación en esa página."
                     textIsRich="true"/>
                 <demo
-                    jcr:created="{Date}2018-12-07T12:55:03.496+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T12:55:03.496+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <languageNavigation
-                            jcr:created="{Date}2019-03-06T14:11:01.819+01:00"
-                            jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-06-06T11:03:10.029+03:00"
-                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/languagenavigation"
-                            navigationRoot="/content/core-components-examples/library/templating/language-navigation/language-structure"
-                            structureDepth="2"/>
+                            navigationRoot="/content/core-components-examples/library/templating/language-navigation/language-structure/us"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/tabs">
                         <properties
-                            cq:panelTitle="Properties"
+                            cq:panelTitle="Propiedades"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/demo/properties"
                             reference="../../component"/>
                         <markup
-                            cq:panelTitle="Markup"
+                            cq:panelTitle="HTML"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/demo/markup"
                             reference="../../component"/>
@@ -138,6 +98,49 @@
                             reference="../../component"/>
                     </info>
                 </demo>
+                <title_3
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Múltiples niveles"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_3
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>La propiedad &lt;i>Language Structure Depth&lt;/i> permite construir la navegación para un contenido que no sólo está traducido en diferentes idiomas, sino también adaptado a los mercados regionales. Esto permite cusar, por ejemplo, una estructura país/idioma. También puede haber más de 2 niveles de anidamiento, pero la estructura de la página debe seguir la misma jerarquía.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_3
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <languageNavigation
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/languagenavigation"
+                            navigationRoot="/content/core-components-examples/library/templating/language-navigation/language-structure"
+                            structureDepth="2"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Propiedades"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="HTML"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_3>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">

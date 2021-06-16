@@ -56,6 +56,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.dam.api.Asset;
@@ -182,10 +183,23 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 component = componentCandidate;
             }
 
-
             ImageComponent imageComponent = new ImageComponent(component);
-            if (imageComponent.source == Source.NONEXISTING) {
-                LOGGER.error("The image from {} does not have a valid file reference.", component.getPath());
+            // If the image has no content, use the featured image of the page if it exists
+            if (imageComponent.source == Source.NOCONTENT) {
+                PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
+                if (pageManager != null) {
+                    Page page = pageManager.getContainingPage(component);
+                    if (page != null) {
+                        Resource featuredImage = ComponentUtils.getFeaturedImage(page);
+                        if (featuredImage != null) {
+                            imageComponent = new ImageComponent(featuredImage);
+                        }
+                    }
+                }
+            }
+            if (imageComponent.source == Source.NOCONTENT || imageComponent.source == Source.NONEXISTING) {
+                LOGGER.error("Either the image from {} does not have a valid file reference" +
+                        "or the containing page does not have a valid featured image", component.getPath());
                 metrics.markImageErrors();
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
@@ -427,6 +441,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     }
                     if (flipVertically) {
                         layer.flipVertically();
+                    }
+                    if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
+                            ("jpg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
+                                    || "jpeg".equalsIgnoreCase(mimeTypeService.getExtension(imageType)))) {
+                        LOGGER.debug("Adding default (white) background to a transparent JPG: {}", imageFile.getPath());
+                        layer.setBackground(Color.white);
                     }
                     resizeAndStreamLayer(response, layer, imageType, resizeWidth, quality);
                 } else {
@@ -862,6 +882,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private enum Source {
         ASSET,
         FILE,
+        NOCONTENT,
         NONEXISTING
     }
 
@@ -871,13 +892,15 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
         ImageComponent(@NotNull Resource component) {
             String fileReference = component.getValueMap().get(DownloadResource.PN_REFERENCE, String.class);
-            if (StringUtils.isNotEmpty(fileReference)) {
+            Resource childFileNode = component.getChild(DownloadResource.NN_FILE);
+            if (StringUtils.isEmpty(fileReference) && childFileNode == null) {
+                source = Source.NOCONTENT;
+            } else if (StringUtils.isNotEmpty(fileReference)) {
                 imageResource = component.getResourceResolver().getResource(fileReference);
                 if (imageResource != null) {
                     source = Source.ASSET;
                 }
             } else {
-                Resource childFileNode = component.getChild(DownloadResource.NN_FILE);
                 if (childFileNode != null) {
                     if (JcrConstants.NT_FILE.equals(childFileNode.getResourceType())) {
                         Resource jcrContent = childFileNode.getChild(JcrConstants.JCR_CONTENT);
