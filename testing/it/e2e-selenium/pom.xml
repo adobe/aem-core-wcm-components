@@ -34,7 +34,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.it.e2e-selenium</artifactId>
     <version>2.16.5-SNAPSHOT</version>
-    <name>Core Components Selenium Base Test Framework</name>
+    <name>Adobe Experience Manager Core WCM Components Selenium Base Test Framework</name>
 
     <build>
         <pluginManagement>
