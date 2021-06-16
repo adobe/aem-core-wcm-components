@@ -30,6 +30,6 @@
         "sync-pom-version-to-package": "^1.6.0"
     },
     "dependencies": {
-        "@adobe/adobe-client-data-layer": "2.0.1"
+        "@adobe/adobe-client-data-layer": "2.0.2"
     }
 }

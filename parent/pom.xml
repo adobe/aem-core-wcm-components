@@ -58,7 +58,7 @@
         <slf4j.version>1.7.6</slf4j.version>
         <aem.java.version>8</aem.java.version>
         <jacoco.version>0.8.3</jacoco.version>
-        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
         <node.version>v10.13.0</node.version>
         <npm.version>6.4.1</npm.version>
         <java.version>11</java.version>
@@ -801,7 +801,7 @@
             <dependency>
                 <groupId>com.adobe.aem</groupId>
                 <artifactId>uber-jar</artifactId>
-                <version>6.5.8</version>
+                <version>6.4.8.4-1.0</version>
                 <scope>provided</scope>
             </dependency>
 

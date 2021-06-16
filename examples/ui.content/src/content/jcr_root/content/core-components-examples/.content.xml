@@ -5,8 +5,6 @@
     <jcr:content
         cq:allowedTemplates="[/conf/core-components-examples/settings/wcm/templates/.*]"
         cq:deviceGroups="[/etc/mobile/groups/responsive]"
-        cq:lastModified="{Date}2018-12-06T19:40:56.470+01:00"
-        cq:lastModifiedBy="admin"
         jcr:primaryType="nt:unstructured"
         jcr:title="Core Components"
         sling:redirect="{Boolean}true"

@@ -2,8 +2,6 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2020-05-22T18:27:05.662+03:00"
-        cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="AEM Core Components - Component Library"
         jcr:primaryType="cq:PageContent"
@@ -14,34 +12,20 @@
             sling:resourceType="wcm/foundation/components/responsivegrid">
             <responsivegrid
                 cq:styleIds="[1544293237403]"
-                jcr:lastModified="{Date}2018-12-10T17:42:36.568+01:00"
-                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <title
                     cq:styleIds="[1644862132301]"
-                    jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-15T20:21:58.794+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/version/title"/>
                 <text
                     cq:styleIds="[1544762734201]"
-                    jcr:created="{Date}2018-12-10T18:55:07.046+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-09T16:29:27.380+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Get to know the AEM Core Components with this collection of component examples - currently featuring a selection of the available components. For all components, visit our &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components&quot;>GitHub Project&lt;/a>.&lt;/p>&#xa;"
+                    text="&lt;p>Get to know the AEM Core Components with this collection of component examples - currently featuring a selection of the available components. For all components, visit our &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components&quot;>GitHub Project&lt;/a>.&lt;/p>"
                     textIsRich="true"/>
                 <text_585499147
                     cq:styleIds="[1550289148555]"
-                    jcr:created="{Date}2019-02-16T04:47:24.253+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-16T04:51:18.833+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Search Components"
                     sling:resourceType="core-components-examples/components/form/text"
@@ -53,29 +37,17 @@
                     usePlaceholder="true"/>
                 <container
                     cq:styleIds="[1579016386576]"
-                    jcr:created="{Date}2020-01-14T16:32:24.183+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2020-01-14T16:34:28.219+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/container"
                     layout="responsiveGrid">
                     <title_153929503
                         cq:styleIds="[1544759664489]"
-                        jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Templating"
                         sling:resourceType="core-components-examples/components/title"
                         type="h2"/>
                     <teaser_7603064014
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:31:20.431+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -98,10 +70,6 @@
                     </teaser_7603064014>
                     <teaser_1607066013
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:31:20.431+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -124,10 +92,6 @@
                     </teaser_1607066013>
                     <teaser_931274390
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -151,29 +115,17 @@
                 </container>
                 <container_40754488
                     cq:styleIds="[1579016386576]"
-                    jcr:created="{Date}2020-01-14T16:32:30.330+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2020-01-14T16:35:42.487+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/container"
                     layout="responsiveGrid">
                     <title_153929502
                         cq:styleIds="[1544759664489]"
-                        jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Page Authoring"
                         sling:resourceType="core-components-examples/components/title"
                         type="h2"/>
                     <teaser_1276818308
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:30:09.811+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:23.402+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -196,10 +148,6 @@
                     </teaser_1276818308>
                     <teaser_893705994
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:30:11.839+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:11.153+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -222,10 +170,6 @@
                     </teaser_893705994>
                     <teaser_1579987477
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:52.616+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:30:56.410+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -248,10 +192,6 @@
                     </teaser_1579987477>
                     <teaser_1923066042
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-05-29T18:25:56.775+03:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -274,10 +214,6 @@
                     </teaser_1923066042>
                     <teaser_1609110728
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:30:07.216+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:32:39.312+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -300,10 +236,6 @@
                     </teaser_1609110728>
                     <teaser_1138854624
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-05-21T11:21:34.635+02:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-05-21T11:52:24.956+02:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -326,10 +258,6 @@
                     </teaser_1138854624>
                     <teaser_1607066012
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:31:20.431+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -352,10 +280,6 @@
                     </teaser_1607066012>
                     <teaser_1565704130
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:52.616+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:30:56.410+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -378,10 +302,6 @@
                     </teaser_1565704130>
                     <teaser_739474271
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:50.507+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:30:40.938+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -404,10 +324,6 @@
                     </teaser_739474271>
                     <teaser_931274384
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:50.507+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:30:40.938+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="CF List"
                         sling:resourceType="core-components-examples/components/teaser"
@@ -431,10 +347,6 @@
                     </teaser_931274384>
                     <teaser_1138854628
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-05-21T11:21:34.635+02:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-05-21T11:52:24.956+02:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -457,10 +369,6 @@
                     </teaser_1138854628>
                     <teaser_1138854628_co
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-05-21T11:21:34.635+02:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2020-05-01T14:44:49.190-07:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -483,10 +391,6 @@
                     </teaser_1138854628_co>
                     <teaser
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2020-04-13T13:09:51.049+03:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2020-05-22T18:27:05.458+03:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -510,10 +414,6 @@
                     </teaser>
                     <teaser_1803864476
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:30:01.616+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:32:00.149+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -536,10 +436,6 @@
                     </teaser_1803864476>
                     <teaser_803940090
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:58.871+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:31:40.985+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -563,29 +459,17 @@
                 </container_40754488>
                 <container_1589240805
                     cq:styleIds="[1579016386576]"
-                    jcr:created="{Date}2020-01-14T16:32:32.991+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2020-01-14T16:35:51.897+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/container"
                     layout="responsiveGrid">
                     <title_153929501
                         cq:styleIds="[1544759664489]"
-                        jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Container"
                         sling:resourceType="core-components-examples/components/title"
                         type="h2"/>
                     <teaser_1837085907
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-05-28T13:32:25.481+03:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-05-28T13:34:36.342+03:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -608,10 +492,6 @@
                     </teaser_1837085907>
                     <teaser
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -634,10 +514,6 @@
                     </teaser>
                     <teaser_1767983946
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:30:04.042+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:32:22.983+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -660,10 +536,6 @@
                     </teaser_1767983946>
                     <teaser_1276818309
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
@@ -687,29 +559,17 @@
                 </container_1589240805>
                 <container_1589240806
                     cq:styleIds="[1579016386576]"
-                    jcr:created="{Date}2020-01-14T16:32:32.991+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2020-01-14T16:35:51.897+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/container"
                     layout="responsiveGrid">
                     <title_153929501
                         cq:styleIds="[1544759664489]"
-                        jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Form"
                         sling:resourceType="core-components-examples/components/title"
                         type="h2"/>
                     <teaser_1837085907
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-05-28T13:32:25.481+03:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-05-28T13:34:36.342+03:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Container"
                         sling:resourceType="core-components-examples/components/teaser"
@@ -733,10 +593,6 @@
                     </teaser_1837085907>
                     <teaser
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Input"
                         sling:resourceType="core-components-examples/components/teaser"
@@ -760,10 +616,6 @@
                     </teaser>
                     <teaser_1767983946
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:30:04.042+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:32:22.983+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Options"
                         sling:resourceType="core-components-examples/components/teaser"
@@ -787,10 +639,6 @@
                     </teaser_1767983946>
                     <teaser_1276818309
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Hidden"
                         sling:resourceType="core-components-examples/components/teaser"
@@ -814,10 +662,6 @@
                     </teaser_1276818309>
                     <teaser_1276818310
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Button"
                         sling:resourceType="core-components-examples/components/teaser"
@@ -844,13 +688,9 @@
                 <container_1589240808/> <!-- Forms and Communications Portal components on main library page -->
                 <text_557507476
                     cq:styleIds="[1550360114923]"
-                    jcr:created="{Date}2019-02-17T01:01:23.716+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-17T01:01:33.456+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>No components found.&lt;/p>&#xa;"
+                    text="&lt;p>No components found.&lt;/p>"
                     textIsRich="true"/>
             </responsivegrid>
         </root>
