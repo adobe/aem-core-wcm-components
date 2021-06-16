@@ -154,8 +154,11 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertTrue(image.displayPopupTitle());
         assertEquals(null, image.getLink(), "Did not expect a link for this image, since it's marked as decorative.");
+        assertEquals("850", image.getWidth());
+        assertEquals("450", image.getHeight());
         assertNull(image.getImageLink(), "Expected null link");
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/" + ASSET_NAME + ".png", image.getSrc());
+        assertNull(image.getSrcset());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE4_PATH));
     }
 
@@ -168,6 +171,14 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         String escapedResourcePath = AbstractImageTest.IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
         assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt());
+        assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
+        assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
+        String expectedSrcset = "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".600.png/1490005239000/" + ASSET_NAME + ".png 600w," +
+                "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".700.png/1490005239000/" + ASSET_NAME + ".png 700w," +
+                "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".800.png/1490005239000/" + ASSET_NAME + ".png 800w," +
+                "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".2000.png/1490005239000/" + ASSET_NAME + ".png 2000w," +
+                "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".2500.png/1490005239000/" + ASSET_NAME + ".png 2500w";
+        assertEquals(expectedSrcset, image.getSrcset());
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
         String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +

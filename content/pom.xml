@@ -166,6 +166,8 @@
                         <exclude>**/node_modules/**</exclude>
                         <!-- Ignore generated datalayer clientlib -->
                         <exclude>**/core.wcm.components.commons.datalayer.v1/**</exclude>
+                        <!-- Ignore generated vanilla-lazyload clientlib -->
+                        <exclude>**/src/content/jcr_root/apps/core/wcm/components/commons/vanilla-lazyload/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
