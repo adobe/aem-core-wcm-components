@@ -15,11 +15,20 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -34,6 +43,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
+
+    @ValueMapValue(name = "width", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String width;
+
+    @ValueMapValue(name = "height", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String height;
 
     @Override
     @Nullable
@@ -49,8 +67,46 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     @Override
-    protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt ) {
+    protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt) {
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }
 
+
+    @Override
+    public String getSrcset() {
+        int[] widthsArray = super.getWidths();
+        String srcUritemplate = super.getSrcUriTemplate();
+        String[] srcsetArray = new String[widthsArray.length];
+        if (widthsArray.length > 0 && srcUritemplate != null) {
+            String srcUriTemplateDecoded = "";
+            try {
+                srcUriTemplateDecoded = URLDecoder.decode(srcUritemplate, StandardCharsets.UTF_8.name());
+            } catch (UnsupportedEncodingException e) {
+                LOGGER.error("Character Decoding failed for " + resource.getPath());
+            }
+            if (srcUriTemplateDecoded.contains("{.width}")) {
+                for (int i = 0; i < widthsArray.length; i++) {
+                    if (srcUriTemplateDecoded.contains("={.width}")) {
+                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                    } else {
+                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                    }
+                }
+                return StringUtils.join(srcsetArray, ',');
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String getWidth() {
+        return width;
+    }
+
+    @Nullable
+    @Override
+    public String getHeight() {
+        return height;
+    }
 }
