@@ -34,7 +34,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.it.http</artifactId>
     <version>2.16.5-SNAPSHOT</version>
-    <name>Core Components HTTP Integration Tests</name>
+    <name>Adobe Experience Manager Core WCM Components HTTP Integration Tests</name>
 
     <build>
         <pluginManagement>
