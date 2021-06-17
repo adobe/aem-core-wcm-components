@@ -8,8 +8,6 @@
         cq:name="snowy-mountain-glacier.jpg"
         cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-02-20T15:21:37.135+01:00"
-        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="Snowy mountain glacier">
         <metadata
@@ -30,8 +28,6 @@
             dc:format="image/jpeg"
             dc:modified="{Date}2019-02-19T22:05:28.978+01:00"
             dc:title="Snowy mountain glacier"
-            jcr:lastModified="{Date}2019-02-20T15:21:36.865+01:00"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
             jcr:title="Snowy mountain glacier"

@@ -1,0 +1,17 @@
+{
+  "teaser": {
+    "jcr:primaryType": "sling:Folder",
+    "v2" : {
+      "jcr:primaryType": "nt:unstructured",
+      "teaser" : {
+        "jcr:primaryType" : "cq:Component",
+        "jcr:title" : "Teaser (v2)",
+        "sling:resourceSuperType": "core/wcm/components/teaser",
+        "jcr:description" : "Teaser Component",
+        "cq:icon" : "teaser",
+        "imageDelegate": "core/wcm/components/image/v3/image",
+        "componentGroup" : ".core-wcm"
+      }
+    }
+  }
+}

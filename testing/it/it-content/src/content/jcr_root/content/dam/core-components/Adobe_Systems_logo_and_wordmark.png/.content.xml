@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:exif="http://ns.adobe.com/exif/1.0/" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="d16f0a8a-c694-45a6-9346-bb5b030d4809">
+    <jcr:content
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2020-12-01T12:32:43.926+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:Bitsperpixel="{Long}32"
+            dam:Comments="XML:com.adobe.xmp: &lt;x:xmpmeta xmlns:x=&quot;adobe:ns:meta/&quot; x:xmptk=&quot;XMP Core 6.0.0&quot;>&#xa;   &lt;rdf:RDF xmlns:rdf=&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;>&#xa;      &lt;rdf:Description rdf:about=&quot;&quot;&#xa;            xmlns:exif=&quot;http://ns.adobe.com/exif/1.0/&quot;&#xa;            xmlns:tiff=&quot;http://ns.adobe.com/tiff/1.0/&quot;>&#xa;         &lt;exif:PixelYDimension>2000&lt;/exif:PixelYDimension>&#xa;         &lt;exif:PixelXDimension>2000&lt;/exif:PixelXDimension>&#xa;         &lt;tiff:Orientation>1&lt;/tiff:Orientation>&#xa;         &lt;tiff:ResolutionUnit>2&lt;/tiff:ResolutionUnit>&#xa;      &lt;/rdf:Description>&#xa;   &lt;/rdf:RDF>&#xa;&lt;/x:xmpmeta>&#xa;&#xa;"
+            dam:extracted="{Date}2020-12-01T12:32:43.689+02:00"
+            dam:Fileformat="PNG"
+            dam:MIMEtype="image/png"
+            dam:Numberofimages="{Long}1"
+            dam:Numberoftextualcomments="{Long}1"
+            dam:Physicalheightindpi="{Long}72"
+            dam:Physicalheightininches="{Decimal}27.77430534362793"
+            dam:Physicalwidthindpi="{Long}72"
+            dam:Physicalwidthininches="{Decimal}27.77430534362793"
+            dam:Progressive="no"
+            dam:sha1="30886e690d83d32f66b7d3edfbefb235bbc0545f"
+            dam:size="{Long}437463"
+            dc:format="image/png"
+            exif:PixelXDimension="{Long}2000"
+            exif:PixelYDimension="{Long}2000"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"
+            tiff:ImageLength="{Long}2000"
+            tiff:ImageWidth="{Long}2000"
+            tiff:Orientation="{Long}1"
+            tiff:ResolutionUnit="{Long}2"/>
+        <related jcr:primaryType="nt:unstructured"/>
+        <usages
+            dam:score="{Long}3"
+            jcr:primaryType="nt:unstructured"
+            usedBy="[aem]">
+            <aem
+                jcr:primaryType="nt:unstructured"
+                count="{Long}3"
+                lastUsed="{Date}2020-11-27T19:42:37.681+02:00"/>
+        </usages>
+    </jcr:content>
+</jcr:root>

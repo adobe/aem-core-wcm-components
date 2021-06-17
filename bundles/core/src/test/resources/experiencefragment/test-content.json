@@ -1,9 +1,9 @@
 {
     "mysite": {
-        "jcr:primaryType": "sling:Folder", 
+        "jcr:primaryType": "sling:Folder",
         "jcr:content": {
-            "jcr:primaryType": "cq:PageContent", 
-            "jcr:title": "Language Structure", 
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Language Structure",
             "jcr:created": "Mon Apr 08 2019 20:21:55 GMT+0200"
         },
         "page": {
@@ -76,6 +76,20 @@
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
                             "fragmentVariationPath": "/content/experience-fragments/mysite/en/header_empty/master"
+                        },
+                        "title_core": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "jcr:createdBy": "admin",
+                            "jcr:title": "Welcome to AEM Core Components Demo !!",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created": "Thu Jan 21 2021 03:24:27 GMT-0600",
+                            "type": "h1",
+                            "jcr:lastModified": "Thu Jan 21 2021 05:05:03 GMT-0600",
+                            "sling:resourceType": "core/wcm/components/title/v2/title",
+                            "cq:styleIds": [
+                                "1614651105857",
+                                "1614651142305"
+                            ]
                         },
                         "xf-component-72": {
                             "jcr:primaryType": "nt:unstructured",
@@ -315,7 +329,8 @@
                             "jcr:content": {
                                 "cq:xfVariantType": "web",
                                 "jcr:primaryType": "cq:PageContent",
-                                "jcr:title": "English Test Footer Variation"}
+                                "jcr:title": "English Test Footer Variation"
+                            }
 
                         }
                     }
@@ -370,7 +385,8 @@
                                 "jcr:content": {
                                     "cq:xfVariantType": "web",
                                     "jcr:primaryType": "cq:PageContent",
-                                    "jcr:title": "English Test Footer Variation"}
+                                    "jcr:title": "English Test Footer Variation"
+                                }
 
                             }
                         }
@@ -514,7 +530,8 @@
                         "jcr:content": {
                             "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
-                            "jcr:title": "English Test Footer Variation"}
+                            "jcr:title": "English Test Footer Variation"
+                        }
 
                     }
                 },
@@ -606,7 +623,8 @@
                         "jcr:content": {
                             "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
-                            "jcr:title": "English Test Footer Variation"}
+                            "jcr:title": "English Test Footer Variation"
+                        }
 
                     }
                 }
@@ -656,7 +674,8 @@
                         "jcr:content": {
                             "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
-                            "jcr:title": "English Test Footer Variation"}
+                            "jcr:title": "English Test Footer Variation"
+                        }
 
                     }
                 }

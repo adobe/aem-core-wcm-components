@@ -2,8 +2,6 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-07-17T15:12:57.174+02:00"
-        cq:lastModifiedBy="admin"
         cq:tags="[]"
         cq:xfMasterVariation="{Boolean}true"
         cq:xfVariantType="web"
@@ -11,24 +9,14 @@
         jcr:title="Simple Experience Fragment - master"
         sling:resourceType="cq/experience-fragments/components/xfpage">
         <root
-            jcr:lastModified="{Date}2016-11-22T17:31:48.669+02:00"
-            jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
             <text
-                jcr:created="{Date}2019-07-17T15:17:19.438+02:00"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2019-07-17T15:17:32.534+02:00"
-                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="core-components-examples/components/text"
-                text="&lt;p>Lava forming some rock.&lt;/p>&#xd;&#xa;"
+                text="&lt;p>Lava forming some rock.&lt;/p>"
                 textIsRich="true"/>
             <image
-                jcr:created="{Date}2019-07-17T15:17:40.586+02:00"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2019-07-17T15:18:21.810+02:00"
-                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="core-components-examples/components/image"
                 altValueFromDAM="true"

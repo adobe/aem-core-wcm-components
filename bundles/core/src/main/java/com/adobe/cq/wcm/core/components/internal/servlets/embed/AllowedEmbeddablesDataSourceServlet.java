@@ -49,6 +49,7 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
     service = { Servlet.class },
     property = {
         "sling.servlet.resourceTypes=" + AllowedEmbeddablesDataSourceServlet.RESOURCE_TYPE_V1,
+        "sling.servlet.resourceTypes=" + AllowedEmbeddablesDataSourceServlet.RESOURCE_TYPE_V2,
         "sling.servlet.methods=GET",
         "sling.servlet.extensions=html"
     }
@@ -56,6 +57,7 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 public class AllowedEmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
 
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/embed/v1/datasources/allowedembeddables";
+    public static final String RESOURCE_TYPE_V2 = "core/wcm/components/embed/v2/datasources/allowedembeddables";
 
     private static final long serialVersionUID = -3528015217249498756L;
 

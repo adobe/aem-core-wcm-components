@@ -503,6 +503,24 @@
     }
 
     /**
+     * Scrolls the browser when the URI fragment is changed to the item of the container Accordion component that corresponds to the deep link in the URL fragment,
+       and displays its content.
+     * This method fixes the issue existent with Chrome and related browsers, which are just scrolling to the item without displaying its content.
+     */
+    function onHashChange() {
+        if (location.hash && location.hash !== "#") {
+            var anchorLocation = decodeURIComponent(location.hash);
+            var anchorElement = document.querySelector(anchorLocation);
+            if (anchorElement && anchorElement.classList.contains("cmp-accordion__item") && !anchorElement.hasAttribute("data-cmp-expanded")) {
+                var anchorElementButton = document.querySelector(anchorLocation + "-button");
+                if (anchorElementButton) {
+                    anchorElementButton.click();
+                }
+            }
+        }
+    }
+
+    /**
      * Reads options data from the Accordion wrapper element, defined via {@code data-cmp-*} data attributes.
      *
      * @private
@@ -595,5 +613,7 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    window.addEventListener("hashchange", window.CQ.CoreComponents.container.utils.locationHashChanged, false);
+    window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    window.addEventListener("hashchange", onHashChange, false);
+
 }());

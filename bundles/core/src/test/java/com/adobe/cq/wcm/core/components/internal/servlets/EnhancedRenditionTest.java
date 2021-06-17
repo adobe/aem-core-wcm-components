@@ -18,6 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.jcr.Binary;
+
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.Test;
 

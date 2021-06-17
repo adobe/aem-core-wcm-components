@@ -9,7 +9,7 @@
                 "jcr:primaryType"        : "cq:Component",
                 "jcr:title"              : "Teaser (v1)",
                 "sling:resourceSuperType": "core/wcm/components/teaser",
-                "imageDelegate"          : "core/wcm/components/image/v2/image",
+                "imageDelegate"          : "core/wcm/components/image/v3/image",
                 "componentGroup"         : ".core-wcm"
             }
         }
@@ -20,7 +20,7 @@
         "jcr:primaryType"        : "cq:Component",
         "jcr:title"              : "Teaser Icon Abbreviation",
         "sling:resourceSuperType": "core/wcm/components/teaser",
-        "imageDelegate"          : "core/wcm/components/image/v2/image",
+        "imageDelegate"          : "core/wcm/components/image/v3/image",
         "componentGroup"         : ".core-wcm"
     },
     "teaserIconAutoAbbreviation": {
@@ -29,7 +29,7 @@
         "jcr:primaryType"        : "cq:Component",
         "jcr:title"              : "Teaser Icon Auto Abbreviation",
         "sling:resourceSuperType": "core/wcm/components/teaser",
-        "imageDelegate"          : "core/wcm/components/image/v2/image",
+        "imageDelegate"          : "core/wcm/components/image/v3/image",
         "componentGroup"         : ".core-wcm"
     },
     "teaserIconSVG": {
@@ -37,7 +37,7 @@
         "jcr:primaryType"        : "cq:Component",
         "jcr:title"              : "Teaser Icon SVG",
         "sling:resourceSuperType": "core/wcm/components/teaser",
-        "imageDelegate"          : "core/wcm/components/image/v2/image",
+        "imageDelegate"          : "core/wcm/components/image/v3/image",
         "componentGroup"         : ".core-wcm",
         "cq:icon.svg": {
         }
@@ -47,7 +47,7 @@
         "jcr:primaryType"        : "cq:Component",
         "jcr:title"              : "Teaser Icon PNG",
         "sling:resourceSuperType": "core/wcm/components/teaser",
-        "imageDelegate"          : "core/wcm/components/image/v2/image",
+        "imageDelegate"          : "core/wcm/components/image/v3/image",
         "componentGroup"         : ".core-wcm",
         "cq:icon.png": {
         }

@@ -159,7 +159,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * List of properties that should be suppressed on image delegation.
      */
-    private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
+    protected final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
     }};
@@ -208,7 +208,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      * Initialize the model.
      */
     @PostConstruct
-    private void initModel() {
+    protected void initModel() {
         ValueMap properties = resource.getValueMap();
 
         pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
@@ -227,7 +227,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
 
         if (this.hasImage()) {
-            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties);
+            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties, null);
         }
         // use the target page as the link if it exists
         link = this.getTargetPage()
@@ -253,13 +253,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      *
      * @return True if the teaser has an image, false if it does not.
      */
-    private boolean hasImage() {
+    protected boolean hasImage() {
         return Optional.ofNullable(this.resource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
             .map(request.getResourceResolver()::getResource)
             .orElseGet(() -> request.getResource().getChild(DownloadResource.NN_FILE)) != null;
     }
 
-    protected ListItem newAction(Resource actionRes, Component component) {
+    protected Action newAction(Resource actionRes, Component component) {
         return new Action(actionRes, getId(), component);
     }
 
@@ -277,7 +277,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      * @return The target page if it exists, or empty if not.
      */
     @NotNull
-    private Optional<Page> getTargetPage() {
+    protected Optional<Page> getTargetPage() {
         if (this.targetPage == null) {
             if (this.isActionsEnabled()) {
                 this.targetPage = this.getTeaserActions().stream().findFirst().flatMap(Action::getCtaPage).orElse(null);
@@ -303,7 +303,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 .map(Iterable::spliterator)
                 .map(s -> StreamSupport.stream(s, false))
                 .orElseGet(Stream::empty)
-                .map(action -> new Action(action, this.getId(), component))
+                .map(action -> newAction(action, component))
                 .collect(Collectors.toList());
         }
         return this.actions;
@@ -455,7 +455,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          * @param actionRes The action resource.
          * @param parentId The ID of the containing Teaser.
          */
-        private Action(@NotNull final Resource actionRes, final String parentId, Component component) {
+        public Action(@NotNull final Resource actionRes, final String parentId, Component component) {
             super(parentId, actionRes, component);
             ctaParentId = parentId;
             ctaResource = actionRes;
@@ -469,7 +469,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         @Override
         @JsonIgnore
-        public @NotNull Link getLink() {
+        @Nullable
+        public Link getLink() {
             return ctaLink.orElse(null);
         }
 

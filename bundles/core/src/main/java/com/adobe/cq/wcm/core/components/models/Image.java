@@ -20,6 +20,8 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -208,11 +210,23 @@ public interface Image extends Component {
     }
 
     /**
+     * Returns the image's link.
+     *
+     * @return the image's link.
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default Link getImageLink() {
+        return null;
+    }
+
+    /**
      * Returns the image's link URL, if one was set.
      *
      * @return the image's link URL, if one was set, or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     * @deprecated Please use {@link #getImageLink()}
      */
+    @Deprecated
     default String getLink() {
         return null;
     }
@@ -292,6 +306,36 @@ public interface Image extends Component {
     }
 
     /**
+     * Returns the value for the {@code srcset} html attribute of the image.
+     *
+     * @return the value of the {@code srcset} attribute, if one was set, or {@code null}.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    default String getSrcset() {
+        return null;
+    }
+
+    /**
+     * Returns the value for the {@code width} html attribute of the image.
+     *
+     * @return the value for the image's {@code width} attribute, if one was set, or {@code null}.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
+     */
+    default String getWidth() {
+        return null;
+    }
+
+    /**
+     * Returns the value for the {@code height} html attribute of the image.
+     *
+     * @return the value for the image's {@code height} attribute, if one was set, or {@code null}.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
+     */
+    default String getHeight() {
+        return null;
+    }
+
+    /**
      * Returns the number of pixels in advance of an image becoming visible that a lazy
      * loading image should load.
      *
@@ -328,4 +372,9 @@ public interface Image extends Component {
     default boolean isDmImage() {
         return false;
     }
+
+    default ImageData getComponentData() {
+        return null;
+    }
+
 }

@@ -7,8 +7,6 @@
     <jcr:content
         cq:name="adobe-basel"
         cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
-        jcr:lastModified="{Date}2019-04-25T13:06:43.662+01:00"
-        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="Adobe Research Schweiz AG"
         contentFragment="{Boolean}true"

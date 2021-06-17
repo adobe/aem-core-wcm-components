@@ -47,6 +47,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
     property = {
         "sling.servlet.methods=GET",
         "sling.servlet.resourceTypes=" + EmbedUrlProcessorServlet.RESOURCE_TYPE_V1,
+        "sling.servlet.resourceTypes=" + EmbedUrlProcessorServlet.RESOURCE_TYPE_V2,
         "sling.servlet.selectors=" + EmbedUrlProcessorServlet.SELECTOR,
         "sling.servlet.extensions=" + EmbedUrlProcessorServlet.EXTENSION
     }
@@ -54,6 +55,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class EmbedUrlProcessorServlet extends SlingSafeMethodsServlet {
 
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/embed/v1/embed";
+    protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/embed/v2/embed";
     protected static final String SELECTOR = "urlProcessor";
     protected static final String EXTENSION = "json";
 

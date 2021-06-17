@@ -7,8 +7,6 @@
         cq:name="experience-fragment.svg"
         cq:parentPath="/content/dam/core-components-examples/library/components"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-08-28T15:42:10.855+02:00"
-        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:extracted="{Date}2019-08-28T15:42:10.393+02:00"
@@ -17,8 +15,6 @@
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-08-20T11:24:57.258+02:00"
             dc:title="Experience Fragment"
-            jcr:lastModified="{Date}2019-08-28T15:29:40.017+02:00"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured">
             <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>

@@ -15,7 +15,6 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.teaser="com.adobe.cq.wcm.core.components.models.Teaser"
      data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
-     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-use.imageTemplate="image.html"
      data-sly-use.pretitleTemplate="pretitle.html"
@@ -23,7 +22,7 @@
      data-sly-use.descriptionTemplate="description.html"
      data-sly-use.actionsTemplate="actions.html"
      data-sly-test.hasContent="${teaser.imageResource || teaser.pretitle || teaser.title || teaser.description || teaser.actions.size > 0}"
-     id="${component.id}"
+     id="${teaser.id}"
      class="cmp-teaser${!wcmmode.disabled && teaser.imageResource ? ' cq-dd-image' : ''}"
      data-cmp-data-layer="${image.data.json}"
      data-cmp-smartcroprendition="${image.smartCropRendition}">

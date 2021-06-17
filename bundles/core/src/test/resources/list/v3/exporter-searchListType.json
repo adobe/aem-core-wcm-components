@@ -1,0 +1,34 @@
+{
+    "id": "list-b2e295b751",
+    "dateFormatString": "yyyy-MM-dd",
+    "items": [
+        {
+            "id": "list-b2e295b751-item-c1a450dfb3",
+            "path": "/content/list/pages/page_1",
+            "link": {
+                "url": "/content/list/pages/page_1.html",
+                "valid": true
+            },
+            "title": "Page 1",
+            "lastModified": 1474672365000,
+            "dataLayer": {
+                "list-b2e295b751-item-c1a450dfb3": {
+                    "@type": "cq:Component/item",
+                    "dc:title": "Page 1",
+                    "xdm:linkURL": "/content/list/pages/page_1.html"
+                }
+            },
+            ":type": "cq:PageContent"
+        }
+    ],
+    "dataLayer": {
+        "list-b2e295b751": {
+            "@type": "core/wcm/components/list/v3/list"
+        }
+    },
+    "displayItemAsTeaser": false,
+    "showDescription": false,
+    "showModificationDate": false,
+    "linkItems": false,
+    ":type": "core/wcm/components/list/v3/list"
+}

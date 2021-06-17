@@ -59,6 +59,7 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -69,6 +70,9 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
+import static com.day.cq.commons.jcr.JcrConstants.JCR_MIMETYPE;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -87,7 +91,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected PageManager pageManager;
 
     @ScriptVariable
-    private Page currentPage;
+    protected Page currentPage;
 
     @ScriptVariable
     protected Style currentStyle;
@@ -133,6 +137,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected boolean disableLazyLoading;
     protected int jpegQuality;
     protected String imageName;
+    private Resource fileResource;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
@@ -145,6 +150,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
     @PostConstruct
     protected void initModel() {
+        initFeaturedImageBasedProperties();
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
@@ -165,9 +171,15 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
             }
         } else {
-            Resource file = resource.getChild(DownloadResource.NN_FILE);
-            if (file != null) {
-                mimeType = PropertiesUtil.toString(file.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), MIME_TYPE_IMAGE_JPEG);
+            if (fileResource != null) {
+                mimeType = PropertiesUtil.toString(fileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), null);
+                if (StringUtils.isEmpty(mimeType)) {
+                    Resource fileResourceContent = fileResource.getChild(JCR_CONTENT);
+                    if (fileResourceContent != null) {
+                        ValueMap fileProperties = fileResourceContent.getValueMap();
+                        mimeType = fileProperties.get(JCR_MIMETYPE, MIME_TYPE_IMAGE_JPEG);
+                    }
+                }
                 String fileName = properties.get(ImageResource.PN_FILE_NAME, String.class);
                 imageName = StringUtils.isNotEmpty(fileName) ? getSeoFriendlyName(FilenameUtils.getBaseName(fileName)) : "";
                 hasContent = true;
@@ -378,8 +390,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
 
     @Override
+    @JsonIgnore
     @NotNull
-    protected ImageData getComponentData() {
+    public ImageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
             .withTitle(this::getTitle)
             .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
@@ -392,4 +405,17 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     .orElse(null))
             .build();
     }
+
+    private void initFeaturedImageBasedProperties() {
+        fileResource = resource.getChild(DownloadResource.NN_FILE);
+        if (StringUtils.isEmpty(fileReference) && fileResource == null) {
+            Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
+            if (featuredImage != null) {
+                fileResource = featuredImage.getChild(DownloadResource.NN_FILE);
+                ValueMap featuredImageProps = featuredImage.getValueMap();
+                fileReference = featuredImageProps.get(DownloadResource.PN_REFERENCE, String.class);
+            }
+        }
+    }
+
 }

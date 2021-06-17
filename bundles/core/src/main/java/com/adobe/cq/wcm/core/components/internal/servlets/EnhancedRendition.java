@@ -18,6 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.awt.*;
 import java.io.InputStream;
 
+import javax.jcr.Binary;
+
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.ResourceWrapper;

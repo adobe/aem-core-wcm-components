@@ -9,8 +9,6 @@
                 <responsivegrid jcr:primaryType="nt:unstructured">
                     <policy_76194888503838
                         cq:styleDefaultClasses="cmp-examples-structure"
-                        jcr:lastModified="{Date}2018-12-18T19:17:00.040Z"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Root"
                         sling:resourceType="wcm/core/components/policy/policy"
@@ -31,8 +29,6 @@
                     </policy_76194888503838>
                     <policy_1545309074617
                         cq:styleDefaultClasses="cmp-examples-structure__main"
-                        jcr:lastModified="{Date}2020-03-31T12:22:22.749-07:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Structure"
                         sling:resourceType="wcm/core/components/policy/policy"
@@ -80,8 +76,6 @@
         <components jcr:primaryType="nt:unstructured">
             <page jcr:primaryType="nt:unstructured">
                 <policy_212634895490169
-                    jcr:lastModified="{Date}2019-02-14T14:27:11.516+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Core Components Examples - Page"
                     sling:resourceType="wcm/core/components/policy/policy"
@@ -94,8 +88,6 @@
             <form jcr:primaryType="nt:unstructured">
                 <text jcr:primaryType="nt:unstructured">
                     <policy_1550289110975
-                        jcr:lastModified="{Date}2019-02-16T04:53:01.777+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Form Text"
                         sling:resourceType="wcm/core/components/policy/policy">
@@ -116,8 +108,6 @@
             </form>
             <search jcr:primaryType="nt:unstructured">
                 <policy_1572547933941
-                    jcr:lastModified="{Date}2019-10-31T12:58:04.144-06:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Core Components Examples - Search"
                     sling:resourceType="wcm/core/components/policy/policy"
@@ -129,8 +119,6 @@
             </search>
             <teaser jcr:primaryType="nt:unstructured">
                 <policy_1547060084604
-                    jcr:lastModified="{Date}2020-03-06T00:50:36.952+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Core Components Examples - Teaser"
                     sling:resourceType="wcm/core/components/policy/policy">
@@ -157,8 +145,6 @@
             </teaser>
             <download jcr:primaryType="nt:unstructured">
                 <policy_1559906471859
-                    jcr:lastModified="{Date}2019-06-07T13:36:21.106+02:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="download"
                     sling:resourceType="wcm/core/components/policy/policy"
@@ -171,8 +157,6 @@
             </download>
             <embed jcr:primaryType="nt:unstructured">
                 <policy_1558686151045
-                        jcr:lastModified="{Date}2019-05-24T13:52:49.696+05:30"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Embed"
                         sling:resourceType="wcm/core/components/policy/policy"
@@ -182,8 +166,6 @@
             </embed>
             <title jcr:primaryType="nt:unstructured">
                 <policy_1544759499870
-                        jcr:lastModified="{Date}2018-12-20T19:58:20.742Z"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Title"
                         sling:resourceType="wcm/core/components/policy/policy"
@@ -218,8 +200,6 @@
             </title>
             <text jcr:primaryType="nt:unstructured">
                 <policy_1544762709128
-                        jcr:lastModified="{Date}2019-01-15T17:04:07.053+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Text"
                         sling:resourceType="wcm/core/components/policy/policy">
@@ -364,8 +344,6 @@
             </text>
             <separator jcr:primaryType="nt:unstructured">
                 <policy_1550355088949
-                        jcr:lastModified="{Date}2019-02-16T23:15:25.965+01:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Separator"
                         sling:resourceType="wcm/core/components/policy/policy">
@@ -387,8 +365,6 @@
             </separator>
             <container jcr:primaryType="nt:unstructured">
                 <policy_1559057070844
-                        jcr:lastModified="{Date}2019-05-28T18:24:48.269+03:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Container"
                         sling:resourceType="wcm/core/components/policy/policy"

@@ -15,26 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -42,8 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
 public class TeaserImplTest {
@@ -54,6 +47,7 @@ public class TeaserImplTest {
     protected static final String PNG_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_BINARY_NAME;
     protected static final String CONTEXT_PATH = "/core";
     protected static final String TEST_ROOT_PAGE = "/content/teasers";
+    protected static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
     protected static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     protected static final String TITLE = "Teaser";
     protected static final String PRETITLE = "Teaser's Pretitle";
@@ -72,6 +66,7 @@ public class TeaserImplTest {
     protected static final String TEASER_11 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-11";
     protected static final String TEASER_12 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-12";
     protected static final String TEASER_13 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-13";
+    protected static final String TEASER_20 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-20";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -86,6 +81,7 @@ public class TeaserImplTest {
     protected void internalSetup() {
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_DAM_JSON, "/content/dam/core/images");
+        context.load().json(testBase + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
     }
 
@@ -209,14 +205,14 @@ public class TeaserImplTest {
         Teaser teaser = getTeaserUnderTest(TEASER_1,
             Teaser.PN_TITLE_TYPE, "h5");
         assertEquals("h5", teaser.getTitleType(), "Expected title type is not correct");
-        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser2"));
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser2"));
     }
 
     @Test
     protected void testTeaserWithDefaultTitleType() {
         Teaser teaser = getTeaserUnderTest(TEASER_1);
         assertNull(teaser.getTitleType(), "Expected the default title type is not correct");
-        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser1"));
     }
 
     @Test
@@ -224,7 +220,7 @@ public class TeaserImplTest {
         Teaser teaser = getTeaserUnderTest(TEASER_13,
             Teaser.PN_TITLE_TYPE, "h5", Teaser.PN_SHOW_TITLE_TYPE, true);
         assertEquals("h4", teaser.getTitleType(), "Expected title type is not correct");
-        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser13"));
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser13"));
     }
 
     @Test
@@ -268,14 +264,6 @@ public class TeaserImplTest {
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);
         }
-        Component component = mock(Component.class);
-        when(component.getProperties()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>() {{
-            put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/components/image/v2/image");
-        }}));
-        when(component.getResourceType()).thenReturn(TeaserImpl.RESOURCE_TYPE);
-        SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
-        slingBindings.put(WCMBindings.COMPONENT, component);
-        request.setAttribute(SlingBindings.class.getName(), slingBindings);
         request.setContextPath(CONTEXT_PATH);
         return request.adaptTo(Teaser.class);
     }
