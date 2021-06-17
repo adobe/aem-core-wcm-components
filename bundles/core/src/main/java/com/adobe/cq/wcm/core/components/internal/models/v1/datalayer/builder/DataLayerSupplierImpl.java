@@ -145,6 +145,12 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
     private Supplier<ContentFragmentData.ElementData[]> contentFragmentElementsSupplier;
 
     /**
+     * The embeddable value supplier;
+     */
+    @Nullable
+    private Supplier<Map<String, Object>> embeddableSupplier;
+
+    /**
      * Construct a wrapper for a {@link DataLayerSupplier}.
      *
      * @param dataLayerSupplier The data layer supply to wrap.
@@ -482,6 +488,26 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     public DataLayerSupplierImpl setSmartTags(@NotNull final Supplier<Map<String, Object>> supplier) {
         this.smartTagsSupplier = supplier;
+        return this;
+    }
+
+    @Override
+    @NotNull
+    public Optional<Supplier<Map<String, Object>>> getEmbeddableDetails() {
+        if (this.embeddableSupplier != null) {
+            return Optional.of(this.embeddableSupplier);
+        }
+        return this.wrappedSupplier.getEmbeddableDetails();
+    }
+
+    /**
+     * Set the embeddable details value supplier.
+     *
+     * @param supplier The embeddable details value supplier.
+     * @return This.
+     */
+    public DataLayerSupplierImpl setEmbeddableDetails(@NotNull final Supplier<Map<String, Object>> supplier) {
+        this.embeddableSupplier = supplier;
         return this;
     }
 

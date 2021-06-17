@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2020 Adobe
+ ~ Copyright 2021 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,11 +13,24 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
- * This packages defines models for integration with
- * <a href="https://github.com/adobe/adobe-client-data-layer">Adobe Client Data Layer</a>
- */
-@Version("1.3.0")
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
-import org.osgi.annotation.versioning.Version;
+import java.util.Collections;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public interface EmbeddableData extends ComponentData {
+
+    /**
+     * Returns the embeddable properties.
+     *
+     * @return Map of embeddable properties
+     *
+     * @since com.adobe.cq.wcm.core.components.models.datalayer 1.3.0
+     */
+    @JsonProperty("embeddableProperties")
+    default Map<String, Object> getEmbeddableDetails() {
+        return Collections.emptyMap();
+    }
+}

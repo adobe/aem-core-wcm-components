@@ -89,4 +89,14 @@ public final class ComponentDataLayerExtender {
         return new ContentFragmentDataBuilder(DataLayerSupplierImpl.extend(this.componentData));
     }
 
+    /**
+     * Get a EmbeddableDataBuilder that extends existing component data.
+     *
+     * @return A new EmbeddableDataBuilder pre-initialized with the existing component data.
+     */
+    @NotNull
+    public EmbeddableDataBuilder asEmbeddable() {
+        return new EmbeddableDataBuilder(DataLayerSupplierImpl.extend(this.componentData));
+    }
+
 }

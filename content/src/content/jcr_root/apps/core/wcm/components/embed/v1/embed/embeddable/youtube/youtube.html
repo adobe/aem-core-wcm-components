@@ -15,6 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <iframe data-sly-use.youTube="com.adobe.cq.wcm.core.components.models.embeddable.YouTube"
         data-sly-test="${!youtube.empty}"
+        data-cmp-data-layer="${youtube.data.json}"
         width="${youTube.iFrameWidth || '100%' @ context='scriptString'}"
         height="${youTube.iFrameHeight || 390 @ context='scriptString'}"
         src="${youTube.iFrameSrc}"

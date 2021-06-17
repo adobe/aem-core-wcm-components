@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.EmbeddableData;
 
 /**
  * Data layer field value supplier.
@@ -163,6 +164,16 @@ public interface DataLayerSupplier {
      */
     @NotNull
     default Optional<Supplier<Map<String, Object>>> getSmartTags() {
+        return Optional.empty();
+    }
+
+    /**
+     * Get the embeddable details value supplier.
+     *
+     * @return The embeddable details value supplier, or empty if not set.
+     */
+    @NotNull
+    default Optional<Supplier<Map<String, Object>>> getEmbeddableDetails() {
         return Optional.empty();
     }
 
