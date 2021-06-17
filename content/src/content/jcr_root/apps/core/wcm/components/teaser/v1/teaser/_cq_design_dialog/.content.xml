@@ -27,6 +27,18 @@
                                 sling:resourceType="granite/ui/components/coral/foundation/container"
                                 granite:class="coral-Form-fieldwrapper">
                                 <items jcr:primaryType="nt:unstructured">
+                                    <enableDmFeatures
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, Dynamic Media features are enabled."
+                                        name="./enableDmFeatures"
+                                        text="Enable DM features"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true">
+                                        <granite:rendercondition jcr:primaryType="nt:unstructured"
+                                                                 sling:resourceType="granite/ui/components/coral/foundation/renderconditions/feature"
+                                                                 feature="com.adobe.dam.asset.scene7.feature.flag"/>
+                                    </enableDmFeatures>
                                     <label
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/text"

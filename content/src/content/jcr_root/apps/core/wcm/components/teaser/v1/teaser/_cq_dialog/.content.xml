@@ -16,9 +16,9 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <image
+                    <asset
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Image"
+                        jcr:title="Asset"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -34,7 +34,6 @@
                                             <file
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
-                                                allowUpload="{Boolean}false"
                                                 autoStart="{Boolean}false"
                                                 class="cq-droptarget"
                                                 fieldLabel="Image Asset"
@@ -51,7 +50,7 @@
                                 </items>
                             </columns>
                         </items>
-                    </image>
+                    </asset>
                     <text
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Text"
@@ -389,6 +388,88 @@
                             </columns>
                         </items>
                     </actions>
+                    <metadata
+                        granite:hide="${!cqDesign.enableDmFeatures}"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Metadata"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <dynamicmediaGroup
+                                                granite:hide="${!cqDesign.enableDmFeatures}"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/well"
+                                                granite:class="cmp-image__editor-dynamicmedia">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <dmpresettypecontainer
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                        <items jcr:primaryType="nt:unstructured">
+                                                            <presettype
+                                                                wrapperClass="cmp-image__editor-dynamicmedia-presettype"
+                                                                jcr:primaryType="nt:unstructured"
+                                                                sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
+                                                                deleteHint="{Boolean}true"
+                                                                fieldLabel="Preset Type"
+                                                                fieldDescription="Select either an Image Preset or Smart Crop rendition."
+                                                                name="./dmPresetType"
+                                                                text="Preset Type">
+                                                                <items jcr:primaryType="nt:unstructured">
+                                                                    <option1
+                                                                        jcr:primaryType="nt:unstructured"
+                                                                        checked="{Boolean}true"
+                                                                        text="Image Preset"
+                                                                        value="imagePreset"/>
+                                                                    <option2
+                                                                        jcr:primaryType="nt:unstructured"
+                                                                        text="Smart Crop"
+                                                                        value="smartCrop"/>
+                                                                </items>
+                                                            </presettype>
+                                                        </items>
+                                                    </dmpresettypecontainer>
+                                                    <imagepreset
+                                                        granite:class="cmp-image__editor-dynamicmedia-imagepreset"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                        fieldDescription="Image Preset to use when rendering image."
+                                                        fieldLabel="Image Preset"
+                                                        name="./imagePreset">
+                                                        <datasource
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="dam/components/scene7/common/imagepresetdatasource"/>
+                                                    </imagepreset>
+                                                    <smartcroprenditions
+                                                        granite:class="cmp-image__editor-dynamicmedia-smartcroprendition"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                        fieldDescription="Select Auto for Dynamic Media to decide the best rendition. Else select a specific smart crop rendition."
+                                                        fieldLabel="Rendition"
+                                                        name="./smartCropRendition">
+                                                    </smartcroprenditions>
+                                                    <imageModifiers
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        fieldDescription="Additional Dynamic Media Image Serving commands separated by '&amp;'.Field gives complete flexibility to change image effects."
+                                                        fieldLabel="Image Modifiers"
+                                                        name="./imageModifiers"/>
+                                                </items>
+                                            </dynamicmediaGroup>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </metadata>
                 </items>
             </tabs>
         </items>
