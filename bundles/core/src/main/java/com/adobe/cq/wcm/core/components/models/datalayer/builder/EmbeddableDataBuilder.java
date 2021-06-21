@@ -25,8 +25,8 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.Dat
 import com.adobe.cq.wcm.core.components.models.datalayer.EmbeddableData;
 
 /**
- * Data builder for a Embeddable.
- * This builder will produce a valid {@link EmbeddableData} object.
+ * Data builder for an Embeddable.
+ * This builder produces a valid {@link EmbeddableData} object.
  *
  * @since com.adobe.cq.wcm.core.components.models.datalayer.builder 1.2.0
  */

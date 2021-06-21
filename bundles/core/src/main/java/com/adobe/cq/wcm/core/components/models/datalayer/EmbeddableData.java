@@ -20,6 +20,11 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Interface defining data for embeddables.
+ *
+ * @since com.adobe.cq.wcm.core.components.models.datalayer 1.3.0
+ */
 public interface EmbeddableData extends ComponentData {
 
     /**
