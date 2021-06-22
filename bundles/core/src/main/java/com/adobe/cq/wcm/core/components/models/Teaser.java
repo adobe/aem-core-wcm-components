@@ -129,6 +129,21 @@ public interface Teaser extends Component {
     String PN_SHOW_TITLE_TYPE = "showTitleType";
 
     /**
+     * Name of the component property indicating to which title component the teaser should be delegated.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    String PN_TITLE_DELEGATE = "titleDelegate";
+
+    /**
+     * Name of the component property indicating to which button component the teaser should be delegated.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    String PN_BUTTON_DELEGATE = "buttonDelegate";
+
+
+    /**
      * Checks if the teaser has Call-to-Action elements
      *
      * @return {@code true} if teaser has CTAs, {@code false} otherwise
@@ -238,6 +253,23 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getTitleType() {
+        return null;
+    }
+
+
+    /**
+     * Returns a wrapped resource of the item which is used to render the item as a Teaser component.
+     *
+     * The wrapped resource is either:
+     * - the featured image of the item page, if it exists
+     * - the content node of the item page, if it exists
+     * - null otherwise
+     *
+     * @return wrapped resource of the item which can be rendered as a Teaser component
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    @Nullable
+    default Resource getTitleResource() {
         return null;
     }
 

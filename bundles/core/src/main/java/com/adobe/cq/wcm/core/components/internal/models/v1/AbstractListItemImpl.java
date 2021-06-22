@@ -67,6 +67,7 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl impleme
             this.path = resource.getPath();
         }
         if (component != null) {
+            this.component = component;
             this.dataLayerType = component.getResourceType() + "/" + ITEM_ID_PREFIX;
         }
         this.resource = resource;

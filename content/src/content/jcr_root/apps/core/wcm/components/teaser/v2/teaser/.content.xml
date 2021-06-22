@@ -5,5 +5,7 @@
     jcr:primaryType="cq:Component"
     jcr:title="Teaser (v2) (work-in-progress)"
     sling:resourceSuperType="core/wcm/components/image"
+    buttonDelegate="core/wcm/components/button/v2/button"
+    componentGroup=".wip"
     imageDelegate="core/wcm/components/image/v3/image"
-    componentGroup=".wip"/>
+    titleDelegate="core/wcm/components/title/v3/title"/>

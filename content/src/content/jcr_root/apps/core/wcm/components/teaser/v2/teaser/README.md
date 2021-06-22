@@ -63,8 +63,8 @@ The following properties are written to JCR for this Teaser component and are ex
 11. `./titleType` - stores the value for this title's HTML element type
 
 ### Extending the Teaser Component
-When extending the Teaser component by using `sling:resourceSuperType`, developers need to define the `imageDelegate` property for
-the proxy component and point it to the designated Image component.
+When extending the Teaser component by using `sling:resourceSuperType`, developers need to define the `buttonDelegate`, `imageDelegate` 
+and `titleDelegate` property for the proxy component and point it to the designated button, image and title component.
 
 For example:
 ```
@@ -77,11 +77,11 @@ BLOCK cmp-teaser
     ELEMENT cmp-teaser__image
     ELEMENT cmp-teaser__content
     ELEMENT cmp-teaser__pretitle
-    ELEMENT cmp-teaser__title
+    ELEMENT cmp-title__text
     ELEMENT cmp-teaser__title-link
     ELEMENT cmp-teaser__description
     ELEMENT cmp-teaser__action-container
-    ELEMENT cmp-teaser__action-link
+    ELEMENT cmp-button
 ```
 
 ## Information

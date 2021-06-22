@@ -170,6 +170,28 @@
                         "jcr:primaryType"   : "nt:unstructured",
                         "linkURL"           : "/content/teasers",
                         "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
+                    },
+                    "teaser-21"          : {
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "linkURL"             : "/content/teasers",
+                        "jcr:title"           : "Teaser",
+                        "jcr:description"     : "Description",
+                        "actionsEnabled"             : true,
+                        "sling:resourceType"  : "core/wcm/components/invalidTeaser/v2/invalidTeaser",
+                        "actions"                : {
+                            "jcr:primaryType" : "nt:unstructured",
+                            "item0" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "link": "http://www.adobe.com",
+                                "text": "Adobe"
+                            },
+                            "item1" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "link": "/content/teasers",
+                                "text": "Teasers"
+                            }
+                        }
                     }
                 }
             }

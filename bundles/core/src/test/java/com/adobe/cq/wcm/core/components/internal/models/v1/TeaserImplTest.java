@@ -73,7 +73,7 @@ public class TeaserImplTest {
     protected String testBase;
 
     @BeforeEach
-    protected void setUp() {
+    protected void setUp() throws Exception {
         testBase = TEST_BASE;
         internalSetup();
     }

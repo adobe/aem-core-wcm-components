@@ -22,26 +22,32 @@ import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
 
 import com.adobe.cq.wcm.core.components.Utils;
+import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
+import com.day.cq.commons.jcr.JcrConstants;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(AemContextExtension.class)
 public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImplTest {
 
     private static final String TEST_BASE = "/teaser/v2";
+    private static final String TEASER_21 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-21";
+    private Logger testLogger;
 
     @BeforeEach
-    protected void setUp() {
+    protected void setUp() throws Exception {
         testBase = TEST_BASE;
         internalSetup();
+        testLogger = Utils.mockLogger(TeaserImpl.class, "LOG");
     }
 
     @Test
@@ -50,6 +56,8 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertTrue(teaser.isActionsEnabled(), "Expected teaser with actions");
         assertEquals(2, teaser.getActions().size(), "Expected to find two Actions");
         assertEquals("Teasers Test", teaser.getTitle());
+        assertNotNull(teaser.getTitleResource());
+        assertEquals("Teasers Test", teaser.getTitleResource().getValueMap().get(JcrConstants.JCR_TITLE));
         assertEquals("Teasers description", teaser.getDescription());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser11"));
     }
@@ -94,6 +102,8 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertEquals("Adobe", action.getTitle(), "Action text does not match");
         assertEquals("http://www.adobe.com", action.getURL());
         assertValidLink(action.getLink(), "http://www.adobe.com");
+        assertNotNull(action.getButtonResource());
+        assertEquals("Adobe", action.getButtonResource().getValueMap().get(JcrConstants.JCR_TITLE), "Action text does not match");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser9"));
     }
 
@@ -109,6 +119,15 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertEquals("/content/teasers", linkURL, "image resource: linkURL");
         assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", fileReference, "image resource: fileReference");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser20"));
+    }
+
+    @Test
+    protected void testInvalidDelegatingTeaser() {
+        Teaser teaser = getTeaserUnderTest(TEASER_21);
+        ListItem action = teaser.getActions().get(0);
+        assertNull(action.getButtonResource());
+        verify(testLogger, times(1)).error("no buttonDelegate property set on component " +
+                "/apps/core/wcm/components/invalidTeaser/v2/invalidTeaser");
     }
 
 }

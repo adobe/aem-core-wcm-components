@@ -124,4 +124,13 @@ public interface ListItem extends Component {
     @Nullable
     default Resource getTeaserResource() { return null;}
 
+    /**
+     * Returns a wrapped resource of the item which is used to render the item as a Button component.
+     *
+     * @return wrapped resource of the item which can be rendered as a Teaser component
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    @Nullable
+    default Resource getButtonResource() { return null ;}
+
 }

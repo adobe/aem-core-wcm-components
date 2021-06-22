@@ -4,12 +4,28 @@
     "v2" : {
       "jcr:primaryType": "nt:unstructured",
       "teaser" : {
+        "buttonDelegate": "core/wcm/components/button/v2/button",
         "jcr:primaryType" : "cq:Component",
         "jcr:title" : "Teaser (v2)",
         "sling:resourceSuperType": "core/wcm/components/teaser",
         "jcr:description" : "Teaser Component",
         "cq:icon" : "teaser",
         "imageDelegate": "core/wcm/components/image/v3/image",
+        "titleDelegate": "core/wcm/components/title/v3/title",
+        "componentGroup" : ".core-wcm"
+      }
+    }
+  },
+  "invalidTeaser": {
+    "jcr:primaryType": "sling:Folder",
+    "v2" : {
+      "jcr:primaryType": "nt:unstructured",
+      "invalidTeaser" : {
+        "jcr:primaryType" : "cq:Component",
+        "jcr:title" : "Teaser (v2)",
+        "sling:resourceSuperType": "core/wcm/components/teaser/v2/teaser",
+        "jcr:description" : "Teaser Component",
+        "cq:icon" : "teaser",
         "componentGroup" : ".core-wcm"
       }
     }

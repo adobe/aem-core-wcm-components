@@ -15,9 +15,11 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    buttonDelegate="core/wcm/components/button/v2/button"
     jcr:description="Teaser Component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="Teaser"
     sling:resourceSuperType="core/wcm/components/teaser/v2/teaser"
     componentGroup="Core Components Examples"
-    imageDelegate="core-components-examples/components/image"/>
+    imageDelegate="core-components-examples/components/image"
+    titleDelegate="core/wcm/components/title/v3/title"/>
