@@ -13,8 +13,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<ol class="cmp-examples-demo__properties">
-    <li class="cmp-examples-demo__property" data-sly-set.referenced="${resource.children[0]}" data-sly-repeat.prop="${referenced.valueMap}">
+<ol class="cmp-examples-demo__properties" data-sly-set.referenced="${resource.children[0]}" data-sly-list.prop="${referenced.valueMap}">
+    <li class="cmp-examples-demo__property" data-sly-test="${prop!='jcr:primaryType' && prop!='jcr:created' && prop!='jcr:createdBy' && prop!='jcr:lastModified' && prop!='jcr:lastModifiedBy'}">
         <span class="cmp-examples-demo__property-title">${prop}<span class="cmp-examples-demo__property-separator">:</span></span>
         <span class="cmp-examples-demo__property-value">${referenced.valueMap[prop]}</span>
     </li>
