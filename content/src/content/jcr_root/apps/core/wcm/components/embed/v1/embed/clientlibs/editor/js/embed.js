@@ -306,7 +306,7 @@
             } else {
                 $element.show();
             }
-            if (field) {
+            if (field && typeof field.setDisabled === "function") {
                 field.setDisabled(false);
             }
         } else {
@@ -315,7 +315,7 @@
             } else {
                 $element.hide();
             }
-            if (field) {
+            if (field && typeof field.setDisabled === "function") {
                 field.setDisabled(true);
                 setFieldValid($element);
             }
@@ -334,10 +334,12 @@
         $childFoundationFields.each(function(index, element) {
             var field = $(element).adaptTo("foundation-field");
             if (field) {
-                if (show) {
+                if (show && typeof field.setDisabled === "function") {
                     field.setDisabled(false);
                 } else {
-                    field.setDisabled(true);
+                    if (typeof field.setDisabled === "function") {
+                        field.setDisabled(true);
+                    }
                     setFieldValid($(element));
                 }
             }
@@ -397,7 +399,9 @@
         var field = $element.adaptTo("foundation-field");
         var validation = $element.adaptTo("foundation-validation");
         if (field && validation) {
-            field.setInvalid(false);
+            if (typeof field.setInvalid === "function") {
+                field.setInvalid(false);
+            }
             validation.checkValidity();
             validation.updateUI();
         }
