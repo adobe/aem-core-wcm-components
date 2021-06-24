@@ -20,10 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Locale;
+
+import javax.json.Json;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceWrapper;
@@ -38,7 +41,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.embeddable.YouTube;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
@@ -102,7 +107,7 @@ class YouTubeImplTest {
     @Test
     void testWithDefaultValues() throws URISyntaxException {
         Mockito.when(page.getLanguage()).thenReturn(Locale.US);
-        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_1);
+        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_1, page);
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=en_US&mute=1&autoplay=1&loop=1&playlist=2R2gb0MKJlo&rel=1&playsinline=1"), youTube.getIFrameSrc(style).get());
         assertEquals("300", youTube.getIFrameWidth());
         assertEquals("200", youTube.getIFrameHeight());
@@ -112,7 +117,7 @@ class YouTubeImplTest {
     void testWithDefaultValuesInEditMode() throws URISyntaxException {
         Mockito.when(page.getLanguage()).thenReturn(Locale.US);
         Mockito.when(parentComponentContext.getEditContext()).thenReturn(editContext);
-        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_1);
+        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_1, page);
         // autoplay should not be set in edit mode
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=en_US&mute=1&loop=1&playlist=2R2gb0MKJlo&rel=1&playsinline=1"), youTube.getIFrameSrc(style).get());
         assertEquals("300", youTube.getIFrameWidth());
@@ -122,7 +127,7 @@ class YouTubeImplTest {
     @Test
     void testWithOverriddenValues() throws URISyntaxException {
         Mockito.when(page.getLanguage()).thenReturn(Locale.GERMANY);
-        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_2);
+        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_2, page);
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=de_DE&mute=0&autoplay=0&loop=0&rel=0&playsinline=0"), youTube.getIFrameSrc(style).get());
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
@@ -131,7 +136,7 @@ class YouTubeImplTest {
     @Test
     void testWithOverriddenValuesWithoutStyle() throws URISyntaxException {
         Mockito.when(page.getLanguage()).thenReturn(Locale.GERMANY);
-        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_2);
+        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_2, page);
         assertEquals("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=de_DE", youTube.getIFrameSrc());
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
@@ -145,7 +150,7 @@ class YouTubeImplTest {
         Mockito.when(style.get(YouTube.PN_DESIGN_LOOP_ENABLED, false)).thenReturn(false);
         Mockito.when(style.get(YouTube.PN_DESIGN_RELATED_VIDEOS_ENABLED, false)).thenReturn(false);
         Mockito.when(style.get(YouTube.PN_DESIGN_PLAYS_INLINE_ENABLED, false)).thenReturn(false);
-        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_2);
+        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_2, page);
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=en_US"), youTube.getIFrameSrc(style).get());
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
@@ -153,19 +158,28 @@ class YouTubeImplTest {
 
     @Test
     void testWithNoId() throws URISyntaxException {
-        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_3);
+        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_3, page);
         assertFalse(youTube.getIFrameSrc(style).isPresent());
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
     }
 
-    private YouTubeImpl getYouTubeUnderTest(String resourcePath) {
+    @Test
+    void testDataLayerJson() {
+        Utils.enableDataLayer(context, true);
+        String expected = "{\"embed-101c9bdb7f\":{\"@type\":\"core/wcm/components/embed/v1/embed\",\"embeddableProperties\":{\"youtubeVideoId\":\"2R2gb0MKJlo\"}}}";
+        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_1, context.currentPage(ROOT_PAGE));
+        assertEquals(Json.createReader(new StringReader(expected)).read(),
+                Json.createReader(new StringReader(youTube.getData().getJson())).read());
+    }
+
+    private YouTubeImpl getYouTubeUnderTest(String resourcePath, Page page) {
         Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to define test resource " + resourcePath + "?");
         }
         MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver(),
-            context.bundleContext());
+                context.bundleContext());
         SlingBindings bindings = new SlingBindings();
         bindings.put(SlingBindings.RESOURCE, resource);
         bindings.put(SlingBindings.REQUEST, request);
@@ -182,7 +196,7 @@ class YouTubeImplTest {
 
     @Test
     public void testGetStyleForWrappedResource() {
-        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_3);
+        YouTubeImpl youTube = getYouTubeUnderTest(PATH_VIDEO_3, page);
         Resource resource = context.resourceResolver().getResource(PATH_VIDEO_3);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to define test resource " + PATH_VIDEO_3 + "?");
