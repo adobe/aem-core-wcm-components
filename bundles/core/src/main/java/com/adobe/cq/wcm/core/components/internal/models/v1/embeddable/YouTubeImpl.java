@@ -30,10 +30,14 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import com.adobe.cq.wcm.core.components.models.datalayer.EmbeddableData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.adobe.cq.wcm.core.components.models.embeddable.YouTube;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
@@ -41,13 +45,14 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.commons.policy.ContentPolicyStyle;
+import com.google.common.collect.ImmutableMap;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
-        adapters = { YouTube.class },
+        adapters = {YouTube.class},
         defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL
-    )
-public class YouTubeImpl implements YouTube {
+)
+public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
 
     /**
      * URL pattern is defined in https://developers.google.com/youtube/player_parameters
@@ -94,7 +99,7 @@ public class YouTubeImpl implements YouTube {
     @ValueMapValue(name = PN_REL)
     @Nullable
     private Boolean isRel;
-    
+
     @ValueMapValue(name = PN_PLAYS_INLINE)
     @Nullable
     private Boolean isPlaysInline;
@@ -134,9 +139,10 @@ public class YouTubeImpl implements YouTube {
     /**
      * Relying on the injected currentStyle does not work, as this uses the wrong resource type "youtube" instead of "embed".
      * This helper method rebuilds the logic from "com.day.cq.wcm.scripting.impl.WcmBindingsValesProvider" but uses the wrapped resource.
+     *
      * @return the style for the  wrapped resource
      */
-     Style getStyleForWrappedResource(Resource resource) {
+    Style getStyleForWrappedResource(Resource resource) {
         ContentPolicyManager policyManager = resource.getResourceResolver().adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
             Resource wrappedResource = getWrappedResource(resource);
@@ -165,7 +171,15 @@ public class YouTubeImpl implements YouTube {
             return uri.get().toString();
         }
     }
-   
+
+    @Override
+    @NotNull
+    protected EmbeddableData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asEmbeddable()
+                .withEmbeddableDetails(() -> ImmutableMap.of(PN_VIDEO_ID, videoId))
+                .build();
+    }
+
     Optional<URI> getIFrameSrc(Style currentStyle) throws URISyntaxException {
         if (isEmpty()) {
             return Optional.empty();
@@ -184,7 +198,8 @@ public class YouTubeImpl implements YouTube {
                 // going via WCMMode to determine if one is on publish does not work as this resource is included explicitly with wcmmode=disabled
                 // therefore use edit context of parent component
                 if (componentContext.getParent().getEditContext() == null) {
-                    addYouTubeBooleanUriParameter(uriBuilder, PARAMETER_AUTOPLAY, isAutoPlay, currentStyle, PN_DESIGN_AUTOPLAY_DEFAULT_VALUE);
+                    addYouTubeBooleanUriParameter(uriBuilder, PARAMETER_AUTOPLAY, isAutoPlay, currentStyle,
+                            PN_DESIGN_AUTOPLAY_DEFAULT_VALUE);
                 } else {
                     LOGGER.debug("Autoplay disabled because WCMMode is not disabled");
                 }
@@ -200,7 +215,8 @@ public class YouTubeImpl implements YouTube {
                 addYouTubeBooleanUriParameter(uriBuilder, PARAMETER_REL, isRel, currentStyle, PN_DESIGN_RELATED_VIDEOS_DEFAULT_VALUE);
             }
             if (Boolean.TRUE.equals(currentStyle.get(PN_DESIGN_PLAYS_INLINE_ENABLED, false))) {
-                addYouTubeBooleanUriParameter(uriBuilder, PARAMETER_PLAYS_INLINE, isPlaysInline, currentStyle, PN_DESIGN_PLAYS_INLINE_DEFAULT_VALUE);
+                addYouTubeBooleanUriParameter(uriBuilder, PARAMETER_PLAYS_INLINE, isPlaysInline, currentStyle,
+                        PN_DESIGN_PLAYS_INLINE_DEFAULT_VALUE);
             }
         } else {
             LOGGER.debug("No style available, optional YouTube parameters are not used!");
@@ -216,7 +232,8 @@ public class YouTubeImpl implements YouTube {
         }
     }
 
-    boolean addYouTubeBooleanUriParameter(URIBuilder uriBuilder, String parameterName, Boolean value, Style style, String stylePropertyName) {
+    boolean addYouTubeBooleanUriParameter(URIBuilder uriBuilder, String parameterName, Boolean value, Style style,
+                                          String stylePropertyName) {
         boolean effectiveValue = getBooleanValueOrDefaultFromStyle(value, style, stylePropertyName);
         uriBuilder.addParameter(parameterName, effectiveValue ? "1" : "0");
         return effectiveValue;
