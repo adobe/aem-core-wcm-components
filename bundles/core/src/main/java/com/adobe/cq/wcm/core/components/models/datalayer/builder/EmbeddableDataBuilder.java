@@ -38,7 +38,7 @@ public class EmbeddableDataBuilder extends GenericDataBuilder<EmbeddableDataBuil
     }
 
     /**
-     * Set the supplier that supplies the content fragment data.
+     * Sets the supplier that supplies the content fragment data.
      *
      * @param supplier The content fragment data value supplier.
      * @return A new {@link ContentFragmentDataBuilder}.

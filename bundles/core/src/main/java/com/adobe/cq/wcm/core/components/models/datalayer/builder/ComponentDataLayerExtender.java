@@ -90,7 +90,7 @@ public final class ComponentDataLayerExtender {
     }
 
     /**
-     * Get a EmbeddableDataBuilder that extends existing component data.
+     * Gets a EmbeddableDataBuilder that extends existing component data.
      *
      * @return A new EmbeddableDataBuilder pre-initialized with the existing component data.
      */

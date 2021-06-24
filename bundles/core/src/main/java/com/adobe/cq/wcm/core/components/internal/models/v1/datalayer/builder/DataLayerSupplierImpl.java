@@ -501,7 +501,7 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
     }
 
     /**
-     * Set the embeddable details value supplier.
+     * Sets the embeddable details value supplier.
      *
      * @param supplier The embeddable details value supplier.
      * @return This.
@@ -521,7 +521,7 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
     }
 
     /**
-     * Set the template path field value supplier.
+     * Sets the template path field value supplier.
      *
      * @param supplier The template path field value supplier.
      * @return This.
