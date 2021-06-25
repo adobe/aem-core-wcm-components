@@ -794,6 +794,13 @@
                 <scope>provided</scope>
             </dependency>
 
+
+            <dependency>
+                <groupId>com.adobe.cq.wcm</groupId>
+                <artifactId>com.adobe.aem.wcm.seo</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
             <!--
                 AEM APIs; make sure to not move this bundle upper in the list so that newer APIs available in AEM but not in the Uber
                 Jar can be used as dependencies.

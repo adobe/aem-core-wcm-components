@@ -413,6 +413,12 @@
             <artifactId>httpclient-osgi</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.adobe.cq.wcm</groupId>
+            <artifactId>com.adobe.aem.wcm.seo</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Testing dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>

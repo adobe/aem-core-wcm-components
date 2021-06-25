@@ -13,3 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<link data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page"
+      data-sly-test="${page.canonicalLink}"
+      rel="canonical" href="${page.canonicalLink}">
+<link data-sly-test="${page.alternateLanguageLinks}"
+      data-sly-repeat="${page.alternateLanguageLinks.entrySet}"
+      rel="alternate" hreflang="${item.key.toLanguageTag}" href="${item.value}">
