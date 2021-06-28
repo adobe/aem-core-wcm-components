@@ -36,20 +36,3 @@ module.exports = {
     ]
 };
 
-module.exports = {
-    context: __dirname,
-    clientLibRoot: "src/content/jcr_root/apps/core/wcm/components/commons/vanilla-lazyload/clientlibs",
-    libs: [
-        {
-            name: "vanilla-lazyload",
-            serializationFormat: "xml",
-            allowProxy: true,
-            jsProcessor: ["default:none", "min:gcc;compilationLevel=whitespace"],
-            assets: {
-                js: [
-                    "node_modules/vanilla-lazyload/dist/lazyload.min.js"
-                ]
-            }
-        }
-    ]
-};
