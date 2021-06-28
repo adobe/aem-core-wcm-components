@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2020 Adobe
+ * Copyright 2021 Adobe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,18 @@
  */
 module.exports = {
     context: __dirname,
-    clientLibRoot: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/v1/clientlibs",
+    clientLibRoot: "src/content/jcr_root/apps/core/wcm/components/commons/vanilla-lazyload/clientlibs",
     libs: [
         {
-            name: "core.wcm.components.commons.datalayer.v1",
+            name: "vanilla-lazyload",
             serializationFormat: "xml",
             allowProxy: true,
             jsProcessor: ["default:none", "min:gcc;compilationLevel=whitespace"],
             assets: {
                 js: [
-                    "src/scripts/datalayer/v1/polyfill.js",
-                    "node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js",
-                    "src/scripts/datalayer/v1/datalayer.js"
+                    "node_modules/vanilla-lazyload/dist/lazyload.min.js"
                 ]
             }
         }
     ]
 };
-
