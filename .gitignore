@@ -20,4 +20,3 @@ atlassian-ide-plugin.xml
 node
 node_modules
 core.wcm.components.commons.datalayer.*
-/content/src/content/jcr_root/apps/core/wcm/components/commons/vanilla-lazyload/

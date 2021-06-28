@@ -18,7 +18,6 @@
      data-sly-test="${image.src}"
      data-cmp-is="image"
      data-cmp-lazy="${image.lazyEnabled}"
-     data-cmp-lazythreshold="${image.lazyThreshold}"
      data-cmp-src="${image.srcUriTemplate ? image.srcUriTemplate : image.src}"
      data-cmp-dmimage="${image.dmImage}"
      data-cmp-smartcroprendition="${image.smartCropRendition}"
@@ -35,8 +34,8 @@
        data-cmp-clickable="${image.data ? true : false}"
        data-cmp-hook-image="link">
         <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
-        <img data-sly-attribute.data-srcset="${image.lazyEnabled ? image.srcset : ''}" data-sly-attribute.data-src="${image.lazyEnabled ? image.src : ''}"
-             data-sly-attribute.srcset="${!image.lazyEnabled ? image.srcset : ''}" data-sly-attribute.src="${!image.lazyEnabled ? image.src : ''}"
+        <img srcset="${image.srcset}" src="${image.src}"
+             data-sly-attribute.loading="${image.lazyEnabled ? 'lazy' : ''}"
              class="cmp-image__image"
              itemprop="contentUrl" data-cmp-hook-image="image"
              data-sly-attribute.usemap="${image.areas ? usemap : ''}"
@@ -54,6 +53,4 @@
     <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>
-<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"></sly>
-<sly data-sly-call="${clientlib.js @ categories='vanilla-lazyload'}"></sly>
 

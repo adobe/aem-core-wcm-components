@@ -19,7 +19,6 @@
     var NS = "cmp";
     var IS = "image";
 
-    var LAZY_THRESHOLD_DEFAULT = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
 
     var selectors = {
@@ -30,7 +29,6 @@
     };
 
     var isLazyLoadingEnabled = false;
-    var lazythreshold = 0;
 
     var properties = {
         /**
@@ -44,25 +42,6 @@
             "default": false,
             "transform": function(value) {
                 return !(value === null || typeof value === "undefined");
-            }
-        },
-        /**
-         * The lazy threshold.
-         * This is the number of pixels, in advance of becoming visible, when an lazy-loading image should begin
-         * to load.
-         *
-         * @memberof Image
-         * @type {Number}
-         * @default 0
-         */
-        "lazythreshold": {
-            "default": 0,
-            "transform": function(value) {
-                var val =  parseInt(value);
-                if (isNaN(val)) {
-                    return LAZY_THRESHOLD_DEFAULT;
-                }
-                return val;
             }
         }
     };
@@ -153,10 +132,6 @@
             if (!isLazyLoadingEnabled && that._properties.lazy) {
                 isLazyLoadingEnabled = true;
             }
-
-            if (!lazythreshold && that._properties.lazythreshold) {
-                lazythreshold = that._properties.lazythreshold;
-            }
         }
 
         function resizeAreas() {
@@ -224,27 +199,10 @@
         }
     }
 
-    function startLazyLoading() {
-        /* eslint-disable camelcase, no-undef, no-unused-vars */
-        var config = {
-            elements_selector: "img.cmp-image__image",
-            use_native: !lazythreshold
-        };
-        if (lazythreshold) {
-            config.threshold = lazythreshold;
-        }
-        var lazyLoad = new LazyLoad(config);
-        /* eslint-enable camelcase, no-undef, no-unused-vars */
-    }
-
     function onDocumentReady() {
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new Image({ element: elements[i], options: readData(elements[i]) });
-        }
-
-        if (isLazyLoadingEnabled) {
-            startLazyLoading();
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
