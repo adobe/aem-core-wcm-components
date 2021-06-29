@@ -234,9 +234,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     smartImages[index] = baseResourcePath + DOT +
                             selector + DOT + jpegQuality + DOT + width + DOT + extension +
                             (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                            (lastModifiedDate > 0 ? ("/" + lastModifiedDate) : "") +
-                            (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "") +
-                            DOT + extension;
+                            (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
+                            (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
                     smartSizes[index] = width;
                     index++;
                 }
@@ -251,9 +250,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 src += extension;
             }
             src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate) : "") +
-                    (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") +
-                    DOT + extension;
+                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "")) : "") +
+                    (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
             if (!isDecorative) {
                 link = linkHandler.getLink(resource);
             } else {
