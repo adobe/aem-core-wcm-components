@@ -207,9 +207,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     staticSelectors += DOT + jpegQuality;
                 }
                 srcUriTemplate = baseResourcePath + DOT + staticSelectors +
-                    SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-                    (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
-                    (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension): "");
+                        SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
+                        (inTemplate ? templateRelativePath : "") +
+                        (lastModifiedDate > 0 ?("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
+                        (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
 
                 // if content policy delegate path is provided pass it to the image Uri
                 String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
