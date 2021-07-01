@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.17.1-SNAPSHOT</version>
+        <version>2.17.3-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
@@ -33,7 +33,7 @@
     <!-- ====================================================================== -->
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.it.e2e-selenium</artifactId>
-    <version>2.17.1-SNAPSHOT</version>
+    <version>2.17.3-SNAPSHOT</version>
     <name>Adobe Experience Manager Core WCM Components Selenium Base Test Framework</name>
 
     <build>
