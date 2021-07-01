@@ -35,6 +35,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("group2")
 public class DataLayerIT extends AuthorBaseUITest {
 
     protected String testPage;
