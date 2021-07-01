@@ -16,22 +16,24 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.commons;
 
-import org.apache.http.HttpStatus;
-import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.WebDriverRunner;
+import org.apache.http.HttpStatus;
+import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.JavascriptException;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DataLayerIT extends AuthorBaseUITest {
 
@@ -48,17 +50,31 @@ public class DataLayerIT extends AuthorBaseUITest {
     @Test
     public void testDataLayerInitialized() throws InterruptedException {
         editorPage.enterPreviewMode();
-        assertTrue(isDataLayerInitialized());
-    }
-
-    public Boolean isDataLayerInitialized() {
         Commons.switchContext("ContentFrame");
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        return (Boolean) ((JavascriptExecutor) webDriver).executeScript("return Boolean(window.adobeDataLayer.getState());");
+        Object adobeDataLayer = ((JavascriptExecutor) webDriver).executeScript("return window.adobeDataLayer;");
+        assertNotNull(adobeDataLayer, "adobeDataLayer is undefined!");
+        try {
+            // check if adobeDataLayer is initialized i.e. getState() function is defined
+            Object state = ((JavascriptExecutor) webDriver).executeScript("return window.adobeDataLayer.getState();");
+            // check if returned state object is not empty
+            assertNotNull(state, "adobeDataLayer.getState(): returned state object is null!");
+            Map<?, ?> stateMap = (Map) (state);
+            // check some basic properties of the state object
+            assertNotNull(stateMap.get("page"), "returned State is missing 'page' property!");
+            assertNotNull(stateMap.get("component"), "returned State is missing 'component' property!");
+            Map<?, ?> components = (Map) stateMap.get("component");
+            assertEquals(2, components.size(), "returned state.components should have 2 entries!");
+        } catch (JavascriptException e) {
+            // this would return 'window.adobeDataLayer.getState() is not a function'
+            fail(e);
+        } catch (ClassCastException e) {
+            fail("returned State object is not properly initialized!");
+        }
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
     }
 }
