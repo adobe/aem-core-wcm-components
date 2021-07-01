@@ -41,6 +41,7 @@ public class ImageImplTest extends AbstractImageTest {
     protected static String PAGE = TEST_ROOT + "/test";
     private static final String IMAGE_TITLE_ALT = "Adobe Logo";
     protected static String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png";
+    protected static String IMAGE_FILE_REFERENCE_NO_DATE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_no_date.png";
     private static final String IMAGE_LINK = "https://www.adobe.com";
     protected static String ASSET_NAME = "adobe-systems-logo-and-wordmark";
 
@@ -177,6 +178,34 @@ public class ImageImplTest extends AbstractImageTest {
         assertFalse(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_PATH));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    protected void testImageFromTemplateStructureNoDate() {
+        context.contentPolicyMapping("core/wcm/components/image",
+                "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
+        Image image = getImageUnderTest(TEMPLATE_IMAGE_NO_DATE_PATH);
+        assertEquals(CONTEXT_PATH + "/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + ".png/structure/jcr" +
+                "%3acontent/root/image_template_no_date.png", image.getSrc());
+        assertEquals(IMAGE_TITLE_ALT, image.getAlt());
+        assertEquals(IMAGE_TITLE_ALT, image.getTitle());
+        assertEquals(IMAGE_FILE_REFERENCE_NO_DATE, image.getFileReference());
+        String expectedJson = "{" +
+                "\"smartImages\":[\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  "." + jpegQuality +
+                ".600.png/structure/jcr%3acontent/root/image_template_no_date.png\",\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + "." +
+                jpegQuality + ".700.png/structure/jcr%3acontent/root/image_template_no_date.png\", \"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." +
+                selector + "." + jpegQuality + ".800.png/structure/jcr%3acontent/root/image_template_no_date.png\"," +
+                "\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  "." + jpegQuality +
+                ".2000.png/structure/jcr%3acontent/root/image_template_no_date.png\",\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  "." +
+                jpegQuality + ".2500.png/structure/jcr%3acontent/root/image_template_no_date.png\"]," +
+                "\"smartSizes\":[600,700,800,2000,2500]," +
+                "\"lazyEnabled\":true" +
+                "}";
+        compareJSON(expectedJson, image.getJson());
+        assertFalse(image.displayPopupTitle());
+        assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_NO_DATE_PATH));
     }
 
     @Test
