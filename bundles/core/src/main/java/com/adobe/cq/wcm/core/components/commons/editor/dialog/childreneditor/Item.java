@@ -34,7 +34,7 @@ import java.util.Optional;
 /**
  * Defines an {@code Item} class, used by the children editor {@code Editor} Sling Model.
  *
- * @since com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor 1.1.0
+ * @since com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor 1.0.0
  */
 public class Item {
     public static final Logger LOG = LoggerFactory.getLogger(Item.class);
