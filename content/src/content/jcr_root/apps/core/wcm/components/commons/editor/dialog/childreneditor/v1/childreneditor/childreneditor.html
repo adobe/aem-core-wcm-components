@@ -20,12 +20,31 @@
                   data-container-path = "${childrenEditor.container.path}">
     <coral-multifield-item data-sly-repeat.item="${childrenEditor.items}" data-name="${item.name}">
         <div class="cmp-childreneditor__item">
+            <coral-icon data-sly-test.isLiveCopy="${item.isLiveCopy}"
+                        class="coral-Form-fieldinfo coral3-Icon coral3-Icon--infoCircle coral3-Icon--sizeS"
+                        icon="infoCircle"
+                        tabindex="0"
+                        size="S"
+                        role="img"
+                        aria-label="description"></coral-icon>
+            <coral-tooltip data-sly-test="${isLiveCopy}"
+                           target="_prev"
+                           placement="right"
+                           class="coral3-Tooltip coral3-Tooltip--info coral3-Tooltip--arrowLeft"
+                           aria-hidden="true"
+                           variant="info"
+                           tabindex="-1"
+                           role="tooltip"
+                           style="z-index: 10020; max-width: 1070px; left: 205px; top: -3px;">
+                <coral-tooltip-content>You have to cancel the inheritance for the panel in order to change its title.</coral-tooltip-content>
+            </coral-tooltip>
             <sly data-sly-call="${iconTemplate.icon @ item=item}"></sly>
             <input is="coral-textfield"
                    class="cmp-childreneditor__item-title"
                    data-cmp-hook-childreneditor="itemTitle"
                    name="./${item.name}/cq:panelTitle"
                    value="${item.value}"
+                   data-sly-attribute.disabled="${item.isLiveCopy}"
                    placeholder="${item.title}">
         </div>
     </coral-multifield-item>
