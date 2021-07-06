@@ -6,6 +6,9 @@ PageObjects (Page, Component etc..) are defined in the common library [selenium-
 
 # Requirement
 
+## Test Content
+Some of the tests rely on predefined test content/assets. So you have to install the [it-content](https://github.com/adobe/aem-core-wcm-components/tree/master/testing/it/it-content) package on your test environment.
+
 ## Java version
 Use JDK 11 to compile
 
