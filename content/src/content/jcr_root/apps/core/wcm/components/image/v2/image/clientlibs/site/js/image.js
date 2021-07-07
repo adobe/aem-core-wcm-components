@@ -233,19 +233,21 @@
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
             var imgSrcAttribute = that._elements.image.getAttribute("src");
 
-            if (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL) {
-                that._elements.image.setAttribute("src", url);
-            } else {
-                var urlTemplateParts = that._properties.src.split(SRC_URI_TEMPLATE_WIDTH_VAR);
-                // check if image src was dynamically swapped meanwhile (e.g. by Target)
-                var isImageRefSame = imgSrcAttribute.startsWith(urlTemplateParts[0]);
-                if (isImageRefSame && urlTemplateParts.length > 1) {
-                    isImageRefSame = imgSrcAttribute.endsWith(urlTemplateParts[urlTemplateParts.length - 1]);
-                }
-                if (isImageRefSame) {
+            if (url !== imgSrcAttribute) {
+                if (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL) {
                     that._elements.image.setAttribute("src", url);
-                    if (!hasWidths) {
-                        window.removeEventListener("scroll", that.update);
+                } else {
+                    var urlTemplateParts = that._properties.src.split(SRC_URI_TEMPLATE_WIDTH_VAR);
+                    // check if image src was dynamically swapped meanwhile (e.g. by Target)
+                    var isImageRefSame = imgSrcAttribute.startsWith(urlTemplateParts[0]);
+                    if (isImageRefSame && urlTemplateParts.length > 1) {
+                        isImageRefSame = imgSrcAttribute.endsWith(urlTemplateParts[urlTemplateParts.length - 1]);
+                    }
+                    if (isImageRefSame) {
+                        that._elements.image.setAttribute("src", url);
+                        if (!hasWidths) {
+                            window.removeEventListener("scroll", that.update);
+                        }
                     }
                 }
             }
