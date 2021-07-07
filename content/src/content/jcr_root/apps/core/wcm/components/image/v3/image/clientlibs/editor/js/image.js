@@ -37,19 +37,38 @@
     var imagePath;
     var smartCropRenditionFromJcr;
     var smartCropRenditionsDropDown;
+    var imageFromPageImage;
+    var altFromPageTuple;
+    var $pageImageThumbnail;
+    var altTextFromPage;
+    var altTextFromDAM;
+    var altCheckboxSelector = "coral-checkbox[name='./altValueFromDAM']";
+    var altInputSelector = "input[name='./alt']";
+    var pageAltCheckboxSelector = "coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
+    var pageAltInputSelector = "input[name='./cq:featuredimage/alt']";
 
     $(document).on("dialog-loaded", function(e) {
+        altTextFromPage = undefined;
+        altTextFromDAM = undefined;
         var $dialog        = e.dialog;
         var $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
             isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
-            altTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
+
+            if ($(pageAltCheckboxSelector).length === 1) {
+                // when the tuple is used in the page dialog to define the featured image
+                altTuple = new CheckboxTextfieldTuple(dialogContent, pageAltCheckboxSelector, pageAltInputSelector);
+            } else {
+                // when the tuple is used in the image dialog
+                altTuple = new CheckboxTextfieldTuple(dialogContent, altCheckboxSelector, altInputSelector);
+            }
+
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
-            $cqFileUpload = $dialog.find(".cq-FileUpload");
+            $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
             $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
             $dynamicMediaGroup.hide();
@@ -57,6 +76,18 @@
             if (areDMFeaturesEnabled) {
                 smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
             }
+
+            imageFromPageImage = dialogContent.querySelector("coral-checkbox[name='./imageFromPageImage']");
+            // uncheck the "Inherit the image from page image" checkbox when there is neither an image nor a page image defined
+            var hasImage = $dialog.find(".cmp-image__editor-file-upload .cq-FileUpload-thumbnail-img img").length > 0;
+            var hasPageImage = $dialog.find(".cq-page-image-thumbnail__image[src]").length > 0;
+            if (!hasImage && !hasPageImage) {
+                imageFromPageImage.checked = false;
+            }
+
+            altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, "coral-checkbox[name='./altValueFromPageImage']", "input[name='./alt']");
+            $pageImageThumbnail = $dialogContent.find(".cq-page-image-thumbnail");
+            altTextFromPage = $dialogContent.find(".cq-page-image-thumbnail__image").attr("alt");
 
             if ($cqFileUpload.length) {
                 imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
@@ -71,7 +102,7 @@
                             captionTuple.hideCheckbox(false);
                             altTuple.reinitCheckbox();
                             captionTuple.reinitCheckbox();
-                            toggleAlternativeFieldsAndLink(isDecorative);
+                            toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
                             if (areDMFeaturesEnabled) {
                                 selectPresetType($(presetTypeSelector), "imagePreset");
                                 resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
@@ -105,7 +136,9 @@
                     captionTuple.hideCheckbox(true);
                 }
             }
-            toggleAlternativeFieldsAndLink(isDecorative);
+            toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
+            togglePageImageInherited(imageFromPageImage, isDecorative);
+
         }
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
@@ -125,8 +158,12 @@
         $(window).off("focus");
     });
 
-    $(document).on("change", dialogContentSelector + ' coral-checkbox[name="./isDecorative"]', function(e) {
-        toggleAlternativeFieldsAndLink(e.target);
+    $(document).on("change", dialogContentSelector + " coral-checkbox[name='./isDecorative']", function(e) {
+        toggleAlternativeFieldsAndLink(imageFromPageImage, e.target);
+    });
+
+    $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
+        togglePageImageInherited(e.target, isDecorative);
     });
 
     $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
@@ -146,23 +183,61 @@
         }
     });
 
-    function toggleAlternativeFieldsAndLink(checkbox) {
+    function togglePageImageInherited(checkbox, isDecorative) {
         if (checkbox) {
+            toggleAlternativeFields(checkbox, isDecorative);
             if (checkbox.checked) {
-                $linkURLGroup.hide();
+                $cqFileUpload.hide();
+                $pageImageThumbnail.show();
+            } else {
+                $cqFileUpload.show();
+                $pageImageThumbnail.hide();
+            }
+        }
+    }
+
+    function toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox) {
+        if (fromPageCheckbox && isDecorativeCheckbox) {
+            if (isDecorativeCheckbox.checked) {
                 $altGroup.hide();
+                altTuple.hideTextfield(true);
+                altTuple.hideCheckbox(true);
+                altFromPageTuple.hideTextfield(true);
+                altFromPageTuple.hideCheckbox(true);
             } else {
                 $altGroup.show();
+                altTuple.hideTextfield(false);
+                altTuple.hideCheckbox(fromPageCheckbox.checked);
+                altFromPageTuple.hideCheckbox(!fromPageCheckbox.checked);
+                if (fromPageCheckbox.checked) {
+                    altFromPageTuple.seedTextValue(altTextFromPage);
+                    altFromPageTuple.update();
+                } else {
+                    altTuple.seedTextValue(altTextFromDAM);
+                    altTuple.update();
+                }
+            }
+        } else {
+            $altGroup.show();
+            altTuple.hideTextfield(false);
+            altTuple.hideCheckbox(false);
+            altTuple.seedTextValue(altTextFromDAM);
+            altTuple.update();
+        }
+    }
+
+    function toggleAlternativeFieldsAndLink(fromPageCheckbox, isDecorativeCheckbox) {
+        if (fromPageCheckbox && isDecorativeCheckbox) {
+            if (isDecorativeCheckbox.checked) {
+                $linkURLGroup.hide();
+            } else {
                 $linkURLGroup.show();
             }
             if ($linkURLField.length) {
-                $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
-            }
-            altTuple.hideTextfield(checkbox.checked);
-            if (fileReference) {
-                altTuple.hideCheckbox(checkbox.checked);
+                $linkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
             }
         }
+        toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox);
     }
 
     function retrieveDAMInfo(fileReference) {
@@ -171,13 +246,13 @@
         }).done(function(data) {
             if (data) {
                 if (altTuple) {
-                    var description = data["dc:description"];
-                    if (description === undefined || description.trim() === "") {
-                        description = data["dc:title"];
+                    altTextFromDAM = data["dc:description"];
+                    if (altTextFromDAM === undefined || altTextFromDAM.trim() === "") {
+                        altTextFromDAM = data["dc:title"];
                     }
-                    altTuple.seedTextValue(description);
+                    altTuple.seedTextValue(altTextFromDAM);
                     altTuple.update();
-                    toggleAlternativeFieldsAndLink(isDecorative);
+                    toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
                 }
                 if (captionTuple) {
                     var title = data["dc:title"];
