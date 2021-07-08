@@ -410,6 +410,7 @@ public interface Page extends ContainerExporter, Component {
      * @since om.adobe.cq.wcm.core.components.models 12.22.0
      */
     @Nullable
+    @JsonIgnore
     default String getCanonicalLink() { return null; }
 
     /**
@@ -421,6 +422,7 @@ public interface Page extends ContainerExporter, Component {
      * @since om.adobe.cq.wcm.core.components.models 12.22.0
      */
     @NotNull
+    @JsonIgnore
     default Map<Locale, String> getAlternateLanguageLinks() {
         return Collections.emptyMap();
     }
@@ -434,6 +436,7 @@ public interface Page extends ContainerExporter, Component {
      * @since om.adobe.cq.wcm.core.components.models 12.22.0
      */
     @NotNull
+    @JsonIgnore
     default List<String> getRobotsTags() {
         return Collections.emptyList();
     }

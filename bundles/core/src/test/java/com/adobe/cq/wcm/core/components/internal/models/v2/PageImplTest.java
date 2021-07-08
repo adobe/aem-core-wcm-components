@@ -21,9 +21,12 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,20 +34,27 @@ import org.mockito.Mockito;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
+import com.adobe.aem.wcm.seo.impl.sitemap.SitemapLinkExternalizerImpl;
+import com.adobe.aem.wcm.seo.sitemap.PageTreeSitemapGenerator;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.components.testing.MockPersistenceStrategy;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
+import com.adobe.cq.wcm.core.components.testing.MockSitemapLinkExternalizer;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
+import com.day.cq.wcm.api.PageManagerFactory;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.Utils.getTestExporterJSONPath;
 import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -56,6 +66,8 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     private static final String SLING_CONFIGS_ROOT = "/conf/page/sling:configs";
 
     private static final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
+
+    private PageTreeSitemapGenerator pageTreeSitemapGenerator;
 
     @BeforeEach
     @Override
@@ -74,6 +86,10 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         context.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
         context.registerInjectActivateService(mockProductInfoProvider);
         context.registerInjectActivateService(new MockPersistenceStrategy(), ImmutableMap.of(Constants.SERVICE_RANKING, Integer.MAX_VALUE));
+
+        pageTreeSitemapGenerator = Mockito.mock(PageTreeSitemapGenerator.class);
+        context.registerService(PageTreeSitemapGenerator.class, pageTreeSitemapGenerator);
+        context.registerInjectActivateService(new MockSitemapLinkExternalizer());
     }
 
     private void loadHtmlPageItemsConfig(boolean useNewFormat) {
@@ -193,5 +209,31 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         Page page = getPageUnderTest(PAGE);
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
+    }
+
+    @Test
+    public void testRobotsTags() {
+        Page page = getPageUnderTest(PAGE);
+        assertEquals(2,page.getRobotsTags().size());
+        assertThat(page.getRobotsTags(), hasItems("index", "nofollow"));
+    }
+
+    @Test
+    public void testCanonicalLink() {
+        Page page = getPageUnderTest(PAGE);
+        assertEquals("http://foo.bar/content/page/templated-page",page.getCanonicalLink());
+    }
+
+    @Test
+    public void testAlternateLanguageLinks() {
+        Page page = getPageUnderTest(PAGE);
+        Map<Locale, String> expectedAlternates = ImmutableMap.of(
+            Locale.ENGLISH, "http://foo.bar/content/en/templated-page",
+            Locale.GERMAN, "http://foo.bar/content/de/templated-page"
+        );
+        when(pageTreeSitemapGenerator.getLanguageAlternatives(any())).thenReturn(expectedAlternates);
+        assertEquals(2,page.getAlternateLanguageLinks().size());
+        assertEquals("http://foo.bar/content/en/templated-page",page.getAlternateLanguageLinks().get(Locale.ENGLISH));
+        assertEquals("http://foo.bar/content/de/templated-page",page.getAlternateLanguageLinks().get(Locale.GERMAN));
     }
 }

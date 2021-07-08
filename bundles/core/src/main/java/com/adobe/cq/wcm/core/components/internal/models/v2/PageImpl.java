@@ -338,7 +338,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public @NotNull Map<Locale, String> getAlternateLanguageLinks() {
         try {
             SeoTags seoTags = resource.adaptTo(SeoTags.class);
-            return seoTags != null ? seoTags.getAlternateLanguages() : Collections.emptyMap();
+            return seoTags != null && seoTags.getAlternateLanguages().size() > 0
+                ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())
+                : Collections.emptyMap();
         } catch (NoClassDefFoundError ex) {
             return Collections.emptyMap();
         }
@@ -349,7 +351,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         try {
             SeoTags seoTags = resource.adaptTo(SeoTags.class);
             return seoTags != null && seoTags.getRobotsTags().size() > 0
-                ? new ArrayList<>(seoTags.getRobotsTags())
+                ? Collections.unmodifiableList(seoTags.getRobotsTags())
                 : Collections.emptyList();
         } catch (NoClassDefFoundError ex) {
             return Collections.emptyList();
