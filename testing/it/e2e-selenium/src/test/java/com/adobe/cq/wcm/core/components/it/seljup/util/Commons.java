@@ -117,6 +117,8 @@ public class Commons {
     public static String rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
     // tabs component
     public static String rtTabs_v1 = "core/wcm/components/tabs/v1/tabs";
+    // video component
+    public static String rtVideo_v1 = "core/wcm/components/video/v1/video";
     // content fragment component
     public static String rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
     // content fragment list component

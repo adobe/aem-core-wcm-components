@@ -78,7 +78,7 @@
                                         fieldDescription="Textual alternative of the meaning or function of the image, for visually impaired readers."
                                         fieldLabel="Alternative Text"
                                         name="./alt"
-                                        required="{Boolean}true"
+                                        required="{Boolean}false"
                                         wrapperClass="cmp-image--editor-alt"/>
                                 </items>
                             </column>

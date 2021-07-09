@@ -1,40 +1,54 @@
-//package com.adobe.cq.wcm.core.components.it.seljup.components.video;
-//
-//import com.adobe.cq.wcm.core.components.it.seljup.components.commons.ChildrenEditor;
-//import com.adobe.cq.wcm.core.components.it.seljup.components.tabs.TabsEditDialog;
-//import com.codeborne.selenide.SelenideElement;
-//import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
-//
-//import static com.codeborne.selenide.Selenide.$;
-//
-//public class VideoEditDialog extends Dialog {
-//
-//    private static SelenideElement videoTab = $("coral-tab[data-foundation-tracking-event*='video']");
-//    private static SelenideElement posterTab = $("coral-tab[data-foundation-tracking-event*='poster']");
-//    private static SelenideElement propertiesTab = $("coral-tab[data-foundation-tracking-event*='properties']");
-//
-//    public ChildrenEditor getChildrenEditor() {
-//        return new ChildrenEditor();
-//    }
-//
-//    public void openVideoTab() {
-//        $(videoTab).click();
-//    }
-//
-//    public TabsEditDialog.EditDialogProperties openPosterTab() {
-//        $(posterTab).click();
-//        return new TabsEditDialog.EditDialogProperties();
-//    }
-//
-//
-//
-////    public void openItemsTab() {
-////        $(itemsTab).click();
-////    }
-////
-////    public TabsEditDialog.EditDialogProperties openPropertiesTab() {
-////        $(propertiesTab).click();
-////        return new TabsEditDialog.EditDialogProperties();
-////    }
-//
-//}
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2021 Adobe
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+package com.adobe.cq.wcm.core.components.it.seljup.components.video;
+
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+
+import static com.codeborne.selenide.Selenide.$$;
+
+public class VideoEditDialog {
+    private static String loopEnabled = ".cmp-video__editor coral-checkbox[name='./loopEnabled']";
+    private static String hideControl = ".cmp-video__editor coral-checkbox[name='./hideControl']";
+    private static String autoplayEnabled = ".cmp-video__editor coral-checkbox[name='./autoplayEnabled']";
+
+    public void openVideoTab() {
+        $$(".cmp-video__editor coral-tab").get(0).click();
+    }
+
+    public void openPosterTab() {
+        $$(".cmp-video__editor coral-tab").get(1).click();
+    }
+
+    public void openPropertiesTab() {
+        $$(".cmp-video__editor coral-tab").get(2).click();
+    }
+
+    public void clickLoopEnabled() {
+        CoralCheckbox checkbox = new CoralCheckbox(loopEnabled);
+        checkbox.click();
+    }
+
+    public void clickHideControl() {
+        CoralCheckbox checkbox = new CoralCheckbox(hideControl);
+        checkbox.click();
+    }
+
+    public void clickAutoplayEnabled() {
+        CoralCheckbox checkbox = new CoralCheckbox(autoplayEnabled);
+        checkbox.click();
+    }
+}
