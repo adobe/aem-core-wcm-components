@@ -17,13 +17,17 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.video;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class VideoEditDialog {
     private static String loopEnabled = ".cmp-video__editor coral-checkbox[name='./loopEnabled']";
     private static String hideControl = ".cmp-video__editor coral-checkbox[name='./hideControl']";
     private static String autoplayEnabled = ".cmp-video__editor coral-checkbox[name='./autoplayEnabled']";
+    private static String fileUpload = "coral-fileupload[name='./videoFile']";
+    private static String videoInSidePanel = "coral-card.cq-draggable[data-path=\"%s\"]";
 
     public void openVideoTab() {
         $$(".cmp-video__editor coral-tab").get(0).click();
@@ -50,5 +54,9 @@ public class VideoEditDialog {
     public void clickAutoplayEnabled() {
         CoralCheckbox checkbox = new CoralCheckbox(autoplayEnabled);
         checkbox.click();
+    }
+
+    public void uploadVideoFromSidePanel(String videoPath) {
+        $(String.format(videoInSidePanel, videoPath)).dragAndDropTo(fileUpload);
     }
 }

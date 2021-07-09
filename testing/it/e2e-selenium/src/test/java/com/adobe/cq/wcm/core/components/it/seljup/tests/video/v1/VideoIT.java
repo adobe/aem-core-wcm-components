@@ -18,7 +18,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.video.v1;
 
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.components.image.ImageEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.video.VideoEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.video.v1.Video;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
@@ -36,6 +38,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class VideoIT extends AuthorBaseUITest {
 
     private static String componentName = "video";
+    private static String testAssetsPath         = "/content/dam/core-components-examples";
+    private static String testVideoPath          = testAssetsPath + "/library/videoSample/mp4";
+    private static String assetFilterSelect         = "coral-select.assetfilter";
+    private static String assetFilterVideosOption      = "coral-selectlist-item[value='Videos']";
 
     private String proxyComponentPath;
 
@@ -44,6 +50,8 @@ public class VideoIT extends AuthorBaseUITest {
     protected Video video;
     protected String cmpPath;
     protected String videoRT;
+
+    private SidePanel sidePanel;
 
     private void setupResources() {
         videoRT = Commons.rtVideo_v1;
@@ -56,13 +64,23 @@ public class VideoIT extends AuthorBaseUITest {
         cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
-        video = new Video();
+        this.video = new Video();
+    }
+
+    public void openSidePanel() {
+        sidePanel = new SidePanel();
+        if(sidePanel.isHidden()) {
+            sidePanel.show();
+            sidePanel.element().find(assetFilterSelect).click();
+            sidePanel.element().find(assetFilterVideosOption).click();
+        }
     }
 
     @BeforeEach
     public void setupBefore() throws Exception {
         setupResources();
         setup();
+        openSidePanel();
     }
 
     @AfterEach
@@ -83,9 +101,18 @@ public class VideoIT extends AuthorBaseUITest {
     public void testCheckBoxes() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, cmpPath);
         VideoEditDialog editDialog = video.getEditDialog();
+
+        editDialog.openVideoTab();
+        editDialog.uploadVideoFromSidePanel(testVideoPath);
+
         editDialog.openPropertiesTab();
         editDialog.clickLoopEnabled();
+
         Commons.saveConfigureDialog();
-        assertTrue($(".cmp-video video").getAttribute("loop").equals(""), "loop is set");
+
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(video.element().find("video").getAttribute("loop").equals("true"), "loop is set");
     }
 }
