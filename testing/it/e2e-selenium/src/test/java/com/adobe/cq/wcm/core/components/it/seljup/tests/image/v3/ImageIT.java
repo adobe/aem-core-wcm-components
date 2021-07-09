@@ -16,9 +16,13 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v3;
 
+import java.util.concurrent.TimeoutException;
+
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.it.seljup.components.image.v2.Image;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
@@ -33,4 +37,24 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests = new ImageTests();
         imageTests.setup(adminClient, label, Commons.rtImage_v3, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
+
+    /**
+     * Test: set Alt Text and Title
+     */
+    @Test
+    @DisplayName("Test: set Alt Text and Title")
+    public void testAddAltTextAndTitle() throws TimeoutException, InterruptedException {
+        imageTests.testAddAltTextAndTitleV3();
+    }
+
+    /**
+     * Test: set image as decorative
+     */
+    @Test
+    @DisplayName("Test: set image as decorative")
+    public void testSetImageAsDecorative() throws TimeoutException, InterruptedException {
+        imageTests.testSetImageAsDecorativeV3();
+    }
+
+
 }

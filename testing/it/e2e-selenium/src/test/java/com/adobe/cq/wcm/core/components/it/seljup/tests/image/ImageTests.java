@@ -195,6 +195,22 @@ public class ImageTests {
             + " and title " + captionText);
     }
 
+    public void testAddAltTextAndTitleV3() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.checkAltValueFromDAM();
+        editDialog.setAltText(altText);
+        editDialog.openMetadataTab();
+        editDialog.checkTitleValueFromDAM();
+        editDialog.setTitle(captionText);
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
+                + " and title " + captionText);
+    }
+
     public void testDisableCaptionAsPopup() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();
@@ -214,6 +230,18 @@ public class ImageTests {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.openMetadataTab();
         editDialog.setLinkURL(redirectPage);
+        editDialog.checkDecorative();
+        assertTrue(!image.isImageWithAltText(), "Image with alt text should not be present");
+        assertTrue(!image.isLinkSet(), "Image link should not be set");
+    }
+
+    public void testSetImageAsDecorativeV3() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.openMetadataTab();
+        editDialog.setLinkURL(redirectPage);
+        editDialog.openAssetTab();
         editDialog.checkDecorative();
         assertTrue(!image.isImageWithAltText(), "Image with alt text should not be present");
         assertTrue(!image.isLinkSet(), "Image link should not be set");

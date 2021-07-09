@@ -39,6 +39,7 @@ public class ImageEditDialog extends Dialog {
     private static String popUpTitle = "[name='./displayPopupTitle']";
     public static String decorative = "[name='./isDecorative']";
     public static String assetFilter = "[name='assetfilter_image_path']";
+    private static SelenideElement assetTab = $(".cq-dialog coral-tab[data-foundation-tracking-event*='asset']");
     private static SelenideElement metadataTab = $("coral-tab[data-foundation-tracking-event*='metadata']");
     private static String altValueFromDAM = "[name='./altValueFromDAM']";
     private static String titleValueFromDAM = "[name='./titleValueFromDAM']";
@@ -87,6 +88,10 @@ public class ImageEditDialog extends Dialog {
 
     public void openMetadataTab() {
         $(metadataTab).click();
+    }
+
+    public void openAssetTab() {
+        $(assetTab).click();
     }
 
     public void checkAltValueFromDAM() {
