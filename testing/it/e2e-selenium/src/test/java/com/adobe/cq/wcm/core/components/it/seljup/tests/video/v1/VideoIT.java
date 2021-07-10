@@ -35,6 +35,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeoutException;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
@@ -92,6 +93,11 @@ public class VideoIT extends AuthorBaseUITest {
         sidePanel.element().find(assetFilterVideosOption).click();
     }
 
+    private void enterPreviewMode() {
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+    }
+
     @BeforeEach
     public void setupBefore() throws Exception {
         setupResources();
@@ -115,7 +121,20 @@ public class VideoIT extends AuthorBaseUITest {
         editDialog.uploadVideoFromSidePanel(testVideoPath);
 
         Commons.saveConfigureDialog();
+        enterPreviewMode();
+
         assertTrue(video.element().isDisplayed(), "video is set");
+    }
+
+    @Test
+    @DisplayName("Test: Video component is not added")
+    public void testVideoIsNotAdded() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
+
+        Commons.saveConfigureDialog();
+        enterPreviewMode();
+
+        assertFalse(video.element().isDisplayed(), "video is not visible");
     }
 
     @Test
@@ -132,8 +151,7 @@ public class VideoIT extends AuthorBaseUITest {
 
         Commons.saveConfigureDialog();
 
-        editorPage.enterPreviewMode();
-        Commons.switchContext("ContentFrame");
+        enterPreviewMode();
 
         assertTrue(video.element().find("video").getAttribute("loop").equals("true"), "loop is set");
     }
