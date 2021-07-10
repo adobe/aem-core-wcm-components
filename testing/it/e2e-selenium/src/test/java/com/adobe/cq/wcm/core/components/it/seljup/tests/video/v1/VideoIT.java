@@ -20,18 +20,21 @@ import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.image.ImageEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.video.VideoEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.video.v1.Video;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.WebDriverRunner;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeoutException;
 
-import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
@@ -52,28 +55,41 @@ public class VideoIT extends AuthorBaseUITest {
     protected String videoRT;
 
     private SidePanel sidePanel;
+    private WebDriver webDriver;
+    private VideoEditDialog editDialog;
 
     private void setupResources() {
         videoRT = Commons.rtVideo_v1;
     }
 
     protected void setup() throws ClientException {
+        webDriver = WebDriverRunner.getWebDriver();
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
         proxyComponentPath = Commons.creatProxyComponent(adminClient, videoRT, "Proxy Video", componentName);
         addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
         cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
-        this.video = new Video();
+
+        video = new Video();
+        editDialog = video.getEditDialog();
     }
 
-    public void openSidePanel() {
+    private void openSidePanel() {
         sidePanel = new SidePanel();
         if(sidePanel.isHidden()) {
             sidePanel.show();
-            sidePanel.element().find(assetFilterSelect).click();
-            sidePanel.element().find(assetFilterVideosOption).click();
         }
+    }
+
+    private void selectVideoAssets() {
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(assetFilterSelect)));
+        sidePanel.element().find(assetFilterSelect).click();
+
+        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(assetFilterVideosOption)));
+        sidePanel.element().find(assetFilterVideosOption).click();
     }
 
     @BeforeEach
@@ -81,6 +97,7 @@ public class VideoIT extends AuthorBaseUITest {
         setupResources();
         setup();
         openSidePanel();
+        selectVideoAssets();
     }
 
     @AfterEach
@@ -91,9 +108,14 @@ public class VideoIT extends AuthorBaseUITest {
 
     @Test
     @DisplayName("Test: Add video component")
-    public void testAddVideo() throws InterruptedException {
-        VideoEditDialog editDialog = video.getEditDialog();
-        Thread.sleep(4000);
+    public void testAddVideo() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
+
+        editDialog.openVideoTab();
+        editDialog.uploadVideoFromSidePanel(testVideoPath);
+
+        Commons.saveConfigureDialog();
+        assertTrue(video.element().isDisplayed(), "video is set");
     }
 
     @Test
