@@ -93,6 +93,30 @@ public class VideoIT extends AuthorBaseUITest {
         sidePanel.element().find(assetFilterVideosOption).click();
     }
 
+    /**
+     * Adds minimum configuration needed for the component to be displayed.
+     * @param closeDialog
+     * @return
+     * @throws InterruptedException
+     * @throws TimeoutException
+     */
+    private void addMinConfig(Boolean closeDialog) throws InterruptedException, TimeoutException {
+        if (!Commons.iseditDialogVisible()) {
+            Commons.openEditDialog(editorPage, cmpPath);
+        }
+
+        editDialog.openVideoTab();
+        editDialog.uploadVideoFromSidePanel(testVideoPath);
+
+        if (closeDialog) {
+            Commons.saveConfigureDialog();
+        }
+    }
+
+    private void addMinConfig() throws InterruptedException, TimeoutException {
+        addMinConfig(false);
+    }
+
     private void enterPreviewMode() {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
@@ -115,12 +139,7 @@ public class VideoIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Add video component")
     public void testAddVideo() throws InterruptedException, TimeoutException {
-        Commons.openEditDialog(editorPage, cmpPath);
-
-        editDialog.openVideoTab();
-        editDialog.uploadVideoFromSidePanel(testVideoPath);
-
-        Commons.saveConfigureDialog();
+        addMinConfig(true);
         enterPreviewMode();
 
         assertTrue(video.element().isDisplayed(), "video is set");
@@ -143,8 +162,7 @@ public class VideoIT extends AuthorBaseUITest {
         Commons.openEditDialog(editorPage, cmpPath);
         VideoEditDialog editDialog = video.getEditDialog();
 
-        editDialog.openVideoTab();
-        editDialog.uploadVideoFromSidePanel(testVideoPath);
+        addMinConfig(false);
 
         editDialog.openPropertiesTab();
         editDialog.clickLoopEnabled();
