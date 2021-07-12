@@ -41,23 +41,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag("group2")
 public class VideoIT extends AuthorBaseUITest {
 
-    private static String componentName = "video";
-    private static String testAssetsPath         = "/content/dam/core-components-examples";
-    private static String testVideoPath          = testAssetsPath + "/library/videoSample/mp4";
+    private static String componentName             = "video";
+    private static String testAssetsPath            = "/content/dam/core-components-examples";
+    private static String testVideoPath             = testAssetsPath + "/library/videoSample/mp4";
     private static String assetFilterSelect         = "coral-select.assetfilter";
-    private static String assetFilterVideosOption      = "coral-selectlist-item[value='Videos']";
+    private static String assetFilterVideosOption   = "coral-selectlist-item[value='Videos']";
 
     private String proxyComponentPath;
+    private SidePanel sidePanel;
+    private WebDriver webDriver;
+    private VideoEditDialog editDialog;
 
     protected String testPage;
     protected EditorPage editorPage;
     protected Video video;
     protected String cmpPath;
     protected String videoRT;
-
-    private SidePanel sidePanel;
-    private WebDriver webDriver;
-    private VideoEditDialog editDialog;
 
     private void setupResources() {
         videoRT = Commons.rtVideo_v1;
@@ -76,6 +75,10 @@ public class VideoIT extends AuthorBaseUITest {
         editDialog = video.getEditDialog();
     }
 
+    /**
+     * Opens the side panel if it is closed.
+     * @return
+     */
     private void openSidePanel() {
         sidePanel = new SidePanel();
         if(sidePanel.isHidden()) {
@@ -83,6 +86,10 @@ public class VideoIT extends AuthorBaseUITest {
         }
     }
 
+    /**
+     * Filter and show only video assets in the side panel.
+     * @return
+     */
     private void selectVideoAssets() {
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(assetFilterSelect)));
@@ -113,10 +120,20 @@ public class VideoIT extends AuthorBaseUITest {
         }
     }
 
+    /**
+     * Adds minimum configuration needed for the component to be displayed.
+     * @return
+     * @throws InterruptedException
+     * @throws TimeoutException
+     */
     private void addMinConfig() throws InterruptedException, TimeoutException {
         addMinConfig(false);
     }
 
+    /**
+     * Activates preview mode and switch the context to the content iframe.
+     * @return
+     */
     private void enterPreviewMode() {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
@@ -162,7 +179,7 @@ public class VideoIT extends AuthorBaseUITest {
         Commons.openEditDialog(editorPage, cmpPath);
         VideoEditDialog editDialog = video.getEditDialog();
 
-        addMinConfig(false);
+        addMinConfig();
 
         editDialog.openPropertiesTab();
         editDialog.clickLoopEnabled();
