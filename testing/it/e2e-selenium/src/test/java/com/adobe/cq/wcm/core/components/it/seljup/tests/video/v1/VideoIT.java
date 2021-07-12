@@ -16,9 +16,14 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.video.v1;
 
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.junit.annotations.Author;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pageobject.granite.LoginPage;
 import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
+import com.adobe.cq.testing.selenium.utils.DisableTour;
+import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.video.VideoEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.video.v1.Video;
@@ -33,8 +38,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import static com.adobe.cq.testing.selenium.Constants.GROUPID_CONTENT_AUTHORS;
+import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.setAffinityCookie;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -140,17 +151,27 @@ public class VideoIT extends AuthorBaseUITest {
     }
 
     @BeforeEach
-    public void setupBefore() throws Exception {
+    public void setupBefore() throws ClientException {
         setupResources();
         setup();
         openSidePanel();
         selectVideoAssets();
     }
 
+    /**
+     * Overrides AuthorBaseUITest.getUserGroupMembership
+     * Allows login as administrator in order to cleanup the temporary sites.
+     * @return
+     */
+    public List<String> getUserGroupMembership() {
+        return Arrays.asList("administrators", "administrators");
+    }
+
     @AfterEach
     public void cleanup() throws ClientException, InterruptedException {
         Commons.deleteProxyComponent(adminClient, proxyComponentPath);
         authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePath(proxyComponentPath.replace("/components/video", ""), HttpStatus.SC_OK);
     }
 
     @Test
