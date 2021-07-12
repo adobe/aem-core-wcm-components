@@ -53,6 +53,7 @@ public class VideoIT extends AuthorBaseUITest {
     private VideoEditDialog editDialog;
 
     protected String testPage;
+    protected String testFolder;
     protected EditorPage editorPage;
     protected Video video;
     protected String cmpPath;
@@ -64,7 +65,7 @@ public class VideoIT extends AuthorBaseUITest {
 
     protected void setup() throws ClientException {
         webDriver = WebDriverRunner.getWebDriver();
-        testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
+        testPage = authorClient.createPage("video-v1", "Video v1", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
         proxyComponentPath = Commons.creatProxyComponent(adminClient, videoRT, "Proxy Video", componentName);
         addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
         cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
@@ -104,29 +105,30 @@ public class VideoIT extends AuthorBaseUITest {
      * Adds minimum configuration needed for the component to be displayed.
      * @param closeDialog
      * @return
-     * @throws InterruptedException
-     * @throws TimeoutException
      */
-    private void addMinConfig(Boolean closeDialog) throws InterruptedException, TimeoutException {
-        if (!Commons.iseditDialogVisible()) {
-            Commons.openEditDialog(editorPage, cmpPath);
+    private void addMinConfig(Boolean closeDialog) {
+        try {
+            if (!Commons.iseditDialogVisible()) {
+                Commons.openEditDialog(editorPage, cmpPath);
+            }
+
+            editDialog.openVideoTab();
+            editDialog.uploadVideoFromSidePanel(testVideoPath);
+
+            if (closeDialog) {
+                Commons.saveConfigureDialog();
+            }
+        } catch (Exception e) {
+            System.out.println("Could not initialize component.");
         }
 
-        editDialog.openVideoTab();
-        editDialog.uploadVideoFromSidePanel(testVideoPath);
-
-        if (closeDialog) {
-            Commons.saveConfigureDialog();
-        }
     }
 
     /**
      * Adds minimum configuration needed for the component to be displayed.
      * @return
-     * @throws InterruptedException
-     * @throws TimeoutException
      */
-    private void addMinConfig() throws InterruptedException, TimeoutException {
+    private void addMinConfig() {
         addMinConfig(false);
     }
 
@@ -151,6 +153,7 @@ public class VideoIT extends AuthorBaseUITest {
     public void cleanup() throws ClientException, InterruptedException {
         Commons.deleteProxyComponent(adminClient, proxyComponentPath);
         authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePath(rootPage, 200, 201);
     }
 
     @Test
