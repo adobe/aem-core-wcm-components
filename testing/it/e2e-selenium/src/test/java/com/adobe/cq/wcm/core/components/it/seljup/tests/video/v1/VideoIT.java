@@ -53,7 +53,6 @@ public class VideoIT extends AuthorBaseUITest {
     private VideoEditDialog editDialog;
 
     protected String testPage;
-    protected String testFolder;
     protected EditorPage editorPage;
     protected Video video;
     protected String cmpPath;
@@ -106,7 +105,7 @@ public class VideoIT extends AuthorBaseUITest {
      * @param closeDialog
      * @return
      */
-    private void addMinConfig(Boolean closeDialog) {
+    private void addMinimumConfig(Boolean closeDialog) {
         try {
             if (!Commons.iseditDialogVisible()) {
                 Commons.openEditDialog(editorPage, cmpPath);
@@ -121,15 +120,14 @@ public class VideoIT extends AuthorBaseUITest {
         } catch (Exception e) {
             System.out.println("Could not initialize component.");
         }
-
     }
 
     /**
      * Adds minimum configuration needed for the component to be displayed.
      * @return
      */
-    private void addMinConfig() {
-        addMinConfig(false);
+    private void addMinimumConfig() {
+        addMinimumConfig(false);
     }
 
     /**
@@ -158,7 +156,7 @@ public class VideoIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Add video component")
     public void testAddVideo() throws InterruptedException, TimeoutException {
-        addMinConfig(true);
+        addMinimumConfig(true);
         enterPreviewMode();
 
         assertTrue(video.element().isDisplayed(), "video is set");
@@ -167,9 +165,6 @@ public class VideoIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Video component is not added")
     public void testVideoIsNotAdded() throws InterruptedException, TimeoutException {
-        Commons.openEditDialog(editorPage, cmpPath);
-
-        Commons.saveConfigureDialog();
         enterPreviewMode();
 
         assertFalse(video.element().isDisplayed(), "video is not visible");
@@ -178,10 +173,7 @@ public class VideoIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Check video boxes")
     public void testCheckBoxes() throws InterruptedException, TimeoutException {
-        Commons.openEditDialog(editorPage, cmpPath);
-        VideoEditDialog editDialog = video.getEditDialog();
-
-        addMinConfig();
+        addMinimumConfig();
 
         editDialog.openPropertiesTab();
         editDialog.clickLoopEnabled();
