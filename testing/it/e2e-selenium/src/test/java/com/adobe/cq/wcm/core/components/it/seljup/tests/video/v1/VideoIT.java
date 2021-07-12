@@ -65,7 +65,7 @@ public class VideoIT extends AuthorBaseUITest {
 
     protected void setup() throws ClientException {
         webDriver = WebDriverRunner.getWebDriver();
-        testPage = authorClient.createPage("video-v1", "Video v1", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
+        testPage = authorClient.createPage("video-v1", "Video v1", rootPage, defaultPageTemplate, HttpStatus.SC_OK).getSlingPath();
         proxyComponentPath = Commons.creatProxyComponent(adminClient, videoRT, "Proxy Video", componentName);
         addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
         cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
@@ -153,7 +153,6 @@ public class VideoIT extends AuthorBaseUITest {
     public void cleanup() throws ClientException, InterruptedException {
         Commons.deleteProxyComponent(adminClient, proxyComponentPath);
         authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        authorClient.deletePath(rootPage, 200, 201);
     }
 
     @Test
