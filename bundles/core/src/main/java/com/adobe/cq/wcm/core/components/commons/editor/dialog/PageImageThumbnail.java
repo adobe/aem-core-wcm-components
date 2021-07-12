@@ -36,7 +36,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
 /**
- * Defines a Sling Model used by the {@code /apps/core/wcm/components/commons/editor/dialog/pageimagethumbnail/v1/pageimagethumbnail} dialog component.
+ * Defines a Sling Model used by the {@code core/wcm/components/commons/editor/dialog/pageimagethumbnail/v1/pageimagethumbnail} dialog component.
  *
  * @since com.adobe.cq.wcm.core.components.commons.editor.dialog 1.0.0
  */
