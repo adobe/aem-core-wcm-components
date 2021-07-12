@@ -221,7 +221,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     @Test
     public void testCanonicalLink() {
         Page page = getPageUnderTest(PAGE);
-        assertEquals("http://foo.bar/content/page/templated-page",page.getCanonicalLink());
+        assertEquals("http://foo.bar/content/page/templated-page", page.getCanonicalLink());
     }
 
     @Test
@@ -231,9 +231,9 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
             Locale.ENGLISH, "http://foo.bar/content/en/templated-page",
             Locale.GERMAN, "http://foo.bar/content/de/templated-page"
         );
-        when(pageTreeSitemapGenerator.getLanguageAlternatives(any())).thenReturn(expectedAlternates);
-        assertEquals(2,page.getAlternateLanguageLinks().size());
-        assertEquals("http://foo.bar/content/en/templated-page",page.getAlternateLanguageLinks().get(Locale.ENGLISH));
-        assertEquals("http://foo.bar/content/de/templated-page",page.getAlternateLanguageLinks().get(Locale.GERMAN));
+        when(pageTreeSitemapGenerator.getAlternateLanguageLinks(any())).thenReturn(expectedAlternates);
+        assertEquals(2, page.getAlternateLanguageLinks().size());
+        assertEquals("http://foo.bar/content/en/templated-page", page.getAlternateLanguageLinks().get(Locale.ENGLISH));
+        assertEquals("http://foo.bar/content/de/templated-page", page.getAlternateLanguageLinks().get(Locale.GERMAN));
     }
 }
