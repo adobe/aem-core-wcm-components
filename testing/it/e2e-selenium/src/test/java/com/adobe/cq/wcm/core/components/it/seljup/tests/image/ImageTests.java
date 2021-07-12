@@ -367,7 +367,6 @@ public class ImageTests {
         editDialog.setAssetFilter(testAssetsPath);
         Commons.openEditDialog(editorPage, compPath);
         editDialog.uploadImageFromSidePanel(testImagePath);
-
     }
 
     /**
