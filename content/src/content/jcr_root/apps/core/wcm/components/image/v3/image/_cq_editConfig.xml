@@ -9,6 +9,7 @@
             propertyName="./fileReference">
             <parameters
                 jcr:primaryType="nt:unstructured"
+                imageFromPageImage="false"
                 imageCrop=""
                 imageMap=""
                 imageRotate=""

@@ -43,6 +43,7 @@ public class BaseImage extends BaseComponent {
     public static String areaElement = "[data-cmp-hook-image='area']";
     public static String imageWithAtlTextAndTitle = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s'][title='%s']";
     public static String imageWithAtlText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s']";
+    public static String imageWithFileName = ".cmp-image__image[src*='/%s']";
 
     protected String title;
     protected String imgWithAltText;
@@ -89,6 +90,10 @@ public class BaseImage extends BaseComponent {
 
     public boolean isImagePresentWithAtlText(String pagePath, String altText) {
         return $(String.format(imageWithAtlText, pagePath, altText)).isDisplayed();
+    }
+
+    public boolean isImagePresentWithFileName(String fileName) {
+        return $(String.format(imageWithFileName, fileName)).isDisplayed();
     }
 
     public boolean isLinkSet() {

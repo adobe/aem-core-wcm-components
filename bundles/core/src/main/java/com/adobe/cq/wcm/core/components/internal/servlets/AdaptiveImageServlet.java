@@ -185,7 +185,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
             ImageComponent imageComponent = new ImageComponent(component);
             // If the image has no content, use the featured image of the page if it exists
-            if (imageComponent.source == Source.NOCONTENT) {
+            ValueMap properties = component.getValueMap();
+            boolean imageFromPageImage = properties.get("imageFromPageImage", imageComponent.source == Source.NOCONTENT);
+            if (imageFromPageImage) {
                 PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
                 if (pageManager != null) {
                     Page page = pageManager.getContainingPage(component);
@@ -199,7 +201,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             if (imageComponent.source == Source.NOCONTENT || imageComponent.source == Source.NONEXISTING) {
                 LOGGER.error("Either the image from {} does not have a valid file reference" +
-                        "or the containing page does not have a valid featured image", component.getPath());
+                        " or the containing page does not have a valid featured image", component.getPath());
                 metrics.markImageErrors();
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;

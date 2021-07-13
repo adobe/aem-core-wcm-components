@@ -18,16 +18,20 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.wcm.core.components.it.seljup.components.image.BaseImage;
 import com.adobe.cq.wcm.core.components.it.seljup.components.image.ImageEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.SelenideElement;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest.adminClient;
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,6 +43,10 @@ public class ImageTests {
     private static String captionText            = "The Last Guardian";
     private static String originalDamTitle       = "Beach house";
     private static String originalDamDescription = "House on a beach with blue sky";
+    private static String logoFileName           = "adobe-systems-logo-and-wordmark.png";
+    private static String imageFileName          = "core-comp-test-image.jpeg";
+    private static String pageImageAlt           = "page image alt";
+
 
 
     private String testPage;
@@ -48,6 +56,7 @@ public class ImageTests {
     private PageEditorPage editorPage;
     private BaseImage image;
     private String redirectPage;
+    private PropertiesPage propertiesPage;
 
     public String getProxyPath() {
         return proxyPath;
@@ -58,6 +67,8 @@ public class ImageTests {
         // 1.
         testPage = client.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
         redirectPage = client.createPage("redirectPage", "Redirect Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
+        propertiesPage = new PropertiesPage(testPage);
+
         // 2.
         String policySuffix = "/structure/page/new_policy";
         HashMap<String, String> data = new HashMap<String, String>();
@@ -97,7 +108,7 @@ public class ImageTests {
     }
 
     public void setMinimalProps() throws InterruptedException, TimeoutException {
-        Commons.selectInAutocomplete(image.getAssetPath(),testAssetsPath);
+        Commons.selectInAutocomplete(image.getAssetPath(), testAssetsPath);
         Commons.openEditDialog(editorPage, compPath);
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.uploadImageFromSidePanel(testImagePath);
@@ -162,14 +173,6 @@ public class ImageTests {
         assertTrue(!image.isImageWithAltText(),"image should be rendered without alt text");
     }
 
-    private void dragImage() throws TimeoutException, InterruptedException {
-        ImageEditDialog editDialog = image.getEditDialog();
-        editDialog.setAssetFilter(testAssetsPath);
-        Commons.openEditDialog(editorPage, compPath);
-        editDialog.uploadImageFromSidePanel(testImagePath);
-
-    }
-
     public void testAddImage() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();
@@ -177,7 +180,7 @@ public class ImageTests {
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, originalDamDescription, originalDamTitle), "Image should be present with alt text " + originalDamDescription
-            + " and title " + originalDamTitle);
+                + " and title " + originalDamTitle);
     }
 
     public void testAddAltTextAndTitle() throws TimeoutException, InterruptedException {
@@ -193,7 +196,23 @@ public class ImageTests {
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
-            + " and title " + captionText);
+                + " and title " + captionText);
+    }
+
+    public void testAddAltTextAndTitleV3() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.checkAltValueFromDAM();
+        editDialog.setAltText(altText);
+        editDialog.openMetadataTab();
+        editDialog.checkTitleValueFromDAM();
+        editDialog.setTitle(captionText);
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
+                + " and title " + captionText);
     }
 
     public void testDisableCaptionAsPopup() throws TimeoutException, InterruptedException {
@@ -215,6 +234,18 @@ public class ImageTests {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.openMetadataTab();
         editDialog.setLinkURL(redirectPage);
+        editDialog.checkDecorative();
+        assertTrue(!image.isImageWithAltText(), "Image with alt text should not be present");
+        assertTrue(!image.isLinkSet(), "Image link should not be set");
+    }
+
+    public void testSetImageAsDecorativeV3() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.openMetadataTab();
+        editDialog.setLinkURL(redirectPage);
+        editDialog.openAssetTab();
         editDialog.checkDecorative();
         assertTrue(!image.isImageWithAltText(), "Image with alt text should not be present");
         assertTrue(!image.isLinkSet(), "Image link should not be set");
@@ -290,4 +321,106 @@ public class ImageTests {
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImageWithLazyLoadingEnabled(), "Image with native lazy loading enabled should be present");
     }
+    public void testPageImageWithEmptyAltTextFromPageImage() throws InterruptedException, ClientException {
+        setPageImage();
+        editorPage.open();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
+    }
+
+    public void testPageImageWithAltTextFromPageImage() throws InterruptedException, ClientException {
+        setPageImage();
+        setPageImageAlt(pageImageAlt);
+        editorPage.open();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithAtlText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
+        assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
+    }
+
+    public void testPageImageWithAltTextFromImage() throws TimeoutException, InterruptedException, ClientException {
+        setPageImage();
+        setPageImageAlt(pageImageAlt);
+        editorPage.open();
+        ImageEditDialog editDialog = image.getEditDialog();
+        Commons.openEditDialog(editorPage, compPath);
+        editDialog.checkAltValueFromPageImage();
+        editDialog.setAltText(altText);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithAtlText(testPage, altText),"image should be rendered with alt text: " + altText);
+        assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
+    }
+
+    public void testPageImageWithDecorative() throws TimeoutException, InterruptedException, ClientException {
+        setPageImage();
+        setPageImageAlt(pageImageAlt);
+        editorPage.open();
+        ImageEditDialog editDialog = image.getEditDialog();
+        Commons.openEditDialog(editorPage, compPath);
+        editDialog.checkDecorative();
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
+    }
+
+    public void testPageImageWithDragAndDropImage() throws TimeoutException, InterruptedException, ClientException {
+        setPageImage();
+        editorPage.open();
+        Commons.openSidePanel();
+        Commons.selectInAutocomplete(image.getAssetPath(), testAssetsPath);
+        Commons.openEditDialog(editorPage, compPath);
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.checkImageFromPageImage();
+        editDialog.uploadImageFromSidePanel(testImagePath);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithAtlText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
+        assertTrue(image.isImagePresentWithFileName(imageFileName),"image should be rendered with file name: " + imageFileName);
+    }
+
+    // ----------------------------------------------------------
+    // private stuff
+    // ----------------------------------------------------------
+
+    private void dragImage() throws TimeoutException, InterruptedException {
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.setAssetFilter(testAssetsPath);
+        Commons.openEditDialog(editorPage, compPath);
+        editDialog.uploadImageFromSidePanel(testImagePath);
+    }
+
+    /**
+     * Sets the featured image of the page.
+     */
+    private void setPageImage() throws ClientException, InterruptedException {
+        // set page resource type to page v3
+        adminClient.setPageProperty(testPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
+        propertiesPage.open();
+        $("coral-tab[data-foundation-tracking-event*='images']").click();
+        $(".cq-FileUpload-picker").click();
+        $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
+        $("*[data-foundation-collection-item-id='/content/dam/core-components/Adobe_Systems_logo_and_wordmark.png'] coral-checkbox").click();
+        $(".granite-pickerdialog-submit").click();
+        propertiesPage.saveAndClose();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+    }
+
+    /**
+     * Sets the alt text of the featured image of the page.
+     */
+    private void setPageImageAlt(String text) throws InterruptedException {
+        propertiesPage.open();
+        // open the Images tab
+        $("coral-tab[data-foundation-tracking-event*='images']").click();
+        SelenideElement altField = $("[name='./cq:featuredimage/alt']");
+        altField.clear();
+        altField.sendKeys(text);
+        propertiesPage.saveAndClose();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+    }
+
 }

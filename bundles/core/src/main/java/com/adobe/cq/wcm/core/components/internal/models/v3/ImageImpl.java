@@ -21,20 +21,26 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.Externalizer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -53,6 +59,10 @@ import static javax.imageio.ImageIO.read;
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
+
+    private static final String PN_IMAGE_FROM_PAGE_IMAGE = "imageFromPageImage";
+    private static final String PN_ALT_VALUE_FROM_PAGE_IMAGE = "altValueFromPageImage";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
 
     @OSGiService
@@ -61,6 +71,55 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @SlingObject
     private ResourceResolver resourceResolver = null;
+
+    /**
+     * The model factory.
+     */
+    @OSGiService
+    protected ModelFactory modelFactory;
+
+    private boolean altValueFromPageImage;
+    private boolean imageFromPageImage;
+    private Image pageImageModel;
+
+    @PostConstruct
+    protected void initModel() {
+        super.initModel();
+        altValueFromPageImage = properties.get(PN_ALT_VALUE_FROM_PAGE_IMAGE, true);
+        if (imageFromPageImage) {
+            Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
+            if (featuredImage != null) {
+                if (!StringUtils.equals(resource.getPath(), featuredImage.getPath())) {
+                    pageImageModel = modelFactory.getModelFromWrappedRequest(this.request, featuredImage, Image.class);
+                }
+            }
+        }
+    }
+
+    @Override
+    public String getAlt() {
+        if (imageFromPageImage && pageImageModel != null && altValueFromPageImage && !isDecorative) {
+            return pageImageModel.getAlt();
+        }
+        return alt;
+    }
+
+    @Override
+    public String getUuid() {
+        if (imageFromPageImage && pageImageModel != null) {
+            return pageImageModel.getUuid();
+        }
+        return uuid;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getFileReference() {
+        if (imageFromPageImage && pageImageModel != null) {
+            return pageImageModel.getFileReference();
+        }
+        return fileReference;
+    }
 
     @Override
     @Nullable
@@ -168,5 +227,29 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @JsonIgnore
     public List<ImageArea> getAreas() {
         return super.getAreas();
+    }
+
+    @Override
+    @JsonIgnore
+    @NotNull
+    public ImageData getComponentData() {
+        String inheritedFileReference = null;
+        if (inheritedResource != null) {
+            inheritedFileReference = inheritedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class);
+        }
+        return getComponentData(inheritedFileReference);
+    }
+
+    @Override
+    protected void initInheritedResource() {
+        imageFromPageImage = properties.get(PN_IMAGE_FROM_PAGE_IMAGE, StringUtils.isEmpty(fileReference) && fileResource == null);
+        if (imageFromPageImage) {
+            Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
+            if (featuredImage != null) {
+                inheritedResource = featuredImage;
+            }
+        } else {
+            inheritedResource = resource;
+        }
     }
 }

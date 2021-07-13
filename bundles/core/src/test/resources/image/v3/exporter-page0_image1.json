@@ -1,0 +1,14 @@
+{
+  "id": "image-61631780d5",
+  "areas": [],
+  "lazyThreshold": 0,
+  "dmImage": false,
+  "widths": [],
+  "lazyEnabled": true,
+  "dataLayer": {
+    "image-61631780d5": {
+      "@type": "core/wcm/components/image/v3/image"
+    }
+  },
+  ":type": "core/wcm/components/image/v3/image"
+}
