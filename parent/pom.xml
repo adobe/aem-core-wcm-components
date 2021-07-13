@@ -682,6 +682,12 @@
                 <version>1.0.2</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>org.apache.sling.servlet-helpers</artifactId>
+                <version>1.4.2</version>
+                <scope>compile</scope>
+            </dependency>
 
             <!-- javax.inject 1 -->
             <dependency>
@@ -902,12 +908,6 @@
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.testing.sling-mock.junit4</artifactId>
                 <version>2.3.4</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.sling</groupId>
-                <artifactId>org.apache.sling.servlet-helpers</artifactId>
-                <version>1.1.8</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

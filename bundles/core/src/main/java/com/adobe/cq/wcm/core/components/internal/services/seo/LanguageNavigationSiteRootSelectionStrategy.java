@@ -20,17 +20,19 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.aem.wcm.seo.localization.SiteRootSelectionStrategy;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigation;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 
@@ -46,33 +48,28 @@ import com.day.cq.wcm.api.designer.Style;
 )
 public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSelectionStrategy {
 
-    private static final String RT_RESPONSIVE_GRID = "wcm/foundation/components/responsivegrid";
-    private static final String RT_BASICPAGE = "wcm/foundation/components/basicpage/v1/basicpage";
-
-    @Reference
-    private Designer designer;
-
     @Override
     @Nullable
     public Page getSiteRoot(@NotNull Page page) {
-        return findLanguageNavigation(page.getContentResource()).
-            map(languageNavigation -> {
-                ValueMap properties = languageNavigation.getValueMap();
-                String navigationRoot = properties.get(LanguageNavigation.PN_NAVIGATION_ROOT, String.class);
-                if (navigationRoot == null) {
-                    Style style = designer.getStyle(languageNavigation);
-                    if (style != null) {
-                        navigationRoot = style.get(LanguageNavigation.PN_NAVIGATION_ROOT, String.class);
-                    }
-                }
-
-                return page.getPageManager().getPage(navigationRoot);
-            })
+        return findLanguageNavigation(page.getContentResource())
+            .map(languageNavigation -> getPropertyLazy(languageNavigation, LanguageNavigation.PN_NAVIGATION_ROOT, String.class))
+            .map(siteRootPath -> page.getPageManager().getPage(siteRootPath))
             .orElse(null);
     }
 
-    private Optional<Resource> findLanguageNavigation(Resource content) {
-        return traverse(content)
+    @Override
+    public int getStructuralDepth(@NotNull Page page, int defaultValue) {
+        return findLanguageNavigation(page.getContentResource())
+            .map(languageNavigation -> getPropertyLazy(languageNavigation, LanguageNavigation.PN_STRUCTURE_DEPTH, Integer.class))
+            .orElse(1);
+    }
+
+    private Optional<Resource> findLanguageNavigation(Resource contentResource) {
+        Resource templatedResource = contentResource.adaptTo(TemplatedResource.class);
+        if (templatedResource != null) {
+            contentResource = templatedResource;
+        }
+        return traverse(contentResource)
             .filter(resource ->
                 resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.LanguageNavigationImpl.RESOURCE_TYPE)
                     || resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v2.LanguageNavigationImpl.RESOURCE_TYPE))
@@ -83,21 +80,38 @@ public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSele
         if (resource == null) {
             return Stream.empty();
         }
-        // traverse only on types that are supposed to have children
-        if (resource.isResourceType(RT_RESPONSIVE_GRID) || resource.isResourceType(RT_BASICPAGE)) {
-            return StreamSupport.stream(resource.getChildren().spliterator(), false)
-                .flatMap(this::traverse);
-        }
         // resolve experience fragments
         if (resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl.RESOURCE_TYPE_V1)
             || resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl.RESOURCE_TYPE_V2)) {
-            return Optional.ofNullable(resource.adaptTo(ExperienceFragment.class))
+            return Optional.ofNullable(new ExperienceFragmentRequest(resource).adaptTo(ExperienceFragment.class))
                 .map(ExperienceFragment::getLocalizedFragmentVariationPath)
                 .map(xfPath -> resource.getResourceResolver().getResource(xfPath))
                 .map(this::traverse)
                 .orElseGet(Stream::empty);
         }
+        return Stream.concat(
+            Stream.of(resource),
+            StreamSupport.stream(resource.getChildren().spliterator(), false).flatMap(this::traverse));
+    }
 
-        return Stream.of(resource);
+    private static <T> T getPropertyLazy(Resource resource, String property, Class<T> type) {
+        ValueMap properties = resource.getValueMap();
+        T value = properties.get(property, type);
+        if (value == null) {
+            Designer designer = resource.getResourceResolver().adaptTo(Designer.class);
+            Style style = designer != null ? designer.getStyle(resource) : null;
+            if (style != null) {
+                value = style.get(property, type);
+            }
+        }
+        return value;
+    }
+
+    private static class ExperienceFragmentRequest extends MockSlingHttpServletRequest {
+
+        ExperienceFragmentRequest(Resource xfResource) {
+            super(xfResource.getResourceResolver());
+            setResource(xfResource);
+        }
     }
 }
