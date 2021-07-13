@@ -70,7 +70,7 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
 
         // when
         Page siteRoot = subject.getSiteRoot(page);
-        int structureDepth = subject.getStructuralDepth(page, 0);
+        int structureDepth = subject.getStructuralDepth(page);
 
         // then
         assertNotNull(siteRoot);
@@ -86,7 +86,7 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
 
         // when
         Page siteRoot = subject.getSiteRoot(page);
-        int structureDepth = subject.getStructuralDepth(page, 0);
+        int structureDepth = subject.getStructuralDepth(page);
 
         // then
         assertNotNull(siteRoot);
@@ -105,7 +105,7 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
 
         // when
         Page siteRoot = subject.getSiteRoot(page);
-        int structureDepth = subject.getStructuralDepth(page, 0);
+        int structureDepth = subject.getStructuralDepth(page);
 
         // then
         assertNotNull(siteRoot);
@@ -147,7 +147,7 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
 
         // when
         Page siteRoot = subject.getSiteRoot(page);
-        int structureDepth = subject.getStructuralDepth(page, 0);
+        int structureDepth = subject.getStructuralDepth(page);
 
         // then
         assertNotNull(siteRoot);

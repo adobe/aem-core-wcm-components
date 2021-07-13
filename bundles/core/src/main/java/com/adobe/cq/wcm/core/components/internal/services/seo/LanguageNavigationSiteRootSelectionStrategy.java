@@ -27,6 +27,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
 
 import com.adobe.aem.wcm.seo.localization.SiteRootSelectionStrategy;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
@@ -39,8 +42,12 @@ import com.day.cq.wcm.api.designer.Style;
 /**
  * An implementation of {@link SiteRootSelectionStrategy} that looks for a language navigation component on the given page and uses it's
  * configured navigation root as site root.
+ * <p>
+ * This Component must be explicitly enabled by providing an (empty) configuration for it. This should be the case for sites the use the
+ * language navigation core component. For any other case this Component should be kept disabled.
  */
 @Component(
+    configurationPolicy = ConfigurationPolicy.REQUIRE,
     property = {
         Constants.SERVICE_RANKING + ":Integer=100"
     },
@@ -58,7 +65,7 @@ public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSele
     }
 
     @Override
-    public int getStructuralDepth(@NotNull Page page, int defaultValue) {
+    public int getStructuralDepth(@NotNull Page page) {
         return findLanguageNavigation(page.getContentResource())
             .map(languageNavigation -> getPropertyLazy(languageNavigation, LanguageNavigation.PN_STRUCTURE_DEPTH, Integer.class))
             .orElse(1);
