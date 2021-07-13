@@ -113,6 +113,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         String baseImageAbsoluteUrl = externalizer.publishLink(resourceResolver, super.getSrc());
         URL url= null;
         try {
+            System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
             url = new URL(baseImageAbsoluteUrl);
         } catch (MalformedURLException e) {
             e.printStackTrace();
