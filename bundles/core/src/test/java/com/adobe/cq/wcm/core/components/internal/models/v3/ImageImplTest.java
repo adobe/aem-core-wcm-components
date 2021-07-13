@@ -37,6 +37,24 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
     private static String TEST_BASE = "/image/v3";
     private static final String IMAGE50_PATH = PAGE + "/jcr:content/root/image50";
+    private static final String IMAGE51_PATH = PAGE + "/jcr:content/root/image51";
+    private static final String IMAGE52_PATH = PAGE + "/jcr:content/root/image52";
+    private static final String IMAGE53_PATH = PAGE + "/jcr:content/root/image53";
+    private static final String IMAGE54_PATH = PAGE + "/jcr:content/root/image54";
+    private static final String IMAGE55_PATH = PAGE + "/jcr:content/root/image55";
+    private static final String IMAGE56_PATH = PAGE + "/jcr:content/root/image56";
+    private static final String IMAGE57_PATH = PAGE + "/jcr:content/root/image57";
+    private static final String IMAGE58_PATH = PAGE + "/jcr:content/root/image58";
+
+    private static String PAGE0 = TEST_ROOT + "/test_page0";
+    private static String PAGE1 = TEST_ROOT + "/test_page1";
+    private static String PAGE2 = TEST_ROOT + "/test_page2";
+    private static String PAGE3 = TEST_ROOT + "/test_page3";
+    private static final String PAGE0_IMAGE0_PATH = PAGE0 + "/jcr:content/root/page0_image0";
+    private static final String PAGE0_IMAGE1_PATH = PAGE0 + "/jcr:content/root/page0_image1";
+    private static final String PAGE1_IMAGE0_PATH = PAGE1 + "/jcr:content/root/page1_image0";
+    private static final String PAGE2_IMAGE0_PATH = PAGE2 + "/jcr:content/root/page2_image0";
+    private static final String PAGE3_IMAGE0_PATH = PAGE3 + "/jcr:content/root/page3_image0";
 
     @BeforeEach
     @Override
@@ -232,6 +250,133 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid(), "getUuid()");
         assertEquals("image-cf7954fac5", image.getId(), "getId()");
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE50_PATH));
+    }
+
+    @Test
+    protected void testInheritedFeaturedImage_altValueFromPageImage() {
+        Image image = getImageUnderTest(IMAGE51_PATH);
+        assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", image.getFileReference(), "getFileReference()");
+        assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid(), "getUuid()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE51_PATH));
+    }
+
+    @Test
+    protected void testInheritedFeaturedImage_altValueFromImage() {
+        Image image = getImageUnderTest(IMAGE52_PATH);
+        assertEquals("image52 alt", image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", image.getFileReference(), "getFileReference()");
+        assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid(), "getUuid()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE52_PATH));
+    }
+
+    @Test
+    protected void testInheritedFeaturedImage_altValueFromPageImage_decorative() {
+        Image image = getImageUnderTest(IMAGE53_PATH);
+        assertNull(image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", image.getFileReference(), "getFileReference()");
+        assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid(), "getUuid()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE53_PATH));
+    }
+
+    @Test
+    protected void testInheritedFeaturedImage_altValueFromImage_decorative() {
+        Image image = getImageUnderTest(IMAGE54_PATH);
+        assertNull(image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", image.getFileReference(), "getFileReference()");
+        assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid(), "getUuid()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE54_PATH));
+    }
+
+    @Test
+    protected void testNoInheritedFeaturedImage_altValueFromDAM() {
+        Image image = getImageUnderTest(IMAGE55_PATH);
+        assertEquals("transparent HD PNG", image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/transparent_hd.png", image.getFileReference(), "getFileReference()");
+        assertEquals("f6460529-b7b1-4b3a-8980-b3b3f0ee109c", image.getUuid(), "getUuid()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE55_PATH));
+    }
+
+    @Test
+    protected void testNoInheritedFeaturedImage_altValueFromImage() {
+        Image image = getImageUnderTest(IMAGE56_PATH);
+        assertEquals("image52a alt", image.getAlt(), "getAlt()");
+        assertNull(image.getFileReference(), "getFileReference()");
+        assertNull(image.getUuid(), "getUuid()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE56_PATH));
+    }
+
+    @Test
+    protected void testNoInheritedFeaturedImage_altValueFromDAM_decorative() {
+        Image image = getImageUnderTest(IMAGE57_PATH);
+        assertNull(image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/transparent_hd.png", image.getFileReference(), "getFileReference()");
+        assertEquals("f6460529-b7b1-4b3a-8980-b3b3f0ee109c", image.getUuid(), "getUuid()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE57_PATH));
+    }
+
+    @Test
+    protected void testNoInheritedFeaturedImage_altValueFromImage_decorative() {
+        Image image = getImageUnderTest(IMAGE58_PATH);
+        assertNull(image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/transparent_hd.png", image.getFileReference(), "getFileReference()");
+        assertEquals("f6460529-b7b1-4b3a-8980-b3b3f0ee109c", image.getUuid(), "getUuid()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE58_PATH));
+    }
+
+    @Test
+    protected void testEmptyImage_emptyFeaturedImage() {
+        Image image = getImageUnderTest(PAGE0_IMAGE0_PATH);
+        assertNull(image.getSrc(), "getSrc()");
+        assertNull(image.getAlt(), "getAlt()");
+        assertNull(image.getFileReference(), "getFileReference()");
+        assertNull(image.getUuid(), "getUuid()");
+        assertEquals("image-c7ca64a6e5", image.getId(), "getId()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, PAGE0_IMAGE0_PATH));
+    }
+
+    @Test
+    protected void testEmptyImage_emptyFeaturedImage_inherit() {
+        Image image = getImageUnderTest(PAGE0_IMAGE1_PATH);
+        assertNull(image.getSrc(), "getSrc()");
+        assertNull(image.getAlt(), "getAlt()");
+        assertNull(image.getFileReference(), "getFileReference()");
+        assertNull(image.getUuid(), "getUuid()");
+        assertEquals("image-61631780d5", image.getId(), "getId()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, PAGE0_IMAGE1_PATH));
+    }
+
+    @Test
+    protected void testInheritedPageImage_pageImageAltValueFromDAM() {
+        Image image = getImageUnderTest(PAGE1_IMAGE0_PATH);
+        assertEquals("/core/content/test_page1/_jcr_content/root/page1_image0.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png", image.getSrc(), "getSrc()");
+        assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", image.getFileReference(), "getFileReference()");
+        assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid(), "getUuid()");
+        assertEquals("image-6401b77a35", image.getId(), "getId()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, PAGE1_IMAGE0_PATH));
+    }
+
+    @Test
+    protected void testInheritedPageImage_pageImageAltValueFromResource() {
+        Image image = getImageUnderTest(PAGE2_IMAGE0_PATH);
+        assertEquals("/core/content/test_page2/_jcr_content/root/page2_image0.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png", image.getSrc(), "getSrc()");
+        assertEquals("featured image alt", image.getAlt(), "getAlt()");
+        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", image.getFileReference(), "getFileReference()");
+        assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid(), "getUuid()");
+        assertEquals("image-310f56f715", image.getId(), "getId()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, PAGE2_IMAGE0_PATH));
+    }
+
+    @Test
+    protected void testInheritedPageImage_pageImageAltValueFromResource_withFileResource() {
+        Image image = getImageUnderTest(PAGE3_IMAGE0_PATH);
+        assertEquals("/core/content/test_page3/_jcr_content/root/page3_image0.coreimg.png", image.getSrc(), "getSrc()");
+        assertEquals("featured image alt", image.getAlt(), "getAlt()");
+        assertNull(image.getFileReference(), "getFileReference()");
+        assertNull(image.getUuid(), "getUuid()");
+        assertEquals("image-96253254e2", image.getId(), "getId()");
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, PAGE3_IMAGE0_PATH));
     }
 
 }
