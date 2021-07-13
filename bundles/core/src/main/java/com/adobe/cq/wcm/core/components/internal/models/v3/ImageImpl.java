@@ -38,9 +38,10 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -111,18 +112,16 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @JsonIgnore
     public String[] getBaseImageResolution() {
         String baseImageAbsoluteUrl = externalizer.publishLink(resourceResolver, super.getSrc());
-        URL url= null;
-        try {
-            System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
-            url = new URL(baseImageAbsoluteUrl);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        URL url;
+        InputStream in;
         BufferedImage image = null;
         try {
-            if (url != null) {
-                image = read(url);
-            }
+            url = new URL(baseImageAbsoluteUrl);
+            URLConnection connection = url.openConnection();
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+            in = connection.getInputStream();
+            image = read(in);
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
