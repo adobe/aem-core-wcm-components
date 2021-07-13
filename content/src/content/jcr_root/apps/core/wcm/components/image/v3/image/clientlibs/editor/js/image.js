@@ -81,7 +81,7 @@
             // uncheck the "Inherit the image from page image" checkbox when there is neither an image nor a page image defined
             var hasImage = $dialog.find(".cmp-image__editor-file-upload .cq-FileUpload-thumbnail-img img").length > 0;
             var hasPageImage = $dialog.find(".cq-page-image-thumbnail__image[src]").length > 0;
-            if (!hasImage && !hasPageImage) {
+            if (imageFromPageImage && !hasImage && !hasPageImage) {
                 imageFromPageImage.checked = false;
             }
 
