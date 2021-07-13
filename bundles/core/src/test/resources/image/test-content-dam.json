@@ -843,6 +843,7 @@
                 "tiff:ImageLength": 1080,
                 "dam:extracted": "Wed Dec 09 2020 10:05:04 GMT+0200",
                 "dc:format": "image/png",
+                "dc:title": "transparent HD PNG",
                 "dam:Bitsperpixel": 32,
                 "dam:MIMEtype": "image/png",
                 "tiff:Orientation": 1,

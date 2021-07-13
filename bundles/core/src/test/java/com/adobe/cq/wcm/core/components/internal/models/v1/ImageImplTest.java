@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(AemContextExtension.class)
 public class ImageImplTest extends AbstractImageTest {
 
-    private static final String TEST_ROOT = "/content";
+    protected static final String TEST_ROOT = "/content";
     protected static String PAGE = TEST_ROOT + "/test";
     private static final String IMAGE_TITLE_ALT = "Adobe Logo";
     protected static String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png";
