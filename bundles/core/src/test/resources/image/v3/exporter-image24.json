@@ -3,46 +3,7 @@
   "alt": "Adobe Systems Logo and Wordmark in PNG format",
   "title": "Adobe Systems Logo and Wordmark",
   "src": "/core/content/test/_jcr_content/root/image24.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png",
-  "srcUriTemplate": "/core/content/test/_jcr_content/root/image24.coreimg{.width}.png/1494867377756/adobe-systems-logo-and-wordmark.png",
-  "areas": [
-    {
-      "shape": "circle",
-      "coordinates": "256,256,256",
-      "relativeCoordinates": "0.2000,0.3001,0.2000",
-      "link": {
-        "url": "http://adobe.com",
-        "valid": true
-      },
-      "alt": ""
-    },
-    {
-      "shape": "rect",
-      "coordinates": "256,171,1023,682",
-      "relativeCoordinates": "0.1992,0.2005,0.7992,0.7995",
-      "link": {
-        "url": "http://adobe.com",
-        "valid": true
-      },
-      "alt": "altText"
-    },
-    {
-      "shape": "poly",
-      "coordinates": "917,344,1280,852,532,852",
-      "relativeCoordinates": "0.7164,0.4033,1.0000,0.9988,0.4156,0.9988",
-      "link": {
-        "url": "http://adobe.com",
-        "attributes": {
-          "target": "_blank"
-        },
-        "valid": true
-      },
-      "alt": ""
-    }
-  ],
-  "lazyThreshold": 0,
-  "dmImage":false,
-  "widths": [],
-  "lazyEnabled": false,
+  "lazyEnabled": true,
   "dataLayer": {
     "image-8289d3d9c1": {
       "repo:modifyDate": "2017-05-15T16:56:17Z",
@@ -52,9 +13,7 @@
         "repo:modifyDate": "2017-03-20T10:20:39Z",
         "@type": "image/png",
         "repo:id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
-        "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-        "xdm:tags": [],
-        "xdm:smartTags": {}
+        "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
       }
     }
   },

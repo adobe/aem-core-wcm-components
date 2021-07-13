@@ -104,7 +104,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
     private int maxInputWidth;
-    
+
     private AdaptiveImageServletMetrics metrics;
 
     @SuppressFBWarnings(justification = "This field needs to be transient")
@@ -113,7 +113,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
-    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics, 
+    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics,
             int defaultResizeWidth, int maxInputWidth) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
@@ -775,7 +775,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      */
     private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component) throws IllegalArgumentException {
         Map<String, Integer> selectorParameterMap = new HashMap<>();
-        int width = this.defaultResizeWidth;
+        int width = this.getResizeWidth(component) > 0 ? this.getResizeWidth(component) : this.defaultResizeWidth;
         if (selectorList.size() > 1) {
             String widthString = (selectorList.size() > 2 ? selectorList.get(2) : selectorList.get(1));
             try {
@@ -859,6 +859,16 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_JPEG_QUALITY, DEFAULT_JPEG_QUALITY);
         }
         return allowedJpegQuality;
+    }
+
+    private int getResizeWidth(@NotNull Resource imageResource){
+        int allowedResizeWidth = 0;
+        ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        if (contentPolicy != null) {
+            allowedResizeWidth = contentPolicy.getProperties()
+                .get(Image.PN_RESIZE_WIDTH, 0);
+        }
+        return  allowedResizeWidth;
     }
 
     private long getRequestLastModifiedSuffix(@Nullable String suffix) {

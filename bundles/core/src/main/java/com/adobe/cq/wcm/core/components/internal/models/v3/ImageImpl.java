@@ -15,28 +15,37 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.models.annotations.Exporter;
-import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.day.cq.commons.Externalizer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Exporter;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
+import static javax.imageio.ImageIO.read;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -45,13 +54,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
 
-    @ValueMapValue(name = "width", injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    protected String width;
+    @OSGiService
+    @Inject
+    protected Externalizer externalizer;
 
-    @ValueMapValue(name = "height", injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    protected String height;
+    @SlingObject
+    private ResourceResolver resourceResolver = null;
 
     @Override
     @Nullable
@@ -100,13 +108,65 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Nullable
     @Override
-    public String getWidth() {
-        return width;
+    @JsonIgnore
+    public String[] getBaseImageResolution() {
+        String baseImageAbsoluteUrl = externalizer.publishLink(resourceResolver, super.getSrc());
+        URL url= null;
+        try {
+            url = new URL(baseImageAbsoluteUrl);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        BufferedImage image = null;
+        try {
+            if (url != null) {
+                image = read(url);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (image != null) {
+            String height = String.valueOf(image.getHeight());
+            String width = String.valueOf(image.getWidth());
+            return new String[] {width, height};
+        } else {
+            return new String[] {null, null};
+        }
     }
 
-    @Nullable
     @Override
-    public String getHeight() {
-        return height;
+    public boolean isLazyEnabled() {
+        return !currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+    }
+
+    @Override
+    @JsonIgnore
+    public String getSrcUriTemplate() {
+        return super.getSrcUriTemplate();
+    }
+
+    @Override
+    @JsonIgnore
+    @Deprecated
+    public int getLazyThreshold() {
+        return super.getLazyThreshold();
+    }
+
+    @Override
+    @JsonIgnore
+    public @NotNull int @NotNull [] getWidths() {
+        return super.getWidths();
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isDmImage() {
+        return super.isDmImage();
+    }
+
+    @Override
+    @JsonIgnore
+    public List<ImageArea> getAreas() {
+        return super.getAreas();
     }
 }

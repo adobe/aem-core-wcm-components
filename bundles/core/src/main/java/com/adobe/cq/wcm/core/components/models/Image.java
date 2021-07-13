@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.List;
 
+import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -170,6 +171,12 @@ public interface Image extends Component {
     String PN_DESIGN_DYNAMIC_MEDIA_ENABLED = "enableDmFeatures";
 
     /**
+     * Name of the configuration policy property that the {@link AdaptiveImageServlet} will use for resizing images that don't provide a width information in their request.
+     * @since com.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    String PN_RESIZE_WIDTH = "resizeWidth";
+
+    /**
      * Returns the value for the {@code src} attribute of the image.
      *
      * @return the image's URL
@@ -316,23 +323,13 @@ public interface Image extends Component {
     }
 
     /**
-     * Returns the value for the {@code width} html attribute of the image.
+     * Returns an array with the base image width and height.
      *
-     * @return the value for the image's {@code width} attribute, if one was set, or {@code null}.
-     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
+     * @return an array with the base image width and height, if image exists, or {@code new String[] {null, null}}.
+     * @since com.adobe.cq.wcm.core.components.models 13.0.0;
      */
-    default String getWidth() {
-        return null;
-    }
-
-    /**
-     * Returns the value for the {@code height} html attribute of the image.
-     *
-     * @return the value for the image's {@code height} attribute, if one was set, or {@code null}.
-     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
-     */
-    default String getHeight() {
-        return null;
+    default String[] getBaseImageResolution() {
+        return new String[] {null, null};
     }
 
     /**

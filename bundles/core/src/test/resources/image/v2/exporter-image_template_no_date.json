@@ -5,7 +5,6 @@
     "link"          : "/core/content/test-image.html",
     "src"           : "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.png/structure/jcr%3acontent/root/image_template_no_date.png",
     "srcUriTemplate": "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82{.width}.png/structure/jcr:content/root/image_template_no_date.png",
-    "areas"         : [],
     "lazyThreshold" : 0,
     "dmImage"       : false,
     "uuid"          : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
@@ -27,9 +26,7 @@
                 "repo:id"        : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
                 "repo:modifyDate": "1970-01-01T00:00:00Z",
                 "@type"          : "image/png",
-                "repo:path"      : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_no_date.png",
-                "xdm:tags"       : [],
-                "xdm:smartTags"  : {}
+                "repo:path"      : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_no_date.png"
             }
         }
     }

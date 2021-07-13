@@ -2,7 +2,6 @@
   "id": "image-dd0253e3cc",
   "src": "/core/content/test/_jcr_content/root/image18.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
   "srcUriTemplate": "/core/content/test/_jcr_content/root/image18.coreimg.82{.width}.png/1490005239000/adobe-systems-logo-and-wordmark.png",
-  "areas": [],
   "lazyThreshold": 0,
   "dmImage": false,
   "widths": [
@@ -23,9 +22,7 @@
         "repo:modifyDate": "2017-03-20T10:20:39Z",
         "@type": "image/png",
         "repo:id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
-        "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
-        "xdm:tags": [],
-        "xdm:smartTags": {}
+        "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark"
       }
     }
   },

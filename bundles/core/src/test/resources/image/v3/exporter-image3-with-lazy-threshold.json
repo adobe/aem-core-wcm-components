@@ -3,12 +3,7 @@
   "alt": "Adobe Logo",
   "title": "Adobe Logo",
   "src": "/core/content/test/_jcr_content/root/image3.coreimg.png",
-  "srcUriTemplate": "/core/content/test/_jcr_content/root/image3.coreimg{.width}.png",
-  "areas": [],
-  "lazyThreshold": 100,
-  "dmImage": false,
-  "widths": [],
-  "lazyEnabled": false,
+  "lazyEnabled": true,
   "imageLink": {
     "url": "https://www.adobe.com",
     "valid": true

@@ -3,24 +3,13 @@
     "alt"           : "Adobe Systems Logo and Wordmark in PNG format",
     "title"         : "Adobe Systems Logo and Wordmark",
     "src"           : "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.png/structure/jcr%3acontent/root/image_template_no_date.png",
-    "srcUriTemplate": "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82{.width}.png/structure/jcr:content/root/image_template_no_date.png",
-    "areas"         : [],
-    "lazyThreshold" : 0,
-    "dmImage"       : false,
     "uuid"          : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
     "srcset"        : "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.600.png/structure/jcr:content/root/image_template_no_date.png 600w,/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.700.png/structure/jcr:content/root/image_template_no_date.png 700w,/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.800.png/structure/jcr:content/root/image_template_no_date.png 800w,/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.2000.png/structure/jcr:content/root/image_template_no_date.png 2000w,/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.2500.png/structure/jcr:content/root/image_template_no_date.png 2500w",
     "imageLink"     : {
         "valid": true,
         "url"  : "/core/content/test-image.html"
     },
-    "widths"        : [
-        600,
-        700,
-        800,
-        2000,
-        2500
-    ],
-    "lazyEnabled"   : false,
+    "lazyEnabled"   : true,
     ":type"         : "core/wcm/components/image/v3/image",
     "dataLayer"     : {
         "image-a2c6a064d4": {
@@ -31,9 +20,7 @@
                 "repo:id"        : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
                 "repo:modifyDate": "1970-01-01T00:00:00Z",
                 "@type"          : "image/png",
-                "repo:path"      : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_no_date.png",
-                "xdm:tags"       : [],
-                "xdm:smartTags"  : {}
+                "repo:path"      : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_no_date.png"
             }
         }
     }

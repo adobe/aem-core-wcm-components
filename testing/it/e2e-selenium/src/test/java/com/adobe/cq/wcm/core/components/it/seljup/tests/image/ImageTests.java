@@ -28,6 +28,7 @@ import org.apache.sling.testing.clients.ClientException;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ImageTests {
@@ -265,4 +266,28 @@ public class ImageTests {
         assertTrue(image.isAreaCoordinatesCorrectlySet(new String[]{"0","0","58","38"}), "Area coordinates should be correctly set");
     }
 
+    public void testCheckMapAreaNotAvailable(CQClient client) throws ClientException {
+        // persist a test image map with a single map area
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("imageMap", "[rect(0,0,226,230)\""+redirectPage+"\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
+        data.put("fileReference", testImagePath);
+        Commons.editNodeProperties(client, compPath, data, 200);
+
+        // refresh the component
+        editorPage.refresh();
+
+        // verify the map area is not available
+        Commons.switchContext("ContentFrame");
+        assertFalse(image.isAreaElementPresent(), "Area element should not be present");
+    }
+
+    public void testLazyLoadingEnabled() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImageWithLazyLoadingEnabled(), "Image with native lazy loading enabled should be present");
+    }
 }

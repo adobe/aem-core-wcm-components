@@ -16,14 +16,8 @@
 <div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${image.src}"
-     data-cmp-is="image"
-     data-cmp-lazy="${image.lazyEnabled}"
-     data-cmp-src="${image.srcUriTemplate ? image.srcUriTemplate : image.src}"
      data-cmp-dmimage="${image.dmImage}"
-     data-cmp-smartcroprendition="${image.smartCropRendition}"
-     data-asset="${image.fileReference}"
      data-asset-id="${image.uuid}"
-     data-title="${image.title || image.alt}"
      id="${image.id}"
      data-cmp-data-layer="${image.data.json}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
@@ -31,26 +25,15 @@
     <a data-sly-unwrap="${!image.imageLink.valid}"
        class="cmp-image__link"
        data-sly-attribute="${image.imageLink.htmlAttributes}"
-       data-cmp-clickable="${image.data ? true : false}"
-       data-cmp-hook-image="link">
-        <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
+       data-cmp-clickable="${image.data ? true : false}">
         <img srcset="${image.srcset}" src="${image.src}"
-             data-sly-attribute.loading="${image.lazyEnabled ? 'lazy' : ''}"
+             loading="${image.lazyEnabled ? 'lazy' : ''}"
              class="cmp-image__image"
-             itemprop="contentUrl" data-cmp-hook-image="image"
-             data-sly-attribute.usemap="${image.areas ? usemap : ''}"
-             width="${image.width}" height="${image.height}"
+             itemprop="contentUrl"
+             width="${image.baseImageResolution[0]}" height="${image.baseImageResolution[1]}"
              alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
-        <map data-sly-test="${image.areas}"
-             data-sly-list.area="${image.areas}"
-             name="${resource.path}"
-             data-cmp-hook-image="map">
-            <area shape="${area.shape}" coords="${area.coordinates}" data-sly-attribute="${area.link.htmlAttributes}" alt="${area.alt}"
-                  data-cmp-hook-image="area" data-cmp-relcoords="${area.relativeCoordinates}">
-        </map>
     </a>
     <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>
     <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>
-
