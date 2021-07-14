@@ -40,6 +40,8 @@ import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PageTests {
@@ -299,6 +301,28 @@ public class PageTests {
 
         // check the Export Configuration
         assertTrue(page.getExportTemplate().equals(exportConfiguration), "Export Templates should be set to " + exportConfiguration);
+    }
+
+    public void testAdvancedSeoPageProperties() throws InterruptedException {
+        // Open properties page
+        PropertiesPage propertiesPage = new PropertiesPage(testPage);
+        propertiesPage.open();
+        // open the Advanced tab
+        propertiesPage.clickTab("advanced", AdvancedTab.class);
+
+        // tests for the export options
+        page.setRobotsTags("index", "follow");
+        page.setGenerateSitemap(true);
+
+        // save the configuration and open again the page property
+        propertiesPage.saveAndClose();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        propertiesPage.open();
+        propertiesPage.clickTab("advanced", AdvancedTab.class);
+
+        // check the Export Configuration
+        assertArrayEquals(new String[] {"index", "follow"}, page.getRobotsTags());
+        assertTrue(page.getGenerateSitemap());
     }
 
     public void testThumbnailPageProperties() {
