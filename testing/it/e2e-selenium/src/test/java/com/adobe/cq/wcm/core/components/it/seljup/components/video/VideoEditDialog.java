@@ -26,8 +26,9 @@ public class VideoEditDialog {
     private static String loopEnabled = ".cmp-video__editor coral-checkbox[name='./loopEnabled']";
     private static String hideControl = ".cmp-video__editor coral-checkbox[name='./hideControl']";
     private static String autoplayEnabled = ".cmp-video__editor coral-checkbox[name='./autoplayEnabled']";
-    private static String fileUpload = "coral-fileupload[name='./videoFile']";
-    private static String videoInSidePanel = "coral-card.cq-draggable[data-path=\"%s\"]";
+    private static String videoFileUpload = "coral-fileupload[name='./videoFile']";
+    private static String posterFileUpload = "coral-fileupload[name='./posterFile']";
+    private static String assetInSidePanel = "coral-card.cq-draggable[data-path=\"%s\"]";
 
     public void openVideoTab() {
         $$(".cmp-video__editor coral-tab").get(0).click();
@@ -57,6 +58,10 @@ public class VideoEditDialog {
     }
 
     public void uploadVideoFromSidePanel(String videoPath) {
-        $(String.format(videoInSidePanel, videoPath)).dragAndDropTo(fileUpload);
+        $(String.format(assetInSidePanel, videoPath)).dragAndDropTo(videoFileUpload);
+    }
+
+    public void uploadPosterFromSidePanel(String imagePath) {
+        $(String.format(assetInSidePanel, imagePath)).dragAndDropTo(posterFileUpload);
     }
 }

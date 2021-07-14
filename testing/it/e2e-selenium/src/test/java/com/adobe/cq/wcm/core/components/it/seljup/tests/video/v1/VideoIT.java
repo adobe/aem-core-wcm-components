@@ -16,14 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.video.v1;
 
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.junit.annotations.Author;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pageobject.granite.LoginPage;
 import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
-import com.adobe.cq.testing.selenium.utils.DisableTour;
-import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.video.VideoEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.video.v1.Video;
@@ -38,14 +33,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.IOException;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import static com.adobe.cq.testing.selenium.Constants.GROUPID_CONTENT_AUTHORS;
-import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.setAffinityCookie;
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -55,8 +47,9 @@ public class VideoIT extends AuthorBaseUITest {
     private static String componentName             = "video";
     private static String testAssetsPath            = "/content/dam/core-components-examples";
     private static String testVideoPath             = testAssetsPath + "/library/videoSample/mp4";
+    private static String testImagePath             = testAssetsPath + "/library/sample-assets/lava-into-ocean.jpg";
     private static String assetFilterSelect         = "coral-select.assetfilter";
-    private static String assetFilterVideosOption   = "coral-selectlist-item[value='Videos']";
+    private static String assetFilterOption         = "coral-selectlist-item[value='%s']";
 
     private String proxyComponentPath;
     private SidePanel sidePanel;
@@ -99,16 +92,18 @@ public class VideoIT extends AuthorBaseUITest {
 
     /**
      * Filter and show only video assets in the side panel.
+     * @param assetType
      * @return
      */
-    private void selectVideoAssets() {
+    private void selectAssetFilter(String assetType) {
+        String assetFilterOptionSelector = String.format(assetFilterOption, assetType);
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(assetFilterSelect)));
         sidePanel.element().find(assetFilterSelect).click();
 
         new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
-            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(assetFilterVideosOption)));
-        sidePanel.element().find(assetFilterVideosOption).click();
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(assetFilterOptionSelector)));
+        $(assetFilterOptionSelector).click();
     }
 
     /**
@@ -155,7 +150,7 @@ public class VideoIT extends AuthorBaseUITest {
         setupResources();
         setup();
         openSidePanel();
-        selectVideoAssets();
+        selectAssetFilter("Videos");
     }
 
     /**
@@ -174,35 +169,72 @@ public class VideoIT extends AuthorBaseUITest {
         authorClient.deletePath(proxyComponentPath.replace("/components/video", ""), HttpStatus.SC_OK);
     }
 
+    /**
+     * Add a video component without a video file reference
+     */
+    @Test
+    @DisplayName("Test: Video component is not added")
+    public void testVideoIsNotAdded() {
+        enterPreviewMode();
+
+        assertFalse(video.element().isDisplayed(), "video is not visible");
+    }
+
+    /**
+     * Video with file reference
+     */
     @Test
     @DisplayName("Test: Add video component")
-    public void testAddVideo() throws InterruptedException, TimeoutException {
+    public void testAddVideo() {
         addMinimumConfig(true);
         enterPreviewMode();
 
         assertTrue(video.element().isDisplayed(), "video is set");
     }
 
+    /**
+     * Video with poster
+     *
+     * @throws InterruptedException
+     */
     @Test
-    @DisplayName("Test: Video component is not added")
-    public void testVideoIsNotAdded() throws InterruptedException, TimeoutException {
-        enterPreviewMode();
+    @DisplayName("Test: Add poster for video")
+    public void testAddPoster() throws InterruptedException {
+        addMinimumConfig();
+        editDialog.openPosterTab();
+        selectAssetFilter("Images");
+        editDialog.uploadPosterFromSidePanel(testImagePath);
 
-        assertFalse(video.element().isDisplayed(), "video is not visible");
+        Commons.saveConfigureDialog();
+
+        enterPreviewMode();
+        Thread.sleep(20*1000);
+        assertFalse(video.element().getAttribute("poster").isEmpty(), "poster is set");
     }
 
+    /**
+     * Video with loop, autoplay and hidden controls
+     *
+     * @throws InterruptedException
+     */
     @Test
-    @DisplayName("Test: Check video boxes")
-    public void testCheckBoxes() throws InterruptedException, TimeoutException {
+    @DisplayName("Test: Video properties are checked")
+    public void testCheckBoxes() throws InterruptedException {
         addMinimumConfig();
 
         editDialog.openPropertiesTab();
         editDialog.clickLoopEnabled();
+        editDialog.clickHideControl();
+        editDialog.clickAutoplayEnabled();
 
         Commons.saveConfigureDialog();
 
         enterPreviewMode();
 
-        assertTrue(video.element().find("video").getAttribute("loop").equals("true"), "loop is set");
+        assertTrue(video.element().find("video").getAttribute("loop") != null, "loop is enabled");
+        assertTrue(video.element().find("video").getAttribute("controls") == null, "controls are hidden");
+        assertTrue(video.element().find("video").getAttribute("autoplay").equals("true"), "autoplay is enabled");
+        assertTrue(video.element().find("video").getAttribute("playsinline").equals("true"), "playsinline is set");
+        assertTrue(video.element().find("video").getAttribute("muted").equals("true"), "sound is muted");
     }
 }
