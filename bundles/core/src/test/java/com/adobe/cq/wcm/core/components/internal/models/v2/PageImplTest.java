@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +32,6 @@ import org.mockito.Mockito;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
-import com.adobe.aem.wcm.seo.impl.sitemap.SitemapLinkExternalizerImpl;
 import com.adobe.aem.wcm.seo.sitemap.PageTreeSitemapGenerator;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
