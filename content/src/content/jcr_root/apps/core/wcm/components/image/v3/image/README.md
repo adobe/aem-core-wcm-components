@@ -49,10 +49,7 @@ The following properties are written to JCR for this Image component and are exp
 1. `./altValueFromPageImage` - if `true`, the HTML `alt` attribute is inherited from the featured image of the page. This property is only enabled when `./imageFromPageImage` is `true`.
 1. `./imageFromPageImage` - if `true`, the image is inherited from the featured image of the page.
 1. `./linkURL` - allows defining a URL to which the image will link to
-1. `./width` - allows defining a HTML `width` attribute, useful for browser to calculate the aspect ratio of the image, preventing the layout shifts
-1.  `./height` - allows defining a HTML `height` attribute, useful for browser to calculate the aspect ratio of the image, preventing the layout shifts
 1. `./jcr:title` - defines the value of the HTML `title` attribute or the value of the caption, depending on the value of
-`./displayPopupTitle`
 1. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,
 otherwise a caption will be rendered
 1. `./id` - defines the component HTML ID attribute.
@@ -101,13 +98,13 @@ Publish:
 The component provides a `core.wcm.components.image.v3` client library category that contains a recommended base
 CSS styling. It should be added to a relevant site client library using the `embed` property.
 
-It also reuses the `core.wcm.components.image.v2.editor` editor client library category that includes JavaScript
+It also provides a `core.wcm.components.image.v3.editor` editor client library category that includes JavaScript
 handling for dialog interaction. It is already included by its edit dialog.
 
 ## BEM Description
 ```
 BLOCK cmp-image
-    ELEMENT cmp-image__link
+    ELEMENT cmp-image__linki
     ELEMENT cmp-image__image
     ELEMENT cmp-image__title
 ```

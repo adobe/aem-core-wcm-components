@@ -57,7 +57,6 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testLazyLoadingEnabled();
     }
 
-
     /**
      * Test: set Alt Text and Title
      */

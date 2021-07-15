@@ -2,12 +2,7 @@
   "id": "image-96253254e2",
   "alt": "featured image alt",
   "src": "/core/content/test_page3/_jcr_content/root/page3_image0.coreimg.png",
-  "srcUriTemplate": "/core/content/test_page3/_jcr_content/root/page3_image0.coreimg{.width}.png",
-  "areas": [],
-  "lazyThreshold": 0,
-  "dmImage": false,
-  "widths": [],
-  "lazyEnabled": false,
+  "lazyEnabled": true,
   "dataLayer": {
     "image-96253254e2": {
       "@type": "core/wcm/components/image/v3/image"

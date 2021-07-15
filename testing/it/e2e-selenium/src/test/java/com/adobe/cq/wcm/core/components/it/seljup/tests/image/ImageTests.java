@@ -48,7 +48,6 @@ public class ImageTests {
     private static String pageImageAlt           = "page image alt";
 
 
-
     private String testPage;
     private String proxyPath;
     private String compPath;

@@ -106,7 +106,8 @@
                                         name="./resizeWidth"
                                         typeHint="Long"
                                         required="{Boolean}false"
-                                        defaultValue="{Long}1280" />
+                                        defaultValue="{Long}1280"
+                                        max="{Long}3840"/>
                                     <widths
                                         granite:class="core-image-widths"
                                         jcr:primaryType="nt:unstructured"
