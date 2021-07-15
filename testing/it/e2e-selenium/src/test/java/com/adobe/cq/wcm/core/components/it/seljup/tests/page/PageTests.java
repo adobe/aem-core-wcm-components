@@ -16,6 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.page;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
@@ -38,6 +41,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
+import org.codehaus.jackson.JsonNode;
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -303,14 +307,14 @@ public class PageTests {
         assertTrue(page.getExportTemplate().equals(exportConfiguration), "Export Templates should be set to " + exportConfiguration);
     }
 
-    public void testAdvancedSeoPageProperties() throws InterruptedException {
+    public void testAdvancedSeoPageProperties() throws InterruptedException, ClientException {
         // Open properties page
         PropertiesPage propertiesPage = new PropertiesPage(testPage);
         propertiesPage.open();
         // open the Advanced tab
         propertiesPage.clickTab("advanced", AdvancedTab.class);
 
-        // tests for the export options
+        // tests for the SEO options
         page.setRobotsTags("index", "follow");
         page.setGenerateSitemap(true);
 
@@ -320,9 +324,18 @@ public class PageTests {
         propertiesPage.open();
         propertiesPage.clickTab("advanced", AdvancedTab.class);
 
-        // check the Export Configuration
+        // check the SEO Configuration
         assertArrayEquals(new String[] {"index", "follow"}, page.getRobotsTags());
         assertTrue(page.getGenerateSitemap());
+        // validate the actual persisted values
+        JsonNode content = adminClient.doGetJson(testPage + "/_jcr_content", 1, HttpStatus.SC_OK);
+        JsonNode robotsTags = content.get("cq:robotsTags");
+        assertTrue(robotsTags.isArray());
+        assertEquals(2, robotsTags.size());
+        assertEquals("index", robotsTags.get(0).getTextValue());
+        assertEquals("follow", robotsTags.get(1).getTextValue());
+        JsonNode sitemapRoot = content.get("sling:sitemapRoot");
+        assertEquals("true", sitemapRoot.getTextValue());
     }
 
     public void testThumbnailPageProperties() {

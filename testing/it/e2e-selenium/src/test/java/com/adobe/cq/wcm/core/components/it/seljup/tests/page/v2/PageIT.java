@@ -140,7 +140,7 @@ public class PageIT extends AdminBaseUITest {
      */
     @Test
     @DisplayName("Test: Check the Advanced SEO options of a page properties.")
-    public void testAdvancedSeoPageProperties() throws InterruptedException {
+    public void testAdvancedSeoPageProperties() throws InterruptedException, ClientException {
         pageTests.testAdvancedSeoPageProperties();
     }
 
