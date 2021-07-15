@@ -131,7 +131,9 @@ public class AbstractImageTest {
         context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH +
                 "/jcr:content/renditions/cq5dam.web.1280.1280.png");
         context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + JPG_IMAGE_BINARY_NAME, PNG_ASSET_PATH +
-                "/jcr:content/renditions/cq5dam.web.1280.1280.jpg");
+            "/jcr:content/renditions/cq5dam.web.1280.1280.jpg");
+        context.load().binaryFile("/image/" + "cq5dam.fpo.1280.1280_" + JPG_IMAGE_BINARY_NAME, PNG_ASSET_PATH +
+            "/jcr:content/renditions/cq5dam.fpo.1280.1280.jpg");
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH_WITHOUT_EXTENSION + "/jcr:content/renditions/original");
         context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH_WITHOUT_EXTENSION +
                 "/jcr:content/renditions/cq5dam.web.1280.1280.png");

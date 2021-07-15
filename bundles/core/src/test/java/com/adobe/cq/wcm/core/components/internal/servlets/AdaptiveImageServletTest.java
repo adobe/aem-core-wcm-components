@@ -118,6 +118,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         BufferedImage image = ImageIO.read(byteArrayInputStream);
         Dimension expectedDimension = new Dimension(800, 800);
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
+        Assertions.assertEquals(33041, response.getOutput().length, "Expected image file size not found");
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
     }

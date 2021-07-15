@@ -28,6 +28,8 @@ import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.api.Rendition;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
@@ -40,7 +42,7 @@ public class EnhancedRenditionTest {
         Rendition mockRendition = mock(Rendition.class);
         when(mockRendition.getMimeType()).thenReturn("mimeType");
         when(mockRendition.getProperties()).thenReturn(ValueMap.EMPTY);
-        when(mockRendition.getSize()).thenReturn((long)Math.floor(Math.random() * 100));
+        when(mockRendition.getSize()).thenReturn((long) Math.floor(Math.random() * 100));
         when(mockRendition.getStream()).thenReturn(mock(InputStream.class));
         when(mockRendition.getAsset()).thenReturn(mock(Asset.class));
         EnhancedRendition rendition = new EnhancedRendition(mockRendition);
@@ -116,6 +118,25 @@ public class EnhancedRenditionTest {
             when(mockRendition.getStream()).thenReturn(is);
             EnhancedRendition rendition = new EnhancedRendition(mockRendition);
             assertNull(rendition.getDimension());
+        } catch (IOException ioex) {
+            fail(ioex);
+        }
+    }
+
+    @Test
+    public void testIgnoredRenditions() {
+        Rendition mockRendition = mock(Rendition.class);
+        when(mockRendition.getProperties()).thenReturn(ValueMap.EMPTY);
+        when(mockRendition.getName()).thenReturn("cq5dam.fpo.jpeg");
+        when(mockRendition.getMimeType()).thenReturn("image/png");
+        try (InputStream is = this.getClass().getClassLoader().getResourceAsStream("image/1x1.png")) {
+            when(mockRendition.getStream()).thenReturn(is);
+            EnhancedRendition rendition = new EnhancedRendition(mockRendition);
+            assertFalse(rendition.isValid());
+
+            when(mockRendition.getName()).thenReturn("cq5dam.web.jpeg");
+            rendition = new EnhancedRendition(mockRendition);
+            assertTrue(rendition.isValid());
         } catch (IOException ioex) {
             fail(ioex);
         }
