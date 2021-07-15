@@ -15,17 +15,23 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.seo;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
 
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.adobe.aem.wcm.seo.localization.SiteRootSelectionStrategy;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.LanguageNavigationImpl;
@@ -40,6 +46,8 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith({ AemContextExtension.class, MockitoExtension.class })
 class LanguageNavigationSiteRootSelectionStrategyTest {
@@ -54,7 +62,8 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
     protected void setUp() {
         internalSetup();
         aemContext.registerService(LiveRelationshipManager.class, liveRelationshipManager);
-        aemContext.registerInjectActivateService(subject);
+        // Causing a StackOverflowError because of SLING-10616
+        // aemContext.registerInjectActivateService(subject);
     }
 
     protected void internalSetup() {
@@ -121,9 +130,33 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
 
         // when
         Page siteRoot = subject.getSiteRoot(page);
+        int structureDepth = subject.getStructuralDepth(page);
 
         // then
         assertNull(siteRoot);
+        assertEquals(1, structureDepth);
+    }
+
+    @Test
+    void testNoSiteRootFallbackToDefault() throws PersistenceException, NoSuchFieldException, IllegalAccessException {
+        // given
+        // replace with service injection after SLING-10616 was released
+        DefaultSiteRootSelectionStrategy defaultSiteRootSelectionStrategy = spy(new DefaultSiteRootSelectionStrategy());
+        Field defaultSelectionStrategy = subject.getClass().getDeclaredField("defaultSelectionStrategy");
+        defaultSelectionStrategy.setAccessible(true);
+        defaultSelectionStrategy.set(subject, defaultSiteRootSelectionStrategy);
+        Page page = aemContext.pageManager().getPage("/content/languagenavigation/LOCALE-1/LOCALE-5/about");
+        deleteSiblings(page.getContentResource().getChild("root/languagenavigation-component-4"));
+
+        // when
+        Page siteRoot = subject.getSiteRoot(page);
+        int structureDepth = subject.getStructuralDepth(page);
+
+        // then
+        assertEquals("/content/languagenavigation", siteRoot.getPath());
+        assertEquals(2, structureDepth);
+        verify(defaultSiteRootSelectionStrategy).getSiteRoot(page);
+        verify(defaultSiteRootSelectionStrategy).getStructuralDepth(page);
     }
 
     @Test
@@ -165,5 +198,15 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
             }
         }
         resolver.commit();
+    }
+
+    private static class DefaultSiteRootSelectionStrategy implements SiteRootSelectionStrategy {
+        @Override public @Nullable Page getSiteRoot(@NotNull Page page) {
+            return page.getAbsoluteParent(1);
+        }
+
+        @Override public int getStructuralDepth(@NotNull Page page) {
+            return 2;
+        }
     }
 }

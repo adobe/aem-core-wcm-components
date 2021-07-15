@@ -15,11 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -93,6 +91,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      * Main content selector style property name.
      */
     public static final String PN_MAIN_CONTENT_SELECTOR_PROP = "mainContentSelector";
+
+    /**
+     * Property name of the style property that enables/disables rendering of the alternate language links
+     */
+    public static final String PN_RENDER_ALTERNATE_LANGUAGES = "renderAlternateLanguageLinks";
 
     /**
      * Flag indicating if cloud configuration support is enabled.
@@ -337,10 +340,14 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public @NotNull Map<Locale, String> getAlternateLanguageLinks() {
         try {
-            SeoTags seoTags = resource.adaptTo(SeoTags.class);
-            return seoTags != null && seoTags.getAlternateLanguages().size() > 0
-                ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())
-                : Collections.emptyMap();
+            if (currentStyle != null && currentStyle.get(PN_RENDER_ALTERNATE_LANGUAGES, Boolean.FALSE)) {
+                SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                return seoTags != null && seoTags.getAlternateLanguages().size() > 0
+                    ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())
+                    : Collections.emptyMap();
+            } else {
+                return Collections.emptyMap();
+            }
         } catch (NoClassDefFoundError ex) {
             return Collections.emptyMap();
         }

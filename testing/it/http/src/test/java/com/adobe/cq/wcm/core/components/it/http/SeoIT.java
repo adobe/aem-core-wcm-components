@@ -122,9 +122,9 @@ public class SeoIT {
     @Test
     public void testLanguageAlternatesRenderedToPage() throws ClientException {
         String content = publishSling.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
-        GraniteAssert.assertRegExFind("canonical link expected", content,
+        GraniteAssert.assertRegExFind("language alternate link en-GB expected", content,
             "<link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503/gb/en/child.html\"/>");
-        GraniteAssert.assertRegExFind("canonical link expected", content,
+        GraniteAssert.assertRegExFind("language alternate link en-US expected", content,
             "<link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503/us/en/child.html\"/>");
     }
 

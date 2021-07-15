@@ -16,11 +16,9 @@
 package com.adobe.cq.wcm.core.components.internal.services.seo;
 
 import java.util.Optional;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.function.Predicate;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +26,9 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.metatype.annotations.AttributeDefinition;
-import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.adobe.aem.wcm.seo.localization.SiteRootSelectionStrategy;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
@@ -55,50 +54,73 @@ import com.day.cq.wcm.api.designer.Style;
 )
 public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSelectionStrategy {
 
+    @Reference(
+        cardinality = ReferenceCardinality.OPTIONAL,
+        policyOption = ReferencePolicyOption.GREEDY,
+        target = "(objectClass=*DefaultSiteRootSelectionStrategy)")
+    private SiteRootSelectionStrategy defaultSelectionStrategy;
+
     @Override
     @Nullable
     public Page getSiteRoot(@NotNull Page page) {
-        return findLanguageNavigation(page.getContentResource())
-            .map(languageNavigation -> getPropertyLazy(languageNavigation, LanguageNavigation.PN_NAVIGATION_ROOT, String.class))
-            .map(siteRootPath -> page.getPageManager().getPage(siteRootPath))
-            .orElse(null);
+        Resource languageNavigation = findLanguageNavigation(page.getContentResource());
+        if (languageNavigation != null) {
+            String siteRoot = getPropertyLazy(languageNavigation, LanguageNavigation.PN_NAVIGATION_ROOT, String.class);
+            if (siteRoot != null) {
+                return page.getPageManager().getPage(siteRoot);
+            }
+        }
+        return defaultSelectionStrategy != null ? defaultSelectionStrategy.getSiteRoot(page) : null;
     }
 
     @Override
     public int getStructuralDepth(@NotNull Page page) {
-        return findLanguageNavigation(page.getContentResource())
-            .map(languageNavigation -> getPropertyLazy(languageNavigation, LanguageNavigation.PN_STRUCTURE_DEPTH, Integer.class))
-            .orElse(1);
+        Resource languageNavigation = findLanguageNavigation(page.getContentResource());
+        if (languageNavigation != null) {
+            Integer structureDepth = getPropertyLazy(languageNavigation, LanguageNavigation.PN_STRUCTURE_DEPTH, Integer.class);
+            if (structureDepth != null) {
+                return structureDepth;
+            }
+        }
+        return defaultSelectionStrategy != null ? defaultSelectionStrategy.getStructuralDepth(page) : 1;
     }
 
-    private Optional<Resource> findLanguageNavigation(Resource contentResource) {
+    private Resource findLanguageNavigation(Resource contentResource) {
         Resource templatedResource = contentResource.adaptTo(TemplatedResource.class);
         if (templatedResource != null) {
             contentResource = templatedResource;
         }
-        return traverse(contentResource)
-            .filter(resource ->
-                resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.LanguageNavigationImpl.RESOURCE_TYPE)
-                    || resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v2.LanguageNavigationImpl.RESOURCE_TYPE))
-            .findFirst();
+        return findFirst(contentResource,
+            resource -> resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.LanguageNavigationImpl.RESOURCE_TYPE)
+                || resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v2.LanguageNavigationImpl.RESOURCE_TYPE));
     }
 
-    private Stream<Resource> traverse(Resource resource) {
+    private Resource findFirst(Resource resource, Predicate<Resource> condition) {
         if (resource == null) {
-            return Stream.empty();
+            return null;
         }
-        // resolve experience fragments
+        // check if the condition is met
+        if (condition.test(resource)) {
+            return resource;
+        }
+        // if not, check for experience fragments and resolve them
         if (resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl.RESOURCE_TYPE_V1)
             || resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl.RESOURCE_TYPE_V2)) {
             return Optional.ofNullable(new ExperienceFragmentRequest(resource).adaptTo(ExperienceFragment.class))
                 .map(ExperienceFragment::getLocalizedFragmentVariationPath)
                 .map(xfPath -> resource.getResourceResolver().getResource(xfPath))
-                .map(this::traverse)
-                .orElseGet(Stream::empty);
+                .map(xfResource -> findFirst(xfResource, condition))
+                .orElse(null);
         }
-        return Stream.concat(
-            Stream.of(resource),
-            StreamSupport.stream(resource.getChildren().spliterator(), false).flatMap(this::traverse));
+        // if not iterate over the resource's children
+        for (Resource child : resource.getChildren()) {
+            Resource result = findFirst(child, condition);
+            if (result != null) {
+                return result;
+            }
+        }
+
+        return null;
     }
 
     private static <T> T getPropertyLazy(Resource resource, String property, Class<T> type) {

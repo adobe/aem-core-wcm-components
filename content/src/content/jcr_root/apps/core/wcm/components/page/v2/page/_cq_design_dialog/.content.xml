@@ -118,6 +118,13 @@
                                 fieldDescription="ID of the main section of the page. Used as accessibility feature to skip directly to the main content of the page."
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                 name="./mainContentSelector"/>
+                            <renderAlternateLanguageLinks
+                                jcr:primaryType="nt:unstructured"
+                                text="Render alternate language links"
+                                fieldDescription="If enabled, links to alternate language versions of the page in the same site will be added to the page's head."
+                                value="true"
+                                name="./renderAlternateLanguageLinks"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"/>
                         </items>
                     </properties>
                     <styletab
