@@ -13,7 +13,6 @@
             "jcr:primaryType": "nt:unstructured",
             "videoFileReference": "/content/dam/some/test/video/sample.mp4",
             "posterImageReference": "/content/dam/core-components-examples/library/aem-corecomponents-logo.svg",
-            "alt": "Some alternative Text sample",
             "autoplayEnabled": "true",
             "hideControl": "true",
             "jcr:lastModified": "Mon May 24 2021 11:11:53 GMT+0200",
