@@ -38,8 +38,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import static com.codeborne.selenide.Selenide.$;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("group2")
 public class VideoIT extends AuthorBaseUITest {
@@ -189,7 +188,8 @@ public class VideoIT extends AuthorBaseUITest {
         addMinimumConfig(true);
         enterPreviewMode();
 
-        assertTrue(video.element().isDisplayed(), "video is set");
+        assertTrue(video.element().isDisplayed(), "video is displayed");
+        assertFalse(video.element().find("video source").getAttribute("src").isEmpty(), "video path is set");
     }
 
     /**
@@ -208,8 +208,7 @@ public class VideoIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         enterPreviewMode();
-        Thread.sleep(20*1000);
-        assertFalse(video.element().getAttribute("poster").isEmpty(), "poster is set");
+        assertFalse(video.element().find("video").getAttribute("poster").isEmpty(), "poster is set");
     }
 
     /**

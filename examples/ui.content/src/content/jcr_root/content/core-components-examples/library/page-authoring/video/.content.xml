@@ -119,7 +119,7 @@
                             hideControl="false"
                             loopEnabled="true"
                             posterImageReference="/content/dam/core-components-examples/library/aem-corecomponents-logo.svg"
-                            videoFileReference="/content/dam/bmw/markethiresdeployed/video-gallery-demo-content/small.mp4"/>
+                            videoFileReference="/content/dam/core-components-examples/library/videoSample/mp4"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"

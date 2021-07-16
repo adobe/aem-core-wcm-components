@@ -19,7 +19,7 @@
      data-cmp-data-layer="${videoModel.data.json}"
      class="cmp-video">
     <video class="cmp-video__video"
-           poster="${videoModel.posterImageReference ? posterImageReference : false}"
+           poster="${videoModel.posterImageReference ? videoModel.posterImageReference : false}"
            controls="${!videoModel.hideControl ? true : false}"
            loop="${videoModel.loopEnabled ? true : false}"
            autoplay="${videoModel.autoplayEnabled ? true : false}"
