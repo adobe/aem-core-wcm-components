@@ -19,7 +19,7 @@ import java.net.URISyntaxException;
 
 import org.jetbrains.annotations.Nullable;
 
-public interface YouTube {
+public interface YouTube extends Embeddable {
 
     /**
      * Name of the resource property that defines the id of the YouTube video.

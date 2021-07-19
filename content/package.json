@@ -1,6 +1,6 @@
 {
     "name": "com.adobe.cq.core.wcm.components.content",
-    "version": "2.17.1-SNAPSHOT",
+    "version": "2.17.3-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components Content Package",
     "license": "Apache-2.0",
     "private": false,
@@ -30,7 +30,6 @@
         "sync-pom-version-to-package": "^1.6.0"
     },
     "dependencies": {
-        "@adobe/adobe-client-data-layer": "2.0.2",
-        "vanilla-lazyload": "^17.3.2"
+        "@adobe/adobe-client-data-layer": "2.0.2"
     }
 }

@@ -258,6 +258,35 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     @Test
     @SuppressWarnings("deprecation")
     @Override
+    protected void testImageFromTemplateStructureNoDate() {
+        context.contentPolicyMapping(resourceType,
+                "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
+        com.adobe.cq.wcm.core.components.models.Image image = getImageUnderTest(TEMPLATE_IMAGE_NO_DATE_PATH);
+        assertEquals(CONTEXT_PATH + "/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + ".png/structure/jcr%3acontent/root/image_template_no_date.png", image.getSrc());
+        assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt());
+        assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
+        assertEquals(IMAGE_FILE_REFERENCE_NO_DATE, image.getFileReference());
+        String expectedJson = "{" +
+                "\"smartImages\":[" +
+                "\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + "." + JPEG_QUALITY +
+                ".600.png/structure/jcr%3acontent/root/image_template_no_date.png\",\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + "." +
+                JPEG_QUALITY +".700.png/structure/jcr%3acontent/root/image_template_no_date.png\", \"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." +
+                selector + "." + JPEG_QUALITY + ".800.png/structure/jcr%3acontent/root/image_template_no_date.png\"," +
+                "\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + "." + JPEG_QUALITY + "." +
+                "2000.png/structure/jcr%3acontent/root/image_template_no_date.png\"," + "\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure."
+                + selector + "." + JPEG_QUALITY +".2500.png/structure/jcr%3acontent/root/image_template_no_date.png\"" + "]," +
+                "\"smartSizes\":[600,700,800,2000,2500]," +
+                "\"lazyEnabled\":false" +
+                "}";
+        compareJSON(expectedJson, image.getJson());
+        assertTrue(image.displayPopupTitle());
+        assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_NO_DATE_PATH));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    @Override
     protected void testLocalFileWithoutFileNameParameter() {
         context.contentPolicyMapping(resourceType,
                 "allowedRenditionWidths", new int[]{600});
