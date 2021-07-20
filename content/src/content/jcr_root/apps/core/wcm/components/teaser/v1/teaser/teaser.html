@@ -24,7 +24,7 @@
      data-sly-test.hasContent="${teaser.imageResource || teaser.pretitle || teaser.title || teaser.description || teaser.actions.size > 0}"
      id="${teaser.id}"
      class="cmp-teaser${!wcmmode.disabled && teaser.imageResource ? ' cq-dd-image' : ''}"
-     data-cmp-data-layer="${image.data.json}"
+     data-cmp-data-layer="${teaser.data.json}"
      data-cmp-smartcroprendition="${image.smartCropRendition}">
     <sly data-sly-call="${imageTemplate.image @ teaser=teaser}"></sly>
     <div class="cmp-teaser__content">
