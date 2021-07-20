@@ -14,8 +14,8 @@
  * limitations under the License.
  ******************************************************************************/
 
-/* global jQuery*/
-(function ($, Coral) {
+/* global jQuery */
+(function($, Coral) {
     "use strict";
 
     var selectors = {
@@ -39,7 +39,7 @@
                 hideControl = dialogContent.querySelector(selectors.hideControl);
                 mutedCheckbox = dialogContent.querySelector(selectors.muted);
 
-                if (mutedCheckbox.hasAttribute("checked")){
+                if (mutedCheckbox.hasAttribute("checked")) {
                     mutedStatus = true;
                 }
 
@@ -49,21 +49,21 @@
                 }
 
                 if (hideControl) {
-                    Coral.commons.ready(hideControl, function () {
+                    Coral.commons.ready(hideControl, function() {
                         hideControl.on("change", onHideControlChange);
                     });
                 }
 
                 if (mutedCheckbox) {
-                    Coral.commons.ready(mutedCheckbox, function () {
+                    Coral.commons.ready(mutedCheckbox, function() {
                         mutedCheckbox.on("change", function(e) {
                             mutedStatus = event.target.checked;
-                        })
+                        });
                     });
                 }
 
                 if (autoplay) {
-                    Coral.commons.ready(autoplay, function () {
+                    Coral.commons.ready(autoplay, function() {
                         autoplay.on("change", autoplayChange);
                     });
                 }
@@ -71,12 +71,8 @@
         }
     });
 
-    function toggleMutedCheck(event) {
-        mutedStatus = event.target.checked;
-    }
-
-    function autoplayChange(defaultNotChecked = false) {
-        if(defaultNotChecked === true){
+    function autoplayChange(defaultNotChecked) {
+        if (defaultNotChecked === true) {
             autoplay.removeAttribute("checked");
         }
         if (autoplay.checked) {
@@ -84,10 +80,11 @@
             mutedCheckbox.setAttribute("disabled");
         } else {
             mutedCheckbox.removeAttribute("disabled");
-            if (mutedStatus === true)
+            if (mutedStatus === true) {
                 mutedCheckbox.setAttribute("checked");
-            else
+            } else {
                 mutedCheckbox.removeAttribute("checked");
+            }
         }
     }
 
