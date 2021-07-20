@@ -35,11 +35,8 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.osgi.service.component.annotations.Reference;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -79,6 +76,10 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
     @Default(booleanValues = false)
     private boolean autoplayEnabled;
 
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(booleanValues = false)
+    private boolean isMuted;
+
     /**
      * The current resource properties.
      */
@@ -94,6 +95,7 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
         hideControl = properties.get(Video.PN_HIDE_CONTROL, hideControl);
         loopEnabled = properties.get(Video.PN_LOOP_ENABLED, loopEnabled);
         autoplayEnabled = properties.get(Video.PN_AUTOPLAY_ENABLED, autoplayEnabled);
+        isMuted = properties.get(Video.PN_MUTED_ENABLED, isMuted);
     }
 
     @Override
@@ -125,6 +127,11 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
     @Override
     public boolean isAutoplayEnabled() {
         return autoplayEnabled;
+    }
+
+    @Override
+    public boolean isMuted() {
+        return isMuted;
     }
 
     @Override

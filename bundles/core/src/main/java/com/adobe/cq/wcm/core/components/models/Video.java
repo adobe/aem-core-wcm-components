@@ -45,6 +45,12 @@ public interface Video extends Component {
     String PN_AUTOPLAY_ENABLED = "autoplayEnabled";
 
     /**
+     * Name of the property that defines if video autoplay is enabled.
+     *
+     */
+    String PN_MUTED_ENABLED = "mutedEnabled";
+
+    /**
      * Returns the file reference of the current video, if one exists.
      *
      * @return Returns the file reference of the current video, if one exists, or {@code null} otherwise
@@ -86,6 +92,15 @@ public interface Video extends Component {
      * @return Returns true if video autoplay should be enabled, false otherwise
      */
     default boolean isAutoplayEnabled() {
+        return false;
+    }
+
+    /**
+     * Returns weather the video is set to be muted or not
+     *
+     * @return Returns true if video id set to muted, false otherwise
+     */
+    default boolean isMuted() {
         return false;
     }
 
