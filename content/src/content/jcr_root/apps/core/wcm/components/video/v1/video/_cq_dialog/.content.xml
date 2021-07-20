@@ -123,6 +123,18 @@
                                                     jcr:primaryType="nt:unstructured"
                                                     cmp-video-v1-dialog-edit-hook="autoplay"/>
                                             </autoplay>
+                                            <muted
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="Set the video sounds to mute"
+                                                name="./mutedEnabled"
+                                                text="Mute video sounds"
+                                                uncheckedValue="{Boolean}false"
+                                                value="{Boolean}true">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-video-v1-dialog-edit-hook="mutedCheckboxStatus"/>
+                                            </muted>
                                         </items>
                                     </column>
                                 </items>

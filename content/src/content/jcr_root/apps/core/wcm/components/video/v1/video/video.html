@@ -24,7 +24,7 @@
            loop="${videoModel.loopEnabled ? true : false}"
            autoplay="${videoModel.autoplayEnabled ? true : false}"
            playsinline="${videoModel.autoplayEnabled ? true : false}"
-           muted="${videoModel.autoplayEnabled ? true : false}">
+           muted="${videoModel.isMuted ? true : false}">
         <source src="${videoModel.fileReference}"/>
     </video>
 </div>
