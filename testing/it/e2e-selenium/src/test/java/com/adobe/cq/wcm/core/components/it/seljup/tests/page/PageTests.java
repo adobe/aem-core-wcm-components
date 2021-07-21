@@ -16,9 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.page;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;

@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import com.adobe.aem.wcm.seo.localization.SiteRootSelectionStrategy;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentDataImpl;
-import com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigation;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
