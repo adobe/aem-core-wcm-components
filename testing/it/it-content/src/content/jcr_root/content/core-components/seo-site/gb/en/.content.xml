@@ -53,7 +53,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:mixinTypes="[cq:LiveRelationship]"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/languagenavigation"
+                    sling:resourceType="core/wcm/components/languagenavigation/v2/languagenavigation"
                     navigationRoot="/content/core-components/seo-site"
                     structureDepth="2"/>
             </container>

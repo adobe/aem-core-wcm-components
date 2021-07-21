@@ -57,8 +57,7 @@ public class SeoIT {
     @Rule
     public ErrorCollector collector = new ErrorCollector();
 
-    static CQClient author;
-    static ReplicationClient authorReplication;
+    static CQClient publish;
     static OsgiConsoleClient publishOsgiConsole;
     static SlingClient publishSling;
 
@@ -66,9 +65,8 @@ public class SeoIT {
     static String mappingEntry;
 
     @BeforeClass
-    public static void beforeClass() throws ClientException {
-        author = cqBaseClassRule.authorRule.getAdminClient(CQClient.class);
-        authorReplication = cqBaseClassRule.authorRule.getAdminClient(ReplicationClient.class);
+    public static void beforeClass() throws ClientException, InterruptedException, TimeoutException {
+        publish = cqBaseClassRule.publishRule.getAdminClient(CQClient.class);
         publishOsgiConsole = cqBaseClassRule.publishRule.getAdminClient(OsgiConsoleClient.class);
         publishSling = cqBaseClassRule.publishRule.getAdminClient(SlingClient.class);
 
@@ -76,6 +74,10 @@ public class SeoIT {
         osgiConfigurationsToDelete.put(publishOsgiConsole, publishOsgiConsole.editConfiguration(
             "com.adobe.cq.wcm.core.components.internal.services.seo.LanguageNavigationSiteRootSelectionStrategy", null,
             Collections.singletonMap("configured", Boolean.TRUE)));
+        publishOsgiConsole.waitComponentRegistered(
+            "com.adobe.cq.wcm.core.components.internal.services.seo.LanguageNavigationSiteRootSelectionStrategy",
+            5000,
+            1000);
 
         // enable sitemap scheduler to build sitemaps every 10s
         osgiConfigurationsToDelete.put(publishOsgiConsole, publishOsgiConsole.editConfiguration(
@@ -105,6 +107,7 @@ public class SeoIT {
     }
 
     @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testRobotsTagRenderedToPage() throws ClientException {
         String content = publishSling.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         GraniteAssert.assertRegExNoFind("robots meta tag not expected", content, Pattern.compile("<meta name=\"robots\""));
@@ -113,6 +116,7 @@ public class SeoIT {
     }
 
     @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testCanonicalLinkRenderedToPage() throws ClientException {
         String content = publishSling.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         GraniteAssert.assertRegExFind("canonical link expected", content,
@@ -120,6 +124,7 @@ public class SeoIT {
     }
 
     @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testLanguageAlternatesRenderedToPage() throws ClientException {
         String content = publishSling.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         GraniteAssert.assertRegExFind("language alternate link en-GB expected", content,
@@ -129,11 +134,10 @@ public class SeoIT {
     }
 
     @Test
-    @Category({ IgnoreOn64.class, IgnoreOn65.class })
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testSitemapAndSitemapIndexGeneration() throws ClientException, InterruptedException, TimeoutException {
         try {
-            author.setPageProperty("/content/core-components/seo-site/gb/en", "sling:sitemapRoot", "true", HttpStatus.SC_OK);
-            authorReplication.activate("/content/core-components/seo-site/gb/en", HttpStatus.SC_OK);
+            publish.setPageProperty("/content/core-components/seo-site/gb/en", "sling:sitemapRoot", "true", HttpStatus.SC_OK);
             publishSling.waitExists("/var/sitemaps/content/core-components/seo-site/gb/en/sitemap.xml", 30000, 5000);
 
             String timeRegex = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z";
@@ -167,8 +171,7 @@ public class SeoIT {
             assertEquals(expectedSitemap, sitemap);
         } finally {
             try {
-                author.setPageProperty("/content/core-components/seo-site/gb/en", "sling:sitemapRoot", "false", HttpStatus.SC_OK);
-                authorReplication.activate("/content/core-components/seo-site/gb/en", HttpStatus.SC_OK);
+                publish.setPageProperty("/content/core-components/seo-site/gb/en", "sling:sitemapRoot", "false", HttpStatus.SC_OK);
                 publishSling.deletePath("/var/sitemaps/content/core-components/seo-site/gb/en/sitemap.xml");
             } catch (Exception e) {
                 // ignore

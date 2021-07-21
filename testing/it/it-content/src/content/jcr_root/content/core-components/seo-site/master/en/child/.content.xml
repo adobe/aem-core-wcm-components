@@ -30,7 +30,7 @@
                     jcr:lastModified="{Date}2021-07-14T16:25:04.932+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/languagenavigation"
+                    sling:resourceType="core/wcm/components/languagenavigation/v2/languagenavigation"
                     navigationRoot="/content/core-components/seo-site"
                     structureDepth="2"/>
             </container>
