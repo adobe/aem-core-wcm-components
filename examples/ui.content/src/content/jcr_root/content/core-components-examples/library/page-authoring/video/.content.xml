@@ -114,10 +114,10 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/video"
-                            alt="Some Alternative Text sample"
                             autoplayEnabled="true"
                             hideControl="false"
                             loopEnabled="true"
+                            mutedEnabled="true"
                             posterImageReference="/content/dam/core-components-examples/library/aem-corecomponents-logo.svg"
                             videoFileReference="/content/dam/core-components-examples/library/videoSample/mp4"/>
                     </component>
