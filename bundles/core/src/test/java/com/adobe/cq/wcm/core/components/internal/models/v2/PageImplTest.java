@@ -223,12 +223,15 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
 
     @Test
     public void testNoRobotsTags() {
+        Page page = getPageUnderTest(PAGE);
+        // without adapter
+        assertTrue(page.getRobotsTags().isEmpty());
+        // with adapter
         context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
             SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
             when(seoTags.getRobotsTags()).thenReturn(Collections.emptyList());
             return seoTags;
         });
-        Page page = getPageUnderTest(PAGE);
         assertTrue(page.getRobotsTags().isEmpty());
     }
 
@@ -247,12 +250,27 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     public void testCanonicalLink() {
         context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
             SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
-            when(seoTags.getCanonicalUrl()).thenReturn("http://foo.bar" + resource.getParent().getPath());
+            when(seoTags.getCanonicalUrl()).thenReturn("http://foo.bar" + resource.getParent().getPath() + ".html");
             return seoTags;
         });
         Page page = getPageUnderTest(PAGE);
-        assertEquals("http://foo.bar/content/page/templated-page", page.getCanonicalLink());
+        assertEquals("http://foo.bar/content/page/templated-page.html", page.getCanonicalLink());
     }
+
+    @Test
+    public void testNoCanonicalLink() {
+        Page page = getPageUnderTest(PAGE);
+        // without adapter
+        assertEquals("https://example.org/content/page/templated-page.html", page.getCanonicalLink());
+        // with adapater
+        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
+            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
+            when(seoTags.getCanonicalUrl()).thenReturn("http://foo.bar" + resource.getParent().getPath() + ".html");
+            return seoTags;
+        });
+        assertEquals("http://foo.bar/content/page/templated-page.html", page.getCanonicalLink());
+    }
+
 
     @Test
     public void testCanonicalLinkWhenSeoApiUnavailable() {
@@ -262,7 +280,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
             return seoTags;
         });
         Page page = getPageUnderTest(PAGE);
-        assertEquals("https://example.org/content/page/templated-page", page.getCanonicalLink());
+        assertEquals("https://example.org/content/page/templated-page.html", page.getCanonicalLink());
     }
 
     @ParameterizedTest(name = PageImpl.PN_RENDER_ALTERNATE_LANGUAGES + " = {0}")
@@ -299,14 +317,18 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertTrue(page.getAlternateLanguageLinks().isEmpty());
     }
 
+
     @Test
     public void testNoAlternateLanguageLinks() {
+        Page page = getPageUnderTest(PAGE, PageImpl.PN_RENDER_ALTERNATE_LANGUAGES, true);
+        // without adapter
+        assertTrue(page.getAlternateLanguageLinks().isEmpty());
+        // with adapter
         context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
             SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
             when(seoTags.getAlternateLanguages()).thenReturn(Collections.emptyMap());
             return seoTags;
         });
-        Page page = getPageUnderTest(PAGE, PageImpl.PN_RENDER_ALTERNATE_LANGUAGES, true);
         assertTrue(page.getAlternateLanguageLinks().isEmpty());
     }
 }

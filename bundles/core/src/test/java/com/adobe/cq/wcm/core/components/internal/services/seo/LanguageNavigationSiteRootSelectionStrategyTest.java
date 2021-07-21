@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.services.seo;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 
+import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -88,6 +89,26 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
     }
 
     @Test
+    void testSiteRootFromPageV2() throws PersistenceException {
+        // given
+        Page page = aemContext.pageManager().getPage("/content/languagenavigation/LOCALE-1/LOCALE-5/about");
+        Resource languageNav = page.getContentResource().getChild("root/languagenavigation-component-2");
+        deleteSiblings(languageNav);
+        ModifiableValueMap properties = languageNav.adaptTo(ModifiableValueMap.class);
+        properties.put("sling:resourceType", com.adobe.cq.wcm.core.components.internal.models.v2.LanguageNavigationImpl.RESOURCE_TYPE);
+        languageNav.getResourceResolver().commit();
+
+        // when
+        Page siteRoot = subject.getSiteRoot(page);
+        int structureDepth = subject.getStructuralDepth(page);
+
+        // then
+        assertNotNull(siteRoot);
+        assertEquals("/content/languagenavigation", siteRoot.getPath());
+        assertEquals(2, structureDepth);
+    }
+
+    @Test
     void testSiteRootFromPageWithDefaultStructureDepth() throws PersistenceException {
         // given
         Page page = aemContext.pageManager().getPage("/content/languagenavigation/LOCALE-1/LOCALE-5/about");
@@ -138,9 +159,11 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
     }
 
     @Test
-    void testNoSiteRootOnEmptyPage() {
+    void testNoSiteRootOnPageWithoutLanguageNav() {
         // given
         Page page = aemContext.create().page("/content/languagenavigation/LOCALE-X/LOCALE-Y");
+        aemContext.create().resource(page, "root");
+        aemContext.create().resource(page,"anyComponent");
 
         // when
         Page siteRoot = subject.getSiteRoot(page);

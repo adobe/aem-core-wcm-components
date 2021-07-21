@@ -329,12 +329,16 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Override
     public @Nullable String getCanonicalLink() {
+        String canonicalUrl;
         try {
             SeoTags seoTags = resource.adaptTo(SeoTags.class);
-            return seoTags != null ? seoTags.getCanonicalUrl() : null;
+            canonicalUrl = seoTags != null ? seoTags.getCanonicalUrl() : null;
         } catch (NoClassDefFoundError ex) {
-            return pathProcessor.externalize(currentPage.getPath(), request);
+            canonicalUrl = null;
         }
+        return canonicalUrl != null
+            ? canonicalUrl
+            : pathProcessor.externalize(currentPage.getPath(), request) + LinkHandler.HTML_EXTENSION;
     }
 
     @Override
