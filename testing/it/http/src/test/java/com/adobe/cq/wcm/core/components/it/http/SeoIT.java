@@ -72,10 +72,7 @@ public class SeoIT {
         publishSling = cqBaseClassRule.publishRule.getAdminClient(SlingClient.class);
 
         // get the context path
-        cp = cqBaseClassRule.publishRule.getConfiguration().getUrl().getPath();
-        if ("".equals(cp)) {
-            cp = "/";
-        }
+        cp = cqBaseClassRule.publishRule.getConfiguration().getUrl().getPath() + "/";
 
         // enable the LanguageNavigationSiteRootSelectionStrategy
         osgiConfigurationsToDelete.put(publishOsgiConsole, publishOsgiConsole.editConfiguration(
