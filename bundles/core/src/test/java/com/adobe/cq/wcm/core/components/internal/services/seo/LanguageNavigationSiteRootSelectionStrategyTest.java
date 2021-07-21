@@ -138,6 +138,38 @@ class LanguageNavigationSiteRootSelectionStrategyTest {
     }
 
     @Test
+    void testNoSiteRootOnEmptyPage() {
+        // given
+        Page page = aemContext.create().page("/content/languagenavigation/LOCALE-X/LOCALE-Y");
+
+        // when
+        Page siteRoot = subject.getSiteRoot(page);
+        int structureDepth = subject.getStructuralDepth(page);
+
+        // then
+        assertNull(siteRoot);
+        assertEquals(1, structureDepth);
+    }
+
+    /**
+     * Intermediate pages exist, when a descendant got published but its parent not. They miss the jcr:content node
+     */
+    @Test
+    void testNoSiteRootOnIntermediatePage() {
+        // given
+        Page page = aemContext.create().resource("/content/languagenavigation/LOCALE-X/LOCALE-Y",
+            "jcr:primaryType", "cq:Page").adaptTo(Page.class);
+
+        // when
+        Page siteRoot = subject.getSiteRoot(page);
+        int structureDepth = subject.getStructuralDepth(page);
+
+        // then
+        assertNull(siteRoot);
+        assertEquals(1, structureDepth);
+    }
+
+    @Test
     void testNoSiteRootFallbackToDefault() throws PersistenceException, NoSuchFieldException, IllegalAccessException {
         // given
         // replace with service injection after SLING-10616 was released

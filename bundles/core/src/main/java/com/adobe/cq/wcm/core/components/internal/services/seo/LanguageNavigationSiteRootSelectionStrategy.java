@@ -86,7 +86,7 @@ public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSele
     }
 
     private Resource findLanguageNavigation(Resource contentResource) {
-        Resource templatedResource = contentResource.adaptTo(TemplatedResource.class);
+        Resource templatedResource = contentResource != null ? contentResource.adaptTo(TemplatedResource.class) : null;
         if (templatedResource != null) {
             contentResource = templatedResource;
         }
