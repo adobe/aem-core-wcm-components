@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -54,6 +55,7 @@ import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -220,6 +222,28 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     }
 
     @Test
+    public void testNoRobotsTags() {
+        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
+            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
+            when(seoTags.getRobotsTags()).thenReturn(Collections.emptyList());
+            return seoTags;
+        });
+        Page page = getPageUnderTest(PAGE);
+        assertTrue(page.getRobotsTags().isEmpty());
+    }
+
+    @Test
+    public void testRobotsTagsEmptyWhenSeoApiUnavailable() {
+        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
+            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
+            doThrow(new NoClassDefFoundError()).when(seoTags).getRobotsTags();
+            return seoTags;
+        });
+        Page page = getPageUnderTest(PAGE);
+        assertTrue(page.getRobotsTags().isEmpty());
+    }
+
+    @Test
     public void testCanonicalLink() {
         context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
             SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
@@ -228,6 +252,17 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         });
         Page page = getPageUnderTest(PAGE);
         assertEquals("http://foo.bar/content/page/templated-page", page.getCanonicalLink());
+    }
+
+    @Test
+    public void testCanonicalLinkWhenSeoApiUnavailable() {
+        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
+            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
+            doThrow(new NoClassDefFoundError()).when(seoTags).getCanonicalUrl();
+            return seoTags;
+        });
+        Page page = getPageUnderTest(PAGE);
+        assertEquals("https://example.org/content/page/templated-page", page.getCanonicalLink());
     }
 
     @ParameterizedTest(name = PageImpl.PN_RENDER_ALTERNATE_LANGUAGES + " = {0}")
@@ -251,5 +286,27 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         } else {
             assertTrue(page.getAlternateLanguageLinks().isEmpty());
         }
+    }
+
+    @Test
+    public void testAlternateLanguageLinksWhenSeoApiUnavailable() {
+        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
+            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
+            doThrow(new NoClassDefFoundError()).when(seoTags).getAlternateLanguages();
+            return seoTags;
+        });
+        Page page = getPageUnderTest(PAGE, PageImpl.PN_RENDER_ALTERNATE_LANGUAGES, true);
+        assertTrue(page.getAlternateLanguageLinks().isEmpty());
+    }
+
+    @Test
+    public void testNoAlternateLanguageLinks() {
+        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
+            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
+            when(seoTags.getAlternateLanguages()).thenReturn(Collections.emptyMap());
+            return seoTags;
+        });
+        Page page = getPageUnderTest(PAGE, PageImpl.PN_RENDER_ALTERNATE_LANGUAGES, true);
+        assertTrue(page.getAlternateLanguageLinks().isEmpty());
     }
 }
