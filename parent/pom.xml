@@ -810,7 +810,7 @@
             <dependency>
                 <groupId>com.adobe.cq.wcm</groupId>
                 <artifactId>com.adobe.aem.wcm.seo</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.4</version>
             </dependency>
 
             <!--
