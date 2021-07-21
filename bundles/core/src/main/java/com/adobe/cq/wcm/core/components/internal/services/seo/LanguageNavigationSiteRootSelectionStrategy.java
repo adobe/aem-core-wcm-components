@@ -20,7 +20,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Constants;
@@ -34,10 +33,13 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.aem.wcm.seo.localization.SiteRootSelectionStrategy;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentDataImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigation;
+import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.TemplatedResource;
+import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -65,6 +67,12 @@ public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSele
         target = "(objectClass=*DefaultSiteRootSelectionStrategy)")
     private SiteRootSelectionStrategy defaultSelectionStrategy;
 
+    @Reference
+    private LanguageManager languageManager;
+
+    @Reference
+    private LiveRelationshipManager liveRelationshipManager;
+
     private final Cache<Page, Optional<Resource>> languageNavigationCache = CacheBuilder.newBuilder().weakKeys().build();
 
     @Override
@@ -85,24 +93,26 @@ public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSele
 
     private Optional<Resource> findLanguageNavigation(Page page) {
         try {
-            return languageNavigationCache.get(page, () -> findLanguageNavigation(page.getContentResource()));
+            return languageNavigationCache.get(page, () -> findLanguageNavigation(page.getContentResource(), page));
         } catch (ExecutionException ex) {
             LOG.warn("Failed to find language navigation", ex);
             return Optional.empty();
         }
     }
 
-    private Optional<Resource> findLanguageNavigation(Resource contentResource) {
+    private Optional<Resource> findLanguageNavigation(Resource contentResource, Page containingPage) {
         Resource templatedResource = contentResource != null ? contentResource.adaptTo(TemplatedResource.class) : null;
         if (templatedResource != null) {
             contentResource = templatedResource;
         }
-        return findFirst(contentResource,
+        return findFirst(
+            contentResource,
             resource -> resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.LanguageNavigationImpl.RESOURCE_TYPE)
-                || resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v2.LanguageNavigationImpl.RESOURCE_TYPE));
+                || resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v2.LanguageNavigationImpl.RESOURCE_TYPE),
+            containingPage);
     }
 
-    private Optional<Resource> findFirst(Resource resource, Predicate<Resource> condition) {
+    private Optional<Resource> findFirst(Resource resource, Predicate<Resource> condition, Page containingPage) {
         if (resource == null) {
             return Optional.empty();
         }
@@ -113,26 +123,19 @@ public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSele
         // if not, check for experience fragments and resolve them
         if (resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl.RESOURCE_TYPE_V1)
             || resource.isResourceType(com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl.RESOURCE_TYPE_V2)) {
-            return Optional.ofNullable(new ExperienceFragmentRequest(resource).adaptTo(ExperienceFragment.class))
-                .map(ExperienceFragment::getLocalizedFragmentVariationPath)
+            return Optional.ofNullable(resource.adaptTo(ExperienceFragmentDataImpl.class))
+                .map(ExperienceFragmentDataImpl::getLocalizedFragmentVariationPath)
                 .map(xfPath -> resource.getResourceResolver().getResource(xfPath))
-                .flatMap(xfResource -> findFirst(xfResource, condition));
+                .flatMap(xfResource -> findFirst(xfResource, condition, containingPage));
         }
         // if not iterate over the resource's children
         for (Resource child : resource.getChildren()) {
-            Optional<Resource> result = findFirst(child, condition);
+            Optional<Resource> result = findFirst(child, condition, containingPage);
             if (result.isPresent()) {
                 return result;
             }
         }
 
         return Optional.empty();
-    }
-
-    private static class ExperienceFragmentRequest extends MockSlingHttpServletRequest {
-        ExperienceFragmentRequest(Resource xfResource) {
-            super(xfResource.getResourceResolver());
-            setResource(xfResource);
-        }
     }
 }
