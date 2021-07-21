@@ -63,12 +63,19 @@ public class SeoIT {
 
     static Multimap<OsgiConsoleClient, String> osgiConfigurationsToDelete = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
     static String mappingEntry;
+    static String cp;
 
     @BeforeClass
     public static void beforeClass() throws ClientException, InterruptedException, TimeoutException {
         publish = cqBaseClassRule.publishRule.getAdminClient(CQClient.class);
         publishOsgiConsole = cqBaseClassRule.publishRule.getAdminClient(OsgiConsoleClient.class);
         publishSling = cqBaseClassRule.publishRule.getAdminClient(SlingClient.class);
+
+        // get the context path
+        cp = cqBaseClassRule.publishRule.getConfiguration().getUrl().getPath();
+        if ("".equals(cp)) {
+            cp = "/";
+        }
 
         // enable the LanguageNavigationSiteRootSelectionStrategy
         osgiConfigurationsToDelete.put(publishOsgiConsole, publishOsgiConsole.editConfiguration(
@@ -120,7 +127,7 @@ public class SeoIT {
     public void testCanonicalLinkRenderedToPage() throws ClientException {
         String content = publishSling.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         GraniteAssert.assertRegExFind("canonical link expected", content,
-            "<link rel=\"canonical\" href=\"http://integrationtest.local:4503/gb/en/child.html\"/>");
+            "<link rel=\"canonical\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>");
     }
 
     @Test
@@ -128,9 +135,9 @@ public class SeoIT {
     public void testLanguageAlternatesRenderedToPage() throws ClientException {
         String content = publishSling.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         GraniteAssert.assertRegExFind("language alternate link en-GB expected", content,
-            "<link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503/gb/en/child.html\"/>");
+            "<link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>");
         GraniteAssert.assertRegExFind("language alternate link en-US expected", content,
-            "<link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503/us/en/child.html\"/>");
+            "<link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en/child.html\"/>");
     }
 
     @Test
@@ -140,11 +147,11 @@ public class SeoIT {
             publish.setPageProperty("/content/core-components/seo-site/gb/en", "sling:sitemapRoot", "true", HttpStatus.SC_OK);
             publishSling.waitExists("/var/sitemaps/content/core-components/seo-site/gb/en/sitemap.xml", 30000, 5000);
 
-            String timeRegex = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z";
+            String timeRegex = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})Z";
             String expectedSitemapIndex = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                 + "<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">"
                 + "<sitemap>"
-                + "<loc>http://integrationtest.local:4503/gb/en.sitemap.xml</loc>"
+                + "<loc>http://integrationtest.local:4503" + cp + "gb/en.sitemap.xml</loc>"
                 + "<lastmod>test</lastmod>"
                 + "</sitemap>"
                 + "</sitemapindex>";
@@ -157,13 +164,13 @@ public class SeoIT {
                 + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">"
                 + "<url>"
                 + "<loc>http://integrationtest.local:4503/gb/en.html</loc>"
-                + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503/gb/en.html\"/>"
-                + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503/us/en.html\"/>"
+                + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en.html\"/>"
+                + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en.html\"/>"
                 + "</url>"
                 + "<url>"
                 + "<loc>http://integrationtest.local:4503/gb/en/child.html</loc>"
-                + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503/gb/en/child.html\"/>"
-                + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503/us/en/child.html\"/>"
+                + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>"
+                + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en/child.html\"/>"
                 + "</url>"
                 + "</urlset>";
             String sitemap = publishSling.doGet("/content/core-components/seo-site/gb/en.sitemap.xml", HttpStatus.SC_OK)
