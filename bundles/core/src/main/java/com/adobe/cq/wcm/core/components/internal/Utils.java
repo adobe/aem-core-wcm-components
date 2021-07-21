@@ -38,6 +38,8 @@ import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.designer.Designer;
+import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.foundation.AllowedComponentList;
 import com.google.common.collect.ImmutableSet;
 
@@ -254,5 +256,28 @@ public class Utils {
             }
         }
         return jsonObj;
+    }
+
+    /**
+     * Returns the property from the given {@link Resource} if it exists and is convertible to the requested type. If not it tries to get
+     * the property from the {@link Resource}'s {@link Style}.
+     *
+     * @param resource the {@link Resource}
+     * @param property the property name
+     * @param type     the class of the requested type
+     * @param <T>      the type of the expected return value
+     * @return the return value converted to the requested type, or null of not found in either of {@link Resource} properties or{@link Style}
+     */
+    public static <T> T getPropertyOrStyle(Resource resource, String property, Class<T> type) {
+        ValueMap properties = resource.getValueMap();
+        T value = properties.get(property, type);
+        if (value == null) {
+            Designer designer = resource.getResourceResolver().adaptTo(Designer.class);
+            Style style = designer != null ? designer.getStyle(resource) : null;
+            if (style != null) {
+                value = style.get(property, type);
+            }
+        }
+        return value;
     }
 }

@@ -283,7 +283,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertEquals("https://example.org/content/page/templated-page.html", page.getCanonicalLink());
     }
 
-    @ParameterizedTest(name = PageImpl.PN_RENDER_ALTERNATE_LANGUAGES + " = {0}")
+    @ParameterizedTest(name = PageImpl.PN_STYLE_RENDER_ALTERNATE_LANGUAGES + " = {0}")
     @ValueSource(strings = { "true", "false" })
     public void testAlternateLanguageLinks(String renderProperty) {
         context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
@@ -296,7 +296,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
             return seoTags;
         });
         boolean renderAlternateLanguages = Boolean.parseBoolean(renderProperty);
-        Page page = getPageUnderTest(PAGE, PageImpl.PN_RENDER_ALTERNATE_LANGUAGES, renderProperty);
+        Page page = getPageUnderTest(PAGE, PageImpl.PN_STYLE_RENDER_ALTERNATE_LANGUAGES, renderProperty);
         if (renderAlternateLanguages) {
             assertEquals(2, page.getAlternateLanguageLinks().size());
             assertEquals("http://foo.bar/content/en/templated-page", page.getAlternateLanguageLinks().get(Locale.ENGLISH));
@@ -313,14 +313,14 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
             doThrow(new NoClassDefFoundError()).when(seoTags).getAlternateLanguages();
             return seoTags;
         });
-        Page page = getPageUnderTest(PAGE, PageImpl.PN_RENDER_ALTERNATE_LANGUAGES, true);
+        Page page = getPageUnderTest(PAGE, PageImpl.PN_STYLE_RENDER_ALTERNATE_LANGUAGES, true);
         assertTrue(page.getAlternateLanguageLinks().isEmpty());
     }
 
 
     @Test
     public void testNoAlternateLanguageLinks() {
-        Page page = getPageUnderTest(PAGE, PageImpl.PN_RENDER_ALTERNATE_LANGUAGES, true);
+        Page page = getPageUnderTest(PAGE, PageImpl.PN_STYLE_RENDER_ALTERNATE_LANGUAGES, true);
         // without adapter
         assertTrue(page.getAlternateLanguageLinks().isEmpty());
         // with adapter

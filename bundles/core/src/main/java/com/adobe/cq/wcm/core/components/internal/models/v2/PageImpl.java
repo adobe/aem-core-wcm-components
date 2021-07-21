@@ -95,7 +95,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     /**
      * Property name of the style property that enables/disables rendering of the alternate language links
      */
-    public static final String PN_RENDER_ALTERNATE_LANGUAGES = "renderAlternateLanguageLinks";
+    public static final String PN_STYLE_RENDER_ALTERNATE_LANGUAGES = "renderAlternateLanguageLinks";
 
     /**
      * Flag indicating if cloud configuration support is enabled.
@@ -344,7 +344,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public @NotNull Map<Locale, String> getAlternateLanguageLinks() {
         try {
-            if (currentStyle != null && currentStyle.get(PN_RENDER_ALTERNATE_LANGUAGES, Boolean.FALSE)) {
+            if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGES, Boolean.FALSE)) {
                 SeoTags seoTags = resource.adaptTo(SeoTags.class);
                 return seoTags != null && seoTags.getAlternateLanguages().size() > 0
                     ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())
