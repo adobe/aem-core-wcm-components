@@ -78,7 +78,7 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Default(booleanValues = false)
-    private boolean isMuted;
+    private boolean muted;
 
     /**
      * The current resource properties.
@@ -95,7 +95,7 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
         hideControl = properties.get(Video.PN_HIDE_CONTROL, hideControl);
         loopEnabled = properties.get(Video.PN_LOOP_ENABLED, loopEnabled);
         autoplayEnabled = properties.get(Video.PN_AUTOPLAY_ENABLED, autoplayEnabled);
-        isMuted = properties.get(Video.PN_MUTED_ENABLED, isMuted);
+        muted = properties.get(Video.PN_MUTED_ENABLED, muted);
     }
 
     @Override
@@ -131,7 +131,10 @@ public class VideoImpl extends AbstractComponentImpl implements Video {
 
     @Override
     public boolean isMuted() {
-        return isMuted;
+        if (autoplayEnabled) {
+            return true;
+        }
+        return muted;
     }
 
     @Override

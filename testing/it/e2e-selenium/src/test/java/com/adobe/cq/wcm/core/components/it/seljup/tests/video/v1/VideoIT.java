@@ -35,7 +35,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.*;
@@ -212,28 +211,83 @@ public class VideoIT extends AuthorBaseUITest {
     }
 
     /**
-     * Video with loop, autoplay and hidden controls
+     * Video with loop enabled
      *
      * @throws InterruptedException
      */
     @Test
-    @DisplayName("Test: Video properties are checked")
-    public void testCheckBoxes() throws InterruptedException {
+    @DisplayName("Test: Loop is checked")
+    public void testLoopEnabled() throws InterruptedException {
         addMinimumConfig();
 
         editDialog.openPropertiesTab();
         editDialog.clickLoopEnabled();
+        Commons.saveConfigureDialog();
+        enterPreviewMode();
+
+        assertTrue(video.element().find("video").getAttribute("loop") != null, "loop is enabled");
+    }
+
+    /**
+     * Video with controls hidden
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Hide Controls is checked")
+    public void testHideControlEnabled() throws InterruptedException {
+        addMinimumConfig();
+
+        editDialog.openPropertiesTab();
         editDialog.clickHideControl();
+        Commons.saveConfigureDialog();
+        enterPreviewMode();
+
+        assertTrue(video.element().find("video").getAttribute("controls") == null, "controls are hidden");
+        assertTrue(video.element().find("video").getAttribute("autoplay").equals("true"), "autoplay is enabled");
+        assertTrue(video.element().find("video").getAttribute("playsinline").equals("true"), "playsinline is set");
+        assertTrue(video.element().find("video").getAttribute("muted").equals("true"), "sound is muted");
+    }
+
+    /**
+     * Video with autoplay enabled
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Autoplay is checked")
+    public void testAutoplayEnabled() throws InterruptedException {
+        addMinimumConfig();
+
+        editDialog.openPropertiesTab();
         editDialog.clickAutoplayEnabled();
+        Thread.sleep(5000);
+        Commons.saveConfigureDialog();
+        enterPreviewMode();
+
+
+        assertTrue(video.element().find("video").getAttribute("autoplay").equals("true"), "autoplay is enabled");
+        assertTrue(video.element().find("video").getAttribute("playsinline").equals("true"), "playsinline is set");
+        assertTrue(video.element().find("video").getAttribute("muted").equals("true"), "sound is muted");
+    }
+
+    /**
+     * Video with sound set to muted
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Video is muted")
+    public void testMutedEnabled() throws InterruptedException {
+        addMinimumConfig();
+
+        editDialog.openPropertiesTab();
+        editDialog.clickMutedEnabled();
 
         Commons.saveConfigureDialog();
 
         enterPreviewMode();
 
-        assertTrue(video.element().find("video").getAttribute("loop") != null, "loop is enabled");
-        assertTrue(video.element().find("video").getAttribute("controls") == null, "controls are hidden");
-        assertTrue(video.element().find("video").getAttribute("autoplay").equals("true"), "autoplay is enabled");
-        assertTrue(video.element().find("video").getAttribute("playsinline").equals("true"), "playsinline is set");
-        assertTrue(video.element().find("video").getAttribute("muted").equals("true"), "sound is muted");
+        assertTrue(video.element().find("video").getAttribute("muted") != null, "video is muted");
     }
 }

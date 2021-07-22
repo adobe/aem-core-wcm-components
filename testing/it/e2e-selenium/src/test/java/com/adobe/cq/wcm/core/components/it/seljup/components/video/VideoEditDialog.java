@@ -26,6 +26,7 @@ public class VideoEditDialog {
     private static String loopEnabled = ".cmp-video__editor coral-checkbox[name='./loopEnabled']";
     private static String hideControl = ".cmp-video__editor coral-checkbox[name='./hideControl']";
     private static String autoplayEnabled = ".cmp-video__editor coral-checkbox[name='./autoplayEnabled']";
+    private static String mutedEnabled = ".cmp-video__editor coral-checkbox[name='./mutedEnabled']";
     private static String videoFileUpload = "coral-fileupload[name='./videoFile']";
     private static String posterFileUpload = "coral-fileupload[name='./posterFile']";
     private static String assetInSidePanel = "coral-card.cq-draggable[data-path=\"%s\"]";
@@ -56,6 +57,12 @@ public class VideoEditDialog {
         CoralCheckbox checkbox = new CoralCheckbox(autoplayEnabled);
         checkbox.click();
     }
+
+    public void clickMutedEnabled() {
+        CoralCheckbox checkbox = new CoralCheckbox(mutedEnabled);
+        checkbox.click();
+    }
+
 
     public void uploadVideoFromSidePanel(String videoPath) {
         $(String.format(assetInSidePanel, videoPath)).dragAndDropTo(videoFileUpload);
