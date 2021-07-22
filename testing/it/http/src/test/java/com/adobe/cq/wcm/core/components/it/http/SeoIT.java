@@ -21,12 +21,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
-import java.util.regex.Pattern;
 
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
-import org.apache.sling.testing.clients.SlingClient;
 import org.apache.sling.testing.clients.osgi.OsgiConsoleClient;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -36,8 +36,6 @@ import org.junit.experimental.categories.Category;
 import org.junit.rules.ErrorCollector;
 
 import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.client.ReplicationClient;
-import com.adobe.cq.testing.junit.assertion.GraniteAssert;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
 import com.google.common.collect.ImmutableMap;
@@ -59,7 +57,6 @@ public class SeoIT {
 
     static CQClient publish;
     static OsgiConsoleClient publishOsgiConsole;
-    static SlingClient publishSling;
 
     static Multimap<OsgiConsoleClient, String> osgiConfigurationsToDelete = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
     static String mappingEntry;
@@ -69,7 +66,6 @@ public class SeoIT {
     public static void beforeClass() throws ClientException, InterruptedException, TimeoutException {
         publish = cqBaseClassRule.publishRule.getAdminClient(CQClient.class);
         publishOsgiConsole = cqBaseClassRule.publishRule.getAdminClient(OsgiConsoleClient.class);
-        publishSling = cqBaseClassRule.publishRule.getAdminClient(SlingClient.class);
 
         // get the context path
         cp = cqBaseClassRule.publishRule.getConfiguration().getUrl().getPath() + "/";
@@ -94,8 +90,8 @@ public class SeoIT {
 
         // create a mapping on publish to validate proper externalisation
         mappingEntry = "/etc/map/http/integrationtest.local." + cqBaseClassRule.publishRule.getConfiguration().getUrl().getPort();
-        publishSling.createNode(mappingEntry,"nt:unstructured");
-        publishSling.setPropertyStringArray(
+        publish.createNode(mappingEntry,"nt:unstructured");
+        publish.setPropertyStringArray(
             mappingEntry,
             "sling:internalRedirect",
             Arrays.asList("/content/core-components/seo-site", "/"),
@@ -107,34 +103,36 @@ public class SeoIT {
         for (Map.Entry<OsgiConsoleClient, String> entry : osgiConfigurationsToDelete.entries()) {
             entry.getKey().deleteConfiguration(entry.getValue());
         }
-        publishSling.deletePath(mappingEntry, HttpStatus.SC_OK);
+        publish.deletePath(mappingEntry, HttpStatus.SC_OK);
     }
 
     @Test
     @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testRobotsTagRenderedToPage() throws ClientException {
-        String content = publishSling.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
-        GraniteAssert.assertRegExNoFind("robots meta tag not expected", content, Pattern.compile("<meta name=\"robots\""));
-        content = publishSling.doGet("/content/core-components/seo-site/gb/en/noindex-child.html", 200).getContent();
-        GraniteAssert.assertRegExFind("robots meta tag with noindex expected", content, "<meta name=\"robots\" content=\"noindex\"/>");
+        String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
+        MatcherAssert.assertThat(content, CoreMatchers.not(CoreMatchers.containsString("<meta name=\"robots\"")));
+        content = publish.doGet("/content/core-components/seo-site/gb/en/noindex-child.html", 200).getContent();
+        MatcherAssert.assertThat(content, CoreMatchers.containsString("<meta name=\"robots\" content=\"noindex\"/>"));
     }
 
     @Test
     @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testCanonicalLinkRenderedToPage() throws ClientException {
-        String content = publishSling.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
-        GraniteAssert.assertRegExFind("canonical link expected", content,
-            "<link rel=\"canonical\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>");
+        String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
+        MatcherAssert.assertThat(content, CoreMatchers.containsString(
+            "<link rel=\"canonical\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>"));
     }
 
     @Test
     @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testLanguageAlternatesRenderedToPage() throws ClientException {
-        String content = publishSling.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
-        GraniteAssert.assertRegExFind("language alternate link en-GB expected", content,
-            "<link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>");
-        GraniteAssert.assertRegExFind("language alternate link en-US expected", content,
-            "<link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en/child.html\"/>");
+        String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
+        MatcherAssert.assertThat(content, CoreMatchers.not(CoreMatchers.containsString(
+            "<link rel=\"alternate\" hreflang=\"en\" href=\"http://integrationtest.local:4503" + cp + "master/en/child.html\"/>")));
+        MatcherAssert.assertThat(content, CoreMatchers.containsString(
+            "<link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>"));
+        MatcherAssert.assertThat(content, CoreMatchers.containsString(
+            "<link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en/child.html\"/>"));
     }
 
     @Test
@@ -142,7 +140,7 @@ public class SeoIT {
     public void testSitemapAndSitemapIndexGeneration() throws ClientException, InterruptedException, TimeoutException {
         try {
             publish.setPageProperty("/content/core-components/seo-site/gb/en", "sling:sitemapRoot", "true", HttpStatus.SC_OK);
-            publishSling.waitExists("/var/sitemaps/content/core-components/seo-site/gb/en/sitemap.xml", 30000, 5000);
+            publish.waitExists("/var/sitemaps/content/core-components/seo-site/gb/en/sitemap.xml", 30000, 5000);
 
             String timeRegex = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})Z";
             String expectedSitemapIndex = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -152,7 +150,7 @@ public class SeoIT {
                 + "<lastmod>test</lastmod>"
                 + "</sitemap>"
                 + "</sitemapindex>";
-            String index = publishSling.doGet("/content/core-components/seo-site/gb/en.sitemap-index.xml", HttpStatus.SC_OK)
+            String index = publish.doGet("/content/core-components/seo-site/gb/en.sitemap-index.xml", HttpStatus.SC_OK)
                 .getContent()
                 .replaceAll(timeRegex, "test");
             assertEquals(expectedSitemapIndex, index);
@@ -160,23 +158,23 @@ public class SeoIT {
             String expectedSitemap = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                 + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">"
                 + "<url>"
-                + "<loc>http://integrationtest.local:4503/gb/en.html</loc>"
+                + "<loc>http://integrationtest.local:4503" + cp + "gb/en.html</loc>"
                 + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en.html\"/>"
                 + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en.html\"/>"
                 + "</url>"
                 + "<url>"
-                + "<loc>http://integrationtest.local:4503/gb/en/child.html</loc>"
+                + "<loc>http://integrationtest.local:4503" + cp + "gb/en/child.html</loc>"
                 + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>"
                 + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en/child.html\"/>"
                 + "</url>"
                 + "</urlset>";
-            String sitemap = publishSling.doGet("/content/core-components/seo-site/gb/en.sitemap.xml", HttpStatus.SC_OK)
+            String sitemap = publish.doGet("/content/core-components/seo-site/gb/en.sitemap.xml", HttpStatus.SC_OK)
                 .getContent();
             assertEquals(expectedSitemap, sitemap);
         } finally {
             try {
                 publish.setPageProperty("/content/core-components/seo-site/gb/en", "sling:sitemapRoot", "false", HttpStatus.SC_OK);
-                publishSling.deletePath("/var/sitemaps/content/core-components/seo-site/gb/en/sitemap.xml");
+                publish.deletePath("/var/sitemaps/content/core-components/seo-site/gb/en/sitemap.xml");
             } catch (Exception e) {
                 // ignore
             }
