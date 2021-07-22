@@ -123,6 +123,13 @@ public class VideoImplTest {
         Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_ROOT_PAGE_GRID));
     }
 
+    @Test
+    @DisplayName("Video Component - Test is sound is muted")
+    protected void testMutedEnabled() {
+        assertTrue(video.isMuted());
+        Utils.testJSONExport(video, Utils.getTestExporterJSONPath(TEST_BASE, TEST_ROOT_PAGE_GRID));
+    }
+
     protected Video getVideoUnderTest(Object... properties) {
         Utils.enableDataLayer(context, true);
         final Resource resource = context.currentResource(TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID);

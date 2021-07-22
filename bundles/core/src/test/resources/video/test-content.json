@@ -17,7 +17,8 @@
             "hideControl": "true",
             "jcr:lastModified": "Mon May 24 2021 11:11:53 GMT+0200",
             "sling:resourceType": "core/wcm/components/video/v1/video",
-            "loopEnabled": "true"
+            "loopEnabled": "true",
+            "mutedEnabled": "true"
         }
     }
 }

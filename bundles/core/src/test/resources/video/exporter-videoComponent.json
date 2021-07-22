@@ -5,6 +5,7 @@
     "hideControl": true,
     "loopEnabled": true,
     "autoplayEnabled": true,
+    "muted": true,
     ":type": "core/wcm/components/video/v1/video",
     "dataLayer": {
         "video-684c9d715b": {

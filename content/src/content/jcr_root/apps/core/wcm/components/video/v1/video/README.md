@@ -18,7 +18,7 @@ Video (v1)
 Video component written in HTL that renders a video reference using the standard html5 player
 
 ## Features
-* allows enabling or disabling autoplay, loop, user controls
+* allows enabling or disabling autoplay, loop, user controls, sound
 * allows poster image to be used as placeholder when video is loading
 
 ### Use Object
@@ -30,8 +30,9 @@ The following properties are written to JCR for this Video component and are exp
 1. `./fileReference` - property or `file` child node - will store either a reference to the video file
 2. `./posterFileReference` - property or `file` child node - will store either a reference to the image file, or the image file
 3. `./loopEnabled` - defines whether the video should loop from the start when playback is finished
-3. `./hideControl` - defines whether video controls should be hidden for the user
-3. `./autoplayEnabled` - defines whether the video should autoplay
+4. `./hideControl` - defines whether video controls should be hidden for the user
+5. `./autoplayEnabled` - defines whether the video should autoplay
+6. `./mutedEnabled` - defines whether the video sound shoul be muted
 
 ## BEM Description
 ```
