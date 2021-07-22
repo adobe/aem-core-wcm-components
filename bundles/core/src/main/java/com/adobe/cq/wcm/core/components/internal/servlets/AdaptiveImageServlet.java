@@ -104,7 +104,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
     private int maxInputWidth;
-    
+
     private AdaptiveImageServletMetrics metrics;
 
     @SuppressFBWarnings(justification = "This field needs to be transient")
@@ -113,7 +113,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
-    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics, 
+    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics,
             int defaultResizeWidth, int maxInputWidth) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
@@ -533,7 +533,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             EnhancedRendition enhancedRendition = new EnhancedRendition(rendition);
             Dimension dimension = enhancedRendition.getDimension();
             if (dimension != null) {
-                if (dimension.getWidth() >= width) {
+                if (dimension.getWidth() >= width && enhancedRendition.isValid()) {
                     bestRendition = enhancedRendition;
                     if (StringUtils.equals(bestRendition.getPath(), asset.getOriginal().getPath())) {
                         metrics.markOriginalRenditionUsed();

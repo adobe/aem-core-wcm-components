@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.awt.*;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.jcr.Binary;
 
@@ -39,6 +40,8 @@ import com.day.cq.dam.api.Rendition;
 public class EnhancedRendition extends ResourceWrapper implements Rendition {
 
     private static final Logger LOG = LoggerFactory.getLogger(EnhancedRendition.class);
+
+    private static final String[] IGNORED_RENDITIONS = new String[]{"fpo"};
 
     private Rendition rendition;
     private Dimension dimension;
@@ -90,6 +93,16 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
             dimensionProcessed = true;
         }
         return dimension;
+    }
+
+    /**
+     * Checks to see if this rendition should be one that is ignored. Initially this is just going
+     * to ignore the FPO rendition that is used for the OOTB Creative Cloud integration which is the same
+     * dimensions as the original, but usually significantly lower quality.
+     * @return
+     */
+    public boolean isValid() {
+        return Arrays.stream(IGNORED_RENDITIONS).noneMatch(selector -> this.rendition.getName().contains("." + selector + "."));
     }
 
     /**
