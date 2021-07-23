@@ -499,7 +499,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @NotNull
     private Layer getLayer(@NotNull EnhancedRendition rendition) throws IOException {
         AssetHandler assetHandler = assetStore.getAssetHandler(rendition.getMimeType());
-        return new Layer(assetHandler.getImage(rendition));
+        return new Layer(assetHandler.getImage(rendition.getRendition()));
     }
 
     /**

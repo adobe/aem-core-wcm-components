@@ -18,11 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.awt.*;
 import java.io.InputStream;
 
-import javax.jcr.Binary;
-
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +33,7 @@ import com.day.cq.dam.api.Rendition;
 /**
  * A {@link Rendition} wrapper that facilitates finding out the rendition's dimensions.
  */
-public class EnhancedRendition extends ResourceWrapper implements Rendition {
+class EnhancedRendition {
 
     private static final Logger LOG = LoggerFactory.getLogger(EnhancedRendition.class);
 
@@ -45,7 +42,6 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
     private boolean dimensionProcessed = false;
 
     public EnhancedRendition(@NotNull Rendition rendition) {
-        super(rendition);
         this.rendition = rendition;
     }
 
@@ -92,43 +88,35 @@ public class EnhancedRendition extends ResourceWrapper implements Rendition {
         return dimension;
     }
 
-    /**
-     * See {@link Rendition#getMimeType()}
-     */
-    @Override
-    public String getMimeType() {
+    String getMimeType() {
         return rendition.getMimeType();
     }
 
-    /**
-     * See {@link Rendition#getProperties()}
-     */
-    @Override
-    public ValueMap getProperties() {
+    ValueMap getProperties() {
         return rendition.getProperties();
     }
 
-    /**
-     * See {@link Rendition#getSize()}
-     */
-    @Override
-    public long getSize() {
+    long getSize() {
         return rendition.getSize();
     }
 
-    /**
-     * See {@link Rendition#getStream()}
-     */
-    @Override
-    public InputStream getStream() {
+    InputStream getStream() {
         return rendition.getStream();
     }
 
-    /**
-     * See {@link Rendition#getAsset()}
-     */
-    @Override
-    public Asset getAsset() {
+    Asset getAsset() {
         return rendition.getAsset();
+    }
+
+    String getPath() {
+        return rendition.getPath();
+    }
+
+    String getName() {
+        return rendition.getName();
+    }
+
+    Rendition getRendition() {
+        return rendition;
     }
 }
