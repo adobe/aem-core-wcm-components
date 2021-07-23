@@ -31,8 +31,8 @@ The following properties are written to JCR for this Video component and are exp
 2. `./posterFileReference` - property or `file` child node - will store either a reference to the image file, or the image file
 3. `./loopEnabled` - defines whether the video should loop from the start when playback is finished
 4. `./hideControl` - defines whether video controls should be hidden for the user
-5. `./autoplayEnabled` - defines whether the video should autoplay
-6. `./mutedEnabled` - defines whether the video sound shoul be muted
+5. `./autoplayEnabled` - defines whether the video should autoplay. Forces mute to be also se to true.
+6. `./mutedEnabled` - defines whether the video sound should be muted. It cannot be disabled if autoplay is set to true, because of browsers only allowing autoplay if the video is muted.
 
 ## BEM Description
 ```

@@ -102,7 +102,7 @@
                                             <hideControl
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                fieldDescription="Hide/show video controls for user."
+                                                fieldDescription="Hide video controls for user. In that case autoplay should be enabled otherwise the video cannot start."
                                                 name="./hideControl"
                                                 text="Hide video controls"
                                                 uncheckedValue="false"
