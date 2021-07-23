@@ -18,17 +18,17 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Image&lt;sub>v3&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Image&lt;sub>v3&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Image allows a single image asset to be displayed on the page. Images are adaptive; the relevant image width is selected for the screen size and lazy loading is available.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Image allows a single image asset to be displayed on the page. Images are adaptive; the relevant image width is selected for the screen size and lazy loading is available.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -40,7 +40,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -65,7 +65,7 @@
                 <text_1337506761
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Simple image with an asset referenced from DAM and no other configuration. By default, metadata for the asset (alternative text and caption) is read from DAM but can also be provided by an author.&lt;/p>&#xa;"
+                    text="&lt;p>Simple image with an asset referenced from DAM and no other configuration. By default, metadata for the asset (alternative text and caption) is read from DAM but can also be provided by an author.&lt;/p>"
                     textIsRich="true"/>
                 <demo_554582955
                     jcr:primaryType="nt:unstructured"
@@ -111,7 +111,7 @@
                 <text_1337505101
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Captions are displayed by default in a pop-up on hover but the image can also be configured so that the caption is displayed directly on the page.&lt;/p>&#xa;"
+                    text="&lt;p>Captions are displayed by default in a pop-up on hover but the image can also be configured so that the caption is displayed directly on the page.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1384627264
                     jcr:primaryType="nt:unstructured"
@@ -157,7 +157,7 @@
                 <text_1337505103
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Images can be linked to internal relative AEM resources or to external absolute URLs.&lt;/p>&#xa;"
+                    text="&lt;p>Images can be linked to internal relative AEM resources or to external absolute URLs.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1473529393
                     jcr:primaryType="nt:unstructured"
@@ -204,7 +204,7 @@
                 <text_1337505105
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>SVG and GIF image MIME types are supported.&lt;/p>&#xa;"
+                    text="&lt;p>SVG and GIF image MIME types are supported.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -250,7 +250,7 @@
                 <text_1337505106
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>An empty image component renders the featured image defined for the page.&lt;/p>&#xa;"
+                    text="&lt;p>An empty image component renders the featured image defined for the page.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1473529394
                     jcr:primaryType="nt:unstructured"

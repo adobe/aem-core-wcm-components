@@ -24,7 +24,7 @@
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Get to know the AEM Core Components with this collection of component examples - currently featuring a selection of the available components. For all components, visit our &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components&quot;>GitHub Project&lt;/a>.&lt;/p>&#xa;"
+                    text="&lt;p>Get to know the AEM Core Components with this collection of component examples - currently featuring a selection of the available components. For all components, visit our &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components&quot;>GitHub Project&lt;/a>.&lt;/p>"
                     textIsRich="true"/>
                 <text_585499147
                     cq:styleIds="[1550289148555]"
@@ -718,7 +718,7 @@
                     cq:styleIds="[1550360114923]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>No components found.&lt;/p>&#xa;"
+                    text="&lt;p>No components found.&lt;/p>"
                     textIsRich="true"/>
             </responsivegrid>
         </root>

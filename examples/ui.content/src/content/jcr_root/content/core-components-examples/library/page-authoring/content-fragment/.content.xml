@@ -18,17 +18,17 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Content Fragment&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Content Fragment&lt;sub>v1&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Content Fragment allows a content fragment asset, its elements and variations to be presented on a page.&lt;/p>&#xa;"
+                    text="&lt;p>Content Fragment allows a content fragment asset, its elements and variations to be presented on a page.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -40,7 +40,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -65,7 +65,7 @@
                 <text_1424864129
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Content fragment component with an associated content fragment asset. The asset uses the&amp;nbsp;&lt;i>Simple Fragment&amp;nbsp;&lt;/i>model and displays some dummy article content, including a header and paragraph. It has one&amp;nbsp;&lt;i>Main&lt;/i>&amp;nbsp;element.&lt;/p>&#xa;"
+                    text="&lt;p>Content fragment component with an associated content fragment asset. The asset uses the&amp;nbsp;&lt;i>Simple Fragment&amp;nbsp;&lt;/i>model and displays some dummy article content, including a header and paragraph. It has one&amp;nbsp;&lt;i>Main&lt;/i>&amp;nbsp;element.&lt;/p>"
                     textIsRich="true"/>
                 <demo_759741754
                     jcr:primaryType="nt:unstructured"
@@ -115,7 +115,7 @@
                 <text_1424864129_copy
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>It is possible to output alternative variations on the page. Here we use the same simple content fragment asset, but instead display its &lt;i>Short&lt;/i> variation. Short variations are more suited to mobile apps, for example.&lt;/p>&#xa;"
+                    text="&lt;p>It is possible to output alternative variations on the page. Here we use the same simple content fragment asset, but instead display its &lt;i>Short&lt;/i> variation. Short variations are more suited to mobile apps, for example.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -161,7 +161,7 @@
                 <text_1263763772
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>In this example, the asset is based on a bespoke &lt;i>Office&amp;nbsp;&lt;/i> model&amp;nbsp;which allows the output of structured data associated with a business location or office.&lt;/p>&#xa;"
+                    text="&lt;p>In this example, the asset is based on a bespoke &lt;i>Office&amp;nbsp;&lt;/i> model&amp;nbsp;which allows the output of structured data associated with a business location or office.&lt;/p>"
                     textIsRich="true"/>
                 <demo_981582357
                     jcr:primaryType="nt:unstructured"
@@ -206,7 +206,7 @@
                 <text_1010010208
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>For structured content fragments, it is possible to limit the output to certain elements in the data. In this example we again show the same office, but only its &lt;i>title&lt;/i> and&lt;i> city&lt;/i>.&lt;/p>&#xa;"
+                    text="&lt;p>For structured content fragments, it is possible to limit the output to certain elements in the data. In this example we again show the same office, but only its &lt;i>title&lt;/i> and&lt;i> city&lt;/i>.&lt;/p>"
                     textIsRich="true"/>
                 <demo_26077943
                     jcr:primaryType="nt:unstructured"

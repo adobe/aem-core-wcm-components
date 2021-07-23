@@ -16,6 +16,7 @@
 <div data-sly-use.embed="com.adobe.cq.wcm.core.components.models.Embed"
      data-sly-use.commonsTemplates="core/wcm/components/commons/v1/templates.html"
      data-sly-test.hasContent="${(embed.result && embed.result.processor) || embed.html || embed.embeddableResourceType}"
+     data-cmp-data-layer="${embed.data.json}"
      id="${embed.id}"
      class="cmp-embed">
     <sly data-sly-test="${embed.result && embed.result.processor}"

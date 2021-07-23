@@ -59,7 +59,6 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -137,8 +136,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected boolean disableLazyLoading;
     protected int jpegQuality;
     protected String imageName;
-    private boolean useFeaturedImage;
-    private Resource fileResource;
+    protected Resource fileResource;
+    protected Resource inheritedResource;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
@@ -151,38 +150,46 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
     @PostConstruct
     protected void initModel() {
+        link = Optional.empty();
         fileResource = resource.getChild(DownloadResource.NN_FILE);
-        initFeaturedImageBasedProperties();
+        initInheritedResource();
+        if (inheritedResource == null) {
+            return;
+        }
+        ValueMap inheritedResourceProperties = inheritedResource.getValueMap();
+        Resource inheritedFileResource = inheritedResource.getChild(DownloadResource.NN_FILE);
+        String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
+
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
         Asset asset = null;
-        if (StringUtils.isNotEmpty(fileReference)) {
+        if (StringUtils.isNotEmpty(inheritedFileReference)) {
             // the image is coming from DAM
-            final Resource assetResource = request.getResourceResolver().getResource(fileReference);
+            final Resource assetResource = request.getResourceResolver().getResource(inheritedFileReference);
             if (assetResource != null) {
                 asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
-                    imageName = getImageNameFromDam();
+                    imageName = getImageNameFromDam(inheritedFileReference);
                     hasContent = true;
                 } else {
-                    LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
+                    LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", inheritedFileReference, resource.getPath());
                 }
             } else {
-                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
+                LOGGER.error("Unable to find resource '{}' used by image '{}'.", inheritedFileReference, resource.getPath());
             }
         } else {
-            if (fileResource != null) {
-                mimeType = PropertiesUtil.toString(fileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), null);
+            if (inheritedFileResource != null) {
+                mimeType = PropertiesUtil.toString(inheritedFileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), null);
                 if (StringUtils.isEmpty(mimeType)) {
-                    Resource fileResourceContent = fileResource.getChild(JCR_CONTENT);
+                    Resource fileResourceContent = inheritedFileResource.getChild(JCR_CONTENT);
                     if (fileResourceContent != null) {
                         ValueMap fileProperties = fileResourceContent.getValueMap();
                         mimeType = fileProperties.get(JCR_MIMETYPE, MIME_TYPE_IMAGE_JPEG);
                     }
                 }
-                String fileName = properties.get(ImageResource.PN_FILE_NAME, String.class);
+                String fileName = inheritedResourceProperties.get(ImageResource.PN_FILE_NAME, String.class);
                 imageName = StringUtils.isNotEmpty(fileName) ? getSeoFriendlyName(FilenameUtils.getBaseName(fileName)) : "";
                 hasContent = true;
             }
@@ -199,10 +206,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             // Check for the suffix and remove as necessary.
             mimeType = mimeType.split(";")[0];
             extension = mimeTypeService.getExtension(mimeType);
-            ValueMap properties = resource.getValueMap();
-            Calendar lastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+            Calendar lastModified = inheritedResourceProperties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
             if (lastModified == null) {
-                lastModified = properties.get(NameConstants.PN_PAGE_LAST_MOD, Calendar.class);
+                lastModified = inheritedResourceProperties.get(NameConstants.PN_PAGE_LAST_MOD, Calendar.class);
             }
             if (lastModified != null) {
                 lastModifiedDate = lastModified.getTimeInMillis();
@@ -226,9 +232,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 templateRelativePath = resource.getPath().substring(template.getPath().length());
             } else {
                 baseResourcePath = resource.getPath();
-                if (useFeaturedImage) {
-                    baseResourcePath = getFeaturedImagePath();
-                }
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
             if (smartSizesSupported()) {
@@ -237,10 +240,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
                     smartImages[index] = baseResourcePath + DOT +
-                        selector + DOT + jpegQuality + DOT + width + DOT + extension +
-                        (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                        (lastModifiedDate > 0 ? ("/" + lastModifiedDate +
-                        (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "") + DOT + extension): "");
+                            selector + DOT + jpegQuality + DOT + width + DOT + extension +
+                            (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                            (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
+                            (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
                     smartSizes[index] = width;
                     index++;
                 }
@@ -254,8 +257,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             } else {
                 src += extension;
             }
-            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? ("/" + lastModifiedDate +
-                (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension) : "");
+            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "")) : "") +
+                    (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
             if (!isDecorative) {
                 link = linkHandler.getLink(resource);
             } else {
@@ -271,8 +275,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      *
      * @return image name from DAM
      */
-    protected String getImageNameFromDam() {
-        return Optional.ofNullable(this.fileReference)
+    protected String getImageNameFromDam(String fileReference) {
+        return Optional.ofNullable(fileReference)
             .map(reference -> request.getResourceResolver().getResource(reference))
             .map(damResource -> damResource.adaptTo(Asset.class))
             .map(Asset::getName)
@@ -390,6 +394,15 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         return !StringUtils.equals(mimeType, MIME_TYPE_IMAGE_SVG);
     }
 
+    /**
+     * Sets the inherited resource:
+     * - to the featured image of the page if the image component inherits from it (only supported for image v3 and later)
+     * - to the image resource otherwise
+     */
+    protected void initInheritedResource() {
+        inheritedResource = resource;
+    }
+
     /*
      * DataLayer specific methods
      */
@@ -398,37 +411,21 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     @JsonIgnore
     @NotNull
     public ImageData getComponentData() {
+        return getComponentData(fileReference);
+    }
+
+    protected ImageData getComponentData(String fileReference) {
         return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
-            .withTitle(this::getTitle)
-            .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
-            .withAssetData(() ->
-                Optional.ofNullable(this.fileReference)
-                    .map(reference -> this.request.getResourceResolver().getResource(reference))
-                    .map(assetResource -> assetResource.adaptTo(Asset.class))
-                    .map(DataLayerBuilder::forAsset)
-                    .map(AssetDataBuilder::build)
-                    .orElse(null))
-            .build();
-    }
-
-    private void initFeaturedImageBasedProperties() {
-        useFeaturedImage = StringUtils.isEmpty(fileReference) && fileResource == null;
-        if (useFeaturedImage) {
-            Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
-            if (featuredImage != null) {
-                fileResource = featuredImage.getChild(DownloadResource.NN_FILE);
-                ValueMap featuredImageProps = featuredImage.getValueMap();
-                fileReference = featuredImageProps.get(DownloadResource.PN_REFERENCE, String.class);
-            }
-        }
-    }
-
-    private String getFeaturedImagePath() {
-        Resource featuredImage = ComponentUtils.getFeaturedImage(currentPage);
-        if (featuredImage != null) {
-            return featuredImage.getPath();
-        }
-        return null;
+                .withTitle(this::getTitle)
+                .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
+                .withAssetData(() ->
+                        Optional.ofNullable(fileReference)
+                                .map(reference -> this.request.getResourceResolver().getResource(reference))
+                                .map(assetResource -> assetResource.adaptTo(Asset.class))
+                                .map(DataLayerBuilder::forAsset)
+                                .map(AssetDataBuilder::build)
+                                .orElse(null))
+                .build();
     }
 
 }

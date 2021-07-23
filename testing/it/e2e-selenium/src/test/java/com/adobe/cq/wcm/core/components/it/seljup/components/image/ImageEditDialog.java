@@ -39,8 +39,11 @@ public class ImageEditDialog extends Dialog {
     private static String popUpTitle = "[name='./displayPopupTitle']";
     public static String decorative = "[name='./isDecorative']";
     public static String assetFilter = "[name='assetfilter_image_path']";
+    private static SelenideElement assetTab = $(".cq-dialog coral-tab[data-foundation-tracking-event*='asset']");
     private static SelenideElement metadataTab = $("coral-tab[data-foundation-tracking-event*='metadata']");
     private static String altValueFromDAM = "[name='./altValueFromDAM']";
+    private static String altValueFromPageImage = "[name='./altValueFromPageImage']";
+    private static String imageFromPageImage = "[name='./imageFromPageImage']";
     private static String titleValueFromDAM = "[name='./titleValueFromDAM']";
 
     public void uploadImageFromSidePanel(String imagePath) {
@@ -89,8 +92,22 @@ public class ImageEditDialog extends Dialog {
         $(metadataTab).click();
     }
 
+    public void openAssetTab() {
+        $(assetTab).click();
+    }
+
     public void checkAltValueFromDAM() {
         CoralCheckbox checkbox = new CoralCheckbox(altValueFromDAM);
+        checkbox.click();
+    }
+
+    public void checkAltValueFromPageImage() {
+        CoralCheckbox checkbox = new CoralCheckbox(altValueFromPageImage);
+        checkbox.click();
+    }
+
+    public void checkImageFromPageImage() {
+        CoralCheckbox checkbox = new CoralCheckbox(imageFromPageImage);
         checkbox.click();
     }
 

@@ -19,17 +19,17 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Container&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Container&lt;sub>v1&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Container can be used to group together other components and apply a common layout or style. Custom background image and color can also be applied.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Container can be used to group together other components and apply a common layout or style. Custom background image and color can also be applied.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -41,7 +41,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830_cop
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -66,7 +66,7 @@
                 <text_975671813
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Container that uses the default &lt;i>Simple&lt;/i> layout and contains sample content.&lt;/p>&#xa;"
+                    text="&lt;p>Container that uses the default &lt;i>Simple&lt;/i> layout and contains sample content.&lt;/p>"
                     textIsRich="true"/>
                 <demo_975671813
                     jcr:primaryType="nt:unstructured"
@@ -86,7 +86,7 @@
                             <text
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/text"
-                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xd;&#xa;"
+                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>"
                                 textIsRich="true"/>
                         </container>
                     </component>
@@ -119,7 +119,7 @@
                 <text_975671822
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Container that uses the &lt;i>Responsive Grid&lt;/i> layout and contains sample content.&lt;/p>&#xa;"
+                    text="&lt;p>Container that uses the &lt;i>Responsive Grid&lt;/i> layout and contains sample content.&lt;/p>"
                     textIsRich="true"/>
                 <demo_975671829
                     jcr:primaryType="nt:unstructured"
@@ -134,7 +134,7 @@
                             <text
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/text"
-                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xd;&#xa;"
+                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>"
                                 textIsRich="true">
                                 <cq:responsive jcr:primaryType="nt:unstructured">
                                     <default
@@ -185,7 +185,7 @@
                 <text_975671855
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Container with a background color applied.&lt;/p>&#xa;"
+                    text="&lt;p>Container with a background color applied.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -206,7 +206,7 @@
                             <text
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/text"
-                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xd;&#xa;"
+                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>"
                                 textIsRich="true"/>
                         </container>
                     </component>
@@ -239,7 +239,7 @@
                 <text_975671891
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Container with a background image applied.&lt;/p>&#xa;"
+                    text="&lt;p>Container with a background image applied.&lt;/p>"
                     textIsRich="true"/>
                 <demo_295699411
                     jcr:primaryType="nt:unstructured"
@@ -260,7 +260,7 @@
                             <text
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/text"
-                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xd;&#xa;"
+                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>"
                                 textIsRich="true"/>
                         </container>
                     </component>
@@ -293,7 +293,7 @@
                 <text_975671881
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Nested containers, with each container using the &lt;i>Responsive Grid&lt;/i> layout.&lt;/p>&#xa;"
+                    text="&lt;p>Nested containers, with each container using the &lt;i>Responsive Grid&lt;/i> layout.&lt;/p>"
                     textIsRich="true"/>
                 <demo_2146960736
                     jcr:primaryType="nt:unstructured"
@@ -315,7 +315,7 @@
                             <text
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/text"
-                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xa;"
+                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>"
                                 textIsRich="true"/>
                             <container_793091227
                                 jcr:primaryType="nt:unstructured"
@@ -330,7 +330,7 @@
                                 <text
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="core-components-examples/components/text"
-                                    text="&lt;p>Hac habitasse platea dictumst quisque sagittis purus. At risus viverra adipiscing at in tellus integer. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Leo vel orci porta non pulvinar neque laoreet suspendisse. Volutpat diam ut venenatis tellus in metus vulputate eu.&lt;/p>&#xa;"
+                                    text="&lt;p>Hac habitasse platea dictumst quisque sagittis purus. At risus viverra adipiscing at in tellus integer. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Leo vel orci porta non pulvinar neque laoreet suspendisse. Volutpat diam ut venenatis tellus in metus vulputate eu.&lt;/p>"
                                     textIsRich="true"/>
                                 <cq:responsive jcr:primaryType="nt:unstructured">
                                     <default
@@ -352,7 +352,7 @@
                                 <text
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="core-components-examples/components/text"
-                                    text="&lt;p>Libero id faucibus nisl tincidunt eget nullam non nisi. Hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris. Velit aliquet sagittis id consectetur purus ut. Orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt.&lt;/p>&#xa;"
+                                    text="&lt;p>Libero id faucibus nisl tincidunt eget nullam non nisi. Hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris. Velit aliquet sagittis id consectetur purus ut. Orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt.&lt;/p>"
                                     textIsRich="true"/>
                                 <cq:responsive jcr:primaryType="nt:unstructured">
                                     <default

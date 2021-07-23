@@ -7,13 +7,12 @@
         jcr:primaryType="cq:PageContent"
         jcr:title="Language Structure"
         sling:resourceType="core-components-examples/components/page"
-        hideInNav="true"
-        navTitle="Language Structure">
+        hideInNav="true">
         <image jcr:primaryType="nt:unstructured">
             <file/>
         </image>
     </jcr:content>
-    <de/>
-    <fr/>
     <us/>
+    <fr/>
+    <de/>
 </jcr:root>

@@ -12,11 +12,6 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 * **Contributions** are welcome, read our [contributing guide](CONTRIBUTING.md) for more information.
 * **Ideas and questions** are discussed on our [public mailing list](https://groups.google.com/forum/#!forum/aem-core-components-dev); you can also [subscribe via email](mailto:aem-core-components-dev+subscribe@googlegroups.com).
 
-### Usability Study 2020
-
-We're conducting a usability study by using the [System Usability Scale](https://measuringu.com/sus/), a reliable tool to measure the perceived usability.
-Please help us making the Core Components better by responding to our **[short usability questionnaire](https://s2.userzoom.com/m/MSBDNTc1MlMxMDk1)**. Thank you!
-
 ## Documentation
 
 * **[Component Library](https://www.adobe.com/go/aem_cmp_library):** A collection of examples to view the components in their various configurations.
@@ -97,7 +92,7 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 Core Components | AEM as a Cloud Service | AEM 6.5 | AEM 6.4 | Java SE | Maven
 ----------------|------------------------|---------|---------|---------|---------
-[2.16.4](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.16.4) | Continual | 6.5.5.0+ (*) | 6.4.8.1+ (*) | 8, 11 | 3.3.9+
+[2.17.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.17.2) | Continual | 6.5.6.0+ (*) | 6.4.8.4+ (*) | 8, 11 | 3.3.9+
 
 (*) - Since version 2.11.0 `org.apache.sling.models.impl` version 1.4.12 or higher is required (due to [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
 
@@ -116,6 +111,10 @@ To compile your own version of the Core Components, you can build and install ev
 You can also install individual packages/bundles by issuing the following command in the top-level folder of the project:
 
     mvn clean install -PautoInstallPackage -pl <project_name(s)> -am
+
+With AEM as a Cloud Service SDK, use the `cloud` profile as follows to deploy the components into `/libs` instead of `/apps`:
+
+    mvn clean install -PautoInstallSinglePackage,cloud
 
 Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install

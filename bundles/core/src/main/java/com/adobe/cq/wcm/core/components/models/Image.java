@@ -306,6 +306,36 @@ public interface Image extends Component {
     }
 
     /**
+     * Returns the value for the {@code srcset} html attribute of the image.
+     *
+     * @return the value of the {@code srcset} attribute, if one was set, or {@code null}.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    default String getSrcset() {
+        return null;
+    }
+
+    /**
+     * Returns the value for the {@code width} html attribute of the image.
+     *
+     * @return the value for the image's {@code width} attribute, if one was set, or {@code null}.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
+     */
+    default String getWidth() {
+        return null;
+    }
+
+    /**
+     * Returns the value for the {@code height} html attribute of the image.
+     *
+     * @return the value for the image's {@code height} attribute, if one was set, or {@code null}.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
+     */
+    default String getHeight() {
+        return null;
+    }
+
+    /**
      * Returns the number of pixels in advance of an image becoming visible that a lazy
      * loading image should load.
      *

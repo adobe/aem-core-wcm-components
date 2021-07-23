@@ -101,6 +101,9 @@ media
 21. `./cq:contextHubSegmentsPath` - defines the Context Path Segments Path.
 22. `./mainContentSelector` - defines the ID of the main content element of the page (used by the "skip to main content" accessibility feature).
 23. `./id` - defines the component HTML ID attribute.
+24. `./cq:featuredimage/fileReference` property or `./cq:featuredimage/file` child node - will store either a reference to the image file, or the image file of the featured image of the page.
+25. `./cq:featuredimage/alt` - defines the value of the HTML `alt` attribute of the featured image of the page.
+26. `./cq:featuredimage/altValueFromDAM` - if `true`, the HTML `alt` attribute of the featured image of the page is inherited from the DAM asset.
 
 ## Web Resources Client Library
 A web resources client library can be defined at the template level (see `./appResourcesClientlib` component policy configuration).
@@ -139,6 +142,8 @@ icon-70x70.png|Internet Explorer, Edge and Windows Phone|70px x 70px
 ## Client Libraries
 The component reuses the `core.wcm.components.page.v2.sharing` client library category that contains the JavaScript
 required to enable social sharing. It should be added to a relevant site client library using the `embed` property.
+It also reuses the `core.wcm.components.image.v3.editor` client library category in the edit dialog to support defining
+the featured image of the page.
 
 ## Information
 * **Vendor**: Adobe

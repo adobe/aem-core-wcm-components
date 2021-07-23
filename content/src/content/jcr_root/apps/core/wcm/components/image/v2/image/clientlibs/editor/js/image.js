@@ -58,7 +58,7 @@
                 smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
             }
 
-            if ($cqFileUpload) {
+            if ($cqFileUpload.length && $cqFileUpload.data("cqFileuploadTemporaryfilepath")) {
                 imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
                 retrieveInstanceInfo(imagePath);
                 $cqFileUpload.on("assetselected", function(e) {

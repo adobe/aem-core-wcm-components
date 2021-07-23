@@ -63,16 +63,6 @@
                                         checked="{Boolean}false"
                                         uncheckedValue="true"
                                         value="{Boolean}false"/>
-                                    <lazyThreshold
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                        fieldDescription="The number of pixels to begin loading an image in advance of it becoming visible."
-                                        fieldLabel="Lazy Threshold"
-                                        name="./lazyThreshold"
-                                        typeHint="Long"
-                                        required="{Boolean}false"
-                                        min="{Long}0"
-                                        deleteHint="{Boolean}true"/>
                                     <decorative
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

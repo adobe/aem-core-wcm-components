@@ -18,17 +18,17 @@
                         cq:styleIds="[1644862132301]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/text"
-                        text="&lt;h1>Teaser&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                        text="&lt;h1>Teaser&lt;sub>v2&lt;/sub>&lt;/h1>"
                         textIsRich="true"/>
                 <text
                         cq:styleIds="[1544762734201]"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/text"
-                        text="&lt;p>Teaser allows the grouping of an image, title and description for promoting and linking to site content sections. One or more actions can also be defined.&lt;/p>&#xa;"
+                        text="&lt;p>Teaser allows the grouping of an image, title and description for promoting and linking to site content sections. One or more actions can also be defined.&lt;/p>"
                         textIsRich="true"/>
                 <teaser
                         cq:styleIds="[1550165685463]"
-                        jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                        jcr:description="&lt;p>GitHub&lt;/p>"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Technical Documentation"
                         sling:resourceType="core-components-examples/components/teaser"
@@ -40,7 +40,7 @@
                         titleFromPage="false"/>
                 <teaser_556024830
                         cq:styleIds="[1550165685463]"
-                        jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                        jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Using Core Components"
                         sling:resourceType="core-components-examples/components/teaser"
@@ -75,7 +75,7 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/demo/component">
                         <teaser
-                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Teaser Title"
                                 sling:resourceType="core-components-examples/components/teaser"
@@ -123,7 +123,7 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/demo/component">
                         <teaser
-                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Teaser Title"
                                 sling:resourceType="core-components-examples/components/teaser"
@@ -163,7 +163,7 @@
                 <text_1337506001
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/text"
-                        text="&lt;p>Teasers can be linked to internal relative AEM resources or external absolute URLs.&lt;/p>&#xa;"
+                        text="&lt;p>Teasers can be linked to internal relative AEM resources or external absolute URLs.&lt;/p>"
                         textIsRich="true"/>
                 <demo_1789748122
                         jcr:primaryType="nt:unstructured"
@@ -172,7 +172,7 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/demo/component">
                         <teaser
-                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Linked Teaser"
                                 sling:resourceType="core-components-examples/components/teaser"
@@ -212,7 +212,7 @@
                 <text_1337507001
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/text"
-                        text="&lt;p>Teaser with an image, title, description and call-to-action button.&lt;/p>&#xd;&#xa;"
+                        text="&lt;p>Teaser with an image, title, description and call-to-action button.&lt;/p>"
                         textIsRich="true"/>
                 <demo_1878698139
                         jcr:primaryType="nt:unstructured"
@@ -221,7 +221,7 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/demo/component">
                         <teaser
-                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Teaser Title"
                                 sling:resourceType="core-components-examples/components/teaser"
@@ -267,7 +267,7 @@
                 <text_1337508001
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/text"
-                        text="&lt;p>Teaser with an image, title, description and multiple call-to-action buttons, each with a different link.&lt;/p>&#xa;"
+                        text="&lt;p>Teaser with an image, title, description and multiple call-to-action buttons, each with a different link.&lt;/p>"
                         textIsRich="true"/>
                 <demo_1581767054
                         jcr:primaryType="nt:unstructured"
@@ -276,7 +276,7 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/demo/component">
                         <teaser_2781767054
-                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Teaser Title"
                                 sling:resourceType="core-components-examples/components/teaser"
@@ -326,7 +326,7 @@
                 <text_1337509001
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/text"
-                        text="&lt;p>Teaser with an image, title, description and link - with the image, title and description taken from the linked page.&lt;/p>&#xa;"
+                        text="&lt;p>Teaser with an image, title, description and link - with the image, title and description taken from the linked page.&lt;/p>"
                         textIsRich="true"/>
                 <demo_1257101605
                         jcr:primaryType="nt:unstructured"

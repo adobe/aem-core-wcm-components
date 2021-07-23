@@ -18,17 +18,17 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Embed&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Embed&lt;sub>v2&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Embed allows a third-party widget to be added to a page. Media can be added from a supported URL, a pre-configured embeddable or with safe freeform HTML.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Embed allows a third-party widget to be added to a page. Media can be added from a supported URL, a pre-configured embeddable or with safe freeform HTML.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -40,7 +40,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -65,7 +65,7 @@
                 <text_1337506761
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>URLs to embeddable objects can be pasted in the edit dialog. Embed will check that the URL matches a supported processor and provide feedback to the author. Additional URL processors can be registered by a developer.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>URLs to embeddable objects can be pasted in the edit dialog. Embed will check that the URL matches a supported processor and provide feedback to the author. Additional URL processors can be registered by a developer.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1160408555
                     jcr:primaryType="nt:unstructured"
@@ -108,7 +108,7 @@
                 <text_462863792
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>URLs to embeddable objects that use oEmbed to retrieve the embedding information. This example uses the bundled Twitter configuration. Other configurations can be easily added by a developer.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>URLs to embeddable objects that use oEmbed to retrieve the embedding information. This example uses the bundled Twitter configuration. Other configurations can be easily added by a developer.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -151,7 +151,7 @@
                 <text_1337506722
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Trusted pre-configured embeddable snippets that can be selected by an author. These snippets are parameterized and can include unsafe tags such as &lt;i style=&quot;font-size: 1rem;&quot;>script&lt;/i>. Developers are able to create custom embeddable snippets for selection in the edit dialog.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Trusted pre-configured embeddable snippets that can be selected by an author. These snippets are parameterized and can include unsafe tags such as &lt;i style=&quot;font-size: 1rem;&quot;>script&lt;/i>. Developers are able to create custom embeddable snippets for selection in the edit dialog.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1160408470
                     jcr:primaryType="nt:unstructured"
@@ -196,7 +196,7 @@
                 <text_1337505001
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Allows an author to input free-form html and is restricted to safe tags only. For example, the &lt;i>script&lt;/i> tag is not supported.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Allows an author to input free-form html and is restricted to safe tags only. For example, the &lt;i>script&lt;/i> tag is not supported.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1160408466
                     jcr:primaryType="nt:unstructured"

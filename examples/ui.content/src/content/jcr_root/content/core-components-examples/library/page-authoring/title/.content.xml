@@ -18,17 +18,17 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Title&lt;sub>v3&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Title&lt;sub>v3&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Title can be used to create headings for a page or page sections.&lt;/p>&#xa;"
+                    text="&lt;p>Title can be used to create headings for a page or page sections.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -40,7 +40,7 @@
                     titleFromPage="false"/>
                 <teaser_556024830
                     cq:styleIds="[1550165685463]"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
                     sling:resourceType="core-components-examples/components/teaser"
@@ -65,7 +65,7 @@
                 <text_1337506761
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Default title without any configuration. The title is taken from the current page.&lt;/p>&#xa;"
+                    text="&lt;p>Default title without any configuration. The title is then taken from the current page, taking the &lt;i>Page Title&lt;/i> if it has been set, and taking the main page &lt;i>Title&lt;/i> otherwise. The default heading level is &lt;i>H1&lt;/i>, which can be configured at page template level.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
@@ -106,7 +106,7 @@
                 <text_1337508375
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Alternative title texts can be provided rather than the default of taking the title from the current page.&lt;/p>&#xa;"
+                    text="&lt;p>The title text can be provided rather than the default of taking the title from the current page.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1448137506
                     jcr:primaryType="nt:unstructured"
@@ -148,7 +148,7 @@
                 <text_1337502846
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>The heading type can be configured (H1-H6).&lt;/p>&#xa;"
+                    text="&lt;p>The heading size can be configured (H1-H6).&lt;/p>"
                     textIsRich="true"/>
                 <demo_1448137580
                     jcr:primaryType="nt:unstructured"
@@ -191,7 +191,7 @@
                 <text_1337504482
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Titles can be linked&amp;nbsp;to internal relative AEM resources, external absolute URLs or&amp;nbsp;page anchors.&lt;/p>&#xa;"
+                    text="&lt;p>Titles can be linked&amp;nbsp;to internal relative AEM resources, external absolute URLs or page anchors.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1934630368
                     jcr:primaryType="nt:unstructured"
@@ -202,8 +202,7 @@
                         <title
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/title"
-                            linkURL="/content/core-components-examples/library/page-authoring/title"
-                            type="h1"/>
+                            linkURL="/content/core-components-examples/library/page-authoring/title"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -225,6 +224,92 @@
                             reference="../../component"/>
                     </info>
                 </demo_1934630368>
+                <title_290383811
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Linked"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337504482
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Titles can be linked to internal relative AEM resources, external absolute URLs or page anchors.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_1934630368
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <title
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/title"
+                            linkURL="/content/core-components-examples/library/page-authoring/title"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_1934630368>
+                <title_290383812
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link Label and Title"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337504483
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>When linked, there's the additional possibility to provide a &lt;i>Title Attribute&lt;/i> and/or a &lt;i>Accessibility Label&lt;/i> to the link.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_1934630369
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <title
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/title"
+                            linkURL="/content/core-components-examples/library/page-authoring/title"
+                            linkAccessibilityLabel="This is the accessibility label"
+                            linkTitleAttribute="This is the title attribute"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_1934630369>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">
