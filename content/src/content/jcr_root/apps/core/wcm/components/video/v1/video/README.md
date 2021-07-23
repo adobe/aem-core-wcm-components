@@ -41,7 +41,7 @@ BLOCK cmp-video
 ```
 
 ## Information
-* **Vendor**: Adobe
+* **Vendor**: Eggs Unimedia
 * **Version**: v1
 * **Compatibility**: AEM 6.4
 * **Status**: work-in-progress
