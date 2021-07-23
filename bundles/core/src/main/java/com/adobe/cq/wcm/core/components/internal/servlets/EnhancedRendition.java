@@ -31,7 +31,7 @@ import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.api.Rendition;
 
 /**
- * A {@link Rendition} wrapper that facilitates finding out the rendition's dimensions.
+ * A {@link Rendition} delegate that facilitates finding out the rendition's dimensions.
  */
 class EnhancedRendition {
 
