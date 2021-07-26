@@ -899,14 +899,14 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.sling</groupId>
-                <artifactId>org.apache.sling.servlet-helpers</artifactId>
-                <version>1.4.2</version>
+                <artifactId>org.apache.sling.testing.sling-mock.junit4</artifactId>
+                <version>2.3.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.sling</groupId>
-                <artifactId>org.apache.sling.testing.sling-mock.junit4</artifactId>
-                <version>2.3.4</version>
+                <artifactId>org.apache.sling.servlet-helpers</artifactId>
+                <version>1.4.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
