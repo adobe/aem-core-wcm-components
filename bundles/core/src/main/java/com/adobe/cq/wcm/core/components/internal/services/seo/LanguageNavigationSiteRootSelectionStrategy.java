@@ -46,7 +46,7 @@ import com.google.common.cache.CacheBuilder;
  * An implementation of {@link SiteRootSelectionStrategy} that looks for a language navigation component on the given page and uses it's
  * configured navigation root as site root.
  * <p>
- * This Component must be explicitly enabled by providing an (empty) configuration for it. This should be the case for sites the use the
+ * This Component must be explicitly enabled by providing an (empty) configuration for it. This should be the case for sites that use the
  * language navigation core component. For any other case this Component should be kept disabled.
  */
 @Component(
