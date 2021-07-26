@@ -892,15 +892,15 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.sling</groupId>
-                <artifactId>org.apache.sling.servlet-helpers</artifactId>
-                <version>1.4.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit4</artifactId>
                 <version>3.1.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>org.apache.sling.servlet-helpers</artifactId>
+                <version>1.4.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
