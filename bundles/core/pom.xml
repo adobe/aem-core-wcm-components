@@ -550,12 +550,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.sitemap</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
         </dependency>
