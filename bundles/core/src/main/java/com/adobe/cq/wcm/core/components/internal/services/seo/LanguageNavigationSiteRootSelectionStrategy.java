@@ -72,6 +72,13 @@ public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSele
     @Reference
     private LiveRelationshipManager liveRelationshipManager;
 
+    /**
+     * This cache is used to cache subsequent invocations of the interface's public methods for the same object (knowingly accepting a key
+     * comparison using the == operator). It was not intended to cache invocations with equal objects beyond the life time of a single
+     * request for example. This is because the values returned by the {@link SiteRootSelectionStrategy} are likely to be used together,
+     * meaning a consumer will call the public methods of this interface close after each other passing the same {@link Page} object to each
+     * method call. In this case, we don't need to traverse multiple times.
+     */
     private final Cache<Page, Optional<Resource>> languageNavigationCache = CacheBuilder.newBuilder().weakKeys().build();
 
     @Override
