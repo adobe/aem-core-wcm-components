@@ -170,6 +170,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private String[] clientLibCategoriesJsHead;
 
     private List<HtmlPageItem> htmlPageItems;
+    private Map<Locale, String> alternateLanguageLinks;
+    private String canonicalUrl;
+    private List<String> robotsTags;
 
     @PostConstruct
     protected void initModel() {
@@ -329,43 +332,52 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Override
     public @Nullable String getCanonicalLink() {
-        String canonicalUrl;
-        try {
-            SeoTags seoTags = resource.adaptTo(SeoTags.class);
-            canonicalUrl = seoTags != null ? seoTags.getCanonicalUrl() : null;
-        } catch (NoClassDefFoundError ex) {
-            canonicalUrl = null;
+        if (this.canonicalUrl == null) {
+            String canonicalUrl;
+            try {
+                SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                canonicalUrl = seoTags != null ? seoTags.getCanonicalUrl() : null;
+            } catch (NoClassDefFoundError ex) {
+                canonicalUrl = null;
+            }
+            this.canonicalUrl = canonicalUrl != null
+                ? canonicalUrl
+                : pathProcessor.externalize(currentPage.getPath(), request) + LinkHandler.HTML_EXTENSION;
         }
-        return canonicalUrl != null
-            ? canonicalUrl
-            : pathProcessor.externalize(currentPage.getPath(), request) + LinkHandler.HTML_EXTENSION;
+        return canonicalUrl;
     }
 
     @Override
     public @NotNull Map<Locale, String> getAlternateLanguageLinks() {
-        try {
-            if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGES, Boolean.FALSE)) {
-                SeoTags seoTags = resource.adaptTo(SeoTags.class);
-                return seoTags != null && seoTags.getAlternateLanguages().size() > 0
-                    ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())
-                    : Collections.emptyMap();
-            } else {
-                return Collections.emptyMap();
+        if (alternateLanguageLinks == null) {
+            try {
+                if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGES, Boolean.FALSE)) {
+                    SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                    alternateLanguageLinks = seoTags != null && seoTags.getAlternateLanguages().size() > 0
+                        ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())
+                        : Collections.emptyMap();
+                } else {
+                    alternateLanguageLinks = Collections.emptyMap();
+                }
+            } catch (NoClassDefFoundError ex) {
+                alternateLanguageLinks = Collections.emptyMap();
             }
-        } catch (NoClassDefFoundError ex) {
-            return Collections.emptyMap();
         }
+        return alternateLanguageLinks;
     }
 
     @Override
     public @NotNull List<String> getRobotsTags() {
-        try {
-            SeoTags seoTags = resource.adaptTo(SeoTags.class);
-            return seoTags != null && seoTags.getRobotsTags().size() > 0
-                ? Collections.unmodifiableList(seoTags.getRobotsTags())
-                : Collections.emptyList();
-        } catch (NoClassDefFoundError ex) {
-            return Collections.emptyList();
+        if (robotsTags == null) {
+            try {
+                SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                robotsTags = seoTags != null && seoTags.getRobotsTags().size() > 0
+                    ? Collections.unmodifiableList(seoTags.getRobotsTags())
+                    : Collections.emptyList();
+            } catch (NoClassDefFoundError ex) {
+                robotsTags = Collections.emptyList();
+            }
         }
+        return robotsTags;
     }
 }

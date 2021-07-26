@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -217,8 +218,11 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
             return seoTags;
         });
         Page page = getPageUnderTest(PAGE);
-        assertEquals(2,page.getRobotsTags().size());
+        List<String> robotsTags = page.getRobotsTags();
+        assertEquals(2, robotsTags.size());
         assertThat(page.getRobotsTags(), hasItems("index", "nofollow"));
+        // assert that the returned object is cached by the instance
+        assertSame(robotsTags, page.getRobotsTags());
     }
 
     @Test
@@ -254,7 +258,10 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
             return seoTags;
         });
         Page page = getPageUnderTest(PAGE);
-        assertEquals("http://foo.bar/content/page/templated-page.html", page.getCanonicalLink());
+        String canonicalLink = page.getCanonicalLink();
+        assertEquals("http://foo.bar/content/page/templated-page.html", canonicalLink);
+        // assert that the returned object is cached by the instance
+        assertSame(canonicalLink, page.getCanonicalLink());
     }
 
     @Test
@@ -262,13 +269,6 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         Page page = getPageUnderTest(PAGE);
         // without adapter
         assertEquals("https://example.org/content/page/templated-page.html", page.getCanonicalLink());
-        // with adapater
-        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
-            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
-            when(seoTags.getCanonicalUrl()).thenReturn("http://foo.bar" + resource.getParent().getPath() + ".html");
-            return seoTags;
-        });
-        assertEquals("http://foo.bar/content/page/templated-page.html", page.getCanonicalLink());
     }
 
 
@@ -297,13 +297,16 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         });
         boolean renderAlternateLanguages = Boolean.parseBoolean(renderProperty);
         Page page = getPageUnderTest(PAGE, PageImpl.PN_STYLE_RENDER_ALTERNATE_LANGUAGES, renderProperty);
+        Map<Locale, String> alternateLanguageLinks = page.getAlternateLanguageLinks();
         if (renderAlternateLanguages) {
-            assertEquals(2, page.getAlternateLanguageLinks().size());
+            assertEquals(2, alternateLanguageLinks.size());
             assertEquals("http://foo.bar/content/en/templated-page", page.getAlternateLanguageLinks().get(Locale.ENGLISH));
             assertEquals("http://foo.bar/content/de/templated-page", page.getAlternateLanguageLinks().get(Locale.GERMAN));
         } else {
-            assertTrue(page.getAlternateLanguageLinks().isEmpty());
+            assertTrue(alternateLanguageLinks.isEmpty());
         }
+        // assert that the returned object is cached by the instance
+        assertSame(alternateLanguageLinks,  page.getAlternateLanguageLinks());
     }
 
     @Test
