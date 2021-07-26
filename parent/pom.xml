@@ -682,12 +682,6 @@
                 <version>1.0.2</version>
                 <scope>provided</scope>
             </dependency>
-            <dependency>
-                <groupId>org.apache.sling</groupId>
-                <artifactId>org.apache.sling.servlet-helpers</artifactId>
-                <version>1.4.2</version>
-                <scope>compile</scope>
-            </dependency>
 
             <!-- javax.inject 1 -->
             <dependency>
@@ -806,7 +800,6 @@
                 <scope>provided</scope>
             </dependency>
 
-
             <dependency>
                 <groupId>com.adobe.cq.wcm</groupId>
                 <artifactId>com.adobe.aem.wcm.seo</artifactId>
@@ -896,6 +889,12 @@
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.testing.caconfig-mock-plugin</artifactId>
                 <version>1.3.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>org.apache.sling.servlet-helpers</artifactId>
+                <version>1.4.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
