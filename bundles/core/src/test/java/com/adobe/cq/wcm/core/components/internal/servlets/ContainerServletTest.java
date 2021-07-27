@@ -24,6 +24,7 @@ import javax.servlet.ServletException;
 import org.apache.sling.api.resource.Resource;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -68,7 +69,7 @@ public class ContainerServletTest {
     @Test
     public void testDeleteOneChild() throws ServletException, IOException {
         // set param to delete one item
-        context.request().getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{"item_1"});
+        context.request().setParameterMap(ImmutableMap.of(PARAM_DELETED_CHILDREN, new String[]{"item_1"}));
         servlet.doPost(context.request(), context.response());
         assertNull(context.currentResource().getChild("item_1"), "Deleted child 'item_1' still exists");
     }
@@ -79,7 +80,7 @@ public class ContainerServletTest {
     @Test
     public void testDeleteMultipleChildren() throws ServletException, IOException {
         // set param to delete 2 items
-        context.request().getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{"item_1","item_3"});
+        context.request().setParameterMap(ImmutableMap.of(PARAM_DELETED_CHILDREN, new String[]{"item_1","item_3"}));
         servlet.doPost(context.request(), context.response());
         assertNull(context.currentResource().getChild("item_1"), "Deleted child 'item_1' still exists");
         assertNotNull(context.currentResource().getChild("item_2"), "Child 'item_2' was deleted but should still exist");
@@ -92,7 +93,7 @@ public class ContainerServletTest {
     @Test
     public void testDeleteUnknownChild() throws ServletException, IOException {
         // set param to non-existing child name
-        context.request().getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{"item_XXXX"});
+        context.request().setParameterMap(ImmutableMap.of(PARAM_DELETED_CHILDREN, new String[]{"item_XXXX"}));
         servlet.doPost(context.request(), context.response());
     }
 
@@ -102,7 +103,7 @@ public class ContainerServletTest {
     @Test
     public void testDeleteEmptyParam() throws ServletException, IOException {
         // send an empty list
-        context.request().getParameterMap().put(PARAM_DELETED_CHILDREN, new String[]{});
+        context.request().setParameterMap(ImmutableMap.of(PARAM_DELETED_CHILDREN, new String[]{}));
         servlet.doPost(context.request(), context.response());
     }
 
@@ -114,7 +115,7 @@ public class ContainerServletTest {
         // define the new order
         String[] reorderedChildren = new String[]{"item_3","item_2","item_1"};
         // set the param
-        context.request().getParameterMap().put(PARAM_ORDERED_CHILDREN, reorderedChildren);
+        context.request().setParameterMap(ImmutableMap.of(PARAM_ORDERED_CHILDREN, reorderedChildren));
         // make the request
         servlet.doPost(context.request(), context.response());
         // get iterators

@@ -20,6 +20,10 @@
                 "two",
                 "three"
             ],
+            "cq:robotsTags"     : [
+                "index",
+                "nofollow"
+            ],
             "cq:templateType"   : "/libs/settings/wcm/template-types/html5page",
             "sling:configRef"   : "/conf/page",
             "sling:resourceType": "core/wcm/components/page/v2/page",

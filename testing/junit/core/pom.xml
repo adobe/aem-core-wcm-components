@@ -232,6 +232,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.sitemap</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- AEM APIs -->
         <dependency>
             <groupId>com.adobe.aem</groupId>
