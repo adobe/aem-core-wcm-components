@@ -17,8 +17,10 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -44,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Version;
 
+import com.adobe.aem.wcm.seo.SeoTags;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -54,6 +57,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
+import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
@@ -89,6 +93,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public static final String PN_MAIN_CONTENT_SELECTOR_PROP = "mainContentSelector";
 
     /**
+     * Property name of the style property that enables/disables rendering of the alternate language links
+     */
+    public static final String PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS = "renderAlternateLanguageLinks";
+
+    /**
      * Flag indicating if cloud configuration support is enabled.
      */
     private Boolean hasCloudconfigSupport;
@@ -116,6 +125,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     @OSGiService
     private ConfigurationResolver configurationResolver;
+
+    /**
+     * The @{@link PathProcessor} service.
+     */
+    @OSGiService
+    private PathProcessor pathProcessor;
 
     /**
      * The current component context.
@@ -155,6 +170,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private String[] clientLibCategoriesJsHead;
 
     private List<HtmlPageItem> htmlPageItems;
+    private Map<Locale, String> alternateLanguageLinks;
+    private String canonicalUrl;
+    private List<String> robotsTags;
 
     @PostConstruct
     protected void initModel() {
@@ -310,5 +328,56 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             }
         }
         return htmlPageItems;
+    }
+
+    @Override
+    public @Nullable String getCanonicalLink() {
+        if (this.canonicalUrl == null) {
+            String canonicalUrl;
+            try {
+                SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                canonicalUrl = seoTags != null ? seoTags.getCanonicalUrl() : null;
+            } catch (NoClassDefFoundError ex) {
+                canonicalUrl = null;
+            }
+            this.canonicalUrl = canonicalUrl != null
+                ? canonicalUrl
+                : pathProcessor.externalize(currentPage.getPath(), request) + LinkHandler.HTML_EXTENSION;
+        }
+        return canonicalUrl;
+    }
+
+    @Override
+    public @NotNull Map<Locale, String> getAlternateLanguageLinks() {
+        if (alternateLanguageLinks == null) {
+            try {
+                if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, Boolean.FALSE)) {
+                    SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                    alternateLanguageLinks = seoTags != null && seoTags.getAlternateLanguages().size() > 0
+                        ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())
+                        : Collections.emptyMap();
+                } else {
+                    alternateLanguageLinks = Collections.emptyMap();
+                }
+            } catch (NoClassDefFoundError ex) {
+                alternateLanguageLinks = Collections.emptyMap();
+            }
+        }
+        return alternateLanguageLinks;
+    }
+
+    @Override
+    public @NotNull List<String> getRobotsTags() {
+        if (robotsTags == null) {
+            try {
+                SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                robotsTags = seoTags != null && seoTags.getRobotsTags().size() > 0
+                    ? Collections.unmodifiableList(seoTags.getRobotsTags())
+                    : Collections.emptyList();
+            } catch (NoClassDefFoundError ex) {
+                robotsTags = Collections.emptyList();
+            }
+        }
+        return robotsTags;
     }
 }

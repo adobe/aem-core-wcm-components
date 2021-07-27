@@ -69,6 +69,7 @@
                         <_metatypeannotations>*</_metatypeannotations>
                         <Import-Package>
                             com.adobe.cq.commerce.*;resolution:=optional,
+                            com.adobe.aem.wcm.seo.*;resolution:=optional,
                             javax.annotation;version=0.0.0,
                             com.day.cq.dam.api;version="[1.24,2.0)",
                             *
@@ -411,6 +412,12 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient-osgi</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.cq.wcm</groupId>
+            <artifactId>com.adobe.aem.wcm.seo</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Testing dependencies -->
