@@ -15,6 +15,20 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.awt.*;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
@@ -23,21 +37,15 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.commons.Externalizer;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
-
-import java.util.List;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
 class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImplTest {
@@ -76,11 +84,19 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private ImageImpl imageImpl;
 
     @Mock
-    Externalizer externalizer;
+    private Resource inheritedResource;
+
+    @Mock
+    private ValueMap inheritedResourceProperties;
+
+    @Mock
+    private Externalizer externalizer;
 
     @Test
     void testImageWithLazyThreshold() {
-        testImageWithLazyThreshold(ImageImpl.RESOURCE_TYPE);
+        context.contentPolicyMapping(resourceType, Image.PN_DESIGN_LAZY_THRESHOLD, 100);
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+        assertEquals(0, image.getLazyThreshold());
     }
 
     @Test
@@ -327,24 +343,49 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetBaseImageResolution() {
-        Mockito.when(externalizer.publishLink(any(), any())).thenReturn("https://via.placeholder.com/850.jpeg");
-        assertArrayEquals(new String[]{"850", "850"}, imageImpl.getBaseImageResolution());
+    protected void testGetBaseImageDimension() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
+        when(externalizer.publishLink(any(), any())).thenReturn("https://via.placeholder.com/850.jpeg");
+        assertEquals(new Dimension(850, 850), imageImpl.getBaseImageDimension());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetBaseImageResolutionInvalidImageUrl() {
-        Mockito.when(externalizer.publishLink(any(), any())).thenReturn("ghghiu");
-        assertArrayEquals(new String[]{null, null}, imageImpl.getBaseImageResolution());
+    protected void testGetBaseImageDimension_wrongImageExtension() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
+        when(externalizer.publishLink(any(), any())).thenReturn("https://via.placeholder.com/850.qsqs");
+        assertEquals(new Dimension(0, 0), imageImpl.getBaseImageDimension());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetBaseImageResolutionWrongImageUrl() {
-        Mockito.when(externalizer.publishLink(any(), any())).thenReturn("https://invalidurl.com/whatever.jpeg");
-        assertArrayEquals(new String[]{null, null}, imageImpl.getBaseImageResolution());
+    protected void testGetBaseImageDimension_noImageExtension() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
+        when(externalizer.publishLink(any(), any())).thenReturn("https://via.placeholder.com/850");
+        assertEquals(new Dimension(0, 0), imageImpl.getBaseImageDimension());
     }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testGetBaseImageDimension_inexistentImage() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
+        when(externalizer.publishLink(any(), any())).thenReturn("https://invalidurl.com/whatever.jpeg");
+        assertEquals(new Dimension(0, 0), imageImpl.getBaseImageDimension());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testGetBaseImageDimension_nullBaseImageAbsoluteUri() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
+        when(externalizer.publishLink(any(), any())).thenReturn(null);
+        assertEquals(new Dimension(0, 0), imageImpl.getBaseImageDimension());
+    }
+
     @Test
     protected void testInheritedFeaturedImage_altValueFromPageImage() {
         Image image = getImageUnderTest(IMAGE51_PATH);

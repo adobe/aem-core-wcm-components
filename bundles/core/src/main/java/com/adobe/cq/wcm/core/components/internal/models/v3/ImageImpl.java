@@ -15,17 +15,29 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
-import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.models.ImageArea;
-import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
-import com.day.cq.commons.DownloadResource;
-import com.day.cq.commons.Externalizer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.awt.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.ImageInputStream;
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -40,19 +52,18 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
+import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.day.cq.commons.DownloadResource;
+import com.day.cq.commons.Externalizer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import static javax.imageio.ImageIO.read;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -142,8 +153,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public String getSrcset() {
-        int[] widthsArray = super.getWidths();
-        String srcUritemplate = super.getSrcUriTemplate();
+        int[] widthsArray = getWidths();
+        String srcUritemplate = getSrcUriTemplate();
         String[] srcsetArray = new String[widthsArray.length];
         if (widthsArray.length > 0 && srcUritemplate != null) {
             String srcUriTemplateDecoded = "";
@@ -169,28 +180,62 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     @Override
     @JsonIgnore
-    public String[] getBaseImageResolution() {
-        String baseImageAbsoluteUrl = externalizer.publishLink(resourceResolver, super.getSrc());
-        URL url;
-        InputStream in;
-        BufferedImage image = null;
-        try {
-            url = new URL(baseImageAbsoluteUrl);
-            URLConnection connection = url.openConnection();
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-            in = connection.getInputStream();
-            image = read(in);
-            in.close();
+    public Dimension getBaseImageDimension() {
+        String baseImageAbsoluteUri = externalizer.publishLink(resourceResolver, getSrc());
+        if (baseImageAbsoluteUri == null) {
+            return new Dimension(0, 0);
+        }
+        int imageNameIndex = baseImageAbsoluteUri.lastIndexOf("/");
+        String imageName = baseImageAbsoluteUri.substring(imageNameIndex + 1);
+        int imageExtensionIndex = imageName.lastIndexOf(".");
+        String imageExtension = imageName.substring(imageExtensionIndex + 1);
+        String[] allowedExtensions = {"jpg", "jpeg", "gif", "png", "svg"};
+
+        // stop execution if the base image URI doesn't have an extension or if it is not allowed
+        if (imageExtensionIndex == -1 || !Arrays.asList(allowedExtensions).contains(imageExtension)) {
+            return new Dimension(0, 0);
+        }
+
+        // download the image locally
+        try (BufferedInputStream in = new BufferedInputStream(new URL(baseImageAbsoluteUri).openStream());
+             FileOutputStream fileOutputStream = new FileOutputStream(imageName)) {
+            byte[] dataBuffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+                fileOutputStream.write(dataBuffer, 0, bytesRead);
+            }
         } catch (IOException e) {
             e.printStackTrace();
+            return new Dimension(0, 0);
         }
-        if (image != null) {
-            String height = String.valueOf(image.getHeight());
-            String width = String.valueOf(image.getWidth());
-            return new String[] {width, height};
-        } else {
-            return new String[] {null, null};
+
+        // get the absolute path of the image
+        Path currentRelativePath = Paths.get("");
+        String imageAbsolutePath = currentRelativePath.toAbsolutePath().toString() + "/" + imageName;
+
+        // read the width and height of the image and then delete it
+        File imageFile = new File(imageAbsolutePath);
+        Iterator<ImageReader> iter = ImageIO.getImageReadersBySuffix(imageExtension);
+        while (iter.hasNext()) {
+            ImageReader reader = iter.next();
+            try {
+                ImageInputStream stream = new FileImageInputStream(imageFile);
+                reader.setInput(stream);
+                int width = reader.getWidth(reader.getMinIndex());
+                int height = reader.getHeight(reader.getMinIndex());
+                return new Dimension(width, height);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                reader.dispose();
+                try {
+                    Files.deleteIfExists(Paths.get(imageAbsolutePath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+        return new Dimension(0, 0);
     }
 
     @Override
@@ -208,7 +253,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @JsonIgnore
     @Deprecated
     public int getLazyThreshold() {
-        return super.getLazyThreshold();
+        return 0;
     }
 
     @Override

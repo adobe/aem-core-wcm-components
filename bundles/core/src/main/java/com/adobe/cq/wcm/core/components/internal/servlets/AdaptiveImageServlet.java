@@ -842,7 +842,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         }
         if (list.isEmpty()) {
-            list.add(this.defaultResizeWidth);
+            int width = this.getResizeWidth(imageResource) > 0 ? this.getResizeWidth(imageResource) : this.defaultResizeWidth;
+            list.add(width);
         }
         return list;
     }
@@ -863,12 +864,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return allowedJpegQuality;
     }
 
+    /**
+     * Returns the allowed resize width from this component's content policy.
+     *
+     * @param imageResource the resource identifying the accessed image component
+     * @return the resize width or 0 if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
+     */
     private int getResizeWidth(@NotNull Resource imageResource){
         int allowedResizeWidth = 0;
         ContentPolicy contentPolicy = getContentPolicy(imageResource);
         if (contentPolicy != null) {
             allowedResizeWidth = contentPolicy.getProperties()
-                .get(Image.PN_RESIZE_WIDTH, 0);
+                .get(Image.PN_DESIGN_RESIZE_WIDTH, 0);
         }
         return  allowedResizeWidth;
     }

@@ -30,7 +30,8 @@
              loading="${image.lazyEnabled ? 'lazy' : ''}"
              class="cmp-image__image"
              itemprop="contentUrl"
-             width="${image.baseImageResolution[0]}" height="${image.baseImageResolution[1]}"
+             width="${image.baseImageDimension.width > 0 ? image.baseImageDimension.width : ''}"
+             height="${image.baseImageDimension.height > 0 ? image.baseImageDimension.height : ''}"
              alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
     </a>
     <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>

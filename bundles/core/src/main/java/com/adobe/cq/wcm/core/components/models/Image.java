@@ -15,14 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.awt.*;
 import java.util.List;
 
-import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -140,24 +140,23 @@ public interface Image extends Component {
 
     /**
      * Name of the resource property that will indicate if the current image should has Image Modifiers settings.
-     *
      */
     String PN_IMAGE_MODIFIERS = "imageModifers";
 
     /**
-     *  Name of the resource property that will indicate imageServerUrl.
+     * Name of the resource property that will indicate imageServerUrl.
      */
     String PN_IMAGE_SERVER_URL = "imageServerUrl";
 
     /**
      * Name of the resource property that defines areas of an image map.
-     *
+     * <p>
      * The property stores map areas as follows:
      * [area1][area2][...]
-     *
+     * <p>
      * Area format:
      * [SHAPE(COORDINATES)"HREF"|"TARGET"|"ALT"|(RELATIVE_COORDINATES)]
-     *
+     * <p>
      * Example:
      * [rect(0,0,10,10)"http://www.adobe.com"|"_self"|"alt"|(0,0,0.8,0.8)][circle(10,10,10)"http://www.adobe.com"|"_self"|"alt"|(0.8,0.8,0.8)]
      *
@@ -171,10 +170,11 @@ public interface Image extends Component {
     String PN_DESIGN_DYNAMIC_MEDIA_ENABLED = "enableDmFeatures";
 
     /**
-     * Name of the configuration policy property that the {@link AdaptiveImageServlet} will use for resizing images that don't provide a width information in their request.
+     * Name of the configuration policy property that will be used for resizing the base images, the ones from {@code src} attribute.
+     *
      * @since com.adobe.cq.wcm.core.components.models 12.22.0
      */
-    String PN_RESIZE_WIDTH = "resizeWidth";
+    String PN_DESIGN_RESIZE_WIDTH = "resizeWidth";
 
     /**
      * Returns the value for the {@code src} attribute of the image.
@@ -323,13 +323,13 @@ public interface Image extends Component {
     }
 
     /**
-     * Returns an array with the base image width and height.
+     * Returns {@code new Dimension(width, height)} with the base image width and height.
      *
-     * @return an array with the base image width and height, if image exists, or {@code new String[] {null, null}}.
+     * @return {@code new Dimension(width, height)} with the base image width and height, if image exists, or {@code new Dimension(0, 0)}.
      * @since com.adobe.cq.wcm.core.components.models 13.0.0;
      */
-    default String[] getBaseImageResolution() {
-        return new String[] {null, null};
+    default Dimension getBaseImageDimension() {
+        return new Dimension(0, 0);
     }
 
     /**
