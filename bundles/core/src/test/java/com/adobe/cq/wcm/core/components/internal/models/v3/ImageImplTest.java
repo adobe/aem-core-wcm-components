@@ -19,7 +19,9 @@ import java.awt.*;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,11 +36,14 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
-import com.day.cq.commons.Externalizer;
+import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.commons.handler.StandardImageHandler;
+import com.day.cq.wcm.api.designer.Style;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
+import static com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_RESIZE_WIDTH;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -90,7 +95,16 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private ValueMap inheritedResourceProperties;
 
     @Mock
-    private Externalizer externalizer;
+    private Asset asset;
+
+    @Mock
+    private SlingHttpServletRequest request;
+
+    @Mock
+    private ResourceResolver resolver;
+
+    @Mock
+    private Style currentStyle;
 
     @Test
     void testImageWithLazyThreshold() {
@@ -343,47 +357,93 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetBaseImageDimension() {
+    protected void testGetBaseDamAssetDimension() {
+        asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
-        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
-        when(externalizer.publishLink(any(), any())).thenReturn("https://via.placeholder.com/850.jpeg");
-        assertEquals(new Dimension(850, 850), imageImpl.getBaseImageDimension());
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
+
+        assertEquals(new Dimension(850, 509), imageImpl.getBaseDamAssetDimension());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetBaseImageDimension_wrongImageExtension() {
+    protected void testGetBaseDamAssetDimension_resizeWidthSmallerThanAssetWidth() {
+        asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
-        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
-        when(externalizer.publishLink(any(), any())).thenReturn("https://via.placeholder.com/850.qsqs");
-        assertEquals(new Dimension(0, 0), imageImpl.getBaseImageDimension());
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn("600");
+
+        assertEquals(new Dimension(600, 359), imageImpl.getBaseDamAssetDimension());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetBaseImageDimension_noImageExtension() {
+    protected void testGetBaseDamAssetDimension_resizeWidthBiggerThanAssetWidth() {
+        asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
-        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
-        when(externalizer.publishLink(any(), any())).thenReturn("https://via.placeholder.com/850");
-        assertEquals(new Dimension(0, 0), imageImpl.getBaseImageDimension());
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn("1000");
+
+        assertEquals(new Dimension(850, 509), imageImpl.getBaseDamAssetDimension());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetBaseImageDimension_inexistentImage() {
+    protected void testGetBaseDamAssetDimension_resizeWidthZero() {
+        asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
-        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
-        when(externalizer.publishLink(any(), any())).thenReturn("https://invalidurl.com/whatever.jpeg");
-        assertEquals(new Dimension(0, 0), imageImpl.getBaseImageDimension());
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn("0");
+
+        assertEquals(new Dimension(850, 509), imageImpl.getBaseDamAssetDimension());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetBaseImageDimension_nullBaseImageAbsoluteUri() {
+    protected void testGetBaseDamAssetDimension_nullFileReference() {
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
-        when(inheritedResourceProperties.get(any(), any())).thenReturn("");
-        when(externalizer.publishLink(any(), any())).thenReturn(null);
-        assertEquals(new Dimension(0, 0), imageImpl.getBaseImageDimension());
+        when(inheritedResourceProperties.get(any(), any())).thenReturn(null);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
+
+        assertEquals(new Dimension(0, 0), imageImpl.getBaseDamAssetDimension());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testGetBaseDamAssetDimension_nullAssetResource() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(null);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
+
+        assertEquals(new Dimension(0, 0), imageImpl.getBaseDamAssetDimension());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testGetBaseDamAssetDimension_nullAsset() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(null);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
+
+        assertEquals(new Dimension(0, 0), imageImpl.getBaseDamAssetDimension());
     }
 
     @Test

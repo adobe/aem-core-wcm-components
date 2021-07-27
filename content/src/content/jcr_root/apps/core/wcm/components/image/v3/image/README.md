@@ -37,7 +37,7 @@ component; the actual size will be requested by the client device;
 3. `./disableLazyLoading` - if `true`, the browsers native lazy loading of images (loading only when the image is visible on the client
 device) is disabled.
 4.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
-5. `./resizeWidth` - Defines a resize width for resizing images while keeping the original aspect ratio. If the value is bigger than the natural width of the image, it will have no effect. It will also have no effect on SVG images.
+5. `./resizeWidth` - Defines a resize width for resizing the images which are DAM assets, while keeping the original aspect ratio. If the value is bigger than the natural width of the image, it will have no effect. It will also have no effect on SVG images.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Image component and are expected to be available as `Resource` properties:

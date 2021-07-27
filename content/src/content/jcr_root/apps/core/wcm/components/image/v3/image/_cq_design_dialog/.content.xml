@@ -101,12 +101,13 @@
                                     <resizeWidth
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                        fieldDescription="Define a resize width (in pixels). Its value will be used for resizing the width of the base images while the aspect ratio will be preserved. If the value is bigger than the natural width of an image, it will have no effect. Note that this setting has no effect on SVG images."
+                                        fieldDescription="Define a resize width (in pixels). Its value will be used for resizing the width of the base images that are DAM assets. The aspect ratio of the images will be preserved. If the value is bigger than the natural width of an image, it will have no effect. Note that this setting no effect on SVG images."
                                         fieldLabel="Resize Width"
                                         name="./resizeWidth"
                                         typeHint="Long"
                                         required="{Boolean}false"
                                         defaultValue="{Long}1280"
+                                        min="{Long}1"
                                         max="{Long}3840"/>
                                     <widths
                                         granite:class="core-image-widths"

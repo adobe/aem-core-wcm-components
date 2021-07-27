@@ -16,36 +16,20 @@
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.awt.*;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.FileImageInputStream;
-import javax.imageio.stream.ImageInputStream;
-import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -56,12 +40,13 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
+import com.adobe.cq.wcm.core.components.internal.servlets.EnhancedRendition;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
-import com.day.cq.commons.Externalizer;
+import com.day.cq.dam.api.Asset;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -75,13 +60,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String PN_ALT_VALUE_FROM_PAGE_IMAGE = "altValueFromPageImage";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
-
-    @OSGiService
-    @Inject
-    protected Externalizer externalizer;
-
-    @SlingObject
-    private ResourceResolver resourceResolver = null;
 
     /**
      * The model factory.
@@ -180,58 +158,28 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     @Override
     @JsonIgnore
-    public Dimension getBaseImageDimension() {
-        String baseImageAbsoluteUri = externalizer.publishLink(resourceResolver, getSrc());
-        if (baseImageAbsoluteUri == null) {
-            return new Dimension(0, 0);
-        }
-        int imageNameIndex = baseImageAbsoluteUri.lastIndexOf("/");
-        String imageName = baseImageAbsoluteUri.substring(imageNameIndex + 1);
-        int imageExtensionIndex = imageName.lastIndexOf(".");
-        String imageExtension = imageName.substring(imageExtensionIndex + 1);
-        String[] allowedExtensions = {"jpg", "jpeg", "gif", "png", "svg"};
-
-        // stop execution if the base image URI doesn't have an extension or if it is not allowed
-        if (imageExtensionIndex == -1 || !Arrays.asList(allowedExtensions).contains(imageExtension)) {
-            return new Dimension(0, 0);
-        }
-
-        // download the image locally
-        try (BufferedInputStream in = new BufferedInputStream(new URL(baseImageAbsoluteUri).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(imageName)) {
-            byte[] dataBuffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                fileOutputStream.write(dataBuffer, 0, bytesRead);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new Dimension(0, 0);
-        }
-
-        // get the absolute path of the image
-        Path currentRelativePath = Paths.get("");
-        String imageAbsolutePath = currentRelativePath.toAbsolutePath().toString() + "/" + imageName;
-
-        // read the width and height of the image and then delete it
-        File imageFile = new File(imageAbsolutePath);
-        Iterator<ImageReader> iter = ImageIO.getImageReadersBySuffix(imageExtension);
-        while (iter.hasNext()) {
-            ImageReader reader = iter.next();
-            try {
-                ImageInputStream stream = new FileImageInputStream(imageFile);
-                reader.setInput(stream);
-                int width = reader.getWidth(reader.getMinIndex());
-                int height = reader.getHeight(reader.getMinIndex());
-                return new Dimension(width, height);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                reader.dispose();
-                try {
-                    Files.deleteIfExists(Paths.get(imageAbsolutePath));
-                } catch (IOException e) {
-                    e.printStackTrace();
+    public Dimension getBaseDamAssetDimension() {
+        ValueMap inheritedResourceProperties = inheritedResource.getValueMap();
+        String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
+        Asset asset;
+        String resizeWidth = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class);
+        if (StringUtils.isNotEmpty(inheritedFileReference)) {
+            final Resource assetResource = request.getResourceResolver().getResource(inheritedFileReference);
+            if (assetResource != null) {
+                asset = assetResource.adaptTo(Asset.class);
+                EnhancedRendition original = null;
+                if (asset != null) {
+                    original = new EnhancedRendition(asset.getOriginal());
+                }
+                if (original != null) {
+                    Dimension dimension = original.getDimension();
+                    if (dimension != null) {
+                        if (resizeWidth != null && Integer.parseInt(resizeWidth) > 0 && Integer.parseInt(resizeWidth) < dimension.getWidth()) {
+                            int calculatedHeight = (int) Math.round(Integer.parseInt(resizeWidth) * (dimension.getHeight() / (float)dimension.getWidth()));
+                            return new Dimension(Integer.parseInt(resizeWidth), calculatedHeight);
+                        }
+                        return dimension;
+                    }
                 }
             }
         }
