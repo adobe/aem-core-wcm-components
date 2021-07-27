@@ -271,7 +271,6 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertEquals("https://example.org/content/page/templated-page.html", page.getCanonicalLink());
     }
 
-
     @Test
     public void testCanonicalLinkWhenSeoApiUnavailable() {
         context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {

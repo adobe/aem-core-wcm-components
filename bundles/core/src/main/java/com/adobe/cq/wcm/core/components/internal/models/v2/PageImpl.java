@@ -50,6 +50,7 @@ import com.adobe.aem.wcm.seo.SeoTags;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
@@ -57,7 +58,6 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
@@ -125,12 +125,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     @OSGiService
     private ConfigurationResolver configurationResolver;
-
-    /**
-     * The @{@link PathProcessor} service.
-     */
-    @OSGiService
-    private PathProcessor pathProcessor;
 
     /**
      * The current component context.
@@ -331,7 +325,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     @Override
-    public @Nullable String getCanonicalLink() {
+    @Nullable
+    public String getCanonicalLink() {
         if (this.canonicalUrl == null) {
             String canonicalUrl;
             try {
@@ -342,13 +337,14 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             }
             this.canonicalUrl = canonicalUrl != null
                 ? canonicalUrl
-                : pathProcessor.externalize(currentPage.getPath(), request) + LinkHandler.HTML_EXTENSION;
+                : linkHandler.getLink(currentPage).map(Link::getExternalizedURL).orElse(null);
         }
         return canonicalUrl;
     }
 
     @Override
-    public @NotNull Map<Locale, String> getAlternateLanguageLinks() {
+    @NotNull
+    public Map<Locale, String> getAlternateLanguageLinks() {
         if (alternateLanguageLinks == null) {
             try {
                 if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, Boolean.FALSE)) {
@@ -367,7 +363,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     @Override
-    public @NotNull List<String> getRobotsTags() {
+    @NotNull
+    public List<String> getRobotsTags() {
         if (robotsTags == null) {
             try {
                 SeoTags seoTags = resource.adaptTo(SeoTags.class);
