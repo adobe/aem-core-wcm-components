@@ -58,7 +58,6 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
