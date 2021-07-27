@@ -18,22 +18,25 @@ package com.adobe.cq.wcm.core.components.it.seljup.components.page.v1;
 
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.CalendarPicker;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralMultiField;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralTagList;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.AdvancedTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.ThumbnailTab;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Page {
     private static String onTime = "./onTime";
@@ -48,6 +51,8 @@ public class Page {
     private static String contextHubPath = "[name='./cq:contextHubPath']";
     private static String contextHubSegmentsPath = "[name='./cq:contextHubSegmentsPath']";
     private static String advanceConfig = "[name='./cq:conf']";
+    private static String robotsTags = "name='./cq:robotsTags'";
+    private static String generateSitemap = "[name='./sling:sitemapRoot']";
 
     public void setOnTime() throws InterruptedException {
         CalendarPicker calendarPicker = new CalendarPicker(onTime);
@@ -66,11 +71,11 @@ public class Page {
     }
 
     public String getOnTime() {
-        return $("input[name='"+onTime+"']").getValue();
+        return $("input[name='" + onTime + "']").getValue();
     }
 
     public String getOffTime() {
-        return $("input[name='"+offTime+"']").getValue();
+        return $("input[name='" + offTime + "']").getValue();
     }
 
     public String getVanityUrlValue(int idx) {
@@ -116,7 +121,7 @@ public class Page {
     }
 
     public String getLoginPath() {
-        return $("input"+loginPage).getValue();
+        return $("input" + loginPage).getValue();
     }
 
     public void setExportTemplate(String config) {
@@ -176,5 +181,28 @@ public class Page {
 
     public String getAdvanceConfig() {
         return $(advanceConfig + " input[is='coral-textfield']").getValue();
+    }
+
+    public void setRobotsTags(String... values) {
+        CoralSelect selectList = new CoralSelect(robotsTags);
+        CoralSelectList coralSelectList = selectList.openSelectList();
+        for (String value : values) {
+            coralSelectList.selectByValue(value);
+        }
+    }
+
+    public String[] getRobotsTags() {
+        CoralTagList tagList = new CoralTagList(robotsTags);
+        return tagList.getItems().stream().map(SelenideElement::getValue).toArray(String[]::new);
+    }
+
+    public void setGenerateSitemap(boolean enabled) {
+        CoralCheckbox coralCheckbox = new CoralCheckbox(generateSitemap);
+        coralCheckbox.setSelected(enabled);
+    }
+
+    public boolean getGenerateSitemap() {
+        CoralCheckbox coralCheckbox = new CoralCheckbox(generateSitemap);
+        return coralCheckbox.isChecked();
     }
 }

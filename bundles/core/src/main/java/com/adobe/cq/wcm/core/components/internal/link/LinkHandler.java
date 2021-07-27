@@ -48,13 +48,14 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.*;
 @Model(adaptables = SlingHttpServletRequest.class)
 public class LinkHandler {
 
+    public static final String HTML_EXTENSION = ".html";
+
     /**
      * List of allowed/supported values for link target.
      * <code>_self</code> is used in the edit dialog but not listed as allowed here as we do not
      * want to render a target attribute at all when <code>_self</code> is selected.
      */
     private static final Set<String> VALID_LINK_TARGETS = ImmutableSet.of("_blank", "_parent", "_top");
-    protected static final String HTML_EXTENSION = ".html";
 
     /**
      * The current {@link SlingHttpServletRequest}.

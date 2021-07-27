@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -245,7 +246,7 @@ public interface Page extends ContainerExporter, Component {
     default String getBrandSlug() {
     	return null;
     }
-    
+
     /**
      * If this page is associated with a Template, then this method will return the Template's client library categories
      * to be included in the page as defined by the user in the policy.
@@ -398,5 +399,45 @@ public interface Page extends ContainerExporter, Component {
     @Nullable
     default List<HtmlPageItem> getHtmlPageItems() {
         return null;
+    }
+
+    /**
+     * Returns the canonical link of the page.
+     * <p>
+     * This should be an absolute url.
+     *
+     * @return the canonical url of the page
+     * @since om.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    @Nullable
+    @JsonIgnore
+    default String getCanonicalLink() { return null; }
+
+    /**
+     * Returns a {@link Map} of alternate languages of the page.
+     * <p>
+     * The {@link Map} maps each alternate language to an absolute url to the page in this language, if it exists.
+     *
+     * @return a {@link Map} of alternate languages and links to the page in this language
+     * @since om.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    @NotNull
+    @JsonIgnore
+    default Map<Locale, String> getAlternateLanguageLinks() {
+        return Collections.emptyMap();
+    }
+
+    /**
+     * Returns a list of robots meta tags configured for the page.
+     * <p>
+     * The list is cleared from duplicates and conflicting combinations.
+     *
+     * @return a list of robots meta tags
+     * @since om.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    @NotNull
+    @JsonIgnore
+    default List<String> getRobotsTags() {
+        return Collections.emptyList();
     }
 }

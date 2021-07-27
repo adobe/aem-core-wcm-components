@@ -676,6 +676,12 @@
                 <version>1.0.0</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>org.apache.sling.sitemap</artifactId>
+                <version>1.0.2</version>
+                <scope>provided</scope>
+            </dependency>
 
             <!-- javax.inject 1 -->
             <dependency>
@@ -794,6 +800,12 @@
                 <scope>provided</scope>
             </dependency>
 
+            <dependency>
+                <groupId>com.adobe.cq.wcm</groupId>
+                <artifactId>com.adobe.aem.wcm.seo</artifactId>
+                <version>1.0.4</version>
+            </dependency>
+
             <!--
                 AEM APIs; make sure to not move this bundle upper in the list so that newer APIs available in AEM but not in the Uber
                 Jar can be used as dependencies.
@@ -894,7 +906,7 @@
             <dependency>
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.servlet-helpers</artifactId>
-                <version>1.1.8</version>
+                <version>1.4.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

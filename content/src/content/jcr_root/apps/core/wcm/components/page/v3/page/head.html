@@ -22,6 +22,7 @@
     <meta data-sly-test.description="${properties['jcr:description']}" name="description" content="${description}"/>
     <meta data-sly-test.templateName="${page.templateName}" name="template" content="${templateName}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta data-sly-test="${page.robotsTags}" name="robots" content="${page.robotsTags @ join=', '}">
 
     <sly data-sly-test="${pwa.enabled}">
         <link rel="manifest" href="${pwa.manifestPath}" crossorigin="use-credentials"/>

@@ -135,6 +135,18 @@ public class PageIT extends AdminBaseUITest {
     }
 
     /**
+     * Test: Check the Advanced Seo options of a page properties
+     * @throws InterruptedException
+     */
+    @Tag("IgnoreOn65")
+    @Tag("IgnoreOn64")
+    @Test
+    @DisplayName("Test: Check the Advanced SEO options of a page properties.")
+    public void testAdvancedSeoPageProperties() throws InterruptedException, ClientException {
+        pageTests.testAdvancedSeoPageProperties();
+    }
+
+    /**
      * Test: Check the Thumbnail options of a page properties.
      */
     @Test

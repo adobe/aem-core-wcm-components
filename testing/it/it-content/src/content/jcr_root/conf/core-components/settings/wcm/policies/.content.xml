@@ -135,7 +135,8 @@
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Default page policy"
                                 sling:resourceType="wcm/core/components/policy/policy"
-                                clientlibs="cmp-test.base">
+                                clientlibs="cmp-test.base"
+                                renderAlternateLanguageLinks="{Boolean}true">
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
                             </policy_1606475224445>
                         </page>
