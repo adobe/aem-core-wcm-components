@@ -30,8 +30,8 @@
              loading="${image.lazyEnabled ? 'lazy' : ''}"
              class="cmp-image__image"
              itemprop="contentUrl"
-             width="${image.baseDamAssetDimension.width > 0 ? image.baseDamAssetDimension.width : ''}"
-             height="${image.baseDamAssetDimension.height > 0 ? image.baseDamAssetDimension.height : ''}"
+             width="${image.originalDimension.width > 0 ? image.originalDimension.width : ''}"
+             height="${image.originalDimension.height > 0 ? image.originalDimension.height : ''}"
              alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
     </a>
     <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>

@@ -328,7 +328,7 @@ public interface Image extends Component {
      * @return {@code new Dimension(width, height)} containing the base DAM asset's width and height, if the image exists and is a DAM asset, or {@code new Dimension(0, 0)}.
      * @since com.adobe.cq.wcm.core.components.models 13.0.0;
      */
-    default Dimension getBaseDamAssetDimension() {
+    default Dimension getOriginalDimension() {
         return new Dimension(0, 0);
     }
 

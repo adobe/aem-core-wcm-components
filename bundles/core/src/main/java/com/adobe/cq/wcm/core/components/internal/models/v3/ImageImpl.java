@@ -158,7 +158,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     @Override
     @JsonIgnore
-    public Dimension getBaseDamAssetDimension() {
+    public Dimension getOriginalDimension() {
         ValueMap inheritedResourceProperties = inheritedResource.getValueMap();
         String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
         Asset asset;
