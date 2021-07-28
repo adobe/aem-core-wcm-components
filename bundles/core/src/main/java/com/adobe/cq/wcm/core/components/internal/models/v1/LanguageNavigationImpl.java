@@ -42,6 +42,7 @@ import com.day.cq.wcm.api.PageFilter;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
+import org.jetbrains.annotations.Nullable;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {LanguageNavigation.class, ComponentExporter.class},
@@ -51,6 +52,7 @@ import com.day.cq.wcm.api.designer.Style;
 public class LanguageNavigationImpl extends AbstractComponentImpl implements LanguageNavigation {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/languagenavigation/v1/languagenavigation";
+    private static final String PN_ACCESSIBILITY_LABEL = "accessibilityLabel";
 
     @Self
     private SlingHttpServletRequest request;
@@ -66,6 +68,9 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
 
     @Self
     private LinkHandler linkHandler;
+
+    @Nullable
+    private String accessibilityLabel;
 
     private String navigationRoot;
     private int structureDepth;
@@ -97,6 +102,15 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
             }
         }
         return Collections.unmodifiableList(items);
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityLabel() {
+        if (this.accessibilityLabel == null) {
+            this.accessibilityLabel = this.resource.getValueMap().get(PN_ACCESSIBILITY_LABEL, String.class);
+        }
+        return this.accessibilityLabel;
     }
 
     @NotNull
