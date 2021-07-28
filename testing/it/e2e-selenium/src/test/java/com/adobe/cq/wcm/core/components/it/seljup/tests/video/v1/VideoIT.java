@@ -261,7 +261,6 @@ public class VideoIT extends AuthorBaseUITest {
 
         editDialog.openPropertiesTab();
         editDialog.clickAutoplayEnabled();
-        Thread.sleep(5000);
         Commons.saveConfigureDialog();
         enterPreviewMode();
 
