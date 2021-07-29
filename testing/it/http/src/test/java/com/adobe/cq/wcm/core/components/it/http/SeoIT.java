@@ -61,6 +61,7 @@ public class SeoIT {
     static Multimap<OsgiConsoleClient, String> osgiConfigurationsToDelete = Multimaps.newListMultimap(new HashMap<>(), ArrayList::new);
     static String mappingEntry;
     static String cp;
+    static int publisherPort;
 
     @BeforeClass
     public static void beforeClass() throws ClientException, InterruptedException, TimeoutException {
@@ -69,6 +70,7 @@ public class SeoIT {
 
         // get the context path
         cp = cqBaseClassRule.publishRule.getConfiguration().getUrl().getPath() + "/";
+        publisherPort = cqBaseClassRule.publishRule.getConfiguration().getUrl().getPort();
 
         // enable the LanguageNavigationSiteRootSelectionStrategy
         osgiConfigurationsToDelete.put(publishOsgiConsole, publishOsgiConsole.editConfiguration(
@@ -120,7 +122,7 @@ public class SeoIT {
     public void testCanonicalLinkRenderedToPage() throws ClientException {
         String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         MatcherAssert.assertThat(content, CoreMatchers.containsString(
-            "<link rel=\"canonical\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>"));
+            "<link rel=\"canonical\" href=\"http://integrationtest.local:" + publisherPort + cp + "gb/en/child.html\"/>"));
     }
 
     @Test
@@ -128,11 +130,11 @@ public class SeoIT {
     public void testLanguageAlternatesRenderedToPage() throws ClientException {
         String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         MatcherAssert.assertThat(content, CoreMatchers.not(CoreMatchers.containsString(
-            "<link rel=\"alternate\" hreflang=\"en\" href=\"http://integrationtest.local:4503" + cp + "master/en/child.html\"/>")));
+            "<link rel=\"alternate\" hreflang=\"en\" href=\"http://integrationtest.local:" + publisherPort + cp + "master/en/child.html\"/>")));
         MatcherAssert.assertThat(content, CoreMatchers.containsString(
-            "<link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>"));
+            "<link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:" + publisherPort + cp + "gb/en/child.html\"/>"));
         MatcherAssert.assertThat(content, CoreMatchers.containsString(
-            "<link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en/child.html\"/>"));
+            "<link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:" + publisherPort + cp + "us/en/child.html\"/>"));
     }
 
     @Test
@@ -146,7 +148,7 @@ public class SeoIT {
             String expectedSitemapIndex = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                 + "<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">"
                 + "<sitemap>"
-                + "<loc>http://integrationtest.local:4503" + cp + "gb/en.sitemap.xml</loc>"
+                + "<loc>http://integrationtest.local:" + publisherPort + cp + "gb/en.sitemap.xml</loc>"
                 + "<lastmod>test</lastmod>"
                 + "</sitemap>"
                 + "</sitemapindex>";
@@ -158,14 +160,15 @@ public class SeoIT {
             String expectedSitemap = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                 + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">"
                 + "<url>"
-                + "<loc>http://integrationtest.local:4503" + cp + "gb/en.html</loc>"
-                + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en.html\"/>"
-                + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en.html\"/>"
+                + "<loc>http://integrationtest.local:" + publisherPort + cp + "gb/en.html</loc>"
+                + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:" + publisherPort + cp + "gb/en.html\"/>"
+                + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:" + publisherPort + cp + "us/en.html\"/>"
                 + "</url>"
                 + "<url>"
-                + "<loc>http://integrationtest.local:4503" + cp + "gb/en/child.html</loc>"
-                + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:4503" + cp + "gb/en/child.html\"/>"
-                + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:4503" + cp + "us/en/child.html\"/>"
+                + "<loc>http://integrationtest.local:" + publisherPort + cp + "gb/en/child.html</loc>"
+                + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:" + publisherPort + cp + "gb/en/child.html\"/>"
+                + "<xhtml:link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:" + publisherPort + cp + "us/en" +
+                    "/child.html\"/>"
                 + "</url>"
                 + "</urlset>";
             String sitemap = publish.doGet("/content/core-components/seo-site/gb/en.sitemap.xml", HttpStatus.SC_OK)
