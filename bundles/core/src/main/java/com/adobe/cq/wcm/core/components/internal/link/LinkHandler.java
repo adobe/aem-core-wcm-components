@@ -168,7 +168,7 @@ public class LinkHandler {
             return pathProcessors.stream()
                     .filter(pathProcessor -> pathProcessor.accepts(path, request))
                     .findFirst().map(pathProcessor -> new LinkImpl<>(pathProcessor.sanitize(path, request), pathProcessor.map(path,
-                            request), pathProcessor.externalize(path, request), page, htmlAttributes));
+                            request), pathProcessor.externalize(path, request), page, pathProcessor.processHtmlAttributes(path, htmlAttributes)));
         } else {
             return Optional.of(new LinkImpl<>(path, path, path, page, htmlAttributes));
         }
