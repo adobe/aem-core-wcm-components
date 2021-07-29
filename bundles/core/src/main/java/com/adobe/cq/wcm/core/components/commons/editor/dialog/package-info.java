@@ -15,11 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
  * <p>
- *      This package defines the Sling Models exposed for the inherited component.
+ *      This package defines the Sling Models exposed for the dialog widgets.
  * </p>
  *
  */
 @Version("1.0.0")
-package com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited;
+package com.adobe.cq.wcm.core.components.commons.editor.dialog;
 
 import org.osgi.annotation.versioning.Version;
