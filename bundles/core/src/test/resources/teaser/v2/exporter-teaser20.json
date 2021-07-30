@@ -9,7 +9,7 @@
         "url": "/core/content/teasers.html"
     },
     ":type": "core/wcm/components/teaser/v2/teaser",
-    "imagePath": "/core/content/teasers/_jcr_content/_cq_featuredimage.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+    "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-20.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
     "dataLayer": {
         "teaser-12fce3601b": {
             "@type": "core/wcm/components/teaser/v2/teaser",

@@ -15,29 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Teaser;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
-import com.day.cq.commons.ImageResource;
-import com.day.cq.wcm.api.Page;
+import com.day.cq.commons.DownloadResource;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -46,44 +38,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
-
-    /**
-     * The current component.
-     */
-    @ScriptVariable
-    private Component component;
-
-    /**
-     * The current resource.
-     */
-    @Inject
-    private Resource resource;
-
-    /**
-     * List of properties that should be inherited when delegating to the featured image of the page.
-     */
-    private Map<String, String> overriddenProperties = new HashMap<>();
-
-    /**
-     * Initialize the model.
-     */
-    @PostConstruct
-    protected void initModel() {
-        super.initModel();
-        ValueMap properties = resource.getValueMap();
-        if (!this.hasImage() && this.getTargetPage().isPresent()) {
-            Page targetPage = this.getTargetPage().get();
-            Resource featuredImageResource = ComponentUtils.getFeaturedImage(targetPage);
-            if (featuredImageResource != null) {
-                String linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
-                if (StringUtils.isNotEmpty(linkURL)) {
-                    // make the featured image inherit following properties from the teaser node
-                    overriddenProperties.put(ImageResource.PN_LINK_URL, linkURL);
-                }
-                this.setImageResource(component, featuredImageResource, hiddenImageResourceProperties, overriddenProperties);
-            }
-        }
-    }
 
     @Override
     @Nullable
@@ -96,6 +50,15 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Deprecated
     public String getLinkURL() {
         return super.getLinkURL();
+    }
+
+    protected boolean hasImage() {
+        // As Teaser v2 supports inheritance from the featured image of the page, the current resource is wrapped and
+        // augmented with the inherited properties and child resources of the featured image.
+        Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkHandler);
+        return Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
+                .map(request.getResourceResolver()::getResource)
+                .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null;
     }
 
     protected Action newAction(Resource actionRes, Component component) {

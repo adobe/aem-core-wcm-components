@@ -3,11 +3,11 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Teaser"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.teaser.v1.editor]"
+    extraClientlibs="[core.wcm.components.teaser.v1.editor,core.wcm.components.image.v3.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_teaser_v2"
     trackingFeature="core-components:teaser:v2">
     <content
-        granite:class="cmp-teaser__editor"
+        granite:class="cmp-teaser__editor cmp-image__editor"
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
@@ -18,40 +18,8 @@
                 <items jcr:primaryType="nt:unstructured">
                     <image
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Image"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <columns
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
-                                margin="{Boolean}true">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <column
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/container">
-                                        <items jcr:primaryType="nt:unstructured">
-                                            <file
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
-                                                allowUpload="{Boolean}false"
-                                                autoStart="{Boolean}false"
-                                                class="cq-droptarget"
-                                                fieldLabel="Image Asset"
-                                                fileNameParameter="./fileName"
-                                                fileReferenceParameter="./fileReference"
-                                                mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
-                                                multiple="{Boolean}false"
-                                                name="./file"
-                                                title="Upload Image Asset"
-                                                uploadUrl="${suffix.path}"
-                                                useHTML5="{Boolean}true"/>
-                                        </items>
-                                    </column>
-                                </items>
-                            </columns>
-                        </items>
-                    </image>
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/apps/core/wcm/components/image/v3/image/cq:dialog/content/items/tabs/items/asset"/>
                     <text
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Text"

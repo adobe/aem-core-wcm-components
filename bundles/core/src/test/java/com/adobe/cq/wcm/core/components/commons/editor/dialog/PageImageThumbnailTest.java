@@ -50,10 +50,14 @@ public class PageImageThumbnailTest {
         MockSlingHttpServletRequest request = context.request();
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix(RESOURCE1);
+        requestPathInfo.setResourcePath(RESOURCE1);
         PageImageThumbnail pageImageThumbnail = request.adaptTo(PageImageThumbnail.class);
         if (pageImageThumbnail != null) {
             assertEquals("featured image alt", pageImageThumbnail.getAlt(), "getAlt()");
             assertEquals("/content/page/_jcr_content/_cq_featuredimage.coreimg.png", pageImageThumbnail.getSrc(), "getSrc()");
+            assertEquals("/content/page/jcr:content/root/responsivegrid/image", pageImageThumbnail.getComponentPath(), "getComponentPath()");
+            assertEquals("/content/page/jcr:content/root/responsivegrid/image", pageImageThumbnail.getConfigPath(), "getConfigPath()");
+            assertEquals("/content/page", pageImageThumbnail.getCurrentPagePath(), "getCurrentPagePath()");
         } else {
             fail("can't create page image thumnbail model");
         }
@@ -68,6 +72,18 @@ public class PageImageThumbnailTest {
         if (pageImageThumbnail != null) {
             assertEquals("featured image alt", pageImageThumbnail.getAlt(), "getAlt()");
             assertEquals("/content/page/_jcr_content/_cq_featuredimage.coreimg.png", pageImageThumbnail.getSrc(), "getSrc()");
+        }
+    }
+
+    @Test
+    void testPageImageThumbnailWithLinkURL() {
+        context.currentResource(RESOURCE1);
+        MockSlingHttpServletRequest request = context.request();
+        request.setParameterMap(ImmutableMap.of("item", RESOURCE1, "linkURL", "/content/page1"));
+        PageImageThumbnail pageImageThumbnail = request.adaptTo(PageImageThumbnail.class);
+        if (pageImageThumbnail != null) {
+            assertEquals("featured image alt for page 1", pageImageThumbnail.getAlt(), "getAlt()");
+            assertEquals("/content/page1/_jcr_content/_cq_featuredimage.coreimg.png", pageImageThumbnail.getSrc(), "getSrc()");
         }
     }
 

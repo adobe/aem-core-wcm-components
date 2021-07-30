@@ -20,7 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Image"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.image.v3.editor]"
+    extraClientlibs="[core.wcm.components.image.v3.editor,core.wcm.components.commons.editor.dialog.pageimagethumbnail.v1]"
     helpPath="https://www.adobe.com/go/aem_cmp_image_v3"
     trackingFeature="core-components:image:v3">
     <content
@@ -54,7 +54,7 @@
                                                 checked="${true}"
                                                 fieldDescription="When checked, uses the image defined for the page."
                                                 name="./imageFromPageImage"
-                                                text="Inherit - Image taken from the page"
+                                                text="Inherit featured image from linked page or current page"
                                                 uncheckedValue="false"
                                                 value="{Boolean}true"/>
                                             <pageImageThumbnail
@@ -84,7 +84,7 @@
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                         fieldDescription="Textual alternative of the meaning or function of the image, for visually impaired readers."
-                                                        fieldLabel="Alternative Text"
+                                                        fieldLabel="Alternative text for accessibility"
                                                         name="./alt"
                                                         required="{Boolean}true"/>
                                                     <altValueFromPageImage
@@ -93,7 +93,7 @@
                                                         checked="true"
                                                         fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
                                                         name="./altValueFromPageImage"
-                                                        text="Inherit - Value taken from the page featured image"
+                                                        text="Inherit alternative text from linked page or current page"
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <altValueFromDAM
@@ -102,7 +102,7 @@
                                                         checked="${not empty cqDesign.altValueFromDAM ? cqDesign.altValueFromDAM : true}"
                                                         fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
                                                         name="./altValueFromDAM"
-                                                        text="Inherit - Value taken from the DAM asset"
+                                                        text="Inherit from description of asset"
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                 </items>
@@ -113,7 +113,7 @@
                                                 checked="${not empty cqDesign.isDecorative ? cqDesign.isDecorative : false}"
                                                 fieldDescription="Check if the image should be ignored by assistive technology and therefore does not require an alternative text. This applies to decorative images only."
                                                 name="./isDecorative"
-                                                text="Ignore the accessiblity alternative text, the image is decorative"
+                                                text="Don't require an alternative text for accessiblity"
                                                 uncheckedValue="false"
                                                 value="{Boolean}true"/>
                                         </items>

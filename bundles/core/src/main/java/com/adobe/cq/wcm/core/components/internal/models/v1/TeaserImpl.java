@@ -19,13 +19,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -165,16 +163,15 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }};
 
     /**
+     * The teaser link
+     */
+    protected Optional<Link<Page>> link;
+
+    /**
      * The current component.
      */
     @ScriptVariable
     private Component component;
-
-    /**
-     * The current resource.
-     */
-    @Inject
-    private Resource resource;
 
     /**
      * The page manager.
@@ -189,20 +186,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     protected Style currentStyle;
 
     /**
-     * The current request.
-     */
-    @Self
-    private SlingHttpServletRequest request;
-
-    /**
      * The model factory service.
      */
     @OSGiService
     private ModelFactory modelFactory;
 
     @Self
-    private LinkHandler linkHandler;
-    protected Optional<Link<Page>> link;
+    protected LinkHandler linkHandler;
 
     /**
      * Initialize the model.

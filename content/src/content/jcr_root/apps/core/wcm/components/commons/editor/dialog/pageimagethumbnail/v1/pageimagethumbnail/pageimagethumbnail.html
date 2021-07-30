@@ -14,7 +14,10 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.thumbnail="com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited.PageImageThumbnail">
-    <coral-fileupload class="cq-page-image-thumbnail coral-Form-field cq-FileUpload _coral-FileUpload">
+    <coral-fileupload class="cq-page-image-thumbnail coral-Form-field cq-FileUpload _coral-FileUpload"
+                      data-thumbnail-current-page-path="${thumbnail.currentPagePath}"
+                      data-thumbnail-component-path="${thumbnail.componentPath}"
+                      data-thumbnail-config-path="${thumbnail.configPath}">
         <div class="cq-FileUpload-thumbnail">
             <div class="cq-FileUpload-thumbnail-img">
                 <img class="cq-page-image-thumbnail__image"
@@ -28,8 +31,10 @@
                         <use xlink:href="#spectrum-icon-18-Image"></use>
                     </svg>
                 </coral-icon>
-
             </div>
+            <button data-sly-test="${hasSrc}" type="button" class="_coral-Button _coral-Button--primary _coral-Button--quiet" disabled><coral-button-label class="_coral-Button-label">Edit</coral-button-label></button>
+            <button data-sly-test="${hasSrc}" type="button" class="_coral-Button _coral-Button--primary _coral-Button--quiet" disabled><coral-button-label class="_coral-Button-label">Clear</coral-button-label></button>
+            <button data-sly-test="${hasSrc}" type="button" class="_coral-Button _coral-Button--primary _coral-Button--quiet" disabled><coral-button-label class="_coral-Button-label">Pick</coral-button-label></button>
         </div>
     </coral-fileupload>
 </div>
