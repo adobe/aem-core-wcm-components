@@ -16,7 +16,9 @@
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.awt.*;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -33,6 +35,7 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.designer.Style;
@@ -255,8 +258,28 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     @SuppressWarnings("deprecation")
     @Override
     protected void testImageWithMap() {
-        Image image = getImageUnderTest(AbstractImageTest.IMAGE24_PATH);
-        assertNull(image.getAreas());
+        context.contentPolicyMapping(resourceType,
+            "uuidDisabled", true);
+        com.adobe.cq.wcm.core.components.models.Image image = getImageUnderTest(AbstractImageTest.IMAGE24_PATH);
+        Object[][] expectedAreas = {
+            {"circle", "256,256,256", "0.2000,0.3001,0.2000", "http://adobe.com", "", ""},
+            {"rect", "256,171,1023,682", "0.1992,0.2005,0.7992,0.7995", "http://adobe.com", "", "altText"},
+            {"poly", "917,344,1280,852,532,852", "0.7164,0.4033,1.0000,0.9988,0.4156,0.9988", "http://adobe.com", "_blank", ""}
+        };
+        List<ImageArea> areas = image.getAreas();
+        int index = 0;
+        while (areas.size() > index) {
+            ImageArea area = areas.get(index);
+            assertEquals(expectedAreas[index][0], area.getShape(), "The image area's shape is not as expected.");
+            assertEquals(expectedAreas[index][1], area.getCoordinates(), "The image area's coordinates are not as expected.");
+            assertEquals(expectedAreas[index][2], area.getRelativeCoordinates(), "The image area's relative coordinates are not as expected.");
+            assertEquals(expectedAreas[index][3], area.getHref(), "The image area's href is not as expected.");
+            assertEquals(expectedAreas[index][4], area.getTarget(), "The image area's target is not as expected.");
+            assertEquals(expectedAreas[index][5], area.getAlt(), "The image area's alt text is not as expected.");
+            assertValidLink(area.getLink(), (String) expectedAreas[index][3], StringUtils.trimToNull((String) expectedAreas[index][4]));
+            index++;
+        }
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE24_PATH));
     }
 
     @Test

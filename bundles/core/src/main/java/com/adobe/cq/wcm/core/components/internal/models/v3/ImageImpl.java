@@ -206,7 +206,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     @JsonIgnore
-    public @NotNull int @NotNull [] getWidths() {
+    public int @NotNull [] getWidths() {
         return super.getWidths();
     }
 
@@ -220,7 +220,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @JsonIgnore
     @Deprecated
     public List<ImageArea> getAreas() {
-        return null;
+        return super.getAreas();
     }
 
     @Override
