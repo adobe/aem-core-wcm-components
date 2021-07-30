@@ -218,8 +218,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     @JsonIgnore
+    @Deprecated
     public List<ImageArea> getAreas() {
-        return super.getAreas();
+        return null;
     }
 
     @Override

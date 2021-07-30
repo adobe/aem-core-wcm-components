@@ -293,7 +293,6 @@
           "sling:resourceType": "core/wcm/components/image/v3/image",
           "cq:policy"         : "coretest/components/content/image/policy_1478854677399",
           "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-          "imageMap"          : "[circle(256,256,256)\"http://adobe.com\"|\"\"|\"\"|(0.2000,0.3001,0.2000)][rect(256,171,1023,682)\"http://adobe.com\"|\"\"|\"altText\"|(0.1992,0.2005,0.7992,0.7995)][poly(917,344,1280,852,532,852)\"http://adobe.com\"|\"_blank\"|\"\"|(0.7164,0.4033,1.0000,0.9988,0.4156,0.9988)]",
           "titleValueFromDAM" : "true"
         },
         "image27"            : {
