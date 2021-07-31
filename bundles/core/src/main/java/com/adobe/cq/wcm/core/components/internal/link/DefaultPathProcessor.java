@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.httpclient.URI;
@@ -168,11 +167,6 @@ public class DefaultPathProcessor implements PathProcessor {
             externalPath = path;
         }
         return externalPath;
-    }
-
-    @Override
-    public @Nullable Map<String, String> processHtmlAttributes(@NotNull String path, @Nullable Map<String, String> htmlAttributes) {
-        return htmlAttributes;
     }
 
     @NotNull
