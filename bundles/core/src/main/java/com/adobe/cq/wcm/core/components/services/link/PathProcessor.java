@@ -15,9 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.services.link;
 
+import java.util.Map;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -64,4 +67,15 @@ public interface PathProcessor {
      * @return the external link of the given path
      */
     @NotNull String externalize(@NotNull String path, @NotNull SlingHttpServletRequest request);
+
+
+    /**
+     * Process the HTML attributes for the {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler}
+     * @param path the path of the linked resource
+     * @param htmlAttributes the origin HTML attributes of the link
+     * @return a map of the processed HTML attributes for the link
+     */
+    default @Nullable Map<String, String> processHtmlAttributes(@NotNull String path, @Nullable Map<String, String> htmlAttributes) {
+        return htmlAttributes;
+    };
 }
