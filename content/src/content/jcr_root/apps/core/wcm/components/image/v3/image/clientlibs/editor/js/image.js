@@ -46,6 +46,11 @@
     var altInputSelector = "input[name='./alt']";
     var pageAltCheckboxSelector = "coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
     var pageAltInputSelector = "input[name='./cq:featuredimage/alt']";
+    var pageImageThumbnailSelector = ".cq-page-image-thumbnail";
+    var pageImageThumbnailImageSelector = ".cq-page-image-thumbnail__image";
+    var pageImageThumbnailConfigPathAttribute = "data-thumbnail-config-path";
+    var pageImageThumbnailComponentPathAttribute = "data-thumbnail-component-path";
+    var pageImageThumbnailCurrentPagePathAttribute = "data-thumbnail-current-page-path";
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -86,8 +91,8 @@
             }
 
             altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, "coral-checkbox[name='./altValueFromPageImage']", "input[name='./alt']");
-            $pageImageThumbnail = $dialogContent.find(".cq-page-image-thumbnail");
-            altTextFromPage = $dialogContent.find(".cq-page-image-thumbnail__image").attr("alt");
+            $pageImageThumbnail = $dialogContent.find(pageImageThumbnailSelector);
+            altTextFromPage = $dialogContent.find(pageImageThumbnailImageSelector).attr("alt");
 
             if ($cqFileUpload.length) {
                 imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
@@ -165,6 +170,46 @@
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
         togglePageImageInherited(e.target, isDecorative);
     });
+
+    $(document).on("change", dialogContentSelector + " foundation-autocomplete[name='./linkURL']", function(e) {
+        updatePageFeaturedImageThumbnail(e.target);
+    });
+
+    /**
+     * Updates the page image thumbnail when the link field is updated
+     * @param linkURLField the link field
+     */
+    function updatePageFeaturedImageThumbnail(linkURLField) {
+        var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
+        var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
+        var linkURL = $(linkURLField).find(".coral-InputGroup-input._coral-Textfield").val();
+        if (linkURL === "undefined" || linkURL === "") {
+            linkURL = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailCurrentPagePathAttribute);
+        }
+        return $.ajax({
+            url: thumbnailConfigPath + ".html" + thumbnailComponentPath,
+            data: {
+                "linkURL": linkURL
+            }
+        }).done(function(data) {
+            if (data) {
+                // update the thumbnail image
+                $pageImageThumbnail.replaceWith(data);
+                $pageImageThumbnail = $(dialogContentSelector).find(pageImageThumbnailSelector);
+                if (imageFromPageImage.checked) {
+                    $pageImageThumbnail.show();
+                } else {
+                    $pageImageThumbnail.hide();
+                }
+
+                // update the alt field
+                altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
+                altFromPageTuple.seedTextValue(altTextFromPage);
+                altFromPageTuple.update();
+
+            }
+        });
+    }
 
     $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
         switch (e.target.value) {

@@ -33,6 +33,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public interface Image extends Component {
 
     /**
+     * Name of the resource property that will indicate if the image is inherited from the featured image of the page.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    String PN_IMAGE_FROM_PAGE_IMAGE = "imageFromPageImage";
+
+    /**
+     * Name of the resource property that will indicate if the value of the {@code alt} attribute should be inherited
+     * from the featured image of the page.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    String PN_ALT_VALUE_FROM_PAGE_IMAGE = "altValueFromPageImage";
+
+
+
+    /**
      * Name of the configuration policy property that will store the allowed rendition widths for an image.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0

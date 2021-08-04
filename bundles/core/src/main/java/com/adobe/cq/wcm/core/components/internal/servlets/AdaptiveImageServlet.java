@@ -53,10 +53,10 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.dam.api.Asset;
@@ -77,6 +77,8 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
 
 /**
  * Servlet for adaptive images, can render images with different widths based on policies and requested width.
@@ -183,22 +185,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 component = componentCandidate;
             }
 
-            ImageComponent imageComponent = new ImageComponent(component);
-            // If the image has no content, use the featured image of the page if it exists
-            ValueMap properties = component.getValueMap();
-            boolean imageFromPageImage = properties.get("imageFromPageImage", imageComponent.source == Source.NOCONTENT);
-            if (imageFromPageImage) {
-                PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-                if (pageManager != null) {
-                    Page page = pageManager.getContainingPage(component);
-                    if (page != null) {
-                        Resource featuredImage = ComponentUtils.getFeaturedImage(page);
-                        if (featuredImage != null) {
-                            imageComponent = new ImageComponent(featuredImage);
-                        }
-                    }
-                }
-            }
+            LinkHandler linkHandler = request.adaptTo(LinkHandler.class);
+            Resource wrappedImageResourceWithInheritance = getWrappedImageResourceWithInheritance(component, linkHandler);
+            ImageComponent imageComponent = new ImageComponent(wrappedImageResourceWithInheritance);
+
             if (imageComponent.source == Source.NOCONTENT || imageComponent.source == Source.NONEXISTING) {
                 LOGGER.error("Either the image from {} does not have a valid file reference" +
                         " or the containing page does not have a valid featured image", component.getPath());

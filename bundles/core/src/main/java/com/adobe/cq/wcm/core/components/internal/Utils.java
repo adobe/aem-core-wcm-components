@@ -15,10 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -33,8 +36,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.day.cq.commons.DownloadResource;
+import com.day.cq.commons.ImageResource;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
@@ -43,7 +54,11 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.foundation.AllowedComponentList;
 import com.google.common.collect.ImmutableSet;
 
+import static com.adobe.cq.wcm.core.components.models.Image.*;
+
 public class Utils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
     private static final Set<String> INTERNAL_PARAMETER = ImmutableSet.of(
             ":formstart",
@@ -280,4 +295,79 @@ public class Utils {
         }
         return value;
     }
+
+    /**
+     * Wraps an image resource with the properties and child resources of the inherited featured image of either
+     * the linked page or the page containing the resource.
+     *
+     * @param resource The image resource
+     * @param linkHandler The link handler
+     * @return The wrapped image resource augmented with inherited properties and child resource if inheritance is enabled, the plain image resource otherwise.
+     */
+    public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkHandler linkHandler) {
+        if (resource == null) {
+            LOGGER.error("The resource is not defined");
+            return null;
+        }
+
+        ResourceResolver resourceResolver = resource.getResourceResolver();
+        ValueMap properties = resource.getValueMap();
+        String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
+        Resource fileResource = resource.getChild(DownloadResource.NN_FILE);
+        boolean imageFromPageImage = properties.get(PN_IMAGE_FROM_PAGE_IMAGE, StringUtils.isEmpty(fileReference) && fileResource == null);
+        boolean altValueFromPageImage = properties.get(PN_ALT_VALUE_FROM_PAGE_IMAGE, imageFromPageImage);
+
+        if (imageFromPageImage) {
+            Resource inheritedResource = null;
+            if (linkHandler != null) {
+                Optional<Link> link = linkHandler.getLink(resource);
+                if (link.isPresent()) {
+                    Page linkedPage = (Page) link.get().getReference();
+                    if (linkedPage != null) {
+                        inheritedResource = ComponentUtils.getFeaturedImage(linkedPage);
+                    }
+                } else {
+                    PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
+                    if (pageManager != null) {
+                        Page page = pageManager.getContainingPage(resource);
+                        if (page != null) {
+                            inheritedResource = ComponentUtils.getFeaturedImage(page);
+                        }
+                    }
+                }
+            }
+
+            // Define the inherited properties
+            String inheritedFileReference = null;
+            Resource inheritedFileResource = null;
+            String inheritedAlt = null;
+            String inheritedAltValueFromDAM = null;
+            if (inheritedResource != null) {
+                ValueMap inheritedProperties = inheritedResource.getValueMap();
+                inheritedFileReference = inheritedProperties.get(DownloadResource.PN_REFERENCE, String.class);
+                inheritedFileResource = inheritedResource.getChild(DownloadResource.NN_FILE);
+                inheritedAlt = inheritedProperties.get(ImageResource.PN_ALT, String.class);
+                inheritedAltValueFromDAM = inheritedProperties.get(PN_ALT_VALUE_FROM_DAM, String.class);
+
+            }
+
+            List<String> hiddenProperties = new ArrayList<>();
+            Map<String, String> overriddenProperties = new HashMap<>();
+            Map<String, Resource> overriddenChildren = new HashMap<>();
+            overriddenProperties.put(DownloadResource.PN_REFERENCE, inheritedFileReference);
+            overriddenChildren.put(DownloadResource.NN_FILE, inheritedFileResource);
+            // don't inherit the image title from the page image
+            overriddenProperties.put(PN_TITLE_VALUE_FROM_DAM, "false");
+            if (altValueFromPageImage) {
+                overriddenProperties.put(ImageResource.PN_ALT, inheritedAlt);
+                overriddenProperties.put(PN_ALT_VALUE_FROM_DAM, inheritedAltValueFromDAM);
+            } else {
+                overriddenProperties.put(PN_ALT_VALUE_FROM_DAM, "false");
+            }
+
+            return new CoreResourceWrapper(resource, resource.getResourceType(), hiddenProperties, overriddenProperties, overriddenChildren);
+        }
+        return resource;
+    }
+
 }

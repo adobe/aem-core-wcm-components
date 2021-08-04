@@ -49,18 +49,23 @@ device) is disabled
 The following properties are written to JCR for this Teaser component and are expected to be available as `Resource` properties:
 
 1. `./actionsEnabled` - property that defines whether or not the teaser has Call-to-Action elements
-2. `./actions` - child node where the Call-to-Action elements are stored as a list of `item` nodes with the following properties
+1. `./actions` - child node where the Call-to-Action elements are stored as a list of `item` nodes with the following properties
     1. `link` - property that stores the Call-to-Action link
-    2. `text` - property that stores the Call-to-Action text
-3. `./fileReference` - property or `file` child node - will store either a reference to the image file, or the image file
-4. `./linkURL` - link applied to teaser elements. URL or path to a content page
-5. `./pretitle` - defines the value of the teaser pretitle
-6. `./jcr:title` - defines the value of the teaser title and HTML `title` attribute of the teaser image
-7. `./titleFromPage` - defines whether or not the title value is taken from the linked page
-8. `./jcr:description` - defines the value of the teaser description
-9. `./descriptionFromPage` - defines whether or not the description value is taken from the linked page
-10. `./id` - defines the component HTML ID attribute.
-11. `./titleType` - stores the value for this title's HTML element type
+    1. `text` - property that stores the Call-to-Action text
+1. `./fileReference` - property or `file` child node - will store either a reference to the image file, or the image file
+1. `./linkURL` - link applied to teaser elements. URL or path to a content page
+1. `./pretitle` - defines the value of the teaser pretitle
+1. `./jcr:title` - defines the value of the teaser title and HTML `title` attribute of the teaser image
+1. `./titleFromPage` - defines whether or not the title value is taken from the linked page
+1. `./jcr:description` - defines the value of the teaser description
+1. `./descriptionFromPage` - defines whether or not the description value is taken from the linked page
+1. `./id` - defines the component HTML ID attribute.
+1. `./titleType` - stores the value for this title's HTML element type
+1. `./isDecorative` - if set to `true`, then the image will be ignored by assistive technology
+1. `./alt` - defines the value of the HTML `alt` attribute (not needed if `./isDecorative` is set to `true`)
+1. `./altValueFromDAM` - if `true`, the HTML `alt` attribute is inherited from the DAM asset.
+1. `./imageFromPageImage` - if `true`, the image is inherited from the featured image of either the linked page if `./linkURL` is set or the current page.
+1. `./altValueFromPageImage` - if `true` and if `./imageFromPageImage` is `true`, the HTML `alt` attribute is inherited from the featured image of either the linked page if `./linkURL` is set or the current page.
 
 ### Extending the Teaser Component
 When extending the Teaser component by using `sling:resourceSuperType`, developers need to define the `imageDelegate` property for
@@ -70,6 +75,13 @@ For example:
 ```
 imageDelegate="core/wcm/components/image/v3/image"
 ```
+
+## Client Libraries
+The component reuses the following editor client library categories that include JavaScript
+handling for dialog interaction. They are already included by its edit dialog:
+* `core.wcm.components.teaser.v1.design`
+* `core.wcm.components.teaser.v1.editor`
+* `core.wcm.components.image.v3.editor`
 
 ## BEM Description
 ```
@@ -87,7 +99,7 @@ BLOCK cmp-teaser
 ## Information
 * **Vendor**: Adobe
 * **Version**: v2
-* **Compatibility**: AEM 6.3
+* **Compatibility**: AEM 6.5
 * **Status**: work-in-progress
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_teaser\_v2](https://www.adobe.com/go/aem_cmp_teaser_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_teaser](https://www.adobe.com/go/aem_cmp_library_teaser)
