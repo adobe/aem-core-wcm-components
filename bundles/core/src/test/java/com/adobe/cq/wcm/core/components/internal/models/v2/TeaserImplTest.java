@@ -104,10 +104,10 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         ValueMap imageProperties = imageResource.getValueMap();
         String linkURL = imageProperties.get("linkURL", String.class);
         String fileReference = imageProperties.get("fileReference", String.class);
-        assertEquals("/content/teasers/jcr:content/cq:featuredimage", imageResource.getPath(), "image resource: path");
+        assertEquals("/content/teasers/jcr:content/root/responsivegrid/teaser-20", imageResource.getPath(), "image resource: path");
         assertEquals("core/wcm/components/image/v3/image", imageResource.getResourceType(), "image resource: resource type");
         assertEquals("/content/teasers", linkURL, "image resource: linkURL");
-        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", fileReference, "image resource: fileReference");
+        assertNull(fileReference, "image resource: fileReference");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser20"));
     }
 

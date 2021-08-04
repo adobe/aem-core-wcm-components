@@ -46,8 +46,6 @@ The following properties are written to JCR for this Image component and are exp
 1. `./isDecorative` - if set to `true`, then the image will be ignored by assistive technology
 1. `./alt` - defines the value of the HTML `alt` attribute (not needed if `./isDecorative` is set to `true`)
 1. `./altValueFromDAM` - if `true`, the HTML `alt` attribute is inherited from the DAM asset.
-1. `./altValueFromPageImage` - if `true`, the HTML `alt` attribute is inherited from the featured image of the page. This property is only enabled when `./imageFromPageImage` is `true`.
-1. `./imageFromPageImage` - if `true`, the image is inherited from the featured image of the page.
 1. `./linkURL` - allows defining a URL to which the image will link to
 1. `./jcr:title` - defines the value of the HTML `title` attribute or the value of the caption, depending on the value of
 1. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,
@@ -57,7 +55,8 @@ otherwise a caption will be rendered
 1. `./imagePreset` - defines the name for the Dynamic Media Image Preset to apply to the Dynamic Media image URL.
 1. `./smartCropRendition` - defines how Dynamic Media Smart Crop image renders. `SmartCrop:Auto` means that the component will automatically select Smart Crop rendition which fits the container size better; the name of specific Smart Crop rendition will force the component to render that image rendition only.
 1. `./imageModifiers` - defines additional Dynamic Media Image Serving commands separated by '&amp;'. Field gives complete flexibility to change Dynamic Media image rendering.
-
+1. `./imageFromPageImage` - if `true`, the image is inherited from the featured image of either the linked page if `./linkURL` is set or the current page.
+1. `./altValueFromPageImage` - if `true` and if `./imageFromPageImage` is `true`, the HTML `alt` attribute is inherited from the featured image of either the linked page if `./linkURL` is set or the current page.
 
 ## Extending from This Component
 1. In case you overwrite the image's HTL script, make sure the necessary attributes for the JavaScript loading script are contained in the markup at the right position (see section below).

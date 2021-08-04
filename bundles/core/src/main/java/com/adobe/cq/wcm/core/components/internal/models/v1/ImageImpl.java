@@ -41,12 +41,9 @@ import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Source;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,28 +92,17 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     @ScriptVariable
     protected Style currentStyle;
 
-    @ScriptVariable
-    protected ValueMap properties;
-
     @Inject
     @Source("osgi-services")
     protected MimeTypeService mimeTypeService;
 
-    @ValueMapValue(name = DownloadResource.PN_REFERENCE, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    protected String fileReference;
-
-    @ValueMapValue(name = ImageResource.PN_ALT, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    protected String alt;
-
-    @ValueMapValue(name = JcrConstants.JCR_TITLE, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    protected String title;
-
     @Self
     protected LinkHandler linkHandler;
-    protected Optional<Link> link;
+
+    protected ValueMap properties;
+    protected String fileReference;
+    protected String alt;
+    protected String title;
 
     protected String src;
     protected String[] smartImages = new String[]{};
@@ -137,10 +123,20 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected int jpegQuality;
     protected String imageName;
     protected Resource fileResource;
-    protected Resource inheritedResource;
+    protected Optional<Link> link;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
+    }
+
+    /**
+     * Initializes the resource:
+     * - for Image v1 and v2 the resource is the current resource
+     * - for Image v3 which supports inheritance from the featured image of the linked page or of the current page,
+     * the current resource is wrapped and augmented with the inherited properties and child resources of the featured image.
+     */
+    protected void initResource() {
+        // do nothing for image v1
     }
 
     /**
@@ -150,46 +146,47 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
     @PostConstruct
     protected void initModel() {
-        link = Optional.empty();
+        initResource();
+        // Note: all the properties and child resources of the image should be retrieved through the wrapped 'resource' object
+        // and not through the injected properties of the model.
+        properties = resource.getValueMap();
         fileResource = resource.getChild(DownloadResource.NN_FILE);
-        initInheritedResource();
-        if (inheritedResource == null) {
-            return;
-        }
-        ValueMap inheritedResourceProperties = inheritedResource.getValueMap();
-        Resource inheritedFileResource = inheritedResource.getChild(DownloadResource.NN_FILE);
-        String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
+        fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
+        alt = properties.get(ImageResource.PN_ALT, String.class);
+        title = properties.get(JcrConstants.JCR_TITLE, String.class);
+        link = Optional.empty();
 
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
         Asset asset = null;
-        if (StringUtils.isNotEmpty(inheritedFileReference)) {
+
+        if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
-            final Resource assetResource = request.getResourceResolver().getResource(inheritedFileReference);
+            final Resource assetResource = request.getResourceResolver().getResource(fileReference);
             if (assetResource != null) {
                 asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
-                    imageName = getImageNameFromDam(inheritedFileReference);
+                    imageName = getImageNameFromDam(fileReference);
                     hasContent = true;
                 } else {
-                    LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", inheritedFileReference, resource.getPath());
+                    LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
                 }
             } else {
-                LOGGER.error("Unable to find resource '{}' used by image '{}'.", inheritedFileReference, resource.getPath());
+                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
             }
         } else {
-            if (inheritedFileResource != null) {
-                mimeType = PropertiesUtil.toString(inheritedFileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), null);
+            if (fileResource != null) {
+                mimeType = PropertiesUtil.toString(fileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), null);
                 if (StringUtils.isEmpty(mimeType)) {
-                    Resource fileResourceContent = inheritedFileResource.getChild(JCR_CONTENT);
+                    Resource fileResourceContent = fileResource.getChild(JCR_CONTENT);
                     if (fileResourceContent != null) {
                         ValueMap fileProperties = fileResourceContent.getValueMap();
                         mimeType = fileProperties.get(JCR_MIMETYPE, MIME_TYPE_IMAGE_JPEG);
                     }
                 }
-                String fileName = inheritedResourceProperties.get(ImageResource.PN_FILE_NAME, String.class);
+                String fileName = properties.get(ImageResource.PN_FILE_NAME, String.class);
                 imageName = StringUtils.isNotEmpty(fileName) ? getSeoFriendlyName(FilenameUtils.getBaseName(fileName)) : "";
                 hasContent = true;
             }
@@ -206,9 +203,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             // Check for the suffix and remove as necessary.
             mimeType = mimeType.split(";")[0];
             extension = mimeTypeService.getExtension(mimeType);
-            Calendar lastModified = inheritedResourceProperties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+            Calendar lastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
             if (lastModified == null) {
-                lastModified = inheritedResourceProperties.get(NameConstants.PN_PAGE_LAST_MOD, Calendar.class);
+                lastModified = properties.get(NameConstants.PN_PAGE_LAST_MOD, Calendar.class);
             }
             if (lastModified != null) {
                 lastModifiedDate = lastModified.getTimeInMillis();
@@ -263,7 +260,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             if (!isDecorative) {
                 link = linkHandler.getLink(resource);
             } else {
-                link = Optional.empty();
                 alt = null;
             }
             buildJson();
@@ -392,15 +388,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     private boolean smartSizesSupported() {
         // "smart sizes" is supported for all images except SVG
         return !StringUtils.equals(mimeType, MIME_TYPE_IMAGE_SVG);
-    }
-
-    /**
-     * Sets the inherited resource:
-     * - to the featured image of the page if the image component inherits from it (only supported for image v3 and later)
-     * - to the image resource otherwise
-     */
-    protected void initInheritedResource() {
-        inheritedResource = resource;
     }
 
     /*

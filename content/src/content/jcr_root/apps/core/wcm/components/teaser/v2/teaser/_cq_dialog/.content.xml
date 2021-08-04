@@ -3,11 +3,11 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Teaser"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.teaser.v1.editor]"
+    extraClientlibs="[core.wcm.components.teaser.v1.editor,core.wcm.components.image.v3.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_teaser_v2"
     trackingFeature="core-components:teaser:v2">
     <content
-        granite:class="cmp-teaser__editor"
+        granite:class="cmp-teaser__editor cmp-image__editor"
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
@@ -16,9 +16,9 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <image
+                    <actions
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Image"
+                        jcr:title="Links"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -31,27 +31,90 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <file
+                                            <linksNote
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
-                                                allowUpload="{Boolean}false"
-                                                autoStart="{Boolean}false"
-                                                class="cq-droptarget"
-                                                fieldLabel="Image Asset"
-                                                fileNameParameter="./fileName"
-                                                fileReferenceParameter="./fileReference"
-                                                mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
-                                                multiple="{Boolean}false"
-                                                name="./file"
-                                                title="Upload Image Asset"
-                                                uploadUrl="${suffix.path}"
-                                                useHTML5="{Boolean}true"/>
+                                                sling:resourceType="granite/ui/components/coral/foundation/text"
+                                                text="The teaser title, description and image can be inherited from the linked page, or from page linked in the first call to action. If neither a link nor a call to cation is specified, then the title, description and image will be inherited from the current page."/>
+                                            <linkURL
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="cq/gui/components/coral/common/form/pagefield"
+                                                fieldDescription="Links the teaser to a unique destination page or external URL. For multiple destination links, use call to actions instead."
+                                                fieldLabel="Link"
+                                                name="./linkURL"
+                                                rootPath="/content"
+                                                wrapperClass="foundation-toggleable cmp-teaser__editor-link-url"/>
+                                            <actionsEnabled
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="Allows to link the teaser to multiple destinations. The page linked in the first call to action is used when inheriting the teaser title, description or image."
+                                                name="./actionsEnabled"
+                                                text="Link to destination with call to actions"
+                                                uncheckedValue="{Boolean}false"
+                                                value="{Boolean}true">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="/libs/granite/ui/components/coral/foundation/renderconditions/simple"
+                                                    expression="${!cqDesign.actionsDisabled}"/>
+                                            </actionsEnabled>
+                                            <actionsDisabled
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="{Boolean}false"
+                                                disabled="{Boolean}true"
+                                                fieldDescription="Allows to link the teaser to multiple destinations. The page linked in the first call to action is used when inheriting the teaser title, description or image."
+                                                ignoreData="{Boolean}true"
+                                                name="./actionsEnabled"
+                                                text="Link to destination with call to actions"
+                                                uncheckedValue="{Boolean}false"
+                                                value="{Boolean}true">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="/libs/granite/ui/components/coral/foundation/renderconditions/simple"
+                                                    expression="${cqDesign.actionsDisabled}"/>
+                                            </actionsDisabled>
+                                            <actions
+                                                granite:class="foundation-toggleable cmp-teaser__editor-multifield_actions"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                composite="{Boolean}true">
+                                                <field
+                                                    granite:class="cmp-teaser__editor-action"
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                                                    name="./actions">
+                                                    <items jcr:primaryType="nt:unstructured">
+                                                        <link
+                                                            granite:class="cmp-teaser__editor-actionField"
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="cq/gui/components/coral/common/form/pagefield"
+                                                            emptyText="Link"
+                                                            name="link"
+                                                            required="{Boolean}true"
+                                                            rootPath="/content">
+                                                            <granite:data
+                                                                jcr:primaryType="nt:unstructured"
+                                                                cmp-teaser-v1-dialog-edit-hook="actionLink"/>
+                                                        </link>
+                                                        <text
+                                                            granite:class="cmp-teaser__editor-actionField"
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                            emptyText="Text"
+                                                            name="text"
+                                                            required="{Boolean}true">
+                                                            <granite:data
+                                                                jcr:primaryType="nt:unstructured"
+                                                                cmp-teaser-v1-dialog-edit-hook="actionTitle"/>
+                                                        </text>
+                                                    </items>
+                                                </field>
+                                            </actions>
                                         </items>
                                     </column>
                                 </items>
                             </columns>
                         </items>
-                    </image>
+                    </actions>
                     <text
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Text"
@@ -294,101 +357,10 @@
                             </columns>
                         </items>
                     </text>
-                    <actions
+                    <image
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Link &amp; Actions"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <columns
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
-                                margin="{Boolean}true">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <column
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/container">
-                                        <items jcr:primaryType="nt:unstructured">
-                                            <linkURL
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="cq/gui/components/coral/common/form/pagefield"
-                                                fieldDescription="Link applied to teaser elements. URL or path to a content page."
-                                                fieldLabel="Link"
-                                                name="./linkURL"
-                                                rootPath="/content"
-                                                wrapperClass="foundation-toggleable cmp-teaser__editor-link-url"/>
-                                            <actionsEnabled
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                fieldDescription="When checked, enables definition of Call-To-Actions. The linked page of the first Call-To-Action is used when populating title and description."
-                                                name="./actionsEnabled"
-                                                text="Enable Call-To-Actions"
-                                                uncheckedValue="{Boolean}false"
-                                                value="{Boolean}true">
-                                                <granite:rendercondition
-                                                    jcr:primaryType="nt:unstructured"
-                                                    sling:resourceType="/libs/granite/ui/components/coral/foundation/renderconditions/simple"
-                                                    expression="${!cqDesign.actionsDisabled}"/>
-                                            </actionsEnabled>
-                                            <actionsDisabled
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="{Boolean}false"
-                                                disabled="{Boolean}true"
-                                                fieldDescription="When checked, enables definition of Call-To-Actions. The linked page of the first Call-To-Action is used when populating title and description."
-                                                ignoreData="{Boolean}true"
-                                                name="./actionsEnabled"
-                                                text="Enable Call-To-Actions"
-                                                uncheckedValue="{Boolean}false"
-                                                value="{Boolean}true">
-                                                <granite:rendercondition
-                                                    jcr:primaryType="nt:unstructured"
-                                                    sling:resourceType="/libs/granite/ui/components/coral/foundation/renderconditions/simple"
-                                                    expression="${cqDesign.actionsDisabled}"/>
-                                            </actionsDisabled>
-                                            <actions
-                                                granite:class="foundation-toggleable cmp-teaser__editor-multifield_actions"
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                                composite="{Boolean}true">
-                                                <field
-                                                    granite:class="cmp-teaser__editor-action"
-                                                    jcr:primaryType="nt:unstructured"
-                                                    sling:resourceType="granite/ui/components/coral/foundation/container"
-                                                    name="./actions">
-                                                    <items jcr:primaryType="nt:unstructured">
-                                                        <link
-                                                            granite:class="cmp-teaser__editor-actionField"
-                                                            jcr:primaryType="nt:unstructured"
-                                                            sling:resourceType="cq/gui/components/coral/common/form/pagefield"
-                                                            emptyText="Link"
-                                                            name="link"
-                                                            required="{Boolean}true"
-                                                            rootPath="/content">
-                                                            <granite:data
-                                                                jcr:primaryType="nt:unstructured"
-                                                                cmp-teaser-v1-dialog-edit-hook="actionLink"/>
-                                                        </link>
-                                                        <text
-                                                            granite:class="cmp-teaser__editor-actionField"
-                                                            jcr:primaryType="nt:unstructured"
-                                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                            emptyText="Text"
-                                                            name="text"
-                                                            required="{Boolean}true">
-                                                            <granite:data
-                                                                jcr:primaryType="nt:unstructured"
-                                                                cmp-teaser-v1-dialog-edit-hook="actionTitle"/>
-                                                        </text>
-                                                    </items>
-                                                </field>
-                                            </actions>
-                                        </items>
-                                    </column>
-                                </items>
-                            </columns>
-                        </items>
-                    </actions>
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/apps/core/wcm/components/image/v3/image/cq:dialog/content/items/tabs/items/asset"/>
                 </items>
             </tabs>
         </items>

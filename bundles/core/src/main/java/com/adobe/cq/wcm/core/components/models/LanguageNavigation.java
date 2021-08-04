@@ -50,4 +50,14 @@ public interface LanguageNavigation extends Component {
         return null;
     }
 
+    /**
+     * Retrieves an accessibility label that describes the language navigation.
+     *
+     * @return an accessibility label for the language navigation
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityLabel() {
+        return null;
+    }
+
 }

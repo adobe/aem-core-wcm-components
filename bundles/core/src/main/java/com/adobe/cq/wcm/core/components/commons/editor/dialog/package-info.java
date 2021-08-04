@@ -13,7 +13,13 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-@Version("1.1.0")
-package com.adobe.cq.wcm.core.components.services.link;
+/**
+ * <p>
+ *      This package defines the Sling Models exposed for the dialog widgets.
+ * </p>
+ *
+ */
+@Version("1.0.0")
+package com.adobe.cq.wcm.core.components.commons.editor.dialog;
 
 import org.osgi.annotation.versioning.Version;

@@ -20,7 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Image"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.image.v3.editor]"
+    extraClientlibs="[core.wcm.components.image.v3.editor,core.wcm.components.commons.editor.dialog.pageimagethumbnail.v1]"
     helpPath="https://www.adobe.com/go/aem_cmp_image_v3"
     trackingFeature="core-components:image:v3">
     <content
@@ -52,9 +52,9 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                 checked="${true}"
-                                                fieldDescription="When checked, uses the image defined for the page."
+                                                fieldDescription="Use the featured image defined in the properties of the linked page, or in the properties of the current page when no link is defined."
                                                 name="./imageFromPageImage"
-                                                text="Inherit - Image taken from the page"
+                                                text="Inherit featured image from page"
                                                 uncheckedValue="false"
                                                 value="{Boolean}true"/>
                                             <pageImageThumbnail
@@ -84,16 +84,16 @@
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                         fieldDescription="Textual alternative of the meaning or function of the image, for visually impaired readers."
-                                                        fieldLabel="Alternative Text"
+                                                        fieldLabel="Alternative text for accessibility"
                                                         name="./alt"
                                                         required="{Boolean}true"/>
                                                     <altValueFromPageImage
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="true"
-                                                        fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
+                                                        fieldDescription="Use the description defined on the referenced asset, or the alternative text defined in the page properties."
                                                         name="./altValueFromPageImage"
-                                                        text="Inherit - Value taken from the page featured image"
+                                                        text="Inherit alternative text from page"
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <altValueFromDAM
@@ -102,7 +102,7 @@
                                                         checked="${not empty cqDesign.altValueFromDAM ? cqDesign.altValueFromDAM : true}"
                                                         fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
                                                         name="./altValueFromDAM"
-                                                        text="Inherit - Value taken from the DAM asset"
+                                                        text="Inherit from description of asset"
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                 </items>
@@ -111,9 +111,9 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                 checked="${not empty cqDesign.isDecorative ? cqDesign.isDecorative : false}"
-                                                fieldDescription="Check if the image should be ignored by assistive technology and therefore does not require an alternative text. This applies to decorative images only."
+                                                fieldDescription="If the image is mostly decorative and doesn't convey additional meaning to a visitor, then it might be acceptable to not provide an alternative text, which will make the image ignored by assistive technology like screen readers."
                                                 name="./isDecorative"
-                                                text="Ignore the accessiblity alternative text, the image is decorative"
+                                                text="Don’t provide an alternative text"
                                                 uncheckedValue="false"
                                                 value="{Boolean}true"/>
                                         </items>
@@ -230,7 +230,7 @@
                                             <linkURL
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                                                fieldDescription="Make the image a link to another resource."
+                                                fieldDescription="Make the image a link to another resource. When a link is defined and when the image inherits from the page, the image is the featured image of the linked page."
                                                 fieldLabel="Link"
                                                 nodeTypes="dam:Asset, nt:file, cq:Page"
                                                 name="./linkURL"
