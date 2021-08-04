@@ -63,7 +63,7 @@ public class CoreResourceWrapperTest {
         }};
         Resource wrappedResource = new CoreResourceWrapper(prepareResourceToBeWrapped(properties), "d/e/f", new ArrayList<String>() {{
             add("b");
-        }}, new HashMap<>());
+        }}, new HashMap<>(), null);
 
         Map<String, Object> expectedProperties = new HashMap<>(properties);
         expectedProperties.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, "d/e/f");
@@ -85,7 +85,7 @@ public class CoreResourceWrapperTest {
         Map<String, String> overriddenProperties = new HashMap<>();
         overriddenProperties.put("a", "1");
         overriddenProperties.put("b", "2");
-        Resource wrappedResource = new CoreResourceWrapper(toBeWrapped, "a/b/c", new ArrayList<>(), overriddenProperties);
+        Resource wrappedResource = new CoreResourceWrapper(toBeWrapped, "a/b/c", new ArrayList<>(), overriddenProperties, null);
 
         // isResourceType()
         assertTrue(wrappedResource.isResourceType("a/b/c"));

@@ -36,19 +36,27 @@ public class CoreResourceWrapper extends ResourceWrapper {
 
     private ValueMap valueMap;
     private String overriddenResourceType;
+    private Map<String, Resource> overriddenChildren;
 
     public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType) {
-        this(resource, overriddenResourceType, null, null);
+        this(resource, overriddenResourceType, null, null, null);
     }
 
     public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType,
                                @Nullable List<String> hiddenProperties, @Nullable Map<String, String> overriddenProperties) {
+        this(resource, overriddenResourceType, hiddenProperties, overriddenProperties, null);
+    }
+
+    public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType,
+                               @Nullable List<String> hiddenProperties, @Nullable Map<String, String> overriddenProperties,
+                               @Nullable Map<String, Resource> overriddenChildren) {
         super(resource);
         if (StringUtils.isEmpty(overriddenResourceType)) {
             throw new IllegalArgumentException("The " + CoreResourceWrapper.class.getName() + " needs to override the resource type of " +
                     "the wrapped resource, but the resourceType argument was null or empty.");
         }
         this.overriddenResourceType = overriddenResourceType;
+        this.overriddenChildren = overriddenChildren;
         valueMap = new ValueMapDecorator(new HashMap<>(resource.getValueMap()));
         valueMap.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, overriddenResourceType);
         if (overriddenProperties != null) {
@@ -75,6 +83,17 @@ public class CoreResourceWrapper extends ResourceWrapper {
     @NotNull
     public ValueMap getValueMap() {
         return valueMap;
+    }
+
+    @Override
+    @Nullable
+    public Resource getChild(String relPath) {
+        if (overriddenChildren != null) {
+            if (overriddenChildren.containsKey(relPath)) {
+                return overriddenChildren.get(relPath);
+            }
+        }
+        return super.getChild(relPath);
     }
 
     @Override
