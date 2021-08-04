@@ -52,9 +52,9 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                 checked="${true}"
-                                                fieldDescription="When checked, uses the image defined for the page."
+                                                fieldDescription="Use the featured image defined in the properties of the linked page, or in the properties of the current page when no link is defined."
                                                 name="./imageFromPageImage"
-                                                text="Inherit featured image from linked page or current page"
+                                                text="Inherit featured image from page"
                                                 uncheckedValue="false"
                                                 value="{Boolean}true"/>
                                             <pageImageThumbnail
@@ -91,9 +91,9 @@
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="true"
-                                                        fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
+                                                        fieldDescription="Use the description defined on the referenced asset, or the alternative text defined in the page properties."
                                                         name="./altValueFromPageImage"
-                                                        text="Inherit alternative text from linked page or current page"
+                                                        text="Inherit alternative text from page"
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <altValueFromDAM
@@ -111,9 +111,9 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                 checked="${not empty cqDesign.isDecorative ? cqDesign.isDecorative : false}"
-                                                fieldDescription="Check if the image should be ignored by assistive technology and therefore does not require an alternative text. This applies to decorative images only."
+                                                fieldDescription="If the image is mostly decorative and doesn't convey additional meaning to a visitor, then it might be acceptable to not provide an alternative text, which will make the image ignored by assistive technology like screen readers."
                                                 name="./isDecorative"
-                                                text="Don't require an alternative text for accessiblity"
+                                                text="Don’t provide an alternative text"
                                                 uncheckedValue="false"
                                                 value="{Boolean}true"/>
                                         </items>
@@ -232,19 +232,17 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML WIDTH attribute to apply to the component, useful for browser to calculate the aspect ratio of the image, preventing the layout shifts"
                                                 fieldLabel="Width"
-                                                name="./width"
-                                            />
+                                                name="./width"/>
                                             <height
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML HEIGHT attribute to apply to the component, useful for browser to calculate the aspect ratio of the image, preventing the layout shifts."
                                                 fieldLabel="Height"
-                                                name="./height"
-                                            />
+                                                name="./height"/>
                                             <linkURL
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                                                fieldDescription="Make the image a link to another resource."
+                                                fieldDescription="Make the image a link to another resource. When a link is defined and when the image inherits from the page, the image is the featured image of the linked page."
                                                 fieldLabel="Link"
                                                 nodeTypes="dam:Asset, nt:file, cq:Page"
                                                 name="./linkURL"
