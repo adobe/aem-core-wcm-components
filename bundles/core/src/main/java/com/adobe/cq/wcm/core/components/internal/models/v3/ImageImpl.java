@@ -21,6 +21,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -53,6 +55,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
+
+    @PostConstruct
+    protected void initModel() {
+        super.initModel();
+        if (hasContent) {
+            disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+        }
+    }
 
     @Override
     @Nullable
@@ -102,37 +112,23 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     @Override
     @JsonIgnore
-    public Dimension getOriginalDimension() {
-        ValueMap inheritedResourceProperties = inheritedResource.getValueMap();
-        String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
-        Asset asset;
-        String resizeWidth = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class);
-        if (StringUtils.isNotEmpty(inheritedFileReference)) {
-            final Resource assetResource = request.getResourceResolver().getResource(inheritedFileReference);
-            if (assetResource != null) {
-                asset = assetResource.adaptTo(Asset.class);
-                EnhancedRendition original = null;
-                if (asset != null) {
-                    original = new EnhancedRendition(asset.getOriginal());
-                }
-                if (original != null) {
-                    Dimension dimension = original.getDimension();
-                    if (dimension != null) {
-                        if (resizeWidth != null && Integer.parseInt(resizeWidth) > 0 && Integer.parseInt(resizeWidth) < dimension.getWidth()) {
-                            int calculatedHeight = (int) Math.round(Integer.parseInt(resizeWidth) * (dimension.getHeight() / (float)dimension.getWidth()));
-                            return new Dimension(Integer.parseInt(resizeWidth), calculatedHeight);
-                        }
-                        return dimension;
-                    }
-                }
-            }
+    public String getHeight () {
+        int height = getOriginalDimension().height;
+        if (height > 0) {
+            return String.valueOf(height);
         }
-        return new Dimension(0, 0);
+        return null;
     }
 
+    @Nullable
     @Override
-    public boolean isLazyEnabled() {
-        return !currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+    @JsonIgnore
+    public String getWidth () {
+        int width = getOriginalDimension().width;
+        if (width > 0) {
+            return String.valueOf(width);
+        }
+        return null;
     }
 
     @Override
@@ -167,8 +163,37 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return super.getAreas();
     }
 
+    @Override
     protected void initResource() {
         resource = getWrappedImageResourceWithInheritance(resource, linkHandler);
+    }
+
+    private Dimension getOriginalDimension() {
+        ValueMap inheritedResourceProperties = resource.getValueMap();
+        String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
+        Asset asset;
+        String resizeWidth = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class);
+        if (StringUtils.isNotEmpty(inheritedFileReference)) {
+            final Resource assetResource = request.getResourceResolver().getResource(inheritedFileReference);
+            if (assetResource != null) {
+                asset = assetResource.adaptTo(Asset.class);
+                EnhancedRendition original = null;
+                if (asset != null) {
+                    original = new EnhancedRendition(asset.getOriginal());
+                }
+                if (original != null) {
+                    Dimension dimension = original.getDimension();
+                    if (dimension != null) {
+                        if (resizeWidth != null && Integer.parseInt(resizeWidth) > 0 && Integer.parseInt(resizeWidth) < dimension.getWidth()) {
+                            int calculatedHeight = (int) Math.round(Integer.parseInt(resizeWidth) * (dimension.getHeight() / (float)dimension.getWidth()));
+                            return new Dimension(Integer.parseInt(resizeWidth), calculatedHeight);
+                        }
+                        return dimension;
+                    }
+                }
+            }
+        }
+        return new Dimension(0, 0);
     }
 
 }

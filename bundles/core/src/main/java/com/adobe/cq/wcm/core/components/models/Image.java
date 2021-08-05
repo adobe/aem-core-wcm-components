@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import java.awt.*;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -340,13 +339,25 @@ public interface Image extends Component {
     }
 
     /**
-     * Returns {@code new Dimension(width, height)} containing the base DAM asset's width and height (the DAM asset which is used as the {@code src} html attribute of the image).
+     * Returns the width of the base DAM asset image, the one from the {@code src} attribute.
+     * It will be used as value for the {@code width} attribute of the image, only if the image is a DAM asset and is not SVG.
      *
-     * @return {@code new Dimension(width, height)} containing the base DAM asset's width and height, if the image exists and is a DAM asset, or {@code new Dimension(0, 0)}.
-     * @since com.adobe.cq.wcm.core.components.models 13.0.0;
+     * @return the width of the base DAM asset image, the one from the {@code src} attribute.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
      */
-    default Dimension getOriginalDimension() {
-        return new Dimension(0, 0);
+    default String getWidth() {
+        return null;
+    }
+
+    /**
+     * Returns the height of the base DAM asset image, the one from the {@code src} attribute.
+     * It will be used as value for the {@code height} attribute of the image, only if the image is a DAM asset and is not SVG.
+     *
+     * @return the height of the base DAM asset image, the one from the {@code src} attribute.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
+     */
+    default String getHeight() {
+        return null;
     }
 
     /**

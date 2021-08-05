@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.awt.*;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -357,7 +356,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetOriginalDimension() {
+    protected void testBaseDamAssetImageDimension() {
         asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
         when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
@@ -366,12 +365,13 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
         when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
 
-        assertEquals(new Dimension(850, 509), imageImpl.getOriginalDimension());
+        assertEquals("850", imageImpl.getWidth());
+        assertEquals("509", imageImpl.getHeight());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetOriginalDimension_resizeWidthSmallerThanAssetWidth() {
+    protected void testBaseDamAssetImageDimension_resizeWidthSmallerThanAssetWidth() {
         asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
         when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
@@ -380,12 +380,13 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
         when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn("600");
 
-        assertEquals(new Dimension(600, 359), imageImpl.getOriginalDimension());
+        assertEquals("600", imageImpl.getWidth());
+        assertEquals("359", imageImpl.getHeight());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetOriginalDimension_resizeWidthBiggerThanAssetWidth() {
+    protected void testBaseDamAssetImageDimension_resizeWidthBiggerThanAssetWidth() {
         asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
         when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
@@ -394,12 +395,13 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
         when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn("1000");
 
-        assertEquals(new Dimension(850, 509), imageImpl.getOriginalDimension());
+        assertEquals("850", imageImpl.getWidth());
+        assertEquals("509", imageImpl.getHeight());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetOriginalDimension_resizeWidthZero() {
+    protected void testBaseDamAssetImageDimension_resizeWidthZero() {
         asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
         when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
@@ -408,34 +410,37 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
         when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn("0");
 
-        assertEquals(new Dimension(850, 509), imageImpl.getOriginalDimension());
+        assertEquals("850", imageImpl.getWidth());
+        assertEquals("509", imageImpl.getHeight());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetOriginalDimension_nullFileReference() {
+    protected void testBaseDamAssetImageDimension_nullFileReference() {
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
         when(inheritedResourceProperties.get(any(), any())).thenReturn(null);
         when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
 
-        assertEquals(new Dimension(0, 0), imageImpl.getOriginalDimension());
+        assertNull(imageImpl.getWidth());
+        assertNull(imageImpl.getHeight());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetOriginalDimension_nullAssetResource() {
+    protected void testBaseDamAssetImageDimension_nullAssetResource() {
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
         when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
         when(request.getResourceResolver()).thenReturn(resolver);
         when(resolver.getResource(any())).thenReturn(null);
         when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
 
-        assertEquals(new Dimension(0, 0), imageImpl.getOriginalDimension());
+        assertNull(imageImpl.getWidth());
+        assertNull(imageImpl.getHeight());
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
-    protected void testGetOriginalDimension_nullAsset() {
+    protected void testBaseDamAssetImageDimension_nullAsset() {
         when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
         when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
         when(request.getResourceResolver()).thenReturn(resolver);
@@ -443,7 +448,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         when(inheritedResource.adaptTo(Asset.class)).thenReturn(null);
         when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
 
-        assertEquals(new Dimension(0, 0), imageImpl.getOriginalDimension());
+        assertNull(imageImpl.getWidth());
+        assertNull(imageImpl.getHeight());
     }
 
     @Test
