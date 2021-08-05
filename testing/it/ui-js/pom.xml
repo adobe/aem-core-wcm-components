@@ -104,6 +104,7 @@
                     </validatorsSettings>
                     <properties>
                         <acHandling>merge_preserve</acHandling>
+                        <cloudManagerTarget>none</cloudManagerTarget>
                     </properties>
                     <dependencies>
                         <dependency>
