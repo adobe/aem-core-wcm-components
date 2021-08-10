@@ -3,13 +3,8 @@
   "alt": "transparent HD PNG",
   "title": "transparent HD PNG",
   "src": "/core/content/test/_jcr_content/root/image55.coreimg.png/1607501105000/transparent-hd.png",
-  "srcUriTemplate": "/core/content/test/_jcr_content/root/image55.coreimg{.width}.png/1607501105000/transparent-hd.png",
-  "areas": [],
-  "lazyThreshold": 0,
-  "dmImage": false,
   "uuid": "f6460529-b7b1-4b3a-8980-b3b3f0ee109c",
-  "widths": [],
-  "lazyEnabled": false,
+  "lazyEnabled": true,
   "dataLayer": {
     "image-044ffb3bd3": {
       "@type": "core/wcm/components/image/v3/image",
@@ -18,9 +13,7 @@
         "repo:id": "f6460529-b7b1-4b3a-8980-b3b3f0ee109c",
         "repo:modifyDate": "2020-12-09T08:05:05Z",
         "@type": "image/png",
-        "repo:path": "/content/dam/core/images/transparent_hd.png",
-        "xdm:tags": [],
-        "xdm:smartTags": {}
+        "repo:path": "/content/dam/core/images/transparent_hd.png"
       }
     }
   },

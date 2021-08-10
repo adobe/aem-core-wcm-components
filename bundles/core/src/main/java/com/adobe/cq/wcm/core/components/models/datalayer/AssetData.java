@@ -74,6 +74,7 @@ public interface AssetData {
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
     @JsonProperty("xdm:tags")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     default String[] getTags() {
         return null;
     }
@@ -99,6 +100,7 @@ public interface AssetData {
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.1.0
      */
     @JsonProperty("xdm:smartTags")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     default Map<String, Object> getSmartTags() {
         return null;
     }

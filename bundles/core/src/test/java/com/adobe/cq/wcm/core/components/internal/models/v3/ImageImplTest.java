@@ -18,19 +18,38 @@ package com.adobe.cq.wcm.core.components.internal.models.v3;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.commons.handler.StandardImageHandler;
+import com.day.cq.wcm.api.designer.Style;
+import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_RESIZE_WIDTH;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
 class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImplTest {
@@ -65,9 +84,32 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         internalSetUp(TEST_BASE);
     }
 
+    @InjectMocks
+    private ImageImpl imageImpl;
+
+    @Mock
+    private Resource inheritedResource;
+
+    @Mock
+    private ValueMap inheritedResourceProperties;
+
+    @Mock
+    private Asset asset;
+
+    @Mock
+    private SlingHttpServletRequest request;
+
+    @Mock
+    private ResourceResolver resolver;
+
+    @Mock
+    private Style currentStyle;
+
     @Test
     void testImageWithLazyThreshold() {
-        testImageWithLazyThreshold(ImageImpl.RESOURCE_TYPE);
+        context.contentPolicyMapping(resourceType, Image.PN_DESIGN_LAZY_THRESHOLD, 100);
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+        assertEquals(0, image.getLazyThreshold());
     }
 
     @Test
@@ -165,15 +207,13 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     @Override
     protected void testSimpleDecorativeImage() {
         context.contentPolicyMapping(resourceType,
-                "uuidDisabled", true);
+            "uuidDisabled", true);
         String escapedResourcePath = AbstractImageTest.IMAGE4_PATH.replace("jcr:content", "_jcr_content");
         com.adobe.cq.wcm.core.components.models.Image image = getImageUnderTest(AbstractImageTest.IMAGE4_PATH);
         assertEquals(null, image.getAlt(), "Did not expect a value for the alt attribute, since the image is marked as decorative.");
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertTrue(image.displayPopupTitle());
         assertEquals(null, image.getLink(), "Did not expect a link for this image, since it's marked as decorative.");
-        assertEquals("850", image.getWidth());
-        assertEquals("450", image.getHeight());
         assertNull(image.getImageLink(), "Expected null link");
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/" + ASSET_NAME + ".png", image.getSrc());
         assertNull(image.getSrcset());
@@ -185,26 +225,26 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     @Override
     protected void testImageWithTwoOrMoreSmartSizes() {
         context.contentPolicyMapping(resourceType,
-                "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
+            "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
         String escapedResourcePath = AbstractImageTest.IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
         assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt());
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
         String expectedSrcset = "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".600.png/1490005239000/" + ASSET_NAME + ".png 600w," +
-                "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".700.png/1490005239000/" + ASSET_NAME + ".png 700w," +
-                "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".800.png/1490005239000/" + ASSET_NAME + ".png 800w," +
-                "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".2000.png/1490005239000/" + ASSET_NAME + ".png 2000w," +
-                "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".2500.png/1490005239000/" + ASSET_NAME + ".png 2500w";
+            "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".700.png/1490005239000/" + ASSET_NAME + ".png 700w," +
+            "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".800.png/1490005239000/" + ASSET_NAME + ".png 800w," +
+            "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".2000.png/1490005239000/" + ASSET_NAME + ".png 2000w," +
+            "/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY + ".2500.png/1490005239000/" + ASSET_NAME + ".png 2500w";
         assertEquals(expectedSrcset, image.getSrcset());
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
         String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +
-                ".600.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +
-                ".700.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0" + "." + selector + "." + JPEG_QUALITY +
-                ".800.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +
-                ".2000.png/1490005239000/" + ASSET_NAME + ".png\", \"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +
-                ".2500.png/1490005239000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":false}";
+            ".600.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +
+            ".700.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0" + "." + selector + "." + JPEG_QUALITY +
+            ".800.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +
+            ".2000.png/1490005239000/" + ASSET_NAME + ".png\", \"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +
+            ".2500.png/1490005239000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":false}";
         compareJSON(expectedJson, image.getJson());
         assertTrue(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
@@ -218,12 +258,12 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     @Override
     protected void testImageWithMap() {
         context.contentPolicyMapping(resourceType,
-                "uuidDisabled", true);
+            "uuidDisabled", true);
         com.adobe.cq.wcm.core.components.models.Image image = getImageUnderTest(AbstractImageTest.IMAGE24_PATH);
         Object[][] expectedAreas = {
-                {"circle", "256,256,256", "0.2000,0.3001,0.2000", "http://adobe.com", "", ""},
-                {"rect", "256,171,1023,682", "0.1992,0.2005,0.7992,0.7995", "http://adobe.com", "", "altText"},
-                {"poly", "917,344,1280,852,532,852", "0.7164,0.4033,1.0000,0.9988,0.4156,0.9988", "http://adobe.com", "_blank", ""}
+            {"circle", "256,256,256", "0.2000,0.3001,0.2000", "http://adobe.com", "", ""},
+            {"rect", "256,171,1023,682", "0.1992,0.2005,0.7992,0.7995", "http://adobe.com", "", "altText"},
+            {"poly", "917,344,1280,852,532,852", "0.7164,0.4033,1.0000,0.9988,0.4156,0.9988", "http://adobe.com", "_blank", ""}
         };
         List<ImageArea> areas = image.getAreas();
         int index = 0;
@@ -235,7 +275,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             assertEquals(expectedAreas[index][3], area.getHref(), "The image area's href is not as expected.");
             assertEquals(expectedAreas[index][4], area.getTarget(), "The image area's target is not as expected.");
             assertEquals(expectedAreas[index][5], area.getAlt(), "The image area's alt text is not as expected.");
-            assertValidLink(area.getLink(), (String)expectedAreas[index][3], StringUtils.trimToNull((String)expectedAreas[index][4]));
+            assertValidLink(area.getLink(), (String) expectedAreas[index][3], StringUtils.trimToNull((String) expectedAreas[index][4]));
             index++;
         }
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE24_PATH));
@@ -250,6 +290,166 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid(), "getUuid()");
         assertEquals("image-cf7954fac5", image.getId(), "getId()");
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE50_PATH));
+    }
+
+    @Override
+    @Test
+    protected void testImageWithMoreThanOneSmartSize() {
+        context.contentPolicyMapping(resourceType,
+            "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
+        assertArrayEquals(new int[]{600, 700, 800, 2000, 2500}, image.getWidths());
+        assertTrue(image.isLazyEnabled());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE0_PATH));
+    }
+
+    @Override
+    @Test
+    protected void testImageWithNoSmartSize() {
+        context.contentPolicyMapping(resourceType,
+            "uuidDisabled", true);
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE4_PATH);
+
+        assertArrayEquals(new int[]{}, image.getWidths());
+        assertTrue(image.isLazyEnabled());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE4_PATH));
+    }
+
+    @Override
+    @Test
+    protected void testImageWithOneSmartSize() {
+        context.contentPolicyMapping(resourceType,
+            "allowedRenditionWidths", new int[]{600});
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+        assertArrayEquals(new int[]{600}, image.getWidths());
+        assertTrue(image.isLazyEnabled());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE3_PATH));
+    }
+
+    @Override
+    @Test
+    protected void testImageWithOneSmartSizeAndPolicyDelegate() {
+        context.contentPolicyMapping(resourceType,
+            "allowedRenditionWidths", new int[]{600});
+        context.request().setParameterMap(ImmutableMap.of("contentPolicyDelegatePath", IMAGE0_PATH));
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+
+        assertArrayEquals(new int[]{600}, image.getWidths());
+        assertTrue(image.isLazyEnabled());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE3_PATH + "-with-policy-delegate"));
+    }
+
+    @Test
+    protected void testLazyLoadedDisabled() {
+        context.contentPolicyMapping(resourceType,
+            "disableLazyLoading", true, "allowedRenditionWidths", new int[]{600});
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+        assertFalse(image.isLazyEnabled());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE3_PATH + "-with-lazy-loading-disabled"));
+    }
+
+    @Test
+    protected void testGetSrcUriTemplate() {
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+        assertEquals("/core/content/test/_jcr_content/root/image3.coreimg{.width}.png", image.getSrcUriTemplate());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testBaseDamAssetImageDimension() {
+        asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
+
+        assertEquals("850", imageImpl.getWidth());
+        assertEquals("509", imageImpl.getHeight());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testBaseDamAssetImageDimension_resizeWidthSmallerThanAssetWidth() {
+        asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn("600");
+
+        assertEquals("600", imageImpl.getWidth());
+        assertEquals("359", imageImpl.getHeight());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testBaseDamAssetImageDimension_resizeWidthBiggerThanAssetWidth() {
+        asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn("1000");
+
+        assertEquals("850", imageImpl.getWidth());
+        assertEquals("509", imageImpl.getHeight());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testBaseDamAssetImageDimension_resizeWidthZero() {
+        asset = context.create().asset("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg", 850, 509, StandardImageHandler.JPEG_MIMETYPE);
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(asset);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn("0");
+
+        assertEquals("850", imageImpl.getWidth());
+        assertEquals("509", imageImpl.getHeight());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testBaseDamAssetImageDimension_nullFileReference() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn(null);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
+
+        assertNull(imageImpl.getWidth());
+        assertNull(imageImpl.getHeight());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testBaseDamAssetImageDimension_nullAssetResource() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(null);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
+
+        assertNull(imageImpl.getWidth());
+        assertNull(imageImpl.getHeight());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    protected void testBaseDamAssetImageDimension_nullAsset() {
+        when(inheritedResource.getValueMap()).thenReturn(inheritedResourceProperties);
+        when(inheritedResourceProperties.get(any(), any())).thenReturn("/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg");
+        when(request.getResourceResolver()).thenReturn(resolver);
+        when(resolver.getResource(any())).thenReturn(inheritedResource);
+        when(inheritedResource.adaptTo(Asset.class)).thenReturn(null);
+        when (currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class)).thenReturn(null);
+
+        assertNull(imageImpl.getWidth());
+        assertNull(imageImpl.getHeight());
     }
 
     @Test

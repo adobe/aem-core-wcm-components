@@ -66,9 +66,7 @@
           "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
           "isDecorative"      : true,
           "linkURL"           : "https://www.adobe.com",
-          "alt"               : "Adobe Logo",
-          "width"             : "850",
-          "height"            : "450"
+          "alt"               : "Adobe Logo"
         },
         "image5"            : {
           "jcr:primaryType"   : "nt:unstructured",

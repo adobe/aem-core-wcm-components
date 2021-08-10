@@ -505,7 +505,6 @@
     /**
      * Scrolls the browser when the URI fragment is changed to the item of the container Accordion component that corresponds to the deep link in the URL fragment,
        and displays its content.
-     * This method fixes the issue existent with Chrome and related browsers, which are just scrolling to the item without displaying its content.
      */
     function onHashChange() {
         if (location.hash && location.hash !== "#") {
