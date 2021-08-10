@@ -2,12 +2,7 @@
   "id": "image-fdd83505b7",
   "alt": "image52a alt",
   "src": "/core/content/test/_jcr_content/root/image56.coreimg.gif",
-  "srcUriTemplate": "/core/content/test/_jcr_content/root/image56.coreimg{.width}.gif",
-  "areas": [],
-  "lazyThreshold": 0,
-  "dmImage": false,
-  "widths": [],
-  "lazyEnabled": false,
+  "lazyEnabled": true,
   ":type": "core/wcm/components/image/v3/image",
   "dataLayer": {
     "image-fdd83505b7": {

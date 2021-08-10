@@ -33,7 +33,7 @@ import com.day.cq.dam.api.Rendition;
 /**
  * A {@link Rendition} delegate that facilitates finding out the rendition's dimensions.
  */
-class EnhancedRendition {
+public class EnhancedRendition {
 
     private static final Logger LOG = LoggerFactory.getLogger(EnhancedRendition.class);
 

@@ -16,17 +16,16 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v3;
 
-import java.util.concurrent.TimeoutException;
-
+import com.adobe.cq.wcm.core.components.it.seljup.components.image.v2.Image;
+import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.image.v2.Image;
-import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.concurrent.TimeoutException;
 
 @Tag("group2")
 public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.image.v2.ImageIT {
@@ -36,6 +35,26 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         clientlibs = "core.wcm.components.image.v3";
         imageTests = new ImageTests();
         imageTests.setup(adminClient, label, Commons.rtImage_v3, rootPage, defaultPageTemplate, clientlibs, new Image());
+    }
+
+    /**
+     * Test: Check image map areas are not rendered
+     *
+     * @throws ClientException
+     */
+    @Test
+    @DisplayName("Test: Check image map areas are not rendered")
+    public void testCheckMapAreaNavigationAndResponsiveResize() throws ClientException {
+        imageTests.testCheckMapAreaNotAvailable(adminClient);
+    }
+
+    /**
+     * Test: Lazy loading enabled by default
+     */
+    @Test
+    @DisplayName("Test: Lazy loading enabled by default")
+    public void testLazyLoadingEnabled() throws TimeoutException, InterruptedException {
+        imageTests.testLazyLoadingEnabled();
     }
 
     /**

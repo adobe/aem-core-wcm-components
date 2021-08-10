@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import com.adobe.cq.wcm.core.components.internal.servlets.DMAssetPostProcessor;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -304,6 +305,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     @Override
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public List<ImageArea> getAreas() {
         if (areas == null) {
             return Collections.emptyList();

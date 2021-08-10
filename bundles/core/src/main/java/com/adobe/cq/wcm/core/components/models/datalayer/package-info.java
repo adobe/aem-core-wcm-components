@@ -17,7 +17,7 @@
  * This packages defines models for integration with
  * <a href="https://github.com/adobe/adobe-client-data-layer">Adobe Client Data Layer</a>
  */
-@Version("1.3.0")
+@Version("1.3.1")
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
 import org.osgi.annotation.versioning.Version;

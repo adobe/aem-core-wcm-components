@@ -227,18 +227,6 @@
                                                         value="{Boolean}true"/>
                                                 </items>
                                             </captionGroup>
-                                            <width
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="HTML WIDTH attribute to apply to the component, useful for browser to calculate the aspect ratio of the image, preventing the layout shifts"
-                                                fieldLabel="Width"
-                                                name="./width"/>
-                                            <height
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="HTML HEIGHT attribute to apply to the component, useful for browser to calculate the aspect ratio of the image, preventing the layout shifts."
-                                                fieldLabel="Height"
-                                                name="./height"/>
                                             <linkURL
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"

@@ -31,13 +31,14 @@ public class BaseImage extends BaseComponent {
     private static String imageTag = "div.cmp-image img[src*='%s/_jcr_content/root/responsivegrid/image.img.']";
     private static String altText = "div.cmp-image img[alt='%s']";
     private static String image = "div.cmp-image";
+    public static String imageWithLazyLoadedEnabled = "div.cmp-image img[loading='lazy']";
 
     private static String imgWithTitle = "div.cmp-image img[title='%s']";
 
     private static String imageLink = ".cmp-image__link";
 
     private static String element = ".cmp-image";
-    private static String imageElement = "[data-cmp-hook-image='image']";
+    private static String imageElement = ".cmp-image__image";
     public static String mapElement = "[data-cmp-hook-image='map']";
     public static String areaElement = "[data-cmp-hook-image='area']";
     public static String imageWithAtlTextAndTitle = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s'][title='%s']";
@@ -129,6 +130,10 @@ public class BaseImage extends BaseComponent {
                 return false;
         }
         return true;
+    }
+
+    public boolean isImageWithLazyLoadingEnabled() {
+        return $(imageWithLazyLoadedEnabled).isDisplayed();
     }
 
 }
