@@ -188,6 +188,7 @@ public class PageIT extends AdminBaseUITest {
     /**
      * Test: Check the Edit Closed User Group options of a page properties.
      */
+    @Tag("IgnoreOnSDK")
     @Test
     @DisplayName("Test: Check the Edit Closed User Group options of a page properties.")
     public void testEditUserGroupPermissionsPageProperties() {
