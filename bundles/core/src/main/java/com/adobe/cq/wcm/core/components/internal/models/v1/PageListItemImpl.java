@@ -54,7 +54,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     static final String PN_DISABLE_SHADOWING = "disableShadowing";
 
     /**
-     * Flag indicating if showing is disabled.
+     * Flag indicating if shadowing is disabled.
      */
     public static final boolean PROP_DISABLE_SHADOWING_DEFAULT = false;
 
@@ -66,7 +66,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * The link for this list item.
      */
-    protected final Optional<Link<Page>> link;
+    protected Optional<Link<Page>> link;
 
     /**
      * Construct a list item for a given page.
@@ -85,14 +85,25 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
         super(parentId, page.getContentResource(), component);
         this.page = page;
         this.parentId = parentId;
-
-        if (!isShadowingDisabled) {
-            this.page = getRedirectTarget(page)
-                .filter(redirectTarget -> !redirectTarget.equals(page))
-                .orElse(page);
-        }
-
         this.link = linkHandler.getLink(this.page);
+        if (!isShadowingDisabled) {
+            Optional<Page> redirectPageOptional = getRedirectPage(page);
+            if (redirectPageOptional.isPresent()) {
+                Page redirectPage = redirectPageOptional.get();
+                PageManager pageManager = redirectPage.getPageManager();
+                String redirectTarget = redirectPage.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class);
+                if (StringUtils.isNotEmpty(redirectTarget)) {
+                    Optional<Page> redirectTargetPageOptional = Optional.ofNullable(pageManager.getPage(redirectTarget));
+                    if (redirectTargetPageOptional.isPresent()) {
+                        this.page = redirectTargetPageOptional.get();
+                        this.link = linkHandler.getLink(this.page);
+                    } else {
+                        this.page = redirectPage;
+                        this.link = linkHandler.getLink(redirectTarget, null);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -163,7 +174,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     /**
      * Get the redirect target for the specified page.
-     * This method will follow a chain or redirects to the final target.
+     * This method will follow a chain of redirects to the final redirect target page.
      *
      * @param page The page for which to get the redirect target.
      * @return The redirect target if found, empty if not.
@@ -180,6 +191,35 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
             result = pageManager.getPage(redirectTarget);
             if (result != null) {
                 if (!redirectCandidates.add(result.getPath())) {
+                    LOGGER.warn("Detected redirect loop for the following pages: {}.", redirectCandidates.toString());
+                    break;
+                }
+            }
+        }
+        return Optional.ofNullable(result);
+    }
+
+    /**
+     * Get the redirect page for the specified page.
+     * This method will follow a chain of redirects to the final page that has a redirect target defined.
+     *
+     * @param page The page for which to get the redirect page.
+     * @return The redirect page if found, empty if not.
+     */
+    @NotNull
+    static Optional<Page> getRedirectPage(@NotNull final Page page) {
+        Page result = page;
+        Page next = page;
+        String redirectTarget;
+        PageManager pageManager = page.getPageManager();
+        Set<String> redirectCandidates = new LinkedHashSet<>();
+        redirectCandidates.add(page.getPath());
+        while (next != null && StringUtils
+                .isNotEmpty((redirectTarget = next.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
+            result = next;
+            next = pageManager.getPage(redirectTarget);
+            if (next != null) {
+                if (!redirectCandidates.add(next.getPath())) {
                     LOGGER.warn("Detected redirect loop for the following pages: {}.", redirectCandidates.toString());
                     break;
                 }

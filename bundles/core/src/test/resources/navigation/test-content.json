@@ -525,6 +525,14 @@
                     }
                 }
             }
+        },
+        "navigation-3": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title": "Navigation 3",
+                "cq:redirectTarget": "https://www.adobe.com"
+            }
         }
     },
     "navigation-redirect-chain": {
