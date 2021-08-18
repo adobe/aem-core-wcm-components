@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v1;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
-import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.TeaserEditDialog;
 import com.codeborne.selenide.ElementsCollection;
 
 

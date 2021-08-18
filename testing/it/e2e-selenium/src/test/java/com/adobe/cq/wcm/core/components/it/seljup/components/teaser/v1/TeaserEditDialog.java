@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.seljup.components.teaser;
+package com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v1;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
@@ -45,7 +45,7 @@ public class TeaserEditDialog {
         $("button[is='coral-buttonlist-item'][value='" + url + "']").click();
     }
 
-    public void openImageTab() {
+    public final void openImageTab() {
         $$(".cmp-teaser__editor coral-tab").get(0).click();
     }
 
@@ -53,7 +53,7 @@ public class TeaserEditDialog {
         $$(".cmp-teaser__editor coral-tab").get(1).click();
     }
 
-    public void openLinkAndActionsTab() {
+    public final void openLinkAndActionsTab() {
         $$(".cmp-teaser__editor coral-tab").get(2).click();
     }
 
