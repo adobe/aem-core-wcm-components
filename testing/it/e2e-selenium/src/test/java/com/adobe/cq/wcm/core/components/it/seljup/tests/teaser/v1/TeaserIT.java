@@ -20,7 +20,7 @@ import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.components.commons.AssetFinder;
-import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.TeaserEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v1.TeaserEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v1.Teaser;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
@@ -42,19 +42,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group3")
 public class TeaserIT extends AuthorBaseUITest {
-    private static String  testAssetsPath                   = "/content/dam/core-components";
-    private static String  testImagePath                    = testAssetsPath + "/core-comp-test-image.jpg";
-    private static String  preTitle                         = "Teaser PreTitle";
-    private static String  title                            = "Teaser Title";
-    private static String  description                      = "Teaser Description";
+    protected static String  testAssetsPath                   = "/content/dam/core-components";
+    protected static String  testImagePath                    = testAssetsPath + "/core-comp-test-image.jpg";
+    protected static String  preTitle                         = "Teaser PreTitle";
+    protected static String  title                            = "Teaser Title";
+    protected static String  description                      = "Teaser Description";
     private static String  pageName                         = "teaser-page";
-    private static String  pageTitle                        = "teaser_page";
+    protected static String  pageTitle                        = "teaser_page";
     private static String  secondPageName                   = "teaser-second-page";
-    private static String  secondPageTitle                  = "teaser_second_page";
-    private static String  pageDescription                  = "teaser page description";
-    private static String  actionText2                      = "Action Text 2";
-    private static String  actionExternalLink               = "http://www.adobe.com";
-    private static String  actionExternalText               = "Adobe";
+    protected static String  secondPageTitle                  = "teaser_second_page";
+    public static String  pageDescription                  = "teaser page description";
+    protected static String  actionText2                      = "Action Text 2";
+    protected static String  actionExternalLink               = "http://www.adobe.com";
+    protected static String  actionExternalText               = "Adobe";
     private static String componentName                     = "teaser";
 
 
@@ -70,9 +70,10 @@ public class TeaserIT extends AuthorBaseUITest {
     protected Teaser teaser;
     protected AssetFinder assetFinder;
 
-    private void setupResources() {
+    protected void setupResources() {
         teaserRT = Commons.rtTeaser_v1;
         clientlibs = "core.wcm.components.teaser.v1";
+        teaser = new Teaser();
     }
 
     protected void setup() throws ClientException {
@@ -114,7 +115,6 @@ public class TeaserIT extends AuthorBaseUITest {
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
 
-        teaser = new Teaser();
         assetFinder = new AssetFinder();
     }
 
