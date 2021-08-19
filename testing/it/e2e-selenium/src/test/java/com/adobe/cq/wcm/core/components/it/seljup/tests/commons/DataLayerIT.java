@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.commons;
 
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AdminBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
@@ -37,14 +38,14 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("group2")
-public class DataLayerIT extends AuthorBaseUITest {
+public class DataLayerIT extends AdminBaseUITest {
 
     protected String testPage;
     protected EditorPage editorPage;
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
-        testPage = authorClient.createPage("testPage-" + System.currentTimeMillis(), "Test Page Title", "/content/core-components", "/conf/core-components/settings/wcm/templates/simple-template").getSlingPath();
+        testPage = adminClient.createPage("testPage-" + System.currentTimeMillis(), "Test Page Title", "/content/core-components", "/conf/core-components/settings/wcm/templates/simple-template").getSlingPath();
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
     }
@@ -77,6 +78,6 @@ public class DataLayerIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+        adminClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
     }
 }
