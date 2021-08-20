@@ -145,7 +145,10 @@ public class LinkHandler {
      */
     @NotNull
     public Optional<Link<Page>> getLink(@Nullable Page page) {
-        Page resolved = resolveRedirects(page);
+        Page resolved = page;
+        if (!isShadowingDisabled()) {
+            resolved = resolveRedirects(page);
+        }
         if (resolved == null && page != null) {
             String redirectTarget = page.getProperties().get(PageImpl.PN_REDIRECT_TARGET, "");
             if (StringUtils.isNotEmpty(redirectTarget)) {
@@ -324,9 +327,9 @@ public class LinkHandler {
      *         even {@code null} if the redirect chain does not resolve to a valid page.
      */
     @Nullable
-    private Page resolveRedirects(@Nullable final Page page) {
+    public Page resolveRedirects(@Nullable final Page page) {
         Page result = page;
-        if (page != null && !isShadowingDisabled()) {
+        if (page != null) {
             String redirectTarget;
             Set<String> redirectCandidates = new LinkedHashSet<>();
             redirectCandidates.add(page.getPath());

@@ -37,7 +37,7 @@ public class NavigationItemImplTest {
         when(page.getProperties()).thenReturn(ValueMap.EMPTY);
         LinkHandler linkHandler = mock(LinkHandler.class);
         Component component = mock(Component.class);
-        NavigationItemImpl navigationItem = new NavigationItemImpl(page, true, true, linkHandler, 0, Collections.emptyList(), "id", false, component);
+        NavigationItemImpl navigationItem = new NavigationItemImpl(page, true, true, linkHandler, 0, Collections.emptyList(), "id", component);
         assertEquals(page, navigationItem.getPage());
         assertTrue(navigationItem.isActive());
         assertEquals(Collections.emptyList(), navigationItem.getChildren());

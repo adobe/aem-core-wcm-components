@@ -56,14 +56,14 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         if (this.listItems == null) {
             this.listItems = super.getItems().stream()
                 .filter(Objects::nonNull)
-                .map(page -> newPageListItem(linkHandler, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, component))
+                .map(page -> newPageListItem(linkHandler, page, getId(), component))
                 .collect(Collectors.toList());
         }
         return this.listItems;
     }
 
-    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
-        return new PageListItemImpl(linkHandler, page, parentId, isShadowingDisabled, component);
+    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, Component component) {
+        return new PageListItemImpl(linkHandler, page, parentId, component);
     }
 
 }
