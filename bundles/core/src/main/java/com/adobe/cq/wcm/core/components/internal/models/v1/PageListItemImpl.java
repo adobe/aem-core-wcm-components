@@ -51,7 +51,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
      * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
      * Default is `false`. If `true` - original page is returned. If `false` or not configured - redirect target page.
      */
-    static final String PN_DISABLE_SHADOWING = "disableShadowing";
+    public static final String PN_DISABLE_SHADOWING = "disableShadowing";
 
     /**
      * Flag indicating if shadowing is disabled.
@@ -83,26 +83,12 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
                             final boolean isShadowingDisabled,
                             final Component component) {
         super(parentId, page.getContentResource(), component);
-        this.page = page;
         this.parentId = parentId;
-        this.link = linkHandler.getLink(this.page);
-        if (!isShadowingDisabled) {
-            Optional<Page> redirectPageOptional = getRedirectPage(page);
-            if (redirectPageOptional.isPresent()) {
-                Page redirectPage = redirectPageOptional.get();
-                PageManager pageManager = redirectPage.getPageManager();
-                String redirectTarget = redirectPage.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class);
-                if (StringUtils.isNotEmpty(redirectTarget)) {
-                    Optional<Page> redirectTargetPageOptional = Optional.ofNullable(pageManager.getPage(redirectTarget));
-                    if (redirectTargetPageOptional.isPresent()) {
-                        this.page = redirectTargetPageOptional.get();
-                        this.link = linkHandler.getLink(this.page);
-                    } else {
-                        this.page = redirectPage;
-                        this.link = linkHandler.getLink(redirectTarget, null);
-                    }
-                }
-            }
+        this.link = linkHandler.getLink(page);
+        if (this.link.isPresent()) {
+            this.page = link.get().getReference();
+        } else {
+            this.page = page;
         }
     }
 
@@ -191,35 +177,6 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
             result = pageManager.getPage(redirectTarget);
             if (result != null) {
                 if (!redirectCandidates.add(result.getPath())) {
-                    LOGGER.warn("Detected redirect loop for the following pages: {}.", redirectCandidates.toString());
-                    break;
-                }
-            }
-        }
-        return Optional.ofNullable(result);
-    }
-
-    /**
-     * Get the redirect page for the specified page.
-     * This method will follow a chain of redirects to the final page that has a redirect target defined.
-     *
-     * @param page The page for which to get the redirect page.
-     * @return The redirect page if found, empty if not.
-     */
-    @NotNull
-    static Optional<Page> getRedirectPage(@NotNull final Page page) {
-        Page result = page;
-        Page next = page;
-        String redirectTarget;
-        PageManager pageManager = page.getPageManager();
-        Set<String> redirectCandidates = new LinkedHashSet<>();
-        redirectCandidates.add(page.getPath());
-        while (next != null && StringUtils
-                .isNotEmpty((redirectTarget = next.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
-            result = next;
-            next = pageManager.getPage(redirectTarget);
-            if (next != null) {
-                if (!redirectCandidates.add(next.getPath())) {
                     LOGGER.warn("Detected redirect loop for the following pages: {}.", redirectCandidates.toString());
                     break;
                 }
