@@ -158,6 +158,9 @@ public class LinkHandler {
      */
     @NotNull
     public Optional<Link<Page>> getLink(@Nullable Page page) {
+        if (page == null) {
+            return Optional.empty();
+        }
         Page resolved = page;
         String redirectTarget = null;
         if (!isShadowingDisabled()) {
@@ -165,15 +168,12 @@ public class LinkHandler {
             resolved = pair.getLeft();
             redirectTarget = pair.getRight();
         }
-        if (resolved == null && page != null) {
+        if (resolved == null) {
             if (StringUtils.isNotEmpty(redirectTarget)) {
                 return buildLink(redirectTarget, request, page, null);
             } else {
                 resolved = page;
             }
-        }
-        if (resolved == null) {
-            return Optional.empty();
         }
         String linkURL = getPageLinkURL(resolved);
         return buildLink(linkURL, request, resolved, null);
