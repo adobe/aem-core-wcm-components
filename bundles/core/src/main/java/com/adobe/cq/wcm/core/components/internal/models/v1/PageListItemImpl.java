@@ -36,17 +36,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     /**
-     * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
-     * Default is `false`. If `true` - original page is returned. If `false` or not configured - redirect target page.
-     */
-    public static final String PN_DISABLE_SHADOWING = "disableShadowing";
-
-    /**
-     * Flag indicating if shadowing is disabled.
-     */
-    public static final boolean PROP_DISABLE_SHADOWING_DEFAULT = false;
-
-    /**
      * The page for this list item.
      */
     protected Page page;

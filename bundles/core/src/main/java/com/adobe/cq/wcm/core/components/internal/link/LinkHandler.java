@@ -37,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.wcm.api.Page;
@@ -63,6 +62,17 @@ public class LinkHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(LinkHandler.class);
 
     public static final String HTML_EXTENSION = ".html";
+
+    /**
+     * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
+     * Default is `false`. If `true` - original page is returned. If `false` or not configured - redirect target page.
+     */
+    public static final String PN_DISABLE_SHADOWING = "disableShadowing";
+
+    /**
+     * Flag indicating if shadowing is disabled.
+     */
+    public static final boolean PROP_DISABLE_SHADOWING_DEFAULT = false;
 
     /**
      * List of allowed/supported values for link target.
@@ -100,7 +110,8 @@ public class LinkHandler {
     private List<PathProcessor> pathProcessors;
 
     /**
-     * Variable that defines how
+     * Variable that defines how to handle pages that redirect. Given pages PageA and PageB where PageA redirects to PageB,
+     * when shadowing is disabled, the link will point to the original page (PageA).
      */
     private Boolean shadowingDisabled;
 
@@ -320,10 +331,10 @@ public class LinkHandler {
     }
 
     /**
-     * Attempts to resolve the redirect chain starting form the given page, avoiding loops.
+     * Attempts to resolve the redirect chain starting from the given page, avoiding loops.
      *
      * @param page The starting {@link Page}
-     * @return The {@link Page} the redirect chain resolves too. Can be the original page, if no redirect target is defined or
+     * @return The {@link Page} the redirect chain resolves to. Can be the original page, if no redirect target is defined or
      *         even {@code null} if the redirect chain does not resolve to a valid page.
      */
     @Nullable
@@ -354,12 +365,12 @@ public class LinkHandler {
      */
     private boolean isShadowingDisabled() {
         if (shadowingDisabled == null) {
-            shadowingDisabled = PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT;
+            shadowingDisabled = PROP_DISABLE_SHADOWING_DEFAULT;
             if (currentStyle != null) {
-                shadowingDisabled = currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, shadowingDisabled);
+                shadowingDisabled = currentStyle.get(PN_DISABLE_SHADOWING, shadowingDisabled);
             }
             if (properties != null) {
-                shadowingDisabled = properties.get(PageListItemImpl.PN_DISABLE_SHADOWING, shadowingDisabled);
+                shadowingDisabled = properties.get(PN_DISABLE_SHADOWING, shadowingDisabled);
             }
         }
         return shadowingDisabled;
