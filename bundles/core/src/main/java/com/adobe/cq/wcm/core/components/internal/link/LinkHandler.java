@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -157,11 +159,13 @@ public class LinkHandler {
     @NotNull
     public Optional<Link<Page>> getLink(@Nullable Page page) {
         Page resolved = page;
+        String redirectTarget = null;
         if (!isShadowingDisabled()) {
-            resolved = resolveRedirects(page);
+            Pair<Page, String> pair = resolveRedirects(page);
+            resolved = pair.getLeft();
+            redirectTarget = pair.getRight();
         }
         if (resolved == null && page != null) {
-            String redirectTarget = page.getProperties().get(PageImpl.PN_REDIRECT_TARGET, "");
             if (StringUtils.isNotEmpty(redirectTarget)) {
                 return buildLink(redirectTarget, request, page, null);
             } else {
@@ -334,14 +338,15 @@ public class LinkHandler {
      * Attempts to resolve the redirect chain starting from the given page, avoiding loops.
      *
      * @param page The starting {@link Page}
-     * @return The {@link Page} the redirect chain resolves to. Can be the original page, if no redirect target is defined or
-     *         even {@code null} if the redirect chain does not resolve to a valid page.
+     * @return A pair of {@link Page} and {@link String} the redirect chain resolves to. The page can be the original page, if no redirect
+     * target is defined or even {@code null} if the redirect chain does not resolve to a valid page, in this case one should use the right
+     * part of the pair (the {@link String} redirect target).
      */
-    @Nullable
-    public Page resolveRedirects(@Nullable final Page page) {
+    @NotNull
+    public Pair<Page, String> resolveRedirects(@Nullable final Page page) {
         Page result = page;
+        String redirectTarget = null;
         if (page != null) {
-            String redirectTarget;
             Set<String> redirectCandidates = new LinkedHashSet<>();
             redirectCandidates.add(page.getPath());
             while (result != null && StringUtils
@@ -355,7 +360,7 @@ public class LinkHandler {
                 }
             }
         }
-        return result;
+        return new ImmutablePair<>(result, redirectTarget);
     }
 
     /**

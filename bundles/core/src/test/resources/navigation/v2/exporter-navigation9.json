@@ -175,6 +175,28 @@
             }
           },
           ":type":"cq:PageContent"
+        },
+        {
+          ":type": "cq:PageContent",
+          "active": false,
+          "children": [
+          ],
+          "current": false,
+          "dataLayer": {
+            "navigation-e6f3e5ac55-item-c8f482c5ae": {
+              "@type": "core/wcm/components/navigation/v2/navigation/item",
+              "dc:title": "Navigation 4",
+              "xdm:linkURL": "https://www.adobe.com"
+            }
+          },
+          "id": "navigation-e6f3e5ac55-item-c8f482c5ae",
+          "level": 1,
+          "link": {
+            "url": "https://www.adobe.com",
+            "valid": true
+          },
+          "path": "/content/navigation-redirect/navigation-4",
+          "title": "Navigation 4"
         }
       ],
       "level": 0,

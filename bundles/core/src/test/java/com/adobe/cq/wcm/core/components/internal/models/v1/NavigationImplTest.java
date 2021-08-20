@@ -325,7 +325,8 @@ public class NavigationImplTest {
                 {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
                         "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
                 {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"},
-                {"/content/navigation-redirect/navigation-3", 1, false, "https://www.adobe.com", true}
+                {"/content/navigation-redirect/navigation-3", 1, false, "https://www.adobe.com"},
+                {"/content/navigation-redirect/navigation-4", 1, false, "https://www.adobe.com"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation9"));
@@ -367,7 +368,8 @@ public class NavigationImplTest {
             {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
                 "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
             {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"},
-            {"/content/navigation-redirect/navigation-3", 1, false, "/content/navigation-redirect/navigation-3.html"}
+            {"/content/navigation-redirect/navigation-3", 1, false, "/content/navigation-redirect/navigation-3.html"},
+            {"/content/navigation-redirect/navigation-4", 1, false, "/content/navigation-redirect/navigation-4.html"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation16"));
@@ -393,7 +395,8 @@ public class NavigationImplTest {
             {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
                 "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
             {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"},
-            {"/content/navigation-redirect/navigation-3", 1, false, "https://www.adobe.com"}
+            {"/content/navigation-redirect/navigation-3", 1, false, "https://www.adobe.com"},
+            {"/content/navigation-redirect/navigation-4", 1, false, "https://www.adobe.com"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation17"));

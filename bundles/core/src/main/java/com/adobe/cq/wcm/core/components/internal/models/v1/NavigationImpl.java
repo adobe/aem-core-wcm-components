@@ -280,7 +280,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @return True if the specified page redirects to the current page.
      */
     private boolean currentPageIsRedirectTarget(@NotNull final Page page) {
-        return currentPage.equals(linkHandler.resolveRedirects(page));
+        return currentPage.equals(linkHandler.resolveRedirects(page).getLeft());
     }
 
 }

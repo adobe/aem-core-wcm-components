@@ -151,6 +151,24 @@
             }
           },
           ":type":"cq:PageContent"
+        },
+        {
+          "id":"navigation-c07c8768dd-item-c8f482c5ae",
+          "path"     : "/content/navigation-redirect/navigation-4",
+          "children" : [],
+          "level"    : 1,
+          "active"   : false,
+          "current"  : false,
+          "url"      : "/core/content/navigation-redirect/navigation-4.html",
+          "title"    : "Navigation 4",
+          "dataLayer": {
+            "navigation-c07c8768dd-item-c8f482c5ae": {
+              "@type"      : "core/wcm/components/navigation/v1/navigation/item",
+              "dc:title"   : "Navigation 4",
+              "xdm:linkURL": "/core/content/navigation-redirect/navigation-4.html"
+            }
+          },
+          ":type"    : "cq:PageContent"
         }
       ],
       "level": 0,
