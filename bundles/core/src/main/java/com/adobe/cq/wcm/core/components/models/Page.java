@@ -238,6 +238,16 @@ public interface Page extends ContainerExporter, Component {
     }
 
     /**
+     * Returns the description of this page.
+     *
+     * @return the page's description
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.23.0
+     */
+    default String getDescription() {
+        return null;
+    }
+
+    /**
      * Returns the brand slug of this page.
      *
      * @return the page's brandSlug

@@ -17,7 +17,7 @@
     <meta charset="UTF-8">
     <title>${page.title}${page.brandSlug ? ' | ' : ''}${page.brandSlug}</title>
     <meta data-sly-test.keywords="${page.keywords}" name="keywords" content="${keywords}"/>
-    <meta data-sly-test.description="${properties['jcr:description']}" name="description" content="${description}"/>
+    <meta data-sly-test.description="${page.description || properties['jcr:description']}" name="description" content="${description}"/>
     <meta data-sly-test.templateName="${page.templateName}" name="template" content="${templateName}"/>
     <sly data-sly-include="head.socialmedia.html"></sly>
     <sly data-sly-include="customheaderlibs.html"></sly>
