@@ -42,9 +42,8 @@ public class LanguageNavigationImpl extends com.adobe.cq.wcm.core.components.int
 
     protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler,
                                                                int level, List<NavigationItem> children, String title, String parentId,
-                                                               boolean isShadowingDisabled, Component component) {
-        return new LanguageNavigationItemImpl(page, active, current, linkHandler, level, children, title, parentId, isShadowingDisabled,
-                component);
+                                                               Component component) {
+        return new LanguageNavigationItemImpl(page, active, current, linkHandler, level, children, title, parentId, component);
     }
 
 }

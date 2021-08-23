@@ -36,8 +36,8 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     private boolean current;
 
     public NavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
-                              String parentId, boolean isShadowingDisabled, Component component) {
-        super(linkHandler, page, parentId, isShadowingDisabled, component);
+                              String parentId, Component component) {
+        super(linkHandler, page, parentId, component);
         this.active = active;
         this.current = current;
         this.level = level;

@@ -40,7 +40,7 @@ public final class LinkTestUtils {
                                        @Nullable SlingHttpServletRequest request) {
         assertTrue(link.isValid(), "linkValid");
         assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
-        if (request != null && StringUtils.isNotEmpty(request.getContextPath())) {
+        if (request != null && StringUtils.isNotEmpty(request.getContextPath()) && !linkURL.startsWith("http")) {
             linkURL = request.getContextPath().concat(linkURL);
         }
         assertEquals(linkURL, link.getURL(), "linkUrl");

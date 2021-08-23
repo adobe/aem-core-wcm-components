@@ -324,7 +324,9 @@ public class NavigationImplTest {
                         "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
                 {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
                         "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
-                {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+                {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"},
+                {"/content/navigation-redirect/navigation-3", 1, false, "https://www.adobe.com"},
+                {"/content/navigation-redirect/navigation-4", 1, false, "https://www.adobe.com"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation9"));
@@ -365,7 +367,9 @@ public class NavigationImplTest {
                 "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1.html"},
             {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
                 "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
-            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"},
+            {"/content/navigation-redirect/navigation-3", 1, false, "/content/navigation-redirect/navigation-3.html"},
+            {"/content/navigation-redirect/navigation-4", 1, false, "/content/navigation-redirect/navigation-4.html"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation16"));
@@ -390,7 +394,9 @@ public class NavigationImplTest {
                 "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
             {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
                 "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
-            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"},
+            {"/content/navigation-redirect/navigation-3", 1, false, "https://www.adobe.com"},
+            {"/content/navigation-redirect/navigation-4", 1, false, "https://www.adobe.com"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation17"));
@@ -513,7 +519,11 @@ public class NavigationImplTest {
             assertEquals(expectedPages[index][0], item.getPath(), "The navigation tree doesn't seem to have the correct order.");
             assertEquals(expectedPages[index][1], item.getLevel(), "The navigation item's level is not what was expected: " + item.getPath());
             assertEquals(expectedPages[index][2], item.isActive(), "The navigation item's active state is not what was expected: " + item.getPath());
-            assertEquals(CONTEXT_PATH + expectedPages[index][3], item.getURL(), "The navigation item's URL is not what was expected: " + item.getPath());
+            String expectedURL = expectedPages[index][3].toString();
+            if (!expectedURL.startsWith("http")) {
+                expectedURL = CONTEXT_PATH + expectedURL;
+            }
+            assertEquals(expectedURL, item.getURL(), "The navigation item's URL is not what was expected: " + item.getPath());
             verifyNavigationItem(expectedPages[index], item);
             index++;
         }
@@ -524,7 +534,11 @@ public class NavigationImplTest {
         assertEquals(expectedPage[0], item.getPath(), "The navigation tree doesn't seem to have the correct order.");
         assertEquals(expectedPage[1], item.getLevel(), "The navigation item's level is not what was expected: " + item.getPath());
         assertEquals(expectedPage[2], item.isActive(), "The navigation item's active state is not what was expected: " + item.getPath());
-        assertEquals(CONTEXT_PATH + expectedPage[3], item.getURL(), "The navigation item's URL is not what was expected: " + item.getPath());
+        String expectedURL = expectedPage[3].toString();
+        if (!expectedURL.startsWith("http")) {
+            expectedURL = CONTEXT_PATH + expectedURL;
+        }
+        assertEquals(expectedURL, item.getURL(), "The navigation item's URL is not what was expected: " + item.getPath());
     }
 
 }
