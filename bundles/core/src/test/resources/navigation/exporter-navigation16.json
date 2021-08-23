@@ -133,6 +133,42 @@
             }
           },
           ":type": "cq:PageContent"
+        },
+        {
+          "id": "navigation-c07c8768dd-item-a5f41f35db",
+          "path": "/content/navigation-redirect/navigation-3",
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "Navigation 3",
+          "url": "/core/content/navigation-redirect/navigation-3.html",
+          "dataLayer": {
+            "navigation-c07c8768dd-item-a5f41f35db": {
+              "@type": "core/wcm/components/navigation/v1/navigation/item",
+              "dc:title": "Navigation 3",
+              "xdm:linkURL": "/core/content/navigation-redirect/navigation-3.html"
+            }
+          },
+          ":type":"cq:PageContent"
+        },
+        {
+          "id":"navigation-c07c8768dd-item-c8f482c5ae",
+          "path"     : "/content/navigation-redirect/navigation-4",
+          "children" : [],
+          "level"    : 1,
+          "active"   : false,
+          "current"  : false,
+          "url"      : "/core/content/navigation-redirect/navigation-4.html",
+          "title"    : "Navigation 4",
+          "dataLayer": {
+            "navigation-c07c8768dd-item-c8f482c5ae": {
+              "@type"      : "core/wcm/components/navigation/v1/navigation/item",
+              "dc:title"   : "Navigation 4",
+              "xdm:linkURL": "/core/content/navigation-redirect/navigation-4.html"
+            }
+          },
+          ":type"    : "cq:PageContent"
         }
       ],
       "level": 0,
