@@ -32,6 +32,9 @@ public class TitleImplTest extends com.adobe.cq.wcm.core.components.internal.mod
 
     private static final String TEST_BASE = "/title/v3";
 
+    protected static final String TITLE_RESOURCE_TITLE_REDIRECT_CHAIN = TEST_PAGE + "/jcr:content/par/title-redirect-chain";
+    protected static final String TITLE_RESOURCE_TITLE_REDIRECT_EXTERNAL_URL = TEST_PAGE + "/jcr:content/par/title-redirect-external-url";
+
     @BeforeEach
     @Override
     protected void setUp() {
@@ -46,6 +49,20 @@ public class TitleImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
         assertValidLink(title.getLink(), "https://www.adobe.com", "World", "World title" );
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
+    }
+
+    @Test
+    protected void testGetLinkFromRedirectChain() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_TITLE_REDIRECT_CHAIN);
+        assertValidLink(title.getLink(), "/content/title/redirect/redirect-page-3.html");
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_TITLE_REDIRECT_CHAIN));
+    }
+
+    @Test
+    protected void testGetLinkFromRedirectToExternalURL() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_TITLE_REDIRECT_EXTERNAL_URL);
+        assertValidLink(title.getLink(), "https://www.adobe.com");
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_TITLE_REDIRECT_EXTERNAL_URL));
     }
 
 }
