@@ -34,7 +34,7 @@
                                             <linksNote
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/text"
-                                                text="The teaser title, description and image can be inherited from the linked page, or from page linked in the first call to action. If neither a link nor a call to cation is specified, then the title, description and image will be inherited from the current page."/>
+                                                text="The teaser title, description and image can be inherited from the linked page, or from the page linked in the first call to action. If neither a link nor a call to action is specified, then the title, description and image will be inherited from the current page."/>
                                             <linkURL
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/coral/common/form/pagefield"
