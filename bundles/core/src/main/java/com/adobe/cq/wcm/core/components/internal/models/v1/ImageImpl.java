@@ -28,6 +28,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;

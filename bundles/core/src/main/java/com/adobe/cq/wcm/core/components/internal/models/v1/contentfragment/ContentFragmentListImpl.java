@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragmentList;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import com.day.cq.commons.jcr.JcrConstants;

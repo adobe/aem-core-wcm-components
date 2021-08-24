@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.List;
 import java.util.Map;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;

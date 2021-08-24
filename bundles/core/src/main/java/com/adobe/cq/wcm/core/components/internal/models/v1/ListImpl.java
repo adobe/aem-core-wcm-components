@@ -31,6 +31,7 @@ import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
 import javax.jcr.RepositoryException;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.day.cq.search.result.SearchResult;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;

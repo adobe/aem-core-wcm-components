@@ -25,6 +25,7 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
