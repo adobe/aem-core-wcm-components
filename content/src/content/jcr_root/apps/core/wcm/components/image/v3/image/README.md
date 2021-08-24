@@ -34,7 +34,7 @@ The following configuration properties are used:
 1. `./allowedRenditionWidths` - defines the allowed renditions (as an integer array) that will be generated for the images rendered by this
 component; the actual size will be requested by the client device;
 2. `./jpegQuality` - defines the image quality for JPEGs (0 lowest quality / size to 100 highest quality / size). Default value is 82.
-3. `./disableLazyLoading` - if `true`, the browsers native lazy loading of images (loading only when the image is visible on the client
+3. `./disableLazyLoading` - if `true`, the browser's native lazy loading of images (loading only when the image is visible on the client
 device) is disabled.
 4.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
 5. `./resizeWidth` - Defines a resize width for resizing the images which are DAM assets, while keeping the original aspect ratio. If the value is bigger than the natural width of the image, it will have no effect. It will also have no effect on SVG images.
@@ -116,7 +116,6 @@ The following attributes can be added to the same element to provide options:
 Native lazy loading is enabled by default. It can be disabled from Component Policy Configuration (`./disableLazyLoading`).
 If there are alternative widths (`./allowedRenditionWidths`) defined in the Component Policy Configuration, the `srcset` attribute will be constructed and set to the `<img>`.
 In this way the the browser will figure out based on its native adaptive capabilities which image to load from the `srcset` attribute in relation with the viewport width.
-
 
 ## SVG
 SVG MIME-types are supported, but have some specific handling. Alternative smart image widths defined at the component policy dialog are ignored for SVG images, with `Image#getWidths` returning an empty array.
