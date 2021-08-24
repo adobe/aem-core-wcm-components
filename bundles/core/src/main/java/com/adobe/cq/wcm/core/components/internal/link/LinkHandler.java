@@ -144,6 +144,12 @@ public class LinkHandler {
         if (linkURL == null) {
             return Optional.empty();
         }
+        if (pageManager != null) {
+            Page page = pageManager.getPage(linkURL);
+            if (page != null) {
+                return Optional.ofNullable(getLink(page).orElse(null));
+            }
+        }
         String linkTarget = props.get(PN_LINK_TARGET, String.class);
         String linkAccessibilityLabel = props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class);
         String linkTitleAttribute = props.get(PN_LINK_TITLE_ATTRIBUTE, String.class);
