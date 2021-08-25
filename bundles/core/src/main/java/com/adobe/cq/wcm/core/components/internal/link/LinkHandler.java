@@ -330,7 +330,7 @@ public class LinkHandler {
      * @return A pair of {@link String} and {@link Page} the page resolves to.
      */
     @NotNull
-    public Pair<Page, String> resolvePage(@Nullable final Page page) {
+    private Pair<Page, String> resolvePage(@Nullable final Page page) {
         Page resolved = page;
         String redirectTarget = null;
         String linkURL = null;
