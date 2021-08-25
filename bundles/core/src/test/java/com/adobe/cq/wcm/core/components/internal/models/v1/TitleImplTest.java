@@ -124,14 +124,14 @@ public class TitleImplTest {
     @Test
     protected void testGetLinkFromRedirectChain() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_TITLE_V2_REDIRECT_CHAIN);
-        assertValidLink(title.getLink(), "/content/title/redirect/redirect-page-3.html");
+        assertValidLink(title.getLink(), "/content/title/redirect/redirect-page-3.html", "Redirect Page 3", "Redirect Page 3 title");
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_TITLE_V2_REDIRECT_CHAIN));
     }
 
     @Test
     protected void testGetLinkFromRedirectToExternalURL() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_TITLE_V2_REDIRECT_EXTERNAL_URL);
-        assertValidLink(title.getLink(), "https://www.adobe.com");
+        assertValidLink(title.getLink(), "https://www.adobe.com", "Adobe", "Adobe title");
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_TITLE_V2_REDIRECT_EXTERNAL_URL));
     }
 

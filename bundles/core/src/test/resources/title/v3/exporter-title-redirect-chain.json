@@ -10,7 +10,11 @@
     },
     "link": {
         "url": "/content/title/redirect/redirect-page-3.html",
-        "valid": true
+        "valid": true,
+        "attributes": {
+            "aria-label": "Redirect Page 3",
+            "title": "Redirect Page 3 title"
+        }
     },
     ":type": "core/wcm/components/title/v3/title"
 }

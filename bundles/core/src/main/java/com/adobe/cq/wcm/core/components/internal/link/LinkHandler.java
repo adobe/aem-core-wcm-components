@@ -144,12 +144,6 @@ public class LinkHandler {
         if (linkURL == null) {
             return Optional.empty();
         }
-        if (pageManager != null) {
-            Page page = pageManager.getPage(linkURL);
-            if (page != null) {
-                return Optional.ofNullable(getLink(page).orElse(null));
-            }
-        }
         String linkTarget = props.get(PN_LINK_TARGET, String.class);
         String linkAccessibilityLabel = props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class);
         String linkTitleAttribute = props.get(PN_LINK_TITLE_ATTRIBUTE, String.class);
@@ -167,22 +161,8 @@ public class LinkHandler {
         if (page == null) {
             return Optional.empty();
         }
-        Page resolved = page;
-        String redirectTarget = null;
-        if (!isShadowingDisabled()) {
-            Pair<Page, String> pair = resolveRedirects(page);
-            resolved = pair.getLeft();
-            redirectTarget = pair.getRight();
-        }
-        if (resolved == null) {
-            if (StringUtils.isNotEmpty(redirectTarget)) {
-                return buildLink(redirectTarget, request, page, null);
-            } else {
-                resolved = page;
-            }
-        }
-        String linkURL = getPageLinkURL(resolved);
-        return buildLink(linkURL, request, resolved, null);
+        Pair<Page, String> pair = resolvePage(page);
+        return buildLink(pair.getRight(), request, pair.getLeft(), null);
     }
 
     /**
@@ -194,10 +174,11 @@ public class LinkHandler {
      */
     @NotNull
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
+        Pair<Page, String> pair = resolvePage(getPage(linkURL).orElse(null));
+        linkURL = StringUtils.isNotEmpty(pair.getRight()) ? pair.getRight() : linkURL;
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        Page targetPage = getPage(linkURL).orElse(null);
-        return buildLink(resolvedLinkURL, request, targetPage,
+        return buildLink(resolvedLinkURL, request, pair.getLeft(),
                 new HashMap<String, String>() {{ put(ATTR_TARGET, resolvedLinkTarget); }});
     }
 
@@ -212,12 +193,13 @@ public class LinkHandler {
      */
     @NotNull
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
+        Pair<Page, String> pair = resolvePage(getPage(linkURL).orElse(null));
+        linkURL = StringUtils.isNotEmpty(pair.getRight()) ? pair.getRight() : linkURL;
         String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
         String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
         String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
-        Page targetPage = getPage(linkURL).orElse(null);
-        return Optional.of(buildLink(resolvedLinkURL, request, targetPage,
+        return Optional.of(buildLink(resolvedLinkURL, request, pair.getLeft(),
                 new HashMap<String, String>() {{
                     put(ATTR_TARGET, resolvedLinkTarget);
                     put(ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel);
@@ -338,6 +320,36 @@ public class LinkHandler {
             return Optional.empty();
         }
         return Optional.ofNullable(pageManager.getPage(path));
+    }
+
+    /**
+     * Attempts to resolve a Link URL and page for the given page. Redirect chains are followed, if
+     * shadowing is not disabled.
+     *
+     * @param page Page
+     * @return A pair of {@link String} and {@link Page} the page resolves to.
+     */
+    @NotNull
+    public Pair<Page, String> resolvePage(@Nullable final Page page) {
+        Page resolved = page;
+        String redirectTarget = null;
+        String linkURL = null;
+        if (!isShadowingDisabled()) {
+            Pair<Page, String> pair = resolveRedirects(page);
+            resolved = pair.getLeft();
+            redirectTarget = pair.getRight();
+        }
+        if (resolved == null) {
+            if (StringUtils.isNotEmpty(redirectTarget)) {
+                return new ImmutablePair<>(page, redirectTarget);
+            } else {
+                resolved = page;
+            }
+        }
+        if (resolved != null) {
+            linkURL = getPageLinkURL(resolved);
+        }
+        return new ImmutablePair<>(resolved, linkURL);
     }
 
     /**
