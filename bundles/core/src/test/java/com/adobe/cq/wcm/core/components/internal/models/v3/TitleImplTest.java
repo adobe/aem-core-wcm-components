@@ -54,7 +54,7 @@ public class TitleImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     @Test
     protected void testGetLinkFromRedirectChain() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_TITLE_REDIRECT_CHAIN);
-        assertValidLink(title.getLink(), "/content/title/redirect/redirect-page-3.html", "Redirect Page 3", "Redirect Page 3 title");
+        assertValidLink(title.getLink(), "/content/title/redirect/redirect-page-3.html", "Should Redirect to Page 3 (accessibility label)", "Should Redirect to Page 3 (title)");
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_TITLE_REDIRECT_CHAIN));
     }
 
