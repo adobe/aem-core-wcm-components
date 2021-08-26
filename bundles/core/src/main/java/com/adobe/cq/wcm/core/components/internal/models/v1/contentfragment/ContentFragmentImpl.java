@@ -45,7 +45,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;

@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
