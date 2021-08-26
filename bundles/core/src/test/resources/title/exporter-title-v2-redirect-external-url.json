@@ -11,7 +11,11 @@
     },
     "link": {
         "url": "https://www.adobe.com",
-        "valid": true
+        "valid": true,
+        "attributes": {
+            "aria-label": "Adobe",
+            "title": "Adobe title"
+        }
     },
     ":type": "core/wcm/components/title/v2/title"
 }
