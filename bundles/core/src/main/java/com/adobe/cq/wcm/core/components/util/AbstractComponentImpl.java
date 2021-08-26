@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v1;
+package com.adobe.cq.wcm.core.components.util;
 
 import java.util.Calendar;
 import java.util.Optional;
@@ -32,15 +32,16 @@ import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
 import com.adobe.cq.wcm.core.components.models.Component;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.adobe.cq.wcm.style.ComponentStyleInfo;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Abstract class that can be used as a base class for {@link Component} implementations.
  */
+@ConsumerType
 public abstract class AbstractComponentImpl implements Component {
 
     /**
@@ -75,7 +76,7 @@ public abstract class AbstractComponentImpl implements Component {
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private Page currentPage;
-    
+
     /**
      * The ID for this component.
      */
@@ -147,7 +148,7 @@ public abstract class AbstractComponentImpl implements Component {
         }
         return componentData;
     }
-    
+
     /**
      * See {@link Component#getAppliedCssClasses()}
      *
@@ -156,13 +157,13 @@ public abstract class AbstractComponentImpl implements Component {
     @Override
     @Nullable
 	public String getAppliedCssClasses() {
-    	
-    	return Optional.ofNullable(this.resource.adaptTo(ComponentStyleInfo.class)) 
-    			.map(ComponentStyleInfo::getAppliedCssClasses) 
-    			.filter(StringUtils::isNotBlank) 
+
+    	return Optional.ofNullable(this.resource.adaptTo(ComponentStyleInfo.class))
+    			.map(ComponentStyleInfo::getAppliedCssClasses)
+    			.filter(StringUtils::isNotBlank)
     			.orElse(null);		// Returning null so sling model exporters don't return anything for this property if not configured
 	}
-    
+
     /**
      * Override this method to provide a different data model for your component. This will be called by
      * {@link AbstractComponentImpl#getData()} in case the datalayer is activated.
