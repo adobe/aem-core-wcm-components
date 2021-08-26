@@ -147,7 +147,7 @@ public class PageImageThumbnail {
      * Returns the src text of the featured image of either the linked page if a linkURL is available or of
      * the page that contains the component.
      *
-     * @return the alternative text of the page image
+     * @return the src text of the page image
      */
     public String getSrc() {
         return src;
