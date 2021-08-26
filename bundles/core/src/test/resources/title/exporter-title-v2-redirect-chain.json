@@ -11,7 +11,11 @@
     },
     "link": {
         "url": "/content/title/redirect/redirect-page-3.html",
-        "valid": true
+        "valid": true,
+        "attributes": {
+            "aria-label": "Should Redirect to Page 3 (accessibility label)",
+            "title": "Should Redirect to Page 3 (title)"
+        }
     },
     ":type": "core/wcm/components/title/v2/title"
 }
