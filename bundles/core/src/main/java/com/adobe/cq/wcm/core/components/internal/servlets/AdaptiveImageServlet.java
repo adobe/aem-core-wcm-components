@@ -524,7 +524,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (dimension.getWidth() >= width) {
                     // if best rendition exist, compare the best rendition's width and make it's too big
                     // bestRendition.getDimension will not be null, or else it wouldn't be set
-                    if (bestRendition == null || bestRendition.getDimension().getWidth() > dimension.getWidth()) {
+                    if (bestRendition == null || bestRendition.getDimension() == null || bestRendition.getDimension().getWidth() > dimension.getWidth()) {
                         bestRendition = enhancedRendition;
                         if (StringUtils.equals(bestRendition.getPath(), asset.getOriginal().getPath())) {
                             metrics.markOriginalRenditionUsed();
