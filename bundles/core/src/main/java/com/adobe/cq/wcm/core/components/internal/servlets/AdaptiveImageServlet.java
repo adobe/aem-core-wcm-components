@@ -514,21 +514,22 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      */
     @NotNull
     private EnhancedRendition getBestRendition(@NotNull Asset asset, int width) throws IOException {
-        // Sort renditions by file size
-        SortedSet<Rendition> renditions = new TreeSet<>((o1, o2) -> Long.valueOf(o1.getSize() - o2.getSize()).intValue());
-        renditions.addAll(asset.getRenditions());
+        // No longer sorting by rendition binary file size first
         EnhancedRendition bestRendition = null;
         // Find first rendition that has a width larger or equal than wanted
-        for (Rendition rendition : renditions) {
+        for (Rendition rendition : asset.getRenditions()) {
             EnhancedRendition enhancedRendition = new EnhancedRendition(rendition);
             Dimension dimension = enhancedRendition.getDimension();
             if (dimension != null) {
                 if (dimension.getWidth() >= width) {
-                    bestRendition = enhancedRendition;
-                    if (StringUtils.equals(bestRendition.getPath(), asset.getOriginal().getPath())) {
-                        metrics.markOriginalRenditionUsed();
+                    // if best rendition exist, compare the best rendition's width and make it's too big
+                    // bestRendition.getDimension will not be null, or else it wouldn't be set
+                    if (bestRendition == null || bestRendition.getDimension().getWidth() > dimension.getWidth()) {
+                        bestRendition = enhancedRendition;
+                        if (StringUtils.equals(bestRendition.getPath(), asset.getOriginal().getPath())) {
+                            metrics.markOriginalRenditionUsed();
+                        }
                     }
-                    break;
                 }
             }
         }
