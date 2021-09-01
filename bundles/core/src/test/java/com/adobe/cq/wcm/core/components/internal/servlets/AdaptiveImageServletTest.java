@@ -21,6 +21,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -29,12 +31,17 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceMetadata;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.commons.metrics.Timer;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,6 +53,8 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.api.handler.AssetHandler;
 import com.day.cq.dam.api.handler.store.AssetStore;
@@ -724,6 +733,155 @@ class AdaptiveImageServletTest extends AbstractImageTest {
                 Assertions.assertEquals(Color.white.getRGB(), responseImage.getPixel(x, y), "Expected white background");
             }
         }
+    }
+
+    @Test
+    void testSelectRenditionWithSmallerWidthAndLargerSize() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img.2000", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new String[] {"2000"});
+        Asset mockAsset = mock(Asset.class);
+        when(mockAsset.getMimeType()).thenReturn("image/png");
+        when(mockAsset.getRenditions()).thenReturn(new LinkedList<Rendition>() {{
+            // larger size but best fit for width
+            add(mockRendition(mockAsset, "750px", 1000000, "image/jpeg", 750, 750));
+            // smaller size but not best fit for width
+            add(mockRendition(mockAsset, "900px", 100000, "image/jpeg", 900, 900));
+            add(mockRendition(mockAsset, "100px", 100, "image/jpeg", 250, 250));
+        }});
+        when(mockAsset.getOriginal()).thenReturn(mockRendition(mockAsset, "original", 9999999, "image/jpeg", 2000, 2000));
+        EnhancedRendition best = servlet.getBestRendition(mockAsset, 700);
+        Assertions.assertEquals(750, best.getDimension().width);
+    }
+
+    @Test
+    void testSelectRenditionWithSameMimeType() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img.2000", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new String[] {"2000"});
+        Asset mockAsset = mock(Asset.class);
+        when(mockAsset.getMimeType()).thenReturn("image/png");
+        when(mockAsset.getRenditions()).thenReturn(new LinkedList<Rendition>() {{
+            // larger size but best fit for width
+            add(mockRendition(mockAsset, "750px", 1000000, "image/jpeg", 750, 750));
+            add(mockRendition(mockAsset, "750px", 2000000, "image/png", 850, 850));
+            // smaller size but not best fit for width
+            add(mockRendition(mockAsset, "900px", 100000, "image/jpeg", 900, 900));
+            add(mockRendition(mockAsset, "100px", 100, "image/jpeg", 250, 250));
+        }});
+        when(mockAsset.getOriginal()).thenReturn(mockRendition(mockAsset, "original", 9999999, "image/jpeg", 2000, 2000));
+        EnhancedRendition best = servlet.getBestRendition(mockAsset, 700);
+        Assertions.assertEquals(850, best.getDimension().width);
+    }
+
+    private Rendition mockRendition(Asset asset, String name, long size, String mimeType, int width, int length) {
+        Rendition rendition = new Rendition() {
+            @Override
+            public String getMimeType() {
+                return mimeType;
+            }
+
+            @Override
+            public String getName() {
+                return name;
+            }
+
+            @Override
+            public String getPath() {
+                return null;
+            }
+
+            @Override
+            public ValueMap getProperties() {
+                ValueMap valueMap = mock(ValueMap.class);
+                when(valueMap.containsKey(DamConstants.TIFF_IMAGEWIDTH)).thenReturn(true);
+                when(valueMap.get(DamConstants.TIFF_IMAGEWIDTH, String.class)).thenReturn(Integer.toString(width));
+                when(valueMap.containsKey(DamConstants.TIFF_IMAGELENGTH)).thenReturn(true);
+                when(valueMap.get(DamConstants.TIFF_IMAGELENGTH, String.class)).thenReturn(Integer.toString(length));
+                return valueMap;
+            }
+
+            @Override
+            public long getSize() {
+                return size;
+            }
+
+            @Override
+            public InputStream getStream() {
+                return null;
+            }
+
+            @Override
+            public Asset getAsset() {
+                return asset;
+            }
+
+            @Override
+            public @Nullable Resource getParent() {
+                return null;
+            }
+
+            @Override
+            public @NotNull Iterator<Resource> listChildren() {
+                return null;
+            }
+
+            @Override
+            public @NotNull Iterable<Resource> getChildren() {
+                return null;
+            }
+
+            @Override
+            public @Nullable Resource getChild(@NotNull String s) {
+                return null;
+            }
+
+            @Override
+            public @NotNull String getResourceType() {
+                return null;
+            }
+
+            @Override
+            public @Nullable String getResourceSuperType() {
+                return null;
+            }
+
+            @Override
+            public boolean hasChildren() {
+                return false;
+            }
+
+            @Override
+            public boolean isResourceType(String s) {
+                return false;
+            }
+
+            @Override
+            public @NotNull ResourceMetadata getResourceMetadata() {
+                return null;
+            }
+
+            @Override
+            public @NotNull ResourceResolver getResourceResolver() {
+                return null;
+            }
+
+            @Override
+            public @NotNull ValueMap getValueMap() {
+                return null;
+            }
+
+            @Override
+            public <AdapterType> @Nullable AdapterType adaptTo(@NotNull Class<AdapterType> aClass) {
+                return null;
+            }
+        };
+
+        return rendition;
     }
 
     private void testNegativeRequestedWidth(String imagePath) throws IOException {

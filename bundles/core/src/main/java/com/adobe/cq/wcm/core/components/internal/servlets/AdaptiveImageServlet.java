@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -513,30 +514,56 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @throws IOException when the best suited rendition is too large for processing
      */
     @NotNull
-    private EnhancedRendition getBestRendition(@NotNull Asset asset, int width) throws IOException {
-        // Sort renditions by file size
-        SortedSet<Rendition> renditions = new TreeSet<>((o1, o2) -> Long.valueOf(o1.getSize() - o2.getSize()).intValue());
-        renditions.addAll(asset.getRenditions());
-        EnhancedRendition bestRendition = null;
-        // Find first rendition that has a width larger or equal than wanted
-        for (Rendition rendition : renditions) {
+    protected EnhancedRendition getBestRendition(@NotNull Asset asset, int width) throws IOException {
+        // Sort renditions by file dimension
+        SortedSet<EnhancedRendition> matchingRenditions = new TreeSet<>(Comparator.comparingInt(o -> o.getDimension() == null ? 0 : o.getDimension().width));
+        SortedSet<EnhancedRendition> nonMatchingRenditions = new TreeSet<>(Comparator.comparingInt(o -> o.getDimension() == null ? 0 : o.getDimension().width));
+
+        for (Rendition rendition : asset.getRenditions()) {
             EnhancedRendition enhancedRendition = new EnhancedRendition(rendition);
-            Dimension dimension = enhancedRendition.getDimension();
-            if (dimension != null) {
-                if (dimension.getWidth() >= width) {
-                    bestRendition = enhancedRendition;
-                    if (StringUtils.equals(bestRendition.getPath(), asset.getOriginal().getPath())) {
-                        metrics.markOriginalRenditionUsed();
-                    }
-                    break;
-                }
+            if (asset.getMimeType().equals(rendition.getMimeType())) {
+                matchingRenditions.add(enhancedRendition);
+            } else {
+                nonMatchingRenditions.add(enhancedRendition);
             }
+
         }
+
+        // Find first rendition in mime-type matching set that has a width larger or equal than wanted
+        EnhancedRendition bestRendition = findBestRendition(matchingRenditions, width);
+        if (bestRendition == null) {
+            // Also try to find a suitable rendition that does not match the mime-type
+            bestRendition = findBestRendition(nonMatchingRenditions, width);
+        }
+
         // If no rendition was found, attempt to use original
         if (bestRendition == null) {
             return getOriginal(asset);
         }
         return filter(bestRendition);
+    }
+
+    /**
+     * Tries to find first suitable renditions in a sorted set that has a width higher or equal than desired width
+     *
+     * @param renditions Sorted set of renditions
+     * @param width The desired minimum width
+     * @return The first rendition with a width higher or equal than the desired width, {@code null} if none found
+     */
+    @Nullable
+    private EnhancedRendition findBestRendition(SortedSet<EnhancedRendition> renditions, int width) {
+        for (EnhancedRendition rendition : renditions) {
+            Dimension dimension = rendition.getDimension();
+            if (dimension != null) {
+                if (dimension.getWidth() >= width) {
+                    if (StringUtils.equals(rendition.getPath(), rendition.getAsset().getOriginal().getPath())) {
+                        metrics.markOriginalRenditionUsed();
+                    }
+                    return rendition;
+                }
+            }
+        }
+        return null;
     }
 
     /**
