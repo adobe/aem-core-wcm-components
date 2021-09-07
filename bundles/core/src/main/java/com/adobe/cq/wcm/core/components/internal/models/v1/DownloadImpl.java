@@ -44,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.services.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;

@@ -15,18 +15,17 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -83,10 +82,10 @@ class DefaultPathProcessorTest {
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));
         DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", DefaultPathProcessor.VanityConfig.MAPPING.getValue()));
-        assertTrue(underTest.accepts(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
-        assertEquals("/content/links/site1/en.html", underTest.sanitize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
-        assertEquals("/vanity.html", underTest.map(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
-        assertEquals("https://example.org/vanity.html", underTest.externalize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        assertTrue(underTest.accepts(page.getPath() + LinkHandlerImpl.HTML_EXTENSION, context.request()));
+        assertEquals("/content/links/site1/en.html", underTest.sanitize(page.getPath() + LinkHandlerImpl.HTML_EXTENSION, context.request()));
+        assertEquals("/vanity.html", underTest.map(page.getPath() + LinkHandlerImpl.HTML_EXTENSION, context.request()));
+        assertEquals("https://example.org/vanity.html", underTest.externalize(page.getPath() + LinkHandlerImpl.HTML_EXTENSION, context.request()));
     }
 
     @Test
@@ -95,11 +94,11 @@ class DefaultPathProcessorTest {
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));
         DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", "shouldBeDefault"));
-        assertEquals("/content/site1/en.html", underTest.map(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
-        assertEquals("https://example.org/content/links/site1/en.html", underTest.externalize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        assertEquals("/content/site1/en.html", underTest.map(page.getPath() + LinkHandlerImpl.HTML_EXTENSION, context.request()));
+        assertEquals("https://example.org/content/links/site1/en.html", underTest.externalize(page.getPath() + LinkHandlerImpl.HTML_EXTENSION, context.request()));
         context.request().setContextPath("/cp");
         underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
-        assertEquals("/cp/vanity.html", underTest.sanitize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        assertEquals("/cp/vanity.html", underTest.sanitize(page.getPath() + LinkHandlerImpl.HTML_EXTENSION, context.request()));
     }
 }

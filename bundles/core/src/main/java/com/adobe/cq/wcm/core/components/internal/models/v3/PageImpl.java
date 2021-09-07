@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.services.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v2.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
