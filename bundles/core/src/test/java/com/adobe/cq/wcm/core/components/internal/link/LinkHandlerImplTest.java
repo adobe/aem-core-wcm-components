@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.link;
 
 import java.util.Optional;
 
+import com.adobe.cq.wcm.core.components.services.link.LinkHandler;
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.asser
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(AemContextExtension.class)
-class LinkHandlerTest {
+class LinkHandlerImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 

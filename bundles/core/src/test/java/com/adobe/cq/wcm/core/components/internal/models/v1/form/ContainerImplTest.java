@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.servlethelpers.MockRequestDispatcherFactory;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
@@ -33,7 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.services.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.form.Container;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
@@ -88,7 +89,7 @@ public class ContainerImplTest {
                         .collect(Collectors.toList());
             }
         });
-        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandler.class, new LinkHandler());
+        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandler.class, new LinkHandlerImpl());
         FormsHelperStubber.createStub();
     }
 

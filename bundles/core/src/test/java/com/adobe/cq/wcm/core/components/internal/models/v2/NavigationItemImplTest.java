@@ -15,14 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.util.Collections;
-
+import com.adobe.cq.wcm.core.components.services.link.LinkHandler;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.components.Component;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.Test;
 
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.components.Component;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

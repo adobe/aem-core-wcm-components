@@ -179,10 +179,10 @@ public class DefaultPathProcessor implements PathProcessor {
     @Nullable
     private String getVanityUrl(@NotNull String path, @NotNull ResourceResolver resourceResolver) {
         String vanityUrl = null;
-        if (path.endsWith(LinkHandler.HTML_EXTENSION)) {
+        if (path.endsWith(LinkHandlerImpl.HTML_EXTENSION)) {
             PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
             if (pageManager != null) {
-                Page page = pageManager.getPage(path.substring(0, path.lastIndexOf(LinkHandler.HTML_EXTENSION)));
+                Page page = pageManager.getPage(path.substring(0, path.lastIndexOf(LinkHandlerImpl.HTML_EXTENSION)));
                 if (page != null) {
                     vanityUrl = page.getVanityUrl();
                     if (StringUtils.isNotBlank(vanityUrl) && !vanityUrl.startsWith("/")) {

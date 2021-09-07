@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.services.link;
 
 import java.util.Map;
 
+import com.adobe.cq.wcm.core.components.services.link.LinkHandler;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +26,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A service that can process a given path. This service is used by the
- * {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler} to build the final
+ * {@link LinkHandlerImpl} to build the final
  * {@link com.adobe.cq.wcm.core.components.commons.link.Link}. The path processor chain of the Link Handler can be extended by a custom
  * path processor which has to get a higher service ranking than the
  * {@link com.adobe.cq.wcm.core.components.internal.link.DefaultPathProcessor}.
@@ -40,7 +41,7 @@ public interface PathProcessor {
      * @param path the path which should be processed
      * @param request the current request
      * @return {@code true} if the processor should handle the given path, otherwise {@code false} and the next path processor is applied by
-     * the {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler} if present
+     * the {@link LinkHandlerImpl} if present
      */
     boolean accepts(@NotNull String path, @NotNull SlingHttpServletRequest request);
 
@@ -70,7 +71,7 @@ public interface PathProcessor {
 
 
     /**
-     * Process the HTML attributes for the {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler}
+     * Process the HTML attributes for the {@link LinkHandlerImpl}
      * @param path the path of the linked resource
      * @param htmlAttributes the origin HTML attributes of the link
      * @return a map of the processed HTML attributes for the link
