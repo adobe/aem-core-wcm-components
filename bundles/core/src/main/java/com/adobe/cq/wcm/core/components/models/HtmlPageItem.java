@@ -161,7 +161,7 @@ public interface HtmlPageItem {
         public String[] getAttributeNames() {
             switch(this) {
                 case LINK:
-                    return new String[] {"crossorigin", PN_HREF, "hreflang", "media", "referrerpolicy", "rel", "sizes", "title", "type", "as"};
+                    return new String[] {"as", "crossorigin", PN_HREF, "hreflang", "media", "referrerpolicy", "rel", "sizes", "title", "type"};
                 case SCRIPT:
                     return new String[] {"async", "charset", "defer", PN_SRC, "type"};
                 case META:
