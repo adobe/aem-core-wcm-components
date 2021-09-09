@@ -8,7 +8,9 @@
       "location"       : "header",
       "attributes"     : {
         "jcr:primaryType": "nt:unstructured",
-        "href"           : "/theme.css"
+        "href"           : "/theme.css",
+        "rel"            : "preload",
+        "as"             : "style"
       }
     },
     "theme.js"       : {

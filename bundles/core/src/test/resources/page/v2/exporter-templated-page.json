@@ -12,7 +12,9 @@
       "element": "link",
       "location": "header",
       "attributes": {
-        "href": "/_theme/theme.css"
+        "href": "/_theme/theme.css",
+        "rel": "preload",
+        "as": "style"
       }
     },
     {

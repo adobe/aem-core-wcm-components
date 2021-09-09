@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -199,6 +200,12 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         loadHtmlPageItemsConfig(false);
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
+        int[] attributeCounts = { 3, 1, 1 };
+        int index = 0;
+        for (HtmlPageItem item : page.getHtmlPageItems()) {
+            assertEquals(attributeCounts[index], item.getAttributes().size());
+            index++;
+        }
     }
 
     @Test
@@ -207,6 +214,12 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         Page page = getPageUnderTest(PAGE);
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
+        int[] attributeCounts = { 3, 1, 1 };
+        int index = 0;
+        for (HtmlPageItem item : page.getHtmlPageItems()) {
+            assertEquals(attributeCounts[index], item.getAttributes().size());
+            index++;
+        }
     }
 
     @Test
