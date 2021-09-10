@@ -16,6 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -30,13 +32,20 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.apache.sling.jcr.resource.api.JcrResourceConstants;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AccordionImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.CarouselImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.TabsImpl;
+import com.day.cq.wcm.msm.api.LiveRelationship;
+import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.day.cq.wcm.api.WCMException;
+import com.day.crx.JcrConstants;
 
 /**
  * Servlet that deletes/reorders the child nodes of a Accordion/Carousel/Tabs container.
@@ -61,6 +70,10 @@ public class ContainerServlet extends SlingAllMethodsServlet {
 
     private static final String PARAM_DELETED_CHILDREN = "delete";
     private static final String PARAM_ORDERED_CHILDREN = "order";
+    private static final String RT_GHOST = "wcm/msm/components/ghost";
+
+    @Reference
+    private transient LiveRelationshipManager liveRelationshipManager;
 
     @Override
     protected void doPost(SlingHttpServletRequest request,
@@ -78,11 +91,17 @@ public class ContainerServlet extends SlingAllMethodsServlet {
                     Resource child = container.getChild(childName);
                     if (child != null) {
                         resolver.delete(child);
+
+                        // For deleted items that have a live relationship, ensure a ghost is created
+                        LiveRelationship liveRelationship = liveRelationshipManager.getLiveRelationship(child, false);
+                        if (liveRelationship != null && liveRelationship.getStatus().isSourceExisting()) {
+                            createGhost(child, resolver);
+                        }
                     }
                 }
             }
             resolver.commit();
-        } catch (PersistenceException e) {
+         } catch (PersistenceException | RepositoryException | WCMException e) {
             LOGGER.error("Could not delete items of the container at {}", container.getPath(), e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
@@ -120,6 +139,20 @@ public class ContainerServlet extends SlingAllMethodsServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    private void createGhost(@NotNull Resource deleted, ResourceResolver resolver) throws PersistenceException, RepositoryException, WCMException {
+        Resource parent = deleted.getParent();
+        if (parent != null) {
+            Map<String,Object> properties = new HashMap<>();
+            properties.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
+            properties.put(JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY, RT_GHOST);
+            resolver.create(parent, deleted.getName(), properties);
+            LiveRelationship liveRelationship = liveRelationshipManager.getLiveRelationship(deleted, false);
+            if (liveRelationship != null) {
+                liveRelationshipManager.cancelRelationship(resolver, liveRelationship,true,false);
+            }
+        }
     }
 
 }
