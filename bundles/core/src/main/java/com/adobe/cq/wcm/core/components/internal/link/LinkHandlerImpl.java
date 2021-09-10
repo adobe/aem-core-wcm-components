@@ -30,15 +30,14 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -59,8 +58,11 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE
  * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {LinkHandler.class})
-public class LinkHandlerImpl implements LinkHandler {
+public final class LinkHandlerImpl implements LinkHandler {
 
+    /**
+     * Default logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(LinkHandlerImpl.class);
 
     /**
@@ -73,30 +75,17 @@ public class LinkHandlerImpl implements LinkHandler {
     /**
      * The current {@link SlingHttpServletRequest}.
      */
-    @Self
-    private SlingHttpServletRequest request;
-
-    /**
-     * The current resource properties
-     */
-    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private ValueMap properties;
+    private final SlingHttpServletRequest request;
 
     /**
      * The current resource style/policies
      */
-    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private Style currentStyle;
+    private final Style style;
 
     /**
-     * Reference to {@link PageManager}
+     * Registered path processors.
      */
-    @ScriptVariable
-    @org.apache.sling.models.annotations.Optional
-    private PageManager pageManager;
-
-    @OSGiService
-    private List<PathProcessor> pathProcessors;
+    private final List<PathProcessor> pathProcessors;
 
     /**
      * Variable that defines how to handle pages that redirect. Given pages PageA and PageB where PageA redirects to PageB,
@@ -104,71 +93,93 @@ public class LinkHandlerImpl implements LinkHandler {
      */
     private Boolean shadowingDisabled;
 
+    /**
+     * Construct a LinkHandler.
+     *
+     * @param slingRequest      The current request.
+     * @param pathProcessorList The list of path processors.
+     * @param currentStyle      The current style.
+     */
+    @Inject
+    public LinkHandlerImpl(@Named("sling-object") @NotNull final SlingHttpServletRequest slingRequest,
+                           @Named("osgi-services") @NotNull final List<PathProcessor> pathProcessorList,
+                           @ScriptVariable(name = "currentStyle") @org.apache.sling.models.annotations.Optional @Nullable final Style currentStyle) {
+        this.request = slingRequest;
+        this.pathProcessors = pathProcessorList;
+        this.style = currentStyle;
+    }
 
     @NotNull
-    public Optional<Link<Page>> getLink(@NotNull Resource resource) {
+    @Override
+    public Optional<Link<@Nullable Page>> getLink(@NotNull final Resource resource) {
         return getLink(resource, PN_LINK_URL);
     }
 
-   @NotNull
-    public Optional<Link<Page>> getLink(@NotNull Resource resource, String linkURLPropertyName) {
+    @NotNull
+    @Override
+    public Optional<Link<@Nullable Page>> getLink(@NotNull final Resource resource,
+                                                  @NotNull final String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
-        String linkURL = props.get(linkURLPropertyName, String.class);
-        if (linkURL == null) {
-            return Optional.empty();
-        }
-        String linkTarget = props.get(PN_LINK_TARGET, String.class);
-        String linkAccessibilityLabel = props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class);
-        String linkTitleAttribute = props.get(PN_LINK_TITLE_ATTRIBUTE, String.class);
-        return Optional.ofNullable(getLink(linkURL, linkTarget, linkAccessibilityLabel, linkTitleAttribute).orElse(null));
+        return Optional.ofNullable(props.get(linkURLPropertyName, String.class))
+            .flatMap(linkURL -> getLink(
+                linkURL,
+                props.get(PN_LINK_TARGET, String.class),
+                props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class),
+                props.get(PN_LINK_TITLE_ATTRIBUTE, String.class)
+            ));
     }
 
     @NotNull
-    public Optional<Link<Page>> getLink(@Nullable Page page) {
-        if (page == null) {
-            return Optional.empty();
-        }
-        Pair<Page, String> pair = resolvePage(page);
-        return buildLink(pair.getRight(), request, pair.getLeft(), null);
+    @Override
+    public Optional<Link<@Nullable Page>> getLink(@Nullable final Page page) {
+        return Optional.ofNullable(page)
+            .map(this::resolvePage)
+            .flatMap(pair -> buildLink(pair.getRight(), pair.getLeft(), null));
     }
 
     @NotNull
-    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
-        Pair<Page, String> pair = resolvePage(getPage(linkURL).orElse(null));
-        linkURL = StringUtils.isNotEmpty(pair.getRight()) ? pair.getRight() : linkURL;
-        String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
-        String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        return buildLink(resolvedLinkURL, request, pair.getLeft(),
-                new HashMap<String, String>() {{ put(ATTR_TARGET, resolvedLinkTarget); }});
+    @Override
+    public Optional<Link<@Nullable Page>> getLink(@Nullable final String linkURL, @Nullable final String target) {
+        return this.getLink(linkURL, target, null, null);
     }
 
     @NotNull
-    public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
-        Pair<Page, String> pair = resolvePage(getPage(linkURL).orElse(null));
-        linkURL = StringUtils.isNotEmpty(pair.getRight()) ? pair.getRight() : linkURL;
-        String resolvedLinkURL = validateAndResolveLinkURL(linkURL);
-        String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        String validatedLinkAccessibilityLabel = validateLinkAccessibilityLabel(linkAccessibilityLabel);
-        String validatedLinkTitleAttribute = validateLinkTitleAttribute(linkTitleAttribute);
-        return Optional.of(buildLink(resolvedLinkURL, request, pair.getLeft(),
-                new HashMap<String, String>() {{
-                    put(ATTR_TARGET, resolvedLinkTarget);
-                    put(ATTR_ARIA_LABEL, validatedLinkAccessibilityLabel);
-                    put(ATTR_TITLE, validatedLinkTitleAttribute);
-                }}))
-                .orElse(null);
+    @Override
+    public Optional<Link<@Nullable Page>> getLink(@Nullable final String linkURL,
+                                                  @Nullable final String target,
+                                                  @Nullable final String linkAccessibilityLabel,
+                                                  @Nullable final String linkTitleAttribute) {
+        Pair<Page, String> pair = Optional.ofNullable(linkURL)
+            .flatMap(this::getPage)
+            .map(this::resolvePage)
+            .map(p -> ImmutablePair.of(p.getLeft(), validateAndResolveLinkURL(p.getRight())))
+            .orElseGet(() -> ImmutablePair.of(null, validateAndResolveLinkURL(linkURL)));
+
+        return buildLink(pair.getRight(), pair.getLeft(),
+            new HashMap<String, String>() {{
+                put(ATTR_TARGET, validateAndResolveLinkTarget(target));
+                validateLinkAccessibilityLabel(linkAccessibilityLabel).ifPresent((v) -> put(ATTR_ARIA_LABEL, v));
+                validateLinkTitleAttribute(linkTitleAttribute).ifPresent((v) -> put(ATTR_TITLE, v));
+            }});
     }
 
-    private Optional<Link<Page>> buildLink(String path, SlingHttpServletRequest request, Page page,
-                                           Map<String, String> htmlAttributes) {
-        if (StringUtils.isNotEmpty(path)) {
-            return pathProcessors.stream()
-                    .filter(pathProcessor -> pathProcessor.accepts(path, request))
-                    .findFirst().map(pathProcessor -> new LinkImpl<>(pathProcessor.sanitize(path, request), pathProcessor.map(path,
-                            request), pathProcessor.externalize(path, request), page, pathProcessor.processHtmlAttributes(path, htmlAttributes)));
-        } else {
-            return Optional.of(new LinkImpl<>(path, path, path, page, htmlAttributes));
-        }
+    @NotNull
+    private Optional<Link<@Nullable Page>> buildLink(@Nullable final String path,
+                                                     @Nullable final Page page,
+                                                     @Nullable final Map<String, String> htmlAttributes) {
+        return Optional.ofNullable(path)
+            .filter(StringUtils::isNotEmpty)
+            .map(p -> this.pathProcessors.stream()
+                .filter(pathProcessor -> pathProcessor.accepts(p, this.request))
+                .findFirst()
+                .map(pathProcessor -> (Link<Page>) new LinkImpl<>(
+                    pathProcessor.sanitize(p, this.request),
+                    pathProcessor.map(p, this.request),
+                    pathProcessor.externalize(p, this.request),
+                    page,
+                    pathProcessor.processHtmlAttributes(p, htmlAttributes)
+                )))
+            .orElseGet(() -> Optional.of(new LinkImpl<>(path, path, path, page, htmlAttributes)));
     }
 
     /**
@@ -178,81 +189,74 @@ public class LinkHandlerImpl implements LinkHandler {
      * @return The validated link URL or {@code null} if not valid
      */
     @Nullable
-    private String validateAndResolveLinkURL(String linkURL) {
-        if (!StringUtils.isEmpty(linkURL)) {
-            return getLinkURL(linkURL);
-        } else {
-            return null;
-        }
+    private String validateAndResolveLinkURL(@Nullable final String linkURL) {
+        return Optional.ofNullable(linkURL)
+            .filter(StringUtils::isNotEmpty)
+            .map(this::getLinkURL)
+            .orElse(null);
     }
 
     /**
      * Validates and resolves the link target.
-     * @param linkTarget Link target
      *
+     * @param linkTarget Link target
      * @return The validated link target or {@code null} if not valid
      */
-    private String validateAndResolveLinkTarget(String linkTarget) {
-        if (linkTarget != null && VALID_LINK_TARGETS.contains(linkTarget)) {
-            return linkTarget;
-        }
-        else {
-            return null;
-        }
+    @Nullable
+    private static String validateAndResolveLinkTarget(@Nullable final String linkTarget) {
+        return Optional.ofNullable(linkTarget)
+            .filter(VALID_LINK_TARGETS::contains)
+            .orElse(null);
     }
 
     /**
      * Validates the link accessibility label.
-     * @param linkAccessibilityLabel Link accessibility label
      *
-     * @return The validated link accessibility label or {@code null} if not valid
+     * @param linkAccessibilityLabel Link accessibility label
+     * @return The validated link accessibility label or empty if not valid
      */
-    private String validateLinkAccessibilityLabel(String linkAccessibilityLabel) {
-        if (!StringUtils.isBlank(linkAccessibilityLabel)) {
-            return linkAccessibilityLabel.trim();
-        }
-        else {
-            return null;
-        }
+    @NotNull
+    private static Optional<String> validateLinkAccessibilityLabel(@Nullable final String linkAccessibilityLabel) {
+        return Optional.ofNullable(linkAccessibilityLabel)
+            .filter(StringUtils::isNotBlank)
+            .map(String::trim);
     }
 
     /**
      * Validates the link title attribute.
-     * @param linkTitleAttribute Link title attribute
      *
-     * @return The validated link title attribute or {@code null} if not valid
+     * @param linkTitleAttribute Link title attribute
+     * @return The validated link title attribute or empty if not valid
      */
-    private String validateLinkTitleAttribute(String linkTitleAttribute) {
-        if (!StringUtils.isBlank(linkTitleAttribute)) {
-            return linkTitleAttribute.trim();
-        }
-        else {
-            return null;
-        }
+    @NotNull
+    private static Optional<String> validateLinkTitleAttribute(@Nullable final String linkTitleAttribute) {
+        return Optional.ofNullable(linkTitleAttribute)
+            .filter(StringUtils::isNotBlank)
+            .map(String::trim);
     }
 
     /**
      * If the provided {@code path} identifies a {@link Page}, this method will generate the correct URL for the page. Otherwise the
      * original {@code String} is returned.
-     * @param path the page path
      *
+     * @param path the page path
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
      */
     @NotNull
-    private String getLinkURL(@NotNull String path) {
+    private String getLinkURL(@NotNull final String path) {
         return getPage(path)
-                .map(this::getPageLinkURL)
-                .orElse(path);
+            .map(LinkHandlerImpl::getPageLinkURL)
+            .orElse(path);
     }
 
     /**
      * Given a {@link Page}, this method returns the correct URL with the extension
-     * @param page the page
      *
+     * @param page the page
      * @return the URL of the provided (@code page}
      */
     @NotNull
-    private String getPageLinkURL(@NotNull Page page) {
+    private static String getPageLinkURL(@NotNull final Page page) {
         return page.getPath() + HTML_EXTENSION;
     }
 
@@ -263,14 +267,10 @@ public class LinkHandlerImpl implements LinkHandler {
      * @return The {@link Page} corresponding to the path
      */
     @NotNull
-    private Optional<Page> getPage(@Nullable String path) {
-        if (pageManager == null) {
-            pageManager = request.getResourceResolver().adaptTo(PageManager.class);
-        }
-        if (pageManager == null) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(pageManager.getPage(path));
+    private Optional<Page> getPage(@Nullable final String path) {
+        return Optional.ofNullable(path)
+            .flatMap(p -> Optional.ofNullable(this.request.getResourceResolver().adaptTo(PageManager.class))
+                .map(pm -> pm.getPage(p)));
     }
 
     /**
@@ -281,37 +281,25 @@ public class LinkHandlerImpl implements LinkHandler {
      * @return A pair of {@link String} and {@link Page} the page resolves to.
      */
     @NotNull
-    private Pair<Page, String> resolvePage(@Nullable final Page page) {
-        Page resolved = page;
-        String redirectTarget = null;
-        String linkURL = null;
-        if (!isShadowingDisabled()) {
-            Pair<Page, String> pair = resolveRedirects(page);
-            resolved = pair.getLeft();
-            redirectTarget = pair.getRight();
+    private Pair<@Nullable Page, @NotNull String> resolvePage(@NotNull final Page page) {
+        Pair<Page, String> pair = !isShadowingDisabled() ? resolveRedirects(page) : new ImmutablePair<>(page, null);
+        if (pair.getLeft() == null && StringUtils.isNotEmpty(pair.getRight())) {
+            return new ImmutablePair<>(page, pair.getRight());
         }
-        if (resolved == null) {
-            if (StringUtils.isNotEmpty(redirectTarget)) {
-                return new ImmutablePair<>(page, redirectTarget);
-            } else {
-                resolved = page;
-            }
-        }
-        if (resolved != null) {
-            linkURL = getPageLinkURL(resolved);
-        }
-        return new ImmutablePair<>(resolved, linkURL);
+        Page resolved = Optional.ofNullable(pair.getLeft()).orElse(page);
+        return new ImmutablePair<>(resolved, getPageLinkURL(resolved));
     }
 
     @NotNull
-    public Pair<Page, String> resolveRedirects(@Nullable final Page page) {
+    @Override
+    public Pair<@Nullable Page, @Nullable String> resolveRedirects(@Nullable final Page page) {
         Page result = page;
         String redirectTarget = null;
-        if (page != null && page.getPageManager() != null) {
+        if (page != null) {
             Set<String> redirectCandidates = new LinkedHashSet<>();
             redirectCandidates.add(page.getPath());
             while (result != null && StringUtils
-                    .isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
+                .isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
                 result = page.getPageManager().getPage(redirectTarget);
                 if (result != null) {
                     if (!redirectCandidates.add(result.getPath())) {
@@ -330,15 +318,14 @@ public class LinkHandlerImpl implements LinkHandler {
      * @return {@code true} if page shadowing is disabled, {@code false} otherwise
      */
     private boolean isShadowingDisabled() {
-        if (shadowingDisabled == null) {
-            shadowingDisabled = PROP_DISABLE_SHADOWING_DEFAULT;
-            if (currentStyle != null) {
-                shadowingDisabled = currentStyle.get(PN_DISABLE_SHADOWING, shadowingDisabled);
-            }
-            if (properties != null) {
-                shadowingDisabled = properties.get(PN_DISABLE_SHADOWING, shadowingDisabled);
-            }
+        if (this.shadowingDisabled == null) {
+            this.shadowingDisabled = Optional.ofNullable(this.request.getResource().getValueMap().get(PN_DISABLE_SHADOWING, Boolean.class))
+                .orElseGet(() ->
+                    Optional.ofNullable(this.style)
+                        .map(cs -> cs.get(PN_DISABLE_SHADOWING, Boolean.class))
+                        .orElse(PROP_DISABLE_SHADOWING_DEFAULT)
+                );
         }
-        return shadowingDisabled;
+        return this.shadowingDisabled;
     }
 }
