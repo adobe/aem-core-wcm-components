@@ -16,6 +16,16 @@
               "jcr:primaryType": "nt:unstructured",
               "name"           : "href",
               "value"          : "/theme.css"
+            },
+            "rel" : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "rel",
+              "value"          : "preload"
+            },
+            "as" : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "as",
+              "value"          : "style"
             }
           }
         },
