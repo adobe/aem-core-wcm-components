@@ -101,7 +101,7 @@ public class ContainerServlet extends SlingAllMethodsServlet {
                 }
             }
             resolver.commit();
-         } catch (PersistenceException | RepositoryException | WCMException e) {
+        } catch (PersistenceException | RepositoryException | WCMException e) {
             LOGGER.error("Could not delete items of the container at {}", container.getPath(), e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
