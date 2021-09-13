@@ -16,8 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.title.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.title.TitleEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.title.TitleEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;

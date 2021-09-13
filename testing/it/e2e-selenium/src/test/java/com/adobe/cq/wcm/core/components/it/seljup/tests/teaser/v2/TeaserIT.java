@@ -18,8 +18,8 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v2;
 
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v2.TeaserEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v2.Teaser;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.TeaserEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.Teaser;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 

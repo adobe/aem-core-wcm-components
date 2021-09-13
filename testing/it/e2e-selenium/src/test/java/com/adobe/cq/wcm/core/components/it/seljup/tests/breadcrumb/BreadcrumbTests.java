@@ -19,11 +19,11 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb;
 
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BreadcrumbEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BaseBreadcrumbItems;
-import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.v2.BreadcrumbList;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.assertion.EditableToolbarAssertion;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.BreadcrumbEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.BaseBreadcrumbItems;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.v2.BreadcrumbList;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;

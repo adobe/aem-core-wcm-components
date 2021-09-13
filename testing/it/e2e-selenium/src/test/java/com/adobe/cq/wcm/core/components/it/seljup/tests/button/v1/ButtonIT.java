@@ -18,9 +18,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.button.v1;
 
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.button.v1.Button;
-import com.adobe.cq.wcm.core.components.it.seljup.components.button.ButtonEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.button.v1.Button;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.button.ButtonEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.codeborne.selenide.WebDriverRunner;

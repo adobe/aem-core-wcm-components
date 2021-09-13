@@ -20,9 +20,9 @@ import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.wcm.core.components.it.seljup.components.image.BaseImage;
-import com.adobe.cq.wcm.core.components.it.seljup.components.image.ImageEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
 

@@ -16,10 +16,10 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.formbutton.v2.FormButton;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formbutton.v2.FormButton;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

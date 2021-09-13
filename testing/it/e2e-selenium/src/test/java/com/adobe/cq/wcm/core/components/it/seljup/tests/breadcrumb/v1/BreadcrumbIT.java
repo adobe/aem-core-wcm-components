@@ -17,7 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.v1.BreadcrumbItems;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.v1.BreadcrumbItems;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.BreadcrumbTests;
 import java.util.concurrent.TimeoutException;
 

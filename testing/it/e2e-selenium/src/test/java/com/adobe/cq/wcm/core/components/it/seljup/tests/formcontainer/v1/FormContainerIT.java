@@ -17,10 +17,10 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.FormContainerEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.v1.FormComponents;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formcomponents.FormContainerEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formcomponents.v1.FormComponents;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
