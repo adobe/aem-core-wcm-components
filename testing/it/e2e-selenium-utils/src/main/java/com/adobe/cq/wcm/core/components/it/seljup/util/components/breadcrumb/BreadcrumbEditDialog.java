@@ -16,7 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 
@@ -60,7 +60,7 @@ public class BreadcrumbEditDialog {
      */
     public void setStartLevelValue(String value) throws InterruptedException {
         $(startLevel).setValue(value);
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
     /**

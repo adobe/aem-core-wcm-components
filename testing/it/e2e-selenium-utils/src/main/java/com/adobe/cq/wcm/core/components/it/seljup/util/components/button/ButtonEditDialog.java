@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.button;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
@@ -49,7 +49,7 @@ public class ButtonEditDialog extends Dialog {
 
     public void setTitleField(String value) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
         content().find(Selectors.SELECTOR_BUTTON_TITLE).click();
         content().find(Selectors.SELECTOR_BUTTON_TITLE).sendKeys(value);
@@ -57,7 +57,7 @@ public class ButtonEditDialog extends Dialog {
 
     public void setNameField(String value) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
         content().find(Selectors.SELECTOR_BUTTON_NAME).click();
         content().find(Selectors.SELECTOR_BUTTON_NAME).sendKeys(value);
@@ -65,7 +65,7 @@ public class ButtonEditDialog extends Dialog {
 
     public void setValueField(String value) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
         content().find(Selectors.SELECTOR_BUTTON_VALUE).click();
         content().find(Selectors.SELECTOR_BUTTON_VALUE).sendKeys(value);
@@ -73,7 +73,7 @@ public class ButtonEditDialog extends Dialog {
 
     public boolean isNameFieldInvalid() {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
         return content().find(Selectors.SELECTOR_BUTTON_NAME).getAttribute("invalid").equals("true");
     }
@@ -81,7 +81,7 @@ public class ButtonEditDialog extends Dialog {
     public void setLinkField(String value) {
         AutoCompleteField autoCompleteField = new AutoCompleteField("./link");
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(autoCompleteField.getCssSelector())));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(autoCompleteField.getCssSelector())));
         autoCompleteField.sendKeys(value);
     }
 

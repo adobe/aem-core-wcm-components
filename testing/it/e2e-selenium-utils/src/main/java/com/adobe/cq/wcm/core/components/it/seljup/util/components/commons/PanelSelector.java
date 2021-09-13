@@ -17,7 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.commons;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -47,17 +47,17 @@ public class PanelSelector extends BaseComponent {
      * @throws InterruptedException
      */
     public void reorderItems(int dragElement,int targetElement) throws InterruptedException {
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         ElementsCollection items = this.getItems();
         SelenideElement dragElementMoveButton = items.get(dragElement).find("button[coral-table-roworder='true']");
         SelenideElement targetElement1 = items.get(targetElement);
         int yOffset = targetElement1.getSize().getHeight() + 1;
         actions().clickAndHold(dragElementMoveButton).build().perform();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         actions().moveToElement(targetElement1).build().perform();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         actions().moveByOffset(0, yOffset).build().perform();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         actions().release().build().perform();
     }
 }

@@ -24,7 +24,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InlineEditor;
 import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
 import com.adobe.cq.testing.selenium.utils.ElementUtils;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
@@ -167,9 +167,9 @@ public class Commons {
         for(i = 0; i < path.length - 1; i++) {
             currentPath = currentPath + "/" + path[i];
             $("[data-foundation-collection-item-id='" + currentPath + "']").click();
-            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+            Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         }
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         currentPath = currentPath + "/"  + path[i];
         if($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox").isDisplayed()) {
             ElementUtils.clickableClick($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox"));
@@ -512,10 +512,10 @@ public class Commons {
     public static void openEditDialog(EditorPage editorPage, String compPath) throws TimeoutException, InterruptedException {
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
         editableToolbar.clickConfigure();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
 
@@ -529,7 +529,7 @@ public class Commons {
     public static InlineEditor openInlineEditor(EditorPage editorPage, String compPath) throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
         return editableToolbar.clickEdit();
     }
@@ -547,7 +547,7 @@ public class Commons {
 
     public static void saveConfigureDialog() throws InterruptedException {
         $(Selectors.SELECTOR_DONE_CONFIG_BUTTON).click();
-        webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
     /**
@@ -704,7 +704,7 @@ public class Commons {
 
     public static void useDialogSelect(String name, String value) throws InterruptedException {
         $( "[name='" + name + "'] > button").click();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         CoralSelectList coralSelectList = new CoralSelectList($("[name='" + name + "']"));
         if(!coralSelectList.isVisible()) {
             CoralSelect selectList = new CoralSelect("name='" + name + "'");

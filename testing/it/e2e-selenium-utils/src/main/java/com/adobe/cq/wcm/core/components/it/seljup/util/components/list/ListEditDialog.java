@@ -19,7 +19,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.list;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
 
@@ -61,7 +61,7 @@ public class ListEditDialog extends Dialog {
 
     public void addFixedListOptions(String value) throws InterruptedException {
         $("coral-multifield[data-granite-coral-multifield-name='./pages'] > button").click();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         $$("foundation-autocomplete[name='./pages'] input[role='combobox']").last().sendKeys(value);
         $("foundation-autocomplete[name='./pages'] button[value^='" + value + "']").click();
     }

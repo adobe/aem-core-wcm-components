@@ -21,7 +21,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formbutton.v1.FormButton;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formbutton.BaseFormButton;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.button.ButtonEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.codeborne.selenide.WebDriverRunner;
@@ -55,7 +55,7 @@ public class FormButtonIT extends AuthorBaseUITest {
     private ButtonEditDialog openButtonEditDialog() throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
     }
 
@@ -79,7 +79,7 @@ public class FormButtonIT extends AuthorBaseUITest {
      */
     @AfterEach
     public void cleanup() throws ClientException, InterruptedException {
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**
@@ -138,7 +138,7 @@ public class FormButtonIT extends AuthorBaseUITest {
         buttonEditDialog.setNameField(buttonName);
         Commons.saveConfigureDialog();
 
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchContext("ContentFrame");
         assertTrue(formButton.isButtonPresentByName(buttonName), "Button should be present with name " + buttonName);
         assertTrue(formButton.getButtonText().contains(buttonLabel), "Button should contain " + buttonLabel + " text");
@@ -159,7 +159,7 @@ public class FormButtonIT extends AuthorBaseUITest {
         buttonEditDialog.setValueField(buttonValue);
         Commons.saveConfigureDialog();
 
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchContext("ContentFrame");
         assertTrue(formButton.isButtonPresentByValue(buttonValue), "Button should be present with value " + buttonValue);
         assertTrue(formButton.getButtonText().contains(buttonLabel), "Button should contain " + buttonLabel + "text");

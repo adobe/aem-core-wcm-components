@@ -17,7 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.formcomponents;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
@@ -57,7 +57,7 @@ public class FormContainerEditDialog extends Dialog {
     public void setActionInputValue(String value) throws InterruptedException {
         $(actionInput).clear();
         $(actionInput).sendKeys(value);
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
     public void setFromField(String value) {
