@@ -35,37 +35,9 @@
     <artifactId>core.wcm.components.it.e2e-selenium-utils</artifactId>
     <version>2.17.11-SNAPSHOT</version>
     <name>Adobe Experience Manager Core WCM Components and Utils</name>
+    <packaging>jar</packaging>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <!-- Compile for custom Java version -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.0</version>
-                    <configuration>
-                        <source>1.${cq.java.version}</source>
-                        <target>1.${cq.java.version}</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.2.0</version>
-                    <configuration>
-                        <classesDirectory>${project.build.testOutputDirectory}</classesDirectory>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.adobe.granite.maven</groupId>
-                    <artifactId>quickstart-maven-plugin</artifactId>
-                    <version>1.6.1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.rat</groupId>
@@ -79,19 +51,8 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <cq.java.version>8</cq.java.version>
-    </properties>
 
     <profiles>
         <profile>

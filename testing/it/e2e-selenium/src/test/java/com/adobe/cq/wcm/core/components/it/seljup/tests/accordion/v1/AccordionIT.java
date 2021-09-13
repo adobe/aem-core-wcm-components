@@ -18,12 +18,12 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.accordion.v1;
 
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.accordion.AccordionEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.accordion.v1.Accordion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.commons.ChildrenEditor;
-import com.adobe.cq.wcm.core.components.it.seljup.components.commons.PanelSelector;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.assertion.EditableToolbarAssertion;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.accordion.AccordionEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.accordion.v1.Accordion;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.ChildrenEditor;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.PanelSelector;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;

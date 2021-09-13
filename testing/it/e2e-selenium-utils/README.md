@@ -1,6 +1,6 @@
 # Purpose
 
-This is Model and Utility classes for WCM Core Components UI testing.
+These are test model and utility classes for WCM Core Components UI testing.
 
 # Requirement
 

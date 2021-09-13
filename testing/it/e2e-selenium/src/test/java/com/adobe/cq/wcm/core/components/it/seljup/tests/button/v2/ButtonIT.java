@@ -18,8 +18,8 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.button.v2;
 
 import java.util.concurrent.TimeoutException;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.button.ButtonEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.button.ButtonEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

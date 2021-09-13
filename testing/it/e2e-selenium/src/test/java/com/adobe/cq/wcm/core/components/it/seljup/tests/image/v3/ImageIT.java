@@ -16,7 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v3;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.image.v2.Image;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v2.Image;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;

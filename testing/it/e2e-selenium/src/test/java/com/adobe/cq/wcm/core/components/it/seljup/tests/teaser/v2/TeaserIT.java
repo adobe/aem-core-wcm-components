@@ -16,8 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v2.TeaserEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v2.Teaser;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.TeaserEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.Teaser;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
