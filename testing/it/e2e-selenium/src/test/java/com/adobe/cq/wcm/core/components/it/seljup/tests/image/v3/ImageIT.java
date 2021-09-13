@@ -175,4 +175,13 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testPageImageWithDragAndDropImage65();
     }
 
+    /**
+     * Test: set page featured image with linked page
+     */
+    @Test
+    @DisplayName("Test: set page featured image with linked page")
+    public void testPageImageWithLinkedPage() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testPageImageWithLinkedPage();
+    }
+
 }

@@ -70,8 +70,10 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentManager;
+import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
+import com.day.cq.wcm.commons.WCMUtils;
 import com.day.cq.wcm.foundation.WCMRenditionPicker;
 import com.day.image.Layer;
 import com.google.common.base.Joiner;
@@ -187,7 +189,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
 
             LinkHandler linkHandler = request.adaptTo(LinkHandler.class);
-            Resource wrappedImageResourceWithInheritance = getWrappedImageResourceWithInheritance(component, linkHandler);
+            Style style = WCMUtils.getStyle(request);
+            Resource wrappedImageResourceWithInheritance = getWrappedImageResourceWithInheritance(component, linkHandler, style);
             ImageComponent imageComponent = new ImageComponent(wrappedImageResourceWithInheritance);
 
             if (imageComponent.source == Source.NOCONTENT || imageComponent.source == Source.NONEXISTING) {

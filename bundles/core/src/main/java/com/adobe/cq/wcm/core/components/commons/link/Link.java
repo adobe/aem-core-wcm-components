@@ -52,7 +52,7 @@ public interface Link<T> {
     String PN_LINK_TITLE_ATTRIBUTE = "linkTitleAttribute";
 
     /**
-     * Check if the link defined for the component is valid.
+     * Checks if the link defined for the component is valid.
      *
      * @return {@code true} if component has a valid link defined
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
@@ -82,7 +82,6 @@ public interface Link<T> {
         return null;
     }
 
-
     /**
      * The externalized URL which also contains the scheme and host information.
      * This is usually created with a {@link com.day.cq.commons.Externalizer} service
@@ -94,7 +93,7 @@ public interface Link<T> {
     }
 
     /**
-     * Map with Attributes for HTML Anchor tag for this link.
+     * Returns a Map with attributes for HTML anchor tag for this link.
      * This usually also contains the Link URL as <code>href</code> attribute,
      * but may contain additional attributes like <code>target</code> and others.
      *

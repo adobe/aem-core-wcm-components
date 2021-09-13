@@ -165,7 +165,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     protected void initResource() {
-        resource = getWrappedImageResourceWithInheritance(resource, linkHandler);
+        resource = getWrappedImageResourceWithInheritance(resource, linkHandler, currentStyle);
     }
 
     private Dimension getOriginalDimension() {

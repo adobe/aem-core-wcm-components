@@ -34,6 +34,23 @@
             "jcr:primaryType"   : "nt:unstructured",
             "jcr:title"         : "Carousel 1",
             "sling:resourceType": "core/wcm/components/image/v3/image"
+          },
+          "teaser_empty"          : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:title"         : "teaser empty",
+            "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
+          },
+          "teaser_with_link"          : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:title"         : "teaser with link",
+            "linkURL"           : "/content/page1",
+            "imageFromPageImage": "true",
+            "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
+          },
+          "teaser_with_cta"          : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:title"         : "teaser with cta",
+            "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
           }
         }
       }

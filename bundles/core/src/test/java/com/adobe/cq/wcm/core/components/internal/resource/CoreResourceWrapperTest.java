@@ -101,6 +101,29 @@ public class CoreResourceWrapperTest {
     }
 
     @Test
+    public void testWrappingWithOverriddenChildren() {
+        Resource toBeWrapped = mock(Resource.class);
+        when(toBeWrapped.getValueMap()).thenReturn(new ValueMapDecorator(Collections.emptyMap()));
+        Resource child1 = mock(Resource.class);
+        when(toBeWrapped.getChild("path/to/child1")).thenReturn(child1);
+        Resource child2 = mock(Resource.class);
+        when(toBeWrapped.getChild("path/to/child2")).thenReturn(child2);
+        Resource child3 = mock(Resource.class);
+        when(toBeWrapped.getChild("path/to/child3")).thenReturn(child3);
+
+        Map<String, Resource> overriddenChildren = new HashMap<>();
+        Resource overriddenChild1 = mock(Resource.class);
+        Resource overriddenChild2 = mock(Resource.class);
+        overriddenChildren.put("path/to/child1", overriddenChild1);
+        overriddenChildren.put("path/to/child2", overriddenChild2);
+
+        Resource wrappedResource = new CoreResourceWrapper(toBeWrapped, "a/b/c", null, null, overriddenChildren);
+        assertEquals(wrappedResource.getChild("path/to/child1"), overriddenChild1, "child should be overridden");
+        assertEquals(wrappedResource.getChild("path/to/child2"), overriddenChild2, "child should be overridden");
+        assertEquals(wrappedResource.getChild("path/to/child3"), child3, "child should not be overridden");
+    }
+
+    @Test
     public void testNulls() {
         assertThrows(IllegalArgumentException.class, () -> new CoreResourceWrapper(null, null));
     }

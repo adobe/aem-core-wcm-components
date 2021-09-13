@@ -24,6 +24,8 @@ import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v1.TeaserEdi
 import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v1.Teaser;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -47,15 +49,27 @@ public class TeaserIT extends AuthorBaseUITest {
     protected static String  preTitle                         = "Teaser PreTitle";
     protected static String  title                            = "Teaser Title";
     protected static String  description                      = "Teaser Description";
+    protected static String  alt                              = "Teaser alt text";
     private static String  pageName                         = "teaser-page";
     protected static String  pageTitle                        = "teaser_page";
     private static String  secondPageName                   = "teaser-second-page";
     protected static String  secondPageTitle                  = "teaser_second_page";
+    private static String  thirdPageName                   = "teaser-third-page";
+    protected static String  thirdPageTitle                  = "teaser_third_page";
     public static String  pageDescription                  = "teaser page description";
     protected static String  actionText2                      = "Action Text 2";
     protected static String  actionExternalLink               = "http://www.adobe.com";
     protected static String  actionExternalText               = "Adobe";
     private static String componentName                     = "teaser";
+    protected static String climbingAsset                   = "AdobeStock_140634652_climbing.jpeg";
+    protected static String climbingAssetAltText            = "Rock Climbing and Bouldering above the lake and mountains";
+    protected static String climbingAssetFormatted          = format(climbingAsset);
+    protected static String surfingAsset                    = "AdobeStock_175749320_surfing.jpg";
+    protected static String surfingAssetAltText             = "Surfers. Balangan beach. Bali, Indonesia.";
+    protected static String surfingAssetFormatted           = format(surfingAsset).replace("jpg", "jpeg");
+    protected static String skiingAsset                     = "AdobeStock_185234795_skiing.jpeg";
+    protected static String skiingAssetAltText              = "A skier does action skiing at the Rolle Pass in the Dolomites, Italy.";
+    protected static String skiingAssetFormatted            = format(skiingAsset);
 
 
     private String proxyPath;
@@ -64,6 +78,7 @@ public class TeaserIT extends AuthorBaseUITest {
     protected String teaserRT;
     protected String testPage;
     protected String secondTestPage;
+    protected String thirdTestPage;
     protected String imageProxyPath;
     protected String cmpPath;
     protected EditorPage editorPage;
@@ -77,9 +92,14 @@ public class TeaserIT extends AuthorBaseUITest {
     }
 
     protected void setup() throws ClientException {
+        setup(Commons.rtImage_v2);
+    }
+
+    protected void setup(String imageResourceType) throws ClientException {
 
         testPage = authorClient.createPage(pageName, pageTitle, rootPage, defaultPageTemplate).getSlingPath();
         secondTestPage = authorClient.createPage(secondPageName, secondPageTitle, rootPage, defaultPageTemplate).getSlingPath();
+        thirdTestPage = authorClient.createPage(thirdPageName, thirdPageTitle, rootPage, defaultPageTemplate).getSlingPath();
 
         //Update test page description
         java.util.List<NameValuePair> props = new ArrayList();
@@ -104,7 +124,7 @@ public class TeaserIT extends AuthorBaseUITest {
 
 
         proxyPath = Commons.createProxyComponent(adminClient, teaserRT, Commons.proxyPath, null, null);
-        imageProxyPath = Commons.createProxyComponent(adminClient, Commons.rtImage_v2, Commons.proxyPath, null, null);
+        imageProxyPath = Commons.createProxyComponent(adminClient, imageResourceType, Commons.proxyPath, null, null);
 
         data.clear();
         data.put("imageDelegate", imageProxyPath);
@@ -291,7 +311,6 @@ public class TeaserIT extends AuthorBaseUITest {
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
-        assertTrue(teaser.isTitleHidden(), "Title and Link should not be displayed");
         assertTrue(!teaser.isTitleLinkPresent(testPage, title),"Title link should not be present");
     }
 
@@ -452,4 +471,13 @@ public class TeaserIT extends AuthorBaseUITest {
         assertTrue(editDialog.getTitleValue().equals(title) && editDialog.isTitleEnabled(),
             "Title should be enabled and should be set to " + title);
     }
+
+    // ----------------------------------------------------------
+    // private stuff
+    // ----------------------------------------------------------
+
+    private static String format(String name) {
+        return StringUtils.lowerCase(name).replace("_", "-");
+    }
+
 }

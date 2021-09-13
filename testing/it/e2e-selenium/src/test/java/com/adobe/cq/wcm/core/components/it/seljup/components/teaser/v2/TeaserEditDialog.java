@@ -17,18 +17,36 @@
 package com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v2;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class TeaserEditDialog extends com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v1.TeaserEditDialog {
 
+    private static String inheritAltFromPage = ".cmp-teaser__editor coral-checkbox[name='./altValueFromPageImage']";
+    private static String isDecorative = ".cmp-teaser__editor coral-checkbox[name='./isDecorative']";
+    private static String altText = ".cmp-teaser__editor input[name='./alt']";
+
     public void openAssetsTab() {
         $$(".cmp-teaser__editor coral-tab").get(2).click();
     }
     public void openLinksTab() {
         $$(".cmp-teaser__editor coral-tab").get(0).click();
+    }
+
+    public void checkInheritAltFromPage() {
+        CoralCheckbox checkbox = new CoralCheckbox(inheritAltFromPage);
+        checkbox.click();
+    }
+
+    public void checkIsDecorative() {
+        CoralCheckbox checkbox = new CoralCheckbox(isDecorative);
+        checkbox.click();
+    }
+
+    public void setAltText(String value) {
+        $(altText).clear();
+        $(altText).sendKeys(value);
     }
 
 }
