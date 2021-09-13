@@ -22,7 +22,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.AssetFinder;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.TeaserEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.Teaser;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -135,8 +135,8 @@ public class TeaserIT extends AuthorBaseUITest {
         Commons.deleteProxyComponent(adminClient, proxyPath);
         Commons.deleteProxyComponent(adminClient, imageProxyPath);
 
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        authorClient.deletePageWithRetry(secondTestPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(secondTestPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**

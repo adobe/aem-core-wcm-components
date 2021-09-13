@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.constant;
 /**
  * This includes the constants used over entire module.
  */
-public class CoreComponentConstants {
+public class RequestConstants {
     /**
      * Retry interval time for some path to exist
      */

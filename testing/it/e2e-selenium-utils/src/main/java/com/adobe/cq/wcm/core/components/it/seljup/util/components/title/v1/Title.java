@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.title.v1;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.title.TitleEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -39,7 +39,7 @@ public class Title extends BaseComponent {
     }
 
     public boolean isTitleWithTypePresent(String typeSize) throws InterruptedException {
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         return $(title + " h" + typeSize).isDisplayed();
     }
 

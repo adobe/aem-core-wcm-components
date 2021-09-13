@@ -19,7 +19,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.embed;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
@@ -61,9 +61,9 @@ public class EmbedEditDialog extends Dialog {
 
         public void waitForUrlFieldToBeValid() throws InterruptedException {
             final WebDriver webDriver = WebDriverRunner.getWebDriver();
-            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-            new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".is-invalid" + urlField)));
-            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+            Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+            new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".is-invalid" + urlField)));
+            Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         }
 
         public boolean isUrlStatusSet(String value) {
@@ -84,7 +84,7 @@ public class EmbedEditDialog extends Dialog {
 
         public void setEmbeddableField(String value) throws InterruptedException {
             $( "["+embeddableField + "] > button").click();
-            Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+            Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
             CoralSelectList coralSelectList = new CoralSelectList($("["+embeddableField + "]"));
             if(!coralSelectList.isVisible()) {
                 CoralSelect selectList = new CoralSelect(embeddableField);

@@ -26,7 +26,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralTagList;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.AdvancedTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.ThumbnailTab;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
@@ -58,7 +58,7 @@ public class Page {
         CalendarPicker calendarPicker = new CalendarPicker(onTime);
         calendarPicker.calendarButton().click();
         calendarPicker.next().click();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         calendarPicker.date(1).click();
     }
 
@@ -66,7 +66,7 @@ public class Page {
         CalendarPicker calendarPicker = new CalendarPicker(offTime);
         calendarPicker.calendarButton().click();
         calendarPicker.next().click();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         calendarPicker.date(2).click();
     }
 
@@ -137,14 +137,14 @@ public class Page {
     public void generateThumbnail(ThumbnailTab thumbnailTab) {
         thumbnailTab.getThumbnailGeneratePreviewActivator().click();
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
             .until(ExpectedConditions.invisibilityOf(thumbnailTab.getDefaultThumbnailImg().toWebElement()));
     }
 
     public void setVariantPath(String path) throws InterruptedException {
         AutoCompleteField autoCompleteField = new AutoCompleteField("css:" + variantPath);
         autoCompleteField.sendKeys(path);
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
     public String getVariantPath() {

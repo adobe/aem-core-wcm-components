@@ -16,7 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.commons;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralMultiField;
@@ -68,16 +68,16 @@ public class ChildrenEditor extends BaseComponent {
      * @throws InterruptedException
      */
     public void moveItems(int dragElement,int targetElement) throws InterruptedException {
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         SelenideElement dragElementMoveButton = $$(item + " " + moveButton).get(dragElement);
         SelenideElement targetElement1 = $$(item).get(targetElement);
         int yOffset = (targetElement1.getSize().getHeight() / 2  + 1) * (-1);
         actions().clickAndHold(dragElementMoveButton).build().perform();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         actions().moveToElement(targetElement1).build().perform();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         actions().moveByOffset(-1, yOffset).build().perform();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         actions().release().build().perform();
     }
 

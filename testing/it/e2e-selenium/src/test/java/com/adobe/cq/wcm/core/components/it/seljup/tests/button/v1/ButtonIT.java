@@ -20,7 +20,7 @@ import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.button.v1.Button;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.button.ButtonEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.codeborne.selenide.WebDriverRunner;
@@ -70,7 +70,7 @@ public class ButtonIT extends AuthorBaseUITest {
     protected ButtonEditDialog getButtonEditDialog() throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
     }
 
@@ -82,7 +82,7 @@ public class ButtonIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanup() throws ClientException, InterruptedException {
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**
@@ -101,7 +101,7 @@ public class ButtonIT extends AuthorBaseUITest {
         buttonEditDialog.setTitleField(testTitle);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(button.isVisible(), "Button should be visible in content frame");
         assertTrue(button.getTitle().trim().equals(testTitle), "Button Text should have been updated");
     }
@@ -120,10 +120,10 @@ public class ButtonIT extends AuthorBaseUITest {
         String link = "https://www.adobe.com";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
         buttonEditDialog.setLinkField(link);
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(button.checkLinkPresent(link),"Button with link " + link + " should be present");
     }
 
@@ -143,7 +143,7 @@ public class ButtonIT extends AuthorBaseUITest {
         buttonEditDialog.getIcon().setValue(icon);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(button.iconPresent(icon),"Icon " + icon + " should be present");
     }
 }

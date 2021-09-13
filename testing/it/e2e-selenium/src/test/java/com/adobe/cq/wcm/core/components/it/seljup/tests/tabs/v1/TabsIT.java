@@ -27,7 +27,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.Childr
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.PanelSelector;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.TabsEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.v1.Tabs;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.WebDriverRunner;
@@ -135,7 +135,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.deleteProxyComponent(adminClient, proxyPath);
 
         // 2.
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
 
     }
 
@@ -206,7 +206,7 @@ public class TabsIT extends AuthorBaseUITest {
         //2.
         TabsEditDialog editDialog = tabs.openEditDialog(parentPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editDialog.openItemsTab();
 
         //3.
@@ -379,7 +379,7 @@ public class TabsIT extends AuthorBaseUITest {
         assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
 
         // verify that 3 items are available in the panel selector and the correct titles are visible
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         ElementsCollection panelSelectorItems = panelSelector.getItems();
         assertTrue(panelSelectorItems.size() == 3, "Number to items in panel selector should be 3");
         assertTrue(panelSelectorItems.get(0).getText().contains("item0"), "First panel select item should be item0");
@@ -422,7 +422,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
 
         //wait for the reordering to reflect
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         // verify new Tabs DOM item order is as expected
         ElementsCollection tabItems = tabs.getTabItems();
@@ -467,7 +467,7 @@ public class TabsIT extends AuthorBaseUITest {
 
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
 
         //2.
@@ -477,7 +477,7 @@ public class TabsIT extends AuthorBaseUITest {
         editableToolbarAssertion.assertInsertButton(true);
 
         editableToolbar.getInsertButton().click();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.isComponentPresentInInsertDialog(teaserProxyPath), "teaser component should be present in insert dialog");
         Commons.deleteProxyComponent(adminClient, teaserProxyPath);
     }

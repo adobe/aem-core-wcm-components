@@ -22,7 +22,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.contentfragment.v1.ContentFragment;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.contentfragmentlist.ContentFragmentListEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.contentfragmentlist.v1.ContentFragmentList;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.ElementsCollection;
 import org.apache.http.HttpStatus;
@@ -89,7 +89,7 @@ public class ContentFragmentListIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        adminClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        adminClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         Commons.deleteProxyComponent(adminClient, proxyPath);
     }
 
@@ -103,7 +103,7 @@ public class ContentFragmentListIT extends AuthorBaseUITest {
         Commons.useDialogSelect(PN_MODEL_PATH, modelPath);
         Commons.selectInAutocomplete(contentFragmentList.getEditDialog().getParentPath(),parentPath);
         Commons.saveConfigureDialog();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         Commons.switchContext("ContentFrame");
         ElementsCollection cfList = contentFragmentList.getContentFragmentList();
@@ -138,7 +138,7 @@ public class ContentFragmentListIT extends AuthorBaseUITest {
         Commons.selectInAutocomplete(contentFragmentList.getEditDialog().getParentPath(),parentPath);
         Commons.selectInTags(contentFragmentList.getEditDialog().getTagNames(), tagName);
         Commons.saveConfigureDialog();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         Commons.switchContext("ContentFrame");
         ElementsCollection cfList = contentFragmentList.getContentFragmentList();
@@ -173,7 +173,7 @@ public class ContentFragmentListIT extends AuthorBaseUITest {
         editDialog.addElement(TITLE);
         editDialog.addElement(TYPE);
         Commons.saveConfigureDialog();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         Commons.switchContext("ContentFrame");
         ElementsCollection cfList = contentFragmentList.getContentFragmentList();

@@ -21,7 +21,7 @@ import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.contentfragment.ContentFragmentEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.contentfragment.v1.ContentFragment;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.ElementsCollection;
 import org.apache.http.HttpStatus;
@@ -74,7 +74,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        adminClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        adminClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         Commons.deleteProxyComponent(adminClient, proxyPath);
     }
 
@@ -87,7 +87,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
         Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
         Commons.saveConfigureDialog();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         Commons.switchContext("ContentFrame");
         ElementsCollection contentFragmentTitle = contentFragment.getTitle();
@@ -112,7 +112,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
         contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
         Commons.useDialogSelect(PN_VARIATION_NAME, variationName1);
         Commons.saveConfigureDialog();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         Commons.switchContext("ContentFrame");
         ElementsCollection contentFragmentTitle = contentFragment.getTitle();
@@ -137,7 +137,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
         Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath2);
         Commons.saveConfigureDialog();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         Commons.switchContext("ContentFrame");
         ElementsCollection contentFragmentTitle = contentFragment.getTitle();
@@ -176,7 +176,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
         editDialog.addElement(TITLE);
         editDialog.addElement(TYPE);
         Commons.saveConfigureDialog();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         Commons.switchContext("ContentFrame");
         ElementsCollection contentFragmentTitle = contentFragment.getTitle();
