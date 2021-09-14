@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited;
 
-import java.util.Optional;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -32,6 +30,7 @@ import org.apache.sling.models.factory.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
@@ -110,25 +109,24 @@ public class PageImageThumbnail {
             // retrieve the page link from the component model
 
             Teaser teaserModel = modelFactory.getModelFromWrappedRequest(request, component, Teaser.class);
-            targetPage = Optional.ofNullable(teaserModel)
-                    .map(Teaser::getLink)
-                    .map(link -> (Page) link.getReference())
-                    .orElse(null);
-            if (targetPage == null) {
+            Link link = null;
+            if (teaserModel != null) {
+                link = teaserModel.getLink();
+            } else {
                 Image imageModel = modelFactory.getModelFromWrappedRequest(request, component, Image.class);
-                targetPage = Optional.ofNullable(imageModel)
-                        .map(Image::getImageLink)
-                        .map(link -> (Page) link.getReference())
-                        .orElse(null);
+                if (imageModel != null) {
+                    link = imageModel.getImageLink();
+                }
             }
-            if (targetPage == null) {
+            if (link != null) {
+                targetPage = (Page) link.getReference();
+            } else {
                 targetPage = currentPage;
             }
-
         }
 
         if (targetPage == null) {
-            log.error("The target page defined for {} is null", component.getPath());
+            log.info("The target page defined for {} is null", component.getPath());
             return;
         }
 
@@ -140,7 +138,7 @@ public class PageImageThumbnail {
 
         Image imageModel = modelFactory.getModelFromWrappedRequest(request, featuredImage, Image.class);
         if (imageModel == null) {
-            log.error("the image model of {} is null", featuredImage.getPath());
+            log.info("the image model of {} is null", featuredImage.getPath());
             return;
         }
 

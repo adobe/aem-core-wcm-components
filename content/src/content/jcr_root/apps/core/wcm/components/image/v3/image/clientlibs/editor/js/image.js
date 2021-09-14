@@ -86,12 +86,6 @@
             }
 
             imageFromPageImage = dialogContent.querySelector("coral-checkbox[name='./imageFromPageImage']");
-            // uncheck the "Inherit the image from page image" checkbox when there is neither an image nor a page image defined
-            var hasImage = $dialog.find(".cmp-image__editor-file-upload .cq-FileUpload-thumbnail-img img").length > 0;
-            var hasPageImage = $dialog.find(".cq-page-image-thumbnail__image[src]").length > 0;
-            if (imageFromPageImage && !hasImage && !hasPageImage) {
-                imageFromPageImage.checked = false;
-            }
 
             altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, "coral-checkbox[name='./altValueFromPageImage']", "input[name='./alt']");
             $pageImageThumbnail = $dialogContent.find(pageImageThumbnailSelector);
