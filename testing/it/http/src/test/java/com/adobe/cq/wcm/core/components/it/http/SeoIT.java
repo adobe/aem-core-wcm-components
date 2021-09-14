@@ -44,6 +44,7 @@ import com.google.common.collect.Multimaps;
 
 import static org.junit.Assert.assertEquals;
 
+@Category({IgnoreOnCloud.class})
 public class SeoIT {
 
     @ClassRule
