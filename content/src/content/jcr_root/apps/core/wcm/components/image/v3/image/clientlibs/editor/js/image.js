@@ -26,6 +26,7 @@
     var $altGroup;
     var $linkURLGroup;
     var $linkURLField;
+    var firstCtaLinkFieldSelector = ".cmp-teaser__editor-multifield_actions coral-multifield-item:first foundation-autocomplete";
     var $firstCtaLinkField;
     var $cqFileUpload;
     var $cqFileUploadEdit;
@@ -74,7 +75,7 @@
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
-            $firstCtaLinkField = $dialogContent.find("foundation-autocomplete[name='./actions/item0/link']");
+            $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
@@ -173,8 +174,8 @@
         updateImageThumbnail();
     });
 
-    // Update the image thumbnail when the first call to action is updated
-    $(document).on("change", dialogContentSelector + " foundation-autocomplete[name='./actions/item0/link']", function(e) {
+    // Update the image thumbnail when the calls to action are updated, removed or reordered
+    $(document).on("change", dialogContentSelector + " .cmp-teaser__editor-multifield_actions", function(e) {
         updateImageThumbnail();
     });
 
@@ -204,13 +205,13 @@
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
-        $firstCtaLinkField = $dialogContent.find("foundation-autocomplete[name='./actions/item0/link']");
-        if ($linkURLField && !$linkURLField.adaptTo("foundation-field").isDisabled()) {
-            linkValue = $($linkURLField).find("input[name='./linkURL']").val();
-        } else if ($firstCtaLinkField && !$firstCtaLinkField.adaptTo("foundation-field").isDisabled()) {
-            linkValue = $($firstCtaLinkField).find("input[name='./actions/item0/link']").val();
+        $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
+        if ($linkURLField && $linkURLField.adaptTo("foundation-field") && !$linkURLField.adaptTo("foundation-field").isDisabled()) {
+            linkValue = $linkURLField.adaptTo("foundation-field").getValue();
+        } else if ($firstCtaLinkField && $firstCtaLinkField.adaptTo("foundation-field") && !$firstCtaLinkField.adaptTo("foundation-field").isDisabled()) {
+            linkValue = $firstCtaLinkField.adaptTo("foundation-field").getValue();
         }
-        if (linkValue === "undefined" || linkValue === "") {
+        if (linkValue === undefined || linkValue === "") {
             linkValue = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailCurrentPagePathAttribute);
         }
 
