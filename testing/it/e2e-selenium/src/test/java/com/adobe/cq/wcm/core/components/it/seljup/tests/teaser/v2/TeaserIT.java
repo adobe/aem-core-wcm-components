@@ -290,7 +290,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(teaser.isImagePresentWithAtlText(testPage, climbingAssetAltText),"image should be rendered with alt text: " + climbingAssetAltText);
+        assertTrue(teaser.isImagePresentWithAltText(testPage, climbingAssetAltText),"image should be rendered with alt text: " + climbingAssetAltText);
         assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
     }
 
@@ -311,7 +311,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(teaser.isImagePresentWithAtlText(testPage, ""),"image should be rendered without alt text");
+        assertTrue(teaser.isImagePresentWithAltText(testPage, ""),"image should be rendered without alt text");
         assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
     }
 
@@ -332,7 +332,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(teaser.isImagePresentWithAtlText(testPage, surfingAssetAltText),"image should be rendered with alt text: " + surfingAssetAltText);
+        assertTrue(teaser.isImagePresentWithAltText(testPage, surfingAssetAltText),"image should be rendered with alt text: " + surfingAssetAltText);
         assertTrue(teaser.isImagePresentWithFileName(surfingAssetFormatted),"image should be rendered with file name: " + surfingAssetFormatted);
     }
 
@@ -359,7 +359,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(teaser.isImagePresentWithAtlText(testPage, alt),"image should be rendered with alt text: " + alt);
+        assertTrue(teaser.isImagePresentWithAltText(testPage, alt),"image should be rendered with alt text: " + alt);
         assertTrue(teaser.isImagePresentWithFileName(surfingAssetFormatted),"image should be rendered with file name: " + surfingAssetFormatted);
     }
 
@@ -381,7 +381,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(teaser.isImagePresentWithAtlText(testPage, skiingAssetAltText),"image should be rendered with alt text: " + skiingAssetAltText);
+        assertTrue(teaser.isImagePresentWithAltText(testPage, skiingAssetAltText),"image should be rendered with alt text: " + skiingAssetAltText);
         assertTrue(teaser.isImagePresentWithFileName(skiingAssetFormatted),"image should be rendered with file name: " + skiingAssetFormatted);
     }
 
@@ -409,7 +409,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(teaser.isImagePresentWithAtlText(testPage, alt),"image should be rendered with alt text: " + alt);
+        assertTrue(teaser.isImagePresentWithAltText(testPage, alt),"image should be rendered with alt text: " + alt);
         assertTrue(teaser.isImagePresentWithFileName(skiingAssetFormatted),"image should be rendered with file name: " + skiingAssetFormatted);
     }
 

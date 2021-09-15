@@ -126,7 +126,7 @@ public class PageImageThumbnail {
         }
 
         if (targetPage == null) {
-            log.info("The target page defined for {} is null", component.getPath());
+            log.info("A target page cannot be found for the link defined in the request parameter or on the server at {}.", component.getPath());
             return;
         }
 

@@ -33,7 +33,7 @@ public class Teaser extends BaseComponent {
     private static String teaserDescription = ".cmp-teaser__description";
     private static String teaserActionLink = "a.cmp-teaser__action-link";
     private static String imageTag = teaserImage + " img[src*='%s/_jcr_content/root/responsivegrid/teaser']";
-    public static String teaserWithAtlText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/teaser.coreimg.'][alt='%s']";
+    public static String teaserWithAltText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/teaser.coreimg.'][alt='%s']";
 
     public Teaser() {
         super(teaser);
@@ -51,8 +51,8 @@ public class Teaser extends BaseComponent {
         return $(String.format(imageWithFileName, fileName)).isDisplayed();
     }
 
-    public boolean isImagePresentWithAtlText(String pagePath, String altText) {
-        return $(String.format(teaserWithAtlText, pagePath, altText)).isDisplayed();
+    public boolean isImagePresentWithAltText(String pagePath, String altText) {
+        return $(String.format(teaserWithAltText, pagePath, altText)).isDisplayed();
     }
 
     public boolean isPreTitlePresent(String preTitle) {

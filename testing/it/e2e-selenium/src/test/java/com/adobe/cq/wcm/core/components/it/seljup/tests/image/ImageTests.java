@@ -184,7 +184,7 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, originalDamDescription, originalDamTitle), "Image should be present with alt text " + originalDamDescription
+        assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, originalDamDescription, originalDamTitle), "Image should be present with alt text " + originalDamDescription
                 + " and title " + originalDamTitle);
     }
 
@@ -200,7 +200,7 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
+        assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
                 + " and title " + captionText);
     }
 
@@ -216,7 +216,7 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
+        assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
                 + " and title " + captionText);
     }
 
@@ -229,7 +229,7 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, originalDamDescription), "Image should be present with alt text " + originalDamDescription);
+        assertTrue(image.isImagePresentWithAltText(testPage, originalDamDescription), "Image should be present with alt text " + originalDamDescription);
         assertTrue(image.isTitleSet(originalDamTitle),"Title should be set");
     }
 
@@ -331,7 +331,7 @@ public class ImageTests {
         editorPage.open();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -340,7 +340,7 @@ public class ImageTests {
         editorPage.open();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -350,7 +350,7 @@ public class ImageTests {
         editorPage.open();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
+        assertTrue(image.isImagePresentWithAltText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -360,7 +360,7 @@ public class ImageTests {
         editorPage.open();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
+        assertTrue(image.isImagePresentWithAltText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -374,7 +374,7 @@ public class ImageTests {
         editDialog.setAltText(altText);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, altText),"image should be rendered with alt text: " + altText);
+        assertTrue(image.isImagePresentWithAltText(testPage, altText),"image should be rendered with alt text: " + altText);
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -388,7 +388,7 @@ public class ImageTests {
         editDialog.setAltText(altText);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, altText),"image should be rendered with alt text: " + altText);
+        assertTrue(image.isImagePresentWithAltText(testPage, altText),"image should be rendered with alt text: " + altText);
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -401,7 +401,7 @@ public class ImageTests {
         editDialog.checkDecorative();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -414,7 +414,7 @@ public class ImageTests {
         editDialog.checkDecorative();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -429,7 +429,7 @@ public class ImageTests {
         editDialog.uploadImageFromSidePanel(testImagePath);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
+        assertTrue(image.isImagePresentWithAltText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
         assertTrue(image.isImagePresentWithFileName(imageFileName),"image should be rendered with file name: " + imageFileName);
     }
 
@@ -444,7 +444,7 @@ public class ImageTests {
         editDialog.uploadImageFromSidePanel(testImagePath);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
+        assertTrue(image.isImagePresentWithAltText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
         assertTrue(image.isImagePresentWithFileName(imageFileName),"image should be rendered with file name: " + imageFileName);
     }
 
@@ -459,7 +459,7 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, climbingAssetAltText),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithAltText(testPage, climbingAssetAltText),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
         image.imageClick();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);

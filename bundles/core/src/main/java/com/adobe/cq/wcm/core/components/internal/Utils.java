@@ -301,6 +301,7 @@ public class Utils {
      *
      * @param resource The image resource
      * @param linkHandler The link handler
+     * @param style The style of the image resource
      * @return The wrapped image resource augmented with inherited properties and child resource if inheritance is enabled, the plain image resource otherwise.
      */
     public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkHandler linkHandler, Style style) {

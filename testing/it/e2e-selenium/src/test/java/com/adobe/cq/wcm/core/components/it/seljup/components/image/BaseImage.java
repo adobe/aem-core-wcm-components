@@ -41,8 +41,8 @@ public class BaseImage extends BaseComponent {
     private static String imageElement = ".cmp-image__image";
     public static String mapElement = "[data-cmp-hook-image='map']";
     public static String areaElement = "[data-cmp-hook-image='area']";
-    public static String imageWithAtlTextAndTitle = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s'][title='%s']";
-    public static String imageWithAtlText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s']";
+    public static String imageWithAltTextAndTitle = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s'][title='%s']";
+    public static String imageWithAltText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s']";
     public static String imageWithFileName = ".cmp-image__image[src*='/%s']";
 
     protected String title;
@@ -84,12 +84,12 @@ public class BaseImage extends BaseComponent {
         return $(imgWithAltText).isDisplayed();
     }
 
-    public boolean isImagePresentWithAtlTextAndTitle(String pagePath, String altText, String title) {
-        return $(String.format(imageWithAtlTextAndTitle, pagePath, altText, title)).isDisplayed();
+    public boolean isImagePresentWithAltTextAndTitle(String pagePath, String altText, String title) {
+        return $(String.format(imageWithAltTextAndTitle, pagePath, altText, title)).isDisplayed();
     }
 
-    public boolean isImagePresentWithAtlText(String pagePath, String altText) {
-        return $(String.format(imageWithAtlText, pagePath, altText)).isDisplayed();
+    public boolean isImagePresentWithAltText(String pagePath, String altText) {
+        return $(String.format(imageWithAltText, pagePath, altText)).isDisplayed();
     }
 
     public boolean isImagePresentWithFileName(String fileName) {
