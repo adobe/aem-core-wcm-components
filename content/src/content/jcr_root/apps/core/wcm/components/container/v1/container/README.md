@@ -79,3 +79,4 @@ The following property is required in the proxy component to enable full editing
 * **Co-authors**: [Vlad Bailescu](https://github.com/bailescu), Shailesh Bassi
 
 _If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._
+//added a comment in files
