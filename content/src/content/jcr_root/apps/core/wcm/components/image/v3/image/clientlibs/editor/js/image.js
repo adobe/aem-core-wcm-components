@@ -183,15 +183,6 @@
         updateImageThumbnail();
     });
 
-    function updateImageThumbnail() {
-        $firstCtaLinkField = $dialogContent.find("foundation-autocomplete[name='./actions/item0/link']");
-        if ($linkURLField && !$linkURLField.adaptTo("foundation-field").isDisabled()) {
-            updatePageFeaturedImageThumbnail($linkURLField);
-        } else if ($firstCtaLinkField && !$firstCtaLinkField.adaptTo("foundation-field").isDisabled()) {
-            updatePageFeaturedImageThumbnail($firstCtaLinkField);
-        }
-    }
-
     $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
         switch (e.target.value) {
             case "imagePreset":
@@ -209,21 +200,25 @@
         }
     });
 
-    /**
-     * Updates the page image thumbnail
-     * @param pageLinkField the page link field
-     */
-    function updatePageFeaturedImageThumbnail(pageLinkField) {
+    function updateImageThumbnail() {
+        var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
-        var pageLink = $(pageLinkField).find(".coral-InputGroup-input._coral-Textfield").val();
-        if (pageLink === "undefined" || pageLink === "") {
-            pageLink = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailCurrentPagePathAttribute);
+        $firstCtaLinkField = $dialogContent.find("foundation-autocomplete[name='./actions/item0/link']");
+        if ($linkURLField && !$linkURLField.adaptTo("foundation-field").isDisabled()) {
+            linkValue = $($linkURLField).find("input[name='./linkURL']").val();
+        } else if ($firstCtaLinkField && !$firstCtaLinkField.adaptTo("foundation-field").isDisabled()) {
+            linkValue = $($firstCtaLinkField).find("input[name='./actions/item0/link']").val();
         }
+        if (linkValue === "undefined" || linkValue === "") {
+            linkValue = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailCurrentPagePathAttribute);
+        }
+
+        // Get the updated page image thumbnail HTML from the server
         return $.ajax({
             url: thumbnailConfigPath + ".html" + thumbnailComponentPath,
             data: {
-                "pageLink": pageLink
+                "pageLink": linkValue
             }
         }).done(function(data) {
             if (data) {
