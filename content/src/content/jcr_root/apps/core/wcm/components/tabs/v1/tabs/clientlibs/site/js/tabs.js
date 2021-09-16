@@ -85,11 +85,13 @@
             }
 
             // Show the tab based on deep-link-id if it matches with any existing tab item id
-            var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tab");
-            if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
-                var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
-                if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
-                    navigateAndFocusTab(deepLinkItemIdx);
+            if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils) {
+                var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tab");
+                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                    var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
+                    if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
+                        navigateAndFocusTab(deepLinkItemIdx);
+                    }
                 }
             }
 
@@ -424,7 +426,9 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils) {
+        window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    }
     window.addEventListener("hashchange", onHashChange, false);
 
 }());
