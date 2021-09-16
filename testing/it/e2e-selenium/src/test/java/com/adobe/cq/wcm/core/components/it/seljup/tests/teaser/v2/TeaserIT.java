@@ -92,6 +92,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.setLinkURL(testPage);
@@ -115,6 +116,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage,cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.setLinkURL(testPage);
@@ -145,6 +147,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.clickActionEnabled();
@@ -177,6 +180,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage,cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.setLinkURL(testPage);
@@ -205,6 +209,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openTextTab();
         editDialog.clickTitleFromPage();

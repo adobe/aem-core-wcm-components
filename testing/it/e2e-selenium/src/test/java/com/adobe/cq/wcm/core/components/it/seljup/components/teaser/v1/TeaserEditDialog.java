@@ -34,6 +34,7 @@ public class TeaserEditDialog {
     private static String actionsEnabled = ".cmp-teaser__editor coral-checkbox[name='./actionsEnabled']";
     private static String actionLinkURL = "[data-cmp-teaser-v1-dialog-edit-hook='actionLink']";
     private static String actionText = "[data-cmp-teaser-v1-dialog-edit-hook='actionTitle']";
+    private static String imageFromPageImage = "[name='./imageFromPageImage']";
 
     public void uploadImageFromSidePanel(String imagePath) {
         $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(assetUpload);
@@ -125,4 +126,12 @@ public class TeaserEditDialog {
     public boolean isTitleEnabled() {
         return $(title).isEnabled();
     }
+
+    public void checkImageFromPageImage() {
+        if ($(imageFromPageImage).exists()) {
+            CoralCheckbox checkbox = new CoralCheckbox(imageFromPageImage);
+            checkbox.click();
+        }
+    }
+
 }

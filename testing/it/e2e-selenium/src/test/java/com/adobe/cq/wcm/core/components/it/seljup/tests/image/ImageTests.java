@@ -474,6 +474,7 @@ public class ImageTests {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.setAssetFilter(testAssetsPath);
         Commons.openEditDialog(editorPage, compPath);
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
     }
 

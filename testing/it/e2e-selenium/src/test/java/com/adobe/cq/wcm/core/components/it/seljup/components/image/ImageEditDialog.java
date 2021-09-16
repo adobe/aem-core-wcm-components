@@ -102,13 +102,17 @@ public class ImageEditDialog extends Dialog {
     }
 
     public void checkAltValueFromPageImage() {
-        CoralCheckbox checkbox = new CoralCheckbox(altValueFromPageImage);
-        checkbox.click();
+        if ($(altValueFromPageImage).exists()) {
+            CoralCheckbox checkbox = new CoralCheckbox(altValueFromPageImage);
+            checkbox.click();
+        }
     }
 
     public void checkImageFromPageImage() {
-        CoralCheckbox checkbox = new CoralCheckbox(imageFromPageImage);
-        checkbox.click();
+        if ($(imageFromPageImage).exists()) {
+            CoralCheckbox checkbox = new CoralCheckbox(imageFromPageImage);
+            checkbox.click();
+        }
     }
 
     public void checkTitleValueFromDAM() {
