@@ -20,6 +20,22 @@
           "xdm:linkURL": "/core/content/invalid_page2"
         }
       }
+    },
+    {
+      "id": "teaser-c5db7cbc93-cta-da455f459b",
+      "link": {
+        "valid": true,
+        "url": "/core/content/page2.html"
+      },
+      "title": "Adobe",
+      ":type": "nt:unstructured",
+      "dataLayer": {
+        "teaser-c5db7cbc93-cta-da455f459b": {
+          "@type": "cq:Component/cta",
+          "dc:title": "Adobe",
+          "xdm:linkURL": "/core/content/page2.html"
+        }
+      }
     }
   ],
   "link": {

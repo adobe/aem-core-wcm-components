@@ -20,6 +20,38 @@
           "xdm:linkURL": "/core/content/page2.html"
         }
       }
+    },
+    {
+      "id": "teaser-a5953f71e6-cta-36320eea12",
+      "link": {
+        "valid": true,
+        "url": "/core/content/non_existing1"
+      },
+      "title": "Adobe",
+      ":type": "nt:unstructured",
+      "dataLayer": {
+        "teaser-a5953f71e6-cta-36320eea12": {
+          "@type": "cq:Component/cta",
+          "dc:title": "Adobe",
+          "xdm:linkURL": "/core/content/non_existing1"
+        }
+      }
+    },
+    {
+      "id": "teaser-a5953f71e6-cta-64ac4fbcc2",
+      "link": {
+        "valid": true,
+        "url": "/core/content/non_existing2"
+      },
+      "title": "Adobe",
+      ":type": "nt:unstructured",
+      "dataLayer": {
+        "teaser-a5953f71e6-cta-64ac4fbcc2": {
+          "@type": "cq:Component/cta",
+          "dc:title": "Adobe",
+          "xdm:linkURL": "/core/content/non_existing2"
+        }
+      }
     }
   ],
   "link": {
