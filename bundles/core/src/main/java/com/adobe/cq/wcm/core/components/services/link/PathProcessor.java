@@ -70,7 +70,7 @@ public interface PathProcessor {
 
 
     /**
-     * Process the HTML attributes for the {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler}
+     * Processes the HTML attributes for the {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler}
      * @param path the path of the linked resource
      * @param htmlAttributes the origin HTML attributes of the link
      * @return a map of the processed HTML attributes for the link

@@ -19,11 +19,14 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.wcm.core.components.it.seljup.components.image.BaseImage;
 import com.adobe.cq.wcm.core.components.it.seljup.components.image.ImageEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
@@ -43,10 +46,13 @@ public class ImageTests {
     private static String captionText            = "The Last Guardian";
     private static String originalDamTitle       = "Beach house";
     private static String originalDamDescription = "House on a beach with blue sky";
+    private static String logoNodeName           = "Adobe_Systems_logo_and_wordmark.png";
     private static String logoFileName           = "adobe-systems-logo-and-wordmark.png";
     private static String imageFileName          = "core-comp-test-image.jpeg";
     private static String pageImageAlt           = "page image alt";
-
+    private static String climbingAsset          = "AdobeStock_140634652_climbing.jpeg";
+    private static String climbingAssetFormatted = StringUtils.lowerCase(climbingAsset).replace("_", "-");
+    private static String climbingAssetAltText   = "Rock Climbing and Bouldering above the lake and mountains";
 
     private String testPage;
     private String proxyPath;
@@ -178,7 +184,7 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, originalDamDescription, originalDamTitle), "Image should be present with alt text " + originalDamDescription
+        assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, originalDamDescription, originalDamTitle), "Image should be present with alt text " + originalDamDescription
                 + " and title " + originalDamTitle);
     }
 
@@ -194,7 +200,7 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
+        assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
                 + " and title " + captionText);
     }
 
@@ -210,7 +216,7 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
+        assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
                 + " and title " + captionText);
     }
 
@@ -223,7 +229,7 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, originalDamDescription), "Image should be present with alt text " + originalDamDescription);
+        assertTrue(image.isImagePresentWithAltText(testPage, originalDamDescription), "Image should be present with alt text " + originalDamDescription);
         assertTrue(image.isTitleSet(originalDamTitle),"Title should be set");
     }
 
@@ -325,7 +331,7 @@ public class ImageTests {
         editorPage.open();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -334,7 +340,7 @@ public class ImageTests {
         editorPage.open();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -344,7 +350,7 @@ public class ImageTests {
         editorPage.open();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
+        assertTrue(image.isImagePresentWithAltText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -354,7 +360,7 @@ public class ImageTests {
         editorPage.open();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
+        assertTrue(image.isImagePresentWithAltText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -368,7 +374,7 @@ public class ImageTests {
         editDialog.setAltText(altText);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, altText),"image should be rendered with alt text: " + altText);
+        assertTrue(image.isImagePresentWithAltText(testPage, altText),"image should be rendered with alt text: " + altText);
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -382,7 +388,7 @@ public class ImageTests {
         editDialog.setAltText(altText);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, altText),"image should be rendered with alt text: " + altText);
+        assertTrue(image.isImagePresentWithAltText(testPage, altText),"image should be rendered with alt text: " + altText);
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -395,7 +401,7 @@ public class ImageTests {
         editDialog.checkDecorative();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -408,7 +414,7 @@ public class ImageTests {
         editDialog.checkDecorative();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, ""),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
@@ -423,7 +429,7 @@ public class ImageTests {
         editDialog.uploadImageFromSidePanel(testImagePath);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
+        assertTrue(image.isImagePresentWithAltText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
         assertTrue(image.isImagePresentWithFileName(imageFileName),"image should be rendered with file name: " + imageFileName);
     }
 
@@ -438,8 +444,26 @@ public class ImageTests {
         editDialog.uploadImageFromSidePanel(testImagePath);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAtlText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
+        assertTrue(image.isImagePresentWithAltText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
         assertTrue(image.isImagePresentWithFileName(imageFileName),"image should be rendered with file name: " + imageFileName);
+    }
+
+    public void testPageImageWithLinkedPage() throws TimeoutException, InterruptedException, ClientException {
+        setPageImage(redirectPage, climbingAsset, true);
+        setPageImage(testPage, logoNodeName, true);
+        editorPage.open();
+        ImageEditDialog editDialog = image.getEditDialog();
+        Commons.openEditDialog(editorPage, compPath);
+        editDialog.openMetadataTab();
+        editDialog.setLinkURL(redirectPage);
+        Commons.saveConfigureDialog();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithAltText(testPage, climbingAssetAltText),"image should be rendered with an empty alt text");
+        assertTrue(image.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
+        image.imageClick();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
     }
 
     // ----------------------------------------------------------
@@ -450,22 +474,38 @@ public class ImageTests {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.setAssetFilter(testAssetsPath);
         Commons.openEditDialog(editorPage, compPath);
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
     }
 
     /**
-     * Sets the featured image of the page.
+     * Sets the featured image for the test page.
      */
     private void setPageImage() throws ClientException, InterruptedException {
+        setPageImage(testPage, logoNodeName, false);
+    }
+
+    /**
+     * Sets the featured image for a page.
+     */
+    private void setPageImage(String page, String asset, boolean altFromDam) throws ClientException, InterruptedException {
+        String assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox";
         // set page resource type to page v3
-        adminClient.setPageProperty(testPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
-        propertiesPage.open();
+        adminClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
+        PropertiesPage pageProperties = new PropertiesPage(page);
+        pageProperties.open();
         $("coral-tab[data-foundation-tracking-event*='images']").click();
         $(".cq-FileUpload-picker").click();
         $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
-        $("*[data-foundation-collection-item-id='/content/dam/core-components/Adobe_Systems_logo_and_wordmark.png'] coral-checkbox").click();
+        $(assetSelector).click();
         $(".granite-pickerdialog-submit").click();
-        propertiesPage.saveAndClose();
+        if (altFromDam) {
+            // inherit alt text from DAM
+            String altValueFromDAMSelector = ".cq-siteadmin-admin-properties coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
+            CoralCheckbox altValueFromDAMCheckbox = new CoralCheckbox(altValueFromDAMSelector);
+            altValueFromDAMCheckbox.click();
+        }
+        pageProperties.saveAndClose();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 

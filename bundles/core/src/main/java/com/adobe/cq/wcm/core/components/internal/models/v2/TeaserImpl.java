@@ -55,7 +55,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     protected boolean hasImage() {
         // As Teaser v2 supports inheritance from the featured image of the page, the current resource is wrapped and
         // augmented with the inherited properties and child resources of the featured image.
-        Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkHandler);
+        Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkHandler, currentStyle);
         return Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
                 .map(request.getResourceResolver()::getResource)
                 .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null;

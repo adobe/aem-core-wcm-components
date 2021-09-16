@@ -16,9 +16,13 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v2;
 
+import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v2.TeaserEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v2.Teaser;
+import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,12 +32,17 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group3")
 public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v1.TeaserIT {
 
     protected Teaser teaser;
+
+    protected void setup() throws ClientException {
+        super.setup(Commons.rtImage_v3);
+    }
 
     protected void setupResources() {
         super.setupResources();
@@ -83,6 +92,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.setLinkURL(testPage);
@@ -90,7 +100,6 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
-        assertTrue(teaser.isTitleHidden(), "Title and Link should not be displayed");
         assertTrue(!teaser.isTitleLinkPresent(testPage, title),"Title link should not be present");
     }
 
@@ -107,6 +116,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage,cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.setLinkURL(testPage);
@@ -137,6 +147,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.clickActionEnabled();
@@ -169,6 +180,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage,cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.setLinkURL(testPage);
@@ -197,6 +209,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openTextTab();
         editDialog.clickTitleFromPage();
@@ -273,4 +286,167 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(editDialog.getTitleValue().equals(title) && editDialog.isTitleEnabled(),
             "Title should be enabled and should be set to " + title);
     }
+
+    @Test
+    @DisplayName("Test: Inherit image from current page")
+    public void testInheritImageFromCurrentPage() throws ClientException, InterruptedException {
+        // set the page image for the current page
+        setPageImage(testPage, climbingAsset);
+
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(teaser.isImagePresentWithAltText(testPage, climbingAssetAltText),"image should be rendered with alt text: " + climbingAssetAltText);
+        assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
+    }
+
+    @Test
+    @DisplayName("Test: Inherit image from current page and no alt text")
+    public void testInheritImageFromCurrentPage_isDecorative() throws ClientException, InterruptedException, TimeoutException {
+        // set the page image for the current page
+        setPageImage(testPage, climbingAsset);
+
+        // set image to decorative
+        Commons.openEditDialog(editorPage,cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openAssetsTab();
+        editDialog.checkInheritAltFromPage();
+        editDialog.setAltText(alt);
+        editDialog.checkIsDecorative();
+        Commons.saveConfigureDialog();
+
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(teaser.isImagePresentWithAltText(testPage, ""),"image should be rendered without alt text");
+        assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
+    }
+
+    @Test
+    @DisplayName("Test: Inherit image from linked page")
+    public void testInheritImageFromLinkedPage() throws ClientException, InterruptedException, TimeoutException {
+        // set the page image for the linked page
+        setPageImage(secondTestPage, surfingAsset);
+        // set the page image for the current page
+        setPageImage(testPage, climbingAsset);
+
+        // set the link URL
+        Commons.openEditDialog(editorPage,cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openLinksTab();
+        editDialog.setLinkURL(secondTestPage);
+        Commons.saveConfigureDialog();
+
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(teaser.isImagePresentWithAltText(testPage, surfingAssetAltText),"image should be rendered with alt text: " + surfingAssetAltText);
+        assertTrue(teaser.isImagePresentWithFileName(surfingAssetFormatted),"image should be rendered with file name: " + surfingAssetFormatted);
+    }
+
+    @Test
+    @DisplayName("Test: Inherit image from linked page with alt defined in the dialog")
+    public void testInheritImageFromLinkedPage_altNotInherited() throws ClientException, InterruptedException, TimeoutException {
+        // set the page image for the linked page
+        setPageImage(secondTestPage, surfingAsset);
+        // set the page image for the current page
+        setPageImage(testPage, climbingAsset);
+
+        // set the link URL
+        Commons.openEditDialog(editorPage,cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openLinksTab();
+        editDialog.setLinkURL(secondTestPage);
+
+        // define alt on the resource
+        editDialog.openAssetsTab();
+        editDialog.checkInheritAltFromPage();
+        editDialog.setAltText(alt);
+
+        Commons.saveConfigureDialog();
+
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(teaser.isImagePresentWithAltText(testPage, alt),"image should be rendered with alt text: " + alt);
+        assertTrue(teaser.isImagePresentWithFileName(surfingAssetFormatted),"image should be rendered with file name: " + surfingAssetFormatted);
+    }
+
+    @Test
+    @DisplayName("Test: Inherit image from action page")
+    public void testInheritImageFromAction() throws ClientException, InterruptedException, TimeoutException {
+        // set the page image for the action page
+        setPageImage(thirdTestPage, skiingAsset);
+        // set the page image for the current page
+        setPageImage(testPage, climbingAsset);
+
+        // set the action URL
+        Commons.openEditDialog(editorPage,cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openLinksTab();
+        editDialog.clickActionEnabled();
+        editDialog.setActionLinkUrl(thirdTestPage);
+        Commons.saveConfigureDialog();
+
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(teaser.isImagePresentWithAltText(testPage, skiingAssetAltText),"image should be rendered with alt text: " + skiingAssetAltText);
+        assertTrue(teaser.isImagePresentWithFileName(skiingAssetFormatted),"image should be rendered with file name: " + skiingAssetFormatted);
+    }
+
+    @Test
+    @DisplayName("Test: Inherit image from action page with alt defined in the dialog")
+    public void testInheritImageFromAction_altNotInherited() throws ClientException, InterruptedException, TimeoutException {
+        // set the page image for the action page
+        setPageImage(thirdTestPage, skiingAsset);
+        // set the page image for the current page
+        setPageImage(testPage, climbingAsset);
+
+        // set the action URL
+        Commons.openEditDialog(editorPage,cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openLinksTab();
+        editDialog.clickActionEnabled();
+        editDialog.setActionLinkUrl(thirdTestPage);
+
+        // define alt on the resource
+        editDialog.openAssetsTab();
+        editDialog.checkInheritAltFromPage();
+        editDialog.setAltText(alt);
+
+        Commons.saveConfigureDialog();
+
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(teaser.isImagePresentWithAltText(testPage, alt),"image should be rendered with alt text: " + alt);
+        assertTrue(teaser.isImagePresentWithFileName(skiingAssetFormatted),"image should be rendered with file name: " + skiingAssetFormatted);
+    }
+
+    // ----------------------------------------------------------
+    // private stuff
+    // ----------------------------------------------------------
+
+    /**
+     * Sets the featured image for a page.
+     */
+    private void setPageImage(String page, String asset) throws ClientException, InterruptedException {
+        String assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox";
+        // set page resource type to page v3
+        adminClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
+        PropertiesPage pageProperties = new PropertiesPage(page);
+        pageProperties.open();
+        $("coral-tab[data-foundation-tracking-event*='images']").click();
+        $(".cq-FileUpload-picker").click();
+        $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
+        $(assetSelector).click();
+        $(".granite-pickerdialog-submit").click();
+
+        // inherit alt text from DAM
+        String altValueFromDAMSelector = ".cq-siteadmin-admin-properties coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
+        CoralCheckbox altValueFromDAMCheckbox = new CoralCheckbox(altValueFromDAMSelector);
+        altValueFromDAMCheckbox.click();
+
+        pageProperties.saveAndClose();
+        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        editorPage.open();
+    }
+
+
+
 }

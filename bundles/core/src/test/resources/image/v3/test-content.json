@@ -725,6 +725,24 @@
           "jcr:createdBy": "admin",
           "imageFromPageImage": "true",
           "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "page0_image2": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "alt": "alt from page0_image2",
+          "altValueFromPageImage": "true",
+          "imageFromPageImage": "true",
+          "linkURL": "/content/test_page4",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "page0_image3": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "alt": "alt from page0_image2",
+          "altValueFromPageImage": "true",
+          "imageFromPageImage": "true",
+          "linkURL": "/wrong_page",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
         }
       },
       "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
@@ -811,6 +829,21 @@
           "imageFromPageImage": "true",
           "sling:resourceType": "core/wcm/components/image/v3/image"
         }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page4"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "true",
+        "alt"               : "featured image alt",
+        "fileReference": "/content/dam/core/images/asset1.png",
+        "sling:resourceType": "core/wcm/components/image/v3/image"
       },
       "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
     }

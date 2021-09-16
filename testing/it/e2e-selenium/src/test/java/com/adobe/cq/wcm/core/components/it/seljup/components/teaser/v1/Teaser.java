@@ -20,6 +20,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.codeborne.selenide.ElementsCollection;
 
 
+import static com.adobe.cq.wcm.core.components.it.seljup.components.image.BaseImage.imageWithFileName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -32,6 +33,7 @@ public class Teaser extends BaseComponent {
     private static String teaserDescription = ".cmp-teaser__description";
     private static String teaserActionLink = "a.cmp-teaser__action-link";
     private static String imageTag = teaserImage + " img[src*='%s/_jcr_content/root/responsivegrid/teaser']";
+    public static String teaserWithAltText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/teaser.coreimg.'][alt='%s']";
 
     public Teaser() {
         super(teaser);
@@ -43,6 +45,14 @@ public class Teaser extends BaseComponent {
 
     public boolean isImagePresent(String path) {
         return $(String.format(imageTag, path)).isDisplayed();
+    }
+
+    public boolean isImagePresentWithFileName(String fileName) {
+        return $(String.format(imageWithFileName, fileName)).isDisplayed();
+    }
+
+    public boolean isImagePresentWithAltText(String pagePath, String altText) {
+        return $(String.format(teaserWithAltText, pagePath, altText)).isDisplayed();
     }
 
     public boolean isPreTitlePresent(String preTitle) {
