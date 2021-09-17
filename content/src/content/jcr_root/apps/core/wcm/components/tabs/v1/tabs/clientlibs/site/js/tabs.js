@@ -19,6 +19,11 @@
 (function() {
     "use strict";
 
+    var containerUtils = window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils ? window.CQ.CoreComponents.container.utils : undefined;
+    if (!containerUtils) {
+        // eslint-disable-next-line no-console
+        console.warn("Tabs: container utilities at window.CQ.CoreComponents.container.utils are not available. This can lead to missing features. Ensure the core.wcm.components.commons.site.container client library is included on the page.");
+    }
     var dataLayerEnabled;
     var dataLayer;
 
@@ -85,8 +90,8 @@
             }
 
             // Show the tab based on deep-link-id if it matches with any existing tab item id
-            if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils) {
-                var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tab");
+            if (containerUtils) {
+                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "tab");
                 if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
                     var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
                     if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
@@ -426,8 +431,8 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils) {
-        window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    if (containerUtils) {
+        window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }
     window.addEventListener("hashchange", onHashChange, false);
 
