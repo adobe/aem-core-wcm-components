@@ -16,6 +16,11 @@
 (function() {
     "use strict";
 
+    var containerUtils = window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils ? window.CQ.CoreComponents.container.utils : undefined;
+    if (!containerUtils) {
+        // eslint-disable-next-line no-console
+        console.warn("Accordion: container utilities at window.CQ.CoreComponents.container.utils are not available. This can lead to missing features. Ensure the core.wcm.components.commons.site.container client library is included on the page.");
+    }
     var dataLayerEnabled;
     var dataLayer;
     var delay = 100;
@@ -116,8 +121,8 @@
                 that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
 
                 // Expand the item based on deep-link-id if it matches with any existing accordion item id
-                if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils) {
-                    var deepLinkItem = window.CQ.CoreComponents.container.utils.getDeepLinkItem(that, "item");
+                if (containerUtils) {
+                    var deepLinkItem = containerUtils.getDeepLinkItem(that, "item");
                     if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
                         setItemExpanded(deepLinkItem, true);
                     }
@@ -614,8 +619,8 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils) {
-        window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    if (containerUtils) {
+        window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }
     window.addEventListener("hashchange", onHashChange, false);
 
