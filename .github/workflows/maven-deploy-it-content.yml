@@ -44,7 +44,6 @@ jobs:
             # Move sub project
             - name: Move project to main
               run: |
-                  rm -rf main/*
                   mv sub main
             - name: Commit Changes
               run: |
