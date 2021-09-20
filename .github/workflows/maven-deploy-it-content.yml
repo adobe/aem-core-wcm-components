@@ -47,6 +47,6 @@ jobs:
                   mv sub main
             - name: Commit Changes
               run: |
-                  git -C main add ${PROJECT_DIR}
+                  git -C main add .
                   git -C main commit -F ../commit.txt
                   git -C main push
