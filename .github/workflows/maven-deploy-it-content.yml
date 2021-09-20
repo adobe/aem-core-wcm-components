@@ -4,6 +4,7 @@ env:
     PROJECT_DIR: core-components
     # Ref-Squad Program Coordinates
     TARGET_REPO: ${{ secrets.REFSQUAD_REPOSITORY }}
+    TARGET_BRANCH: ${{ secrets.REFSQUAD_BRANCH }}
     USER_EMAIL: ${{ secrets.REFSQUAD_USER_EMAIL }}
     USER_NAME: ${{ secrets.REFSQUAD_USER_NAME }}
     USER_PWD: ${{ secrets.REFSQUAD_PASSWORD }}
@@ -12,7 +13,7 @@ env:
 on:
     workflow_dispatch:
         inputs:
-            target_branch:
+            source_branch:
                 description: 'Branch to pick it-content from'
                 required: false
                 default: 'development'
@@ -23,6 +24,7 @@ jobs:
             # Checkout this project into a sub folder
             - uses: actions/checkout@v2
               with:
+                  ref:  ${{ github.event.inputs.source_branch }}
                   path: sub
             # Cleanup sub project
             - name: Clean project
@@ -39,7 +41,7 @@ jobs:
             # Checkout the main project
             - name: Checkout main project
               run:
-                  git clone -b ${{ github.event.inputs.target_branch }} https://${USER_EMAIL}:${USER_PWD}@${TARGET_REPO} main
+                  git clone -b ${TARGET_BRANCH} https://${USER_EMAIL}:${USER_PWD}@${TARGET_REPO} main
             # Move sub project
             - name: Move project to main
               run: |
