@@ -1,7 +1,6 @@
 name: Deploy to Ref-Squad/it-testing branch
 env:
     # Username/email used to commit to the Ref-Squad Program
-    PROJECT_DIR: core-components
     # Ref-Squad Program Coordinates
     TARGET_REPO: ${{ secrets.REFSQUAD_REPOSITORY }}
     TARGET_BRANCH: ${{ secrets.REFSQUAD_BRANCH }}
@@ -45,8 +44,8 @@ jobs:
             # Move sub project
             - name: Move project to main
               run: |
-                  rm -rf main/${PROJECT_DIR}
-                  mv sub main/${PROJECT_DIR}
+                  rm -rf main/*
+                  mv sub main
             - name: Commit Changes
               run: |
                   git -C main add ${PROJECT_DIR}
