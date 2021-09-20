@@ -1,4 +1,4 @@
-name: Deploy to Ref-Squad on CM Stage into it-testing branch
+name: Deploy to Ref-Squad/it-testing branch
 env:
     # Username/email used to commit to the Ref-Squad Program
     PROJECT_DIR: core-components
@@ -39,7 +39,7 @@ jobs:
             # Checkout the main project
             - name: Checkout main project
               run:
-                  git clone -b ${target_branch} https://${USER_EMAIL}:${USER_PWD}@${TARGET_REPO} main
+                  git clone -b ${github.event.inputs.target_branch} https://${USER_EMAIL}:${USER_PWD}@${TARGET_REPO} it-testing
             # Move sub project
             - name: Move project to main
               run: |
