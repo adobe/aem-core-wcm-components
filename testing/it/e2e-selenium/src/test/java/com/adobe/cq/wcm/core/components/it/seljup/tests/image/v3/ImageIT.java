@@ -82,7 +82,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test: set page featured image with empty alt text")
     public void testPageImageWithEmptyAltTextFromPageImage() throws InterruptedException, ClientException {
-        imageTests.testPageImageWithEmptyAltTextFromPageImage();
+        imageTests.testPageImageWithEmptyAltTextFromPageImage(false);
     }
 
     /**
@@ -92,7 +92,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test (6.5): set page featured image with empty alt text")
     public void testPageImageWithEmptyAltTextFromPageImage65() throws InterruptedException, ClientException {
-        imageTests.testPageImageWithEmptyAltTextFromPageImage65();
+        imageTests.testPageImageWithEmptyAltTextFromPageImage(true);
     }
 
     /**
@@ -102,7 +102,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test: set page featured image with alt text from the featured image")
     public void testPageImageWithAltTextFromPageImage() throws InterruptedException, ClientException {
-        imageTests.testPageImageWithAltTextFromPageImage();
+        imageTests.testPageImageWithAltTextFromPageImage(false);
     }
 
     /**
@@ -112,7 +112,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test (6.5): set page featured image with alt text from the featured image")
     public void testPageImageWithAltTextFromPageImage65() throws InterruptedException, ClientException {
-        imageTests.testPageImageWithAltTextFromPageImage65();
+        imageTests.testPageImageWithAltTextFromPageImage(true);
     }
 
     /**
@@ -122,7 +122,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test: set page featured image with alt text from the image")
     public void testPageImageWithAltTextFromImage() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testPageImageWithAltTextFromImage();
+        imageTests.testPageImageWithAltTextFromImage(false);
     }
 
     /**
@@ -132,7 +132,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test (6.5): set page featured image with alt text from the image")
     public void testPageImageWithAltTextFromImage65() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testPageImageWithAltTextFromImage65();
+        imageTests.testPageImageWithAltTextFromImage(true);
     }
 
     /**
@@ -142,7 +142,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test: set page featured image with decorative image")
     public void testPageImageWithDecorative() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testPageImageWithDecorative();
+        imageTests.testPageImageWithDecorative(false);
     }
 
     /**
@@ -152,7 +152,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test (6.5): set page featured image with decorative image")
     public void testPageImageWithDecorative65() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testPageImageWithDecorative65();
+        imageTests.testPageImageWithDecorative(true);
     }
 
     /**
@@ -162,7 +162,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test: set page featured image with dragged and dropped image")
     public void testPageImageWithDragAndDropImage() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testPageImageWithDragAndDropImage();
+        imageTests.testPageImageWithDragAndDropImage(false);
     }
 
     /**
@@ -172,16 +172,27 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test (6.5): set page featured image with dragged and dropped image")
     public void testPageImageWithDragAndDropImage65() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testPageImageWithDragAndDropImage65();
+        imageTests.testPageImageWithDragAndDropImage(true);
     }
 
     /**
      * Test: set page featured image with linked page
      */
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: set page featured image with linked page")
     public void testPageImageWithLinkedPage() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testPageImageWithLinkedPage();
+        imageTests.testPageImageWithLinkedPage(false);
+    }
+
+    /**
+     * Test: set page featured image with linked page
+     */
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test (6.5): set page featured image with linked page")
+    public void testPageImageWithLinkedPage65() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testPageImageWithLinkedPage(true);
     }
 
 }

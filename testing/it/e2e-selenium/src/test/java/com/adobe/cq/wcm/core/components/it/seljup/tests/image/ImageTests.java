@@ -326,8 +326,9 @@ public class ImageTests {
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImageWithLazyLoadingEnabled(), "Image with native lazy loading enabled should be present");
     }
-    public void testPageImageWithEmptyAltTextFromPageImage() throws InterruptedException, ClientException {
-        setPageImage();
+
+    public void testPageImageWithEmptyAltTextFromPageImage(boolean aem65) throws InterruptedException, ClientException {
+        setPageImage(aem65);
         editorPage.open();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
@@ -335,17 +336,8 @@ public class ImageTests {
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
-    public void testPageImageWithEmptyAltTextFromPageImage65() throws InterruptedException, ClientException {
-        setPageImage65();
-        editorPage.open();
-        editorPage.enterPreviewMode();
-        Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
-        assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
-    }
-
-    public void testPageImageWithAltTextFromPageImage() throws InterruptedException, ClientException {
-        setPageImage();
+    public void testPageImageWithAltTextFromPageImage(boolean aem65) throws InterruptedException, ClientException {
+        setPageImage(aem65);
         setPageImageAlt(pageImageAlt);
         editorPage.open();
         editorPage.enterPreviewMode();
@@ -354,18 +346,8 @@ public class ImageTests {
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
-    public void testPageImageWithAltTextFromPageImage65() throws InterruptedException, ClientException {
-        setPageImage65();
-        setPageImageAlt(pageImageAlt);
-        editorPage.open();
-        editorPage.enterPreviewMode();
-        Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAltText(testPage, pageImageAlt),"image should be rendered with alt text: " + pageImageAlt);
-        assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
-    }
-
-    public void testPageImageWithAltTextFromImage() throws TimeoutException, InterruptedException, ClientException {
-        setPageImage();
+    public void testPageImageWithAltTextFromImage(boolean aem65) throws TimeoutException, InterruptedException, ClientException {
+        setPageImage(aem65);
         setPageImageAlt(pageImageAlt);
         editorPage.open();
         ImageEditDialog editDialog = image.getEditDialog();
@@ -378,22 +360,8 @@ public class ImageTests {
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
-    public void testPageImageWithAltTextFromImage65() throws TimeoutException, InterruptedException, ClientException {
-        setPageImage65();
-        setPageImageAlt(pageImageAlt);
-        editorPage.open();
-        ImageEditDialog editDialog = image.getEditDialog();
-        Commons.openEditDialog(editorPage, compPath);
-        editDialog.checkAltValueFromPageImage();
-        editDialog.setAltText(altText);
-        Commons.saveConfigureDialog();
-        Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAltText(testPage, altText),"image should be rendered with alt text: " + altText);
-        assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
-    }
-
-    public void testPageImageWithDecorative() throws TimeoutException, InterruptedException, ClientException {
-        setPageImage();
+    public void testPageImageWithDecorative(boolean aem65) throws TimeoutException, InterruptedException, ClientException {
+        setPageImage(aem65);
         setPageImageAlt(pageImageAlt);
         editorPage.open();
         ImageEditDialog editDialog = image.getEditDialog();
@@ -405,21 +373,8 @@ public class ImageTests {
         assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
     }
 
-    public void testPageImageWithDecorative65() throws TimeoutException, InterruptedException, ClientException {
-        setPageImage65();
-        setPageImageAlt(pageImageAlt);
-        editorPage.open();
-        ImageEditDialog editDialog = image.getEditDialog();
-        Commons.openEditDialog(editorPage, compPath);
-        editDialog.checkDecorative();
-        Commons.saveConfigureDialog();
-        Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAltText(testPage, ""),"image should be rendered with an empty alt text");
-        assertTrue(image.isImagePresentWithFileName(logoFileName),"image should be rendered with file name: " + logoFileName);
-    }
-
-    public void testPageImageWithDragAndDropImage() throws TimeoutException, InterruptedException, ClientException {
-        setPageImage();
+    public void testPageImageWithDragAndDropImage(boolean aem65) throws TimeoutException, InterruptedException, ClientException {
+        setPageImage(aem65);
         editorPage.open();
         Commons.openSidePanel();
         Commons.selectInAutocomplete(image.getAssetPath(), testAssetsPath);
@@ -433,24 +388,9 @@ public class ImageTests {
         assertTrue(image.isImagePresentWithFileName(imageFileName),"image should be rendered with file name: " + imageFileName);
     }
 
-    public void testPageImageWithDragAndDropImage65() throws TimeoutException, InterruptedException, ClientException {
-        setPageImage65();
-        editorPage.open();
-        Commons.openSidePanel();
-        Commons.selectInAutocomplete(image.getAssetPath(), testAssetsPath);
-        Commons.openEditDialog(editorPage, compPath);
-        ImageEditDialog editDialog = image.getEditDialog();
-        editDialog.checkImageFromPageImage();
-        editDialog.uploadImageFromSidePanel(testImagePath);
-        Commons.saveConfigureDialog();
-        Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithAltText(testPage, originalDamDescription),"image should be rendered with alt text: " + originalDamDescription);
-        assertTrue(image.isImagePresentWithFileName(imageFileName),"image should be rendered with file name: " + imageFileName);
-    }
-
-    public void testPageImageWithLinkedPage() throws TimeoutException, InterruptedException, ClientException {
-        setPageImage(redirectPage, climbingAsset, true);
-        setPageImage(testPage, logoNodeName, true);
+    public void testPageImageWithLinkedPage(boolean aem65) throws TimeoutException, InterruptedException, ClientException {
+        setPageImage(aem65, redirectPage, climbingAsset, true);
+        setPageImage(aem65, testPage, logoNodeName, true);
         editorPage.open();
         ImageEditDialog editDialog = image.getEditDialog();
         Commons.openEditDialog(editorPage, compPath);
@@ -479,17 +419,22 @@ public class ImageTests {
     }
 
     /**
-     * Sets the featured image for the test page.
+     * Sets the featured image of the page.
      */
-    private void setPageImage() throws ClientException, InterruptedException {
-        setPageImage(testPage, logoNodeName, false);
+    private void setPageImage(boolean aem65) throws ClientException, InterruptedException {
+        setPageImage(aem65, testPage, logoNodeName, false);
     }
 
     /**
      * Sets the featured image for a page.
      */
-    private void setPageImage(String page, String asset, boolean altFromDam) throws ClientException, InterruptedException {
-        String assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox";
+    private void setPageImage(boolean aem65, String page, String asset, boolean altFromDam) throws ClientException, InterruptedException {
+        String assetSelector;
+        if (aem65) {
+            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-columnview-item-thumbnail";
+        } else {
+            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox";
+        }
         // set page resource type to page v3
         adminClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
         PropertiesPage pageProperties = new PropertiesPage(page);
@@ -506,22 +451,6 @@ public class ImageTests {
             altValueFromDAMCheckbox.click();
         }
         pageProperties.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-    }
-
-    /**
-     * Sets the featured image of the page on 6.5.
-     */
-    private void setPageImage65() throws ClientException, InterruptedException {
-        // set page resource type to page v3
-        adminClient.setPageProperty(testPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
-        propertiesPage.open();
-        $("coral-tab[data-foundation-tracking-event*='images']").click();
-        $(".cq-FileUpload-picker").click();
-        $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
-        $("*[data-foundation-collection-item-id='/content/dam/core-components/Adobe_Systems_logo_and_wordmark.png'] coral-columnview-item-thumbnail").click();
-        $(".granite-pickerdialog-submit").click();
-        propertiesPage.saveAndClose();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 

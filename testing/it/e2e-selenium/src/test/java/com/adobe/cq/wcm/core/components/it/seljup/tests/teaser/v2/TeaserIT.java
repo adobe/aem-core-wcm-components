@@ -287,9 +287,21 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
             "Title should be enabled and should be set to " + title);
     }
 
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from current page")
     public void testInheritImageFromCurrentPage() throws ClientException, InterruptedException {
+        testInheritImageFromCurrentPage(false);
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test (6.5): Inherit image from current page")
+    public void testInheritImageFromCurrentPage65() throws ClientException, InterruptedException {
+        testInheritImageFromCurrentPage(true);
+    }
+
+    private void testInheritImageFromCurrentPage(boolean aem65) throws ClientException, InterruptedException {
         // set the page image for the current page
         setPageImage(testPage, climbingAsset);
 
@@ -299,11 +311,23 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
     }
 
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from current page and no alt text")
     public void testInheritImageFromCurrentPage_isDecorative() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromCurrentPage_isDecorative(false);
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test (6.5): Inherit image from current page and no alt text")
+    public void testInheritImageFromCurrentPage_isDecorative65() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromCurrentPage_isDecorative(true);
+    }
+
+    private void testInheritImageFromCurrentPage_isDecorative(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the current page
-        setPageImage(testPage, climbingAsset);
+        setPageImage(aem65, testPage, climbingAsset);
 
         // set image to decorative
         Commons.openEditDialog(editorPage,cmpPath);
@@ -320,13 +344,25 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
     }
 
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from linked page")
     public void testInheritImageFromLinkedPage() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromLinkedPage(false);
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test (6.5): Inherit image from linked page")
+    public void testInheritImageFromLinkedPage65() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromLinkedPage(true);
+    }
+
+    private void testInheritImageFromLinkedPage(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the linked page
-        setPageImage(secondTestPage, surfingAsset);
+        setPageImage(aem65, secondTestPage, surfingAsset);
         // set the page image for the current page
-        setPageImage(testPage, climbingAsset);
+        setPageImage(aem65, testPage, climbingAsset);
 
         // set the link URL
         Commons.openEditDialog(editorPage,cmpPath);
@@ -341,13 +377,25 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(surfingAssetFormatted),"image should be rendered with file name: " + surfingAssetFormatted);
     }
 
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from linked page with alt defined in the dialog")
     public void testInheritImageFromLinkedPage_altNotInherited() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromLinkedPage_altNotInherited(false);
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test (6.5): Inherit image from linked page with alt defined in the dialog")
+    public void testInheritImageFromLinkedPage_altNotInherited65() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromLinkedPage_altNotInherited(true);
+    }
+
+    private void testInheritImageFromLinkedPage_altNotInherited(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the linked page
-        setPageImage(secondTestPage, surfingAsset);
+        setPageImage(aem65, secondTestPage, surfingAsset);
         // set the page image for the current page
-        setPageImage(testPage, climbingAsset);
+        setPageImage(aem65, testPage, climbingAsset);
 
         // set the link URL
         Commons.openEditDialog(editorPage,cmpPath);
@@ -368,13 +416,25 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(surfingAssetFormatted),"image should be rendered with file name: " + surfingAssetFormatted);
     }
 
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from action page")
     public void testInheritImageFromAction() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromAction(false);
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test (6.5): Inherit image from action page")
+    public void testInheritImageFromAction65() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromAction(true);
+    }
+
+    private void testInheritImageFromAction(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the action page
-        setPageImage(thirdTestPage, skiingAsset);
+        setPageImage(aem65, thirdTestPage, skiingAsset);
         // set the page image for the current page
-        setPageImage(testPage, climbingAsset);
+        setPageImage(aem65, testPage, climbingAsset);
 
         // set the action URL
         Commons.openEditDialog(editorPage,cmpPath);
@@ -390,13 +450,25 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(skiingAssetFormatted),"image should be rendered with file name: " + skiingAssetFormatted);
     }
 
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from action page with alt defined in the dialog")
     public void testInheritImageFromAction_altNotInherited() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromAction_altNotInherited(false);
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test (6.5): Inherit image from action page with alt defined in the dialog")
+    public void testInheritImageFromAction_altNotInherited65() throws ClientException, InterruptedException, TimeoutException {
+        testInheritImageFromAction_altNotInherited(true);
+    }
+
+    private void testInheritImageFromAction_altNotInherited(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the action page
-        setPageImage(thirdTestPage, skiingAsset);
+        setPageImage(aem65, thirdTestPage, skiingAsset);
         // set the page image for the current page
-        setPageImage(testPage, climbingAsset);
+        setPageImage(aem65, testPage, climbingAsset);
 
         // set the action URL
         Commons.openEditDialog(editorPage,cmpPath);
@@ -425,8 +497,13 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
     /**
      * Sets the featured image for a page.
      */
-    private void setPageImage(String page, String asset) throws ClientException, InterruptedException {
-        String assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox";
+    private void setPageImage(boolean aem65, String page, String asset) throws ClientException, InterruptedException {
+        String assetSelector;
+        if (aem65) {
+            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-columnview-item-thumbnail";
+        } else {
+            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox";
+        }
         // set page resource type to page v3
         adminClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
         PropertiesPage pageProperties = new PropertiesPage(page);
