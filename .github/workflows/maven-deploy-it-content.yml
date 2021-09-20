@@ -39,7 +39,7 @@ jobs:
             # Checkout the main project
             - name: Checkout main project
               run:
-                  git clone -b ${github.event.inputs.target_branch} https://${USER_EMAIL}:${USER_PWD}@${TARGET_REPO} main
+                  git clone -b ${{ github.event.inputs.target_branch }} https://${USER_EMAIL}:${USER_PWD}@${TARGET_REPO} main
             # Move sub project
             - name: Move project to main
               run: |
