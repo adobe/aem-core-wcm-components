@@ -303,7 +303,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
     private void testInheritImageFromCurrentPage(boolean aem65) throws ClientException, InterruptedException {
         // set the page image for the current page
-        setPageImage(testPage, climbingAsset);
+        setPageImage(aem65, testPage, climbingAsset);
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
