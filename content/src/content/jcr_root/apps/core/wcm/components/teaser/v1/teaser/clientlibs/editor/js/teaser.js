@@ -37,16 +37,21 @@
         var dialogContent = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
 
         if (dialogContent) {
-
-            var rteInstance = $(descriptionTextfieldSelector).data("rteinstance");
-            // wait for the description textfield rich text editor to signal start before initializing.
-            // Ensures that any state adjustments made here will not be overridden.
-            if (rteInstance && rteInstance.isActive) {
-                init(e, $dialog, $dialogContent, dialogContent);
-            } else {
-                $(descriptionTextfieldSelector).on("editing-start", function() {
+            var $descriptionTextfield = $(descriptionTextfieldSelector);
+            if ($descriptionTextfield.length) {
+                var rteInstance = $descriptionTextfield.data("rteinstance");
+                // wait for the description textfield rich text editor to signal start before initializing.
+                // Ensures that any state adjustments made here will not be overridden.
+                if (rteInstance && rteInstance.isActive) {
                     init(e, $dialog, $dialogContent, dialogContent);
-                });
+                } else {
+                    $descriptionTextfield.on("editing-start", function() {
+                        init(e, $dialog, $dialogContent, dialogContent);
+                    });
+                }
+            } else {
+                // init without description field
+                init(e, $dialog, $dialogContent, dialogContent);
             }
         }
     });
