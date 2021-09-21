@@ -144,4 +144,22 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser23a"));
     }
 
+    @Test
+    protected void testInheritedPageImage_fromTemplate_noLink() {
+        Teaser teaser = getTeaserUnderTest(TEMPLATE_TEASER_1);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "template_teaser1"));
+    }
+
+    @Test
+    protected void testInheritedPageImage_fromTemplate_withLink() {
+        Teaser teaser = getTeaserUnderTest(TEMPLATE_TEASER_2);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "template_teaser2"));
+    }
+
+    @Test
+    protected void testInheritedPageImage_fromTemplate_withCTAs() {
+        Teaser teaser = getTeaserUnderTest(TEMPLATE_TEASER_3);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "template_teaser3"));
+    }
+
 }

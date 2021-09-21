@@ -21,6 +21,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +31,7 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
+import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,6 +40,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
+
+    @ScriptVariable
+    protected Page currentPage;
 
     @Override
     @Nullable
@@ -55,7 +60,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     protected boolean hasImage() {
         // As Teaser v2 supports inheritance from the featured image of the page, the current resource is wrapped and
         // augmented with the inherited properties and child resources of the featured image.
-        Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkHandler, currentStyle);
+        Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkHandler, currentStyle, currentPage);
         return Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
                 .map(request.getResourceResolver()::getResource)
                 .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null;

@@ -593,4 +593,16 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, PAGE0_IMAGE3_PATH));
     }
 
+    @Test
+    protected void testInheritedPageImage_fromTemplate_noLink() {
+        Image image = getImageUnderTest(TEMPLATE_IMAGE_INHERITED_PATH1);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_INHERITED_PATH1));
+    }
+
+    @Test
+    protected void testInheritedPageImage_fromTemplate_withLink() {
+        Image image = getImageUnderTest(TEMPLATE_IMAGE_INHERITED_PATH2);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_INHERITED_PATH2));
+    }
+
 }

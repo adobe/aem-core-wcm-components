@@ -22,6 +22,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -189,8 +190,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
 
             LinkHandler linkHandler = request.adaptTo(LinkHandler.class);
-            Style style = WCMUtils.getStyle(request);
-            Resource wrappedImageResourceWithInheritance = getWrappedImageResourceWithInheritance(component, linkHandler, style);
+            Style currentStyle = WCMUtils.getStyle(request);
+            Page currentPage = Optional.ofNullable(resourceResolver.adaptTo(PageManager.class))
+                    .map(pageManager -> pageManager.getContainingPage(request.getResource()))
+                    .orElse(null);
+            Resource wrappedImageResourceWithInheritance = getWrappedImageResourceWithInheritance(component, linkHandler, currentStyle, currentPage);
             ImageComponent imageComponent = new ImageComponent(wrappedImageResourceWithInheritance);
 
             if (imageComponent.source == Source.NOCONTENT || imageComponent.source == Source.NONEXISTING) {

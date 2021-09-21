@@ -301,10 +301,11 @@ public class Utils {
      *
      * @param resource The image resource
      * @param linkHandler The link handler
-     * @param style The style of the image resource
+     * @param currentStyle The style of the image resource
+     * @param currentPage The page containing the image resource
      * @return The wrapped image resource augmented with inherited properties and child resource if inheritance is enabled, the plain image resource otherwise.
      */
-    public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkHandler linkHandler, Style style) {
+    public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkHandler linkHandler, Style currentStyle, Page currentPage) {
         if (resource == null) {
             LOGGER.error("The resource is not defined");
             return null;
@@ -314,7 +315,6 @@ public class Utils {
             return null;
         }
 
-        ResourceResolver resourceResolver = resource.getResourceResolver();
         ValueMap properties = resource.getValueMap();
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         Resource fileResource = resource.getChild(DownloadResource.NN_FILE);
@@ -323,18 +323,21 @@ public class Utils {
 
         if (imageFromPageImage) {
             Resource inheritedResource = null;
-            boolean actionsEnabled = (style != null) ?
-                    !style.get(Teaser.PN_ACTIONS_DISABLED, !properties.get(Teaser.PN_ACTIONS_ENABLED, false)) :
+            Optional<Link> link = linkHandler.getLink(resource);
+            boolean actionsEnabled = (currentStyle != null) ?
+                    !currentStyle.get(Teaser.PN_ACTIONS_DISABLED, !properties.get(Teaser.PN_ACTIONS_ENABLED, false)) :
                     properties.get(Teaser.PN_ACTIONS_ENABLED, false);
             if (actionsEnabled) {
-                // if actions are enabled (the resource is assumed to be a teaser), the inherited resource is the featured image of the first action's page.
+
+                // the inherited resource is the featured image of the first action's page (the resource is assumed to be a teaser)
+
                 inheritedResource = Optional.of(resource)
                         .map(res -> res.getChild("actions"))
                         .map(actions -> actions.getChildren().iterator().next())
                         .map(firstAction -> linkHandler.getLink(firstAction, "link"))
-                        .map(link -> {
-                            if (link.isPresent()) {
-                                Page linkedPage = (Page) link.get().getReference();
+                        .map(link1 -> {
+                            if (link1.isPresent()) {
+                                Page linkedPage = (Page) link1.get().getReference();
                                 return Optional.ofNullable(linkedPage)
                                         .map(ComponentUtils::getFeaturedImage)
                                         .orElse(null);
@@ -342,21 +345,29 @@ public class Utils {
                             return null;
                         })
                         .orElse(null);
+            } else if (link.isPresent()) {
+
+                // the inherited resource is the featured image of the linked page
+
+                inheritedResource = link
+                        .map(link1 -> (Page) link1.getReference())
+                        .map(ComponentUtils::getFeaturedImage)
+                        .orElse(null);
             } else {
-                Optional<Link> link = linkHandler.getLink(resource);
-                if (link.isPresent()) {
-                    // the inherited resource is the featured image of the linked page.
-                    inheritedResource = link
-                            .map(link1 -> (Page) link1.getReference())
-                            .map(ComponentUtils::getFeaturedImage)
-                            .orElse(null);
-                } else {
-                    // the inherited resource is the featured image of the current page.
-                    inheritedResource = Optional.ofNullable(resourceResolver.adaptTo(PageManager.class))
-                            .map(pageManager -> pageManager.getContainingPage(resource))
-                            .map(ComponentUtils::getFeaturedImage)
-                            .orElse(null);
-                }
+
+                // the inherited resource is the featured image of the current page
+
+                inheritedResource = Optional.ofNullable(currentPage)
+                        .map(page -> {
+                            Template template = page.getTemplate();
+                            // make sure the resource is part of the currentPage or of its template
+                            if (StringUtils.startsWith(resource.getPath(), currentPage.getPath())
+                                    || (template != null && StringUtils.startsWith(resource.getPath(), template.getPath()))) {
+                                return ComponentUtils.getFeaturedImage(currentPage);
+                            }
+                            return null;
+                        })
+                        .orElse(null);
             }
 
             Map<String, String> overriddenProperties = new HashMap<>();
