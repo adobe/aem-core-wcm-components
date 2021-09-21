@@ -57,9 +57,13 @@ public class EnhancedRendition {
                 // Original asset
                 try {
                     Asset asset = getAsset();
-                    int width = Integer.parseInt(asset.getMetadataValue(DamConstants.TIFF_IMAGEWIDTH));
-                    int height = Integer.parseInt(asset.getMetadataValue(DamConstants.TIFF_IMAGELENGTH));
-                    dimension = new Dimension(width, height);
+                    String widthString = asset.getMetadataValue(DamConstants.TIFF_IMAGEWIDTH);
+                    String heightString = asset.getMetadataValue(DamConstants.TIFF_IMAGELENGTH);
+                    if (StringUtils.isNotEmpty(widthString) && StringUtils.isNotEmpty(heightString)) {
+                        int width = Integer.parseInt(widthString);
+                        int height = Integer.parseInt(heightString);
+                        dimension = new Dimension(width, height);
+                    }
                 } catch (NumberFormatException nfex) {
                     LOG.error("Cannot parse original asset dimensions", nfex);
                 }
