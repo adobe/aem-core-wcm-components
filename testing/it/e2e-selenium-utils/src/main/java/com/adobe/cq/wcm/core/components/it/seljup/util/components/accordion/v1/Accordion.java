@@ -44,7 +44,7 @@ public class Accordion extends BaseComponent {
     /**
      * Returns the accordion Items
      *
-     * @returns the accordion Items
+     * @return the accordion Items
      */
     public ElementsCollection getAccordionItem() {
         return $$(accordionItem);
@@ -85,7 +85,7 @@ public class Accordion extends BaseComponent {
 
     /**
      * Returns cq-overlay
-     * @returncq cq-overlay
+     * @return cq-overlay
      */
     public CQOverlay getCQOverlay() {
         return new CQOverlay();

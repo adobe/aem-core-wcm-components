@@ -552,7 +552,6 @@ public class Commons {
 
     /**
      * Open panel selector
-     * @throws  InterruptedException
      */
     public static void openPanelSelect() {
         $(Selectors.SELECTOR_PANEL_SELECT).click();
@@ -647,7 +646,6 @@ public class Commons {
      * @param selector {String} Specific selector for the autocomplete (ex. "[name='./myField']")
      * @param value {String} The value to be selected
      *
-     * @returns {TestCase} A test case that selects a value in an autocomplete field
      */
     public static void selectInAutocomplete(String selector, String value) {
         AutoCompleteField autoCompleteField = new AutoCompleteField("css:" + selector);
@@ -682,7 +680,6 @@ public class Commons {
      *
      * @param selector {String} Specific selector for the tags selector (ex. "[name='./tags']")
      * @param value {String} The tag value
-     * @returns {TestCase} A test case that selects a tag in a tag selector field
      */
     public static void selectInTags(String selector, String value) throws InterruptedException {
         String tagPrefix = "/content/cq:tags";
@@ -694,7 +691,6 @@ public class Commons {
      *
      * @param selector {String} Specific selector for the tags selector (ex. "[name='./tags']")
      * @param value {String} The tag value
-     * @returns {TestCase} A test case that selects a tag in a tag selector field
      */
     public static void selectInDam(String selector, String value) throws InterruptedException {
         String tagPrefix = "/content/dam";
