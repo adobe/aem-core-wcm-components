@@ -150,7 +150,8 @@ public class SearchResultServletTest {
             ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page2.html", "title", "Page2", "id", "search-0dc87a6d22-item-ad3d190367"),
             ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page-template.html", "title", "Page3", "id", "search-0dc87a6d22-item-1abc47fffe"),
             ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page.html", "title", "XF Page", "id", "search-0dc87a6d22-item-2246ed81a7"),
-            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-0dc87a6d22-item-7345474d48")
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-0dc87a6d22-item-7345474d48"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search.html", "title", "Search", "id", "search-0dc87a6d22-item-04a609b18b")
         );
 
         validateResponse(context.response(), expected);
@@ -228,7 +229,8 @@ public class SearchResultServletTest {
             ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page2.html", "title", "Page2", "id", "search-ea349504cd-item-ad3d190367"),
             ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/page-template.html", "title", "Page3", "id", "search-ea349504cd-item-1abc47fffe"),
             ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page.html", "title", "XF Page", "id", "search-ea349504cd-item-2246ed81a7"),
-            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-ea349504cd-item-7345474d48")
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search/xf-page-template.html", "title", "XF Page Template", "id", "search-ea349504cd-item-7345474d48"),
+            ImmutableMap.of("url", CONTEXT_PATH + "/content/en/search.html", "title", "Search", "id", "search-ea349504cd-item-04a609b18b")
         );
 
         validateResponse(context.response(), expected);

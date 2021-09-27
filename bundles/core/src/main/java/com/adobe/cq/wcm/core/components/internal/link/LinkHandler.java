@@ -369,7 +369,7 @@ public class LinkHandler {
             redirectCandidates.add(page.getPath());
             while (result != null && StringUtils
                     .isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
-                result = pageManager.getPage(redirectTarget);
+                result = page.getPageManager().getPage(redirectTarget);
                 if (result != null) {
                     if (!redirectCandidates.add(result.getPath())) {
                         LOGGER.warn("Detected redirect loop for the following pages: {}.", redirectCandidates);
