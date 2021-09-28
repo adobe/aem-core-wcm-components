@@ -364,12 +364,12 @@ public class LinkHandler {
     public Pair<Page, String> resolveRedirects(@Nullable final Page page) {
         Page result = page;
         String redirectTarget = null;
-        if (page != null) {
+        if (page != null && page.getPageManager() != null) {
             Set<String> redirectCandidates = new LinkedHashSet<>();
             redirectCandidates.add(page.getPath());
             while (result != null && StringUtils
                     .isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
-                result = pageManager.getPage(redirectTarget);
+                result = page.getPageManager().getPage(redirectTarget);
                 if (result != null) {
                     if (!redirectCandidates.add(result.getPath())) {
                         LOGGER.warn("Detected redirect loop for the following pages: {}.", redirectCandidates);
