@@ -364,7 +364,7 @@ public class LinkHandler {
     public Pair<Page, String> resolveRedirects(@Nullable final Page page) {
         Page result = page;
         String redirectTarget = null;
-        if (page != null) {
+        if (page != null && page.getPageManager() != null) {
             Set<String> redirectCandidates = new LinkedHashSet<>();
             redirectCandidates.add(page.getPath());
             while (result != null && StringUtils
