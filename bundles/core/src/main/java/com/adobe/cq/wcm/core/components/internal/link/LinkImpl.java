@@ -37,7 +37,6 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Wraps link information to be used in models.
  */
-@JsonInclude(Include.NON_NULL)
 public final class LinkImpl<T> implements Link<T> {
 
     public static final String ATTR_HREF = "href";
@@ -82,7 +81,6 @@ public final class LinkImpl<T> implements Link<T> {
      * @return Link URL, can be {@code null} if link is not valid
      */
     @Override
-    @JsonIgnore
     public @Nullable String getURL() {
         return url;
     }
@@ -93,13 +91,11 @@ public final class LinkImpl<T> implements Link<T> {
      * @return Processed link URL, can be {@code null} if link is not valid or no processors are defined
      */
     @Override
-    @JsonProperty("url")
     public @Nullable String getMappedURL() {
         return mappedUrl;
     }
 
     @Override
-    @JsonIgnore
     public @Nullable String getExternalizedURL() {
         return externalizedUrl;
     }
@@ -111,9 +107,6 @@ public final class LinkImpl<T> implements Link<T> {
      * @return {@link Map} of HTML attributes, may include the URL as {@code href}
      */
     @Override
-    @JsonInclude(Include.NON_EMPTY)
-    @JsonSerialize(using = LinkHtmlAttributesSerializer.class)
-    @JsonProperty("attributes")
     public @NotNull Map<String, String> getHtmlAttributes() {
         return htmlAttributes;
     }
@@ -124,7 +117,6 @@ public final class LinkImpl<T> implements Link<T> {
      * @return Link referenced WCM/DAM entity or {@code null} if link does not point to one
      */
     @Override
-    @JsonIgnore
     public @Nullable T getReference() {
         return reference;
     }
@@ -150,5 +142,4 @@ public final class LinkImpl<T> implements Link<T> {
         }
         return ImmutableMap.copyOf(attributes);
     }
-
 }

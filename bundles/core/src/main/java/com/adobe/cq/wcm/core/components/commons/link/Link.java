@@ -22,12 +22,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.internal.jackson.LinkHtmlAttributesSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * Describes a link target.
  *
  * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
  */
 @ConsumerType
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public interface Link<T> {
 
     /**
@@ -67,6 +74,7 @@ public interface Link<T> {
      * @return Link URL or {@code null} if link is invalid
      */
     @Nullable
+    @JsonIgnore
     default String getURL() {
         return null;
     }
@@ -78,6 +86,7 @@ public interface Link<T> {
      * @return Mapped link URL or {@code null} if link is invalid or no processing can be done
      */
     @Nullable
+    @JsonProperty("url")
     default String getMappedURL() {
         return null;
     }
@@ -89,6 +98,7 @@ public interface Link<T> {
      * @return Full link URL or {@code null} if link is invalid or can't be externalized.
      */
     @Nullable
+    @JsonIgnore
     default String getExternalizedURL() {
         return null;
     }
@@ -102,6 +112,9 @@ public interface Link<T> {
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @NotNull
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = LinkHtmlAttributesSerializer.class)
+    @JsonProperty("attributes")
     default Map<String, String> getHtmlAttributes() {
         return Collections.emptyMap();
     }
@@ -113,6 +126,7 @@ public interface Link<T> {
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @Nullable
+    @JsonIgnore
     default T getReference() {
         return null;
     }
