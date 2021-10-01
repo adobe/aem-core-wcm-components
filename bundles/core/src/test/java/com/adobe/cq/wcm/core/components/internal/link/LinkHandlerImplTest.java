@@ -18,9 +18,13 @@ package com.adobe.cq.wcm.core.components.internal.link;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.services.link.LinkHandler;
 import com.drew.lang.annotations.NotNull;
+import com.google.common.collect.ImmutableMap;
+import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,9 +38,17 @@ import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.*;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.adobe.cq.wcm.core.components.services.link.LinkHandler.PN_DISABLE_SHADOWING;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(AemContextExtension.class)
 class LinkHandlerImplTest {
@@ -71,7 +83,7 @@ class LinkHandlerImplTest {
     @Test
     void testResourceExternalLink() {
         Resource linkResource = context.create().resource(page, "link",
-                PN_LINK_URL, "http://myhost");
+            PN_LINK_URL, "http://myhost");
         Optional<Link> link = getLinkUnderTest(linkResource);
 
         assertValidLink(link.get(), "http://myhost");
@@ -83,10 +95,10 @@ class LinkHandlerImplTest {
     @ValueSource(strings = {"_blank", "_parent", "_top"})
     void testResourceExternalLinkWithAllowedTargetsAndAllAttributes(String target) {
         Resource linkResource = context.create().resource(page, "link",
-                PN_LINK_URL, "http://myhost",
-                PN_LINK_TARGET, target,
-                PN_LINK_ACCESSIBILITY_LABEL, "My Host Label",
-                PN_LINK_TITLE_ATTRIBUTE, "My Host Title");
+            PN_LINK_URL, "http://myhost",
+            PN_LINK_TARGET, target,
+            PN_LINK_ACCESSIBILITY_LABEL, "My Host Label",
+            PN_LINK_TITLE_ATTRIBUTE, "My Host Title");
         Optional<Link> link = getLinkUnderTest(linkResource);
 
         assertValidLink(link.get(), "http://myhost", "My Host Label", "My Host Title", target);
@@ -94,11 +106,11 @@ class LinkHandlerImplTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"_self","_invalid"})
+    @ValueSource(strings = {"_self", "_invalid"})
     void testResourceExternalLinkWithInvalidTargets(String target) {
         Resource linkResource = context.create().resource(page, "link",
-                PN_LINK_URL, "http://myhost",
-                PN_LINK_TARGET, target);
+            PN_LINK_URL, "http://myhost",
+            PN_LINK_TARGET, target);
         Optional<Link> link = getLinkUnderTest(linkResource);
 
         // invalid target or _self target should be stripped away
@@ -109,13 +121,12 @@ class LinkHandlerImplTest {
     @Test
     void testResourcePageLink() {
         Resource linkResource = context.create().resource(page, "link",
-                PN_LINK_URL, page.getPath());
+            PN_LINK_URL, page.getPath());
         Optional<Link> link = getLinkUnderTest(linkResource);
-
         assertValidLink(link.get(), page.getPath() + ".html");
         assertEquals(page, link.map(Link::getReference).orElse(null));
-        assertEquals((page.getPath() + ".html").replaceAll("^\\/content\\/links\\/site1\\/(.+)","/content/site1/$1"),
-                link.get().getMappedURL());
+        assertEquals((page.getPath() + ".html").replaceAll("^\\/content\\/links\\/site1\\/(.+)", "/content/site1/$1"),
+            link.get().getMappedURL());
     }
 
     @Test
@@ -123,7 +134,7 @@ class LinkHandlerImplTest {
         Utils.setInternalState(Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)), "pageManager", null);
         context.request().setContextPath("/core");
         Resource linkResource = context.create().resource(page, "link",
-                PN_LINK_URL, page.getPath());
+            PN_LINK_URL, page.getPath());
         Optional<Link> link = getLinkUnderTest(linkResource);
 
         // TODO: this link should be handled as invalid. but we keep this behavior for now to keep backwards compatibility
@@ -141,7 +152,7 @@ class LinkHandlerImplTest {
     @Test
     void testResourceInvalidPageLink() {
         Resource linkResource = context.create().resource(page, "link",
-                PN_LINK_URL, "/content/non-existing");
+            PN_LINK_URL, "/content/non-existing");
         Optional<Link> link = getLinkUnderTest(linkResource);
 
         // TODO: this link should be handled as invalid. but we keep this behavior for now to keep backwards compatibility
@@ -160,7 +171,7 @@ class LinkHandlerImplTest {
 
     @Test
     void testPageLink_Null() {
-        Optional<Link<Page>> link = Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)).getLink((Page)null);
+        Optional<Link<Page>> link = Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)).getLink((Page) null);
 
         assertFalse(link.isPresent());
     }
@@ -184,6 +195,133 @@ class LinkHandlerImplTest {
 
         assertValidLink(link.get(), page.getPath() + ".html", "_blank");
         assertEquals(page, link.map(Link::getReference).orElse(null));
+    }
+
+    /**
+     * Tests a link whose target is a series of redirect pages.
+     * This test confirms that link shadowing resolution functions properly.
+     */
+    @Test
+    void testLinkWithRedirect() {
+        // set up target pages
+        Page targetPage1 = context.create().page(page.getPath() + "/target1");
+        Page targetPage2 = context.create().page(page.getPath() + "/target2");
+
+        // set up redirects
+        Objects.requireNonNull(targetPage1.getContentResource().adaptTo(ModifiableValueMap.class)).put(PageImpl.PN_REDIRECT_TARGET, targetPage2.getPath());
+
+        // create a link to the first target page
+        Resource linkResource = context.create().resource(page, "link", PN_LINK_URL, targetPage1.getPath());
+        Optional<Link> link = getLinkUnderTest(linkResource);
+
+        assertTrue(link.isPresent());
+        assertValidLink(link.get(), targetPage2.getPath() + ".html");
+        assertEquals("https://example.org" + targetPage2.getPath() + ".html", link.map(Link::getExternalizedURL).orElse(null));
+        assertEquals(targetPage2, link.map(Link::getReference).orElse(null));
+    }
+
+    /**
+     * Tests a link whose target is a series of redirect pages - but shadowing is disabled.
+     * This test confirms the ability to disable shadowing by property on the link component.
+     */
+    @Test
+    void testLinkWithRedirect_shadowingDisabledByProperty() {
+        // set up target pages
+        Page targetPage1 = context.create().page(page.getPath() + "/target1");
+        Page targetPage2 = context.create().page(page.getPath() + "/target2");
+
+        // set up redirects
+        Objects.requireNonNull(targetPage1.getContentResource().adaptTo(ModifiableValueMap.class)).put(PageImpl.PN_REDIRECT_TARGET, targetPage2.getPath());
+
+        // create a link to the first target page
+        Resource linkResource = context.create().resource(page, "link",
+            PN_LINK_URL, targetPage1.getPath(),
+            PN_DISABLE_SHADOWING, Boolean.TRUE
+        );
+        Optional<Link> link = getLinkUnderTest(linkResource);
+
+        assertTrue(link.isPresent());
+        assertValidLink(link.get(), targetPage1.getPath() + ".html");
+        assertEquals("https://example.org" + targetPage1.getPath() + ".html", link.map(Link::getExternalizedURL).orElse(null));
+        assertEquals(targetPage1, link.map(Link::getReference).orElse(null));
+    }
+
+    /**
+     * Tests a link whose target is a series of redirect pages - but shadowing is disabled.
+     * This test confirms the ability to disable shadowing by the style policy.
+     */
+    @Test
+    void testLinkWithRedirect_shadowingDisabledByStyle() {
+        // set up target pages
+        Page targetPage1 = context.create().page(page.getPath() + "/target1");
+        Page targetPage2 = context.create().page(page.getPath() + "/target2");
+
+        // set up redirects
+        Objects.requireNonNull(targetPage1.getContentResource().adaptTo(ModifiableValueMap.class)).put(PageImpl.PN_REDIRECT_TARGET, targetPage2.getPath());
+
+        // create a link to the first target page
+        Resource linkResource = context.create().resource(page, "link",
+            PN_LINK_URL, targetPage1.getPath(),
+            ResourceResolver.PROPERTY_RESOURCE_TYPE, "/placeholder"
+        );
+        this.context.contentPolicyMapping("/placeholder", ImmutableMap.of(
+            PN_DISABLE_SHADOWING, Boolean.TRUE
+        ));
+        Optional<Link> link = getLinkUnderTest(linkResource);
+
+        assertTrue(link.isPresent());
+        assertValidLink(link.get(), targetPage1.getPath() + ".html");
+        assertEquals("https://example.org" + targetPage1.getPath() + ".html", link.map(Link::getExternalizedURL).orElse(null));
+        assertEquals(targetPage1, link.map(Link::getReference).orElse(null));
+    }
+
+    /**
+     * Tests the ability to resolve a link when the link points to a redirect page that subsequently redirects to
+     * an external site. This external link is discovered during link shadowing resolution, and is thus a different
+     * test than when the link its self points to an external site.
+     */
+    @Test
+    void testLinkWithRedirectToExternal() {
+        // set up target pages
+        Page targetPage1 = context.create().page(page.getPath() + "/target1");
+
+        // set up redirects
+        Objects.requireNonNull(targetPage1.getContentResource().adaptTo(ModifiableValueMap.class)).put(PageImpl.PN_REDIRECT_TARGET, "http://myhost");
+
+        // create a link to the first target page
+        Resource linkResource = context.create().resource(page, "link",
+            PN_LINK_URL, targetPage1.getPath()
+        );
+
+        Optional<Link> link = getLinkUnderTest(linkResource);
+
+        assertTrue(link.isPresent());
+        assertValidLink(link.get(), "http://myhost");
+        assertEquals(targetPage1, link.map(Link::getReference).orElse(null));
+    }
+
+    /**
+     * Tests that link shadowing does not get stuck when the link target page is a redirect loop.
+     */
+    @Test
+    void testLinkWithRedirectLoop() {
+        // create three pages
+        Page targetPage1 = context.create().page(page.getPath() + "/target1");
+        Page targetPage2 = context.create().page(page.getPath() + "/target2");
+        Page targetPage3 = context.create().page(page.getPath() + "/target3");
+
+        // set up a redirect loop. The cycle between two and three is intentional to prevent false
+        // positive test if shadowing becomes disabled.
+        Objects.requireNonNull(targetPage1.getContentResource().adaptTo(ModifiableValueMap.class)).put(PageImpl.PN_REDIRECT_TARGET, targetPage2.getPath());
+        Objects.requireNonNull(targetPage2.getContentResource().adaptTo(ModifiableValueMap.class)).put(PageImpl.PN_REDIRECT_TARGET, targetPage3.getPath());
+        Objects.requireNonNull(targetPage3.getContentResource().adaptTo(ModifiableValueMap.class)).put(PageImpl.PN_REDIRECT_TARGET, targetPage2.getPath());
+
+        // create a link to the first target page
+        Resource linkResource = context.create().resource(page, "link", PN_LINK_URL, targetPage1.getPath());
+        Optional<Link> link = getLinkUnderTest(linkResource);
+
+        assertTrue(link.isPresent());
+        assertEquals(targetPage2, link.get().getReference());
     }
 
 }
