@@ -15,9 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +33,10 @@ import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.*;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,27 +46,35 @@ class LinkHandlerImplTest {
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
     private Page page;
-    private LinkHandler underTest;
 
     @BeforeEach
     void setUp() {
         page = context.create().page("/content/links/site1/en/");
         context.currentPage(page);
-        underTest = context.request().adaptTo(LinkHandler.class);
+    }
+
+    /**
+     * Get link for the given resource.
+     *
+     * @param linkResource The link resource.
+     * @return The value of {@link LinkHandler#getLink(Resource)}.
+     */
+    private Optional<Link> getLinkUnderTest(@NotNull final Resource linkResource) {
+        this.context.currentResource(linkResource);
+        return Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)).getLink(linkResource);
     }
 
     @Test
     void testResourceEmpty() {
         Resource linkResource = context.create().resource(page, "link");
-        Optional<Link> link = underTest.getLink(linkResource);
-        assertEquals(Optional.empty(), link);
+        assertEquals(Optional.empty(), getLinkUnderTest(linkResource));
     }
 
     @Test
     void testResourceExternalLink() {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "http://myhost");
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = getLinkUnderTest(linkResource);
 
         assertValidLink(link.get(), "http://myhost");
         assertNull(link.map(Link::getReference).orElse(null));
@@ -76,7 +89,7 @@ class LinkHandlerImplTest {
                 PN_LINK_TARGET, target,
                 PN_LINK_ACCESSIBILITY_LABEL, "My Host Label",
                 PN_LINK_TITLE_ATTRIBUTE, "My Host Title");
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = getLinkUnderTest(linkResource);
 
         assertValidLink(link.get(), "http://myhost", "My Host Label", "My Host Title", target);
         assertNull(link.map(Link::getReference).orElse(null));
@@ -88,7 +101,7 @@ class LinkHandlerImplTest {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "http://myhost",
                 PN_LINK_TARGET, target);
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = getLinkUnderTest(linkResource);
 
         // invalid target or _self target should be stripped away
         assertValidLink(link.get(), "http://myhost");
@@ -99,7 +112,8 @@ class LinkHandlerImplTest {
     void testResourcePageLink() {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, page.getPath());
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = getLinkUnderTest(linkResource);
+
         assertValidLink(link.get(), page.getPath() + ".html");
         assertEquals(page, link.map(Link::getReference).orElse(null));
         assertEquals((page.getPath() + ".html").replaceAll("^\\/content\\/links\\/site1\\/(.+)","/content/site1/$1"),
@@ -108,11 +122,11 @@ class LinkHandlerImplTest {
 
     @Test
     void testResourcePageLinkWithNoInjectedPageManager() {
-        Utils.setInternalState(underTest, "pageManager", null);
+        Utils.setInternalState(Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)), "pageManager", null);
         context.request().setContextPath("/core");
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, page.getPath());
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = getLinkUnderTest(linkResource);
 
         // TODO: this link should be handled as invalid. but we keep this behavior for now to keep backwards compatibility
         assertEquals("/core/content/site1/en.html", link.get().getMappedURL());
@@ -122,7 +136,7 @@ class LinkHandlerImplTest {
     @Test
     void testMalformedURLLink() {
         String malformedURL = "https://a:80:b/c";
-        Optional<Link<Page>> link = underTest.getLink("https://a:80:b/c", null);
+        Optional<Link<Page>> link = Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)).getLink("https://a:80:b/c", null);
         assertEquals(malformedURL, link.get().getURL());
     }
 
@@ -130,7 +144,7 @@ class LinkHandlerImplTest {
     void testResourceInvalidPageLink() {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "/content/non-existing");
-        Optional<Link> link = underTest.getLink(linkResource);
+        Optional<Link> link = getLinkUnderTest(linkResource);
 
         // TODO: this link should be handled as invalid. but we keep this behavior for now to keep backwards compatibility
         assertValidLink(link.get(), "/content/non-existing");
@@ -139,7 +153,7 @@ class LinkHandlerImplTest {
 
     @Test
     void testPageLink() {
-        Optional<Link<Page>> link = underTest.getLink(page);
+        Optional<Link<Page>> link = Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)).getLink(page);
 
         assertValidLink(link.get(), page.getPath() + ".html");
         assertEquals("https://example.org" + page.getPath() + ".html", link.map(Link::getExternalizedURL).orElse(null));
@@ -148,14 +162,14 @@ class LinkHandlerImplTest {
 
     @Test
     void testPageLink_Null() {
-        Optional<Link<Page>> link = underTest.getLink((Page)null);
+        Optional<Link<Page>> link = Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)).getLink((Page)null);
 
         assertFalse(link.isPresent());
     }
 
     @Test
     void testEmptyLink() {
-        Optional<Link<Page>> link = underTest.getLink("", "");
+        Optional<Link<Page>> link = Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)).getLink("", "");
         if (link.isPresent()) {
             assertNull(link.get().getURL());
             assertNull(link.get().getMappedURL());
@@ -168,7 +182,7 @@ class LinkHandlerImplTest {
 
     @Test
     void testLinkURLPageLinkWithTarget() {
-        Optional<Link<Page>> link = underTest.getLink(page.getPath(), "_blank", null, null);
+        Optional<Link<Page>> link = Objects.requireNonNull(context.request().adaptTo(LinkHandler.class)).getLink(page.getPath(), "_blank", null, null);
 
         assertValidLink(link.get(), page.getPath() + ".html", "_blank");
         assertEquals(page, link.map(Link::getReference).orElse(null));
