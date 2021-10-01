@@ -106,14 +106,12 @@ public class LinkHandlerImpl implements LinkHandler {
 
 
     @NotNull
-    @SuppressWarnings("rawtypes")
-    public Optional<Link> getLink(@NotNull Resource resource) {
+    public Optional<Link<Page>> getLink(@NotNull Resource resource) {
         return getLink(resource, PN_LINK_URL);
     }
 
    @NotNull
-    @SuppressWarnings("rawtypes")
-    public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
+    public Optional<Link<Page>> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
         if (linkURL == null) {

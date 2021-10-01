@@ -46,7 +46,6 @@ import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
@@ -323,7 +322,7 @@ public class Utils {
 
         if (imageFromPageImage) {
             Resource inheritedResource = null;
-            Optional<Link> link = linkHandler.getLink(resource);
+            Optional<Link<Page>> link = linkHandler.getLink(resource);
             boolean actionsEnabled = (currentStyle != null) ?
                     !currentStyle.get(Teaser.PN_ACTIONS_DISABLED, !properties.get(Teaser.PN_ACTIONS_ENABLED, false)) :
                     properties.get(Teaser.PN_ACTIONS_ENABLED, false);
