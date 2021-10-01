@@ -21,6 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
+import com.day.cq.wcm.api.Page;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -79,7 +80,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @Self
     private LinkHandler linkHandler;
-    protected Optional<Link> link;
+    protected Optional<Link<@Nullable Page>> link;
 
     @PostConstruct
     private void initModel() {

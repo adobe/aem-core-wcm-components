@@ -124,7 +124,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected int jpegQuality;
     protected String imageName;
     protected Resource fileResource;
-    protected Optional<Link> link;
+    protected Optional<Link<Page>> link;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;

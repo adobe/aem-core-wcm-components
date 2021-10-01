@@ -32,8 +32,10 @@ import java.util.Optional;
 @ConsumerType
 public interface LinkHandler {
 
+    /**
+     * Page extension.
+     */
     String HTML_EXTENSION = ".html";
-
 
     /**
      * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
@@ -50,52 +52,54 @@ public interface LinkHandler {
      * Resolves a link from the properties of the given resource.
      *
      * @param resource Resource
-     * @return {@link Optional} of  {@link Link}
+     * @return {@link Optional} of {@link Link}
      */
     @NotNull
-    Optional<Link> getLink(@NotNull Resource resource);
+    Optional<Link<@Nullable Page>> getLink(@NotNull Resource resource);
 
     /**
      * Resolves a link from the properties of the given resource.
      *
      * @param resource            Resource
      * @param linkURLPropertyName Property name to read link URL from.
-     * @return {@link Optional} of  {@link Link}
+     * @return {@link Optional} of {@link Link}
      */
     @NotNull
-    @SuppressWarnings("rawtypes")
-    Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName);
+    Optional<Link<@Nullable Page>> getLink(@NotNull Resource resource, @NotNull String linkURLPropertyName);
 
     /**
      * Builds a link pointing to the given target page.
-     * @param page Target page
      *
-     * @return {@link Optional} of  {@link Link<Page>}
+     * @param page Target page
+     * @return {@link Optional} of {@link Link<Page>}
      */
     @NotNull
-    Optional<Link<Page>> getLink(@Nullable Page page);
+    Optional<Link<@Nullable Page>> getLink(@Nullable Page page);
 
     /**
      * Builds a link with the given Link URL and target.
-     * @param linkURL Link URL
-     * @param target Target
      *
-     * @return {@link Optional} of  {@link Link<Page>}
+     * @param linkURL Link URL
+     * @param target  Target
+     * @return {@link Optional} of {@link Link<Page>}
      */
     @NotNull
-    Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target);
+    Optional<Link<@Nullable Page>> getLink(@Nullable String linkURL, @Nullable String target);
 
     /**
      * Builds a link with the given Link URL, target, accessibility label, title.
-     * @param linkURL Link URL
-     * @param target Target
-     * @param linkAccessibilityLabel Link Accessibility Label
-     * @param linkTitleAttribute Link Title Attribute
      *
-     * @return {@link Optional} of  {@link Link<Page>}
+     * @param linkURL                Link URL
+     * @param target                 Target
+     * @param linkAccessibilityLabel Link Accessibility Label
+     * @param linkTitleAttribute     Link Title Attribute
+     * @return {@link Optional} of {@link Link<Page>}
      */
     @NotNull
-    Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute);
+    Optional<Link<@Nullable Page>> getLink(@Nullable String linkURL,
+                                           @Nullable String target,
+                                           @Nullable String linkAccessibilityLabel,
+                                           @Nullable String linkTitleAttribute);
 
     /**
      * Attempts to resolve the redirect chain starting from the given page, avoiding loops.
@@ -106,5 +110,5 @@ public interface LinkHandler {
      * part of the pair (the {@link String} redirect target).
      */
     @NotNull
-    Pair<Page, String> resolveRedirects(@Nullable final Page page);
+    Pair<@Nullable Page, @Nullable String> resolveRedirects(@Nullable final Page page);
 }

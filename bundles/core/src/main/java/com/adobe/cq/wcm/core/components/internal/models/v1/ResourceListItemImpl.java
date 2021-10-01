@@ -18,9 +18,11 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.Calendar;
 import java.util.Optional;
 
+import com.day.cq.wcm.api.Page;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
@@ -34,7 +36,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
-    protected Optional<Link> link;
+    /**
+     * The link.
+     */
+    protected Optional<Link<@Nullable Page>> link;
+
     /**
      * The title.
      */
