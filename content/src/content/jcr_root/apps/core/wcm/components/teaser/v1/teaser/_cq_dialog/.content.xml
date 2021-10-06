@@ -68,6 +68,7 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
                                             <pretitle
+                                                granite:hide="${cqDesign.pretitleHidden}"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="A pretitle that will be displayed above the Teaser's title."
