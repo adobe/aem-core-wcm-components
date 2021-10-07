@@ -62,21 +62,21 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 18. [Experience Fragment](content/src/content/jcr_root/apps/core/wcm/components/experiencefragment/v1/experiencefragment)
 19. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
 20. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
-
+21. [Video](content/src/content/jcr_root/apps/core/wcm/components/video/v1/video)
 ### Container Components
 
-21. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
-22. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
-23. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
-24. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
+22. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
+23. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
+24. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
+25. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
 
 ### Form Components
 
-25. [Core Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
-26. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
-27. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
-28. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
-29. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
+26. [Core Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+27. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
+28. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
+29. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
+30. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
 ### Roadmap
 

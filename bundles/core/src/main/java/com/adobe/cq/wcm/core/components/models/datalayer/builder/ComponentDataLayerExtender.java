@@ -80,6 +80,16 @@ public final class ComponentDataLayerExtender {
     }
 
     /**
+     * Get a VideoComponentDataBuilder that extends existing component data.
+     *
+     * @return A new VideoComponentDataBuilder pre-initialized with the existing image component data.
+     */
+    @NotNull
+    public VideoComponentDataBuilder asVideoComponent() {
+        return new VideoComponentDataBuilder(DataLayerSupplierImpl.extend(this.componentData));
+    }
+
+    /**
      * Get a ContentFragmentDataBuilder that extends existing component data.
      *
      * @return A new ContentFragmentDataBuilder pre-initialized with the existing component data.
