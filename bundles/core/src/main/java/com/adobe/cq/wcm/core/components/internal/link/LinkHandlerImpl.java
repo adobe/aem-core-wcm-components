@@ -15,13 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
+import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.designer.Style;
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -38,13 +38,12 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
-import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.designer.Style;
-import com.google.common.collect.ImmutableSet;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
@@ -58,23 +57,10 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE
  * Simple implementation for resolving and validating links from model's resources.
  * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
-@Model(adaptables = SlingHttpServletRequest.class)
-public class LinkHandlerImpl {
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {LinkHandler.class})
+public class LinkHandlerImpl implements LinkHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LinkHandlerImpl.class);
-
-    public static final String HTML_EXTENSION = ".html";
-
-    /**
-     * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
-     * Default is `false`. If `true` - original page is returned. If `false` or not configured - redirect target page.
-     */
-    public static final String PN_DISABLE_SHADOWING = "disableShadowing";
-
-    /**
-     * Flag indicating if shadowing is disabled.
-     */
-    public static final boolean PROP_DISABLE_SHADOWING_DEFAULT = false;
 
     /**
      * List of allowed/supported values for link target.
@@ -117,27 +103,16 @@ public class LinkHandlerImpl {
      */
     private Boolean shadowingDisabled;
 
-    /**
-     * Resolves a link from the properties of the given resource.
-     *
-     * @param resource Resource
-     * @return {@link Optional} of  {@link Link}
-     */
     @NotNull
     @SuppressWarnings("rawtypes")
+    @Override
     public Optional<Link> getLink(@NotNull Resource resource) {
         return getLink(resource, PN_LINK_URL);
     }
 
-    /**
-     * Resolves a link from the properties of the given resource.
-     *
-     * @param resource            Resource
-     * @param linkURLPropertyName Property name to read link URL from.
-     * @return {@link Optional} of  {@link Link}
-     */
     @NotNull
     @SuppressWarnings("rawtypes")
+    @Override
     public Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName) {
         ValueMap props = resource.getValueMap();
         String linkURL = props.get(linkURLPropertyName, String.class);
@@ -150,13 +125,8 @@ public class LinkHandlerImpl {
         return Optional.ofNullable(getLink(linkURL, linkTarget, linkAccessibilityLabel, linkTitleAttribute).orElse(null));
     }
 
-    /**
-     * Builds a link pointing to the given target page.
-     * @param page Target page
-     *
-     * @return {@link Optional} of  {@link Link<Page>}
-     */
     @NotNull
+    @Override
     public Optional<Link<Page>> getLink(@Nullable Page page) {
         if (page == null) {
             return Optional.empty();
@@ -165,14 +135,8 @@ public class LinkHandlerImpl {
         return buildLink(pair.getRight(), request, pair.getLeft(), null);
     }
 
-    /**
-     * Builds a link with the given Link URL and target.
-     * @param linkURL Link URL
-     * @param target Target
-     *
-     * @return {@link Optional} of  {@link Link<Page>}
-     */
     @NotNull
+    @Override
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target) {
         Pair<Page, String> pair = resolvePage(getPage(linkURL).orElse(null));
         linkURL = StringUtils.isNotEmpty(pair.getRight()) ? pair.getRight() : linkURL;
@@ -182,16 +146,8 @@ public class LinkHandlerImpl {
                 new HashMap<String, String>() {{ put(ATTR_TARGET, resolvedLinkTarget); }});
     }
 
-    /**
-     * Builds a link with the given Link URL, target, accessibility label, title.
-     * @param linkURL Link URL
-     * @param target Target
-     * @param linkAccessibilityLabel Link Accessibility Label
-     * @param linkTitleAttribute Link Title Attribute
-     *
-     * @return {@link Optional} of  {@link Link<Page>}
-     */
     @NotNull
+    @Override
     public Optional<Link<Page>> getLink(@Nullable String linkURL, @Nullable String target, @Nullable String linkAccessibilityLabel, @Nullable String linkTitleAttribute) {
         Pair<Page, String> pair = resolvePage(getPage(linkURL).orElse(null));
         linkURL = StringUtils.isNotEmpty(pair.getRight()) ? pair.getRight() : linkURL;
@@ -352,15 +308,8 @@ public class LinkHandlerImpl {
         return new ImmutablePair<>(resolved, linkURL);
     }
 
-    /**
-     * Attempts to resolve the redirect chain starting from the given page, avoiding loops.
-     *
-     * @param page The starting {@link Page}
-     * @return A pair of {@link Page} and {@link String} the redirect chain resolves to. The page can be the original page, if no redirect
-     * target is defined or even {@code null} if the redirect chain does not resolve to a valid page, in this case one should use the right
-     * part of the pair (the {@link String} redirect target).
-     */
     @NotNull
+    @Override
     public Pair<Page, String> resolveRedirects(@Nullable final Page page) {
         Page result = page;
         String redirectTarget = null;
@@ -398,6 +347,4 @@ public class LinkHandlerImpl {
         }
         return shadowingDisabled;
     }
-
-
 }
