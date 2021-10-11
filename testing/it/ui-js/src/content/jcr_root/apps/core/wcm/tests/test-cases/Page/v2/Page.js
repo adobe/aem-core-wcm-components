@@ -43,7 +43,7 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
 
             .execTestCase(pageV1.openPageProperties)
 
-            /* insert information for 'Settings' */
+        /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { before: 1000 })
@@ -52,13 +52,13 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
                 return h.find("coral-tab.is-selected coral-tab-label:contains('Advanced')").size() === 1;
             })
 
-            // test the configuration settings
+        // test the configuration settings
 
             // set the configuration
             .fillInput("foundation-autocomplete[name='./cq:conf'] input[is='coral-textfield']", configuration, { after: 2000 })
             .click("button[value='" + configuration + "']", { after: 2000 })
 
-            /*  Check if the configuration is saved */
+        /*  Check if the configuration is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })

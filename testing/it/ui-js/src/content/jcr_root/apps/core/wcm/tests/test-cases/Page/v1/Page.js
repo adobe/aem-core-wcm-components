@@ -101,7 +101,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /* insert information for 'Title and Tags' */
+        /* insert information for 'Title and Tags' */
 
             // open the Basic tab
             .click("coral-tab-label:contains('Basic')")
@@ -134,7 +134,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // set the Hide in Navigation
             .click("input[name='./hideInNav']")
 
-            /* check if the date is saved */
+        /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -167,7 +167,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /* insert information for 'More Titles and Description' */
+        /* insert information for 'More Titles and Description' */
 
             // open the Basic tab
             .click("coral-tab-label:contains('Basic')")
@@ -185,7 +185,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .simulate("textarea[name='./jcr:description']", "key-sequence",
                 { sequence: description })
 
-            /* check if the date is saved */
+        /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -220,7 +220,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /* Insert information for On/Off time */
+        /* Insert information for On/Off time */
 
             // open the Basic tab
             .click("coral-tab-label:contains('Basic')")
@@ -242,7 +242,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // select second day
             .click("coral-datepicker[name='./offTime'] td a:contains('2'):eq(0)", { delay: 1000 })
 
-            /* check if the date is saved */
+        /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -272,7 +272,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /* insert information for 'Vanity URL' */
+        /* insert information for 'Vanity URL' */
 
             // open the Basic tab
             .click("coral-tab-label:contains('Basic')")
@@ -295,7 +295,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // set the Redirect Vanity URL
             .click("input[name='./sling:redirect']")
 
-            /*  check if data are saved */
+        /*  check if data are saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -325,7 +325,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /* insert information for 'Settings' */
+        /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { delay: 1000 })
@@ -334,7 +334,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
                 return h.find("coral-tab.is-selected coral-tab-label:contains('Advanced')").size() === 1;
             })
 
-            // test the Settings options
+        // test the Settings options
 
             // set the language
             .click("coral-select[name='./jcr:language'] > button")
@@ -347,7 +347,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // required when running with no pacing delay, otherwise designPath does not get saved.
             .wait(2000)
 
-            /*  Check if the date is saved */
+        /*  Check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -381,7 +381,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /* insert information for 'Settings' */
+        /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { delay: 1000 })
@@ -401,7 +401,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .simulate("input[name='./cq:allowedTemplates']", "key-sequence",
                 { sequence: allowedTemplate })
 
-            /*  check if the date is saved */
+        /*  check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -427,7 +427,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /* insert information for 'Settings' */
+        /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { delay: 1000 })
@@ -441,7 +441,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .fillInput("foundation-autocomplete[name='./cq:loginPath'] input[is='coral-textfield']", loginPage, { delay: 1000 })
             .click("button[value='" + loginPage + "']", { after: 2000 })
 
-            /*  check if the date is saved */
+        /*  check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -471,7 +471,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /* insert information for 'Settings' */
+        /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { delay: 1000 })
@@ -486,7 +486,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click("button[value='" + exportConfiguration + "']")
             .wait(200)
 
-            /*  check if the date is saved */
+        /*  check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -578,7 +578,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click("foundation-autocomplete[name='./variantPath'] button[title='Open Selection Dialog']")
             .click("form.granite-pickerdialog-content button:contains('Cancel')")
 
-            /* check if the date is saved */
+        /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -625,7 +625,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click(".cq-CloudServices-container span:contains('Add Configuration')")
             .click("coral-selectlist-item span:contains('Cloud Proxy Configuration')")
 
-            /* check if the date is saved */
+        /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { before: 2000, expectNav: true })
@@ -663,7 +663,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click("button:contains('Add Brand')")
             .click(".groupedServices-ServiceSelector-service-title")
 
-            /* check if the date is saved */
+        /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { before: 2000, expectNav: true })

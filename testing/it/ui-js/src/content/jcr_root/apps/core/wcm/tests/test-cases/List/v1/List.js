@@ -188,8 +188,8 @@ window.CQ.CoreComponentsIT.List.v1 = window.CQ.CoreComponentsIT.List.v1 || {}
             // open the configuration dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
-            // default setting is to build list using 'child pages', empty 'parent page' and 'child depth' = 1,
-            // so we only need to save
+        // default setting is to build list using 'child pages', empty 'parent page' and 'child depth' = 1,
+        // so we only need to save
 
             // close the dialog
             .execTestCase(c.tcSaveConfigureDialog)
