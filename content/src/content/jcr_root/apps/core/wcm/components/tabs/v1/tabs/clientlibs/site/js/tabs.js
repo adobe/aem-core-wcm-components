@@ -353,7 +353,7 @@
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
                 var value = data[key];
 
                 if (key.indexOf(NS) === 0) {
