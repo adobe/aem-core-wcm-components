@@ -4,9 +4,14 @@
     <jcr:content
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:primaryType="nt:unstructured"
-        jcr:title="Page Authoring"
+        jcr:title="Core Content"
         sling:resourceType="core-components-examples/components/page"
         cq:redirectTarget="/content/core-components-examples/library"/>
+    <container/>
+    <carousel/>
+    <tabs/>
+    <accordion/>
+    <form-container/>
     <title/>
     <text/>
     <image/>
@@ -19,7 +24,7 @@
     <content-fragment-list/>
     <embed/>
     <pdf-viewer/>
-    <progressbar/>
-    <social-sharing/>
+    <progress-bar/>
+    <sharing/>
     <separator/>
 </jcr:root>

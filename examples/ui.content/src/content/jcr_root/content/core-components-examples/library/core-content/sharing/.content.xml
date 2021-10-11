@@ -4,7 +4,7 @@
     <jcr:content
         cq:tags="[core-components-examples:component-type/page-authoring]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Add social sharing links"
+        jcr:description="Add social media sharing links"
         jcr:primaryType="cq:PageContent"
         jcr:title="Social Sharing"
         sling:resourceType="core-components-examples/components/page"
@@ -19,13 +19,13 @@
                     cq:styleIds="[1644862132301]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;h1>Social Sharing&lt;sub>v1&lt;/sub>&lt;/h1>"
+                    text="&lt;h1>Social Media Sharing&lt;sub>v1&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Social Sharing adds Facebook and Pinterest share links to the page. It is often included in page headers or footers.&lt;/p>"
+                    text="&lt;p>Social Media Sharing adds Facebook and Pinterest share links to the page. It is often included in page headers or footers.&lt;/p>"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
@@ -66,7 +66,7 @@
                 <text_1337506761
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Social Sharing with Facebook and Pinterest links.&lt;/p>"
+                    text="&lt;p>Social Media Sharing with Facebook and Pinterest links.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
