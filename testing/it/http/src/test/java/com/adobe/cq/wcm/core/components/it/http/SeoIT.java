@@ -109,7 +109,7 @@ public class SeoIT {
     }
 
     @Test
-    @Category({IgnoreOn64.class, IgnoreOn65.class})
+    @Category({IgnoreOn64.class})
     public void testRobotsTagRenderedToPage() throws ClientException {
         String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         MatcherAssert.assertThat(content, CoreMatchers.not(CoreMatchers.containsString("<meta name=\"robots\"")));
@@ -118,7 +118,7 @@ public class SeoIT {
     }
 
     @Test
-    @Category({IgnoreOn64.class, IgnoreOn65.class})
+    @Category({IgnoreOn64.class})
     public void testCanonicalLinkRenderedToPage() throws ClientException {
         String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         MatcherAssert.assertThat(content, CoreMatchers.containsString(
@@ -126,7 +126,7 @@ public class SeoIT {
     }
 
     @Test
-    @Category({IgnoreOn64.class, IgnoreOn65.class})
+    @Category({IgnoreOn64.class})
     public void testLanguageAlternatesRenderedToPage() throws ClientException {
         String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         MatcherAssert.assertThat(content, CoreMatchers.not(CoreMatchers.containsString(
@@ -138,7 +138,7 @@ public class SeoIT {
     }
 
     @Test
-    @Category({IgnoreOn64.class, IgnoreOn65.class})
+    @Category({IgnoreOn64.class})
     public void testSitemapAndSitemapIndexGeneration() throws ClientException, InterruptedException, TimeoutException {
         try {
             publish.setPageProperty("/content/core-components/seo-site/gb/en", "sling:sitemapRoot", "true", HttpStatus.SC_OK);
