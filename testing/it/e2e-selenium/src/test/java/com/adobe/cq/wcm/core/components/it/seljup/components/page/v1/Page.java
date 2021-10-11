@@ -28,6 +28,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.AdvancedTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.ThumbnailTab;
 import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 
@@ -184,8 +185,14 @@ public class Page {
     }
 
     public void setRobotsTags(String... values) {
-        CoralSelect selectList = new CoralSelect(robotsTags);
-        CoralSelectList coralSelectList = selectList.openSelectList();
+        Selenide.$("[" + robotsTags + "] > button").click();
+        CoralSelectList coralSelectList = new CoralSelectList(Selenide.$("[" + robotsTags + "]"));
+
+        if (!coralSelectList.isVisible()) {
+            CoralSelect selectList = new CoralSelect(robotsTags);
+            coralSelectList = selectList.openSelectList();
+        }
+
         for (String value : values) {
             coralSelectList.selectByValue(value);
         }
