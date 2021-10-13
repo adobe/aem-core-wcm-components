@@ -16,7 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.formoptions.v2.FormOptions;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formoptions.v2.FormOptions;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;

@@ -19,11 +19,11 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.embed.v1;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.embed.UrlProcessors;
-import com.adobe.cq.wcm.core.components.it.seljup.components.embed.v1.Embed;
-import com.adobe.cq.wcm.core.components.it.seljup.components.embed.UrlProcessors.OEmbed;
-import com.adobe.cq.wcm.core.components.it.seljup.components.embed.EmbedEditDialog.EditDialogProperties;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.embed.UrlProcessors;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.embed.v1.Embed;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.embed.UrlProcessors.OEmbed;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.embed.EmbedEditDialog.EditDialogProperties;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
@@ -125,7 +125,7 @@ public class EmbedIT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         //1.
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
 
         //2.
         Commons.deleteProxyComponent(adminClient, proxyPath);
@@ -215,7 +215,7 @@ public class EmbedIT extends AuthorBaseUITest {
         //8.
         editDialogProperties.setUrlField(editDialogProperties.getInvalidUrl());
         //wait for validation to finish
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
 
         //9.
         assertTrue(!editDialogProperties.isUrlStatusVisible(), "URL status should not be visible");
@@ -224,7 +224,7 @@ public class EmbedIT extends AuthorBaseUITest {
         //10.
         editDialogProperties.setUrlField(editDialogProperties.getMalformedUrl());
         //wait for validation to finish
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
 
         //11.
         assertTrue(!editDialogProperties.isUrlStatusVisible(), "URL status should not be visible");
@@ -233,7 +233,7 @@ public class EmbedIT extends AuthorBaseUITest {
         //12.
         editDialogProperties.setUrlField("");
         //wait for validation to finish
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
 
         //13.
         assertTrue(!editDialogProperties.isUrlStatusVisible(), "URL status should not be visible");

@@ -17,9 +17,9 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formhidden.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formhidden.v1.FormHidden;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formhidden.FormHiddenEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formhidden.v1.FormHidden;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formhidden.FormHiddenEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
@@ -82,7 +82,7 @@ public class FormHiddenIT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete the test page we created
-        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
 
         // delete the proxy component created
         Commons.deleteProxyComponent(adminClient, compPathHidden);

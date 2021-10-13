@@ -39,17 +39,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <!-- Compile for custom Java version -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.0</version>
-                    <configuration>
-                        <source>1.${cq.java.version}</source>
-                        <target>1.${cq.java.version}</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -258,6 +247,11 @@
     <!-- D E P E N D E N C I E S                                                -->
     <!-- ====================================================================== -->
     <dependencies>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.it.e2e-selenium-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

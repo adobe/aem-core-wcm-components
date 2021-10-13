@@ -20,9 +20,9 @@ import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.wcm.core.components.it.seljup.components.image.BaseImage;
-import com.adobe.cq.wcm.core.components.it.seljup.components.image.ImageEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
 
@@ -108,7 +108,7 @@ public class ImageTests {
 
 
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
-        client.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        client.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         Commons.deleteProxyComponent(client, proxyPath);
     }
 
@@ -140,7 +140,7 @@ public class ImageTests {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         image.imageClick();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
     }
 
@@ -267,7 +267,7 @@ public class ImageTests {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         image.imageClick();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
     }
 
@@ -402,7 +402,7 @@ public class ImageTests {
         assertTrue(image.isImagePresentWithAltText(testPage, climbingAssetAltText),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
         image.imageClick();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
     }
 
@@ -451,7 +451,7 @@ public class ImageTests {
             altValueFromDAMCheckbox.click();
         }
         pageProperties.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
     /**
@@ -465,7 +465,7 @@ public class ImageTests {
         altField.clear();
         altField.sendKeys(text);
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
 }

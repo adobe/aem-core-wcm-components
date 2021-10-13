@@ -19,11 +19,11 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb;
 
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BreadcrumbEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.BaseBreadcrumbItems;
-import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.v2.BreadcrumbList;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.assertion.EditableToolbarAssertion;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.BreadcrumbEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.BaseBreadcrumbItems;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.v2.BreadcrumbList;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
@@ -84,14 +84,14 @@ public class BreadcrumbTests {
     }
 
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
-        client.deletePageWithRetry(testPages.get(0), true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        client.deletePageWithRetry(testPages.get(0), true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         Commons.deleteProxyComponent(client, proxyPath);
     }
 
     private void openConfiguration(String compPath) throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
         EditableToolbarAssertion editableToolbarAssertion = new EditableToolbarAssertion(editableToolbar,
             "editable toolbar of none style selector enabled component - %s button is not displayed while it should");

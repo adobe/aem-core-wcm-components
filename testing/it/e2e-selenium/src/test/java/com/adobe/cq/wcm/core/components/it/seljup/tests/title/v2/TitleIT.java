@@ -16,8 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.title.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.title.TitleEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.title.TitleEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -53,11 +53,11 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
         title.getEditDialog().setLinkURL(redirectPage);
         Commons.saveConfigureDialog();
 
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         title.clickLink();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchToDefaultContext();
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"), "Current page should be Root page after navigation");
     }

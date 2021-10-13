@@ -19,9 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.navigation.v1;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.navigation.NavigationEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.navigation.v1.Navigation;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.navigation.NavigationEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.navigation.v1.Navigation;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
@@ -112,7 +112,7 @@ public class NavigationIT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         Commons.deleteProxyComponent(adminClient, proxyPath);
-        authorClient.deletePageWithRetry(page1path, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(page1path, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**
