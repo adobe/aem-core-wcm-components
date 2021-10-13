@@ -402,7 +402,7 @@ public class ImageTests {
         assertTrue(image.isImagePresentWithAltText(testPage, climbingAssetAltText),"image should be rendered with an empty alt text");
         assertTrue(image.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
         image.imageClick();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
     }
 
@@ -451,7 +451,7 @@ public class ImageTests {
             altValueFromDAMCheckbox.click();
         }
         pageProperties.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
     /**
