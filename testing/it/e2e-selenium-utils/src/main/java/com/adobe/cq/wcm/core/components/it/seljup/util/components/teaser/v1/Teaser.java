@@ -20,7 +20,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.codeborne.selenide.ElementsCollection;
 
 
-import static com.adobe.cq.wcm.core.components.it.seljup.components.image.BaseImage.imageWithFileName;
+import static com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage.imageWithFileName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
