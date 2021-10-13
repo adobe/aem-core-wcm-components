@@ -53,9 +53,11 @@ public class BaseText extends BaseComponent {
         return newTextContent;
     }
 
-
     public boolean isTextRendered(String textValue) {
-        return $(rendered).innerHtml().trim().equals(textValue);
+        if ($(rendered).isDisplayed()) {
+            return $(rendered).innerHtml().trim().equals(textValue);
+        }
+        return false;
     }
 
     public TextEditDialog getEditDialog() {
@@ -63,6 +65,9 @@ public class BaseText extends BaseComponent {
     }
 
     public boolean isTextRenderedWithXSSProtection(String textValue) {
-        return $(editorConf).innerHtml().trim().equals(textValue);
+        if ($(editorConf).isDisplayed()) {
+            return $(editorConf).innerHtml().trim().equals(textValue);
+        }
+        return false;
     }
 }
