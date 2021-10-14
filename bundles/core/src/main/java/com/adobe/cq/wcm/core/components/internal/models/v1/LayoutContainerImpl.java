@@ -15,7 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -30,12 +33,18 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
+import com.day.cq.wcm.foundation.model.responsivegrid.ResponsiveGrid;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Layout container model implementation.
  */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = LayoutContainer.class, resourceType = LayoutContainerImpl.RESOURCE_TYPE_V1)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME ,
+        extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class LayoutContainerImpl extends AbstractContainerImpl implements LayoutContainer {
 
     /**
@@ -68,6 +77,8 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     @Nullable
     private String roleAttribute;
 
+    private ResponsiveGrid responsiveGrid;
+
     /**
      * Initialize the model.
      */
@@ -82,6 +93,7 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
                 ))
             .map(LayoutType::getLayoutType)
             .orElse(LayoutType.SIMPLE);
+        this.responsiveGrid = request.adaptTo(ResponsiveGrid.class);
     }
 
     @Override
@@ -113,4 +125,38 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     public String getRoleAttribute() {
         return roleAttribute;
     }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public String getGridClassNames() {
+        if (layout == LayoutType.RESPONSIVE_GRID) {
+            return responsiveGrid.getGridClassNames();
+        }
+        return null;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public Map<String, String> getColumnClassNames() {
+        if (layout == LayoutType.RESPONSIVE_GRID) {
+            return responsiveGrid.getColumnClassNames();
+        }
+        return Collections.emptyMap();
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public int getColumnCount() {
+        if (layout == LayoutType.RESPONSIVE_GRID) {
+            return responsiveGrid.getColumnCount();
+        }
+        return 0;
+    }
+
+    @JsonProperty("allowedComponents")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public AllowedComponentsExporter AllowedComponentsExporter() {
+        if (layout == LayoutType.RESPONSIVE_GRID) {
+            return responsiveGrid.getAllowedComponents();
+        }
+        return null;
+    }
+
 }
