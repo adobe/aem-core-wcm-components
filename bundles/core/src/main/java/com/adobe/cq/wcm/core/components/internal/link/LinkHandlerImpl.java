@@ -59,9 +59,9 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE
  * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
 @Model(adaptables = SlingHttpServletRequest.class)
-public class LinkHandler {
+public class LinkHandlerImpl {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LinkHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LinkHandlerImpl.class);
 
     public static final String HTML_EXTENSION = ".html";
 

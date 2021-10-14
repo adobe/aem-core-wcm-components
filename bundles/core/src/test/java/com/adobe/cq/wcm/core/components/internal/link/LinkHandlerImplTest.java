@@ -36,7 +36,7 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.asser
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(AemContextExtension.class)
-class LinkHandlerTest {
+class LinkHandlerImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
