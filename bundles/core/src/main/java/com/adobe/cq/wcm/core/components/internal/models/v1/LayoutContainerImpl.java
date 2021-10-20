@@ -37,7 +37,6 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 import com.day.cq.wcm.foundation.model.responsivegrid.ResponsiveGrid;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Layout container model implementation.
@@ -148,15 +147,6 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
             return responsiveGrid.getColumnCount();
         }
         return 0;
-    }
-
-    @JsonProperty("allowedComponents")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public AllowedComponentsExporter AllowedComponentsExporter() {
-        if (layout == LayoutType.RESPONSIVE_GRID) {
-            return responsiveGrid.getAllowedComponents();
-        }
-        return null;
     }
 
 }
