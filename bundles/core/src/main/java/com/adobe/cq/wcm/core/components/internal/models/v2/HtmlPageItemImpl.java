@@ -83,7 +83,9 @@ public class HtmlPageItemImpl implements HtmlPageItem {
                 for (AttributeConfig attributeConfig : config.attributes()) {
                     String attrName = attributeConfig.name();
                     String attrValue = attributeConfig.value();
-                    addAttributes(attrName, attrValue);
+                    if (StringUtils.isNotEmpty(attrName)) {
+                        addAttributes(attrName, attrValue);
+                    }
                 }
             } else {
                 // Support the former node structure: see com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
@@ -92,7 +94,9 @@ public class HtmlPageItemImpl implements HtmlPageItem {
                     ValueMap attributesProperties = attributesNode.getValueMap();
                     for (String attrName : getElement().getAttributeNames()) {
                         String attrValue = attributesProperties.get(attrName, String.class);
-                        addAttributes(attrName, attrValue);
+                        if (attrValue != null) {
+                            addAttributes(attrName, attrValue);
+                        }
                     }
                 }
             }
@@ -101,18 +105,16 @@ public class HtmlPageItemImpl implements HtmlPageItem {
     }
 
     private void addAttributes(String name, String value) {
-        if (StringUtils.isNotEmpty(name)) {
-            if ((getElement() == Element.LINK && HtmlPageItem.PN_HREF.equals(name)) ||
-                    (getElement() == Element.SCRIPT && HtmlPageItem.PN_SRC.equals(name))) {
-                value = prefixPath + value;
-            }
-            if (StringUtils.equals(value, "true")) {
-                attributes.put(name, true);
-            } else if (StringUtils.equals(value, "false")) {
-                attributes.put(name, false);
-            } else {
-                attributes.put(name, value);
-            }
+        if ((getElement() == Element.LINK && HtmlPageItem.PN_HREF.equals(name)) ||
+                (getElement() == Element.SCRIPT && HtmlPageItem.PN_SRC.equals(name))) {
+            value = prefixPath + value;
+        }
+        if (StringUtils.equals(value, "true")) {
+            attributes.put(name, true);
+        } else if (StringUtils.equals(value, "false")) {
+            attributes.put(name, false);
+        } else {
+            attributes.put(name, value);
         }
     }
 }
