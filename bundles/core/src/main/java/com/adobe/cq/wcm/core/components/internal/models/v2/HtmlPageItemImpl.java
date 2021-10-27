@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
@@ -25,8 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.wcm.core.components.config.AttributeConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
-
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class HtmlPageItemImpl implements HtmlPageItem {
 
@@ -36,7 +35,7 @@ public class HtmlPageItemImpl implements HtmlPageItem {
     HtmlPageItemConfig config;
     Element element;
     Location location;
-    Map<String, String> attributes;
+    Map<String, Object> attributes;
 
     // Support the former node structure: see com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
     public HtmlPageItemImpl(@NotNull String prefixPath, @NotNull Resource resource) {
@@ -77,20 +76,14 @@ public class HtmlPageItemImpl implements HtmlPageItem {
     }
 
     @Override
-    public Map<String, String> getAttributes() {
+    public Map<String, Object> getAttributes() {
         if (attributes == null) {
             attributes = new LinkedHashMap<>();
             if (config != null) {
                 for (AttributeConfig attributeConfig : config.attributes()) {
                     String attrName = attributeConfig.name();
                     String attrValue = attributeConfig.value();
-                    if (isNotEmpty(attrName)) {
-                        if ((getElement() == Element.LINK && HtmlPageItem.PN_HREF.equals(attrName)) ||
-                                (getElement() == Element.SCRIPT && HtmlPageItem.PN_SRC.equals(attrName))) {
-                            attrValue = prefixPath + attrValue;
-                        }
-                        attributes.put(attrName, attrValue);
-                    }
+                    addAttributes(attrName, attrValue);
                 }
             } else {
                 // Support the former node structure: see com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
@@ -99,17 +92,27 @@ public class HtmlPageItemImpl implements HtmlPageItem {
                     ValueMap attributesProperties = attributesNode.getValueMap();
                     for (String attrName : getElement().getAttributeNames()) {
                         String attrValue = attributesProperties.get(attrName, String.class);
-                        if (attrValue != null) {
-                            if ((getElement() == Element.LINK && HtmlPageItem.PN_HREF.equals(attrName)) ||
-                                    (getElement() == Element.SCRIPT && HtmlPageItem.PN_SRC.equals(attrName))) {
-                                attrValue = prefixPath + attrValue;
-                            }
-                            attributes.put(attrName, attrValue);
-                        }
+                        addAttributes(attrName, attrValue);
                     }
                 }
             }
         }
         return attributes;
+    }
+
+    private void addAttributes(String name, String value) {
+        if (StringUtils.isNotEmpty(name)) {
+            if ((getElement() == Element.LINK && HtmlPageItem.PN_HREF.equals(name)) ||
+                    (getElement() == Element.SCRIPT && HtmlPageItem.PN_SRC.equals(name))) {
+                value = prefixPath + value;
+            }
+            if (StringUtils.equals(value, "true")) {
+                attributes.put(name, true);
+            } else if (StringUtils.equals(value, "false")) {
+                attributes.put(name, false);
+            } else {
+                attributes.put(name, value);
+            }
+        }
     }
 }

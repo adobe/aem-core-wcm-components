@@ -36,6 +36,7 @@
     <sly data-sly-include="head.socialmedia.html"></sly>
     <sly data-sly-include="customheaderlibs.html"></sly>
     <sly data-sly-call="${headlibRenderer.headlibs @
+                                page                      = page,
                                 designPath                = page.designPath,
                                 staticDesignPath          = page.staticDesignPath,
                                 clientLibCategories       = page.clientLibCategories,
