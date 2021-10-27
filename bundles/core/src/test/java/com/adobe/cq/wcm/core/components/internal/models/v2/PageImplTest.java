@@ -201,7 +201,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         loadHtmlPageItemsConfig(false);
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
-        int[] attributeCounts = { 3, 2, 1 };
+        int[] attributeCounts = { 3, 3, 1 };
         int index = 0;
         for (HtmlPageItem item : page.getHtmlPageItems()) {
             assertEquals(attributeCounts[index], item.getAttributes().size());
@@ -223,6 +223,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         cssAttributes.put("rel", "preload");
         cssAttributes.put("as", "style");
         jsAttributes.put("async", true);
+        jsAttributes.put("defer", false);
         jsAttributes.put("src", "/_theme/theme.js");
         metaAttributes.put("charset", "UTF-8");
         Object[] attributes = {cssAttributes, jsAttributes, metaAttributes};

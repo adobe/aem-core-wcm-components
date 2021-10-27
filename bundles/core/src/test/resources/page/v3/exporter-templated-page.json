@@ -22,6 +22,7 @@
       "location": "footer",
       "attributes": {
         "async": true,
+        "defer": false,
         "src": "/_theme/theme.js"
       }
     },

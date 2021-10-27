@@ -40,6 +40,11 @@
               "name"           : "async",
               "value"          : "true"
             },
+            "defer"            : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "defer",
+              "value"          : "false"
+            },
             "src"            : {
               "jcr:primaryType": "nt:unstructured",
               "name"           : "src",
