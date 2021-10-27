@@ -21,6 +21,7 @@
       "element": "script",
       "location": "footer",
       "attributes": {
+        "async": true,
         "src": "/_theme/theme.js"
       }
     },

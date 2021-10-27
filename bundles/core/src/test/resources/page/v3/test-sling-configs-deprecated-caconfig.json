@@ -19,6 +19,7 @@
       "location"       : "footer",
       "attributes"     : {
         "jcr:primaryType": "nt:unstructured",
+        "async"      : "true",
         "src"            : "/theme.js"
       }
     },

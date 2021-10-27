@@ -35,6 +35,11 @@
           "location"       : "footer",
           "attributes"     : {
             "jcr:primaryType": "nt:unstructured",
+            "async"            : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "async",
+              "value"          : "true"
+            },
             "src"            : {
               "jcr:primaryType": "nt:unstructured",
               "name"           : "src",
