@@ -91,7 +91,7 @@ public interface HtmlPageItem {
      * @return HTML attributes and values
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
      */
-    default Map<String, String> getAttributes() {
+    default Map<String, Object> getAttributes() {
         return null;
     }
 
