@@ -14,9 +14,9 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.footer="${ @ page, pwa }">
-    <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+    <sly data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html"
          data-sly-test.clientlibCategoriesJsBody="${page.clientLibCategoriesJsBody}"
-         data-sly-call="${clientlib.js @ categories=clientlibCategoriesJsBody}"></sly>
+         data-sly-call="${clientlib.js @ categories=clientlibCategoriesJsBody, async=true}"></sly>
     <sly data-sly-include="customfooterlibs.html"></sly>
     <sly data-sly-resource="${'cloudservices' @ resourceType='cq/cloudserviceconfigs/components/servicecomponents'}"></sly>
     <sly data-sly-test="${page.hasCloudconfigSupport}" data-sly-resource="${'cloudconfig-footer' @ resourceType='cq/cloudconfig/components/scripttags/footer'}"></sly>
@@ -25,6 +25,6 @@
     </sly>
     <sly data-sly-test="${pwa.enabled}">
         <div class="cmp-page__toastmessagehide"></div>
-        <sly data-sly-call="${clientlib.js @ categories='core.wcm.components.page.v2.pwa'}"></sly>
+        <sly data-sly-call="${clientlib.js @ categories='core.wcm.components.page.v2.pwa', async=true}"></sly>
     </sly>
 </template>
