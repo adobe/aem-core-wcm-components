@@ -51,7 +51,8 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertTrue(teaser.isActionsEnabled(), "Expected teaser with actions");
         assertEquals(2, teaser.getActions().size(), "Expected to find two Actions");
         assertEquals("Teasers Test", teaser.getTitle());
-        assertEquals("Teasers description", teaser.getDescription());
+        // < and > are expected escaped, because the page properties provide only a plain text field for the page description
+        assertEquals("Teasers description from &lt;page properties&gt;", teaser.getDescription());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser11"));
     }
 

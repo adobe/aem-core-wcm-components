@@ -5,7 +5,7 @@
       "jcr:primaryType"   : "cq:PageContent",
       "jcr:title"         : "Teasers Test",
       "sling:resourceType": "core/wcm/components/page/v2/page",
-      "jcr:description"   : "Teasers description",
+      "jcr:description"   : "Teasers description from <page properties>",
       "cq:featuredimage"    : {
         "jcr:primaryType"   : "nt:unstructured",
         "jcr:createdBy"     : "admin",
