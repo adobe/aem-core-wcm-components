@@ -22,6 +22,7 @@ import org.junit.*;
 import org.junit.rules.ErrorCollector;
 
 import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.junit.assertion.GraniteAssert;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
 
@@ -38,9 +39,8 @@ public class ClientlibsIncludeIT {
 
     private static CQClient adminAuthor;
     private String testPage = "/content/core-components/clientlibs-include-page";
-    private final static String CONTAINER_SCRIPT_ELEMENT = "<script async crossorigin=\"anonymous\" onload=\"console.log()\" src=\"/etc.clientlibs/core/wcm/components/commons/site/clientlibs/container.lc-1197d358a0a463b3e0891f4ed50e4864-lc.min.js\"></script>";
-    private final static String ACCORDION_SCRIPT_ELEMENT = "<script async crossorigin=\"anonymous\" onload=\"console.log()\" src=\"/etc.clientlibs/core/wcm/components/accordion/v1/accordion/clientlibs/site.lc-6f3bc8f71dd02924d06d0dfec1aa0b99-lc.min.js\"></script>";
-    private final static String ACCORDION_LINK_ELEMENT = "<link media=\"print\" rel=\"stylesheet\" href=\"/etc.clientlibs/core/wcm/components/accordion/v1/accordion/clientlibs/site.lc-44a1783be8e88dc73188908af6c38c01-lc.min.css\" type=\"text/css\">";
+    private final static String REGEX_SCRIPT_ELEMENT = "<script async crossorigin=\"anonymous\" onload=\"console.log..\" src=\"/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site..*.min.js\"></script>";
+    private final static String REGEX_LINK_ELEMENT = "<link media=\"print\" rel=\"stylesheet\" href=\"/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site..*.min.css\" type=\"text/css\">";
 
     @BeforeClass
     public static void beforeClass() {
@@ -51,23 +51,21 @@ public class ClientlibsIncludeIT {
     public void testJsInclude() throws ClientException {
         String content = adminAuthor.doGet(testPage + ".includejs.html", 200).getContent();
         Assert.assertFalse("The html should not contain any <link> element", StringUtils.contains("<link ", content));
-        Assert.assertTrue("Incorrect script and/or script attributes", StringUtils.contains(content, CONTAINER_SCRIPT_ELEMENT));
-        Assert.assertTrue("Incorrect script and/or script attributes", StringUtils.contains(content, ACCORDION_SCRIPT_ELEMENT));
+        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_SCRIPT_ELEMENT);
     }
 
     @Test
     public void testCssInclude() throws ClientException {
         String content = adminAuthor.doGet(testPage + ".includecss.html", 200).getContent();
         Assert.assertFalse("The html should not contain any <script> element", StringUtils.contains("<script ", content));
-        Assert.assertTrue("Incorrect link and/or link attributes", StringUtils.contains(content, ACCORDION_LINK_ELEMENT));
+        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_LINK_ELEMENT);
     }
 
     @Test
     public void testAllInclude() throws ClientException {
         String content = adminAuthor.doGet(testPage + ".includeall.html", 200).getContent();
-        Assert.assertTrue("Incorrect script and/or script attributes", StringUtils.contains(content, CONTAINER_SCRIPT_ELEMENT));
-        Assert.assertTrue("Incorrect script and/or script attributes", StringUtils.contains(content, ACCORDION_SCRIPT_ELEMENT));
-        Assert.assertTrue("Incorrect link and/or link attributes", StringUtils.contains(content, ACCORDION_LINK_ELEMENT));
+        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_SCRIPT_ELEMENT);
+        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_LINK_ELEMENT);
     }
 
 }

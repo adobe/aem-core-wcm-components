@@ -1,4 +1,5 @@
-<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright 2021 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +13,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<!DOCTYPE HTML>
-<html data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html" lang="en">
-<head >
-    <sly data-sly-call="${clientlib.all @ categories = 'core.wcm.components.includetest',
-        media='print', async=true, defer=false, crossorigin='anonymous', onload='console.log()'}"></sly>
-    <title>test page</title>
-</head>
-<body>
-</body>
-</html>
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="sling:Folder"/>
