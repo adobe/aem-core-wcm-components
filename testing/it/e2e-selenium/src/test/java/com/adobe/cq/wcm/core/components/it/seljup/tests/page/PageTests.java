@@ -22,6 +22,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralMultiField;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.RolloutDialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.AdvancedTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.BlueprintTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.CloudServicesTab;
@@ -637,7 +638,7 @@ public class PageTests {
         // open the Blueprint tab
         BlueprintTab blueprintTab = propertiesPage.clickTab("blueprint", BlueprintTab.class);
 
-        BlueprintTab.RolloutDialog rolloutDialog = blueprintTab.rollout();
+        RolloutDialog rolloutDialog = blueprintTab.rollout();
         Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
         // check livecopy is present for rollout
         assertTrue(rolloutDialog.numberOfLiveCopies() == 1, "There should be 1 livecopy");
