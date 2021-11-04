@@ -13,7 +13,13 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<div id="fb-root" data-sly-use.socialMedia="com.adobe.cq.wcm.core.components.models.SocialMediaHelper"
-     data-sly-test.facebookSharing="${socialMedia.hasFacebookSharing}"
-     data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html"></div>
-<sly data-sly-call="${clientlib.js @ categories='core.wcm.components.page.v2.sharing', async=true}" data-sly-test="${facebookSharing}"></sly>
+<!DOCTYPE HTML>
+<html data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html" lang="en">
+<head >
+    <sly data-sly-call="${clientlib.css @ categories = 'core.wcm.components.includetest',
+        media='print'}"></sly>
+    <title>test page</title>
+</head>
+<body>
+</body>
+</html>
