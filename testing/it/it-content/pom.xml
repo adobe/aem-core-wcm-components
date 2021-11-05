@@ -89,7 +89,7 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <packageType>content</packageType>
+                    <packageType>mixed</packageType>
                     <validatorsSettings>
                         <jackrabbit-filter>
                             <options>
