@@ -39,8 +39,8 @@ public class ClientlibsIncludeIT {
 
     private static CQClient adminAuthor;
     private String testPage = "/content/core-components/clientlibs-include-page";
-    private final static String REGEX_SCRIPT_ELEMENT = "<script async crossorigin=\"anonymous\" onload=\"console.log..\" src=\".*/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site..*.min.js\"></script>";
-    private final static String REGEX_LINK_ELEMENT = "<link media=\"print\" rel=\"stylesheet\" href=\".*/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site..*.min.css\" type=\"text/css\">";
+    private final static String REGEX_SCRIPT_ELEMENT = "<script async crossorigin=\"anonymous\" onload=\"console.log..\" src=\".*/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site.*.js\"></script>";
+    private final static String REGEX_LINK_ELEMENT = "<link media=\"print\" rel=\"stylesheet\" href=\".*/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site.*.css\" type=\"text/css\">";
 
     @BeforeClass
     public static void beforeClass() {
