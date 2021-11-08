@@ -50,28 +50,22 @@ public class ClientlibsIncludeIT {
     @Test
     public void testJsInclude() throws ClientException {
         String content = adminAuthor.doGet(testPage + ".includejs.html", 200).getContent();
-        String pageHtml = ". ---Page HTML for debugging ---: " + content;
-        String appsOutput = ". --- /apps/core/wcm/tests.-1.json for debugging ---: " + adminAuthor.doGet("/apps/core/wcm/tests.-1.json", 200).getContent();
         Assert.assertFalse("The html should not contain any <link> element", StringUtils.contains("<link ", content));
-        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes. Page HTML for debugging" + pageHtml + appsOutput, content, REGEX_SCRIPT_ELEMENT);
+        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_SCRIPT_ELEMENT);
     }
 
     @Test
     public void testCssInclude() throws ClientException {
         String content = adminAuthor.doGet(testPage + ".includecss.html", 200).getContent();
-        String pageHtml = ". ---Page HTML for debugging ---: " + content;
-        String appsOutput = ". --- /apps/core/wcm/tests.-1.json for debugging ---: " + adminAuthor.doGet("/apps/core/wcm/tests.-1.json", 200).getContent();
         Assert.assertFalse("The html should not contain any <script> element", StringUtils.contains("<script ", content));
-        GraniteAssert.assertRegExFind("Incorrect link and/or link attributes. Page HTML for debugging" + pageHtml + appsOutput, content, REGEX_LINK_ELEMENT);
+        GraniteAssert.assertRegExFind("Incorrect link and/or link attributes", content, REGEX_LINK_ELEMENT);
     }
 
     @Test
     public void testAllInclude() throws ClientException {
         String content = adminAuthor.doGet(testPage + ".includeall.html", 200).getContent();
-        String pageHtml = ". ---Page HTML for debugging ---: " + content;
-        String appsOutput = ". --- /apps/core/wcm/tests.-1.json for debugging ---: " + adminAuthor.doGet("/apps/core/wcm/tests.-1.json", 200).getContent();
-        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes. Page HTML for debugging" + pageHtml + appsOutput, content, REGEX_SCRIPT_ELEMENT);
-        GraniteAssert.assertRegExFind("Incorrect link and/or link attributes. Page HTML for debugging" + pageHtml + appsOutput, content, REGEX_LINK_ELEMENT);
+        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_SCRIPT_ELEMENT);
+        GraniteAssert.assertRegExFind("Incorrect link and/or link attributes", content, REGEX_LINK_ELEMENT);
     }
 
 }
