@@ -39,8 +39,8 @@ public class ClientlibsIncludeIT {
 
     private static CQClient adminAuthor;
     private String testPage = "/content/core-components/clientlibs-include-page";
-    private final static String REGEX_SCRIPT_ELEMENT = "<script async crossorigin=\"anonymous\" onload=\"console.log..\" src=\"/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site..*.min.js\"></script>";
-    private final static String REGEX_LINK_ELEMENT = "<link media=\"print\" rel=\"stylesheet\" href=\"/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site..*.min.css\" type=\"text/css\">";
+    private final static String REGEX_SCRIPT_ELEMENT = "<script async crossorigin=\"anonymous\" onload=\"console.log..\" src=\".*/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site..*.min.js\"></script>";
+    private final static String REGEX_LINK_ELEMENT = "<link media=\"print\" rel=\"stylesheet\" href=\".*/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site..*.min.css\" type=\"text/css\">";
 
     @BeforeClass
     public static void beforeClass() {
@@ -58,14 +58,14 @@ public class ClientlibsIncludeIT {
     public void testCssInclude() throws ClientException {
         String content = adminAuthor.doGet(testPage + ".includecss.html", 200).getContent();
         Assert.assertFalse("The html should not contain any <script> element", StringUtils.contains("<script ", content));
-        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_LINK_ELEMENT);
+        GraniteAssert.assertRegExFind("Incorrect link and/or link attributes", content, REGEX_LINK_ELEMENT);
     }
 
     @Test
     public void testAllInclude() throws ClientException {
         String content = adminAuthor.doGet(testPage + ".includeall.html", 200).getContent();
         GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_SCRIPT_ELEMENT);
-        GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_LINK_ELEMENT);
+        GraniteAssert.assertRegExFind("Incorrect link and/or link attributes", content, REGEX_LINK_ELEMENT);
     }
 
 }
