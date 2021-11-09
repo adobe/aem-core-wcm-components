@@ -53,8 +53,8 @@
                             cq:policy="core-components-examples/components/container/policy_1559057070844"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="wcm/core/components/policies/mapping"/>
-                        <title
-                            cq:policy="core-components-examples/components/title/policy_1544759499870"
+                        <image
+                            cq:policy="core-components-examples/components/image/policy_1636447752632"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="wcm/core/components/policies/mapping"/>
                     </components>
