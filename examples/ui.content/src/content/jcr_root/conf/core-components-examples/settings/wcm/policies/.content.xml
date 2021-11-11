@@ -384,6 +384,22 @@
                     </cq:styleGroups>
                 </policy_1559057070844>
             </container>
+            <image jcr:primaryType="nt:unstructured">
+                <policy_1636447752632
+                        jcr:lastModified="{Date}2021-11-09T10:50:03.031+02:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Default Image Policy"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        allowedRenditionWidths="[600,800,1000,1200,1600]"
+                        altValueFromDAM="true"
+                        disableLazyLoading="false"
+                        displayPopupTitle="true"
+                        isDecorative="false"
+                        titleValueFromDAM="true">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1636447752632>
+            </image>
         </components>
     </core-components-examples>
 </jcr:root>
