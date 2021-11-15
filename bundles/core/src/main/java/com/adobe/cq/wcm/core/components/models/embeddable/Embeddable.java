@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.models.embeddable;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.wcm.core.components.internal.jackson.ComponentDataModelSerializer;
+import com.adobe.cq.wcm.core.components.models.datalayer.jackson.ComponentDataModelSerializer;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
