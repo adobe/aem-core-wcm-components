@@ -56,6 +56,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
+import com.day.text.Text;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -366,7 +367,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     public String getDescription() {
         if (this.description == null && !this.descriptionHidden) {
             if (this.descriptionFromPage) {
-                this.description = this.getTargetPage().map(Page::getDescription).orElse(null);
+                this.description = this.getTargetPage()
+                        .map(Page::getDescription)
+                        // page properties uses a plain text field - which may contain special chars that need to be escaped in HTML
+                        // because the resulting description from the teaser is expected to be HTML produced by the RTE editor
+                        .map(Text::escapeXml)
+                        .orElse(null);
             } else {
                 this.description = this.resource.getValueMap().get(JcrConstants.JCR_DESCRIPTION, String.class);
             }
