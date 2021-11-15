@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function() {
+(function () {
     "use strict";
 
     var dataLayerEnabled;
@@ -31,28 +31,28 @@
         ARROW_LEFT: 37,
         ARROW_UP: 38,
         ARROW_RIGHT: 39,
-        ARROW_DOWN: 40
+        ARROW_DOWN: 40,
     };
 
     var selectors = {
-        self: "[data-" + NS + '-is="' + IS + '"]'
+        self: "[data-" + NS + '-is="' + IS + '"]',
     };
 
     var cssClasses = {
         button: {
             disabled: "cmp-accordion__button--disabled",
-            expanded: "cmp-accordion__button--expanded"
+            expanded: "cmp-accordion__button--expanded",
         },
         panel: {
             hidden: "cmp-accordion__panel--hidden",
-            expanded: "cmp-accordion__panel--expanded"
-        }
+            expanded: "cmp-accordion__panel--expanded",
+        },
     };
 
     var dataAttributes = {
         item: {
-            expanded: "data-cmp-expanded"
-        }
+            expanded: "data-cmp-expanded",
+        },
     };
 
     var properties = {
@@ -64,12 +64,12 @@
          * @type {Boolean}
          * @default false
          */
-        "singleExpansion": {
-            "default": false,
-            "transform": function(value) {
+        singleExpansion: {
+            default: false,
+            transform: function (value) {
                 return !(value === null || typeof value === "undefined");
-            }
-        }
+            },
+        },
     };
 
     /**
@@ -111,13 +111,28 @@
 
             if (that._elements["item"]) {
                 // ensures multiple element types are arrays.
-                that._elements["item"] = Array.isArray(that._elements["item"]) ? that._elements["item"] : [that._elements["item"]];
-                that._elements["button"] = Array.isArray(that._elements["button"]) ? that._elements["button"] : [that._elements["button"]];
-                that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
+                that._elements["item"] = Array.isArray(that._elements["item"])
+                    ? that._elements["item"]
+                    : [that._elements["item"]];
+                that._elements["button"] = Array.isArray(
+                    that._elements["button"]
+                )
+                    ? that._elements["button"]
+                    : [that._elements["button"]];
+                that._elements["panel"] = Array.isArray(that._elements["panel"])
+                    ? that._elements["panel"]
+                    : [that._elements["panel"]];
 
                 // Expand the item based on deep-link-id if it matches with any existing accordion item id
-                var deepLinkItem = window.CQ.CoreComponents.container.utils.getDeepLinkItem(that, "item");
-                if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
+                var deepLinkItem =
+                    window.CQ.CoreComponents.container.utils.getDeepLinkItem(
+                        that,
+                        "item"
+                    );
+                if (
+                    deepLinkItem &&
+                    !deepLinkItem.hasAttribute(dataAttributes.item.expanded)
+                ) {
                     setItemExpanded(deepLinkItem, true);
                 }
 
@@ -136,10 +151,22 @@
                     } else {
                         // Deep link case
                         // Collapse the items other than which is deep linked
-                        for (var j = 0; j < that._elements["item"].length; j++) {
-                            if (that._elements["item"][j].id !== deepLinkItem.id &&
-                                that._elements["item"][j].hasAttribute(dataAttributes.item.expanded)) {
-                                setItemExpanded(that._elements["item"][j], false);
+                        for (
+                            var j = 0;
+                            j < that._elements["item"].length;
+                            j++
+                        ) {
+                            if (
+                                that._elements["item"][j].id !==
+                                    deepLinkItem.id &&
+                                that._elements["item"][j].hasAttribute(
+                                    dataAttributes.item.expanded
+                                )
+                            ) {
+                                setItemExpanded(
+                                    that._elements["item"][j],
+                                    false
+                                );
                             }
                         }
                     }
@@ -148,27 +175,48 @@
                 refreshItems();
                 bindEvents();
 
-                if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
+                if (
+                    window.Granite &&
+                    window.Granite.author &&
+                    window.Granite.author.MessageChannel
+                ) {
                     /*
                      * Editor message handling:
                      * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
                      * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
                      * - if so, route the "navigate" operation to enact a navigation of the Accordion based on index data
                      */
-                    window.CQ.CoreComponents.MESSAGE_CHANNEL = window.CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
-                    window.CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
-                        if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
-                            if (message.data.operation === "navigate") {
-                                // switch to single expansion mode when navigating in edit mode.
-                                var singleExpansion = that._properties.singleExpansion;
-                                that._properties.singleExpansion = true;
-                                toggle(message.data.index);
+                    window.CQ.CoreComponents.MESSAGE_CHANNEL =
+                        window.CQ.CoreComponents.MESSAGE_CHANNEL ||
+                        new window.Granite.author.MessageChannel(
+                            "cqauthor",
+                            window
+                        );
+                    window.CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage(
+                        "cmp.panelcontainer",
+                        function (message) {
+                            if (
+                                message.data &&
+                                message.data.type === "cmp-accordion" &&
+                                message.data.id ===
+                                    that._elements.self.dataset[
+                                        "cmpPanelcontainerId"
+                                    ]
+                            ) {
+                                if (message.data.operation === "navigate") {
+                                    // switch to single expansion mode when navigating in edit mode.
+                                    var singleExpansion =
+                                        that._properties.singleExpansion;
+                                    that._properties.singleExpansion = true;
+                                    toggle(message.data.index);
 
-                                // revert to the configured state.
-                                that._properties.singleExpansion = singleExpansion;
+                                    // revert to the configured state.
+                                    that._properties.singleExpansion =
+                                        singleExpansion;
+                                }
                             }
                         }
-                    });
+                    );
                 }
             }
         }
@@ -182,13 +230,18 @@
         function cacheElements(wrapper) {
             that._elements = {};
             that._elements.self = wrapper;
-            var hooks = that._elements.self.querySelectorAll("[data-" + NS + "-hook-" + IS + "]");
+            var hooks = that._elements.self.querySelectorAll(
+                "[data-" + NS + "-hook-" + IS + "]"
+            );
 
             for (var i = 0; i < hooks.length; i++) {
                 var hook = hooks[i];
-                if (hook.closest("." + NS + "-" + IS) === that._elements.self) { // only process own accordion elements
+                if (hook.closest("." + NS + "-" + IS) === that._elements.self) {
+                    // only process own accordion elements
                     var capitalized = IS;
-                    capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
+                    capitalized =
+                        capitalized.charAt(0).toUpperCase() +
+                        capitalized.slice(1);
                     var key = hook.dataset[NS + "Hook" + capitalized];
                     if (that._elements[key]) {
                         if (!Array.isArray(that._elements[key])) {
@@ -221,7 +274,10 @@
                         value = options[key];
 
                         // transform the provided option
-                        if (property && typeof property.transform === "function") {
+                        if (
+                            property &&
+                            typeof property.transform === "function"
+                        ) {
                             value = property.transform(value);
                         }
                     }
@@ -245,14 +301,17 @@
             var buttons = that._elements["button"];
             if (buttons) {
                 for (var i = 0; i < buttons.length; i++) {
-                    (function(index) {
-                        buttons[i].addEventListener("click", function(event) {
+                    (function (index) {
+                        buttons[i].addEventListener("click", function (event) {
                             toggle(index);
                             focusButton(index);
                         });
-                        buttons[i].addEventListener("keydown", function(event) {
-                            onButtonKeyDown(event, index);
-                        });
+                        buttons[i].addEventListener(
+                            "keydown",
+                            function (event) {
+                                onButtonKeyDown(event, index);
+                            }
+                        );
                     })(i);
                 }
             }
@@ -315,9 +374,14 @@
                     // ensure only a single item is expanded if single expansion is enabled.
                     for (var i = 0; i < that._elements["item"].length; i++) {
                         if (that._elements["item"][i] !== item) {
-                            var expanded = getItemExpanded(that._elements["item"][i]);
+                            var expanded = getItemExpanded(
+                                that._elements["item"][i]
+                            );
                             if (expanded) {
-                                setItemExpanded(that._elements["item"][i], false);
+                                setItemExpanded(
+                                    that._elements["item"][i],
+                                    false
+                                );
                             }
                         }
                     }
@@ -328,16 +392,19 @@
 
                 if (dataLayerEnabled) {
                     var accordionId = that._elements.self.id;
-                    var expandedItems = getExpandedItems()
-                        .map(function(item) {
-                            return getDataLayerId(item);
-                        });
+                    var expandedItems = getExpandedItems().map(function (item) {
+                        return getDataLayerId(item);
+                    });
 
                     var uploadPayload = { component: {} };
-                    uploadPayload.component[accordionId] = { shownItems: expandedItems };
+                    uploadPayload.component[accordionId] = {
+                        shownItems: expandedItems,
+                    };
 
                     var removePayload = { component: {} };
-                    removePayload.component[accordionId] = { shownItems: undefined };
+                    removePayload.component[accordionId] = {
+                        shownItems: undefined,
+                    };
 
                     dataLayer.push(removePayload);
                     dataLayer.push(uploadPayload);
@@ -359,19 +426,18 @@
                     dataLayer.push({
                         event: "cmp:show",
                         eventInfo: {
-                            path: "component." + getDataLayerId(item)
-                        }
+                            path: "component." + getDataLayerId(item),
+                        },
                     });
                 }
-
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
                 if (dataLayerEnabled) {
                     dataLayer.push({
                         event: "cmp:hide",
                         eventInfo: {
-                            path: "component." + getDataLayerId(item)
-                        }
+                            path: "component." + getDataLayerId(item),
+                        },
                     });
                 }
             }
@@ -386,7 +452,11 @@
          * @returns {Boolean} true if the item is expanded, false otherwise
          */
         function getItemExpanded(item) {
-            return item && item.dataset && item.dataset["cmpExpanded"] !== undefined;
+            return (
+                item &&
+                item.dataset &&
+                item.dataset["cmpExpanded"] !== undefined
+            );
         }
 
         /**
@@ -450,7 +520,7 @@
                 button.classList.add(cssClasses.button.expanded);
                 // used to fix some known screen readers issues in reading the correct state of the 'aria-expanded' attribute
                 // e.g. https://bugs.webkit.org/show_bug.cgi?id=210934
-                setTimeout(function() {
+                setTimeout(function () {
                     button.setAttribute("aria-expanded", true);
                 }, delay);
                 panel.classList.add(cssClasses.panel.expanded);
@@ -481,7 +551,7 @@
                 button.removeAttribute("aria-disabled");
                 // used to fix some known screen readers issues in reading the correct state of the 'aria-expanded' attribute
                 // e.g. https://bugs.webkit.org/show_bug.cgi?id=210934
-                setTimeout(function() {
+                setTimeout(function () {
                     button.setAttribute("aria-expanded", false);
                 }, delay);
                 panel.classList.add(cssClasses.panel.hidden);
@@ -507,11 +577,18 @@
        and displays its content.
      */
     function onHashChange() {
-        if (location.hash && location.hash !== "#") {
+        // Issue #1661 add check for '#/' to handle SPA routing
+        if (location.hash && location.hash !== "#" && location.hash !== "#/") {
             var anchorLocation = decodeURIComponent(location.hash);
             var anchorElement = document.querySelector(anchorLocation);
-            if (anchorElement && anchorElement.classList.contains("cmp-accordion__item") && !anchorElement.hasAttribute("data-cmp-expanded")) {
-                var anchorElementButton = document.querySelector(anchorLocation + "-button");
+            if (
+                anchorElement &&
+                anchorElement.classList.contains("cmp-accordion__item") &&
+                !anchorElement.hasAttribute("data-cmp-expanded")
+            ) {
+                var anchorElementButton = document.querySelector(
+                    anchorLocation + "-button"
+                );
                 if (anchorElementButton) {
                     anchorElementButton.click();
                 }
@@ -530,7 +607,8 @@
         var data = element.dataset;
         var options = [];
         var capitalized = IS;
-        capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
+        capitalized =
+            capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
@@ -572,26 +650,41 @@
      * @private
      */
     function onDocumentReady() {
-        dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerEnabled = document.body.hasAttribute(
+            "data-cmp-data-layer-enabled"
+        );
+        dataLayer = dataLayerEnabled
+            ? (window.adobeDataLayer = window.adobeDataLayer || [])
+            : undefined;
 
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
-            new Accordion({ element: elements[i], options: readData(elements[i]) });
+            new Accordion({
+                element: elements[i],
+                options: readData(elements[i]),
+            });
         }
 
-        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var MutationObserver =
+            window.MutationObserver ||
+            window.WebKitMutationObserver ||
+            window.MozMutationObserver;
         var body = document.querySelector("body");
-        var observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function(addedNode) {
+                    nodesArray.forEach(function (addedNode) {
                         if (addedNode.querySelectorAll) {
-                            var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function(element) {
-                                new Accordion({ element: element, options: readData(element) });
+                            var elementsArray = [].slice.call(
+                                addedNode.querySelectorAll(selectors.self)
+                            );
+                            elementsArray.forEach(function (element) {
+                                new Accordion({
+                                    element: element,
+                                    options: readData(element),
+                                });
                             });
                         }
                     });
@@ -602,7 +695,7 @@
         observer.observe(body, {
             subtree: true,
             childList: true,
-            characterData: true
+            characterData: true,
         });
     }
 
@@ -612,7 +705,10 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    window.addEventListener(
+        "load",
+        window.CQ.CoreComponents.container.utils.scrollToAnchor,
+        false
+    );
     window.addEventListener("hashchange", onHashChange, false);
-
-}());
+})();

@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function() {
+(function () {
     "use strict";
 
     window.CQ = window.CQ || {};
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
-    window.CQ.CoreComponents.container = window.CQ.CoreComponents.container || {};
+    window.CQ.CoreComponents.container =
+        window.CQ.CoreComponents.container || {};
     window.CQ.CoreComponents.container.utils = {};
 
     /**
@@ -29,7 +30,6 @@
      * @type {{}}
      */
     window.CQ.CoreComponents.container.utils = {
-
         /**
          * Returns index of the container component item (accordion, tabs) that corresponds to the deep link in the URL fragment.
          *
@@ -37,15 +37,27 @@
          * @param {String} itemType The type of the item as defined in the component.
          * @returns {Number} the index within the items array if the item exists, -1 otherwise.
          */
-        getDeepLinkItemIdx: function(component, itemType) {
+        getDeepLinkItemIdx: function (component, itemType) {
             if (window.location.hash) {
                 var deepLinkId = window.location.hash.substring(1);
-                if (document.getElementById(deepLinkId) &&
-                    deepLinkId && component &&
-                    component._config && component._config.element && component._config.element.id &&
-                    component._elements && component._elements[itemType] &&
-                    deepLinkId.indexOf(component._config.element.id + "-item-") === 0) {
-                    for (var i = 0; i < component._elements[itemType].length; i++) {
+                if (
+                    document.getElementById(deepLinkId) &&
+                    deepLinkId &&
+                    component &&
+                    component._config &&
+                    component._config.element &&
+                    component._config.element.id &&
+                    component._elements &&
+                    component._elements[itemType] &&
+                    deepLinkId.indexOf(
+                        component._config.element.id + "-item-"
+                    ) === 0
+                ) {
+                    for (
+                        var i = 0;
+                        i < component._elements[itemType].length;
+                        i++
+                    ) {
                         var item = component._elements[itemType][i];
                         if (item.id === deepLinkId) {
                             return i;
@@ -63,9 +75,17 @@
          * @param {String} itemType The type of the item as defined in the component.
          * @returns {Object} the item if it exists, undefined otherwise.
          */
-        getDeepLinkItem: function(component, itemType) {
-            var idx = window.CQ.CoreComponents.container.utils.getDeepLinkItemIdx(component, itemType);
-            if (component && component._elements && component._elements[itemType]) {
+        getDeepLinkItem: function (component, itemType) {
+            var idx =
+                window.CQ.CoreComponents.container.utils.getDeepLinkItemIdx(
+                    component,
+                    itemType
+                );
+            if (
+                component &&
+                component._elements &&
+                component._elements[itemType]
+            ) {
                 return component._elements[itemType][idx];
             }
         },
@@ -77,9 +97,14 @@
            to the element that corresponds to the deep link in the URI fragment.
          * Small setTimeout is needed, otherwise the scrolling will not work on Chrome.
          */
-        scrollToAnchor: function() {
-            setTimeout(function() {
-                if (location.hash && location.hash !== "#") {
+        scrollToAnchor: function () {
+            setTimeout(function () {
+                // Issue #1661 add check for '#/' to handle SPA routing
+                if (
+                    location.hash &&
+                    location.hash !== "#" &&
+                    location.hash !== "#/"
+                ) {
                     var anchorLocation = decodeURIComponent(location.hash);
                     var anchorElement = document.querySelector(anchorLocation);
                     if (anchorElement && anchorElement.offsetTop) {
@@ -87,6 +112,6 @@
                     }
                 }
             }, 100);
-        }
+        },
     };
-}());
+})();

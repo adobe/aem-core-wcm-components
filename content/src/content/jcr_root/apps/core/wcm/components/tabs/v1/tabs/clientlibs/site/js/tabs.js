@@ -16,7 +16,7 @@
 /* global
     CQ
  */
-(function() {
+(function () {
     "use strict";
 
     var dataLayerEnabled;
@@ -31,15 +31,15 @@
         ARROW_LEFT: 37,
         ARROW_UP: 38,
         ARROW_RIGHT: 39,
-        ARROW_DOWN: 40
+        ARROW_DOWN: 40,
     };
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
         active: {
             tab: "cmp-tabs__tab--active",
-            tabpanel: "cmp-tabs__tabpanel--active"
-        }
+            tabpanel: "cmp-tabs__tabpanel--active",
+        },
     };
 
     /**
@@ -85,29 +85,55 @@
             }
 
             // Show the tab based on deep-link-id if it matches with any existing tab item id
-            var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tab");
+            var deepLinkItemIdx =
+                CQ.CoreComponents.container.utils.getDeepLinkItemIdx(
+                    that,
+                    "tab"
+                );
             if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
                 var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
-                if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
+                if (
+                    deepLinkItem &&
+                    that._elements["tab"][that._active].id !== deepLinkItem.id
+                ) {
                     navigateAndFocusTab(deepLinkItemIdx);
                 }
             }
 
-            if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
+            if (
+                window.Granite &&
+                window.Granite.author &&
+                window.Granite.author.MessageChannel
+            ) {
                 /*
                  * Editor message handling:
                  * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
                  * - check that the message data panel container type is correct and that the id (path) matches this specific Tabs component
                  * - if so, route the "navigate" operation to enact a navigation of the Tabs based on index data
                  */
-                CQ.CoreComponents.MESSAGE_CHANNEL = CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
-                CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
-                    if (message.data && message.data.type === "cmp-tabs" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
-                        if (message.data.operation === "navigate") {
-                            navigate(message.data.index);
+                CQ.CoreComponents.MESSAGE_CHANNEL =
+                    CQ.CoreComponents.MESSAGE_CHANNEL ||
+                    new window.Granite.author.MessageChannel(
+                        "cqauthor",
+                        window
+                    );
+                CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage(
+                    "cmp.panelcontainer",
+                    function (message) {
+                        if (
+                            message.data &&
+                            message.data.type === "cmp-tabs" &&
+                            message.data.id ===
+                                that._elements.self.dataset[
+                                    "cmpPanelcontainerId"
+                                ]
+                        ) {
+                            if (message.data.operation === "navigate") {
+                                navigate(message.data.index);
+                            }
                         }
                     }
-                });
+                );
             }
         }
 
@@ -137,13 +163,18 @@
         function cacheElements(wrapper) {
             that._elements = {};
             that._elements.self = wrapper;
-            var hooks = that._elements.self.querySelectorAll("[data-" + NS + "-hook-" + IS + "]");
+            var hooks = that._elements.self.querySelectorAll(
+                "[data-" + NS + "-hook-" + IS + "]"
+            );
 
             for (var i = 0; i < hooks.length; i++) {
                 var hook = hooks[i];
-                if (hook.closest("." + NS + "-" + IS) === that._elements.self) { // only process own tab elements
+                if (hook.closest("." + NS + "-" + IS) === that._elements.self) {
+                    // only process own tab elements
                     var capitalized = IS;
-                    capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
+                    capitalized =
+                        capitalized.charAt(0).toUpperCase() +
+                        capitalized.slice(1);
                     var key = hook.dataset[NS + "Hook" + capitalized];
                     if (that._elements[key]) {
                         if (!Array.isArray(that._elements[key])) {
@@ -167,11 +198,11 @@
             var tabs = that._elements["tab"];
             if (tabs) {
                 for (var i = 0; i < tabs.length; i++) {
-                    (function(index) {
-                        tabs[i].addEventListener("click", function(event) {
+                    (function (index) {
+                        tabs[i].addEventListener("click", function (event) {
                             navigateAndFocusTab(index);
                         });
-                        tabs[i].addEventListener("keydown", function(event) {
+                        tabs[i].addEventListener("keydown", function (event) {
                             onKeyDown(event);
                         });
                     })(i);
@@ -230,13 +261,17 @@
                 if (Array.isArray(tabpanels)) {
                     for (var i = 0; i < tabpanels.length; i++) {
                         if (i === parseInt(that._active)) {
-                            tabpanels[i].classList.add(selectors.active.tabpanel);
+                            tabpanels[i].classList.add(
+                                selectors.active.tabpanel
+                            );
                             tabpanels[i].removeAttribute("aria-hidden");
                             tabs[i].classList.add(selectors.active.tab);
                             tabs[i].setAttribute("aria-selected", true);
                             tabs[i].setAttribute("tabindex", "0");
                         } else {
-                            tabpanels[i].classList.remove(selectors.active.tabpanel);
+                            tabpanels[i].classList.remove(
+                                selectors.active.tabpanel
+                            );
                             tabpanels[i].setAttribute("aria-hidden", true);
                             tabs[i].classList.remove(selectors.active.tab);
                             tabs[i].setAttribute("aria-selected", false);
@@ -286,22 +321,23 @@
             focusWithoutScroll(that._elements["tab"][index]);
 
             if (dataLayerEnabled) {
-
                 var activeItem = getDataLayerId(that._elements.tabpanel[index]);
-                var exActiveItem = getDataLayerId(that._elements.tabpanel[exActive]);
+                var exActiveItem = getDataLayerId(
+                    that._elements.tabpanel[exActive]
+                );
 
                 dataLayer.push({
                     event: "cmp:show",
                     eventInfo: {
-                        path: "component." + activeItem
-                    }
+                        path: "component." + activeItem,
+                    },
                 });
 
                 dataLayer.push({
                     event: "cmp:hide",
                     eventInfo: {
-                        path: "component." + exActiveItem
-                    }
+                        path: "component." + exActiveItem,
+                    },
                 });
 
                 var tabsId = that._elements.self.id;
@@ -322,10 +358,15 @@
        and displays its content.
      */
     function onHashChange() {
-        if (location.hash && location.hash !== "#") {
+        // Issue #1661 add check for '#/' to handle SPA routing
+        if (location.hash && location.hash !== "#" && location.hash !== "#/") {
             var anchorLocation = decodeURIComponent(location.hash);
             var anchorElement = document.querySelector(anchorLocation);
-            if (anchorElement && anchorElement.classList.contains("cmp-tabs__tab") && !anchorElement.classList.contains("cmp-tabs__tab--active")) {
+            if (
+                anchorElement &&
+                anchorElement.classList.contains("cmp-tabs__tab") &&
+                !anchorElement.classList.contains("cmp-tabs__tab--active")
+            ) {
                 anchorElement.click();
             }
         }
@@ -342,7 +383,8 @@
         var data = element.dataset;
         var options = [];
         var capitalized = IS;
-        capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
+        capitalized =
+            capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
@@ -384,26 +426,38 @@
      * @private
      */
     function onDocumentReady() {
-        dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerEnabled = document.body.hasAttribute(
+            "data-cmp-data-layer-enabled"
+        );
+        dataLayer = dataLayerEnabled
+            ? (window.adobeDataLayer = window.adobeDataLayer || [])
+            : undefined;
 
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new Tabs({ element: elements[i], options: readData(elements[i]) });
         }
 
-        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var MutationObserver =
+            window.MutationObserver ||
+            window.WebKitMutationObserver ||
+            window.MozMutationObserver;
         var body = document.querySelector("body");
-        var observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function(addedNode) {
+                    nodesArray.forEach(function (addedNode) {
                         if (addedNode.querySelectorAll) {
-                            var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function(element) {
-                                new Tabs({ element: element, options: readData(element) });
+                            var elementsArray = [].slice.call(
+                                addedNode.querySelectorAll(selectors.self)
+                            );
+                            elementsArray.forEach(function (element) {
+                                new Tabs({
+                                    element: element,
+                                    options: readData(element),
+                                });
                             });
                         }
                     });
@@ -414,7 +468,7 @@
         observer.observe(body, {
             subtree: true,
             childList: true,
-            characterData: true
+            characterData: true,
         });
     }
 
@@ -424,7 +478,10 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    window.addEventListener(
+        "load",
+        window.CQ.CoreComponents.container.utils.scrollToAnchor,
+        false
+    );
     window.addEventListener("hashchange", onHashChange, false);
-
-}());
+})();
