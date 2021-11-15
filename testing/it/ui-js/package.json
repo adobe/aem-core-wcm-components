@@ -16,7 +16,7 @@
         "sync-pom-version": "sync-pom-version"
     },
     "devDependencies": {
-        "eslint": "^4.19.1",
-        "sync-pom-version-to-package": "^1.6.0"
+        "eslint": "^7.32.0",
+        "sync-pom-version-to-package": "^1.6.1"
     }
 }

@@ -81,7 +81,7 @@
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
                 var value = data[key];
 
                 if (key.indexOf(NS) === 0) {
@@ -417,7 +417,7 @@
         this._properties = {};
 
         for (var key in properties) {
-            if (properties.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(properties, key)) {
                 var property = properties[key];
                 if (options && options[key] != null) {
                     if (property && typeof property.transform === "function") {

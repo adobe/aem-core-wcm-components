@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* global CQ */
-(function($, ns, channel, window, undefined) {
+(function($, ns) {
     "use strict";
 
     /**
@@ -124,4 +124,4 @@
         });
     };
 
-}(jQuery, Granite.author, jQuery(document), this));
+}(jQuery, Granite.author));

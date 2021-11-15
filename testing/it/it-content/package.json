@@ -1,6 +1,6 @@
 {
     "name": "com.adobe.cq.core.wcm.components.it.content",
-    "version": "2.17.11-SNAPSHOT",
+    "version": "2.17.13-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components IT Content",
     "license": "Apache-2.0",
     "private": false,
@@ -13,6 +13,6 @@
         "sync-pom-version": "sync-pom-version"
     },
     "devDependencies": {
-        "sync-pom-version-to-package": "^1.6.0"
+        "sync-pom-version-to-package": "^1.6.1"
     }
 }

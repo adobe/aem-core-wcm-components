@@ -132,7 +132,7 @@
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
                 var value = data[key];
 
                 if (key.indexOf(NS) === 0) {
@@ -161,7 +161,7 @@
             setupProperties(config.options);
             cacheElements(config.element);
             // check image is DM asset; if true try to make req=set
-            if (config.options.src && config.options.hasOwnProperty("dmimage") && (config.options["smartcroprendition"] === "SmartCrop:Auto")) {
+            if (config.options.src && Object.prototype.hasOwnProperty.call(config.options, "dmimage") && (config.options["smartcroprendition"] === "SmartCrop:Auto")) {
                 var request = new XMLHttpRequest();
                 var url = decodeURIComponent(config.options.src).split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
 
@@ -285,7 +285,7 @@
                 styles["padding-bottom"] = ratio + "%";
 
                 for (var s in styles) {
-                    if (styles.hasOwnProperty(s)) {
+                    if (Object.prototype.hasOwnProperty.call(styles, s)) {
                         that._elements.image.style[s] = styles[s];
                     }
                 }
@@ -324,7 +324,7 @@
         function removeLazyLoader() {
             that._elements.image.classList.remove(lazyLoader.cssClass);
             for (var property in lazyLoader.style) {
-                if (lazyLoader.style.hasOwnProperty(property)) {
+                if (Object.prototype.hasOwnProperty.call(lazyLoader.style, property)) {
                     that._elements.image.style[property] = "";
                 }
             }
@@ -390,7 +390,7 @@
             that._properties = {};
 
             for (var key in properties) {
-                if (properties.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(properties, key)) {
                     var property = properties[key];
                     if (options && options[key] != null) {
                         if (property && typeof property.transform === "function") {
