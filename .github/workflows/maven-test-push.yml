@@ -62,7 +62,7 @@ jobs:
       - name: Build & Test with Maven
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: mvn -B -U clean install ${{ matrix.profile }} ${{ fromJSON('["-Prelease", ""]')[matrix.java == 11 || matrix.profile == ''] }} -s ./.github/workflows/settings.xml -Dbaseline.skip=true
+        run: mvn -B -U clean install ${{ matrix.profile }} ${{ fromJSON('["-Prelease", ""]')[matrix.java == 11 || matrix.profile == ''] }} -s ./.github/workflows/settings.xml
 
       # Run code coverage check
       - name: Run core coverage check
