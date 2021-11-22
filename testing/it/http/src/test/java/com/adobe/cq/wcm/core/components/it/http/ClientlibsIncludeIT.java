@@ -19,6 +19,7 @@ package com.adobe.cq.wcm.core.components.it.http;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.*;
+import org.junit.experimental.categories.Category;
 import org.junit.rules.ErrorCollector;
 
 import com.adobe.cq.testing.client.CQClient;
@@ -26,6 +27,7 @@ import com.adobe.cq.testing.junit.assertion.GraniteAssert;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
 
+@Category({IgnoreOnCloud.class})
 public class ClientlibsIncludeIT {
 
     @ClassRule
