@@ -79,9 +79,9 @@
          */
         scrollToAnchor: function() {
             setTimeout(function() {
-                if (location.hash && location.hash !== "#") {
-                    var anchorLocation = decodeURIComponent(location.hash);
-                    var anchorElement = document.querySelector(anchorLocation);
+                if (window.location.hash) {
+                    var id = decodeURIComponent(window.location.hash.substring(1));
+                    var anchorElement = document.getElementById(id);
                     if (anchorElement && anchorElement.offsetTop) {
                         anchorElement.scrollIntoView();
                     }
