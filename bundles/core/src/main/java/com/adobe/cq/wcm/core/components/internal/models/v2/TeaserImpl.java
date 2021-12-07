@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -24,11 +25,14 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.wcm.api.Page;
@@ -39,10 +43,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TeaserImpl.class);
+    private static final String TITLE_DELEGATE = "titleDelegate";
+
+    /**
+     * The current component.
+     */
+    @ScriptVariable
+    private Component component;
+
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
 
     @ScriptVariable
     protected Page currentPage;
+
+    private Resource titleResource;
 
     @Override
     @Nullable
@@ -55,6 +70,19 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Deprecated
     public String getLinkURL() {
         return super.getLinkURL();
+    }
+
+    public Resource getTitleResource() {
+        if (titleResource == null && component != null) {
+            String delegateResourceType = component.getProperties().get(TITLE_DELEGATE, String.class);
+            if (StringUtils.isEmpty(delegateResourceType)) {
+                LOGGER.error("In order for title rendering delegation to work correctly you need to set up the titleDelegate property on" +
+                        " the {} component; its value has to point to the resource type of a title component.", component.getPath());
+            } else {
+                titleResource = new CoreResourceWrapper(request.getResource(), delegateResourceType, null, null);
+            }
+        }
+        return titleResource;
     }
 
     protected boolean hasImage() {
