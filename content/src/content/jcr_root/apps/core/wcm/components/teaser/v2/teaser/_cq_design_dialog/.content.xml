@@ -81,7 +81,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                 fieldLabel="Default Title Type"
-                                name="./titleType"
+                                name="./title/type"
                                 granite:class="foundation-toggleable">
                                 <items jcr:primaryType="nt:unstructured">
                                     <def

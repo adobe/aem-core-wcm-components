@@ -24,6 +24,8 @@ import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -45,6 +47,9 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.api.policies.ContentPolicy;
+import com.day.cq.wcm.api.policies.ContentPolicyManager;
+import com.day.cq.wcm.commons.policy.ContentPolicyStyle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class,
@@ -63,6 +68,9 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
 
     @ScriptVariable
     private Resource resource;
+
+    @ScriptVariable
+    private ResourceResolver resolver;
 
     @ScriptVariable
     private PageManager pageManager;
@@ -92,23 +100,43 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
      */
     private Heading heading;
 
+    private Style getStyle(Resource resource) {
+        ContentPolicy currentPolicy;
+        Style contentPolicyStyle = null;
+        if (componentContext != null) {
+            ContentPolicyManager policyManager = resolver.adaptTo(ContentPolicyManager.class);
+            if (policyManager != null) {
+                currentPolicy = policyManager.getPolicy(resource, request);
+                if (currentPolicy != null) {
+                    contentPolicyStyle = new ContentPolicyStyle(currentPolicy, componentContext.getCell());
+                }
+            }
+        }
+        return contentPolicyStyle;
+    }
+
     @PostConstruct
     private void initModel() {
         if (StringUtils.isBlank(title)) {
             title = StringUtils.defaultIfEmpty(currentPage.getPageTitle(), currentPage.getTitle());
         }
 
+        ValueMap properties = resource.getValueMap();
+        boolean isSubComponent = properties.get("cq:isSubComponent", false);
+        String styleRelPath = (isSubComponent) ? resource.getName() : ".";
+        Style style = (isSubComponent) ? getStyle(resource.getParent()) : currentStyle;
+
         if (heading == null) {
             heading = Heading.getHeading(type);
-            if (heading == null && currentStyle != null) {
-                heading = Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
+            if (heading == null && style != null) {
+                heading = Heading.getHeading(style.get(styleRelPath + "/" + PN_DESIGN_DEFAULT_TYPE, String.class));
             }
         }
 
         link = linkHandler.getLink(resource);
 
-        if(currentStyle != null) {
-            linkDisabled = currentStyle.get(Title.PN_TITLE_LINK_DISABLED, linkDisabled);
+        if(style != null) {
+            linkDisabled = style.get(styleRelPath + "/" + Title.PN_TITLE_LINK_DISABLED, linkDisabled);
         }
     }
 

@@ -142,19 +142,29 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/well">
                                                 <items jcr:primaryType="nt:unstructured">
+                                                    <subComponent
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                        name="./cq:isSubComponent"
+                                                        value="{Boolean}true"/>
+                                                    <titleResourceType
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                        name="./title/sling:resourceType"
+                                                        value="core-components-examples/components/title"/>
                                                     <title
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                         fieldDescription="A title to display as the headline for the teaser."
                                                         fieldLabel="Title"
-                                                        name="./jcr:title"
+                                                        name="./title/jcr:title"
                                                         value="${cqDesign._jcr_description}"/>
                                                     <titleType
                                                         granite:hide="${!cqDesign.showTitleType}"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                         fieldLabel="Title Type"
-                                                        name="./titleType"
+                                                        name="./title/type"
                                                         granite:class="foundation-toggleable">
                                                         <items jcr:primaryType="nt:unstructured">
                                                             <def
