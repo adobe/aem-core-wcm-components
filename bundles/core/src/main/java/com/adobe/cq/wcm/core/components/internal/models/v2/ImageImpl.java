@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.servlets.DMAssetPostProcessor;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -93,6 +92,16 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * The path of the delegated content policy.
      */
     private static final String CONTENT_POLICY_DELEGATE_PATH = "contentPolicyDelegatePath";
+
+    /**
+     * Server path for dynamic media
+     */
+    private static final String DM_IMAGE_SERVER_PATH = "/is/image/";
+
+    /**
+     * Content path for Scene7
+     */
+    private static final String DM_CONTENT_SERVER_PATH = "/is/content/";
 
     /**
      * Placeholder for the SRC URI template.
@@ -176,17 +185,20 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         dmImage = true;
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
+                        //sets to '/is/image/ or '/is/content' based on dam:scene7Type property
+                        String dmServerPath;
+                        if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
+                            dmServerPath = DM_CONTENT_SERVER_PATH;
+                        } else {
+                            dmServerPath = DM_IMAGE_SERVER_PATH;
+                        }
                         String dmServerUrl;
                         // for Author
                         if (!isWCMDisabled) {
-                            if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
-                                dmServerUrl = DMAssetPostProcessor.CONTENT_SERVER_PATH;
-                            } else {
-                                dmServerUrl = DMAssetPostProcessor.IMAGE_SERVER_PATH;
-                            }
+                            dmServerUrl = dmServerPath;
                         } else {
                             // for Publish
-                            dmServerUrl = (String) properties.get(PN_IMAGE_SERVER_URL);
+                            dmServerUrl = asset.getMetadataValue(Scene7Constants.PN_S7_DOMAIN) + dmServerPath;
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
                     }
