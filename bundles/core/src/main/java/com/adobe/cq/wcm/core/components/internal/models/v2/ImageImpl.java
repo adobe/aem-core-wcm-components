@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.servlets.DMAssetPostProcessor;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -93,6 +92,16 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * The path of the delegated content policy.
      */
     private static final String CONTENT_POLICY_DELEGATE_PATH = "contentPolicyDelegatePath";
+
+    /**
+     * Server path for dynamic media
+     */
+    private static final String DM_IMAGE_SERVER_PATH = "/is/image/";
+
+    /**
+     * Content path for Scene7
+     */
+    private static final String DM_CONTENT_SERVER_PATH = "/is/content/";
 
     /**
      * Placeholder for the SRC URI template.
@@ -179,9 +188,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         //sets to '/is/image/ or '/is/content' based on dam:scene7Type property
                         String dmServerPath;
                         if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
-                            dmServerPath = DMAssetPostProcessor.CONTENT_SERVER_PATH;
+                            dmServerPath = DM_CONTENT_SERVER_PATH;
                         } else {
-                            dmServerPath = DMAssetPostProcessor.IMAGE_SERVER_PATH;
+                            dmServerPath = DM_IMAGE_SERVER_PATH;
                         }
                         String dmServerUrl;
                         // for Author
@@ -189,7 +198,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             dmServerUrl = dmServerPath;
                         } else {
                             // for Publish
-                            dmServerUrl = asset.getMetadataValue(Scene7Constants.PN_S7_DOMAIN) + dmServerPath.substring(1);
+                            dmServerUrl = asset.getMetadataValue(Scene7Constants.PN_S7_DOMAIN) + dmServerPath;
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
                     }
