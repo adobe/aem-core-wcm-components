@@ -198,7 +198,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             dmServerUrl = dmServerPath;
                         } else {
                             // for Publish
-                            dmServerUrl = asset.getMetadataValue(Scene7Constants.PN_S7_DOMAIN) + dmServerPath;
+                            dmServerUrl = asset.getMetadataValue(Scene7Constants.PN_S7_DOMAIN) + dmServerPath.substring(1);
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
                     }
