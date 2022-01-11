@@ -47,20 +47,6 @@
         var element = event.currentTarget;
         var componentId = getClickId(element);
 
-        // add clicked link contained by the Text Component to Data Layer
-        if (element.classList.contains("cmp-text")) {
-            if (event.target.tagName === "A") {
-                dataLayer.push({
-                    event: "cmp:click",
-                    eventInfo: {
-                        path: "component." + componentId,
-                        link: event.target.getAttribute("href")
-                    }
-                });
-            }
-            return;
-        }
-
         dataLayer.push({
             event: "cmp:click",
             eventInfo: {
