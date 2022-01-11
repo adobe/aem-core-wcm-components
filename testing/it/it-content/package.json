@@ -1,6 +1,6 @@
 {
     "name": "com.adobe.cq.core.wcm.components.it.content",
-    "version": "2.17.9-SNAPSHOT",
+    "version": "2.17.15-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components IT Content",
     "license": "Apache-2.0",
     "private": false,
