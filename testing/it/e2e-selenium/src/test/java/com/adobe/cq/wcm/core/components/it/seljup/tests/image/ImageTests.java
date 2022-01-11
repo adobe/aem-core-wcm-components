@@ -37,6 +37,7 @@ import static com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest.adminC
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 
 public class ImageTests {
 
@@ -443,7 +444,7 @@ public class ImageTests {
         $(".cq-FileUpload-picker").click();
         $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
         $(assetSelector).click();
-        $(".granite-pickerdialog-submit").click();
+        clickableClick($(".granite-pickerdialog-submit"));
         if (altFromDam) {
             // inherit alt text from DAM
             String altValueFromDAMSelector = ".cq-siteadmin-admin-properties coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
