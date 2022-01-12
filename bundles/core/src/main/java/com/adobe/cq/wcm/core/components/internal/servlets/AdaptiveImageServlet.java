@@ -389,14 +389,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
                         layer.write(imageType, quality, response.getOutputStream());
                     } else {
-                        LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
-                            asset.getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
-                        stream(response, rendition.getStream(), imageType, imageName);
+                        streamOrConvert(response, rendition, imageType, imageName, resizeWidth, quality);
                     }
                 } else {
-                    LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
-                            asset.getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
-                    stream(response, rendition.getStream(), imageType, imageName);
+                    streamOrConvert(response, rendition, imageType, imageName, resizeWidth, quality);
                 }
             } else {
                 resizeAndStreamLayer(response, layer, imageType, resizeWidth, quality);
@@ -604,6 +600,21 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         metrics.markRejectedTooLargeRendition();
         throw new IOException(String.format("Cannot process rendition %s due to size %s", rendition.getName(), rendition.getDimension()));
+    }
+
+    private void streamOrConvert(@NotNull SlingHttpServletResponse response, @NotNull EnhancedRendition rendition, @NotNull String imageType,
+                                 String imageName, int resizeWidth, double quality) throws IOException {
+        Dimension dimension = rendition.getDimension();
+        if (rendition.getMimeType().equals(imageType)) {
+            LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
+                    rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
+            stream(response, rendition.getStream(), imageType, imageName);
+        } else {
+            LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
+                            "but the rendition is not of the requested type {}, need to convert",
+                    rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
+            resizeAndStreamLayer(response, getLayer(rendition), imageType, 0, quality);
+        }
     }
 
     private void stream(@NotNull SlingHttpServletResponse response, @NotNull InputStream inputStream, @NotNull String contentType,
