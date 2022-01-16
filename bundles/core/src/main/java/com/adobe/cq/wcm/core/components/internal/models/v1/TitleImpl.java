@@ -45,6 +45,7 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.commons.WCMUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class,
@@ -100,6 +101,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
 
         if (heading == null) {
             heading = Heading.getHeading(type);
+            Style currentStyle = WCMUtils.getStyle(request);
             if (heading == null && currentStyle != null) {
                 heading = Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
             }

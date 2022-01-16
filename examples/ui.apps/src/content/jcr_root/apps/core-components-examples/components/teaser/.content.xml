@@ -20,4 +20,5 @@
     jcr:title="Teaser"
     sling:resourceSuperType="core/wcm/components/teaser/v2/teaser"
     componentGroup="Core Components Examples"
+    titleDelegate="core/wcm/components/title/v3/title"
     imageDelegate="core-components-examples/components/image"/>

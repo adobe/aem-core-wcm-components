@@ -160,6 +160,10 @@
                             </imageDelegate>
                         </items>
                     </main>
+                    <title
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="core/wcm/components/title/v3/title/cq:design_dialog/content/items/tabs/items/sizes"/>
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
