@@ -46,6 +46,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.resource.external.ExternalizableInputStream;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.metrics.Timer;
@@ -291,13 +292,16 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return null;
     }
 
+    @SuppressFBWarnings(justification = "False positive due to https://github.com/spotbugs/spotbugs/issues/1338", value = "RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE")
     private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality,
                                          Asset asset, String
                                                  imageType, String imageName) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
         if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
             LOGGER.debug("GIF or SVG asset detected; will render the original rendition.");
-            stream(response, asset.getOriginal().getStream(), imageType, imageName);
+            try (InputStream inputStream = asset.getOriginal().getStream()) {
+                stream(response, inputStream, imageType, imageName);
+            }
             return;
         }
         int rotationAngle = getRotation(componentProperties);
@@ -609,13 +613,14 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void stream(@NotNull SlingHttpServletResponse response, @NotNull InputStream inputStream, @NotNull String contentType,
                         String imageName)
             throws IOException {
+        // similar to what is done in https://github.com/apache/sling-org-apache-sling-servlets-get/blob/edfaf307e4257dd34cc5b71121dfb8dfc43c12cb/src/main/java/org/apache/sling/servlets/get/impl/helpers/StreamRenderer.java#L159-L162
+        if (inputStream instanceof ExternalizableInputStream) {
+            response.sendRedirect(ExternalizableInputStream.class.cast(inputStream).getURI().toString());
+            return;
+        }
         response.setContentType(contentType);
         response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
-        try {
-            IOUtils.copy(inputStream, response.getOutputStream());
-        } finally {
-            IOUtils.closeQuietly(inputStream);
-        }
+        IOUtils.copy(inputStream, response.getOutputStream());
     }
 
     /**
