@@ -20,22 +20,22 @@
         self: '[name="cmp-examples-component-search"]',
         componentGroup: '.cmp-examples-container--component-group',
         componentTeaser: '.cmp-examples-teaser--component',
-        noResults: '.cmp-examples-text--no-results'
+        searchResultsInfoMessage: '#searchResultsInfoMessage'
     };
 
     var search;
     var componentGroups;
     var componentTeasers;
-    var noResults;
 
     function updateResults(token) {
-        var total = componentTeasers.length;
         var count = 0;
+        var foundComponentTeasers = 0;
 
         componentTeasers.forEach(function(teaser) {
             var teaserText = teaser.textContent || teaser.innerText;
             if (teaserText.toUpperCase().indexOf(token.toUpperCase()) > -1) {
                 teaser.style.display = "";
+                foundComponentTeasers += 1;
             } else {
                 teaser.style.display = "none";
                 count++;
@@ -61,23 +61,37 @@
             }
         });
 
-        if (noResults) {
-            noResults.style.display = (total === count) ? "" : "none";
+        updateSearchResultsInfoMessage(token, foundComponentTeasers);
+    }
+
+    // useful for Accessibility, helping users with low vision and users with cognitive disabilities to identify the change in results
+    function updateSearchResultsInfoMessage(token, foundComponentTeasers) {
+        if (!token) {
+            document.querySelector(selectors.searchResultsInfoMessage).innerHTML=''
+        } else {
+            document.querySelector(selectors.searchResultsInfoMessage).innerHTML = foundComponentTeasers > 0 ?
+                `<p aria-live="polite" role="status">${foundComponentTeasers} ${foundComponentTeasers === 1 ? "component" : "components"} found based on your search.</p>` :
+                `<p aria-live="polite" role="status">No components found. Please try a different search.</p>`;
         }
+    }
+
+    function createSearchResultsInfoElement() {
+        var searchInput = document.querySelector(selectors.self);
+        var infoMessageContainer = document.createElement("div");
+        infoMessageContainer.setAttribute("id", "searchResultsInfoMessage");
+        infoMessageContainer.setAttribute("aria-live", "polite");
+        infoMessageContainer.setAttribute("role", "status");
+        searchInput.parentNode.insertBefore(infoMessageContainer , searchInput.nextSibling);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
         search = document.querySelector(selectors.self);
         if (search) {
+            createSearchResultsInfoElement();
             componentGroups = document.querySelectorAll(selectors.componentGroup);
             componentGroups = [].slice.call(componentGroups);
             componentTeasers = document.querySelectorAll(selectors.componentTeaser);
             componentTeasers = [].slice.call(componentTeasers);
-            noResults = document.querySelector(selectors.noResults);
-
-            if (noResults) {
-                noResults.style.display = "none";
-            }
 
             search.addEventListener('input', function(event) {
                 updateResults(search.value);

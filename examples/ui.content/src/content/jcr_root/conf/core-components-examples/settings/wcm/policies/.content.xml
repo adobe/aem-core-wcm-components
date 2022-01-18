@@ -332,11 +332,6 @@
                                         cq:styleId="1544762734201"
                                         cq:styleLabel="Hero"
                                         jcr:primaryType="nt:unstructured"/>
-                                <item3
-                                        cq:styleClasses="cmp-examples-text--no-results"
-                                        cq:styleId="1550360114923"
-                                        cq:styleLabel="No Results"
-                                        jcr:primaryType="nt:unstructured"/>
                             </cq:styles>
                         </item0>
                     </cq:styleGroups>
