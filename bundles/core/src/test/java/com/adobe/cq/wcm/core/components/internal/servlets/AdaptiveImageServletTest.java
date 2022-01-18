@@ -752,7 +752,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             add(mockRendition(mockAsset, "100px", 100, "image/jpeg", 250, 250));
         }});
         when(mockAsset.getOriginal()).thenReturn(mockRendition(mockAsset, "original", 9999999, "image/jpeg", 2000, 2000));
-        EnhancedRendition best = servlet.getBestRendition(mockAsset, 700);
+        EnhancedRendition best = servlet.getBestRendition(mockAsset, 700, mockAsset.getMimeType());
         Assertions.assertEquals(750, best.getDimension().width);
     }
 
@@ -774,7 +774,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             add(mockRendition(mockAsset, "100px", 100, "image/jpeg", 250, 250));
         }});
         when(mockAsset.getOriginal()).thenReturn(mockRendition(mockAsset, "original", 9999999, "image/jpeg", 2000, 2000));
-        EnhancedRendition best = servlet.getBestRendition(mockAsset, 700);
+        EnhancedRendition best = servlet.getBestRendition(mockAsset, 700, mockAsset.getMimeType());
         Assertions.assertEquals(850, best.getDimension().width);
     }
 

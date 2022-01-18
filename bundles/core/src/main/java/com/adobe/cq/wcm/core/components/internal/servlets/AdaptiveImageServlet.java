@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -329,45 +330,53 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     }
                 }
                 layer = getLayer(getOriginal(asset));
-                if (Math.abs(scaling - 1.0D) != 0) {
-                    Rectangle scaledRectangle = new Rectangle(
-                            (int) (rectangle.x * scaling),
-                            (int) (rectangle.y * scaling),
-                            (int) (rectangle.getWidth() * scaling),
-                            (int) (rectangle.getHeight() * scaling)
-                    );
-                    layer.crop(scaledRectangle);
-                } else {
-                    layer.crop(rectangle);
+                if (layer != null) {
+                    if (Math.abs(scaling - 1.0D) != 0) {
+                        Rectangle scaledRectangle = new Rectangle(
+                                (int) (rectangle.x * scaling),
+                                (int) (rectangle.y * scaling),
+                                (int) (rectangle.getWidth() * scaling),
+                                (int) (rectangle.getHeight() * scaling)
+                        );
+                        layer.crop(scaledRectangle);
+                    } else {
+                        layer.crop(rectangle);
+                    }
+                    appliedTransformation = true;
                 }
-                appliedTransformation = true;
             }
             if (rotationAngle != 0) {
                 if (layer == null) {
-                    layer = getLayer(getBestRendition(asset, resizeWidth));
+                    layer = getLayer(getBestRendition(asset, resizeWidth, imageType));
                 }
-                layer.rotate(rotationAngle);
-                LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
-                appliedTransformation = true;
+                if (layer != null) {
+                    layer.rotate(rotationAngle);
+                    LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
+                    appliedTransformation = true;
+                }
             }
             if (flipHorizontally) {
                 if (layer == null) {
-                    layer = getLayer(getBestRendition(asset, resizeWidth));
+                    layer = getLayer(getBestRendition(asset, resizeWidth, imageType));
                 }
-                layer.flipHorizontally();
-                LOGGER.debug("Flipped image horizontally.");
-                appliedTransformation = true;
+                if (layer != null) {
+                    layer.flipHorizontally();
+                    LOGGER.debug("Flipped image horizontally.");
+                    appliedTransformation = true;
+                }
             }
             if (flipVertically) {
                 if (layer == null) {
-                    layer = getLayer(getBestRendition(asset, resizeWidth));
+                    layer = getLayer(getBestRendition(asset, resizeWidth, imageType));
                 }
-                layer.flipVertically();
-                LOGGER.debug("Flipped image vertically.");
-                appliedTransformation = true;
+                if (layer != null) {
+                    layer.flipVertically();
+                    LOGGER.debug("Flipped image vertically.");
+                    appliedTransformation = true;
+                }
             }
             if (!appliedTransformation) {
-                EnhancedRendition rendition = getBestRendition(asset, resizeWidth);
+                EnhancedRendition rendition = getBestRendition(asset, resizeWidth, imageType);
                 Dimension dimension = rendition.getDimension();
                 if (dimension != null) {
                     // keeping aspect ratio
@@ -378,16 +387,20 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
                         layer = getLayer(rendition);
-                        if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
-                                ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension))) {
-                            LOGGER.debug("Adding default (white) background to a transparent PNG: {}/{}", asset.getPath(),
-                                    rendition.getName());
-                            layer.setBackground(Color.white);
+                        if (layer != null) {
+                            if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
+                                    ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension))) {
+                                LOGGER.debug("Adding default (white) background to a transparent PNG: {}/{}", asset.getPath(),
+                                        rendition.getName());
+                                layer.setBackground(Color.white);
+                            }
+                            layer.resize(resizeWidth, resizeHeight);
+                            response.setContentType(imageType);
+                            LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
+                            layer.write(imageType, quality, response.getOutputStream());
+                        } else {
+                            streamOrConvert(response, rendition, imageType, imageName, resizeWidth, quality);
                         }
-                        layer.resize(resizeWidth, resizeHeight);
-                        response.setContentType(imageType);
-                        LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
-                        layer.write(imageType, quality, response.getOutputStream());
                     } else {
                         streamOrConvert(response, rendition, imageType, imageName, resizeWidth, quality);
                     }
@@ -488,12 +501,21 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      *
      * @param rendition - the rendition
      * @return a layer for the rendition
-     * @throws IOException if a {@link Layer} cannot be created for the given rendition
+     *
+     * @return {@code null} if the rendition is not supported
      */
-    @NotNull
-    private Layer getLayer(@NotNull EnhancedRendition rendition) throws IOException {
+    @Nullable
+    private Layer getLayer(@NotNull EnhancedRendition rendition) {
         AssetHandler assetHandler = assetStore.getAssetHandler(rendition.getMimeType());
-        return new Layer(assetHandler.getImage(rendition.getRendition()));
+        try {
+            BufferedImage image = assetHandler.getImage(rendition.getRendition());
+            if (image != null) {
+                return new Layer(image);
+            }
+        } catch (IOException ioex) {
+            LOGGER.debug("Unable to handle rendition " + rendition.getPath(), ioex);
+        }
+        return null;
     }
 
     /**
@@ -508,40 +530,51 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     /**
-     * Given an {@link Asset} and a specified width, this method will return the best rendition
+     * Given an {@link Asset}, a specified width and desired mime type, this method will return the best rendition
      * for that width (smallest rendition larger than the specified width) or the original.
      *
      * @param asset the asset for which to retrieve the best rendition
      * @param width the width
+     * @param mimeType the desired mime type for the rendition
      * @return a rendition that is suitable for that width
      * @throws IOException when the best suited rendition is too large for processing
      */
     @NotNull
-    protected EnhancedRendition getBestRendition(@NotNull Asset asset, int width) throws IOException {
+    protected EnhancedRendition getBestRendition(@NotNull Asset asset, int width, @NotNull String mimeType) throws IOException {
         // Sort renditions by file dimension
         SortedSet<EnhancedRendition> matchingRenditions = new TreeSet<>(Comparator.comparingInt(o -> o.getDimension() == null ? 0 : o.getDimension().width));
         SortedSet<EnhancedRendition> nonMatchingRenditions = new TreeSet<>(Comparator.comparingInt(o -> o.getDimension() == null ? 0 : o.getDimension().width));
 
         for (Rendition rendition : asset.getRenditions()) {
             EnhancedRendition enhancedRendition = new EnhancedRendition(rendition);
-            if (asset.getMimeType().equals(rendition.getMimeType())) {
+            if (mimeType.equals(rendition.getMimeType())) {
                 matchingRenditions.add(enhancedRendition);
             } else {
                 nonMatchingRenditions.add(enhancedRendition);
             }
 
         }
+        EnhancedRendition bestRendition;
+        if (!matchingRenditions.isEmpty()) {
+            // Find first rendition in mime-type matching set that has a width larger or equal than wanted
+            bestRendition = findBestRendition(matchingRenditions, width);
 
-        // Find first rendition in mime-type matching set that has a width larger or equal than wanted
-        EnhancedRendition bestRendition = findBestRendition(matchingRenditions, width);
-        if (bestRendition == null) {
+            if (bestRendition == null) {
+                // If no rendition is found for the desired width, use either the original rendition or the largest rendition
+                if (mimeType.equals(asset.getMimeType())) {
+                    bestRendition = getOriginal(asset);
+                } else {
+                    bestRendition = matchingRenditions.last();
+                }
+            }
+        } else {
             // Also try to find a suitable rendition that does not match the mime-type
             bestRendition = findBestRendition(nonMatchingRenditions, width);
-        }
 
-        // If no rendition was found, attempt to use original
-        if (bestRendition == null) {
-            return getOriginal(asset);
+            // If no rendition was found, attempt to use original
+            if (bestRendition == null) {
+                return getOriginal(asset);
+            }
         }
         return filter(bestRendition);
     }
@@ -610,10 +643,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
             stream(response, rendition.getStream(), imageType, imageName);
         } else {
-            LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
-                            "but the rendition is not of the requested type {}, need to convert",
-                    rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
-            resizeAndStreamLayer(response, getLayer(rendition), imageType, 0, quality);
+            Layer layer = getLayer(rendition);
+            if (layer == null) {
+                LOGGER.warn("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
+                                "but the rendition is not of the requested type {}, cannot convert so serving as is",
+                        rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
+                stream(response, rendition.getStream(), rendition.getMimeType(), imageName);
+            } else {
+                LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
+                                "but the rendition is not of the requested type {}, need to convert",
+                        rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
+                resizeAndStreamLayer(response, layer, imageType, 0, quality);
+            }
         }
     }
 
