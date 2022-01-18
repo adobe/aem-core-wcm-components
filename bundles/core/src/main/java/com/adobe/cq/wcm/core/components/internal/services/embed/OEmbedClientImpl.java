@@ -25,13 +25,16 @@ import java.util.regex.Pattern;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.osgi.framework.Constants;
@@ -41,6 +44,8 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedClient;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
@@ -106,9 +111,19 @@ public class OEmbedClientImpl implements OEmbedClient {
         } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 String xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
+                InputStream xmlStream = getData(xmlURL);
+
+                //Disable XXE
+                SAXParserFactory spf = SAXParserFactory.newInstance();
+                spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+
+                //Do unmarshall operation
+                Source xmlSource = new SAXSource(spf.newSAXParser().getXMLReader(), new InputSource(xmlStream));
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                return (OEmbedResponse) jaxbUnmarshaller.unmarshal(getData(xmlURL));
-            } catch (JAXBException | IOException e) {
+                return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlSource);
+            } catch (SAXException | ParserConfigurationException | JAXBException | IOException e) {
                 LOGGER.error("Failed to read JSON response", e);
             }
         }
