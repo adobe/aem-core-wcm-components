@@ -328,10 +328,8 @@
                             }
                         }
                     }
-                    setItemExpanded(item, true);
-                } else {
-                    setItemExpanded(item, !getItemExpanded(item));
                 }
+                setItemExpanded(item, !getItemExpanded(item));
 
                 if (dataLayerEnabled) {
                     var accordionId = that._elements.self.id;
@@ -463,11 +461,6 @@
                 panel.classList.add(cssClasses.panel.expanded);
                 panel.classList.remove(cssClasses.panel.hidden);
                 panel.setAttribute("aria-hidden", false);
-
-                if (that._properties.singleExpansion) {
-                    button.classList.add(cssClasses.button.disabled);
-                    button.setAttribute("aria-disabled", true);
-                }
             }
         }
 
@@ -483,9 +476,7 @@
             if (index > -1) {
                 var button = that._elements["button"][index];
                 var panel = that._elements["panel"][index];
-                button.classList.remove(cssClasses.button.disabled);
                 button.classList.remove(cssClasses.button.expanded);
-                button.removeAttribute("aria-disabled");
                 // used to fix some known screen readers issues in reading the correct state of the 'aria-expanded' attribute
                 // e.g. https://bugs.webkit.org/show_bug.cgi?id=210934
                 setTimeout(function() {
