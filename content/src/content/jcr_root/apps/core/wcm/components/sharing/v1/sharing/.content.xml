@@ -4,4 +4,6 @@
     jcr:description="Core WCM Social Media Sharing Component (v1)"
     jcr:primaryType="cq:Component"
     jcr:title="Social Media Sharing (v1)"
-    componentGroup=".core-wcm"/>
+    componentGroup=".core-wcm"
+    cq:deprecated="Core Components 2.18.0"
+    cq:deprecatedReason="Should not be used in new projects"/>
