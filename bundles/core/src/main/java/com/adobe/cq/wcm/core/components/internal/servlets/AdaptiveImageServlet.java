@@ -292,13 +292,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return null;
     }
 
+    @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "Scanning generated code of try-with-resources")
     private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality,
-                                         Asset asset, String
-                                                 imageType, String imageName) throws IOException {
+                                         Asset asset, String imageType, String imageName) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
         if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
             LOGGER.debug("GIF or SVG asset detected; will render the original rendition.");
-            stream(response, asset.getOriginal().getStream(), imageType, imageName);
+            metrics.markOriginalRenditionUsed();
+            try (InputStream is = asset.getOriginal().getStream()) {
+                if (is != null) {
+                    stream(response, is, imageType, imageName);
+                }
+            }
             return;
         }
         int rotationAngle = getRotation(componentProperties);
@@ -412,16 +417,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         } else {
             LOGGER.debug("No need to perform any processing on asset {}; rendering.", asset.getPath());
-            stream(response, getOriginal(asset).getStream(), imageType, imageName);
+            try (InputStream is = getOriginal(asset).getStream()) {
+                if (is != null) {
+                    stream(response, is, imageType, imageName);
+                }
+            }
         }
     }
 
     private void transformAndStreamFile(SlingHttpServletResponse response, ValueMap componentProperties, int
             resizeWidth, double quality, Resource imageFile, String imageType, String imageName) throws
             IOException {
-        InputStream is = null;
-        try {
-            is = imageFile.adaptTo(InputStream.class);
+        try (InputStream is = imageFile.adaptTo(InputStream.class)) {
             if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
                     || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
                 LOGGER.debug("GIF or SVG file detected; will render the original file.");
@@ -463,8 +470,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     stream(response, is, imageType, imageName);
                 }
             }
-        } finally {
-            IOUtils.closeQuietly(is);
         }
     }
 
@@ -531,7 +536,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     /**
      * Given an {@link Asset}, a specified width and desired mime type, this method will return the best rendition
-     * for that width (smallest rendition larger than the specified width) or the original.
+     * for that width (smallest rendition larger than the specified width or largest rendition of the specified mime type)
+     * or the original.
      *
      * @param asset the asset for which to retrieve the best rendition
      * @param width the width
@@ -635,20 +641,40 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         throw new IOException(String.format("Cannot process rendition %s due to size %s", rendition.getName(), rendition.getDimension()));
     }
 
+    /**
+     * Try to stream the rendition if it matches the mime-type or convert it. If conversion fails, stream the rendition as is.
+     *
+     * @param response the {@link HttpServletResponse} to write the rendition to
+     * @param rendition the rendition to stream
+     * @param imageType the image mime type
+     * @param imageName the image name
+     * @param resizeWidth the width to resize the rendition to
+     * @param quality the quality to use when converting the rendition
+     * @throws IOException
+     */
+    @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "Scanning generated code of try-with-resources")
     private void streamOrConvert(@NotNull SlingHttpServletResponse response, @NotNull EnhancedRendition rendition, @NotNull String imageType,
                                  String imageName, int resizeWidth, double quality) throws IOException {
         Dimension dimension = rendition.getDimension();
         if (rendition.getMimeType().equals(imageType)) {
             LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
                     rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
-            stream(response, rendition.getStream(), imageType, imageName);
+            try (InputStream is = rendition.getStream()) {
+                if (is != null) {
+                    stream(response, is, imageType, imageName);
+                }
+            }
         } else {
             Layer layer = getLayer(rendition);
             if (layer == null) {
                 LOGGER.warn("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
                                 "but the rendition is not of the requested type {}, cannot convert so serving as is",
                         rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
-                stream(response, rendition.getStream(), rendition.getMimeType(), imageName);
+                try (InputStream is = rendition.getStream()) {
+                    if (is != null) {
+                        stream(response, is, rendition.getMimeType(), imageName);
+                    }
+                }
             } else {
                 LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
                                 "but the rendition is not of the requested type {}, need to convert",
@@ -658,16 +684,21 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
     }
 
+    /**
+     * Stream an image from the given input stream.
+     *
+     * @param response the {@link HttpServletResponse} to write the image to
+     * @param inputStream the input stream to read the image from
+     * @param contentType the mime type of the image
+     * @param imageName the name of the image
+     * @throws IOException
+     */
     private void stream(@NotNull SlingHttpServletResponse response, @NotNull InputStream inputStream, @NotNull String contentType,
                         String imageName)
             throws IOException {
         response.setContentType(contentType);
         response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
-        try {
-            IOUtils.copy(inputStream, response.getOutputStream());
-        } finally {
-            IOUtils.closeQuietly(inputStream);
-        }
+        IOUtils.copy(inputStream, response.getOutputStream());
     }
 
     /**
