@@ -101,6 +101,9 @@
                         <jackrabbit-nodetypes>
                             <isDisabled>true</isDisabled>
                         </jackrabbit-nodetypes>
+                        <netcentric-aem-cloud>
+                            <isDisabled>true</isDisabled>
+                        </netcentric-aem-cloud>
                     </validatorsSettings>
                     <properties>
                         <acHandling>merge_preserve</acHandling>
