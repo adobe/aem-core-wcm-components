@@ -111,18 +111,18 @@ public class OEmbedClientImpl implements OEmbedClient {
         } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 String xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
-                InputStream xmlStream = getData(xmlURL);
+                try (InputStream xmlStream = getData(xmlURL)) {
+                    //Disable XXE
+                    SAXParserFactory spf = SAXParserFactory.newInstance();
+                    spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                    spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                    spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
-                //Disable XXE
-                SAXParserFactory spf = SAXParserFactory.newInstance();
-                spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-                spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-                spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-
-                //Do unmarshall operation
-                Source xmlSource = new SAXSource(spf.newSAXParser().getXMLReader(), new InputSource(xmlStream));
-                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlSource);
+                    //Do unmarshall operation
+                    Source xmlSource = new SAXSource(spf.newSAXParser().getXMLReader(), new InputSource(xmlStream));
+                    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                    return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlSource);
+                }
             } catch (SAXException | ParserConfigurationException | JAXBException | IOException e) {
                 LOGGER.error("Failed to read JSON response", e);
             }
