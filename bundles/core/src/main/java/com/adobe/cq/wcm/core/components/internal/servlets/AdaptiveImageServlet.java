@@ -293,7 +293,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "Scanning generated code of try-with-resources")
-    private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality,
+    protected void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality,
                                          Asset asset, String imageType, String imageName) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
         if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
@@ -483,7 +483,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param resizeWidth the resize width
      * @throws IOException if the streaming of the {@link Layer} into the response's output stream cannot be performed
      */
-    private void resizeAndStreamLayer(SlingHttpServletResponse response, Layer layer, String imageType, int resizeWidth, double quality)
+    protected void resizeAndStreamLayer(SlingHttpServletResponse response, Layer layer, String imageType, int resizeWidth, double quality)
             throws IOException {
         int width = layer.getWidth();
         int height = layer.getHeight();
