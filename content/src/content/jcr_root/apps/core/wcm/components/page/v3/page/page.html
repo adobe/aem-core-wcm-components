@@ -37,10 +37,8 @@
              data-sly-call="${redirect.redirect @ redirectTarget = page.redirectTarget}"></sly>
         <sly data-sly-test="${!isRedirectPage}">
             <sly data-sly-include="body.skiptomaincontent.html"></sly>
-            <sly data-sly-include="body.socialmedia_begin.html"></sly>
             <sly data-sly-include="body.html"></sly>
             <sly data-sly-call="${footer.footer @ page = page, pwa = pwa}"></sly>
-            <sly data-sly-include="body.socialmedia_end.html"></sly>
         </sly>
     </body>
 </html>
