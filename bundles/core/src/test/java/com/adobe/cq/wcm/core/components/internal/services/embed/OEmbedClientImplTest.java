@@ -23,6 +23,7 @@ import java.util.HashMap;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -145,7 +146,7 @@ class OEmbedClientImplTest {
         Unmarshaller unmarshaller = mock(Unmarshaller.class);
         when(jaxbContext.createUnmarshaller()).thenReturn(unmarshaller);
         mockHttpClient(client);
-        when(unmarshaller.unmarshal(any(InputStream.class))).thenReturn(new OEmbedXMLResponseImpl());
+        when(unmarshaller.unmarshal(any(Source.class))).thenReturn(new OEmbedXMLResponseImpl());
         String provider = client.getProvider("http://test.com/xml");
         assertEquals("Test XML", provider);
         assertNotNull(client.getResponse("http://test.com/xml"));

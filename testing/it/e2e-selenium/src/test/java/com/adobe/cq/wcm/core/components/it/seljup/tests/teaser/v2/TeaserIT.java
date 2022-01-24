@@ -23,17 +23,21 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.Teas
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Driver;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 
 @Tag("group3")
 public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v1.TeaserIT {
@@ -512,7 +516,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         $(".cq-FileUpload-picker").click();
         $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
         $(assetSelector).click();
-        $(".granite-pickerdialog-submit").click();
+        clickableClick($(".granite-pickerdialog-submit"));
 
         // inherit alt text from DAM
         String altValueFromDAMSelector = ".cq-siteadmin-admin-properties coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
