@@ -61,7 +61,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    overflow: auto;
+    overflow: visible;
     grid-area: initial;
     z-index: @cmp-examples-z-index-aside;
 
@@ -75,6 +75,7 @@
     .transition-transform(~'@{cmp-examples-animation-duration-2} ease-in-out');
 
     &--open {
+        overflow: auto;
         .transform(translateX(0));
     }
 
@@ -139,6 +140,10 @@
             padding: 0 (@cmp-examples-structure-main-grid-gap-m / 2);
         }
     }
+
+    .cmp-examples-structure__aside {
+        overflow: auto;
+    }
 }
 
 @media @cmp-examples-screen-l-min {
@@ -166,6 +171,7 @@
     .cmp-examples-structure__aside--open {
         top: @cmp-examples-structure-header-height-l;
         left: auto;
+        overflow: auto;
 
         -ms-grid-row: 2;
         -ms-grid-column: 1;
