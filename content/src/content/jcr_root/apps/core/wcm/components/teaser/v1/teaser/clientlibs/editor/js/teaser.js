@@ -23,7 +23,8 @@
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionFromPage"]';
     var descriptionTextfieldSelector = '.cq-RichText-editable[name="./jcr:description"]';
-    var linkURLSelector = '[name="./linkURL"]';
+    var linkURLSelector = '.cmp-link-url[name="./linkURL"]';
+    var linkTargetSelector = '.cmp-link-target [name="./linkTarget"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var actionsEnabled;
     var titleTuple;
@@ -98,10 +99,12 @@
     function toggleInputs(dialogContent) {
         var $actionsMultifield = dialogContent.find(actionsMultifieldSelector);
         var linkURLField = dialogContent.find(linkURLSelector).adaptTo("foundation-field");
+        var linkTargetField = dialogContent.find(linkTargetSelector).adaptTo("foundation-field");
         var actions = $actionsMultifield.adaptTo("foundation-field");
         if (linkURLField && actions) {
             if (actionsEnabled) {
                 linkURLField.setDisabled(true);
+                linkTargetField.setDisabled(true);
                 actions.setDisabled(false);
                 if ($actionsMultifield.size() > 0) {
                     var actionsMultifield = $actionsMultifield[0];
@@ -121,6 +124,7 @@
                 }
             } else {
                 linkURLField.setDisabled(false);
+                linkTargetField.setDisabled(false);
                 actions.setDisabled(true);
                 toggleActionItems($actionsMultifield, true);
             }
@@ -130,11 +134,13 @@
     function toggleActionItems(actionsMultifield, disabled) {
         actionsMultifield.find("coral-multifield-item").each(function(ix, item) {
             var linkField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']").adaptTo("foundation-field");
+            var targetField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionTarget']").adaptTo("foundation-field");
             var textField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionTitle']").adaptTo("foundation-field");
             if (disabled && linkField.getValue() === "" && textField.getValue() === "") {
                 actionsMultifield[0].items.remove(item);
             }
             linkField.setDisabled(disabled);
+            targetField.setDisabled(disabled);
             textField.setDisabled(disabled);
         });
     }
