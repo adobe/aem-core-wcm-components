@@ -26,10 +26,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
+import javax.imageio.spi.IIORegistry;
+import javax.imageio.spi.ImageReaderSpi;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 import org.apache.sling.api.resource.Resource;
@@ -99,14 +101,20 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         AdaptiveImageServletMetrics metrics = mock(AdaptiveImageServletMetrics.class);
         when(metrics.startDurationRecording()).thenReturn(mock(Timer.Context.class));
         when(assetStore.getAssetHandler(anyString())).thenReturn(assetHandler);
+        IIORegistry registry = IIORegistry.getDefaultInstance();
+        Iterator iter = registry.getServiceProviders(ImageReaderSpi.class, true);
+        // Force ImageIO to pick TwelveMonkeys plugins for JPG and TIFF
+        while (iter.hasNext()) {
+            ImageReaderSpi provider = (ImageReaderSpi) iter.next();
+            if (!provider.getClass().getName().contains("twelvemonkeys") &&
+                    (ArrayUtils.contains(provider.getFormatNames(), "jpg") ||
+                            ArrayUtils.contains(provider.getFormatNames(), "tiff"))) {
+                registry.deregisterServiceProvider(provider);
+            }
+        }
         when(assetHandler.getImage(any(Rendition.class))).thenAnswer(invocation -> {
-            // Force ImageIO to pick the right reader for the image
-            ImageIO.setUseCache(false);
             Rendition rendition = invocation.getArgument(0);
-            Iterator readers = ImageIO.getImageReadersByFormatName(rendition.getMimeType().replace("image/", "").replace("jpeg", "jpg"));
-            ImageReader reader = (ImageReader)readers.next();
-            reader.setInput(ImageIO.createImageInputStream(rendition.getStream()), true);
-            return reader.read(0);
+            return ImageIO.read(rendition.getStream());
         });
         servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
         testLogger = Utils.mockLogger(AdaptiveImageServlet.class, "LOGGER");
