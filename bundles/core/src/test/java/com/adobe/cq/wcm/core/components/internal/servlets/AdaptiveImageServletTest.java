@@ -22,9 +22,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -101,7 +103,10 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         ImageIO.setUseCache(false);
         when(assetHandler.getImage(any(Rendition.class))).thenAnswer(invocation -> {
             Rendition rendition = invocation.getArgument(0);
-            return ImageIO.read(rendition.getStream());
+            Iterator readers = ImageIO.getImageReadersByFormatName(rendition.getMimeType().replace("image/", "").replace("jpeg", "jpg"));
+            ImageReader reader = (ImageReader)readers.next();
+            reader.setInput(ImageIO.createImageInputStream(rendition.getStream()), true);
+            return reader.read(0, reader.getDefaultReadParam());
         });
         servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
         testLogger = Utils.mockLogger(AdaptiveImageServlet.class, "LOGGER");
