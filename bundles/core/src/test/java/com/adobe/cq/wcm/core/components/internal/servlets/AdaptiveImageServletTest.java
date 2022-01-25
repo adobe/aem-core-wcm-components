@@ -32,7 +32,6 @@ import javax.imageio.spi.ImageReaderSpi;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 import org.apache.sling.api.resource.Resource;
@@ -869,6 +868,31 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Dimension expectedDimension = new Dimension(2000, 2000);
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
+    }
+
+    @Test
+    void testTransformAndStreamAssetForTiffRenderedAsJpegWithoutJpegRenditionsAndUnableToProcess() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img.2000", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+
+        Asset mockAsset = mock(Asset.class);
+        when(mockAsset.getMimeType()).thenReturn("image/tiff");
+        when(mockAsset.getRenditions()).thenReturn(new LinkedList<>());
+        when(mockAsset.getMetadataValue(DamConstants.TIFF_IMAGEWIDTH)).thenReturn("2000");
+        when(mockAsset.getMetadataValue(DamConstants.TIFF_IMAGELENGTH)).thenReturn("2000");
+        Rendition original = mockRendition(mockAsset, "original", 9999999, "image/tiff", 2000, 2000);
+        when(original.getStream()).thenReturn(new ByteArrayInputStream(new byte[]{ 0, 1, 2 }),
+                new ByteArrayInputStream(new byte[]{ 0, 1, 2 }));
+        when(mockAsset.getOriginal()).thenReturn(original);
+
+        servlet.transformAndStreamAsset(response, new MockValueMap(request.getResource(), new HashMap<>()), 2000, 90, mockAsset, "image/jpeg", "test");
+
+        Assertions.assertEquals(200, response.getStatus(), "Expected a 200 response code.");
+        Assertions.assertEquals("image/tiff", response.getContentType(), "Expected a TIFF image.");
+
+        Assertions.assertEquals(3, response.getOutput().length, "Expected three-byte original TIFF");
     }
 
     private Rendition mockRendition(Asset asset, String name, long size, String mimeType, int width, int length) {
