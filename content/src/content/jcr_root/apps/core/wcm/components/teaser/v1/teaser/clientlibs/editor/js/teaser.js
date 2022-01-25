@@ -23,7 +23,7 @@
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionFromPage"]';
     var descriptionTextfieldSelector = '.cq-RichText-editable[name="./jcr:description"]';
-    var linkURLSelector = '.cmp-link-url[name="./linkURL"]';
+    var linkURLSelector = '[name="./linkURL"]';
     var linkTargetSelector = '.cmp-link-target [name="./linkTarget"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var actionsEnabled;
@@ -104,7 +104,9 @@
         if (linkURLField && actions) {
             if (actionsEnabled) {
                 linkURLField.setDisabled(true);
-                linkTargetField.setDisabled(true);
+                if (linkTargetField) {
+                    linkTargetField.setDisabled(true);
+                }
                 actions.setDisabled(false);
                 if ($actionsMultifield.size() > 0) {
                     var actionsMultifield = $actionsMultifield[0];
@@ -124,7 +126,9 @@
                 }
             } else {
                 linkURLField.setDisabled(false);
-                linkTargetField.setDisabled(false);
+                if (linkTargetField) {
+                    linkTargetField.setDisabled(false);
+                }
                 actions.setDisabled(true);
                 toggleActionItems($actionsMultifield, true);
             }
@@ -139,9 +143,15 @@
             if (disabled && linkField.getValue() === "" && textField.getValue() === "") {
                 actionsMultifield[0].items.remove(item);
             }
-            linkField.setDisabled(disabled);
-            targetField.setDisabled(disabled);
-            textField.setDisabled(disabled);
+            if (linkField) {
+                linkField.setDisabled(disabled);
+            }
+            if (targetField) {
+                targetField.setDisabled(disabled);
+            }
+            if (textField) {
+                textField.setDisabled(disabled);
+            }
         });
     }
 

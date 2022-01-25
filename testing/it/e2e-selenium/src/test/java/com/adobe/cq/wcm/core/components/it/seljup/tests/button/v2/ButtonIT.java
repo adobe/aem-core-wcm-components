@@ -33,6 +33,7 @@ public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.
 
     private void setupResources() {
         buttonRT = Commons.rtButton_v2;
+        linkPropertyName = "linkURL";
     }
 
     @BeforeEach
@@ -56,7 +57,7 @@ public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.
         String link = "https://www.adobe.com";
         String target = "_blank";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
-        buttonEditDialog.setLinkField(link);
+        buttonEditDialog.setLinkField(link, linkPropertyName);
         buttonEditDialog.clickLinkTarget();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.saveConfigureDialog();
