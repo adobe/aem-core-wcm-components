@@ -113,7 +113,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * Flag indicating if the title should be hidden.
      */
-    private boolean titleHidden = false;
+    protected boolean titleHidden = false;
 
     /**
      * Flag indicating if the title type should be hidden.
@@ -123,7 +123,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * Flag indicating if the description should be hidden.
      */
-    private boolean descriptionHidden = false;
+    protected boolean descriptionHidden = false;
 
     /**
      * Flag indicating if the image should not be linked.
@@ -287,7 +287,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      * @return List of teaser actions.
      */
     @NotNull
-    private List<Action> getTeaserActions() {
+    protected List<Action> getTeaserActions() {
         if (this.actions == null) {
             this.actions = Optional.ofNullable(this.isActionsEnabled() ? this.resource.getChild(Teaser.NN_ACTIONS) : null)
                 .map(Resource::getChildren)

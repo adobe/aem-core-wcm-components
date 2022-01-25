@@ -190,7 +190,7 @@
                                                     <titleFromLinkedPage
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="{Boolean}false"
+                                                        checked="{Boolean}true"
                                                         fieldDescription="When checked, populate the title with the linked page's title."
                                                         name="./titleFromPage"
                                                         text="Get title from linked page"
@@ -338,7 +338,7 @@
                                                     <descriptionFromLinkedPage
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="{Boolean}false"
+                                                        checked="{Boolean}true"
                                                         fieldDescription="When checked, populate the description with the linked page's description."
                                                         name="./descriptionFromPage"
                                                         text="Get description from linked page"

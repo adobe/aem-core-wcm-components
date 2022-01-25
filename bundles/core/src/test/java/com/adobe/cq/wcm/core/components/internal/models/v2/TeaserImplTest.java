@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImplTest {
 
     private static final String TEST_BASE = "/teaser/v2";
+    private static final String TEASER_24 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-24";
 
     @BeforeEach
     protected void setUp() {
@@ -54,6 +55,15 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         // < and > are expected escaped, because the page properties provide only a plain text field for the page description
         assertEquals("Teasers description from &lt;page properties&gt;", teaser.getDescription());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser11"));
+    }
+
+    @Test
+    protected void testTeaserWithTitleAndDescriptionFromCurrentPage() {
+        Teaser teaser = getTeaserUnderTest(TEASER_24);
+        assertEquals("Teasers Test", teaser.getTitle());
+        // < and > are expected escaped, because the page properties provide only a plain text field for the page description
+        assertEquals("Teasers description from &lt;page properties&gt;", teaser.getDescription());
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser24"));
     }
 
     @Test

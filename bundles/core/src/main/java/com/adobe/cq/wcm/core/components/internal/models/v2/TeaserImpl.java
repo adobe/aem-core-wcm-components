@@ -17,8 +17,12 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -31,8 +35,10 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
+import com.day.text.Text;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
@@ -40,6 +46,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
+
+    /**
+     * Flag indicating if the title should be inherited from the target page.
+     */
+    private boolean titleFromPage = true;
+
+    /**
+     * Flag indicating if the description should be inherited from the target page.
+     */
+    private boolean descriptionFromPage = true;
+
+    /**
+     * The title.
+     */
+    private String title;
+
+    /**
+     * The description.
+     */
+    private String description;
 
     @ScriptVariable
     protected Page currentPage;
@@ -55,6 +81,49 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Deprecated
     public String getLinkURL() {
         return super.getLinkURL();
+    }
+
+    @PostConstruct
+    protected void initModel() {
+        super.initModel();
+        ValueMap properties = resource.getValueMap();
+        titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
+        descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
+    }
+
+    @Override
+    public String getTitle() {
+        if (this.title == null && !this.titleHidden) {
+            if (titleFromPage) {
+                this.title = this.getTargetPage()
+                        .map(tp -> StringUtils.defaultIfEmpty(tp.getPageTitle(), tp.getTitle()))
+                        .orElseGet(() -> this.getTeaserActions().stream().findFirst()
+                                .map(com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl.Action::getTitle)
+                                .orElseGet(() -> Optional.ofNullable(getCurrentPage())
+                                        .map(cp -> StringUtils.defaultIfEmpty(cp.getPageTitle(), cp.getTitle()))
+                                        .orElse(null)));
+            } else {
+                this.title = this.resource.getValueMap().get(JcrConstants.JCR_TITLE, String.class);
+            }
+        }
+        return title;
+    }
+
+    @Override
+    public String getDescription() {
+        if (this.description == null && !this.descriptionHidden) {
+            if (descriptionFromPage) {
+                this.description = this.getTargetPage().map(Optional::of).orElseGet(() -> Optional.ofNullable(getCurrentPage()))
+                        .map(Page::getDescription)
+                        // page properties uses a plain text field - which may contain special chars that need to be escaped in HTML
+                        // because the resulting description from the teaser is expected to be HTML produced by the RTE editor
+                        .map(Text::escapeXml)
+                        .orElse(null);
+            } else {
+                this.description = this.resource.getValueMap().get(JcrConstants.JCR_DESCRIPTION, String.class);
+            }
+        }
+        return this.description;
     }
 
     protected boolean hasImage() {
