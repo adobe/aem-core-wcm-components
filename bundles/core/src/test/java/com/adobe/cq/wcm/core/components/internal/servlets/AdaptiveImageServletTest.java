@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -110,9 +111,9 @@ class AdaptiveImageServletTest extends AbstractImageTest {
                     (ArrayUtils.contains(provider.getFormatNames(), "JPG") ||
                             ArrayUtils.contains(provider.getFormatNames(), "TIFF"))) {
                 registry.deregisterServiceProvider(provider);
-                System.out.println("Deregistering " + provider.getClass().getName() + " [" + provider.getFormatNames() + "]");
+                System.out.println("Deregistering " + provider.getClass().getName() + " [" + Arrays.toString(provider.getFormatNames()) + "]");
             } else {
-                System.out.println("Keeping " + provider.getClass().getName() + " [" + provider.getFormatNames() + "]");
+                System.out.println("Keeping " + provider.getClass().getName() + " [" + Arrays.toString(provider.getFormatNames()) + "]");
             }
         }
         when(assetHandler.getImage(any(Rendition.class))).thenAnswer(invocation -> {
