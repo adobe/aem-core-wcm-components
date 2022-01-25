@@ -99,9 +99,9 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         AdaptiveImageServletMetrics metrics = mock(AdaptiveImageServletMetrics.class);
         when(metrics.startDurationRecording()).thenReturn(mock(Timer.Context.class));
         when(assetStore.getAssetHandler(anyString())).thenReturn(assetHandler);
-        // Force ImageIO to pick the right reader for the image
-        ImageIO.setUseCache(false);
         when(assetHandler.getImage(any(Rendition.class))).thenAnswer(invocation -> {
+            // Force ImageIO to pick the right reader for the image
+            ImageIO.setUseCache(false);
             Rendition rendition = invocation.getArgument(0);
             Iterator readers = ImageIO.getImageReadersByFormatName(rendition.getMimeType().replace("image/", "").replace("jpeg", "jpg"));
             ImageReader reader = (ImageReader)readers.next();
