@@ -107,12 +107,12 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         while (iter.hasNext()) {
             ImageReaderSpi provider = (ImageReaderSpi) iter.next();
             if (!provider.getClass().getName().contains("twelvemonkeys") &&
-                    (ArrayUtils.contains(provider.getFormatNames(), "jpg") ||
-                            ArrayUtils.contains(provider.getFormatNames(), "tiff"))) {
+                    (ArrayUtils.contains(provider.getFormatNames(), "JPG") ||
+                            ArrayUtils.contains(provider.getFormatNames(), "TIFF"))) {
                 registry.deregisterServiceProvider(provider);
-                System.out.println("Deregistering " + provider.getClass().getName());
+                System.out.println("Deregistering " + provider.getClass().getName() + " [" + provider.getFormatNames() + "]");
             } else {
-                System.out.println("Keeping " + provider.getClass().getName());
+                System.out.println("Keeping " + provider.getClass().getName() + " [" + provider.getFormatNames() + "]");
             }
         }
         when(assetHandler.getImage(any(Rendition.class))).thenAnswer(invocation -> {
