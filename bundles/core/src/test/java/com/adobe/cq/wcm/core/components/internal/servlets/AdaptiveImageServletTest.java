@@ -106,7 +106,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             Iterator readers = ImageIO.getImageReadersByFormatName(rendition.getMimeType().replace("image/", "").replace("jpeg", "jpg"));
             ImageReader reader = (ImageReader)readers.next();
             reader.setInput(ImageIO.createImageInputStream(rendition.getStream()), true);
-            return reader.read(0, reader.getDefaultReadParam());
+            return reader.read(0);
         });
         servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
         testLogger = Utils.mockLogger(AdaptiveImageServlet.class, "LOGGER");
