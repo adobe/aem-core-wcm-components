@@ -111,9 +111,6 @@ class AdaptiveImageServletTest extends AbstractImageTest {
                     ((Arrays.stream(provider.getFormatNames()).filter(f -> "JPG".equalsIgnoreCase(f)).count() > 0) ||
                             (Arrays.stream(provider.getFormatNames()).filter(f -> "TIFF".equalsIgnoreCase(f)).count() > 0))) {
                 registry.deregisterServiceProvider(provider);
-                System.out.println("Deregistering " + provider.getClass().getName() + " [" + Arrays.toString(provider.getFormatNames()) + "]");
-            } else {
-                System.out.println("Keeping " + provider.getClass().getName() + " [" + Arrays.toString(provider.getFormatNames()) + "]");
             }
         }
         when(assetHandler.getImage(any(Rendition.class))).thenAnswer(invocation -> {
