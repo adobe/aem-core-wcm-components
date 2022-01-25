@@ -147,7 +147,7 @@
             url = linkURL;
         }
         // get the info from the current page in case no link is provided.
-        if(url === undefined && (Granite.author && Granite.author.page)) {
+        if (url === undefined && (Granite.author && Granite.author.page)) {
             url = Granite.author.page.path;
         }
         if (url && url.startsWith("/")) {
