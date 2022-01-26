@@ -49,11 +49,12 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
         Commons.openEditDialog(editorPage, cmpPath);
         title.getEditDialog().setLinkURL(link);
         title.getEditDialog().clickLinkTarget();
-        Commons.saveConfigureDialog();
-
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(title.checkLinkPresentWithTarget(link + ".html", target),"Title with link " + link + " and target "+ target + " should be present");
     }
 

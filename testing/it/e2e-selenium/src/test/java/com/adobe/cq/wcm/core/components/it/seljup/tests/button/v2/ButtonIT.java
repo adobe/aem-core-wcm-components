@@ -63,6 +63,6 @@ public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        assertTrue(button.checkLinkPresent(link),"Button with link " + link + " and target "+ target + " should be present");
+        assertTrue(button.checkLinkPresentWithTarget(link, target),"Button with link " + link + " and target "+ target + " should be present");
     }
 }

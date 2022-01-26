@@ -416,11 +416,12 @@ public class ImageTests {
         editDialog.openMetadataTab();
         image.getEditDialog().setLinkURL(link);
         image.getEditDialog().clickLinkTarget();
-
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.saveConfigureDialog();
         Commons.closeSidePanel();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(image.checkLinkPresentWithTarget(link + ".html", target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
