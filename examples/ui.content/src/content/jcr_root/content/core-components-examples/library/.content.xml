@@ -523,28 +523,6 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser>
-                    <teaser_1803864476
-                        cq:styleIds="[1547060090076]"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/social-sharing.svg"
-                        linkURL="/content/core-components-examples/library/core-content/sharing"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_1803864476>
                     <teaser_803940090
                         cq:styleIds="[1547060090076]"
                         jcr:primaryType="nt:unstructured"

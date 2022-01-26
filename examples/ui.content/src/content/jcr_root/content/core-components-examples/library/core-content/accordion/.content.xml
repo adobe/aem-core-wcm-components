@@ -461,7 +461,8 @@
                                 sling:resourceType="wcm/foundation/components/responsivegrid">
                                 <accordion
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core-components-examples/components/accordion">
+                                    sling:resourceType="core-components-examples/components/accordion"
+                                    headingElement="h4">
                                     <item_468781096
                                         cq:panelTitle="Item 1.1"
                                         jcr:primaryType="nt:unstructured"
@@ -486,7 +487,8 @@
                                 sling:resourceType="wcm/foundation/components/responsivegrid">
                                 <accordion_copy
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core-components-examples/components/accordion">
+                                    sling:resourceType="core-components-examples/components/accordion"
+                                    headingElement="h4">
                                     <item_645266587
                                         cq:panelTitle="Item 2.1"
                                         jcr:primaryType="nt:unstructured"
@@ -511,7 +513,8 @@
                                 sling:resourceType="wcm/foundation/components/responsivegrid">
                                 <accordion
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core-components-examples/components/accordion">
+                                    sling:resourceType="core-components-examples/components/accordion"
+                                    headingElement="h4">
                                     <item_716487435
                                         cq:panelTitle="Item 3.1"
                                         jcr:primaryType="nt:unstructured"
