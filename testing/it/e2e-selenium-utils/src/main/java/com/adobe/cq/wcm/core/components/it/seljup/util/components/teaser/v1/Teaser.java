@@ -29,9 +29,9 @@ public class Teaser extends BaseComponent {
     private static String teaserImage = ".cmp-teaser__image";
     private static String TeaserPreTitle = ".cmp-teaser__pretitle";
     private static String teaserTitle = ".cmp-teaser__title";
-    private static String teaserTitleLink = ".cmp-teaser__title-link";
+    protected static String teaserTitleLink = ".cmp-teaser__title-link";
     private static String teaserDescription = ".cmp-teaser__description";
-    private static String teaserActionLink = "a.cmp-teaser__action-link";
+    protected static String teaserActionLink = "a.cmp-teaser__action-link";
     private static String imageTag = teaserImage + " img[src*='%s/_jcr_content/root/responsivegrid/teaser']";
     public static String teaserWithAltText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/teaser.coreimg.'][alt='%s']";
 

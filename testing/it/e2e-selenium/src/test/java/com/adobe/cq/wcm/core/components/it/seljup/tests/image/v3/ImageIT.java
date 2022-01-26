@@ -195,4 +195,13 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testPageImageWithLinkedPage(true);
     }
 
+    /**
+     * Test: set link with target on image
+     */
+    @Test
+    @DisplayName("Test: set link with target on image")
+    public void testSetLinkWithTarget() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testSetLinkWithTarget();
+    }
+
 }

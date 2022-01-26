@@ -124,6 +124,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.setLinkURL(testPage);
+        editDialog.clickLinkTarget();
         editDialog.openTextTab();
         editDialog.setPreTitle(preTitle);
         editDialog.setTitle(title);
@@ -134,6 +135,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
         assertTrue(teaser.isPreTitlePresent(preTitle), "PreTitle should be present");
         assertTrue(teaser.isTitleLinkPresent(testPage, title),"Title link should be present");
+        assertTrue(teaser.isTitleLinkPresentWithTarget(testPage, title, "_blank1"),"Title link should be present");
         assertTrue(teaser.isDescriptionPresent(description),"Description should be present");
     }
 
@@ -158,6 +160,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.setActionLinkUrl(actionExternalLink);
         editDialog.setActionText(actionExternalText);
         editDialog.addActionLinkUrl(secondTestPage);
+        editDialog.clickLActionLinkTarget();
         editDialog.setActionText(actionText2);
         Commons.saveConfigureDialog();
 
@@ -167,7 +170,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(!teaser.isTitleLinkPresent(), "Title link should not be present");
         assertTrue(!teaser.isDescriptionPresent(), "Teaser description should not be present");
         assertTrue(teaser.isActionLinkPresent(actionExternalText), actionExternalLink + " action link should be present");
-        assertTrue(teaser.isActionLinkPresent(actionText2), actionText2 + " action link should be present");
+        assertTrue(teaser.isActionLinkPresentWithTarget(actionText2, "_blank"), actionText2 + " action link should be present");
     }
 
     /**

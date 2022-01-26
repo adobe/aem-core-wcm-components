@@ -407,6 +407,23 @@ public class ImageTests {
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
     }
 
+    public void testSetLinkWithTarget() throws TimeoutException, InterruptedException {
+        String link = redirectPage;
+        String target = "_blank";
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.openMetadataTab();
+        image.getEditDialog().setLinkURL(link);
+        image.getEditDialog().clickLinkTarget();
+
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.checkLinkPresentWithTarget(link + ".html", target),"Title with link " + link + " and target "+ target + " should be present");
+    }
+
     // ----------------------------------------------------------
     // private stuff
     // ----------------------------------------------------------
