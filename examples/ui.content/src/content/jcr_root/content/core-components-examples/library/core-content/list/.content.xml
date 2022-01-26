@@ -79,7 +79,7 @@
                             childDepth="1"
                             linkItems="false"
                             listFrom="children"
-                            parentPage="/content/core-components-examples/library/page-authoring"
+                            parentPage="/content/core-components-examples/library/core-content"
                             showDescription="false"
                             showModificationDate="false"
                             sortOrder="asc"/>
@@ -127,7 +127,7 @@
                             childDepth="1"
                             linkItems="false"
                             listFrom="static"
-                            pages="[/content/core-components-examples/library/container/carousel,/content/core-components-examples/library/page-authoring/teaser,/content/core-components-examples/library/page-authoring/text]"
+                            pages="[/content/core-components-examples/library/container/carousel,/content/core-components-examples/library/core-content/teaser,/content/core-components-examples/library/core-content/text]"
                             showDescription="false"
                             showModificationDate="false"
                             sortOrder="asc"
@@ -277,7 +277,7 @@
                             linkItems="false"
                             listFrom="children"
                             orderBy="title"
-                            parentPage="/content/core-components-examples/library/page-authoring"
+                            parentPage="/content/core-components-examples/library/core-content"
                             showDescription="false"
                             showModificationDate="false"
                             sortOrder="desc"/>
@@ -326,7 +326,7 @@
                             linkItems="false"
                             listFrom="children"
                             maxItems="4"
-                            parentPage="/content/core-components-examples/library/page-authoring"
+                            parentPage="/content/core-components-examples/library/core-content"
                             showDescription="false"
                             showModificationDate="false"
                             sortOrder="asc"/>
@@ -374,7 +374,7 @@
                             childDepth="1"
                             linkItems="true"
                             listFrom="children"
-                            parentPage="/content/core-components-examples/library/page-authoring"
+                            parentPage="/content/core-components-examples/library/core-content"
                             showDescription="true"
                             showModificationDate="true"
                             sortOrder="asc"/>
@@ -424,7 +424,7 @@
                             linkItems="true"
                             listFrom="children"
                             maxItems="3"
-                            parentPage="/content/core-components-examples/library/page-authoring"
+                            parentPage="/content/core-components-examples/library/core-content"
                             showDescription="true"
                             showModificationDate="true"
                             sortOrder="asc"/>
