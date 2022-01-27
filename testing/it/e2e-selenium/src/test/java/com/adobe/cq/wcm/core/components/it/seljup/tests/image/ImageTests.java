@@ -422,6 +422,9 @@ public class ImageTests extends AuthorBaseUITest {
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         String link = (contextPath != null)? contextPath + redirectPage + ".html": redirectPage + ".html";
         String target = "_blank";
+        // TODO: debug
+        String html = $(".cmp-image").innerHtml();
+        assertTrue(StringUtils.equals(html, ""), "link: " + link + " html: " + html);
         assertTrue(image.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
