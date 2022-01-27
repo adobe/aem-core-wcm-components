@@ -20,6 +20,7 @@ import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
@@ -33,13 +34,12 @@ import org.apache.sling.testing.clients.ClientException;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
-import static com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest.adminClient;
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 
-public class ImageTests {
+public class ImageTests extends AuthorBaseUITest {
 
     private static String testAssetsPath         = "/content/dam/core-components";
     private static String testImagePath          = testAssetsPath + "/core-comp-test-image.jpg";
@@ -408,13 +408,11 @@ public class ImageTests {
     }
 
     public void testSetLinkWithTarget() throws TimeoutException, InterruptedException {
-        String link = redirectPage;
-        String target = "_blank";
         Commons.openSidePanel();
         dragImage();
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.openMetadataTab();
-        image.getEditDialog().setLinkURL(link);
+        image.getEditDialog().setLinkURL(redirectPage);
         image.getEditDialog().clickLinkTarget();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.saveConfigureDialog();
@@ -422,10 +420,9 @@ public class ImageTests {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        // TODO: debug
-        String html = $(".cmp-image").innerHtml();
-        assertTrue(StringUtils.equals(html, ""), "link: " + link + " html: " + html);
-        assertTrue(image.checkLinkPresentWithTarget(link + ".html", target),"Title with link " + link + " and target "+ target + " should be present");
+        String link = (contextPath != null)? contextPath + redirectPage + ".html": redirectPage + ".html";
+        String target = "_blank";
+        assertTrue(image.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
     // ----------------------------------------------------------

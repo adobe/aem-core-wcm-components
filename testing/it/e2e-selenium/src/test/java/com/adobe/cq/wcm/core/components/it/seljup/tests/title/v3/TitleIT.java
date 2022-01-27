@@ -21,13 +21,11 @@ import java.util.concurrent.TimeoutException;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static com.codeborne.selenide.Selenide.$;
 
 @Tag("group3")
 public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.title.v2.TitleIT {
@@ -46,10 +44,8 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
     @Test
     @DisplayName("Test: set link and target on title")
     public void testSetLinkWithTarget() throws TimeoutException, InterruptedException {
-        String link = redirectPage;
-        String target = "_blank";
         Commons.openEditDialog(editorPage, cmpPath);
-        title.getEditDialog().setLinkURL(link);
+        title.getEditDialog().setLinkURL(redirectPage);
         title.getEditDialog().clickLinkTarget();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.saveConfigureDialog();
@@ -57,10 +53,9 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        // TODO: debug
-        String html = $(".cmp-title__text").innerHtml();
-        assertTrue(StringUtils.equals(html, ""), "link: " + link + " html: " + html);
-        assertTrue(title.checkLinkPresentWithTarget(link + ".html", target),"Title with link " + link + " and target "+ target + " should be present");
+        String link = (contextPath != null)? contextPath + redirectPage + ".html": redirectPage + ".html";
+        String target = "_blank";
+        assertTrue(title.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
 }
