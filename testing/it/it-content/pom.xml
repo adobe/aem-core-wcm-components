@@ -89,12 +89,12 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <packageType>mixed</packageType>
+                    <packageType>content</packageType>
                     <validatorsSettings>
                         <jackrabbit-filter>
                             <options>
                                 <validRoots>
-                                    /conf,/content,/content/campaigns,/content/dam,/content/cq:tags,/home/users,/etc/blueprints,/apps,/apps/core/wcm
+                                    /conf,/content,/content/campaigns,/content/dam,/content/cq:tags,/home/users,/etc/blueprints
                                 </validRoots>
                             </options>
                         </jackrabbit-filter>
