@@ -34,7 +34,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     public void setupBeforeEach() throws ClientException {
         clientlibs = "core.wcm.components.image.v3";
         imageTests = new ImageTests();
-        imageTests.setup(adminClient, label, Commons.rtImage_v3, rootPage, defaultPageTemplate, clientlibs, new Image());
+        imageTests.setup(adminClient, contextPath, label, Commons.rtImage_v3, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
     /**
