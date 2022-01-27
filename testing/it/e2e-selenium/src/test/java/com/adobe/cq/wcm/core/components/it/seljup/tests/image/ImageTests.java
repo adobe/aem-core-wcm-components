@@ -422,6 +422,9 @@ public class ImageTests {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        // TODO: debug
+        String html = $(".cmp-image").innerHtml();
+        assertTrue(StringUtils.equals(html, ""), "link: " + link + " html: " + html);
         assertTrue(image.checkLinkPresentWithTarget(link + ".html", target),"Title with link " + link + " and target "+ target + " should be present");
     }
 

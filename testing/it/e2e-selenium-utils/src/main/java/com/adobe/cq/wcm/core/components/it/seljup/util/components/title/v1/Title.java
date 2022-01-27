@@ -48,6 +48,6 @@ public class Title extends BaseComponent {
     }
 
     public boolean checkLinkPresentWithTarget(String link, String target) {
-        return $("a[href='" + link + "'][target='" + target + "']").isDisplayed();
+        return $("a.cmp-title__link[href='" + link + "'][target='" + target + "']").isDisplayed();
     }
 }
