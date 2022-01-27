@@ -16,6 +16,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
     <!-- Sample content -->
+    <filter root="/apps/core/wcm/tests"/>
     <filter root="/conf/core-components"/>
     <filter root="/content/core-components"/>
     <filter root="/content/campaigns/core_component_brand"/>
