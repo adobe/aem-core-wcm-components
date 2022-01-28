@@ -68,13 +68,10 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     }
 
     @Override
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    //@JsonInclude(JsonInclude.Include.NON_NULL)
     @Nullable
     public Link getLink() {
-        if (!super.isActionsEnabled())
             return link.orElse(null);
-        else
-            return null;
     }
 
     @Override
