@@ -137,7 +137,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
     }
 
     /**
-     * Test: Fully Configured Teaser
+     * Test: Teaser with link and image and not title and description
      * @throws TimeoutException
      * @throws InterruptedException
      */

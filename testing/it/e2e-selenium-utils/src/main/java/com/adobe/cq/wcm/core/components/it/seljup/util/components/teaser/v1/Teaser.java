@@ -27,7 +27,7 @@ import static com.codeborne.selenide.Selenide.$$;
 public class Teaser extends BaseComponent {
     private static String teaser = ".cmp-teaser";
     private static String teaserImage = ".cmp-teaser__image";
-    private static String teaserImageLink=".cmp-image__link";
+    private static String teaserImageLink = ".cmp-image__link";
     private static String TeaserPreTitle = ".cmp-teaser__pretitle";
     private static String teaserTitle = ".cmp-teaser__title";
     private static String teaserTitleLink = ".cmp-teaser__title-link";
