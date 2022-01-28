@@ -66,7 +66,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Override
     @Nullable
     public Link getLink() {
-            return link.orElse(null);
+        return link.orElse(null);
     }
 
     @Override
