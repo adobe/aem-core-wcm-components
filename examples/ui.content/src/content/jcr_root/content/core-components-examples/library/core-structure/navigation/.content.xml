@@ -245,7 +245,7 @@
                         <navigation
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/navigation"
-                            navigationRoot="/content/core-components-examples/library/templating"
+                            navigationRoot="/content/core-components-examples/library/core-structure"
                             disableShadowing="true"/>
                     </component>
                     <info
@@ -287,7 +287,7 @@
                         <navigation
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/navigation"
-                            navigationRoot="/content/core-components-examples/library/templating"
+                            navigationRoot="/content/core-components-examples/library/core-structure"
                             accessibilityLabel="Secondary Navigation"/>
                     </component>
                     <info
