@@ -15,12 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Stream;
 
-import com.adobe.granite.ui.clientlibs.LibraryType;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -71,7 +67,6 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     }
 
     @Override
-    //@JsonInclude(JsonInclude.Include.NON_NULL)
     @Nullable
     public Link getLink() {
             return link.orElse(null);
