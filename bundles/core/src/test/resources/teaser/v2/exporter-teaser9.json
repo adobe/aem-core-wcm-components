@@ -1,6 +1,10 @@
 {
   "title": "Teaser",
   "description": "Description",
+  "link": {
+    "valid": true,
+    "url": "http://www.adobe.com"
+  },
   "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,

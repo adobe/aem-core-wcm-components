@@ -15,8 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Stream;
 
+import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;

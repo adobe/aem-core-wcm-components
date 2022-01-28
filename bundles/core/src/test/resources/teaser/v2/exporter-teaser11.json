@@ -1,6 +1,10 @@
 {
   "title": "Teasers Test",
   "description": "Teasers description from &lt;page properties&gt;",
+  "link": {
+    "valid": true,
+    "url": "/core/content/teasers.html"
+  },
   "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
