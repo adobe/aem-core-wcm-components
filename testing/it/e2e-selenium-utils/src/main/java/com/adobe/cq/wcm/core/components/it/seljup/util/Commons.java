@@ -113,6 +113,7 @@ public class Commons {
     // teaser component
     public static String rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
     public static String rtTeaser_v2 = "core/wcm/components/teaser/v2/teaser";
+    public static String rtTeaser_v3 = "core/wcm/components/teaser/v3/teaser";
     // carousel component
     public static String rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
     // tabs component
