@@ -57,7 +57,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
 
         super.initModel();
 
-        if ( hasImage() && ((super.getTitle()!=null && !super.getTitle().isEmpty()) || super.isActionsEnabled())) {
+        if (hasImage() && (super.isActionsEnabled() || (super.getTitle()!=null && !super.getTitle().isEmpty()))) {
             super.hiddenImageResourceProperties.add(Link.PN_LINK_URL);
             super.setImageResource(component, request.getResource(), super.hiddenImageResourceProperties, null);
         }
