@@ -18,6 +18,6 @@
     jcr:description="Teaser Component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="Teaser"
-    sling:resourceSuperType="core/wcm/components/teaser/v3/teaser"
+    sling:resourceSuperType="core/wcm/components/teaser/v2/teaser"
     componentGroup="Core Components Examples"
     imageDelegate="core-components-examples/components/image"/>
