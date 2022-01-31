@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.servlets.annotations.SlingServletFilter;
 import org.apache.sling.servlets.annotations.SlingServletFilterScope;
 import org.jsoup.Jsoup;
@@ -33,10 +34,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Component(service = Filter.class,
     property = {
@@ -46,74 +44,136 @@ import java.util.UUID;
     extensions = {"html"},
     methods = {"GET"})
 public class TableOfContentsFilter implements Filter {
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void destroy() {
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
+
         CharResponseWrapper wrapper = new CharResponseWrapper((HttpServletResponseWrapper) response);
 
         chain.doFilter(request, wrapper);
 
-        PrintWriter responseWriter = response.getWriter();
-
         if (wrapper.getContentType().contains("text/html")) {
-            CharArrayWriter charWriter = new CharArrayWriter();
             String originalContent = wrapper.toString();
 
             Document document = Jsoup.parse(originalContent);
-            Set<String> hTags = new HashSet<>();
-            hTags.add("h1");
-            hTags.add("h2");
-            hTags.add("h3");
-            hTags.add("h4");
-            hTags.add("h5");
-            hTags.add("h6");
 
-            StringBuilder toc = new StringBuilder();
-            toc.append("<ol>");
-            Elements elements = document.getAllElements();
-            for (Element element : elements) {
-                if(!hTags.contains(element.tagName()) || element.text().length() == 0) {
+            int startLevel = 1;
+            int stopLevel = 6;
+            Set<String> allowedHeadingTags = new HashSet<>();
+            for(int level = startLevel; level <= stopLevel; level++) {
+                allowedHeadingTags.add("h" + level);
+            }
+
+            ListType listType = ListType.getListType("ordered");
+            String listTag = listType == ListType.OL ? "ol" : "ul";
+
+            Elements allElements = document.getAllElements();
+            List<Element> headingElements = new ArrayList();
+            for (Element element : allElements) {
+                if(!allowedHeadingTags.contains(element.tagName()) || element.text().length() == 0) {
                     continue;
                 }
-                toc.append("<li>");
-                String uniqueId = UUID.randomUUID().toString();
-                toc.append("<a href=#" + uniqueId + ">");
-                toc.append(element.text());
-                toc.append("</a>");
-                toc.append("</li>");
-                element.attr("id", uniqueId);
-            }
-            toc.append("</ol>");
-
-            elements = document.getElementsByClass("tableofcomponents-placeholder");
-            for (Element element : elements) {
-                element.append(toc.toString());
+                headingElements.add(element);
             }
 
-//            int indexOfCloseBodyTag = originalContent.indexOf("</body>") - 1;
-//
-//            charWriter.write(originalContent.substring(0, indexOfCloseBodyTag));
-//
-//            String copyrightInfo = "<p>Copyright CodeJava.net</p>";
-////            String closeHTMLTags = "</body></html>";
-//            String closeHTMLTags = originalContent.substring(indexOfCloseBodyTag);
-//
-//            charWriter.write(copyrightInfo);
-//            charWriter.write(closeHTMLTags);
+            Element toc = getNestedList(listTag, headingElements.listIterator(), 0);
 
+            Elements tocPlaceholderElements = document.getElementsByClass("table-of-contents-placeholder");
+            for (Element tocPlaceholderElement : tocPlaceholderElements) {
+                tocPlaceholderElement.appendChild(toc);
+            }
+
+            CharArrayWriter charWriter = new CharArrayWriter();
             charWriter.write(document.outerHtml());
             String alteredContent = charWriter.toString();
             response.setContentLength(alteredContent.length());
-            responseWriter.write(alteredContent);
+            response.getWriter().write(alteredContent);
         }
     }
 
-    @Override
-    public void destroy() {
+    private Element getNestedList(String listTag, ListIterator<Element> headingElementsIterator,
+                                  int parentHeadingLevel) {
+        if(!headingElementsIterator.hasNext()) {
+            return new Element("");
+        }
+        Element list = new Element(listTag);
+        Element headingElement = headingElementsIterator.next();
+        Element listItem = getListItemElement(headingElement);
+        int previousHeadingLevel = getHeadingLevel(headingElement);
+        list.appendChild(listItem);
+        while(headingElementsIterator.hasNext()) {
+            headingElement = headingElementsIterator.next();
+            int currentHeadingLevel = getHeadingLevel(headingElement);
+            if(currentHeadingLevel == previousHeadingLevel ||
+                (currentHeadingLevel < previousHeadingLevel && currentHeadingLevel > parentHeadingLevel)) {
+                listItem = getListItemElement(headingElement);
+                list.appendChild(listItem);
+                previousHeadingLevel = currentHeadingLevel;
+            } else if(currentHeadingLevel > previousHeadingLevel) {
+                headingElementsIterator.previous();
+                list.appendChild(getNestedList(listTag, headingElementsIterator, previousHeadingLevel));
+            } else if(currentHeadingLevel < previousHeadingLevel && currentHeadingLevel <= parentHeadingLevel) {
+                headingElementsIterator.previous();
+                return list;
+            }
+        }
+        return list;
+    }
 
+    /**
+     * Creates list item element from the heading element.
+     * Adds 'id' attribute on heading element if not already present.
+     */
+    private Element getListItemElement(Element headingElement) {
+        String id = headingElement.attr("id");
+        if("".contentEquals(id)) {
+            id = UUID.randomUUID().toString();
+            headingElement.attr("id", id);
+        }
+        Element listItem = new Element("li");
+        Element anchorTag = new Element("a");
+        anchorTag.attr("href", "#" + id);
+        anchorTag.appendText(headingElement.text());
+        listItem.appendChild(anchorTag);
+        return listItem;
+    }
+
+    private int getHeadingLevel(Element headingElement) {
+        return headingElement.tagName().charAt(1) - '0';
+    }
+
+    public enum ListType {
+        OL("ordered"),
+        UL("unordered");
+
+        private String value;
+
+        ListType(String value) {
+            this.value = value;
+        }
+
+        public static ListType getListType(String value) {
+            for (ListType listType : values()) {
+                if (StringUtils.equalsIgnoreCase(listType.value, value)) {
+                    return listType;
+                }
+            }
+            return null;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 }
