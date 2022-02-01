@@ -30,10 +30,105 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
+                                            <listtype
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="Whether to display the table of contents as an unordered list of bullet points, or as an ordered listed of numbered items"
+                                                fieldLabel="List Type"
+                                                name="./listtype">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <unordered
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Unordered List"
+                                                        value="ul"/>
+                                                    <ordered
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Ordered List"
+                                                        value="ol"/>
+                                                </items>
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                                                    expression="${cqDesign.restrictlisttype == 'norestriction'}"/>
+                                            </listtype>
+                                            <titlestartlevel
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="The minimum title level to report in the table of contents"
+                                                fieldLabel="Title Start Level"
+                                                name="./titlestartlevel">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <one
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="1"
+                                                        value="1"/>
+                                                    <two
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="2"
+                                                        value="2"/>
+                                                    <three
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="3"
+                                                        value="3"/>
+                                                    <four
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="4"
+                                                        value="4"/>
+                                                    <five
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="5"
+                                                        value="5"/>
+                                                    <six
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="6"
+                                                        value="6"/>
+                                                </items>
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                                                    expression="${cqDesign.restricttitlestartlevel == 'norestriction'}"/>
+                                            </titlestartlevel>
+                                            <titlestoplevel
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="The maximum title level to report in the table of contents"
+                                                fieldLabel="Title Stop Level"
+                                                name="./titlestoplevel">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <six
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="6"
+                                                        value="6"/>
+                                                    <five
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="5"
+                                                        value="5"/>
+                                                    <four
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="4"
+                                                        value="4"/>
+                                                    <three
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="3"
+                                                        value="3"/>
+                                                    <two
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="2"
+                                                        value="2"/>
+                                                    <one
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="1"
+                                                        value="1"/>
+                                                </items>
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                                                    expression="${cqDesign.restricttitlestoplevel == 'norestriction'}"/>
+                                            </titlestoplevel>
                                             <id
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldDescription="HTML ID attribute to apply to the table of contents component"
                                                 fieldLabel="ID"
                                                 name="./id"/>
                                         </items>
