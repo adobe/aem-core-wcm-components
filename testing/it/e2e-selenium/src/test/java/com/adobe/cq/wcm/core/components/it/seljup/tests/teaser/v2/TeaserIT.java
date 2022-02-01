@@ -254,7 +254,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
         assertTrue(!teaser.isImageLinkPresent(), "Image should not be linked");
         assertTrue(teaser.isTitleHidden(), "Title and Link should not be displayed");
-        assertTrue(!teaser.isTitleLinkPresent(testPage, pageTitle),"Page title should be present as title link ");
+        assertTrue(!teaser.isTitleLinkPresent(testPage, pageTitle),"Page title should not be present as title link ");
         assertTrue(teaser.isDescriptionPresent(pageDescription),"Description from page should be present");
         assertTrue(teaser.isActionLinkPresent(pageTitle), "Test Page action link should be present");
         assertTrue(teaser.isActionLinkPresent(secondPageTitle), "Second Test Page action link should be present");
