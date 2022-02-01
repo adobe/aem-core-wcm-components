@@ -91,7 +91,8 @@ public class TableOfContentsFilter implements Filter {
 
             Elements tocPlaceholderElements = document.getElementsByClass("table-of-contents-placeholder");
             for (Element tocPlaceholderElement : tocPlaceholderElements) {
-                tocPlaceholderElement.appendChild(toc);
+                tocPlaceholderElement.empty();
+                tocPlaceholderElement.append((toc.outerHtml()));
             }
 
             CharArrayWriter charWriter = new CharArrayWriter();
@@ -105,7 +106,7 @@ public class TableOfContentsFilter implements Filter {
     private Element getNestedList(String listTag, ListIterator<Element> headingElementsIterator,
                                   int parentHeadingLevel) {
         if(!headingElementsIterator.hasNext()) {
-            return new Element("");
+            return new Element("span");
         }
         Element list = new Element(listTag);
         Element headingElement = headingElementsIterator.next();
