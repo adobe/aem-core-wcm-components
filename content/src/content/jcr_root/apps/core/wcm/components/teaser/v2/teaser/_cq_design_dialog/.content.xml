@@ -114,30 +114,6 @@
                                         value="h6"/>
                                 </items>
                             </type>
-                            <links
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container"
-                                granite:class="coral-Form-fieldwrapper">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <label
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/text"
-                                        text="Links"
-                                        granite:class="coral-Form-fieldlabel"/>
-                                    <image
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        text="Don't link the image"
-                                        name="./imageLinkHidden"
-                                        value="{Boolean}true"/>
-                                    <title
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        text="Don't link the title"
-                                        name="./titleLinkHidden"
-                                        value="{Boolean}true"/>
-                                </items>
-                            </links>
                             <imageDelegate
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/container"

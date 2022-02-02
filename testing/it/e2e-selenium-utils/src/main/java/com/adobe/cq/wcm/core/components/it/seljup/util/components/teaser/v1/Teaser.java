@@ -27,6 +27,7 @@ import static com.codeborne.selenide.Selenide.$$;
 public class Teaser extends BaseComponent {
     private static String teaser = ".cmp-teaser";
     private static String teaserImage = ".cmp-teaser__image";
+    private static String teaserImageLink = ".cmp-image__link";
     private static String TeaserPreTitle = ".cmp-teaser__pretitle";
     private static String teaserTitle = ".cmp-teaser__title";
     protected static String teaserTitleLink = ".cmp-teaser__title-link";
@@ -55,6 +56,10 @@ public class Teaser extends BaseComponent {
         return $(String.format(teaserWithAltText, pagePath, altText)).isDisplayed();
     }
 
+    public boolean isImageLinkPresent() {
+        return $(teaserImageLink).isDisplayed();
+    }
+
     public boolean isPreTitlePresent(String preTitle) {
         return $(TeaserPreTitle).innerHtml().trim().equals(preTitle);
     }
@@ -76,6 +81,10 @@ public class Teaser extends BaseComponent {
 
     public boolean isDescriptionPresent() {
         return $(teaserDescription).isDisplayed();
+    }
+
+    public boolean isTitlePresent() {
+        return $(teaserTitle).isDisplayed();
     }
 
     public boolean isTitlePresent(String title) {
