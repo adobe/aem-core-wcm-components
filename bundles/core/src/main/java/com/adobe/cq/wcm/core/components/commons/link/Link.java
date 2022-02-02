@@ -44,11 +44,13 @@ public interface Link<T> {
     /**
      * Property name for storing link accessibility label.
      */
+    @Deprecated
     String PN_LINK_ACCESSIBILITY_LABEL = "linkAccessibilityLabel";
 
     /**
      * Property name for storing link title attribute.
      */
+    @Deprecated
     String PN_LINK_TITLE_ATTRIBUTE = "linkTitleAttribute";
 
     /**

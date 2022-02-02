@@ -42,7 +42,7 @@ public class Button extends BaseComponent {
         return $("a[href='" + link + "']").isDisplayed();
     }
 
-    public boolean checkLinkPresent(String link, String target) {
+    public boolean checkLinkPresentWithTarget(String link, String target) {
         return $("a[href='" + link + "'][target='" + target + "']").isDisplayed();
     }
 
