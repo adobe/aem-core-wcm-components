@@ -76,13 +76,9 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     @Nullable
     private String videoId;
 
-    @ValueMapValue(name = PN_WIDTH)
+    @ValueMapValue(name = PN_ASPECT_RATIO)
     @Nullable
-    private String iFrameWidth;
-
-    @ValueMapValue(name = PN_HEIGHT)
-    @Nullable
-    private String iFrameHeight;
+    private String iFrameAspectRatio;
 
     @ValueMapValue(name = PN_MUTE)
     @Nullable
@@ -119,13 +115,8 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     }
 
     @Override
-    public @Nullable String getIFrameWidth() {
-        return iFrameWidth;
-    }
-
-    @Override
-    public @Nullable String getIFrameHeight() {
-        return iFrameHeight;
+    public @Nullable String getIFrameAspectRatio() {
+        return iFrameAspectRatio;
     }
 
     private static @Nullable Resource getWrappedResource(Resource resource) {

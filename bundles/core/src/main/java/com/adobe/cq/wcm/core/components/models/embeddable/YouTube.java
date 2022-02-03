@@ -27,14 +27,9 @@ public interface YouTube extends Embeddable {
     String PN_VIDEO_ID = "youtubeVideoId";
 
     /**
-     * Name of the resource property that defines the width of the iFrame hosting the YouTube video.
+     * Name of the resource property that defines the aspect ratio of the iFrame hosting the YouTube video.
      */
-    String PN_WIDTH = "youtubeWidth";
-
-    /**
-     * Name of the resource property that defines the height of the iFrame hosting the YouTube video.
-     */
-    String PN_HEIGHT = "youtubeHeight";
+    String PN_ASPECT_RATIO = "youtubeAspectRatio";
 
     /* The following resource property names are used for optional YouTube player paramters */
     String PN_AUTOPLAY = "youtubeAutoPlay";
@@ -67,11 +62,7 @@ public interface YouTube extends Embeddable {
 
     String  PN_DESIGN_PLAYS_INLINE_DEFAULT_VALUE = "youtubePlaysInlineDefaultValue";
 
-    default @Nullable String getIFrameWidth() {
-        return null;
-    }
-
-    default @Nullable String getIFrameHeight() {
+    default @Nullable String getIFrameAspectRatio() {
         return null;
     }
 
