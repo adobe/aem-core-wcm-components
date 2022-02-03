@@ -38,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImplTest {
 
     private static final String TEST_BASE = "/teaser/v2";
-    private static final String TEASER_24 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-24";
     private static final String TEASER_25 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-25";
 
     @BeforeEach
