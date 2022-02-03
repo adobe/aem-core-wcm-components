@@ -50,16 +50,6 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
 
     /**
-     * Flag indicating if the title should be inherited from the target page.
-     */
-    private boolean titleFromPage = true;
-
-    /**
-     * Flag indicating if the description should be inherited from the target page.
-     */
-    private boolean descriptionFromPage = true;
-
-    /**
      * The title.
      */
     private String title;
@@ -80,14 +70,12 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
 
     @PostConstruct
     protected void initModel() {
+        super.titleFromPage = true;
+        super.descriptionFromPage = true;
         super.initModel();
-        ValueMap properties = resource.getValueMap();
-        titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
-        descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
 
         if (hasImage() && (super.isActionsEnabled() || (super.getTitle()!=null && !super.getTitle().isEmpty()))) {
-            super.hiddenImageResourceProperties.add(Link.PN_LINK_URL);
-            super.setImageResource(component, request.getResource(), super.hiddenImageResourceProperties, null);
+            super.overriddenImageResourceProperties.put(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.TRUE.toString());
         }
     }
 

@@ -17,7 +17,9 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -145,12 +147,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * Flag indicating if the title should be inherited from the target page.
      */
-    private boolean titleFromPage = false;
+    protected boolean titleFromPage = false;
 
     /**
      * Flag indicating if the description should be inherited from the target page.
      */
-    private boolean descriptionFromPage = false;
+    protected boolean descriptionFromPage = false;
 
     /**
      * List of CTA actions.
@@ -164,6 +166,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
     }};
+
+    protected final Map<String, String> overriddenImageResourceProperties = new HashMap<>();
 
     /**
      * The teaser link
@@ -224,7 +228,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
 
         if (this.hasImage()) {
-            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties, null);
+            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties, overriddenImageResourceProperties);
         }
         // use the target page as the link if it exists
         link = this.getTargetPage()
