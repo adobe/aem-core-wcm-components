@@ -119,7 +119,7 @@
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Anchor Button"
                             sling:resourceType="core-components-examples/components/button"
-                            link="/content/core-components-examples/library/page-authoring/button"/>
+                            linkURL="/content/core-components-examples/library/core-content/button"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"

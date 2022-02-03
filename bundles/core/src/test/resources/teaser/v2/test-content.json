@@ -268,6 +268,15 @@
             "imageFromPageImage": "true"
           },
           "teaser-24"          : {
+            "jcr:primaryType"    : "nt:unstructured",
+            "imageFromPageImage" : "true",
+            "jcr:title"          : "",
+            "linkURL"            : "/content/page1",
+            "sling:resourceType" : "core/wcm/components/teaser/v2/teaser",
+            "titleFromPage"      : false,
+            "descriptionFromPage": false
+          },
+          "teaser-25"          : {
             "jcr:primaryType"   : "nt:unstructured",
             "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
             "sling:resourceType": "core/wcm/components/teaser/v2/teaser",

@@ -41,6 +41,8 @@ import com.day.cq.wcm.api.components.Component;
 import com.day.text.Text;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.annotation.PostConstruct;
+
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl {
@@ -70,6 +72,25 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @ScriptVariable
     protected Page currentPage;
 
+    /**
+     * The current component.
+     */
+    @ScriptVariable
+    private Component component;
+
+    @PostConstruct
+    protected void initModel() {
+        super.initModel();
+        ValueMap properties = resource.getValueMap();
+        titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
+        descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
+
+        if (hasImage() && (super.isActionsEnabled() || (super.getTitle()!=null && !super.getTitle().isEmpty()))) {
+            super.hiddenImageResourceProperties.add(Link.PN_LINK_URL);
+            super.setImageResource(component, request.getResource(), super.hiddenImageResourceProperties, null);
+        }
+    }
+
     @Override
     @Nullable
     public Link getLink() {
@@ -81,14 +102,6 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Deprecated
     public String getLinkURL() {
         return super.getLinkURL();
-    }
-
-    @PostConstruct
-    protected void initModel() {
-        super.initModel();
-        ValueMap properties = resource.getValueMap();
-        titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
-        descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
     }
 
     @Override

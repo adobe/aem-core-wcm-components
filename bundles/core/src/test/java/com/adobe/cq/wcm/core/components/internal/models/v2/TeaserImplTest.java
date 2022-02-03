@@ -39,6 +39,7 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
 
     private static final String TEST_BASE = "/teaser/v2";
     private static final String TEASER_24 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-24";
+    private static final String TEASER_25 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-25";
 
     @BeforeEach
     protected void setUp() {
@@ -59,11 +60,11 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
 
     @Test
     protected void testTeaserWithTitleAndDescriptionFromCurrentPage() {
-        Teaser teaser = getTeaserUnderTest(TEASER_24);
+        Teaser teaser = getTeaserUnderTest(TEASER_25);
         assertEquals("Teasers Test", teaser.getTitle());
         // < and > are expected escaped, because the page properties provide only a plain text field for the page description
         assertEquals("Teasers description from &lt;page properties&gt;", teaser.getDescription());
-        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser24"));
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser25"));
     }
 
     @Test
@@ -171,6 +172,12 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     protected void testInheritedPageImage_fromTemplate_withCTAs() {
         Teaser teaser = getTeaserUnderTest(TEMPLATE_TEASER_3);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "template_teaser3"));
+    }
+
+    @Test
+    protected void testImageFromPage_withLink_andTitleEmpty() {
+        Teaser teaser = getTeaserUnderTest(TEASER_24);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser24"));
     }
 
 }

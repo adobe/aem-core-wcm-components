@@ -78,8 +78,6 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         data.clear();
         data.put("jcr:title", "New Policy");
         data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("titleLinkHidden", "true");
-        data.put("imageLinkHidden", "true");
         String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
         String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
 
@@ -124,6 +122,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.setLinkURL(testPage);
+        editDialog.clickLinkTarget();
         editDialog.openTextTab();
         editDialog.setPreTitle(preTitle);
         editDialog.setTitle(title);
@@ -134,7 +133,35 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
         assertTrue(teaser.isPreTitlePresent(preTitle), "PreTitle should be present");
         assertTrue(teaser.isTitleLinkPresent(testPage, title),"Title link should be present");
+        assertTrue(teaser.isTitleLinkPresentWithTarget(testPage, title, "_blank"),"Title link should be present");
         assertTrue(teaser.isDescriptionPresent(description),"Description should be present");
+        assertTrue(!teaser.isImageLinkPresent(),"The image should not be linked");
+    }
+
+    /**
+     * Test: Teaser with link and image and not title and description
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Teaser with link and image and not title and description")
+    public void testWithLinkAndImageTeaser() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        assetFinder.setFiltersPath(testAssetsPath);
+        Commons.openEditDialog(editorPage,cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openAssetsTab();
+        editDialog.checkImageFromPageImage();
+        editDialog.uploadImageFromSidePanel(testImagePath);
+        editDialog.openLinksTab();
+        editDialog.setLinkURL(testPage);
+        Commons.saveConfigureDialog();
+
+        Commons.switchContext("ContentFrame");
+        assertTrue(teaser.isImagePresent(testPage), "Image should be present");
+        assertTrue(teaser.isImageLinkPresent(), "The image should be linked");
+        assertTrue(!teaser.isTitlePresent(), "Teaser title should not be present");
+        assertTrue(!teaser.isDescriptionPresent(), "Teaser description should not be present");
     }
 
     /**
@@ -158,16 +185,18 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.setActionLinkUrl(actionExternalLink);
         editDialog.setActionText(actionExternalText);
         editDialog.addActionLinkUrl(secondTestPage);
+        editDialog.clickLActionLinkTarget();
         editDialog.setActionText(actionText2);
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isTitleHidden(), "Title and Link should not be displayed");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
+        assertTrue(!teaser.isImageLinkPresent(), "Image should not be linked");
         assertTrue(!teaser.isTitleLinkPresent(), "Title link should not be present");
         assertTrue(!teaser.isDescriptionPresent(), "Teaser description should not be present");
         assertTrue(teaser.isActionLinkPresent(actionExternalText), actionExternalLink + " action link should be present");
-        assertTrue(teaser.isActionLinkPresent(actionText2), actionText2 + " action link should be present");
+        assertTrue(teaser.isActionLinkPresentWithTarget(actionText2, "_blank"), actionText2 + " action link should be present");
     }
 
     /**
@@ -226,8 +255,9 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
+        assertTrue(!teaser.isImageLinkPresent(), "Image should not be linked");
         assertTrue(teaser.isTitleHidden(), "Title and Link should not be displayed");
-        assertTrue(teaser.isTitleLinkPresent(testPage, pageTitle),"Page title should be present as title link ");
+        assertTrue(!teaser.isTitleLinkPresent(testPage, pageTitle),"Page title should not be present as title link ");
         assertTrue(teaser.isDescriptionPresent(pageDescription),"Description from page should be present");
         assertTrue(teaser.isActionLinkPresent(pageTitle), "Test Page action link should be present");
         assertTrue(teaser.isActionLinkPresent(secondPageTitle), "Second Test Page action link should be present");

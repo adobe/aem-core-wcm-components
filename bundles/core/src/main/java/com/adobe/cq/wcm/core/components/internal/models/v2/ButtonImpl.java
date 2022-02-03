@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -38,6 +40,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ButtonImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ButtonImpl {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/button/v2/button";
+
+    @PostConstruct
+    private void initModel() {
+        link = linkHandler.getLink(resource);
+    }
 
     @Override
     @Nullable
