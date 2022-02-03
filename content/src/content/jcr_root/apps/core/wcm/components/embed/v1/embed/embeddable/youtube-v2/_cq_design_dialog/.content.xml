@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="YouTube v2"
+    sling:resourceType="granite/ui/components/coral/foundation/container">
+    <granite:data
+        jcr:primaryType="nt:unstructured"
+        cmp-embed-dialog-edit-embeddableoptions="true"
+        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube-v2"/>
+    <items jcr:primaryType="nt:unstructured">
+        <mute
+            granite:class="toggle-checkbox"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+            checked="false"
+            fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
+            name="./youtubeMuteEnabled"
+            text="Allow configuration of Mute behaviour"
+            uncheckedValue="false"
+            value="true">
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-mute\]"/>
+        </mute>
+        <muteGroup
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/well">
+            <items jcr:primaryType="nt:unstructured">
+                <enable
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    checked="false"
+                    fieldDescription="This parameter specifies whether the video will play muted by default. Enabling this increases the chance that Autoplay works in modern browsers."
+                    name="./youtubeMuteDefaultValue"
+                    text="Default Value of Mute"
+                    uncheckedValue="false"
+                    value="true"/>
+            </items>
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-mute="true"
+                cmp-embed-dialog-edit-showhidetargetvalue="true"/>
+        </muteGroup>
+        <autoplay
+            granite:class="toggle-checkbox"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+            checked="false"
+            fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
+            name="./youtubeAutoPlayEnabled"
+            text="Allow configuration of Autoplay behaviour"
+            uncheckedValue="false"
+            value="true">
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-autoplay\]"/>
+        </autoplay>
+        <autoplayGroup
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/well">
+            <items jcr:primaryType="nt:unstructured">
+                <enable
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    checked="false"
+                    fieldDescription="This parameter specifies whether the initial video will automatically start to play when the player loads."
+                    name="./youtubeAutoPlayDefaultValue"
+                    text="Default Value of Autoplay"
+                    uncheckedValue="false"
+                    value="true"/>
+            </items>
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-autoplay="true"
+                cmp-embed-dialog-edit-showhidetargetvalue="true"/>
+        </autoplayGroup>
+        <loop
+            granite:class="toggle-checkbox"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+            checked="false"
+            fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
+            name="./youtubeLoopEnabled"
+            text="Allow configuration of Loop behaviour"
+            uncheckedValue="false"
+            value="true">
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-loop\]"/>
+        </loop>
+        <loopGroup
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/well">
+            <items jcr:primaryType="nt:unstructured">
+                <enable
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    checked="false"
+                    fieldDescription="In the case of a single video specifies whether the player should play the initial video again and again. In the case of a playlist, the player plays the entire playlist and then starts again at the first video."
+                    name="./youtubeLoopDefaultValue"
+                    text="Default Value of Loop"
+                    uncheckedValue="false"
+                    value="true"/>
+            </items>
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-loop="true"
+                cmp-embed-dialog-edit-showhidetargetvalue="true"/>
+        </loopGroup>
+        <inline
+            granite:class="toggle-checkbox"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+            checked="false"
+            fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
+            name="./youtubePlaysInlineEnabled"
+            text="Allow configuration of Inline Playback (iOS)"
+            uncheckedValue="false"
+            value="true">
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-inline\]"/>
+        </inline>
+        <inlineGroup
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/well">
+            <items jcr:primaryType="nt:unstructured">
+                <enable
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    checked="false"
+                    fieldDescription="This parameter controls whether videos play inline (on) or fullscreen (off) in an HTML5 player on iOS."
+                    name="./youtubePlaysInlineDefaultValue"
+                    text="Default Value of Inline Playback (iOS)"
+                    uncheckedValue="false"
+                    value="true"/>
+            </items>
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-inline="true"
+                cmp-embed-dialog-edit-showhidetargetvalue="true"/>
+        </inlineGroup>
+        <rel
+            granite:class="toggle-checkbox"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+            checked="false"
+            fieldDescription="When checked, enables the ability of content authors to configure this parameter. Otherwise the YouTube default is taken."
+            name="./youtubeRelatedVideosEnabled"
+            text="Allow configuration of related videos"
+            uncheckedValue="false"
+            value="true">
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-rel\]"/>
+        </rel>
+        <relGroup
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/well">
+            <items jcr:primaryType="nt:unstructured">
+                <enable
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                    checked="true"
+                    fieldDescription="If disabled related videos will come from the same channel as the video that was just played, otherwise from any channel."
+                    name="./youtubeRelatedVideosDefaultValue"
+                    text="Default Value of Unrestricted Related Videos"
+                    uncheckedValue="false"
+                    value="true"/>
+            </items>
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-rel="true"
+                cmp-embed-dialog-edit-showhidetargetvalue="true"/>
+        </relGroup>
+    </items>
+</jcr:root>
