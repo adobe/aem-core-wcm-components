@@ -41,6 +41,7 @@ import java.util.*;
         Constants.SERVICE_RANKING + "Integer=999"})
 @SlingServletFilter(scope = {SlingServletFilterScope.REQUEST},
     pattern = "/content/.*",
+    resourceTypes = "cq:Page",
     extensions = {"html"},
     methods = {"GET"})
 public class TableOfContentsFilter implements Filter {
@@ -92,7 +93,14 @@ public class TableOfContentsFilter implements Filter {
             Elements tocPlaceholderElements = document.getElementsByClass("table-of-contents-placeholder");
             for (Element tocPlaceholderElement : tocPlaceholderElements) {
                 tocPlaceholderElement.empty();
+                tocPlaceholderElement.removeAttr("class");
                 tocPlaceholderElement.append((toc.outerHtml()));
+            }
+
+            Elements tocTemplatePlaceholderElements =
+                document.getElementsByClass("table-of-contents-template-placeholder");
+            for (Element tocTemplatePlaceholderElement : tocTemplatePlaceholderElements) {
+                tocTemplatePlaceholderElement.remove();
             }
 
             CharArrayWriter charWriter = new CharArrayWriter();
