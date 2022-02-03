@@ -24,6 +24,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -45,6 +47,8 @@ import java.util.*;
     extensions = {"html"},
     methods = {"GET"})
 public class TableOfContentsFilter implements Filter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TableOfContentsFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

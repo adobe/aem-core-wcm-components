@@ -25,7 +25,7 @@
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                 fieldDescription="Whether the author should be able to choose the list type or not"
                                 fieldLabel="Restrict List Type"
-                                name="./restrictlisttype">
+                                name="./restrictListType">
                                 <items jcr:primaryType="nt:unstructured">
                                     <norestriction
                                         jcr:primaryType="nt:unstructured"
@@ -34,19 +34,19 @@
                                     <unorderedlist
                                         jcr:primaryType="nt:unstructured"
                                         text="Unordered List"
-                                        value="unorderedlist"/>
+                                        value="unordered"/>
                                     <orderedlist
                                         jcr:primaryType="nt:unstructured"
                                         text="Ordered List"
-                                        value="orderedlist"/>
+                                        value="ordered"/>
                                 </items>
                             </restrictlisttype>
                             <restricttitlestartlevel
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                fieldDescription="Whether the author should be able to choose the the minimum title level to report in the table of contents"
+                                fieldDescription="Whether the author should be able to choose the minimum title level to report in the table of contents"
                                 fieldLabel="Restrict Title Start Level"
-                                name="./restricttitlestartlevel">
+                                name="./restrictTitleStartLevel">
                                 <items jcr:primaryType="nt:unstructured">
                                     <norestriction
                                         jcr:primaryType="nt:unstructured"
@@ -81,9 +81,9 @@
                             <restricttitlestoplevel
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                fieldDescription="Whether the author should be able to choose the the maximum title level to report in the table of contents"
+                                fieldDescription="Whether the author should be able to choose the maximum title level to report in the table of contents"
                                 fieldLabel="Restrict Title Stop Level"
-                                name="./restricttitlestoplevel">
+                                name="./restrictTitleStopLevel">
                                 <items jcr:primaryType="nt:unstructured">
                                     <norestriction
                                         jcr:primaryType="nt:unstructured"
@@ -118,23 +118,23 @@
                             <includeclassnames
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                fieldDescription="If set, only titles with those class names, or contained within elements of the indicated class names will be considered"
+                                fieldDescription="If set, only titles with those class names or contained within elements of the indicated class names will be considered"
                                 fieldLabel="Include Class Names">
                                 <field
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                    name="./includeclassnames"
+                                    name="./includeClassNames"
                                     required="{Boolean}true"/>
                             </includeclassnames>
                             <ignoreclassnames
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                fieldDescription="If set, titles with those class names, or contained within elements of the indicated class names will be ignored"
+                                fieldDescription="If set, titles with those class names or contained within elements of the indicated class names will be ignored"
                                 fieldLabel="Ignore Class Names">
                                 <field
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                    name="./ignoreclassnames"
+                                    name="./ignoreClassNames"
                                     required="{Boolean}true"/>
                             </ignoreclassnames>
                         </items>
