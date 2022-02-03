@@ -17,7 +17,114 @@ package com.adobe.cq.wcm.core.components.models;
 
 public interface TableOfContents extends Component {
 
-    default String getText() {
+    /**
+     * Name of the optional resource property that stores the list type of table of contents.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String PN_LIST_TYPE = "listType";
+
+    /**
+     * Name of the optional resource property that stores the minimum title level to generate table of contents.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String PN_TITLE_START_LEVEL = "titleStartLevel";
+
+    /**
+     * Name of the optional resource property that stores the maximum title level to generate table of contents.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String PN_TITLE_STOP_LEVEL = "titleStopLevel";
+
+    /**
+     * Name of the configuration policy property that controls whether the author should be able to choose the
+     * list type or not.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String PN_RESTRICT_LIST_TYPE = "restrictListType";
+
+    /**
+     * Name of the configuration policy property that controls whether the author should be able to choose the
+     * minimum title level to report in the table of contents.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String PN_RESTRICT_TITLE_START_LEVEL = "restrictTitleStartLevel";
+
+    /**
+     * Name of the configuration policy property that controls whether the author should be able to choose the
+     * maximum title level to report in the table of contents.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String PN_RESTRICT_TITLE_STOP_LEVEL = "restrictTitleStopLevel";
+
+    /**
+     * Name of the configuration policy property, if set, only titles with those class names or contained within
+     * elements of the indicated class names will be considered
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String PN_INCLUDE_CLASS_NAMES = "includeClassNames";
+
+    /**
+     * Name of the configuration policy property, if set, titles with those class names or contained within elements of
+     * the indicated class names will be ignored.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String PN_IGNORE_CLASS_NAMES = "ignoreClassNames";
+
+    /**
+     *
+     * @return
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    default String getListType() {
+        return "unordered";
+    }
+
+    /**
+     *
+     * @return
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    default int getTitleStartLevel() {
+        return 1;
+    }
+
+    /**
+     *
+     * @return
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    default int getTitleStopLevel() {
+        return 6;
+    }
+
+    /**
+     *
+     * @return
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    default String[] getIncludeClassNames() {
+        return null;
+    }
+
+    /**
+     *
+     * @return
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    default String[] getIgnoreClassNames() {
         return null;
     }
 }

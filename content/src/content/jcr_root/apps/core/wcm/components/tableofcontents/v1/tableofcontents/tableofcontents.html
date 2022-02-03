@@ -13,6 +13,15 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<div class = "table-of-contents-placeholder"></div>
+<div data-sly-use.toc="com.adobe.cq.wcm.core.components.models.TableOfContents"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
+     class = "table-of-contents-placeholder"
+     id = "${component.id}"
+     data-list-type = "${toc.listType}"
+     data-title-start-level = "${toc.titleStartLevel}"
+     data-title-stop-level = "${toc.titleStopLevel}"
+     data-include-class-names = "${toc.includeClassNames}"
+     data-ignore-class-names = "${toc.ignoreClassNames}">
+</div>
 <sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-call="${template.placeholder @ isEmpty = true, classAppend = 'table-of-contents-template-placeholder'}"/>
