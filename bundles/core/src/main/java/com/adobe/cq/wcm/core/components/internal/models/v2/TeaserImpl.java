@@ -22,7 +22,6 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -40,8 +39,6 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 import com.day.text.Text;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.annotation.PostConstruct;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -62,19 +59,13 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @ScriptVariable
     protected Page currentPage;
 
-    /**
-     * The current component.
-     */
-    @ScriptVariable
-    private Component component;
-
     @PostConstruct
     protected void initModel() {
         super.titleFromPage = true;
         super.descriptionFromPage = true;
         super.initModel();
 
-        if (hasImage() && (super.isActionsEnabled() || (super.getTitle()!=null && !super.getTitle().isEmpty()))) {
+        if (hasImage() && (super.isActionsEnabled() || (super.getTitle() != null && !super.getTitle().isEmpty()))) {
             super.overriddenImageResourceProperties.put(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.TRUE.toString());
         }
     }
