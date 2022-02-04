@@ -16,11 +16,9 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.Component;
 import com.adobe.cq.wcm.core.components.models.TableOfContents;
 import com.day.cq.wcm.api.designer.Style;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -28,8 +26,6 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -50,20 +46,11 @@ public class TableOfContentsImpl implements TableOfContents {
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/tableofcontents/v1/tableofcontents";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TableOfContentsImpl.class);
-
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
 
     @ScriptVariable
-    private Resource resource;
-
-    @ScriptVariable
     protected Style currentStyle;
-
-    @ValueMapValue(name = Component.PN_ID, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private String id;
 
     @ValueMapValue(name = TableOfContents.PN_LIST_TYPE, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
@@ -71,11 +58,11 @@ public class TableOfContentsImpl implements TableOfContents {
 
     @ValueMapValue(name = TableOfContents.PN_TITLE_START_LEVEL, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    private String titleStartLevel;
+    private Integer titleStartLevel;
 
     @ValueMapValue(name = TableOfContents.PN_TITLE_STOP_LEVEL, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    private String titleStopLevel;
+    private Integer titleStopLevel;
 
     private String restrictListType;
     private String restrictTitleStartLevel;
@@ -100,16 +87,16 @@ public class TableOfContentsImpl implements TableOfContents {
     }
 
     @Override
-    public int getTitleStartLevel() {
+    public Integer getTitleStartLevel() {
         return (restrictTitleStartLevel == null || "norestriction".contentEquals(restrictTitleStartLevel))
-            ? titleStartLevel != null ? Integer.parseInt(titleStartLevel) : 1
+            ? titleStartLevel != null ? titleStartLevel : 1
             : Integer.parseInt(restrictTitleStartLevel);
     }
 
     @Override
-    public int getTitleStopLevel() {
+    public Integer getTitleStopLevel() {
         return (restrictTitleStopLevel == null || "norestriction".contentEquals(restrictTitleStopLevel))
-            ? titleStopLevel != null ? Integer.parseInt(titleStopLevel) : 6
+            ? titleStopLevel != null ? titleStopLevel : 6
             : Integer.parseInt(restrictTitleStopLevel);
     }
 

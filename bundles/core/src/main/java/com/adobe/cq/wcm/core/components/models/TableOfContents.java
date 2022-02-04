@@ -94,7 +94,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    default int getTitleStartLevel() {
+    default Integer getTitleStartLevel() {
         return 1;
     }
 
@@ -104,7 +104,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    default int getTitleStopLevel() {
+    default Integer getTitleStopLevel() {
         return 6;
     }
 
