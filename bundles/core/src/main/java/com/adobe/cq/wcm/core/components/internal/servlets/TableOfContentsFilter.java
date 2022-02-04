@@ -68,8 +68,12 @@ public class TableOfContentsFilter implements Filter {
 
         chain.doFilter(request, wrapper);
 
-        if (wrapper.getContentType().contains("text/html")) {
-            String originalContent = wrapper.toString();
+        String originalContent = wrapper.toString();
+
+        Boolean containsTableOfContents = (Boolean) request.getAttribute("contains-table-of-contents");
+
+        if (wrapper.getContentType().contains("text/html") &&
+            (containsTableOfContents != null && containsTableOfContents)) {
 
             Document document = Jsoup.parse(originalContent);
 
@@ -110,8 +114,12 @@ public class TableOfContentsFilter implements Filter {
             CharArrayWriter charWriter = new CharArrayWriter();
             charWriter.write(document.outerHtml());
             String alteredContent = charWriter.toString();
+
             response.setContentLength(alteredContent.length());
             response.getWriter().write(alteredContent);
+        } else {
+            response.setContentLength(originalContent.length());
+            response.getWriter().write(originalContent);
         }
     }
 

@@ -77,6 +77,7 @@ public class TableOfContentsImpl implements TableOfContents {
         restrictTitleStopLevel = currentStyle.get(PN_RESTRICT_TITLE_STOP_LEVEL, String.class);
         includeClassNames = currentStyle.get(PN_INCLUDE_CLASS_NAMES, String[].class);
         ignoreClassNames = currentStyle.get(PN_IGNORE_CLASS_NAMES, String[].class);
+        slingHttpServletRequest.setAttribute("contains-table-of-contents", true);
     }
 
     @Override
