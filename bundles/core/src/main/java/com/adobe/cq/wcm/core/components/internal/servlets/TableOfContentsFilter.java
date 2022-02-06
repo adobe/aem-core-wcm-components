@@ -36,7 +36,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+import java.util.UUID;
 
 @Component(service = Filter.class,
     property = {
@@ -77,32 +82,12 @@ public class TableOfContentsFilter implements Filter {
 
             Document document = Jsoup.parse(originalContent);
 
-            int startLevel = 1;
-            int stopLevel = 6;
-            Set<String> allowedHeadingTags = new HashSet<>();
-            for(int level = startLevel; level <= stopLevel; level++) {
-                allowedHeadingTags.add("h" + level);
-            }
-
-            ListType listType = ListType.getListType("ordered");
-            String listTag = listType == ListType.OL ? "ol" : "ul";
-
-            Elements allElements = document.getAllElements();
-            List<Element> headingElements = new ArrayList();
-            for (Element element : allElements) {
-                if(!allowedHeadingTags.contains(element.tagName()) || element.text().length() == 0) {
-                    continue;
-                }
-                headingElements.add(element);
-            }
-
-            Element toc = getNestedList(listTag, headingElements.listIterator(), 0);
-
             Elements tocPlaceholderElements = document.getElementsByClass("table-of-contents-placeholder");
             for (Element tocPlaceholderElement : tocPlaceholderElements) {
+                Element toc = getTableOfContents(tocPlaceholderElement);
                 tocPlaceholderElement.empty();
-                tocPlaceholderElement.removeAttr("class");
-                tocPlaceholderElement.append((toc.outerHtml()));
+                tocPlaceholderElement.clearAttributes();
+                tocPlaceholderElement.appendChild(toc);
             }
 
             Elements tocTemplatePlaceholderElements =
@@ -121,6 +106,65 @@ public class TableOfContentsFilter implements Filter {
             response.setContentLength(originalContent.length());
             response.getWriter().write(originalContent);
         }
+    }
+
+    private Element getTableOfContents(Element tocPlaceholderElement) {
+        String listType = tocPlaceholderElement.hasAttr("data-list-type")
+            ? tocPlaceholderElement.attr("data-list-type")
+            : "unordered";
+        String listTag = "ordered".contentEquals(listType) ? "ol" : "ul";
+        int titleStartLevel = tocPlaceholderElement.hasAttr("data-title-start-level")
+            ? Math.max(1, Integer.parseInt(tocPlaceholderElement.attr("data-title-start-level")))
+            : 1;
+        int titleStopLevel = tocPlaceholderElement.hasAttr("data-title-stop-level")
+            ? Math.min(6, Integer.parseInt(tocPlaceholderElement.attr("data-title-stop-level")))
+            : 6;
+        String[] includeClassNames = tocPlaceholderElement.hasAttr("data-include-class-names")
+            ? tocPlaceholderElement.attr("data-include-class-names").split(",")
+            : null;
+        String[] ignoreClassNames = tocPlaceholderElement.hasAttr("data-ignore-class-names")
+            ? tocPlaceholderElement.attr("data-ignore-class-names").split(",")
+            : null;
+
+        Document document = tocPlaceholderElement.ownerDocument();
+
+        String includeCssSelector = getCssSelector(includeClassNames, titleStartLevel, titleStopLevel);
+        Elements includeElements = document.select(includeCssSelector);
+
+        if(ignoreClassNames == null) {
+            return getNestedList(listTag, includeElements.listIterator(), 0);
+        }
+        String ignoreCssSelector = getCssSelector(ignoreClassNames, titleStartLevel, titleStopLevel);
+        Elements ignoreElements = document.select(ignoreCssSelector);
+
+        Set<Element> ignoreElementsSet = new HashSet<>();
+        for(Element element : ignoreElements) {
+            ignoreElementsSet.add(element);
+        }
+
+        List<Element> validElements = new ArrayList<>();
+        for(Element element : includeElements) {
+            if(!ignoreElementsSet.contains(element)) {
+                validElements.add(element);
+            }
+        }
+        return getNestedList(listTag, validElements.listIterator(), 0);
+    }
+
+    private String getCssSelector(String[] classNames, int titleStartLevel, int titleStopLevel) {
+        List<String> selectors = new ArrayList<>();
+        if(classNames == null) {
+            for(int level = titleStartLevel; level <= titleStopLevel; level++) {
+                selectors.add("h" + level);
+            }
+        } else {
+            for(String className: classNames) {
+                for(int level = titleStartLevel; level <= titleStopLevel; level++) {
+                    selectors.add("." + className + " h" + level);
+                }
+            }
+        }
+        return StringUtils.join(selectors, ",");
     }
 
     private Element getNestedList(String listTag, ListIterator<Element> headingElementsIterator,
@@ -172,29 +216,5 @@ public class TableOfContentsFilter implements Filter {
 
     private int getHeadingLevel(Element headingElement) {
         return headingElement.tagName().charAt(1) - '0';
-    }
-
-    public enum ListType {
-        OL("ordered"),
-        UL("unordered");
-
-        private String value;
-
-        ListType(String value) {
-            this.value = value;
-        }
-
-        public static ListType getListType(String value) {
-            for (ListType listType : values()) {
-                if (StringUtils.equalsIgnoreCase(listType.value, value)) {
-                    return listType;
-                }
-            }
-            return null;
-        }
-
-        public String getValue() {
-            return value;
-        }
     }
 }
