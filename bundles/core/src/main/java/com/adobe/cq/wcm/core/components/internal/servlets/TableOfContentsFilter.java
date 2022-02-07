@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import com.day.cq.wcm.api.WCMMode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.servlets.annotations.SlingServletFilter;
 import org.apache.sling.servlets.annotations.SlingServletFilterScope;
@@ -69,31 +70,30 @@ public class TableOfContentsFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
 
-        CharResponseWrapper wrapper = new CharResponseWrapper((HttpServletResponseWrapper) response);
-
-        chain.doFilter(request, wrapper);
-
-        String originalContent = wrapper.toString();
-
+        CharResponseWrapper responseWrapper = new CharResponseWrapper((HttpServletResponseWrapper) response);
+        chain.doFilter(request, responseWrapper);
+        String originalContent = responseWrapper.toString();
         Boolean containsTableOfContents = (Boolean) request.getAttribute("contains-table-of-contents");
-
-        if (wrapper.getContentType().contains("text/html") &&
+        if (responseWrapper.getContentType().contains("text/html") &&
             (containsTableOfContents != null && containsTableOfContents)) {
 
             Document document = Jsoup.parse(originalContent);
 
             Elements tocPlaceholderElements = document.getElementsByClass("table-of-contents-placeholder");
             for (Element tocPlaceholderElement : tocPlaceholderElements) {
-                Element toc = getTableOfContents(tocPlaceholderElement);
+                Element tableOfContents = getTableOfContents(tocPlaceholderElement);
                 tocPlaceholderElement.empty();
                 tocPlaceholderElement.clearAttributes();
-                tocPlaceholderElement.appendChild(toc);
-            }
-
-            Elements tocTemplatePlaceholderElements =
-                document.getElementsByClass("table-of-contents-template-placeholder");
-            for (Element tocTemplatePlaceholderElement : tocTemplatePlaceholderElements) {
-                tocTemplatePlaceholderElement.remove();
+                if(tableOfContents != null) {
+                    tocPlaceholderElement.appendChild(tableOfContents);
+                    WCMMode wcmMode = WCMMode.fromRequest(request);
+                    if(wcmMode == WCMMode.EDIT || wcmMode == WCMMode.PREVIEW) {
+                        Elements tocTemplatePlaceholderElement = tocPlaceholderElement
+                            .parent()
+                            .select(".table-of-contents-template-placeholder");
+                        tocTemplatePlaceholderElement.remove();
+                    }
+                }
             }
 
             CharArrayWriter charWriter = new CharArrayWriter();
@@ -128,13 +128,22 @@ public class TableOfContentsFilter implements Filter {
 
         Document document = tocPlaceholderElement.ownerDocument();
 
-        String includeCssSelector = getCssSelector(includeClassNames, titleStartLevel, titleStopLevel);
+        String includeCssSelector;
+        if(includeClassNames == null || includeClassNames.length == 0) {
+            List<String> selectors = new ArrayList<>();
+            for(int level = titleStartLevel; level <= titleStopLevel; level++) {
+                selectors.add("h" + level);
+            }
+            includeCssSelector = StringUtils.join(selectors, ",");
+        } else {
+            includeCssSelector = getCssSelectorString(includeClassNames, titleStartLevel, titleStopLevel);
+        }
         Elements includeElements = document.select(includeCssSelector);
 
-        if(ignoreClassNames == null) {
+        if(ignoreClassNames == null || ignoreClassNames.length == 0) {
             return getNestedList(listTag, includeElements.listIterator(), 0);
         }
-        String ignoreCssSelector = getCssSelector(ignoreClassNames, titleStartLevel, titleStopLevel);
+        String ignoreCssSelector = getCssSelectorString(ignoreClassNames, titleStartLevel, titleStopLevel);
         Elements ignoreElements = document.select(ignoreCssSelector);
 
         Set<Element> ignoreElementsSet = new HashSet<>();
@@ -151,17 +160,14 @@ public class TableOfContentsFilter implements Filter {
         return getNestedList(listTag, validElements.listIterator(), 0);
     }
 
-    private String getCssSelector(String[] classNames, int titleStartLevel, int titleStopLevel) {
+    private String getCssSelectorString(String[] classNames, int titleStartLevel, int titleStopLevel) {
+        if(classNames == null || classNames.length == 0) {
+            return "";
+        }
         List<String> selectors = new ArrayList<>();
-        if(classNames == null) {
+        for(String className: classNames) {
             for(int level = titleStartLevel; level <= titleStopLevel; level++) {
-                selectors.add("h" + level);
-            }
-        } else {
-            for(String className: classNames) {
-                for(int level = titleStartLevel; level <= titleStopLevel; level++) {
-                    selectors.add("." + className + " h" + level);
-                }
+                selectors.add("." + className + " h" + level);
             }
         }
         return StringUtils.join(selectors, ",");
@@ -170,7 +176,7 @@ public class TableOfContentsFilter implements Filter {
     private Element getNestedList(String listTag, ListIterator<Element> headingElementsIterator,
                                   int parentHeadingLevel) {
         if(!headingElementsIterator.hasNext()) {
-            return new Element("span");
+            return null;
         }
         Element list = new Element(listTag);
         Element headingElement = headingElementsIterator.next();
@@ -202,7 +208,7 @@ public class TableOfContentsFilter implements Filter {
      */
     private Element getListItemElement(Element headingElement) {
         String id = headingElement.attr("id");
-        if("".contentEquals(id)) {
+        if(id == null || "".contentEquals(id)) {
             id = UUID.randomUUID().toString();
             headingElement.attr("id", id);
         }

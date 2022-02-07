@@ -24,4 +24,5 @@
      data-ignore-class-names = "${toc.ignoreClassNames}">
 </div>
 <sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"
+     data-sly-test="${wcmmode.edit || wcmmode.preview}"
      data-sly-call="${template.placeholder @ isEmpty = true, classAppend = 'table-of-contents-template-placeholder'}"/>
