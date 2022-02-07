@@ -77,12 +77,10 @@
           "teaser-7"          : {
             "jcr:primaryType"     : "nt:unstructured",
             "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-            "linkURL"             : "/content/teasers",
             "jcr:title"           : "Teaser",
             "titleFromPage": false,
             "descriptionFromPage": false,
             "jcr:description"     : "Description",
-            "actionsEnabled"             : true,
             "sling:resourceType"  : "core/wcm/components/teaser/v2/teaser",
             "actions"                : {
               "jcr:primaryType" : "nt:unstructured",
@@ -223,7 +221,6 @@
             "titleFromPage"       : true,
             "descriptionFromPage": false,
             "sling:resourceType"  : "core/wcm/components/teaser/v2/teaser",
-            "linkURL": "/content/page1",
             "actions" : {
               "jcr:primaryType" : "nt:unstructured",
               "item0" : {
@@ -251,7 +248,6 @@
             "titleFromPage"       : true,
             "descriptionFromPage": false,
             "sling:resourceType"  : "core/wcm/components/teaser/v2/teaser",
-            "linkURL": "/content/page1",
             "actions" : {
               "jcr:primaryType" : "nt:unstructured",
               "item0" : {

@@ -34,9 +34,11 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
+import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.foundation.Image;
 import com.day.text.Text;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -59,15 +61,39 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @ScriptVariable
     protected Page currentPage;
 
-    @PostConstruct
-    protected void initModel() {
-        super.titleFromPage = true;
-        super.descriptionFromPage = true;
-        super.initModel();
+    @Override
+    protected void initProperties() {
+        titleFromPage = true;
+        descriptionFromPage = true;
+        actionsEnabled = true;
+        super.initProperties();
+    }
 
-        if (hasImage() && (super.isActionsEnabled() || (super.getTitle() != null && !super.getTitle().isEmpty()))) {
-            super.overriddenImageResourceProperties.put(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.TRUE.toString());
+    @Override
+    protected void initImage() {
+        overriddenImageResourceProperties.put(Image.PN_LINK_URL, getTargetPage().map(Page::getPath).orElse(null));
+        overriddenImageResourceProperties.put(Teaser.PN_ACTIONS_ENABLED, Boolean.valueOf(actionsEnabled).toString());
+        if (StringUtils.isNotEmpty(getTitle()) || getTeaserActions().size() > 0) {
+            overriddenImageResourceProperties.put(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.TRUE.toString());
         }
+        super.initImage();
+    }
+
+    @Override
+    protected void initLink() {
+        // use the target page as the link if it exists
+        link = Optional.of(this.getTargetPage().map(page -> linkHandler.getLink(page.getPath(), linkTarget).orElse(null))
+                .orElse(
+                        Optional.of(linkHandler.getLink(resource, Link.PN_LINK_URL)
+                                .orElse(
+                                        Optional.ofNullable( actionsEnabled ? getActions().stream().findFirst().map(action -> linkHandler.getLink(action.getURL(), null)).orElse(null) : null)
+                                                .orElse(
+                                                        linkHandler.getLink(currentPage)
+                                                ).orElse(null)
+                                )
+                        ).orElse(null)
+                )
+        );
     }
 
     @Override
@@ -81,6 +107,25 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Deprecated
     public String getLinkURL() {
         return super.getLinkURL();
+    }
+
+    @Override
+    @NotNull
+    protected Optional<Page> getTargetPage() {
+        if (this.targetPage == null) {
+            String linkURL = resource.getValueMap().get(ImageResource.PN_LINK_URL, String.class);
+            if (StringUtils.isNotEmpty(linkURL)) {
+                this.targetPage = Optional.ofNullable(this.resource.getValueMap().get(ImageResource.PN_LINK_URL, String.class))
+                        .map(this.pageManager::getPage).orElse(null);
+            } else if (actionsEnabled && getActions().size() > 0) {
+                this.targetPage = getTeaserActions().stream().findFirst()
+                        .flatMap(com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl.Action::getCtaPage)
+                        .orElse(null);
+            } else {
+                targetPage = currentPage;
+            }
+        }
+        return Optional.ofNullable(this.targetPage);
     }
 
     @Override

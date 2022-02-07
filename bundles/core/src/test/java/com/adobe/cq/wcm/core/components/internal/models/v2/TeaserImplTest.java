@@ -31,6 +31,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -86,12 +87,8 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     @Override
     protected void testTeaserWithoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
-        // TODO: make the following assert pass
-        /*
-        assertThat(testLogger.getLoggingEvents(),
-                hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
-         */
-        assertNull(teaser.getLink(), "The link should be null");
+        assertNotNull(teaser.getLink(), "The link should not be null");
+        assertEquals("/core/content/teasers.html", teaser.getLink().getURL());
     }
 
     @Test
@@ -127,7 +124,8 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     protected void testImageFromPage_withoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_21);
         Link link = teaser.getLink();
-        assertNull(link, "link should be null");
+        assertNotNull(link);
+        assertEquals("/core/content/teasers.html", link.getURL());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser21"));
     }
 

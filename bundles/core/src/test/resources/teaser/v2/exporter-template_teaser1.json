@@ -1,13 +1,18 @@
 {
   "id": "teaser-d0aa736ec6",
-  "actionsEnabled": false,
+  "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
   "actions": [],
+  "link": {
+      "valid": true,
+      "url":"/core/conf/coretest/settings/wcm/templates/testtemplate/structure.html"
+  },
   ":type": "core/wcm/components/teaser/v2/teaser",
   "dataLayer": {
     "teaser-d0aa736ec6": {
-      "@type": "core/wcm/components/teaser/v2/teaser"
+      "@type": "core/wcm/components/teaser/v2/teaser",
+      "xdm:linkURL":"/core/conf/coretest/settings/wcm/templates/testtemplate/structure.html"
     }
   }
 }
