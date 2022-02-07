@@ -26,6 +26,8 @@ public class TeaserEditDialog extends com.adobe.cq.wcm.core.components.it.seljup
     private static String inheritAltFromPage = ".cmp-teaser__editor coral-checkbox[name='./altValueFromPageImage']";
     private static String isDecorative = ".cmp-teaser__editor coral-checkbox[name='./isDecorative']";
     private static String altText = ".cmp-teaser__editor input[name='./alt']";
+    private static String linkTarget = "coral-checkbox[name='./linkTarget']";
+    private static String actionLinkTarget = ".cmp-teaser__editor-actionField-linkTarget";
 
     public void openAssetsTab() {
         $$(".cmp-teaser__editor coral-tab").get(2).click();
@@ -47,6 +49,15 @@ public class TeaserEditDialog extends com.adobe.cq.wcm.core.components.it.seljup
     public void setAltText(String value) {
         $(altText).clear();
         $(altText).sendKeys(value);
+    }
+
+    public void clickLinkTarget() {
+        CoralCheckbox checkbox = new CoralCheckbox(linkTarget);
+        checkbox.click();
+    }
+
+    public void clickLActionLinkTarget() {
+        $$(actionLinkTarget).last().click();
     }
 
 }
