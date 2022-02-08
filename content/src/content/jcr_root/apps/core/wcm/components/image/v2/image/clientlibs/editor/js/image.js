@@ -18,6 +18,7 @@
 
     var dialogContentSelector = ".cmp-image__editor";
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
+    var DecorativeAltTextValidator = window.CQ.CoreComponents.DecorativeAltTextValidator.v1;
     var isDecorative;
     var altTuple;
     var captionTuple;
@@ -30,6 +31,8 @@
     var areDMFeaturesEnabled;
     var fileReference;
     var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
+    var decorativeCheckboxSelector = "coral-checkbox[name='./isDecorative']";
+    var altTextFieldSelector = "input[name='./alt']";
     var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
     var smartCropRenditionDropDownSelector = ".cmp-image__editor-dynamicmedia-smartcroprendition";
     var imagePropertiesRequest;
@@ -42,8 +45,8 @@
         var $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
-            isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
-            altTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
+            isDecorative = dialogContent.querySelector(decorativeCheckboxSelector);
+            altTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', altTextFieldSelector);
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
@@ -106,27 +109,7 @@
             }
             toggleAlternativeFieldsAndLink(isDecorative);
         }
-
-        $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
-            selector: ".cmp-image__editor-alt-text",
-            validate: function(el) {
-                var $el = $(el);
-                var decorative = $el.closest("form").find(".cmp-image__editor-decorative").adaptTo("foundation-field");
-                if (decorative) {
-                    if (el.value.length === 0 && !decorative.checked) {
-                        return Granite.I18n.get("Error: Please fill out this field.");
-                    }
-                }
-            }
-        });
-        $(document).on("change", "coral-checkbox.cmp-image__editor-decorative", function(e) {
-            var $altText = $(".cmp-image__editor-alt-text");
-            var validation = $altText.adaptTo("foundation-validation");
-            if (validation) {
-                validation.checkValidity();
-                validation.updateUI();
-            }
-        });
+        new DecorativeAltTextValidator(decorativeCheckboxSelector, altTextFieldSelector);
     });
 
 
