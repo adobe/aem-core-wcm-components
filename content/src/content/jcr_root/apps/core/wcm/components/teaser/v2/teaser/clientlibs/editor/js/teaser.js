@@ -73,6 +73,18 @@
             var $target = $(event.target);
             if ($target.is("foundation-autocomplete")) {
                 updateText($target);
+            } else if ($target.is("coral-multifield")) {
+                var $first = $(event.target.items.first());
+                if (event.target.items.length === 1 && $first.is("coral-multifield-item")) {
+                    var $input = $first.find(".cmp-teaser__editor-actionField-linkUrl");
+                    if ($input.is("foundation-autocomplete")) {
+                        var value = $linkURLField.adaptTo("foundation-field").getValue();
+                        if (!$input.val() && value) {
+                            $input.val(value);
+                            updateText($input);
+                        }
+                    }
+                }
             }
             retrievePageInfo($dialogContent);
         });
