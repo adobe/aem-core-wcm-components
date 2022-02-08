@@ -146,10 +146,25 @@
 
         }
 
-        $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
-            submittable: ".cmp-image__editor-alt-text",
-            candidate: ".cmp-image__editor-alt-text:not(:hidden)",
-            exclusion: ".cmp-image__editor-alt-text *"
+        $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+            selector: ".cmp-image__editor-alt-text",
+            validate: function(el) {
+                var $el = $(el);
+                var decorative = $el.closest("form").find(".cmp-image__editor-decorative").adaptTo("foundation-field");
+                if (decorative) {
+                    if (el.value.length === 0 && !decorative.checked) {
+                        return Granite.I18n.get("Error: Please fill out this field.");
+                    }
+                }
+            }
+        });
+        $(document).on("change", "coral-checkbox.cmp-image__editor-decorative", function(e) {
+            var $altText = $(".cmp-image__editor-alt-text");
+            var validation = $altText.adaptTo("foundation-validation");
+            if (validation) {
+                validation.checkValidity();
+                validation.updateUI();
+            }
         });
     });
 
