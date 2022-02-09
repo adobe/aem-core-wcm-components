@@ -19,11 +19,11 @@
     var dialogContentSelector = ".cmp-image__editor";
     var $dialogContent;
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
-    var DecorativeAltTextValidator = window.CQ.CoreComponents.DecorativeAltTextValidator.v1;
     var isDecorative;
     var altTuple;
     var captionTuple;
     var $altGroup;
+    var $altTextField;
     var $linkURLGroup;
     var $linkURLField;
     var firstCtaLinkFieldSelector = ".cmp-teaser__editor-multifield_actions coral-multifield-item:first foundation-autocomplete";
@@ -47,7 +47,6 @@
     var altTextFromDAM;
     var altCheckboxSelector = "coral-checkbox[name='./altValueFromDAM']";
     var altInputSelector = "input[name='./alt']";
-    var decorativeCheckboxSelector = "coral-checkbox[name='./isDecorative']"
     var pageAltCheckboxSelector = "coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
     var pageAltInputSelector = "input[name='./cq:featuredimage/alt']";
     var pageImageThumbnailSelector = ".cq-page-image-thumbnail";
@@ -63,7 +62,7 @@
         $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
-            isDecorative = dialogContent.querySelector(decorativeCheckboxSelector);
+            isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
 
             if ($(pageAltCheckboxSelector).length === 1) {
                 // when the tuple is used in the page dialog to define the featured image
@@ -74,6 +73,7 @@
             }
 
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
+            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
             $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
@@ -145,7 +145,11 @@
 
         }
 
-        new DecorativeAltTextValidator(decorativeCheckboxSelector, altInputSelector);
+        $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
+            submittable: ".cmp-image__editor-alt-text",
+            candidate: ".cmp-image__editor-alt-text",
+            exclusion: ".cmp-image__editor-alt-text *"
+        });
     });
 
     $(window).on("focus", function() {
@@ -290,6 +294,9 @@
             }
             if ($linkURLField.length) {
                 $linkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
+            }
+            if ($altTextField.length) {
+                $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked);
             }
         }
         toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox);

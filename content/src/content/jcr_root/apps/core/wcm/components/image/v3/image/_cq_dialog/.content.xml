@@ -108,7 +108,6 @@
                                                 </items>
                                             </alternativeGroup>
                                             <decorative
-                                                granite:class="cmp-image__editor-decorative"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                 checked="${not empty cqDesign.isDecorative ? cqDesign.isDecorative : false}"

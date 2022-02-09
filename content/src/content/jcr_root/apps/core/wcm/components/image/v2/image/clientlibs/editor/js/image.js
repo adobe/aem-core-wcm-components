@@ -18,9 +18,9 @@
 
     var dialogContentSelector = ".cmp-image__editor";
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
-    var DecorativeAltTextValidator = window.CQ.CoreComponents.DecorativeAltTextValidator.v1;
     var isDecorative;
     var altTuple;
+    var $altTextField;
     var captionTuple;
     var $altGroup;
     var $linkURLGroup;
@@ -31,8 +31,6 @@
     var areDMFeaturesEnabled;
     var fileReference;
     var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
-    var decorativeCheckboxSelector = "coral-checkbox[name='./isDecorative']";
-    var altTextFieldSelector = "input[name='./alt']";
     var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
     var smartCropRenditionDropDownSelector = ".cmp-image__editor-dynamicmedia-smartcroprendition";
     var imagePropertiesRequest;
@@ -45,9 +43,10 @@
         var $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
-            isDecorative = dialogContent.querySelector(decorativeCheckboxSelector);
-            altTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', altTextFieldSelector);
+            isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
+            altTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
+            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
@@ -109,9 +108,13 @@
             }
             toggleAlternativeFieldsAndLink(isDecorative);
         }
-        new DecorativeAltTextValidator(decorativeCheckboxSelector, altTextFieldSelector);
-    });
 
+        $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
+            submittable: ".cmp-image__editor-alt-text",
+            candidate: ".cmp-image__editor-alt-text",
+            exclusion: ".cmp-image__editor-alt-text *"
+        });
+    });
 
     $(window).on("focus", function() {
         if (fileReference) {
@@ -155,6 +158,9 @@
             }
             if ($linkURLField.length) {
                 $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
+            }
+            if ($altTextField.length) {
+                $altTextField.adaptTo("foundation-field").setRequired(!checkbox.checked);
             }
             altTuple.hideTextfield(checkbox.checked);
             if (fileReference) {
