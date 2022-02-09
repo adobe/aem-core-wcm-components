@@ -94,6 +94,27 @@
                             showModificationDate="false"
                             sortOrder="asc"
                             tagsMatch="any"/>
+                        <text
+                            jcr:created="{Date}2022-02-03T21:10:15.254+02:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2022-02-03T23:11:45.683+02:00"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/text/v2/text"
+                            id="text1"
+                            text="&lt;p>Text with Style Tab - no default style applied&lt;/p>&#xd;&#xa;"
+                            textIsRich="true"/>
+                        <text_2093072800
+                            cq:styleIds="[1547060098888]"
+                            jcr:created="{Date}2022-02-03T22:57:41.693+02:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2022-02-03T23:12:04.896+02:00"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/text/v2/text"
+                            id="text2"
+                            text="&lt;p>Text with Style Tab - default Blue style applied&lt;/p>&#xd;&#xa;"
+                            textIsRich="true"/>
                     </container>
                     <container_1128719348
                         jcr:created="{Date}2020-11-27T19:46:29.387+02:00"

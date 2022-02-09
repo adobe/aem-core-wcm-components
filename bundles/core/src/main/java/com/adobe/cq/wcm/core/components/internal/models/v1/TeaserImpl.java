@@ -34,6 +34,8 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -168,6 +170,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      */
     protected Optional<Link<Page>> link;
 
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private String linkTarget;
+
     /**
      * The current component.
      */
@@ -222,7 +228,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
         // use the target page as the link if it exists
         link = this.getTargetPage()
-                .map(page -> Optional.of(linkHandler.getLink(page).orElse(null)))
+                .map(page -> Optional.of(linkHandler.getLink(page.getPath(), linkTarget).orElse(null)))
                 .orElseGet(() -> {
                     // target page doesn't exist
                     if (this.isActionsEnabled()) {

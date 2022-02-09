@@ -47,4 +47,7 @@ public class Title extends BaseComponent {
         $(".cmp-title__link").click();
     }
 
+    public boolean checkLinkPresentWithTarget(String link, String target) {
+        return $("a.cmp-title__link[href='" + link + "'][target='" + target + "']").isDisplayed();
+    }
 }
