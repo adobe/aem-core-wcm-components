@@ -18,5 +18,5 @@
     cq:icon="button"
     jcr:description="Button"
     jcr:primaryType="cq:Component"
-    jcr:title="Button (v2) (work-in-progress)"
-    componentGroup=".wip"/>
+    jcr:title="Button (v2)"
+    componentGroup=".core-wcm"/>
