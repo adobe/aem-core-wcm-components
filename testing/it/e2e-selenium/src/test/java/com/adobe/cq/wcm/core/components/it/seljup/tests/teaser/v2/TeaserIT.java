@@ -541,7 +541,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
             $("*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox").click();
         } catch (Throwable t) {
             // Fallback for AEM 6.5
-            $("*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-columnview-item-thumbnail").clear();
+            $("*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-columnview-item-thumbnail").click();
         }
 
         clickableClick($(".granite-pickerdialog-submit"));
