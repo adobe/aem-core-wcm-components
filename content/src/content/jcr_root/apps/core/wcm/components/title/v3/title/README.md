@@ -60,7 +60,7 @@ BLOCK cmp-title
 * **Vendor**: Adobe
 * **Version**: v3
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_title\_v3](https://www.adobe.com/go/aem_cmp_title_v3)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_title](https://www.adobe.com/go/aem_cmp_library_title)
 * **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)

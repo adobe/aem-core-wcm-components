@@ -19,8 +19,8 @@ import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.search.v1.Search;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.search.v1.Search;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
@@ -180,7 +180,7 @@ public class SearchIT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         Commons.deleteProxyComponent(adminClient, proxyPath);
-        authorClient.deletePageWithRetry(page1Path, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(page1Path, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**
@@ -193,7 +193,7 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
         search.setInput("Page 1.1.1");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isResultsVisible(), "Results should be displayed");
         assertTrue(search.isPagePresentInSearch(contextPath + page111Path), "page_1_1_1 should be present in search results");
     }
@@ -210,7 +210,7 @@ public class SearchIT extends AuthorBaseUITest {
 
         Commons.switchContext("ContentFrame");
         search.setInput("Page 1");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(!search.isPagePresentInSearch(contextPath + page1Path), "Parent page 1 should not be present in search results");
     }
 
@@ -224,10 +224,10 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isClearVisible(), "Clear button should be visible");
         search.clickClear();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
         assertTrue(!search.isResultsVisible(), "Results should not be displayed after clearing search");
         assertTrue(search.getInputValue().equals(""), "Input should be empty after clearing search");
@@ -242,7 +242,7 @@ public class SearchIT extends AuthorBaseUITest {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         search.pressEnter();
         assertTrue(Commons.getCurrentUrl().contains("page_1_1"), "Current page should be page_1_1");
         assertTrue(search.getInputValue().equals("Page"), "Search input should be Page");
@@ -258,7 +258,7 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isClearVisible(), "Clear button should be visible");
         search.clickOutside();
         assertTrue(!search.isResultsVisible(), "Results should not be displayed");
@@ -275,7 +275,7 @@ public class SearchIT extends AuthorBaseUITest {
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
         assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isMarkItemsPresent("Page"), "Page should be present in mark item");
     }
 
@@ -305,11 +305,11 @@ public class SearchIT extends AuthorBaseUITest {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() == 0, "No result should be present since minimum search key size is 5");
 
         search.setInput("Page ");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() > 0, "Results should be present");
     }
 
@@ -338,7 +338,7 @@ public class SearchIT extends AuthorBaseUITest {
 
         Commons.switchContext("ContentFrame");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() == 2, "2 Results should be present");
     }
 
@@ -354,10 +354,10 @@ public class SearchIT extends AuthorBaseUITest {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() == 10, "10 Results should be present");
         search.scrollResults(10);
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() == 20, "20 Results should be present after scrolling");
     }
 

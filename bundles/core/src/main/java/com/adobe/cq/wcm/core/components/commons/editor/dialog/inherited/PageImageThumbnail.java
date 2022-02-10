@@ -23,7 +23,6 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
@@ -33,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -85,7 +85,6 @@ public class PageImageThumbnail {
             return;
         }
 
-        Page targetPage = null;
         Resource component = resourceResolver.getResource(componentPath);
         if (component == null) {
             log.error("the component at {} does not exist", componentPath);
@@ -95,36 +94,51 @@ public class PageImageThumbnail {
         if (currentPage != null) {
             currentPagePath = currentPage.getPath();
         }
-        RequestParameter linkURLParam = request.getRequestParameter(Link.PN_LINK_URL);
-        String linkURL = null;
-        if (linkURLParam != null) {
-            linkURL = linkURLParam.getString();
-        } else {
-            // get the linkURL property defined in the repository for the component
-            ValueMap properties = component.getValueMap();
-            linkURL = properties.get(Link.PN_LINK_URL, String.class);
-        }
 
-        if (StringUtils.isNotEmpty(linkURL)) {
-            targetPage = pageManager.getPage(linkURL);
+        Page targetPage = null;
+        RequestParameter pageLinkParam = request.getRequestParameter("pageLink");
+        if (pageLinkParam != null) {
+
+            // retrieve the page link from the request parameter
+
+            String pageLink = pageLinkParam.getString();
+            targetPage = pageManager.getPage(pageLink);
+
         } else {
-            targetPage = currentPage;
+
+            // retrieve the page link from the component model
+
+            Teaser teaserModel = modelFactory.getModelFromWrappedRequest(request, component, Teaser.class);
+            Link link = null;
+            if (teaserModel != null) {
+                link = teaserModel.getLink();
+            } else {
+                Image imageModel = modelFactory.getModelFromWrappedRequest(request, component, Image.class);
+                if (imageModel != null) {
+                    link = imageModel.getImageLink();
+                }
+            }
+            if (link != null) {
+                targetPage = (Page) link.getReference();
+            } else {
+                targetPage = currentPage;
+            }
         }
 
         if (targetPage == null) {
-            log.error("page is null");
+            log.info("A target page cannot be found for the link defined in the request parameter or on the server at {}.", component.getPath());
             return;
         }
 
         Resource featuredImage = ComponentUtils.getFeaturedImage(targetPage);
         if (featuredImage == null) {
-            log.error("the featured image is null");
+            log.info("No featured image defined for the page at {}", targetPage.getPath());
             return;
         }
 
         Image imageModel = modelFactory.getModelFromWrappedRequest(request, featuredImage, Image.class);
         if (imageModel == null) {
-            log.error("the image model is null");
+            log.info("the image model of {} is null", featuredImage.getPath());
             return;
         }
 

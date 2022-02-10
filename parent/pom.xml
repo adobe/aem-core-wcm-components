@@ -59,8 +59,8 @@
         <aem.java.version>8</aem.java.version>
         <jacoco.version>0.8.3</jacoco.version>
         <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
-        <node.version>v10.13.0</node.version>
-        <npm.version>6.4.1</npm.version>
+        <node.version>v16.13.1</node.version>
+        <npm.version>8.3.0</npm.version>
         <java.version>11</java.version>
         <mockitio.version>2.24.5</mockitio.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>

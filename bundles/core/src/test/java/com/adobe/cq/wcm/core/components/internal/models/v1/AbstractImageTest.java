@@ -79,6 +79,8 @@ public class AbstractImageTest {
     protected static final String TEMPLATE_STRUCTURE_PATH = TEMPLATE_PATH + "/structure";
     protected static final String TEMPLATE_IMAGE_PATH = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template";
     protected static final String TEMPLATE_IMAGE_NO_DATE_PATH = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template_no_date";
+    protected static final String TEMPLATE_IMAGE_INHERITED_PATH1 = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template_page_image1";
+    protected static final String TEMPLATE_IMAGE_INHERITED_PATH2 = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template_page_image2";
     protected static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.png";
     protected static final String GIF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.gif";
     protected static final String JPG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.jpg";

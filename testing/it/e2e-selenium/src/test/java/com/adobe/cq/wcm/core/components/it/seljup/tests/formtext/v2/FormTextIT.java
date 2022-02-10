@@ -16,7 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.formtext.v2.FormText;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.v2.FormText;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.FormTextTests;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;

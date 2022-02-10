@@ -180,6 +180,20 @@
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo",
                     "linkURL"           : "/content/test"
+                  },
+                  "image_template_page_image1"             : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/image/v3/image",
+                    "imageFromPageImage": "true"
+                  },
+                  "image_template_page_image2"             : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "jcr:createdBy": "admin",
+                    "alt": "alt from page0_image2",
+                    "altValueFromPageImage": "true",
+                    "imageFromPageImage": "true",
+                    "linkURL": "/content/test_page4",
+                    "sling:resourceType": "core/wcm/components/image/v3/image"
                   }
                 }
               }

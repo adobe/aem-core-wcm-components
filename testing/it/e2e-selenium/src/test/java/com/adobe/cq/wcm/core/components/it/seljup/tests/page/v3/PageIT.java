@@ -156,17 +156,6 @@ public class PageIT extends AdminBaseUITest {
     }
 
     /**
-     * Test: Check the Social Media options of a page properties.
-     *
-     * @throws InterruptedException
-     */
-    @Test
-    @DisplayName("Test: Check the Social Media options of a page properties.")
-    public void testSocialMediaPageProperties() throws InterruptedException {
-        pageTests.testSocialMediaPageProperties();
-    }
-
-    /**
      * Test: Check the Cloud Services options of a page properties.
      * @throws InterruptedException
      */

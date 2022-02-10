@@ -21,12 +21,14 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -199,6 +201,12 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         loadHtmlPageItemsConfig(false);
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
+        int[] attributeCounts = { 3, 3, 1 };
+        int index = 0;
+        for (HtmlPageItem item : page.getHtmlPageItems()) {
+            assertEquals(attributeCounts[index], item.getAttributes().size());
+            index++;
+        }
     }
 
     @Test
@@ -207,6 +215,23 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         Page page = getPageUnderTest(PAGE);
         assertNotNull(page.getHtmlPageItems());
         assertEquals(3, page.getHtmlPageItems().size(), "Unexpected number of HTML page items");
+
+        Map<String, Object> cssAttributes = new HashMap<>();
+        Map<String, Object> jsAttributes = new HashMap<>();
+        Map<String, Object> metaAttributes = new HashMap<>();
+        cssAttributes.put("href", "/_theme/theme.css");
+        cssAttributes.put("rel", "preload");
+        cssAttributes.put("as", "style");
+        jsAttributes.put("async", true);
+        jsAttributes.put("defer", false);
+        jsAttributes.put("src", "/_theme/theme.js");
+        metaAttributes.put("charset", "UTF-8");
+        Object[] attributes = {cssAttributes, jsAttributes, metaAttributes};
+        int index = 0;
+        for (HtmlPageItem item : page.getHtmlPageItems()) {
+            assertEquals(attributes[index], item.getAttributes(), "Wrong attributes");
+            index++;
+        }
     }
 
     @Test

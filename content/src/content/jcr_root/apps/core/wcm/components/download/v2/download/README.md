@@ -72,7 +72,7 @@ BLOCK cmp-download
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_download\_v2](https://www.adobe.com/go/aem_cmp_download_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_download](https://www.adobe.com/go/aem_cmp_library_download)
 * **Author**: [Burkhard Pauli](https://github.com/bpauli)

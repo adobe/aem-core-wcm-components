@@ -34,7 +34,7 @@ window.CQ.CoreComponentsIT.Breadcrumb.v1 = window.CQ.CoreComponentsIT.Breadcrumb
             // common set up
             .execTestCase(c.tcExecuteBeforeTest)
 
-            // TODO : turn this into a loop or recursive
+        // TODO : turn this into a loop or recursive
 
             // create level 1
             .execFct(function(opts, done) {

@@ -19,9 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.languagenavigation.v1;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.languagenavigation.LanguageNavigationEditConfig;
-import com.adobe.cq.wcm.core.components.it.seljup.components.languagenavigation.v1.LanguageNavigation;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.LanguageNavigationEditConfig;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.v1.LanguageNavigation;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
@@ -150,7 +150,7 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         Commons.deleteProxyComponent(adminClient, proxyPath);
-        authorClient.deletePageWithRetry(siteRoot, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(siteRoot, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
 

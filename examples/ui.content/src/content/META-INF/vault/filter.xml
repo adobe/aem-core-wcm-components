@@ -31,7 +31,7 @@
         <exclude pattern="/content/core-components-examples/library/jcr:content/root/responsivegrid/container_1589240808(/.*)?"/>
         <exclude pattern="/content/core-components-examples/library/forms-and-communications-portal(/.*)?"/>
         <exclude pattern="/content/core-components-examples/library/jcr:content/root/responsivegrid/container_40754488/teaser_1837085907"/>
-        <exclude pattern="/content/core-components-examples/library/page-authoring/aemform"/>
+        <exclude pattern="/content/core-components-examples/library/core-content/aemform"/>
     </filter>
     <filter root="/content/cq:tags/core-components-examples"/>
     <filter root="/content/dam/core-components-examples">

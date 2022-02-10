@@ -13,6 +13,6 @@
         "sync-pom-version": "sync-pom-version"
     },
     "devDependencies": {
-        "sync-pom-version-to-package": "^1.6.0"
+        "sync-pom-version-to-package": "^1.6.1"
     }
 }

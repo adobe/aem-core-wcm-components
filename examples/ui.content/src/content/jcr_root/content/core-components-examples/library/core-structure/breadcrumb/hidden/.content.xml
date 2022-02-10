@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Hidden"
+        sling:resourceType="core-components-examples/components/page"
+        hideInNav="true">
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
+        <root jcr:primaryType="nt:unstructured">
+            <responsivegrid
+                cq:styleIds="[1545309110033]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <text_1740702241_copy
+                    cq:styleIds="[1644862132301]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;h1>Breadcrumb&lt;/h1>"
+                    textIsRich="true"/>
+                <text
+                    cq:styleIds="[1544762734201]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>This is a sample page representing a typically hidden level in a breadcrumb hierarchy. The page is marked as &lt;i>Hide in Navigation&lt;/i>. For more information, return to the &lt;a href=&quot;/content/core-components-examples/library/core-structure/breadcrumb/hidden/level-1/level-2/breadcrumb.html&quot;>Breadcrumb example page&lt;/a>.&amp;nbsp;&lt;/p>"
+                    textIsRich="true">
+                </text>
+            </responsivegrid>
+        </root>
+    </jcr:content>
+    <level-1/>
+</jcr:root>

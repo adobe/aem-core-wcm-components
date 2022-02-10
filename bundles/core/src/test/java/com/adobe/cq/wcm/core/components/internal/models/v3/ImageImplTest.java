@@ -71,6 +71,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private static String PAGE3 = TEST_ROOT + "/test_page3";
     private static final String PAGE0_IMAGE0_PATH = PAGE0 + "/jcr:content/root/page0_image0";
     private static final String PAGE0_IMAGE1_PATH = PAGE0 + "/jcr:content/root/page0_image1";
+    private static final String PAGE0_IMAGE2_PATH = PAGE0 + "/jcr:content/root/page0_image2";
+    private static final String PAGE0_IMAGE3_PATH = PAGE0 + "/jcr:content/root/page0_image3";
     private static final String PAGE1_IMAGE0_PATH = PAGE1 + "/jcr:content/root/page1_image0";
     private static final String PAGE2_IMAGE0_PATH = PAGE2 + "/jcr:content/root/page2_image0";
     private static final String PAGE3_IMAGE0_PATH = PAGE3 + "/jcr:content/root/page3_image0";
@@ -577,6 +579,30 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         assertNull(image.getUuid(), "getUuid()");
         assertEquals("image-96253254e2", image.getId(), "getId()");
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, PAGE3_IMAGE0_PATH));
+    }
+
+    @Test
+    protected void testInheritedPageImage_withLink() {
+        Image image = getImageUnderTest(PAGE0_IMAGE2_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, PAGE0_IMAGE2_PATH));
+    }
+
+    @Test
+    protected void testInheritedPageImage_withWrongLink() {
+        Image image = getImageUnderTest(PAGE0_IMAGE3_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, PAGE0_IMAGE3_PATH));
+    }
+
+    @Test
+    protected void testInheritedPageImage_fromTemplate_noLink() {
+        Image image = getImageUnderTest(TEMPLATE_IMAGE_INHERITED_PATH1);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_INHERITED_PATH1));
+    }
+
+    @Test
+    protected void testInheritedPageImage_fromTemplate_withLink() {
+        Image image = getImageUnderTest(TEMPLATE_IMAGE_INHERITED_PATH2);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_INHERITED_PATH2));
     }
 
 }

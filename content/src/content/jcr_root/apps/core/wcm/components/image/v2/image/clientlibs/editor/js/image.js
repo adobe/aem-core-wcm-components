@@ -13,7 +13,6 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* global jQuery, Coral */
 (function($) {
     "use strict";
 
@@ -21,6 +20,7 @@
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var isDecorative;
     var altTuple;
+    var $altTextField;
     var captionTuple;
     var $altGroup;
     var $linkURLGroup;
@@ -46,6 +46,7 @@
             isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
             altTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
+            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
@@ -110,7 +111,7 @@
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
             submittable: ".cmp-image__editor-alt-text",
-            candidate: ".cmp-image__editor-alt-text:not(:hidden)",
+            candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
     });
@@ -157,6 +158,9 @@
             }
             if ($linkURLField.length) {
                 $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
+            }
+            if ($altTextField.length) {
+                $altTextField.adaptTo("foundation-field").setRequired(!checkbox.checked);
             }
             altTuple.hideTextfield(checkbox.checked);
             if (fileReference) {

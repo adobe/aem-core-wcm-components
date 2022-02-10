@@ -17,7 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.image.v1.Image;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v1.Image;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
@@ -38,7 +38,7 @@ public class ImageIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         imageTests = new ImageTests();
-        imageTests.setup(adminClient, label, Commons.rtImage_v1, rootPage, defaultPageTemplate, clientlibs, new Image());
+        imageTests.setup(adminClient, contextPath, label, Commons.rtImage_v1, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
     @AfterEach

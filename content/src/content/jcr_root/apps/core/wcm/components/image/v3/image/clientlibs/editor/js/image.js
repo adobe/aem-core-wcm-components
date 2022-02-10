@@ -13,18 +13,21 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* global jQuery, Coral */
 (function($) {
     "use strict";
 
     var dialogContentSelector = ".cmp-image__editor";
+    var $dialogContent;
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var isDecorative;
     var altTuple;
     var captionTuple;
     var $altGroup;
+    var $altTextField;
     var $linkURLGroup;
     var $linkURLField;
+    var firstCtaLinkFieldSelector = ".cmp-teaser__editor-multifield_actions coral-multifield-item:first foundation-autocomplete";
+    var $firstCtaLinkField;
     var $cqFileUpload;
     var $cqFileUploadEdit;
     var $dynamicMediaGroup;
@@ -56,7 +59,7 @@
         altTextFromPage = undefined;
         altTextFromDAM = undefined;
         var $dialog        = e.dialog;
-        var $dialogContent = $dialog.find(dialogContentSelector);
+        $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
             isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
@@ -70,8 +73,10 @@
             }
 
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
+            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
-            $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
+            $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
+            $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
@@ -83,12 +88,6 @@
             }
 
             imageFromPageImage = dialogContent.querySelector("coral-checkbox[name='./imageFromPageImage']");
-            // uncheck the "Inherit the image from page image" checkbox when there is neither an image nor a page image defined
-            var hasImage = $dialog.find(".cmp-image__editor-file-upload .cq-FileUpload-thumbnail-img img").length > 0;
-            var hasPageImage = $dialog.find(".cq-page-image-thumbnail__image[src]").length > 0;
-            if (imageFromPageImage && !hasImage && !hasPageImage) {
-                imageFromPageImage.checked = false;
-            }
 
             altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, "coral-checkbox[name='./altValueFromPageImage']", "input[name='./alt']");
             $pageImageThumbnail = $dialogContent.find(pageImageThumbnailSelector);
@@ -148,7 +147,7 @@
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
             submittable: ".cmp-image__editor-alt-text",
-            candidate: ".cmp-image__editor-alt-text:not(:hidden)",
+            candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
     });
@@ -171,45 +170,20 @@
         togglePageImageInherited(e.target, isDecorative);
     });
 
+    // Update the image thumbnail when the link field is updated
     $(document).on("change", dialogContentSelector + " foundation-autocomplete[name='./linkURL']", function(e) {
-        updatePageFeaturedImageThumbnail(e.target);
+        updateImageThumbnail();
     });
 
-    /**
-     * Updates the page image thumbnail when the link field is updated
-     * @param linkURLField the link field
-     */
-    function updatePageFeaturedImageThumbnail(linkURLField) {
-        var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
-        var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
-        var linkURL = $(linkURLField).find(".coral-InputGroup-input._coral-Textfield").val();
-        if (linkURL === "undefined" || linkURL === "") {
-            linkURL = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailCurrentPagePathAttribute);
-        }
-        return $.ajax({
-            url: thumbnailConfigPath + ".html" + thumbnailComponentPath,
-            data: {
-                "linkURL": linkURL
-            }
-        }).done(function(data) {
-            if (data) {
-                // update the thumbnail image
-                $pageImageThumbnail.replaceWith(data);
-                $pageImageThumbnail = $(dialogContentSelector).find(pageImageThumbnailSelector);
-                if (imageFromPageImage.checked) {
-                    $pageImageThumbnail.show();
-                } else {
-                    $pageImageThumbnail.hide();
-                }
+    // Update the image thumbnail when the calls to action are updated, removed or reordered
+    $(document).on("change", dialogContentSelector + " .cmp-teaser__editor-multifield_actions", function(e) {
+        updateImageThumbnail();
+    });
 
-                // update the alt field
-                altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
-                altFromPageTuple.seedTextValue(altTextFromPage);
-                altFromPageTuple.update();
-
-            }
-        });
-    }
+    // Update the image thumbnail when the checkbox to enable the call to action is toggled
+    $(document).on("change", dialogContentSelector + " coral-checkbox[name='./actionsEnabled']", function(e) {
+        updateImageThumbnail();
+    });
 
     $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
         switch (e.target.value) {
@@ -227,6 +201,46 @@
                 break;
         }
     });
+
+    function updateImageThumbnail() {
+        var linkValue;
+        var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
+        var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
+        $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
+        if ($linkURLField && $linkURLField.adaptTo("foundation-field") && !$linkURLField.adaptTo("foundation-field").isDisabled()) {
+            linkValue = $linkURLField.adaptTo("foundation-field").getValue();
+        } else if ($firstCtaLinkField && $firstCtaLinkField.adaptTo("foundation-field") && !$firstCtaLinkField.adaptTo("foundation-field").isDisabled()) {
+            linkValue = $firstCtaLinkField.adaptTo("foundation-field").getValue();
+        }
+        if (linkValue === undefined || linkValue === "") {
+            linkValue = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailCurrentPagePathAttribute);
+        }
+
+        // Get the updated page image thumbnail HTML from the server
+        return $.ajax({
+            url: thumbnailConfigPath + ".html" + thumbnailComponentPath,
+            data: {
+                "pageLink": linkValue
+            }
+        }).done(function(data) {
+            if (data) {
+
+                // update the thumbnail image
+                $pageImageThumbnail.replaceWith(data);
+                $pageImageThumbnail = $(dialogContentSelector).find(pageImageThumbnailSelector);
+                if (imageFromPageImage.checked) {
+                    $pageImageThumbnail.show();
+                } else {
+                    $pageImageThumbnail.hide();
+                }
+
+                // update the alt field
+                altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
+                altFromPageTuple.seedTextValue(altTextFromPage);
+                altFromPageTuple.update();
+            }
+        });
+    }
 
     function togglePageImageInherited(checkbox, isDecorative) {
         if (checkbox) {
@@ -280,6 +294,9 @@
             }
             if ($linkURLField.length) {
                 $linkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
+            }
+            if ($altTextField.length) {
+                $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked);
             }
         }
         toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox);

@@ -18,8 +18,8 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.button.v2;
 
 import java.util.concurrent.TimeoutException;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.button.ButtonEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.button.ButtonEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +33,7 @@ public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.
 
     private void setupResources() {
         buttonRT = Commons.rtButton_v2;
+        linkPropertyName = "linkURL";
     }
 
     @BeforeEach
@@ -56,12 +57,12 @@ public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.
         String link = "https://www.adobe.com";
         String target = "_blank";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
-        buttonEditDialog.setLinkField(link);
+        buttonEditDialog.setLinkField(link, linkPropertyName);
         buttonEditDialog.clickLinkTarget();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
-        assertTrue(button.checkLinkPresent(link),"Button with link " + link + " and target "+ target + " should be present");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(button.checkLinkPresentWithTarget(link, target),"Button with link " + link + " and target "+ target + " should be present");
     }
 }

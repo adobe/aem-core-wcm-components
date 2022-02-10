@@ -15,13 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -43,6 +41,7 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
@@ -302,15 +301,20 @@ public class Utils {
      *
      * @param resource The image resource
      * @param linkHandler The link handler
+     * @param currentStyle The style of the image resource
+     * @param currentPage The page containing the image resource
      * @return The wrapped image resource augmented with inherited properties and child resource if inheritance is enabled, the plain image resource otherwise.
      */
-    public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkHandler linkHandler) {
+    public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkHandler linkHandler, Style currentStyle, Page currentPage) {
         if (resource == null) {
             LOGGER.error("The resource is not defined");
             return null;
         }
+        if (linkHandler == null) {
+            LOGGER.error("The link handler is not defined");
+            return null;
+        }
 
-        ResourceResolver resourceResolver = resource.getResourceResolver();
         ValueMap properties = resource.getValueMap();
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         Resource fileResource = resource.getChild(DownloadResource.NN_FILE);
@@ -319,41 +323,68 @@ public class Utils {
 
         if (imageFromPageImage) {
             Resource inheritedResource = null;
-            if (linkHandler != null) {
-                Optional<Link> link = linkHandler.getLink(resource);
-                if (link.isPresent()) {
-                    Page linkedPage = (Page) link.get().getReference();
-                    if (linkedPage != null) {
-                        inheritedResource = ComponentUtils.getFeaturedImage(linkedPage);
-                    }
-                } else {
-                    PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-                    if (pageManager != null) {
-                        Page page = pageManager.getContainingPage(resource);
-                        if (page != null) {
-                            inheritedResource = ComponentUtils.getFeaturedImage(page);
-                        }
-                    }
-                }
+            Optional<Link> link = linkHandler.getLink(resource);
+            boolean actionsEnabled = (currentStyle != null) ?
+                    !currentStyle.get(Teaser.PN_ACTIONS_DISABLED, !properties.get(Teaser.PN_ACTIONS_ENABLED, false)) :
+                    properties.get(Teaser.PN_ACTIONS_ENABLED, false);
+            if (actionsEnabled) {
+
+                // the inherited resource is the featured image of the first action's page (the resource is assumed to be a teaser)
+
+                inheritedResource = Optional.of(resource)
+                        .map(res -> res.getChild("actions"))
+                        .map(actions -> actions.getChildren().iterator().next())
+                        .map(firstAction -> linkHandler.getLink(firstAction, "link"))
+                        .map(link1 -> {
+                            if (link1.isPresent()) {
+                                Page linkedPage = (Page) link1.get().getReference();
+                                return Optional.ofNullable(linkedPage)
+                                        .map(ComponentUtils::getFeaturedImage)
+                                        .orElse(null);
+                            }
+                            return null;
+                        })
+                        .orElse(null);
+            } else if (link.isPresent()) {
+
+                // the inherited resource is the featured image of the linked page
+
+                inheritedResource = link
+                        .map(link1 -> (Page) link1.getReference())
+                        .map(ComponentUtils::getFeaturedImage)
+                        .orElse(null);
+            } else {
+
+                // the inherited resource is the featured image of the current page
+
+                inheritedResource = Optional.ofNullable(currentPage)
+                        .map(page -> {
+                            Template template = page.getTemplate();
+                            // make sure the resource is part of the currentPage or of its template
+                            if (StringUtils.startsWith(resource.getPath(), currentPage.getPath())
+                                    || (template != null && StringUtils.startsWith(resource.getPath(), template.getPath()))) {
+                                return ComponentUtils.getFeaturedImage(currentPage);
+                            }
+                            return null;
+                        })
+                        .orElse(null);
             }
 
-            // Define the inherited properties
+            Map<String, String> overriddenProperties = new HashMap<>();
+            Map<String, Resource> overriddenChildren = new HashMap<>();
             String inheritedFileReference = null;
             Resource inheritedFileResource = null;
             String inheritedAlt = null;
             String inheritedAltValueFromDAM = null;
+
             if (inheritedResource != null) {
+                // Define the inherited properties
                 ValueMap inheritedProperties = inheritedResource.getValueMap();
                 inheritedFileReference = inheritedProperties.get(DownloadResource.PN_REFERENCE, String.class);
                 inheritedFileResource = inheritedResource.getChild(DownloadResource.NN_FILE);
                 inheritedAlt = inheritedProperties.get(ImageResource.PN_ALT, String.class);
                 inheritedAltValueFromDAM = inheritedProperties.get(PN_ALT_VALUE_FROM_DAM, String.class);
-
             }
-
-            List<String> hiddenProperties = new ArrayList<>();
-            Map<String, String> overriddenProperties = new HashMap<>();
-            Map<String, Resource> overriddenChildren = new HashMap<>();
             overriddenProperties.put(DownloadResource.PN_REFERENCE, inheritedFileReference);
             overriddenChildren.put(DownloadResource.NN_FILE, inheritedFileResource);
             // don't inherit the image title from the page image
@@ -365,7 +396,8 @@ public class Utils {
                 overriddenProperties.put(PN_ALT_VALUE_FROM_DAM, "false");
             }
 
-            return new CoreResourceWrapper(resource, resource.getResourceType(), hiddenProperties, overriddenProperties, overriddenChildren);
+            return new CoreResourceWrapper(resource, resource.getResourceType(), null, overriddenProperties, overriddenChildren);
+
         }
         return resource;
     }

@@ -34,8 +34,10 @@ public class PageImageThumbnailTest {
 
     private static final String TEST_BASE = "/commons/editor/dialog/pageimagethumbnail";
     private static final String CONTENT_ROOT = "/content";
-    private static final String RESOURCE1 = CONTENT_ROOT + "/page/jcr:content/root/responsivegrid/image";
-    private static final String RESOURCE2 = CONTENT_ROOT + "/page/jcr:content/root/responsivegrid/image1";
+    private static final String RESOURCE = CONTENT_ROOT + "/page/jcr:content/root/responsivegrid/image";
+    private static final String RESOURCE1 = CONTENT_ROOT + "/page/jcr:content/root/responsivegrid/image1";
+    private static final String TEASER1 = CONTENT_ROOT + "/page/jcr:content/root/responsivegrid/teaser_empty";
+    private static final String TEASER2 = CONTENT_ROOT + "/page/jcr:content/root/responsivegrid/teaser_with_link";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -46,11 +48,11 @@ public class PageImageThumbnailTest {
 
     @Test
     void testPageImageThumbnailWithSuffix() {
-        context.currentResource(RESOURCE1);
+        context.currentResource(RESOURCE);
         MockSlingHttpServletRequest request = context.request();
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
-        requestPathInfo.setSuffix(RESOURCE1);
-        requestPathInfo.setResourcePath(RESOURCE1);
+        requestPathInfo.setSuffix(RESOURCE);
+        requestPathInfo.setResourcePath(RESOURCE);
         PageImageThumbnail pageImageThumbnail = request.adaptTo(PageImageThumbnail.class);
         if (pageImageThumbnail != null) {
             assertEquals("featured image alt", pageImageThumbnail.getAlt(), "getAlt()");
@@ -65,9 +67,9 @@ public class PageImageThumbnailTest {
 
     @Test
     void testPageImageThumbnailWithParam() {
-        context.currentResource(RESOURCE1);
+        context.currentResource(RESOURCE);
         MockSlingHttpServletRequest request = context.request();
-        request.setParameterMap(ImmutableMap.of("item", RESOURCE1));
+        request.setParameterMap(ImmutableMap.of("item", RESOURCE));
         PageImageThumbnail pageImageThumbnail = request.adaptTo(PageImageThumbnail.class);
         if (pageImageThumbnail != null) {
             assertEquals("featured image alt", pageImageThumbnail.getAlt(), "getAlt()");
@@ -77,9 +79,9 @@ public class PageImageThumbnailTest {
 
     @Test
     void testPageImageThumbnailWithLinkURL() {
-        context.currentResource(RESOURCE1);
+        context.currentResource(RESOURCE);
         MockSlingHttpServletRequest request = context.request();
-        request.setParameterMap(ImmutableMap.of("item", RESOURCE1, "linkURL", "/content/page1"));
+        request.setParameterMap(ImmutableMap.of("item", RESOURCE, "pageLink", "/content/page1"));
         PageImageThumbnail pageImageThumbnail = request.adaptTo(PageImageThumbnail.class);
         if (pageImageThumbnail != null) {
             assertEquals("featured image alt for page 1", pageImageThumbnail.getAlt(), "getAlt()");
@@ -89,7 +91,7 @@ public class PageImageThumbnailTest {
 
     @Test
     void testPageImageThumbnailWithoutParam() {
-        context.currentResource(RESOURCE1);
+        context.currentResource(RESOURCE);
         MockSlingHttpServletRequest request = context.request();
         PageImageThumbnail pageImageThumbnail = request.adaptTo(PageImageThumbnail.class);
         if (pageImageThumbnail != null) {
@@ -102,11 +104,23 @@ public class PageImageThumbnailTest {
     void testPageImageThumbnailWithNonExistingResource() {
         MockSlingHttpServletRequest request = context.request();
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
-        requestPathInfo.setSuffix(RESOURCE2);
+        requestPathInfo.setSuffix(RESOURCE1);
         PageImageThumbnail pageImageThumbnail = request.adaptTo(PageImageThumbnail.class);
         if (pageImageThumbnail != null) {
             assertNull(pageImageThumbnail.getAlt(), "getAlt()");
             assertNull(pageImageThumbnail.getSrc(), "getSrc()");
+        }
+    }
+
+    @Test
+    void testWithTeaserAndNoLink() {
+        context.currentResource(TEASER1);
+        MockSlingHttpServletRequest request = context.request();
+        request.setParameterMap(ImmutableMap.of("item", TEASER1));
+        PageImageThumbnail pageImageThumbnail = request.adaptTo(PageImageThumbnail.class);
+        if (pageImageThumbnail != null) {
+            assertEquals("featured image alt", pageImageThumbnail.getAlt(), "getAlt()");
+            assertEquals("/content/page/_jcr_content/_cq_featuredimage.coreimg.png", pageImageThumbnail.getSrc(), "getSrc()");
         }
     }
 

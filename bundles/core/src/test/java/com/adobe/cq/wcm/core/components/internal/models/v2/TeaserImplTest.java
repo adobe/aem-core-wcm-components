@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.Utils;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -110,6 +111,62 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertEquals("/content/teasers", linkURL, "image resource: linkURL");
         assertNull(fileReference, "image resource: fileReference");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser20"));
+    }
+
+    @Test
+    protected void testImageFromPage_withoutLink() {
+        Teaser teaser = getTeaserUnderTest(TEASER_21);
+        Link link = teaser.getLink();
+        assertNull(link, "link should be null");
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser21"));
+    }
+
+    @Test
+    protected void testImageFromPage_withLink() {
+        Teaser teaser = getTeaserUnderTest(TEASER_22);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser22"));
+    }
+
+    @Test
+    protected void testImageFromPage_withInvalidLink() {
+        Teaser teaser = getTeaserUnderTest(TEASER_22a);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser22a"));
+    }
+
+    @Test
+    protected void testImageFromPage_withCta() {
+        Teaser teaser = getTeaserUnderTest(TEASER_23);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser23"));
+    }
+
+    @Test
+    protected void testImageFromPage_withInvalidCta() {
+        Teaser teaser = getTeaserUnderTest(TEASER_23a);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser23a"));
+    }
+
+    @Test
+    protected void testInheritedPageImage_fromTemplate_noLink() {
+        Teaser teaser = getTeaserUnderTest(TEMPLATE_TEASER_1);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "template_teaser1"));
+    }
+
+    @Test
+    protected void testInheritedPageImage_fromTemplate_withLink() {
+        Teaser teaser = getTeaserUnderTest(TEMPLATE_TEASER_2);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "template_teaser2"));
+    }
+
+    @Test
+    protected void testInheritedPageImage_fromTemplate_withCTAs() {
+        Teaser teaser = getTeaserUnderTest(TEMPLATE_TEASER_3);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "template_teaser3"));
+    }
+
+    @Test
+    protected void testImageFromPage_withLink_andTitleEmpty() {
+        Teaser teaser = getTeaserUnderTest(TEASER_24);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser24"));
     }
 
 }
