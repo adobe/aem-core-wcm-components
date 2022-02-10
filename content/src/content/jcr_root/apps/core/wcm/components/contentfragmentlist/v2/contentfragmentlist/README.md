@@ -52,7 +52,7 @@ BLOCK cmp-contentfragmentlist
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_cflist\_v2](https://www.adobe.com/go/aem_cmp_cflist_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_cflist](https://www.adobe.com/go/aem_cmp_library_cflist)
 * **Authors**: [Burkhard Pauli](https://github.com/bpauli)
