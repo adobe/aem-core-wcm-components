@@ -15,7 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
 <div class="cmp-embed__youtube"
-  style="padding-bottom: ${youTube.iFrameAspectRatio @ context='scriptString'}%">
+  style="padding-bottom: ${youTube.iFrameAspectRatio || 56.25  @ context='scriptString'}%">
   <iframe data-sly-use.youTube="com.adobe.cq.wcm.core.components.models.embeddable.YouTube"
     data-sly-test="${!youtube.empty}"
     data-cmp-data-layer="${youtube.data.json}"
