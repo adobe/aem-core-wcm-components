@@ -73,7 +73,7 @@
 
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
-            $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
+            $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
