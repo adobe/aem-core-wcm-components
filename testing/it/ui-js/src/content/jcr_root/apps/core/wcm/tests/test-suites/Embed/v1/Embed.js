@@ -32,7 +32,7 @@
                     button: "[data-cmp-embed-dialog-edit-hook='embeddableField'] button",
                     selectList: "[data-cmp-embed-dialog-edit-hook='embeddableField'] coral-selectlist",
                     items: {
-                        youtube: "[data-cmp-embed-dialog-edit-hook='embeddableField'] coral-selectlist-item[value='core/wcm/components/embed/v1/embed/embeddable/youtube']"
+                        youtube: "[data-cmp-embed-dialog-edit-hook='embeddableField'] coral-selectlist-item[value='core/wcm/components/embed/v1/embed/embeddable/youtube/v1']"
                     }
                 },
                 htmlField: "[data-cmp-embed-dialog-edit-showhidetargetvalue='html']",

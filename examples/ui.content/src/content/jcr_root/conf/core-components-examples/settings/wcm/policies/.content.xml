@@ -160,7 +160,7 @@
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Embed"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        allowedEmbeddables="[core/wcm/components/embed/v1/embed/embeddable/youtube,core/wcm/components/embed/v1/embed/embeddable/youtube-v2]">
+                        allowedEmbeddables="[core/wcm/components/embed/v1/embed/embeddable/youtube/v1,core/wcm/components/embed/v1/embed/embeddable/youtube/v2]">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1558686151045>
             </embed>
