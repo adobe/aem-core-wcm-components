@@ -17,7 +17,9 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -100,7 +102,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * The target page.
      */
-    private Page targetPage;
+    protected Page targetPage;
 
     /**
      * The image src.
@@ -110,12 +112,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * Flag indicating if CTA actions are enabled.
      */
-    private boolean actionsEnabled = false;
+    protected boolean actionsEnabled = false;
 
     /**
      * Flag indicating if the title should be hidden.
      */
-    private boolean titleHidden = false;
+    protected boolean titleHidden = false;
 
     /**
      * Flag indicating if the title type should be hidden.
@@ -125,7 +127,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * Flag indicating if the description should be hidden.
      */
-    private boolean descriptionHidden = false;
+    protected boolean descriptionHidden = false;
 
     /**
      * Flag indicating if the image should not be linked.
@@ -145,12 +147,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * Flag indicating if the title should be inherited from the target page.
      */
-    private boolean titleFromPage = false;
+    protected boolean titleFromPage = false;
 
     /**
      * Flag indicating if the description should be inherited from the target page.
      */
-    private boolean descriptionFromPage = false;
+    protected boolean descriptionFromPage = false;
 
     /**
      * List of CTA actions.
@@ -165,6 +167,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         add(JcrConstants.JCR_DESCRIPTION);
     }};
 
+    protected final Map<String, String> overriddenImageResourceProperties = new HashMap<>();
+
     /**
      * The teaser link
      */
@@ -172,7 +176,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    private String linkTarget;
+    protected String linkTarget;
 
     /**
      * The current component.
@@ -184,7 +188,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      * The page manager.
      */
     @ScriptVariable
-    private PageManager pageManager;
+    protected PageManager pageManager;
 
     /**
      * The current style.
@@ -206,6 +210,15 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      */
     @PostConstruct
     protected void initModel() {
+        initProperties();
+        initImage();
+        initLink();
+    }
+
+    /**
+     * Initialize the properties.
+     */
+    protected void initProperties() {
         ValueMap properties = resource.getValueMap();
 
         pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
@@ -222,10 +235,21 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
+    }
 
+    /**
+     * Initialize the image.
+     */
+    protected void initImage() {
         if (this.hasImage()) {
-            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties, null);
+            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties, overriddenImageResourceProperties);
         }
+    }
+
+    /**
+     * Initialize the link.
+     */
+    protected void initLink() {
         // use the target page as the link if it exists
         link = this.getTargetPage()
                 .map(page -> Optional.of(linkHandler.getLink(page.getPath(), linkTarget).orElse(null)))
@@ -293,7 +317,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
      * @return List of teaser actions.
      */
     @NotNull
-    private List<Action> getTeaserActions() {
+    protected List<Action> getTeaserActions() {
         if (this.actions == null) {
             this.actions = Optional.ofNullable(this.isActionsEnabled() ? this.resource.getChild(Teaser.NN_ACTIONS) : null)
                 .map(Resource::getChildren)
@@ -419,7 +443,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * Teaser CTA.
      */
-    @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
+    @JsonIgnoreProperties({"path", "description", "lastModified", "name", "ctaPage"})
     public class Action extends AbstractListItemImpl implements ListItem {
 
         /**
@@ -482,7 +506,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          * @return The referenced page if this CTA references a page, empty if not.
          */
         @NotNull
-        protected Optional<Page> getCtaPage() {
+        public Optional<Page> getCtaPage() {
             return Optional.ofNullable(ctaLink.map(Link::getReference).orElse(null));
         }
 

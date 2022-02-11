@@ -31,6 +31,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImplTest {
 
     private static final String TEST_BASE = "/teaser/v2";
+    private static final String TEASER_25 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-25";
 
     @BeforeEach
     protected void setUp() {
@@ -54,6 +56,15 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         // < and > are expected escaped, because the page properties provide only a plain text field for the page description
         assertEquals("Teasers description from &lt;page properties&gt;", teaser.getDescription());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser11"));
+    }
+
+    @Test
+    protected void testTeaserWithTitleAndDescriptionFromCurrentPage() {
+        Teaser teaser = getTeaserUnderTest(TEASER_25);
+        assertEquals("Teasers Test", teaser.getTitle());
+        // < and > are expected escaped, because the page properties provide only a plain text field for the page description
+        assertEquals("Teasers description from &lt;page properties&gt;", teaser.getDescription());
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser25"));
     }
 
     @Test
@@ -76,12 +87,8 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     @Override
     protected void testTeaserWithoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
-        // TODO: make the following assert pass
-        /*
-        assertThat(testLogger.getLoggingEvents(),
-                hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
-         */
-        assertNull(teaser.getLink(), "The link should be null");
+        assertNotNull(teaser.getLink(), "The link should not be null");
+        assertEquals("/core/content/teasers.html", teaser.getLink().getURL());
     }
 
     @Test
@@ -117,7 +124,8 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     protected void testImageFromPage_withoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_21);
         Link link = teaser.getLink();
-        assertNull(link, "link should be null");
+        assertNotNull(link);
+        assertEquals("/core/content/teasers.html", link.getURL());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser21"));
     }
 

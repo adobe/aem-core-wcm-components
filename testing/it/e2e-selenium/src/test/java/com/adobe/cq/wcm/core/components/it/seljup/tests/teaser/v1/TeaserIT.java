@@ -16,14 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.AssetFinder;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.TeaserEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.Teaser;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
@@ -36,9 +31,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.AssetFinder;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.Teaser;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.TeaserEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -72,7 +72,7 @@ public class TeaserIT extends AuthorBaseUITest {
     protected static String skiingAssetFormatted            = format(skiingAsset);
 
 
-    private String proxyPath;
+    protected String proxyPath;
 
     protected String clientlibs;
     protected String teaserRT;
@@ -370,7 +370,8 @@ public class TeaserIT extends AuthorBaseUITest {
         editDialog.openLinkAndActionsTab();
         editDialog.clickActionEnabled();
         editDialog.setActionLinkUrl(testPage);
-        editDialog.addActionLinkUrl(secondTestPage);
+        editDialog.addActionLink();
+        editDialog.setActionLinkUrl(secondTestPage);
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
@@ -400,7 +401,8 @@ public class TeaserIT extends AuthorBaseUITest {
         editDialog.clickActionEnabled();
         editDialog.setActionLinkUrl(actionExternalLink);
         editDialog.setActionText(actionExternalText);
-        editDialog.addActionLinkUrl(secondTestPage);
+        editDialog.addActionLink();
+        editDialog.setActionLinkUrl(secondTestPage);
         editDialog.setActionText(actionText2);
         Commons.saveConfigureDialog();
 

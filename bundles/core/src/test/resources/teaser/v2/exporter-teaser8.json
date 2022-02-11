@@ -3,7 +3,7 @@
     "valid": true,
     "url": "/core/content/teasers.html"
   },
-  "actionsEnabled": false,
+  "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
   "actions": [],

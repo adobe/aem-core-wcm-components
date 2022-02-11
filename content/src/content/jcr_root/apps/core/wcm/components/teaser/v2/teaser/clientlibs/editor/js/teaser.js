@@ -17,16 +17,13 @@
     "use strict";
 
     var dialogContentSelector = ".cmp-teaser__editor";
-    var actionsEnabledCheckboxSelector = 'coral-checkbox[name="./actionsEnabled"]';
     var actionsMultifieldSelector = ".cmp-teaser__editor-multifield_actions";
     var titleCheckboxSelector = 'coral-checkbox[name="./titleFromPage"]';
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionFromPage"]';
     var descriptionTextfieldSelector = '.cq-RichText-editable[name="./jcr:description"]';
     var linkURLSelector = '[name="./linkURL"]';
-    var linkTargetSelector = '.cmp-link-target [name="./linkTarget"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
-    var actionsEnabled;
     var titleTuple;
     var descriptionTuple;
     var linkURL;
@@ -71,99 +68,37 @@
             });
         }
 
-        var $actionsEnabledCheckbox = $dialogContent.find(actionsEnabledCheckboxSelector);
-        if ($actionsEnabledCheckbox.size() > 0) {
-            actionsEnabled = $actionsEnabledCheckbox.adaptTo("foundation-field").getValue() === "true";
-            $actionsEnabledCheckbox.on("change", function(e) {
-                actionsEnabled = $(e.target).adaptTo("foundation-field").getValue() === "true";
-                toggleInputs($dialogContent);
-                retrievePageInfo($dialogContent);
-            });
-
-            var $actionsMultifield = $dialogContent.find(actionsMultifieldSelector);
-            $actionsMultifield.on("change", function(event) {
-                var $target = $(event.target);
-                if ($target.is("coral-multifield") && event.target.items && event.target.items.length === 0) {
-                    actionsEnabled = false;
-                    $actionsEnabledCheckbox.adaptTo("foundation-field").setValue(false);
-                    toggleInputs($dialogContent);
-                } else if ($target.is("foundation-autocomplete")) {
-                    updateText($target);
-                }
-                retrievePageInfo($dialogContent);
-            });
-        }
-        toggleInputs($dialogContent);
-    }
-
-    function toggleInputs(dialogContent) {
-        var $actionsMultifield = dialogContent.find(actionsMultifieldSelector);
-        var linkURLField = dialogContent.find(linkURLSelector).adaptTo("foundation-field");
-        var linkTargetField = dialogContent.find(linkTargetSelector).adaptTo("foundation-field");
-        var actions = $actionsMultifield.adaptTo("foundation-field");
-        if (linkURLField && actions) {
-            if (actionsEnabled) {
-                linkURLField.setDisabled(true);
-                if (linkTargetField) {
-                    linkTargetField.setDisabled(true);
-                }
-                actions.setDisabled(false);
-                if ($actionsMultifield.size() > 0) {
-                    var actionsMultifield = $actionsMultifield[0];
-                    if (actionsMultifield.items.length < 1) {
-                        var newMultifieldItem = new Coral.Multifield.Item();
-                        actionsMultifield.items.add(newMultifieldItem);
-                        Coral.commons.ready(newMultifieldItem, function(element) {
-                            var linkField = $(element).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']");
-                            if (linkField) {
-                                linkField.val(linkURL);
-                                linkField.trigger("change");
-                            }
-                        });
-                    } else {
-                        toggleActionItems($actionsMultifield, false);
+        var $actionsMultifield = $dialogContent.find(actionsMultifieldSelector);
+        $actionsMultifield.on("change", function(event) {
+            var $target = $(event.target);
+            if ($target.is("foundation-autocomplete")) {
+                updateText($target);
+            } else if ($target.is("coral-multifield")) {
+                var $first = $(event.target.items.first());
+                if (event.target.items.length === 1 && $first.is("coral-multifield-item")) {
+                    var $input = $first.find(".cmp-teaser__editor-actionField-linkUrl");
+                    if ($input.is("foundation-autocomplete")) {
+                        var value = $linkURLField.adaptTo("foundation-field").getValue();
+                        if (!$input.val() && value) {
+                            $input.val(value);
+                            updateText($input);
+                        }
                     }
                 }
-            } else {
-                linkURLField.setDisabled(false);
-                if (linkTargetField) {
-                    linkTargetField.setDisabled(false);
-                }
-                actions.setDisabled(true);
-                toggleActionItems($actionsMultifield, true);
             }
-        }
-    }
-
-    function toggleActionItems(actionsMultifield, disabled) {
-        actionsMultifield.find("coral-multifield-item").each(function(ix, item) {
-            var linkField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']").adaptTo("foundation-field");
-            var targetField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionTarget']").adaptTo("foundation-field");
-            var textField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionTitle']").adaptTo("foundation-field");
-            if (disabled && linkField.getValue() === "" && textField.getValue() === "") {
-                actionsMultifield[0].items.remove(item);
-            }
-            if (linkField) {
-                linkField.setDisabled(disabled);
-            }
-            if (targetField) {
-                targetField.setDisabled(disabled);
-            }
-            if (textField) {
-                textField.setDisabled(disabled);
-            }
+            retrievePageInfo($dialogContent);
         });
     }
 
     function retrievePageInfo(dialogContent) {
         var url;
-        if (actionsEnabled) {
-            url = dialogContent.find('.cmp-teaser__editor-multifield_actions [data-cmp-teaser-v1-dialog-edit-hook="actionLink"]').val();
+        if (linkURL === undefined || linkURL === "") {
+            url = dialogContent.find('.cmp-teaser__editor-multifield_actions [data-cmp-teaser-v2-dialog-edit-hook="actionLink"]').val();
         } else {
             url = linkURL;
         }
         // get the info from the current page in case no link is provided.
-        if (url === undefined && (Granite.author && Granite.author.page)) {
+        if ((url === undefined || url === "") && (Granite.author && Granite.author.page)) {
             url = Granite.author.page.path;
         }
         if (url && url.startsWith("/")) {
@@ -186,7 +121,7 @@
     function updateText(target) {
         var url = target.val();
         if (url && url.startsWith("/")) {
-            var textField = target.parents("coral-multifield-item").find('[data-cmp-teaser-v1-dialog-edit-hook="actionTitle"]');
+            var textField = target.parents("coral-multifield-item").find('[data-cmp-teaser-v2-dialog-edit-hook="actionTitle"]');
             if (textField && !textField.val()) {
                 $.ajax({
                     url: url + "/_jcr_content.json"
