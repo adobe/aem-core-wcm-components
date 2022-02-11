@@ -168,7 +168,7 @@
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
         var target = e.target;
         updateImageThumbnail().done(function() {
-            togglePageImageInherited(target, isDecorative)
+            togglePageImageInherited(target, isDecorative);
         });
     });
 
