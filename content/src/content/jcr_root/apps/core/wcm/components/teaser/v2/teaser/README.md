@@ -98,6 +98,6 @@ BLOCK cmp-teaser
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.5
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_teaser\_v2](https://www.adobe.com/go/aem_cmp_teaser_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_teaser](https://www.adobe.com/go/aem_cmp_library_teaser)

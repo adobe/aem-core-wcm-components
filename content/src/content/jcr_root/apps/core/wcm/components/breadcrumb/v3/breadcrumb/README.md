@@ -59,7 +59,7 @@ BLOCK cmp-breadcrumb
 * **Vendor**: Adobe
 * **Version**: v3
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_breadcrumb\_v3](https://www.adobe.com/go/aem_cmp_breadcrumb_v3)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_breadcrumb](https://www.adobe.com/go/aem_cmp_library_breadcrumb)
 * **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)

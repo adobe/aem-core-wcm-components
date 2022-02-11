@@ -3,5 +3,5 @@
     cq:icon="asset"
     jcr:description="Embed a third-party widget or safe free-form HTML."
     jcr:primaryType="cq:Component"
-    jcr:title="Embed (v2) (work-in-progress)"
-    componentGroup=".wip"/>
+    jcr:title="Embed (v2)"
+    componentGroup=".core-wcm"/>
