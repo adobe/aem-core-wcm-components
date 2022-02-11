@@ -146,7 +146,7 @@
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
             submittable: ".cmp-image__editor-alt-text",
-            candidate: ".cmp-image__editor-alt-text:not(:disabled)",
+            candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
     });
@@ -166,7 +166,7 @@
     });
 
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
-        togglePageImageInherited(e.target, isDecorative);
+        updateImageThumbnail(togglePageImageInherited(e.target, isDecorative));
     });
 
     // Update the image thumbnail when the link field is updated
@@ -196,7 +196,10 @@
         }
     });
 
-    function updateImageThumbnail() {
+    function updateImageThumbnail(callback) {
+        if (!imageFromPageImage.checked) {
+            return;
+        }
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
@@ -232,6 +235,9 @@
                 altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
                 altFromPageTuple.seedTextValue(altTextFromPage);
                 altFromPageTuple.update();
+                if (callback !== undefined) {
+                    callback();
+                }
             }
         });
     }

@@ -97,11 +97,11 @@
                             return !self._textfieldFoundation.isDisabled();
                         },
                         show: function() {
-                            self._disableTextfield(false);
+                            self._disableTextfield(self._checkbox.checked);
                             $(self._textfield).parent().show();
                         },
                         hide: function() {
-                            self._disableTextfield(true);
+                            self._disableTextfield(!self._checkbox.checked);
                             $(self._textfield).parent().hide();
                         }
                     };
