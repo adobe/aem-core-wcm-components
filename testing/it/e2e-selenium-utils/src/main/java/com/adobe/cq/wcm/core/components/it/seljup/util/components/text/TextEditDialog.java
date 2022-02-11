@@ -16,19 +16,73 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.text;
 
-import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
-import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+
+import static com.codeborne.selenide.Selenide.$;
+
 public class TextEditDialog extends Dialog {
-    private static String textBox = "input[name='./text']";
+
+    private static SelenideElement stylesTab = $("coral-tab[data-foundation-tracking-event*='styles']");
 
     public void setText(String value) {
+        String textBox = "input[name='./text']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector(textBox));
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].value=arguments[1];", element, value);
+    }
+
+    // ----------------------------------------------------------
+    // Style Tab
+    // ----------------------------------------------------------
+
+    public void openStylesTab() {
+        stylesTab.click();
+    }
+
+    public Boolean isStyleSelectMenuDisplayed() {
+        return $("coral-select[name='./cq:styleIds']").isDisplayed();
+    }
+
+    public Boolean isNoStyleOptionSelectedByDefault() {
+        return $("coral-select[name='./cq:styleIds'] > coral-select-item[selected]").innerText().equals("None");
+    }
+
+    public Boolean isBlueStyleOptionSelectedByDefault() {
+        return $("coral-select[name='./cq:styleIds'] > coral-select-item[selected]").innerText().equals("Blue");
+    }
+
+    public void openStyleSelectDropdown() {
+        $("coral-select[name='./cq:styleIds'] button").click();
+    }
+
+    public final Boolean areExpectedOptionsForNoDefaultStylePresentInDropdown() {
+        return $("coral-selectlist-item[selected]").innerText().equals("None") &&
+                $("coral-selectlist-item[value='1547060098888']").exists() &&
+                $("coral-selectlist-item[value='1550165689999']").exists();
+    }
+
+    public final Boolean areExpectedOptionsForDefaultStylePresentInDropdown() {
+        return $("coral-selectlist-item[selected][value='1547060098888']").innerText().equals("Blue") &&
+                $("coral-selectlist-item:not([selected])[value='']").innerText().equals("None") &&
+                $("coral-selectlist-item[value='1550165689999']").exists();
+    }
+
+    public Boolean componentHasNoClassesAppliedByTheStyleSystem(String textComponentId) {
+        return !$(".cmp-blue-text" + textComponentId).exists() && !$(".cmp-red-text" + textComponentId).exists();
+    }
+
+    public Boolean componentHasExpectedClassAppliedByTheStyleSystem(String textComponentSelector, String expectedClassSelector) {
+        return $(expectedClassSelector + " " + textComponentSelector).exists();
+    }
+
+    public Boolean componentHasNoSpecificClassAppliedByTheStyleSystem(String textComponentSelector, String classSelector) {
+        return !$(textComponentSelector + " " + classSelector).exists();
     }
 }

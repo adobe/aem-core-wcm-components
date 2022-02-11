@@ -23,6 +23,7 @@
     var altTuple;
     var captionTuple;
     var $altGroup;
+    var $altTextField;
     var $linkURLGroup;
     var $linkURLField;
     var firstCtaLinkFieldSelector = ".cmp-teaser__editor-multifield_actions coral-multifield-item:first foundation-autocomplete";
@@ -72,9 +73,9 @@
             }
 
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
+            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
-            $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
-            $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
+            $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
@@ -140,12 +141,12 @@
             }
             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
             togglePageImageInherited(imageFromPageImage, isDecorative);
-
+            updateImageThumbnail();
         }
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
             submittable: ".cmp-image__editor-alt-text",
-            candidate: ".cmp-image__editor-alt-text:not(:hidden)",
+            candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
     });
@@ -178,11 +179,6 @@
         updateImageThumbnail();
     });
 
-    // Update the image thumbnail when the checkbox to enable the call to action is toggled
-    $(document).on("change", dialogContentSelector + " coral-checkbox[name='./actionsEnabled']", function(e) {
-        updateImageThumbnail();
-    });
-
     $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
         switch (e.target.value) {
             case "imagePreset":
@@ -205,9 +201,9 @@
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
         $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
-        if ($linkURLField && $linkURLField.adaptTo("foundation-field") && !$linkURLField.adaptTo("foundation-field").isDisabled()) {
+        if ($linkURLField && $linkURLField.adaptTo("foundation-field") && $linkURLField.adaptTo("foundation-field").getValue()) {
             linkValue = $linkURLField.adaptTo("foundation-field").getValue();
-        } else if ($firstCtaLinkField && $firstCtaLinkField.adaptTo("foundation-field") && !$firstCtaLinkField.adaptTo("foundation-field").isDisabled()) {
+        } else if ($firstCtaLinkField && $firstCtaLinkField.adaptTo("foundation-field") && $firstCtaLinkField.adaptTo("foundation-field").getValue()) {
             linkValue = $firstCtaLinkField.adaptTo("foundation-field").getValue();
         }
         if (linkValue === undefined || linkValue === "") {
@@ -292,6 +288,9 @@
             }
             if ($linkURLField.length) {
                 $linkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
+            }
+            if ($altTextField.length) {
+                $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked);
             }
         }
         toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox);

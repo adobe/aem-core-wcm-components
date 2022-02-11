@@ -38,7 +38,7 @@ public class ImageIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         imageTests = new ImageTests();
-        imageTests.setup(adminClient, label, Commons.rtImage_v2, rootPage, defaultPageTemplate, clientlibs, new Image());
+        imageTests.setup(adminClient, contextPath, label, Commons.rtImage_v2, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
     @AfterEach

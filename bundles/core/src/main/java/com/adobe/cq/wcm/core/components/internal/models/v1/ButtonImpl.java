@@ -59,9 +59,6 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
     private SlingHttpServletRequest request;
 
     @ScriptVariable
-    private Resource resource;
-
-    @ScriptVariable
     private PageManager pageManager;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -78,7 +75,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
     protected String accessibilityLabel;
 
     @Self
-    private LinkHandler linkHandler;
+    protected LinkHandler linkHandler;
     protected Optional<Link> link;
 
     @PostConstruct

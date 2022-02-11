@@ -24,12 +24,12 @@
      id="${teaser.id}"
      class="cmp-teaser${!wcmmode.disabled && teaser.imageResource ? ' cq-dd-image' : ''}"
      data-cmp-data-layer="${teaser.data.json}">
-    <sly data-sly-call="${imageTemplate.image @ teaser=teaser}"></sly>
     <div class="cmp-teaser__content">
         <sly data-sly-call="${pretitleTemplate.pretitle @ teaser=teaser}"></sly>
         <sly data-sly-call="${titleTemplate.title @ teaser=teaser}"></sly>
         <sly data-sly-call="${descriptionTemplate.description @ teaser=teaser}"></sly>
         <sly data-sly-call="${actionsTemplate.actions @ teaser=teaser}"></sly>
     </div>
+    <sly data-sly-call="${imageTemplate.image @ teaser=teaser}"></sly>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-teaser'}"></sly>

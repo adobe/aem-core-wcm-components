@@ -52,9 +52,11 @@ public class ButtonIT extends AuthorBaseUITest {
     protected Button button;
     protected String cmpPath;
     protected String buttonRT;
+    protected String linkPropertyName;
 
     private void setupResources() {
         buttonRT = Commons.rtButton_v1;
+        linkPropertyName = "link";
     }
 
     protected void setup() throws ClientException {
@@ -119,7 +121,7 @@ public class ButtonIT extends AuthorBaseUITest {
     void testSetLink() throws TimeoutException, InterruptedException {
         String link = "https://www.adobe.com";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
-        buttonEditDialog.setLinkField(link);
+        buttonEditDialog.setLinkField(link, linkPropertyName);
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");

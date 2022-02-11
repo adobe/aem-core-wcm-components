@@ -127,7 +127,7 @@
                             childDepth="1"
                             linkItems="false"
                             listFrom="static"
-                            pages="[/content/core-components-examples/library/container/carousel,/content/core-components-examples/library/core-content/teaser,/content/core-components-examples/library/core-content/text]"
+                            pages="[/content/core-components-examples/library/core-content/carousel,/content/core-components-examples/library/core-content/teaser,/content/core-components-examples/library/core-content/text]"
                             showDescription="false"
                             showModificationDate="false"
                             sortOrder="asc"
