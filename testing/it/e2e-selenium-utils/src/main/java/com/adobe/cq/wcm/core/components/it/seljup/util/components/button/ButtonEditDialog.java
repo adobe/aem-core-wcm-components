@@ -79,7 +79,12 @@ public class ButtonEditDialog extends Dialog {
     }
 
     public void setLinkField(String value) {
-        AutoCompleteField autoCompleteField = new AutoCompleteField("./link");
+        setLinkField(value, "link");
+    }
+
+    public void setLinkField(String value, String propertyName) {
+        String selector = "./" + propertyName;
+        AutoCompleteField autoCompleteField = new AutoCompleteField(selector);
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(autoCompleteField.getCssSelector())));
         autoCompleteField.sendKeys(value);

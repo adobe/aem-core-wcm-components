@@ -52,7 +52,7 @@ BLOCK cmp-languagenavigation
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_languagenavigation\_v2(https://www.adobe.com/go/aem_cmp_languagenavigation_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_langnav](https://www.adobe.com/go/aem_cmp_library_langnav)
 * **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)

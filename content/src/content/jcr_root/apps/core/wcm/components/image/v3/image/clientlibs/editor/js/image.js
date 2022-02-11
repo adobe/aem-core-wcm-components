@@ -23,6 +23,7 @@
     var altTuple;
     var captionTuple;
     var $altGroup;
+    var $altTextField;
     var $linkURLGroup;
     var $linkURLField;
     var firstCtaLinkFieldSelector = ".cmp-teaser__editor-multifield_actions coral-multifield-item:first foundation-autocomplete";
@@ -72,6 +73,7 @@
             }
 
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
+            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
             $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
@@ -145,7 +147,7 @@
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
             submittable: ".cmp-image__editor-alt-text",
-            candidate: ".cmp-image__editor-alt-text:not(:hidden)",
+            candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
     });
@@ -292,6 +294,9 @@
             }
             if ($linkURLField.length) {
                 $linkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
+            }
+            if ($altTextField.length) {
+                $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked);
             }
         }
         toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox);

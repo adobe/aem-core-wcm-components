@@ -236,6 +236,13 @@
               }
             },
             "imageFromPageImage": "true"
+          },
+          "teaser-24"          : {
+             "jcr:primaryType"   : "nt:unstructured",
+             "imageFromPageImage": "true",
+             "jcr:title"           : "",
+             "linkURL": "/content/page1",
+             "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
           }
         }
       }

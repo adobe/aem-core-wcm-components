@@ -63,12 +63,13 @@ public class ImageTests {
     private BaseImage image;
     private String redirectPage;
     private PropertiesPage propertiesPage;
+    private String contextPath;
 
     public String getProxyPath() {
         return proxyPath;
     }
 
-    public void setup(CQClient client, String label, String imageRT, String rootPage,
+    public void setup(CQClient client, String contextPath, String label, String imageRT, String rootPage,
                       String defaultPageTemplate, String clientlibs, BaseImage image) throws ClientException {
         // 1.
         testPage = client.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
@@ -103,6 +104,8 @@ public class ImageTests {
         editorPage.open();
 
         this.image = image;
+
+        this.contextPath = contextPath;
 
     }
 
@@ -405,6 +408,24 @@ public class ImageTests {
         image.imageClick();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
+    }
+
+    public void testSetLinkWithTarget() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.openMetadataTab();
+        image.getEditDialog().setLinkURL(redirectPage);
+        image.getEditDialog().clickLinkTarget();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        String link = (contextPath != null)? contextPath + redirectPage + ".html": redirectPage + ".html";
+        String target = "_blank";
+        assertTrue(image.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
     // ----------------------------------------------------------

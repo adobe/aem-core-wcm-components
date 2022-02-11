@@ -67,7 +67,7 @@ BLOCK cmp-navigation
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_navigation\_v2](https://www.adobe.com/go/aem_cmp_navigation_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_navigation](https://www.adobe.com/go/aem_cmp_library_navigation)
 * **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)
