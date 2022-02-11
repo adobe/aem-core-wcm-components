@@ -32,6 +32,8 @@
                   "template_teaser2"             : {
                     "jcr:primaryType": "nt:unstructured",
                     "jcr:createdBy": "admin",
+                    "titleFromPage": false,
+                    "descriptionFromPage": false,
                     "imageFromPageImage": "true",
                     "linkURL": "/content/page1",
                     "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
@@ -40,6 +42,8 @@
                     "jcr:primaryType": "nt:unstructured",
                     "jcr:createdBy": "admin",
                     "actionsEnabled"      : true,
+                    "titleFromPage": false,
+                    "descriptionFromPage": false,
                     "imageFromPageImage": true,
                     "actions" : {
                       "jcr:primaryType" : "nt:unstructured",

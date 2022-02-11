@@ -46,6 +46,7 @@ import com.day.cq.dam.api.Asset;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
+import static com.adobe.cq.wcm.core.components.models.Teaser.PN_IMAGE_LINK_HIDDEN;
 
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
@@ -56,18 +57,21 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
 
+    private boolean imageLinkHidden = false;
+
     @PostConstruct
     protected void initModel() {
         super.initModel();
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+            imageLinkHidden = properties.get(PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
         }
     }
 
     @Override
     @Nullable
     public Link getImageLink() {
-        return link.orElse(null);
+        return imageLinkHidden ? null : link.orElse(null);
     }
 
     @Override
