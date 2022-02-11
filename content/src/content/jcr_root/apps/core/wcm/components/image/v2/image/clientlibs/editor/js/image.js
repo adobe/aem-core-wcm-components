@@ -111,7 +111,7 @@
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
             submittable: ".cmp-image__editor-alt-text",
-            candidate: ".cmp-image__editor-alt-text",
+            candidate: ".cmp-image__editor-alt-text:not(:disabled)",
             exclusion: ".cmp-image__editor-alt-text *"
         });
     });
