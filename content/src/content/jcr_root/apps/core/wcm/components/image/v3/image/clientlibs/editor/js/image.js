@@ -75,7 +75,7 @@
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
             $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
-            $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
+            $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
@@ -166,7 +166,10 @@
     });
 
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
-        togglePageImageInherited(e.target, isDecorative);
+        var target = e.target;
+        updateImageThumbnail().done(function() {
+            togglePageImageInherited(target, isDecorative);
+        });
     });
 
     // Update the image thumbnail when the link field is updated
@@ -197,6 +200,9 @@
     });
 
     function updateImageThumbnail() {
+        if (!imageFromPageImage.checked) {
+            return $.Deferred().resolve().promise();
+        }
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
@@ -286,8 +292,9 @@
             } else {
                 $linkURLGroup.show();
             }
-            if ($linkURLField.length) {
-                $linkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
+            var $imageLinkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
+            if ($imageLinkURLField.length) {
+                $imageLinkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
             }
             if ($altTextField.length) {
                 $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked);
