@@ -166,7 +166,10 @@
     });
 
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
-        updateImageThumbnail().then(togglePageImageInherited(e.target, isDecorative));
+        var target = e.target;
+        updateImageThumbnail().done(function() {
+            togglePageImageInherited(target, isDecorative)
+        });
     });
 
     // Update the image thumbnail when the link field is updated
@@ -198,7 +201,7 @@
 
     function updateImageThumbnail() {
         if (!imageFromPageImage.checked) {
-            return $.Deferred();
+            return $.Deferred().resolve().promise();
         }
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
