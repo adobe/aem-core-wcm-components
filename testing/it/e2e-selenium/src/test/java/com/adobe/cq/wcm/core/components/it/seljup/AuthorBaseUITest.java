@@ -101,7 +101,7 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
     }
 
 
-    public void createComponentPolicy(String componentPath, Map<String, String> properties) throws ClientException {
+    public String createComponentPolicy(String componentPath, Map<String, String> properties) throws ClientException {
         String policySuffix = componentPath +  "/new_policy";
         HashMap<String, String> policyProperties = new HashMap<>();
         policyProperties.put("jcr:title", "New Policy");
@@ -110,13 +110,15 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
         String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
         String policyPath = Commons.createPolicy(adminClient, policySuffix, policyProperties, policyPath1);
 
-        // add a policy for teaser component
+        // add a policy for component
         String policyLocation = "core-component/components";
         String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
         HashMap<String, String> mappingProperties = new HashMap<>();
         mappingProperties.put("cq:policy", policyLocation + policySuffix);
         mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mapping");
         Commons.assignPolicy(adminClient, componentPath, mappingProperties, policyAssignmentPath, 200, 201);
+
+        return policyPath;
     }
 
 
