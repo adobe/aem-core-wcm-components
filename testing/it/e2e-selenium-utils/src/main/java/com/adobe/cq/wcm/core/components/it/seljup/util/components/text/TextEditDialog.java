@@ -77,7 +77,7 @@ public class TextEditDialog extends Dialog {
     }
 
     public Boolean areExpectedOptionsForAppliedStylePresentInDropdown() {
-        return $("coral-selectlist-item[selected][value='1547060098888']").innerText().equals("Blue") &&
+        return $("coral-selectlist-item[selected][value='1547060098888']").exists() &&
                 $("coral-selectlist-item[value='1550165689999']").exists();
     }
 
