@@ -200,7 +200,7 @@
     });
 
     function updateImageThumbnail() {
-        if (!imageFromPageImage.checked) {
+        if (imageFromPageImage && !imageFromPageImage.checked) {
             return $.Deferred().resolve().promise();
         }
         var linkValue;
@@ -228,7 +228,7 @@
                 // update the thumbnail image
                 $pageImageThumbnail.replaceWith(data);
                 $pageImageThumbnail = $(dialogContentSelector).find(pageImageThumbnailSelector);
-                if (imageFromPageImage.checked) {
+                if (imageFromPageImage && imageFromPageImage.checked) {
                     $pageImageThumbnail.show();
                 } else {
                     $pageImageThumbnail.hide();
