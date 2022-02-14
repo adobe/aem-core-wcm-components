@@ -110,6 +110,7 @@ public class Commons {
     public static String rtLanguageNavigation_v2 = "core/wcm/components/languagenavigation/v2/languagenavigation";
     // search component
     public static String rtSearch_v1 = "core/wcm/components/search/v1/search";
+    public static String rtSearch_v2 = "core/wcm/components/search/v2/search";
     // teaser component
     public static String rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
     public static String rtTeaser_v2 = "core/wcm/components/teaser/v2/teaser";

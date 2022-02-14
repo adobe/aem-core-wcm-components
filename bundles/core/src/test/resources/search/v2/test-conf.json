@@ -1,0 +1,39 @@
+{
+    "search-template" : {
+        "jcr:primaryType": "cq:Template",
+        "structure": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "Page",
+                "jcr:description": "Yoda is back!",
+                "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200",
+                "search"         : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "placeholder"       : "Start Search",
+                    "searchRoot"        : "/content/de/search",
+                    "jcr:lastModifiedBy": "admin",
+                    "jcr:created"       : "Thu Aug 03 2017 20:50:40 GMT+0200",
+                    "jcr:lastModified"  : "Thu Aug 03 2017 22:42:00 GMT+0200",
+                    "sling:resourceType": "core/wcm/components/search/v2/search"
+                }
+            }
+        }
+    },
+    "xf-search-template" : {
+        "jcr:primaryType": "cq:Template",
+        "structure": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "XF Template",
+                "xf-component"   : {
+                    "jcr:primaryType"      : "nt:unstructured",
+                    "sling:resourceType"   : "core/wcm/components/experiencefragment/v1/experiencefragment",
+                    "fragmentVariationPath": "/content/experience-fragments/search/search-xf/master"
+                }
+            }
+        }
+    }
+}

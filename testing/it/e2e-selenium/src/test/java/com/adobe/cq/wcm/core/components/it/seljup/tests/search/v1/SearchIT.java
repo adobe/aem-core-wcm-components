@@ -15,15 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.seljup.tests.search.v1;
 
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.search.v1.Search;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
@@ -37,6 +31,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.search.v1.Search;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,16 +46,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SearchIT extends AuthorBaseUITest {
 
     private static final String QUERY_BUILDER_URL = "/bin/querybuilder.json";
-    private static final String clientlibs = "core.wcm.components.search.v1";
     private String page1Path;
     private String page11Path;
     private String page111Path;
     private String page112Path;
-    private String policyPath;
     private String proxyPath;
     private String compPath;
-    private EditorPage editorPage;
-    private Search search;
+    protected EditorPage editorPage;
+    protected String clientlibs;
+    protected String searchRT;
+    protected String policyPath;
+    protected Search search;
 
     private boolean pollQuery(CQClient client, String path, String searchTerm, String expected) throws ClientException {
         int timeout = 2000;
@@ -65,7 +67,7 @@ public class SearchIT extends AuthorBaseUITest {
             @Override
             public Boolean call() throws Exception {
                 URLParameterBuilder params = URLParameterBuilder.create().add("fulltext", searchTerm).add("path", path)
-                    .add("p.limit", "100").add("type", "cq:Page");
+                        .add("p.limit", "100").add("type", "cq:Page");
                 response = client.doGet(QUERY_BUILDER_URL, params.getList(), HttpStatus.SC_OK);
                 return true;
             }
@@ -83,7 +85,7 @@ public class SearchIT extends AuthorBaseUITest {
 
         boolean match = false;
         for (final JsonNode hit : hitsNode) {
-            if(hit.get("path").getTextValue().trim().equals(expected)){
+            if (hit.get("path").getTextValue().trim().equals(expected)) {
                 match = true;
                 break;
             }
@@ -92,11 +94,12 @@ public class SearchIT extends AuthorBaseUITest {
         return match;
     }
 
-    /**
-     * Before Test Case
-     */
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    protected void setupResources() {
+        searchRT = Commons.rtSearch_v1;
+        clientlibs = "core.wcm.components.search.v1";
+    }
+
+    protected void setup() throws ClientException {
         // level 1
         page1Path = authorClient.createPage("page_1", "page_1", rootPage, defaultPageTemplate).getSlingPath();
         HashMap<String, String> data = new HashMap<String, String>();
@@ -105,7 +108,7 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.editNodeProperties(adminClient, page1Path, data);
 
         // create 20 pages
-        for(int i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {
             String pagePath = authorClient.createPage("page" + i, "page" + i, page1Path, defaultPageTemplate).getSlingPath();
             data.clear();
             data.put("_charset_", "UTF-8");
@@ -141,16 +144,14 @@ public class SearchIT extends AuthorBaseUITest {
         data.put("./jcr:content/jcr:title", "Page 1.1.3");
         Commons.editNodeProperties(adminClient, page113Path, data);
 
-
-
         // 2.
         String policySuffix = "/structure/page/new_policy";
         data.clear();
         data.put("jcr:title", "New Policy");
         data.put("sling:resourceType", "wcm/core/components/policy/policy");
         data.put("clientlibs", clientlibs);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
+        String policyPath1 = "/conf/" + label + "/settings/wcm/policies/core-component/components";
+        policyPath = Commons.createPolicy(adminClient, policySuffix, data, policyPath1);
 
         // 3.
         String policyLocation = "core-component/components";
@@ -158,10 +159,10 @@ public class SearchIT extends AuthorBaseUITest {
         data.clear();
         data.put("cq:policy", policyLocation + policySuffix);
         data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"",data, policyAssignmentPath);
+        Commons.assignPolicy(adminClient, "", data, policyAssignmentPath);
 
         // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtSearch_v1, Commons.proxyPath, null, null);
+        proxyPath = Commons.createProxyComponent(adminClient, searchRT, Commons.proxyPath, null, null);
 
         // add the component to test page
         compPath = Commons.addComponent(adminClient, proxyPath, page11Path + Commons.relParentCompPath, "search", null);
@@ -171,7 +172,15 @@ public class SearchIT extends AuthorBaseUITest {
         editorPage.open();
 
         search = new Search();
+    }
 
+    /**
+     * Before Test Case
+     **/
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setupResources();
+        setup();
     }
 
     /**
@@ -290,9 +299,9 @@ public class SearchIT extends AuthorBaseUITest {
         data.clear();
         data.put("jcr:title", "New Policy");
         data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("searchTermMinimumLength","5");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
+        data.put("searchTermMinimumLength", "5");
+        String policyPath1 = "/conf/" + label + "/settings/wcm/policies/core-component/components";
+        policyPath = Commons.createPolicy(adminClient, policySuffix, data, policyPath1);
 
         // 3.
         String policyLocation = "core-component/components";
@@ -300,7 +309,7 @@ public class SearchIT extends AuthorBaseUITest {
         data.clear();
         data.put("cq:policy", policyLocation + policySuffix);
         data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/search",data, policyAssignmentPath, 200, 201);
+        Commons.assignPolicy(adminClient, "/search", data, policyAssignmentPath, 200, 201);
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
@@ -324,9 +333,9 @@ public class SearchIT extends AuthorBaseUITest {
         data.clear();
         data.put("jcr:title", "New Policy");
         data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("resultsSize","2");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
+        data.put("resultsSize", "2");
+        String policyPath1 = "/conf/" + label + "/settings/wcm/policies/core-component/components";
+        policyPath = Commons.createPolicy(adminClient, policySuffix, data, policyPath1);
 
         // 3.
         String policyLocation = "core-component/components";
@@ -334,7 +343,7 @@ public class SearchIT extends AuthorBaseUITest {
         data.clear();
         data.put("cq:policy", policyLocation + policySuffix);
         data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/search",data, policyAssignmentPath, 200, 201);
+        Commons.assignPolicy(adminClient, "/search", data, policyAssignmentPath, 200, 201);
 
         Commons.switchContext("ContentFrame");
         search.setInput("Page");

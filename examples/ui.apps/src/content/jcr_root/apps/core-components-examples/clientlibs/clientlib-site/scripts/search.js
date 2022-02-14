@@ -20,7 +20,7 @@
         self: '[name="cmp-examples-component-search"]',
         componentGroup: '.cmp-examples-container--component-group',
         componentTeaser: '.cmp-examples-teaser--component',
-        searchResultsInfoMessage: '#searchResultsInfoMessage'
+        searchResultsStatus: '.cmp-examples-search-results-status'
     };
 
     var search;
@@ -61,33 +61,35 @@
             }
         });
 
-        updateSearchResultsInfoMessage(token, foundComponentTeasers);
+        updateSearchResultsStatusMessage(token, foundComponentTeasers);
     }
 
     // useful for Accessibility, helping users with low vision and users with cognitive disabilities to identify the change in results
-    function updateSearchResultsInfoMessage(token, foundComponentTeasers) {
+    function updateSearchResultsStatusMessage(token, foundComponentTeasers) {
         if (!token) {
-            document.querySelector(selectors.searchResultsInfoMessage).innerHTML=''
+            document.querySelector(selectors.searchResultsStatus).innerHTML = "";
         } else {
-            document.querySelector(selectors.searchResultsInfoMessage).innerHTML = foundComponentTeasers > 0 ?
-                `<p aria-live="polite" role="status">${foundComponentTeasers} ${foundComponentTeasers === 1 ? "component" : "components"} found based on your search.</p>` :
-                `<p aria-live="polite" role="status">No components found. Please try a different search.</p>`;
+            var searchResultsFoundMessage = `<p aria-live="polite" role="status">${foundComponentTeasers} ${foundComponentTeasers === 1 ?
+                "component" : "components"} found based on your search.</p>`;
+            var searchResultsNotFoundMessage = `<p aria-live="polite" role="status">No components found. Please try a different search.</p>`;
+            document.querySelector(selectors.searchResultsStatus).innerHTML = foundComponentTeasers > 0 ?
+                searchResultsFoundMessage : searchResultsNotFoundMessage;
         }
     }
 
-    function createSearchResultsInfoElement() {
+    function createSearchResultsStatusElement() {
         var searchInput = document.querySelector(selectors.self);
         var infoMessageContainer = document.createElement("div");
-        infoMessageContainer.setAttribute("id", "searchResultsInfoMessage");
+        infoMessageContainer.setAttribute("class", "cmp-examples-search-results-status");
         infoMessageContainer.setAttribute("aria-live", "polite");
         infoMessageContainer.setAttribute("role", "status");
-        searchInput.parentNode.insertBefore(infoMessageContainer , searchInput.nextSibling);
+        searchInput.parentNode.insertBefore(infoMessageContainer , searchInput.parentNode.firstChild);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
         search = document.querySelector(selectors.self);
         if (search) {
-            createSearchResultsInfoElement();
+            createSearchResultsStatusElement();
             componentGroups = document.querySelectorAll(selectors.componentGroup);
             componentGroups = [].slice.call(componentGroups);
             componentTeasers = document.querySelectorAll(selectors.componentTeaser);
