@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-Download (v2) Work in progress, do not use in production
+Download (v2)
 ====
 Download component written in HTL that displays a downloadable asset on the page.
 

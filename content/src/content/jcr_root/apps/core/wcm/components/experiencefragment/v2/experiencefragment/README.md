@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-Experience Fragment (v2) Work in progress, do not use in production
+Experience Fragment (v2)
 ====
 Experience fragment component written in HTL that renders an experience fragment variation.
 

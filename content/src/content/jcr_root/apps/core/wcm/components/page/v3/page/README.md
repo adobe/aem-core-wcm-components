@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Page (v3) Work in progress, do not use in production
+Page (v3)
 ====
 Extensible page component written in HTL.
 
