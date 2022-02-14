@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Teaser (v2) Work in progress, do not use in production
+Teaser (v2)
 ====
 Teaser component written in HTL, allowing definition of an image, title, rich text description and actions/links.
 Teaser variations can include some or all of these elements.

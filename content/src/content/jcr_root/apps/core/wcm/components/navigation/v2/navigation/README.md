@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-Navigation (v2) Work in progress, do not use in production
+Navigation (v2)
 ====
 Navigation component written in HTL that renders a website navigation tree.
 
