@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    jcr:primaryType="cq:ClientLibraryFolder"
-    categories="[granite.testing.hobbes.tests,
-        aem.core-components.testsuite,
-        aem.core-components.testsuite.navigation,
-        aem.core-components.testsuite.navigation.v1]"
-    dependencies="[aem.core-components.tests.navigation.v1]"/>
