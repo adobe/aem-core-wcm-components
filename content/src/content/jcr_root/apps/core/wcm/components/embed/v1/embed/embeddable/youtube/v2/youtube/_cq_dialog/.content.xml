@@ -26,18 +26,13 @@
             fieldLabel="Video ID"
             name="./youtubeVideoId"
             required="{Boolean}true"/>
-        <width
+        <aspectRatio
             jcr:primaryType="nt:unstructured"
             sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-            fieldDescription="Width of the YouTube video player."
-            fieldLabel="Width"
-            name="./youtubeWidth"/>
-        <height
-            jcr:primaryType="nt:unstructured"
-            sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-            fieldDescription="Height of the YouTube video player."
-            fieldLabel="Height"
-            name="./youtubeHeight"/>
+            fieldDescription="Aspect ratio of the YouTube video player."
+            fieldLabel="Aspect ratio"
+            name="./youtubeAspectRatio"
+            step="0.0001"/>
         <parameters
             jcr:primaryType="nt:unstructured"
             sling:resourceType="granite/ui/components/coral/foundation/container"
@@ -120,5 +115,5 @@
     <granite:data
         jcr:primaryType="nt:unstructured"
         cmp-embed-dialog-edit-embeddableoptions="true"
-        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube/v1"/>
+        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube/v2/youtube"/>
 </jcr:root>

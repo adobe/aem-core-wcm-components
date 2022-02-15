@@ -82,7 +82,7 @@ class EmbedImplTest {
         assertEquals(Embed.Type.EMBEDDABLE, embed.getType());
         assertNull(embed.getUrl());
         assertNull(embed.getHtml());
-        assertEquals("core/wcm/components/embed/v1/embed/embeddable/youtube/v1", embed.getEmbeddableResourceType());
+        assertEquals("core/wcm/components/embed/v1/embed/embeddable/youtube", embed.getEmbeddableResourceType());
         Utils.testJSONExport(embed, Utils.getTestExporterJSONPath(BASE, EMBED_2));
     }
 

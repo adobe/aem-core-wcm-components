@@ -16,7 +16,7 @@
                         "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/embed/v1/embed",
                         "type": "embeddable",
-                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube/v1",
+                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube",
                         "youtubeVideoId": "2R2gb0MKJlo",
                         "youtubeWidth": "300",
                         "youtubeHeight": "200",
@@ -26,7 +26,7 @@
                         "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/embed/v1/embed",
                         "type": "embeddable",
-                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube/v1",
+                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube",
                         "youtubeVideoId": "2R2gb0MKJlo",
                         "youtubeAutoPlay": "false",
                         "youtubeMute": "false",
@@ -38,7 +38,7 @@
                         "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/embed/v1/embed",
                         "type": "embeddable",
-                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube/v1"
+                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube"
                     }
                 }
             }

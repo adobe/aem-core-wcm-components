@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class EmbedIT extends AuthorBaseUITest {
 
     private static String componentName = "embed";
-    private static String youtubeEmbedField = "core/wcm/components/embed/v1/embed/embeddable/youtube/v1";
+    private static String youtubeEmbedField = "core/wcm/components/embed/v1/embed/embeddable/youtube";
 
     private String policyPath;
     private String proxyPath;

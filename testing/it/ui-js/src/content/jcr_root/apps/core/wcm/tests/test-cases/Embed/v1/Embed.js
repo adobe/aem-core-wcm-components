@@ -44,7 +44,7 @@
                 var data = {
                     "jcr:title": "New Policy",
                     "sling:resourceType": "wcm/core/components/policy/policy",
-                    "allowedEmbeddables": "core/wcm/components/embed/v1/embed/embeddable/youtube/v1"
+                    "allowedEmbeddables": "core/wcm/components/embed/v1/embed/embeddable/youtube"
                 };
 
                 c.createPolicy("/embed" + "/new_policy", data, "policyPath", done, c.policyPath);

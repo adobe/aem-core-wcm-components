@@ -21,7 +21,7 @@
     <granite:data
         jcr:primaryType="nt:unstructured"
         cmp-embed-dialog-edit-embeddableoptions="true"
-        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube/v1"/>
+        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
     <items jcr:primaryType="nt:unstructured">
         <mute
             granite:class="toggle-checkbox"

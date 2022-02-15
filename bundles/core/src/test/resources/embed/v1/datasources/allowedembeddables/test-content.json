@@ -112,7 +112,7 @@
             "jcr:primaryType": "nt:unstructured",
             "jcr:createdBy": "admin",
             "jcr:lastModifiedBy": "admin",
-            "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube/v1",
+            "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube",
             "jcr:created": "Sat Feb 22 2020 12:09:13 GMT+0100",
             "type": "embeddable",
             "jcr:lastModified": "Sat Feb 22 2020 12:19:11 GMT+0100",
