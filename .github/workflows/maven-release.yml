@@ -32,7 +32,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     # Only release from `release/...` branch
-    if: startsWith(github.ref, 'refs/head/release/')
+    if: startsWith(github.ref, 'refs/heads/release/')
     steps:
       # Check out Git repository
       - uses: actions/checkout@v2
