@@ -166,10 +166,7 @@
     });
 
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
-        var target = e.target;
-        updateImageThumbnail().done(function() {
-            togglePageImageInherited(target, isDecorative);
-        });
+        togglePageImageInherited(e.target, isDecorative);
     });
 
     // Update the image thumbnail when the link field is updated
@@ -200,9 +197,6 @@
     });
 
     function updateImageThumbnail() {
-        if (imageFromPageImage && !imageFromPageImage.checked) {
-            return $.Deferred().resolve().promise();
-        }
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
@@ -236,8 +230,10 @@
 
                 // update the alt field
                 altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
-                altFromPageTuple.seedTextValue(altTextFromPage);
-                altFromPageTuple.update();
+                if (imageFromPageImage.checked) {
+                    altFromPageTuple.seedTextValue(altTextFromPage);
+                    altFromPageTuple.update();
+                }
             }
         });
     }
@@ -297,7 +293,7 @@
                 $imageLinkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
             }
             if ($altTextField.length) {
-                $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked);
+                $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked && $("coral-fileupload.is-filled:not(:hidden)").length !== 0);
             }
         }
         toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox);
