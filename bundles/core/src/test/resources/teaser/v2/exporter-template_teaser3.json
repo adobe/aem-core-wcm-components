@@ -37,16 +37,11 @@
       ":type": "nt:unstructured"
     }
   ],
-  "link": {
-    "valid": true,
-    "url": "/core/content/page1.html"
-  },
   "imagePath": "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.png/structure/jcr%3acontent/root/template_teaser3/1490005239000/asset1.png",
   ":type": "core/wcm/components/teaser/v2/teaser",
   "dataLayer": {
     "teaser-6c1c84541c": {
-      "@type": "core/wcm/components/teaser/v2/teaser",
-      "xdm:linkURL": "/core/content/page1.html"
+      "@type": "core/wcm/components/teaser/v2/teaser"
     }
   }
 }

@@ -31,7 +31,7 @@ public class Teaser extends com.adobe.cq.wcm.core.components.it.seljup.util.comp
 
     public boolean isTitleLinkPresentWithTarget(String path, String title, String target) {
         if($("a" + teaserTitleLink + "[href$='" + path + ".html']" ).isDisplayed()) {
-            return $("a" + teaserTitleLink + "[href$='" + path + ".html'][target='" + target + "']").getText().trim().equals(title);
+            return $("a" + teaserTitleLink + "[href$='" + path + ".html'][target='" + target + "'] h2").getText().trim().equals(title);
         }
         return false;
     }
