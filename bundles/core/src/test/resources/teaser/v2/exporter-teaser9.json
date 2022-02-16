@@ -1,10 +1,6 @@
 {
   "title": "Teaser",
   "description": "Description",
-  "link": {
-    "valid": true,
-    "url": "http://www.adobe.com"
-  },
   "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
@@ -48,7 +44,6 @@
     "teaser-6a61ad8d2f": {
       "dc:description": "Description",
       "@type": "core/wcm/components/teaser/v2/teaser",
-      "xdm:linkURL": "http://www.adobe.com",
       "dc:title": "Teaser"
     }
   },

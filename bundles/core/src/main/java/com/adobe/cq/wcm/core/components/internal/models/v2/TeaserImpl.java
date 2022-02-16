@@ -82,18 +82,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Override
     protected void initLink() {
         // use the target page as the link if it exists
-        link = Optional.of(this.getTargetPage().map(page -> linkHandler.getLink(page.getPath(), linkTarget).orElse(null))
-                .orElse(
-                        Optional.of(linkHandler.getLink(resource, Link.PN_LINK_URL)
-                                .orElse(
-                                        Optional.ofNullable( actionsEnabled ? getActions().stream().findFirst().map(action -> linkHandler.getLink(action.getURL(), null)).orElse(null) : null)
-                                                .orElse(
-                                                        linkHandler.getLink(currentPage)
-                                                ).orElse(null)
-                                )
-                        ).orElse(null)
-                )
-        );
+        link = linkHandler.getLink(resource, Link.PN_LINK_URL);
     }
 
     @Override

@@ -223,7 +223,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
-        assertTrue(teaser.isTitleLinkPresent(testPage, pageTitle),"Page title should be present as title link ");
+        assertTrue(teaser.isTeaserLinkPresent(testPage, pageTitle),"Page title should be present as title link ");
         assertTrue(teaser.isDescriptionPresent(pageDescription),"Description from page should be present");
     }
 

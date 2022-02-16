@@ -84,14 +84,6 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     }
 
     @Test
-    @Override
-    protected void testTeaserWithoutLink() {
-        Teaser teaser = getTeaserUnderTest(TEASER_4);
-        assertNotNull(teaser.getLink(), "The link should not be null");
-        assertEquals("/core/content/teasers.html", teaser.getLink().getURL());
-    }
-
-    @Test
     @SuppressWarnings("deprecation")
     @Override
     protected void testTeaserWithActions() {
@@ -124,8 +116,7 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     protected void testImageFromPage_withoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_21);
         Link link = teaser.getLink();
-        assertNotNull(link);
-        assertEquals("/core/content/teasers.html", link.getURL());
+        assertNull(link);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser21"));
     }
 
@@ -177,4 +168,10 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser24"));
     }
 
+    @Test
+    @Override
+    protected void testTeaserWithExternalLinkFromAction() {
+        Teaser teaser = getTeaserUnderTest(TEASER_7);
+        assertEquals("http://www.adobe.com", teaser.getActions().get(0).getURL());
+    }
 }
