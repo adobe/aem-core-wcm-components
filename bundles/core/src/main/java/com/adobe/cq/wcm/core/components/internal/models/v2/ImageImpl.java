@@ -171,10 +171,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         }
                     }
                     if (titleValueFromDAM) {
-                        String damTitle = asset.getMetadataValue(DamConstants.DC_TITLE);
-                        if (StringUtils.isNotEmpty(damTitle)) {
-                            title = damTitle;
-                        }
+                        title = StringUtils.trimToNull(asset.getMetadataValue(DamConstants.DC_TITLE));
                     }
 
                     //check "Enable DM features" checkbox
