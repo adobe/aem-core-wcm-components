@@ -53,8 +53,8 @@
         }
     }
 
-    $(document).on("coral-component:attached", COLLECT_ALL_PAGES_SELECTOR, function() {
-        toggleStructureDepth(this);
+    $(document).on("dialog-loaded", function() {
+        toggleStructureDepth(document.querySelector(COLLECT_ALL_PAGES_SELECTOR));
     });
 
     $(document).on("change", COLLECT_ALL_PAGES_SELECTOR, function() {

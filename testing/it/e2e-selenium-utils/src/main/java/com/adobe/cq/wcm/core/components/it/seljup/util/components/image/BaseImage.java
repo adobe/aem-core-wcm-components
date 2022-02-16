@@ -136,4 +136,7 @@ public class BaseImage extends BaseComponent {
         return $(imageWithLazyLoadedEnabled).isDisplayed();
     }
 
+    public boolean checkLinkPresentWithTarget(String link, String target) {
+        return $("a[href='" + link + "'][target='" + target + "']").isDisplayed();
+    }
 }

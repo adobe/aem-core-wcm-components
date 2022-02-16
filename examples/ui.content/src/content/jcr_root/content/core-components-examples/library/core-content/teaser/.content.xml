@@ -179,7 +179,7 @@
                                 actionsEnabled="false"
                                 descriptionFromPage="false"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"
-                                linkURL="/content/core-components-examples/library/page-authoring/teaser"
+                                linkURL="/content/core-components-examples/library/core-content/teaser"
                                 textIsRich="true"
                                 titleFromPage="false"/>
                     </component>
@@ -233,7 +233,7 @@
                             <actions jcr:primaryType="nt:unstructured">
                                 <item0
                                         jcr:primaryType="nt:unstructured"
-                                        link="/content/core-components-examples/library/page-authoring/teaser"
+                                        link="/content/core-components-examples/library/core-content/teaser"
                                         text="Call To Action"/>
                             </actions>
                         </teaser>
@@ -288,7 +288,7 @@
                             <actions jcr:primaryType="nt:unstructured">
                                 <item0
                                         jcr:primaryType="nt:unstructured"
-                                        link="/content/core-components-examples/library/page-authoring/teaser"
+                                        link="/content/core-components-examples/library/core-content/teaser"
                                         text="Call To Action"/>
                                 <item1
                                         jcr:primaryType="nt:unstructured"
@@ -340,7 +340,7 @@
                                 sling:resourceType="core-components-examples/components/teaser"
                                 actionsEnabled="false"
                                 descriptionFromPage="true"
-                                linkURL="/content/core-components-examples/library/page-authoring/image"
+                                linkURL="/content/core-components-examples/library/core-content/image"
                                 textIsRich="true"
                                 titleFromPage="true"/>
                     </component>

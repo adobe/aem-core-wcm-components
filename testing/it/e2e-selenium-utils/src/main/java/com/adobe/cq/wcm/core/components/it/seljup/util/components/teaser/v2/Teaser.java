@@ -16,9 +16,33 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.codeborne.selenide.ElementsCollection;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+
 public class Teaser extends com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.Teaser {
 
     public TeaserEditDialog getEditDialog() {
         return new TeaserEditDialog();
+    }
+
+    public boolean isTitleLinkPresentWithTarget(String path, String title, String target) {
+        if($("a" + teaserTitleLink + "[href$='" + path + ".html']" ).isDisplayed()) {
+            return $("a" + teaserTitleLink + "[href$='" + path + ".html'][target='" + target + "']").getText().trim().equals(title);
+        }
+        return false;
+    }
+
+    public boolean isActionLinkPresentWithTarget(String url, String target) {
+        ElementsCollection items = $$(teaserActionLink);
+        for(int i = 0; i < items.size(); i++) {
+            if(items.get(i).getText().contains(url) && StringUtils.equals(items.get(i).attr("target"), target)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
