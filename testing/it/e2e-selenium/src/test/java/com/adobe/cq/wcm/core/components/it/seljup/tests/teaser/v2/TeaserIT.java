@@ -134,7 +134,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
         assertTrue(teaser.isPreTitlePresent(preTitle), "PreTitle should be present");
 
-        assertTrue(teaser.isTitleLinkPresentWithTarget(testPage, title, "_blank"),"Title link should be present");
+        assertTrue(teaser.isTeaserLinkPresentWithTarget(testPage, title, "_blank"),"Teaser link should be present with target");
         assertTrue(teaser.isDescriptionPresent(description),"Description should be present");
         assertTrue(!teaser.isImageLinkPresent(),"The image should not be linked");
     }
@@ -223,7 +223,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
-        assertTrue(teaser.isTeaserLinkPresent(testPage, pageTitle),"Page title should be present as title link ");
+        assertTrue(teaser.isTeaserLinkPresent(testPage, pageTitle),"Teaser link should be present");
         assertTrue(teaser.isDescriptionPresent(pageDescription),"Description from page should be present");
     }
 

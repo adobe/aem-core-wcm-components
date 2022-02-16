@@ -66,12 +66,7 @@ public class Teaser extends BaseComponent {
         return $(TeaserPreTitle).innerHtml().trim().equals(preTitle);
     }
 
-    public boolean isTeaserLinkPresent(String path, String title) {
-        if($("a" + teaserLink + "[href$='" + path + ".html']" ).isDisplayed()) {
-            return $("a" + teaserLink + "[href$='" + path + ".html'] " + teaserContent + "  h2").getText().trim().equals(title);
-        }
-        return false;
-    }
+
 
     public boolean isTitleLinkPresent(String path, String title) {
         if($("a" + teaserTitleLink + "[href$='" + path + ".html']" ).isDisplayed()) {
