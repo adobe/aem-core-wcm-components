@@ -3,6 +3,7 @@
   "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
+  "mainLinkElement": "title",
   "actions": [
     {
       "id": "teaser-6c1c84541c-cta-fba1f6b9f4",

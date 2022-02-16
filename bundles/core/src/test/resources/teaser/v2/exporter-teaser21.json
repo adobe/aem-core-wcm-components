@@ -3,6 +3,7 @@
   "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
+  "mainLinkElement": "title",
   "actions": [],
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-21.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
   "link": {

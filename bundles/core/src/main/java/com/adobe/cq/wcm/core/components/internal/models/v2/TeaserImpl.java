@@ -32,6 +32,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
@@ -58,6 +59,11 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
      */
     private String description;
 
+    /**
+     * The element for the main link.
+     */
+    protected String mainLinkElement;
+
     @ScriptVariable
     protected Page currentPage;
 
@@ -66,17 +72,29 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
         titleFromPage = true;
         descriptionFromPage = true;
         actionsEnabled = true;
+        mainLinkElement = currentStyle.get(Teaser.PN_MAIN_LINK_ELEMENT, String.class);
+        if (!VAL_MAIN_LINK_ELEMENT_IMAGE.equals(mainLinkElement)) {
+            mainLinkElement = VAL_MAIN_LINK_ELEMENT_TITLE;
+        }
         super.initProperties();
     }
 
     @Override
     protected void initImage() {
-        overriddenImageResourceProperties.put(Image.PN_LINK_URL, getTargetPage().map(Page::getPath).orElse(null));
+        overriddenImageResourceProperties.put(Image.PN_LINK_URL, getPathOrURL(getLink()));
         overriddenImageResourceProperties.put(Teaser.PN_ACTIONS_ENABLED, Boolean.valueOf(actionsEnabled).toString());
-        if (StringUtils.isNotEmpty(getTitle()) || getTeaserActions().size() > 0) {
+        if (!VAL_MAIN_LINK_ELEMENT_IMAGE.equals(mainLinkElement) ||
+                (actionsEnabled &&
+                        StringUtils.equals(overriddenImageResourceProperties.get(Image.PN_LINK_URL),
+                                getActions().stream().map(ListItem::getLink).map(TeaserImpl::getPathOrURL).findFirst().orElse(null)))) {
             overriddenImageResourceProperties.put(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.TRUE.toString());
         }
         super.initImage();
+    }
+
+    @Nullable
+    private static String getPathOrURL(@Nullable Link link) {
+        return Optional.ofNullable(link).map(Link::getReference).map(o -> ((Page)o).getPath()).orElse(Optional.ofNullable(link).map(Link::getURL).orElse(null));
     }
 
     @Override
@@ -161,6 +179,11 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
             }
         }
         return this.description;
+    }
+
+    @Override
+    public String getMainLinkElement() {
+        return mainLinkElement;
     }
 
     protected boolean hasImage() {

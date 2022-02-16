@@ -129,6 +129,27 @@ public interface Teaser extends Component {
     String PN_SHOW_TITLE_TYPE = "showTitleType";
 
     /**
+     * Name of the policy property that defines which element will have the main link.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    String PN_MAIN_LINK_ELEMENT = "mainLinkElement";
+
+    /**
+     * Value for the {@code title} main element to be used for {@code PN_MAIN_LINK_ELEMENT }.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    String VAL_MAIN_LINK_ELEMENT_TITLE = "title";
+
+    /**
+     *  Value for the {@code image} main element to be used for {@code PN_MAIN_LINK_ELEMENT }.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    String VAL_MAIN_LINK_ELEMENT_IMAGE = "image";
+
+    /**
      * Checks if the teaser has Call-to-Action elements
      *
      * @return {@code true} if teaser has CTAs, {@code false} otherwise
@@ -238,6 +259,16 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getTitleType() {
+        return null;
+    }
+
+    /**
+     * Returns the element (title/image) that will be used for the main link.
+     *
+     * @return the name of the element
+     * @since com.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default String getMainLinkElement() {
         return null;
     }
 

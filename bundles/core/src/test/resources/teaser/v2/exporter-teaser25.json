@@ -1,5 +1,6 @@
 {
     ":type": "core/wcm/components/teaser/v2/teaser",
+    "mainLinkElement": "title",
     "actions": [],
     "actionsEnabled": true,
     "dataLayer": {

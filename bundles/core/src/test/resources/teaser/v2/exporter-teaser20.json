@@ -3,6 +3,7 @@
     "actionsEnabled": true,
     "imageLinkHidden": false,
     "titleLinkHidden": false,
+    "mainLinkElement": "title",
     "actions": [],
     "link": {
         "valid": true,

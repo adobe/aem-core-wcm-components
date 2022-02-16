@@ -17,7 +17,7 @@
     <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}" data-sly-element="${teaser.titleType}">
         <a class="cmp-teaser__title-link"
            data-sly-attribute="${teaser.link.htmlAttributes}"
-           data-sly-unwrap="${!teaser.link.valid || (teaser.actionsEnabled && !teaser.actions.empty)}"
-           data-cmp-clickable="${teaser.data ? true : false}">${title}</a>
+           data-sly-unwrap="${!teaser.link.valid || (teaser.mainLinkElement == 'image' && teaser.imageResource) || (teaser.actionsEnabled && teaser.actions[0].link.URL == teaser.link.URL)}"
+           data-cmp-clickable="${teaser.data ? true : false}">${title} - ${teaser.mainLinkElement}</a>
     </h2>
 </sly>

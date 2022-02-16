@@ -10,6 +10,7 @@
   "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
+  "mainLinkElement": "title",
   "actions": [],
   "id": "teaser-99c7d15e82",
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-1.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",

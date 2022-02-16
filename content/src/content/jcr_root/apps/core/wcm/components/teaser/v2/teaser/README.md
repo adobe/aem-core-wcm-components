@@ -35,6 +35,7 @@ The following configuration properties are used:
 4. `./descriptionHidden` - defines whether or not the description is hidden
 5. `./titleType` - stores the value for this title's HTML element type
 6. `./showTitleType` - defines whether or not the title tab dropdown menu is shown
+7. `./mainLinkElement` - defines the HTML element type for the main link (`title` or `image`)
 
 The following configuration properties are inherited from the image component:
 

@@ -4,6 +4,7 @@
   "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
+  "mainLinkElement": "title",
   "actions": [
     {
       "id": "teaser-c5db7cbc93-cta-837fb3d5fd",

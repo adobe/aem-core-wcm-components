@@ -114,6 +114,23 @@
                                         value="h6"/>
                                 </items>
                             </type>
+                            <mainLink
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                fieldDescription="Select the element for the main link"
+                                fieldLabel="Main Link Element"
+                                name="./mainLinkElement">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <title
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Title"
+                                        value="title"/>
+                                    <image
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Image"
+                                        value="image"/>
+                                </items>
+                            </mainLink>
                             <imageDelegate
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/container"

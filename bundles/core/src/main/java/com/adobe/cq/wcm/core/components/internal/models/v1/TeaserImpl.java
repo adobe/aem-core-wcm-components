@@ -211,8 +211,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @PostConstruct
     protected void initModel() {
         initProperties();
-        initImage();
         initLink();
+        initImage();
     }
 
     /**
