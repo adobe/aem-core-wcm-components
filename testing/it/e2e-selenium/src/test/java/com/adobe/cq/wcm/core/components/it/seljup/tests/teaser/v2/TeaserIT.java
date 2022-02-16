@@ -349,6 +349,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(teaser.isImagePresentWithAltText(testPage, ""),"image should be rendered without alt text");
         assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
     }
