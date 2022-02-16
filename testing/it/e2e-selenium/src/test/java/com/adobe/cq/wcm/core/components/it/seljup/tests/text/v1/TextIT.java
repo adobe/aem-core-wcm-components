@@ -93,7 +93,7 @@ public class TextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check if text is stored/rendered correctly using the inline editor")
-    public void testSetTextValueUsingInlineEditor() throws TimeoutException {
+    public void testSetTextValueUsingInlineEditor() throws TimeoutException, InterruptedException {
         InlineEditor inlineEditor = Commons.openInlineEditor(editorPage, compPath);
         RichTextToolbar rte = inlineEditor.getRichTextToolbar();
         Commons.switchContext("ContentFrame");
@@ -102,9 +102,11 @@ public class TextIT extends AuthorBaseUITest {
         Commons.saveInlineEditor();
 
         Commons.switchContext("ContentFrame");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(text.isTextRendered(testValue), "Text should have been rendered");
 
         Commons.switchToDefaultContext();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editorPage.refresh();
         Commons.switchContext("ContentFrame");
         assertTrue(text.isTextRendered(testValue), "Text should have been rendered");

@@ -31,7 +31,7 @@ public class BaseText extends BaseComponent {
     protected static String text;
     protected static String editor;
     protected static String editorConf;
-    protected static String  rendered;
+    protected static String rendered;
     protected static String renderedConf;
 
     public BaseText() {
