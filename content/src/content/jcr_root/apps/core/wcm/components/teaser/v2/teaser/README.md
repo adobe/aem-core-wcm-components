@@ -78,12 +78,13 @@ imageDelegate="core/wcm/components/image/v3/image"
 The component reuses the following editor client library categories that include JavaScript
 handling for dialog interaction. They are already included by its edit dialog:
 * `core.wcm.components.teaser.v1.design`
-* `core.wcm.components.teaser.v1.editor`
+* `core.wcm.components.teaser.v2.editor`
 * `core.wcm.components.image.v3.editor`
 
 ## BEM Description
 ```
 BLOCK cmp-teaser
+    ELEMENt cmp-teaser__link
     ELEMENT cmp-teaser__image
     ELEMENT cmp-teaser__content
     ELEMENT cmp-teaser__pretitle
