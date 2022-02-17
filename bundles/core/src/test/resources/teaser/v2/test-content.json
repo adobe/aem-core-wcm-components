@@ -99,7 +99,7 @@
           "teaser-8"          : {
             "jcr:primaryType"     : "nt:unstructured",
             "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-            "actionsEnabled"             : true,
+            "actionsEnabled"      : true,
             "sling:resourceType"  : "core/wcm/components/teaser/v2/teaser",
             "titleFromPage": true,
             "descriptionFromPage": true,

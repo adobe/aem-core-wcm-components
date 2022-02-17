@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Content Fragment List (v2) Work in progress, do not use in production
+Content Fragment List (v2)
 ====
 Content Fragment List component written in HTL that renders a list of Content Fragments. Useful for authoring headless content that can be easily consumed by applications. 
 

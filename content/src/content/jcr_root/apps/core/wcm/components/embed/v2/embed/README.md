@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Embed (v2) Work in progress, do not use in production
+Embed (v2)
 ====
 Embed component written in HTL that allows third-party widgets (e.g. chatbots, lead generation forms, social media posts, social pixels, videos etc.) to be added to a page.
 

@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Image (v3) Work in progress, do not use in production
+Image (v3)
 ====
 Image component written in HTL that renders an adaptive image.
 
