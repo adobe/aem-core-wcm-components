@@ -195,36 +195,6 @@
                         </image>
                     </v2>
                 </image>
-                <text jcr:primaryType="nt:unstructured">
-                    <v2 jcr:primaryType="nt:unstructured">
-                        <text jcr:primaryType="nt:unstructured">
-                            <policy_1547060084699
-                                jcr:primaryType="nt:unstructured"
-                                jcr:title="Default text policy"
-                                sling:resourceType="wcm/core/components/policy/policy">
-                                <jcr:content jcr:primaryType="nt:unstructured"/>
-                                <cq:styleGroups jcr:primaryType="nt:unstructured">
-                                    <item0
-                                        cq:styleGroupLabel="Variant"
-                                        jcr:primaryType="nt:unstructured">
-                                        <cq:styles jcr:primaryType="nt:unstructured">
-                                            <item0
-                                                cq:styleClasses="cmp-blue-text"
-                                                cq:styleId="1547060098888"
-                                                cq:styleLabel="Blue"
-                                                jcr:primaryType="nt:unstructured"/>
-                                            <item1
-                                                cq:styleClasses="cmp-red-text"
-                                                cq:styleId="1550165689999"
-                                                cq:styleLabel="Red"
-                                                jcr:primaryType="nt:unstructured"/>
-                                        </cq:styles>
-                                    </item0>
-                                </cq:styleGroups>
-                            </policy_1547060084699>
-                        </text>
-                    </v2>
-                </text>
             </components>
         </wcm>
     </core>

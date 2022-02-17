@@ -172,7 +172,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     /**
      * The teaser link
      */
-    protected Optional<Link<Page>> link;
+    protected Optional<Link> link;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
