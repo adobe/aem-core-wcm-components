@@ -106,7 +106,7 @@ Setup your local development environment for [AEM as a Cloud Service SDK](https:
 
 To compile your own version of the Core Components, you can build and install everything on your running AEM instance by issuing the following command in the top level folder of the project:
 
-    mvn clean install -PautoInstallSinglePackage
+    mvn clean install -PautoInstallPackage
 
 You can also install individual packages/bundles by issuing the following command in the top-level folder of the project:
 
@@ -114,7 +114,7 @@ You can also install individual packages/bundles by issuing the following comman
 
 With AEM as a Cloud Service SDK, use the `cloud` profile as follows to deploy the components into `/libs` instead of `/apps`:
 
-    mvn clean install -PautoInstallSinglePackage,cloud
+    mvn clean install -PautoInstallPackage,cloud
 
 Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install
