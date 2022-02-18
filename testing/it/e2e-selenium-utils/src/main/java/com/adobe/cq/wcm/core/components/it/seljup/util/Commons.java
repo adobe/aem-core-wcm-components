@@ -42,6 +42,7 @@ import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
 import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
+import org.apache.sling.testing.clients.util.poller.Polling;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -459,6 +460,47 @@ public class Commons {
             throw new ClientException(" failed to add component " + component + " with error: " + ex, ex);
         }
     }
+
+    /**
+     * Adds a component to a page with retires
+     *
+     * @param client            CQClient
+     * @param component          mandatory components resource type
+     * @param parentCompPath     mandatory absolute path to the parent component
+     * @param nameHint           optional hint for the component nodes name, if empty component name is taken
+     * @param order              optional where to place component e.g. 'before product_grid', if empty, 'last' is used
+     * @param timeout            try retries for this time duration
+     * @param delay              interval between successive retries
+     * @throws ClientException
+     */
+
+    public static String addComponentWithRetry(final CQClient client, final String component, final String parentCompPath, final String nameHint,
+                                               final String order, long timeout, long delay, final int... expectedStatus) throws ClientException {
+
+        class AddComponentPolling extends Polling {
+            String componentPath;
+
+            AddComponentPolling() {
+            }
+
+            public Boolean call() throws Exception {
+                this.componentPath = addComponent(client, component, parentCompPath, nameHint, order, expectedStatus);
+                return true;
+            }
+        }
+
+        AddComponentPolling addComponentPolling = new AddComponentPolling();
+
+        try {
+            addComponentPolling.poll(timeout, delay);
+        } catch (TimeoutException | InterruptedException var12) {
+            throw new ClientException("Failed to add component " + component + " in " + addComponentPolling.getWaited(), var12);
+        }
+
+        return addComponentPolling.componentPath;
+    }
+
+
 
     /**
      * Hide the page in navigation
