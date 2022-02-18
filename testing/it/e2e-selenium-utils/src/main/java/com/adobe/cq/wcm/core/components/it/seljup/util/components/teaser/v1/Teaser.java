@@ -30,7 +30,9 @@ public class Teaser extends BaseComponent {
     private static String teaserImageLink = ".cmp-image__link";
     private static String TeaserPreTitle = ".cmp-teaser__pretitle";
     private static String teaserTitle = ".cmp-teaser__title";
+    protected static String teaserLink = ".cmp-teaser__link";
     protected static String teaserTitleLink = ".cmp-teaser__title-link";
+    protected static String teaserContent = ".cmp-teaser__content";
     private static String teaserDescription = ".cmp-teaser__description";
     protected static String teaserActionLink = "a.cmp-teaser__action-link";
     private static String imageTag = teaserImage + " img[src*='%s/_jcr_content/root/responsivegrid/teaser']";
@@ -63,6 +65,8 @@ public class Teaser extends BaseComponent {
     public boolean isPreTitlePresent(String preTitle) {
         return $(TeaserPreTitle).innerHtml().trim().equals(preTitle);
     }
+
+
 
     public boolean isTitleLinkPresent(String path, String title) {
         if($("a" + teaserTitleLink + "[href$='" + path + ".html']" ).isDisplayed()) {

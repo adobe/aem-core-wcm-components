@@ -16,12 +16,16 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.text;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 
@@ -36,6 +40,10 @@ public class TextEditDialog extends Dialog {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector(textBox));
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].value=arguments[1];", element, value);
+    }
+
+    public void setId(String value) {
+        $("[name='./id']").sendKeys(value);
     }
 
     // ----------------------------------------------------------
@@ -54,7 +62,7 @@ public class TextEditDialog extends Dialog {
         return $("coral-select[name='./cq:styleIds'] > coral-select-item[selected]").innerText().equals("None");
     }
 
-    public Boolean isBlueStyleOptionSelectedByDefault() {
+    public Boolean isBlueStyleOptionSelected() {
         return $("coral-select[name='./cq:styleIds'] > coral-select-item[selected]").innerText().equals("Blue");
     }
 
@@ -62,15 +70,14 @@ public class TextEditDialog extends Dialog {
         $("coral-select[name='./cq:styleIds'] button").click();
     }
 
-    public final Boolean areExpectedOptionsForNoDefaultStylePresentInDropdown() {
+    public Boolean areExpectedOptionsForNoStyleAppliedPresentInDropdown() {
         return $("coral-selectlist-item[selected]").innerText().equals("None") &&
                 $("coral-selectlist-item[value='1547060098888']").exists() &&
                 $("coral-selectlist-item[value='1550165689999']").exists();
     }
 
-    public final Boolean areExpectedOptionsForDefaultStylePresentInDropdown() {
-        return $("coral-selectlist-item[selected][value='1547060098888']").innerText().equals("Blue") &&
-                $("coral-selectlist-item:not([selected])[value='']").innerText().equals("None") &&
+    public Boolean areExpectedOptionsForAppliedStylePresentInDropdown() {
+        return $("coral-selectlist-item[selected][value='1547060098888']").exists() &&
                 $("coral-selectlist-item[value='1550165689999']").exists();
     }
 
@@ -84,5 +91,13 @@ public class TextEditDialog extends Dialog {
 
     public Boolean componentHasNoSpecificClassAppliedByTheStyleSystem(String textComponentSelector, String classSelector) {
         return !$(textComponentSelector + " " + classSelector).exists();
+    }
+
+    public void pressArrowDown() {
+        Selenide.actions().pause(Duration.ofMillis(250L)).sendKeys(new CharSequence[]{Keys.ARROW_DOWN}).perform();
+    }
+
+    public void pressEnter() {
+        Selenide.actions().pause(Duration.ofMillis(250L)).sendKeys(new CharSequence[]{Keys.ENTER}).perform();
     }
 }

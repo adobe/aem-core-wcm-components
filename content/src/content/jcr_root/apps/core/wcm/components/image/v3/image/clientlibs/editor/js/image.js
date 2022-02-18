@@ -222,7 +222,7 @@
                 // update the thumbnail image
                 $pageImageThumbnail.replaceWith(data);
                 $pageImageThumbnail = $(dialogContentSelector).find(pageImageThumbnailSelector);
-                if (imageFromPageImage.checked) {
+                if (imageFromPageImage && imageFromPageImage.checked) {
                     $pageImageThumbnail.show();
                 } else {
                     $pageImageThumbnail.hide();
