@@ -483,7 +483,7 @@ public class Commons {
             }
 
             public Boolean call() throws Exception {
-                this.componentPath = addComponent(client, component, parentCompPath, "text", null);
+                this.componentPath = addComponent(client, component, parentCompPath, nameHint, order, expectedStatus);
                 return true;
             }
         }
