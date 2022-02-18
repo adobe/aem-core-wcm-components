@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2021 Adobe
+  ~ Copyright 2022 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -31,9 +31,9 @@
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>core.wcm.components.it.content</artifactId>
+    <artifactId>core.wcm.components.it.ui.apps</artifactId>
     <packaging>content-package</packaging>
-    <name>Adobe Experience Manager Core WCM Components IT Content</name>
+    <name>Adobe Experience Manager Core WCM Components IT Immutable Content</name>
     <version>2.18.1-SNAPSHOT</version>
 
     <!-- ====================================================================== -->
@@ -89,12 +89,12 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <packageType>mixed</packageType>
+                    <packageType>application</packageType>
                     <validatorsSettings>
                         <jackrabbit-filter>
                             <options>
                                 <validRoots>
-                                    /conf,/content,/content/campaigns,/content/dam,/content/cq:tags,/home/users,/etc/blueprints,/apps,/apps/core/wcm
+                                    /apps,/apps/core/wcm
                                 </validRoots>
                             </options>
                         </jackrabbit-filter>
@@ -102,9 +102,6 @@
                             <isDisabled>true</isDisabled>
                         </jackrabbit-nodetypes>
                     </validatorsSettings>
-                    <properties>
-                        <acHandling>merge_preserve</acHandling>
-                    </properties>
                     <dependencies>
                         <dependency>
                             <groupId>${project.groupId}</groupId>

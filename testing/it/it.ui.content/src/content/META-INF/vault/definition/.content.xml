@@ -14,14 +14,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<workspaceFilter version="1.0">
-    <!-- Sample content -->
-    <filter root="/apps/core/wcm/tests"/>
-    <filter root="/conf/core-components"/>
-    <filter root="/content/core-components"/>
-    <filter root="/content/campaigns/core_component_brand"/>
-    <filter root="/content/dam/core-components"/>
-    <filter root="/content/cq:tags/core-components"/>
-    <filter root="/content/experience-fragments/core-components-test"/>
-    <filter root="/home/users/core-component"/>
-</workspaceFilter>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          jcr:primaryType="vlt:PackageDefinition"
+          providerLink="https://github.com/adobe/aem-core-wcm-components/releases"
+          providerName="Adobe Systems Inc."
+          providerUrl="https://www.adobe.com"
+          testedWith="AEM 6.3, AEM 6.4">
+</jcr:root>

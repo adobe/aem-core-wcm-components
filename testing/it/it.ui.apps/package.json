@@ -1,7 +1,7 @@
 {
-    "name": "com.adobe.cq.core.wcm.components.it.content",
+    "name": "com.adobe.cq.core.wcm.components.it.ui.apps",
     "version": "2.18.1-SNAPSHOT",
-    "description": "Adobe Experience Manager Core WCM Components IT Content",
+    "description": "Adobe Experience Manager Core WCM Components IT Immutable Content",
     "license": "Apache-2.0",
     "private": false,
     "homepage": "https://github.com/adobe/aem-core-wcm-components",
