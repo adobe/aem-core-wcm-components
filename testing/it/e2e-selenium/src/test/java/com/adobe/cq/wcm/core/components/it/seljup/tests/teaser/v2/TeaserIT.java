@@ -344,9 +344,9 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.openAssetsTab();
         editDialog.checkInheritAltFromPage();
         editDialog.setAltText("");
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
         editDialog.checkIsDecorative();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
         Commons.saveConfigureDialog();
 
         editorPage.enterPreviewMode();
