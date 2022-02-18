@@ -221,6 +221,7 @@
                 if (self._resultsOpen()) {
                     toggleShow(self._elements.results, false);
                     self._elements.input.setAttribute("aria-expanded", "false");
+                    this._hideSearchResultsStatusMessage();
                 }
                 break;
             case keyCodes.ENTER:
