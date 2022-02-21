@@ -58,7 +58,7 @@ public class Teaser extends BaseComponent {
     }
 
     public boolean isImagePresentWithEmptyAltAttribute(String pagePath) {
-        return isImagePresent(pagePath) && $(String.format(imageTag, pagePath)).getAttribute("alt").isBlank();
+        return isImagePresent(pagePath) && $(String.format(imageTag, pagePath)).getAttribute("alt").isEmpty();
     }
 
     public boolean isImageLinkPresent() {
