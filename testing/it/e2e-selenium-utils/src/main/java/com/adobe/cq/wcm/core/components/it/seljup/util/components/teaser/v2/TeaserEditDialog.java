@@ -16,7 +16,11 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2;
 
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.codeborne.selenide.WebDriverRunner;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -44,6 +48,7 @@ public class TeaserEditDialog extends com.adobe.cq.wcm.core.components.it.seljup
     public void openAssetsTab() {
         $$(".cmp-teaser__editor coral-tab").get(2).click();
     }
+
     public void openLinksTab() {
         $$(".cmp-teaser__editor coral-tab").get(0).click();
     }
@@ -56,6 +61,16 @@ public class TeaserEditDialog extends com.adobe.cq.wcm.core.components.it.seljup
     public void checkIsDecorative() {
         CoralCheckbox checkbox = new CoralCheckbox(isDecorative);
         checkbox.click();
+    }
+
+    public void scrollToIsDecorativeCheckbox() {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", $(isDecorative));
+    }
+
+    public boolean isDecorativeChecked() {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        return (Boolean) ((JavascriptExecutor) webDriver).executeScript("return arguments[0].hasAttribute(\"checked\");", $(isDecorative));
     }
 
     public void setAltText(String value) {

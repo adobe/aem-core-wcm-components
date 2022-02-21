@@ -345,14 +345,17 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.checkInheritAltFromPage();
         editDialog.setAltText("");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        editDialog.scrollToIsDecorativeCheckbox();
         editDialog.checkIsDecorative();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        assertTrue(editDialog.isDecorativeChecked());
         Commons.saveConfigureDialog();
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(teaser.isImagePresentWithEmptyAltAttribute(testPage), "image should be rendered with alt attribute empty");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
         assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted), "image should be rendered with file name: " + climbingAssetFormatted);
+        assertTrue(teaser.isImagePresentWithEmptyAltAttribute(testPage), "image should be rendered with alt attribute empty");
     }
 
     @Test
@@ -557,7 +560,4 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editorPage.open();
     }
-
-
-
 }
