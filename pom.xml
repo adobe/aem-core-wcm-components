@@ -66,11 +66,11 @@
         <module>bundles/core</module>
         <module>testing/junit/core</module>
         <module>testing/aem-mock-plugin</module>
-        <module>testing/it/ui-js</module>
         <module>testing/it/http</module>
         <module>testing/it/e2e-selenium-utils</module>
         <module>testing/it/e2e-selenium</module>
-        <module>testing/it/it-content</module>
+        <module>testing/it/it.ui.apps</module>
+        <module>testing/it/it.ui.content</module>
         <module>content</module>
         <module>config</module>
         <module>all</module>
