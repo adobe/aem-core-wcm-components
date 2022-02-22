@@ -39,6 +39,7 @@
         if (dialogContent) {
             var $descriptionTextfield = $(descriptionTextfieldSelector);
             if ($descriptionTextfield.length) {
+                associateDescriptionTextFieldWithLabel($descriptionTextfield[0]);
                 var rteInstance = $descriptionTextfield.data("rteinstance");
                 // wait for the description textfield rich text editor to signal start before initializing.
                 // Ensures that any state adjustments made here will not be overridden.
@@ -197,5 +198,12 @@
                 });
             }
         }
+    }
+
+    function associateDescriptionTextFieldWithLabel(descriptionTextfieldElement) {
+        var richTextContainerSelector = ".cq-RichText.richtext-container";
+        var $richTextContainerParent = $(richTextContainerSelector)[0].parentNode;
+        var $descriptionLabel = $richTextContainerParent.children[0];
+        descriptionTextfieldElement.setAttribute("aria-labelledby", $descriptionLabel.id);
     }
 })(jQuery, Granite);
