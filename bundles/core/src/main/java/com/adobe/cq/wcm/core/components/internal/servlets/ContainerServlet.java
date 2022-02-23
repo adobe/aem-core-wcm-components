@@ -78,7 +78,7 @@ public class ContainerServlet extends SlingAllMethodsServlet {
     @Override
     protected void doPost(SlingHttpServletRequest request,
                           final SlingHttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
         ResourceResolver resolver = request.getResourceResolver();
         Resource container = request.getResource();
@@ -90,12 +90,18 @@ public class ContainerServlet extends SlingAllMethodsServlet {
                 for (String childName: deletedChildrenNames) {
                     Resource child = container.getChild(childName);
                     if (child != null) {
-                        resolver.delete(child);
-
                         // For deleted items that have a live relationship, ensure a ghost is created
                         LiveRelationship liveRelationship = liveRelationshipManager.getLiveRelationship(child, false);
                         if (liveRelationship != null && liveRelationship.getStatus().isSourceExisting()) {
-                            createGhost(child, resolver);
+                            liveRelationshipManager.cancelRelationship(resolver, liveRelationship, true, false);
+                            Resource parent = child.getParent();
+                            String name = child.getName();
+                            resolver.delete(child);
+                            if (parent != null) {
+                                createGhost(parent, name, resolver);
+                            }
+                        } else {
+                            resolver.delete(child);
                         }
                     }
                 }
@@ -141,18 +147,11 @@ public class ContainerServlet extends SlingAllMethodsServlet {
 
     }
 
-    private void createGhost(@NotNull Resource deleted, ResourceResolver resolver) throws PersistenceException, RepositoryException, WCMException {
-        Resource parent = deleted.getParent();
-        if (parent != null) {
-            Map<String,Object> properties = new HashMap<>();
-            properties.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
-            properties.put(JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY, RT_GHOST);
-            resolver.create(parent, deleted.getName(), properties);
-            LiveRelationship liveRelationship = liveRelationshipManager.getLiveRelationship(deleted, false);
-            if (liveRelationship != null) {
-                liveRelationshipManager.cancelRelationship(resolver, liveRelationship,true,false);
-            }
-        }
+    private void createGhost(@NotNull Resource parent, String name, ResourceResolver resolver)
+            throws PersistenceException, RepositoryException, WCMException {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
+        properties.put(JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY, RT_GHOST);
+        resolver.create(parent, name, properties);
     }
-
 }
