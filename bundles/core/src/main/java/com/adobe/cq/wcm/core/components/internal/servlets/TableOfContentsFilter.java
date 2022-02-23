@@ -209,7 +209,10 @@ public class TableOfContentsFilter implements Filter {
     private Element getListItemElement(Element headingElement) {
         String id = headingElement.attr("id");
         if(id == null || "".contentEquals(id)) {
-            id = UUID.randomUUID().toString();
+            id = headingElement.text()
+                .trim()
+                .toLowerCase()
+                .replaceAll("\\s", "-");
             headingElement.attr("id", id);
         }
         Element listItem = new Element("li");
