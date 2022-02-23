@@ -39,7 +39,7 @@
         if (dialogContent) {
             var $descriptionTextfield = $(descriptionTextfieldSelector);
             if ($descriptionTextfield.length) {
-                if (!$descriptionTextfield[0].hasAttribute("aria-labelledby")){
+                if (!$descriptionTextfield[0].hasAttribute("aria-labelledby")) {
                     associateDescriptionTextFieldWithLabel($descriptionTextfield[0]);
                 }
                 var rteInstance = $descriptionTextfield.data("rteinstance");
