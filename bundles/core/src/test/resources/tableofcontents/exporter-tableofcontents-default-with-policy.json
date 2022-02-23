@@ -1,0 +1,7 @@
+{
+    "listType":"ordered",
+    "titleStartLevel":2,
+    "titleStopLevel":4,
+    "includeClassNames":["toc-include-1","toc-include-2"],
+    "ignoreClassNames":["toc-ignore-1","toc-ignore-2"]
+}

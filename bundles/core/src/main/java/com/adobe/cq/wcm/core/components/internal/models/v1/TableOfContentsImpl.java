@@ -46,6 +46,12 @@ public class TableOfContentsImpl implements TableOfContents {
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/tableofcontents/v1/tableofcontents";
 
+    public static final String DEFAULT_LIST_TYPE = "unordered";
+    public static final Integer DEFAULT_TITLE_START_LEVEL = 1;
+    public static final Integer DEFAULT_TITLE_STOP_LEVEL = 6;
+
+    public static final String NO_RESTRICTION = "norestriction";
+
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
 
@@ -82,22 +88,22 @@ public class TableOfContentsImpl implements TableOfContents {
 
     @Override
     public String getListType() {
-        return (restrictListType == null || "norestriction".contentEquals(restrictListType))
-            ? listType != null ? listType : "unordered"
+        return (restrictListType == null || NO_RESTRICTION.contentEquals(restrictListType))
+            ? listType != null ? listType : DEFAULT_LIST_TYPE
             : restrictListType;
     }
 
     @Override
     public Integer getTitleStartLevel() {
-        return (restrictTitleStartLevel == null || "norestriction".contentEquals(restrictTitleStartLevel))
-            ? titleStartLevel != null ? titleStartLevel : 1
+        return (restrictTitleStartLevel == null || NO_RESTRICTION.contentEquals(restrictTitleStartLevel))
+            ? titleStartLevel != null ? titleStartLevel : DEFAULT_TITLE_START_LEVEL
             : Integer.parseInt(restrictTitleStartLevel);
     }
 
     @Override
     public Integer getTitleStopLevel() {
-        return (restrictTitleStopLevel == null || "norestriction".contentEquals(restrictTitleStopLevel))
-            ? titleStopLevel != null ? titleStopLevel : 6
+        return (restrictTitleStopLevel == null || NO_RESTRICTION.contentEquals(restrictTitleStopLevel))
+            ? titleStopLevel != null ? titleStopLevel : DEFAULT_TITLE_STOP_LEVEL
             : Integer.parseInt(restrictTitleStopLevel);
     }
 
