@@ -31,6 +31,8 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -77,7 +79,7 @@ public class Commons {
     public static String template = "/conf/core-components/settings/wcm/templates/core-components";
     // core component resource types
     // accordion component
-    public static String  rtAccordion_v1 = "core/wcm/components/accordion/v1/accordion";
+    public static String RT_ACCORDION_V1 = "core-component/components/accordion-v1";
     // embed component
     public static String rtEmbed_v1 = "core/wcm/components/embed/v1/embed";
     public static String rtEmbed_v2 = "core/wcm/components/embed/v2/embed";
@@ -112,6 +114,7 @@ public class Commons {
     // search component
     public static String rtSearch_v1 = "core/wcm/components/search/v1/search";
     // teaser component
+    public static final String RT_TEASER_V1 = "core-component/components/teaser-v1";
     public static String rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
     public static String rtTeaser_v2 = "core/wcm/components/teaser/v2/teaser";
     // carousel component
@@ -330,8 +333,11 @@ public class Commons {
      * @param title              mandatory the title of the component
      * @param componentGroup     optional the group of the component, if empty, 'Core' is used
      * @throws ClientException
+     *
+     * @deprecated For AEMaaCS testing proxies cannot be created as immutable content must be added via the CM deployment pipeline.
      */
 
+    @Deprecated
     public static String createProxyComponent(CQClient client, String component, String proxyCompPath,  String title, String componentGroup, int... expectedStatus)
         throws ClientException {
 
@@ -770,6 +776,9 @@ public class Commons {
     }
 
     public static boolean isComponentPresentInInsertDialog(String component) {
+        if (!StringUtils.startsWith(component, "/")) {
+            component = "/apps/" + component;
+        }
         return $("coral-selectlist-item[value='" + component + "']").isDisplayed();
     }
 

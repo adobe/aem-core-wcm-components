@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.adobe.cq.testing.selenium.junit.annotations.Author;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.testing.clients.ClientException;
 import org.codehaus.jackson.JsonNode;
@@ -33,22 +33,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.UIAbstractTest;
-import com.adobe.cq.testing.selenium.pageobject.granite.LoginPage;
-import com.adobe.cq.testing.selenium.utils.DisableTour;
-import com.adobe.cq.testing.selenium.junit.extensions.TestContentExtension;
-import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-
-import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.UIAbstractTest;
+import com.adobe.cq.testing.selenium.junit.annotations.Author;
+import com.adobe.cq.testing.selenium.junit.extensions.TestContentExtension;
+import com.adobe.cq.testing.selenium.pageobject.granite.LoginPage;
+import com.adobe.cq.testing.selenium.utils.DisableTour;
+import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+
 import static com.adobe.cq.testing.selenium.Constants.GROUPID_CONTENT_AUTHORS;
-
-
 import static com.adobe.cq.testing.selenium.Constants.RUNMODE_AUTHOR;
 import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.setAffinityCookie;
 
@@ -100,11 +97,28 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
         return Arrays.asList(GROUPID_CONTENT_AUTHORS, "workflow-users");
     }
 
+    public void createPagePolicy(Map<String, String> policyProperties) throws ClientException {
+        String policySuffix = "/structure/page/new_policy";
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("jcr:title", "New Policy");
+        data.put("sling:resourceType", "wcm/core/components/policy/policy");
+        data.putAll(policyProperties);
+        String policyPath = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
+        Commons.createPolicy(adminClient, policySuffix, data , policyPath);
+
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
+        data.clear();
+        data.put("cq:policy", policyLocation + policySuffix);
+        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
+        Commons.assignPolicy(adminClient,"", data, policyAssignmentPath);
+    }
 
     public String createComponentPolicy(String componentPath, Map<String, String> properties) throws ClientException {
-        String policySuffix = componentPath +  "/new_policy";
+        String randomText= TestContentBuilder.randomSmallText();
+        String policySuffix = componentPath + "/" + randomText;
         HashMap<String, String> policyProperties = new HashMap<>();
-        policyProperties.put("jcr:title", "New Policy");
+        policyProperties.put("jcr:title", randomText + " Policy");
         policyProperties.put("sling:resourceType", "wcm/core/components/policy/policy");
         policyProperties.putAll(properties);
         String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
@@ -115,10 +129,16 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
         String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
         HashMap<String, String> mappingProperties = new HashMap<>();
         mappingProperties.put("cq:policy", policyLocation + policySuffix);
-        mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mapping");
+        mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mappings");
         Commons.assignPolicy(adminClient, componentPath, mappingProperties, policyAssignmentPath, 200, 201);
 
         return policyPath;
+    }
+
+    public void deleteComponentPolicy(String componentPath, String policyPath) throws ClientException {
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
+        Commons.deletePolicy(adminClient, policyPath, policyAssignmentPath);
+        Commons.deletePolicyAssignment(adminClient, componentPath, policyAssignmentPath);
     }
 
 
