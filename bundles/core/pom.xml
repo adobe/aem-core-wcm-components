@@ -57,6 +57,7 @@
                 <configuration>
                     <exportScr>true</exportScr>
                     <instructions>
+                        <Embed-Dependency>jsoup</Embed-Dependency>
                         <_plugin>
                             <!-- Enable registration of Sling Models classes via bnd plugin -->
                             org.apache.sling.bnd.models.ModelsScannerPlugin,
@@ -71,6 +72,7 @@
                             com.adobe.cq.commerce.*;resolution:=optional,
                             com.adobe.aem.wcm.seo.*;resolution:=optional,
                             javax.annotation;version=0.0.0,
+                            javax.annotation.meta;resolution:=optional,
                             com.day.cq.dam.api;version="[1.24,2.0)",
                             *
                         </Import-Package>
