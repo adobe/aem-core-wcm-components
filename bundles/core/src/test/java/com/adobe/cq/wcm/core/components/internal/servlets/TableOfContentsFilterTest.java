@@ -54,8 +54,13 @@ public class TableOfContentsFilterTest {
         tableOfContentsFilter = new TableOfContentsFilter();
     }
 
+    /**
+     * Covers all the include and ignore scenarios mentioned at
+     * https://github.com/adobe/aem-core-wcm-components/wiki/Table-of-Content-Component#include--ignore-behavior
+     * @throws Exception
+     */
     @Test
-    void testDoFilter() throws Exception {
+    void testDoFilterWithIncludeIgnoreScenarios() throws Exception {
         MockSlingHttpServletRequest request = context.request();
         request.setAttribute("contains-table-of-contents", true);
 
@@ -88,6 +93,5 @@ public class TableOfContentsFilterTest {
             expectedContent,
             responseWriter.toString()
         );
-//        System.out.println(responseWriter.toString());
     }
 }

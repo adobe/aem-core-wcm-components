@@ -168,6 +168,7 @@ public class TableOfContentsFilter implements Filter {
         for(String className: classNames) {
             for(int level = titleStartLevel; level <= titleStopLevel; level++) {
                 selectors.add("." + className + " h" + level);
+                selectors.add("h" + level + "." + className);
             }
         }
         return StringUtils.join(selectors, ",");

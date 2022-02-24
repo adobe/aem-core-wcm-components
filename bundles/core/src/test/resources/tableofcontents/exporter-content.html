@@ -2,9 +2,28 @@
 <html lang="en"> 
  <head> 
   <meta charset="UTF-8"> 
-  <title>TOC Test</title> 
+  <title>TOC Include Ignore Behavior Test</title> 
  </head> 
  <body> 
+  <div> 
+   <div>
+    <ol>
+     <li><a href="#page-title">Page title</a></li>
+     <ol>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#main-teaser">Main teaser</a></li>
+      <ol>
+       <li><a href="#main-teaser-subtitle">Main teaser subtitle</a></li>
+      </ol>
+      <li><a href="#sidebar-title">Sidebar title</a></li>
+      <li><a href="#sidebar-teaser">Sidebar teaser</a></li>
+      <ol>
+       <li><a href="#sidebar-teaser-subtitle">Sidebar teaser subtitle</a></li>
+      </ol>
+     </ol>
+    </ol>
+   </div> 
+  </div> 
   <div> 
    <div>
     <ul>
@@ -15,13 +34,65 @@
       <ul>
        <li><a href="#main-teaser-subtitle">Main teaser subtitle</a></li>
       </ul>
-      <li><a href="#sidebar-title">Sidebar title</a></li>
-      <li><a href="#sidebar-teaser">Sidebar teaser</a></li>
-      <ul>
-       <li><a href="#sidebar-teaser-subtitle">Sidebar teaser subtitle</a></li>
-      </ul>
      </ul>
     </ul>
+   </div> 
+  </div> 
+  <div> 
+   <div>
+    <ul>
+     <li><a href="#page-title">Page title</a></li>
+     <ul>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#sidebar-title">Sidebar title</a></li>
+     </ul>
+    </ul>
+   </div> 
+  </div> 
+  <div> 
+   <div>
+    <ul>
+     <li><a href="#page-title">Page title</a></li>
+     <ul>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#main-teaser">Main teaser</a></li>
+      <li><a href="#sidebar-title">Sidebar title</a></li>
+      <li><a href="#sidebar-teaser">Sidebar teaser</a></li>
+     </ul>
+    </ul>
+   </div> 
+  </div> 
+  <div> 
+   <div>
+    <ul>
+     <li><a href="#page-title">Page title</a></li>
+     <ul>
+      <li><a href="#main-title">Main title</a></li>
+     </ul>
+    </ul>
+   </div> 
+  </div> 
+  <div> 
+   <div>
+    <ul>
+     <li><a href="#page-title">Page title</a></li>
+     <ul>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#main-teaser">Main teaser</a></li>
+     </ul>
+    </ul>
+   </div> 
+  </div> 
+  <div> 
+   <div>
+    <ol>
+     <li><a href="#page-title">Page title</a></li>
+     <ol>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#main-teaser">Main teaser</a></li>
+      <li><a href="#sidebar-title">Sidebar title</a></li>
+     </ol>
+    </ol>
    </div> 
   </div> 
   <h1 class="cmp-title" id="page-title">Page title</h1> 
