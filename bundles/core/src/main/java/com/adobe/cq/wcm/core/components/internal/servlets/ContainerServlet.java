@@ -51,15 +51,15 @@ import com.day.crx.JcrConstants;
  * Servlet that deletes/reorders the child nodes of a Accordion/Carousel/Tabs container.
  */
 @Component(
-    service = Servlet.class,
-    property = {
-        "sling.servlet.methods=" + HttpConstants.METHOD_POST,
-        "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE,
-        "sling.servlet.resourceTypes=" + TabsImpl.RESOURCE_TYPE,
-        "sling.servlet.resourceTypes=" + AccordionImpl.RESOURCE_TYPE,
-        "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
-        "sling.servlet.extensions=" + ContainerServlet.EXTENSION
-    }
+        service = Servlet.class,
+        property = {
+                "sling.servlet.methods=" + HttpConstants.METHOD_POST,
+                "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE,
+                "sling.servlet.resourceTypes=" + TabsImpl.RESOURCE_TYPE,
+                "sling.servlet.resourceTypes=" + AccordionImpl.RESOURCE_TYPE,
+                "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
+                "sling.servlet.extensions=" + ContainerServlet.EXTENSION
+        }
 )
 public class ContainerServlet extends SlingAllMethodsServlet {
 
@@ -76,9 +76,7 @@ public class ContainerServlet extends SlingAllMethodsServlet {
     private transient LiveRelationshipManager liveRelationshipManager;
 
     @Override
-    protected void doPost(SlingHttpServletRequest request,
-                          final SlingHttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(@NotNull SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response) throws IOException {
 
         ResourceResolver resolver = request.getResourceResolver();
         Resource container = request.getResource();
@@ -87,7 +85,7 @@ public class ContainerServlet extends SlingAllMethodsServlet {
         try {
             String[] deletedChildrenNames = request.getParameterValues(PARAM_DELETED_CHILDREN);
             if (deletedChildrenNames != null && deletedChildrenNames.length > 0) {
-                for (String childName: deletedChildrenNames) {
+                for (String childName : deletedChildrenNames) {
                     Resource child = container.getChild(childName);
                     if (child != null) {
                         // For deleted items that have a live relationship, ensure a ghost is created
@@ -132,7 +130,7 @@ public class ContainerServlet extends SlingAllMethodsServlet {
                         if (i == orderedChildrenNames.length - 1) {
                             containerNode.orderBefore(orderedChildrenNames[i], null);
                         } else {
-                            containerNode.orderBefore(orderedChildrenNames[i], orderedChildrenNames[i+1]);
+                            containerNode.orderBefore(orderedChildrenNames[i], orderedChildrenNames[i + 1]);
                         }
                     }
 
