@@ -18,10 +18,10 @@
      class = "table-of-contents-placeholder"
      id = "${component.id}"
      data-list-type = "${toc.listType}"
-     data-title-start-level = "${toc.titleStartLevel}"
-     data-title-stop-level = "${toc.titleStopLevel}"
-     data-include-class-names = "${toc.includeClassNames}"
-     data-ignore-class-names = "${toc.ignoreClassNames}">
+     data-start-level = "${toc.startLevel}"
+     data-stop-level = "${toc.stopLevel}"
+     data-include-classes = "${toc.includeClasses}"
+     data-ignore-classes = "${toc.ignoreClasses}">
 </div>
 <sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${wcmmode.edit || wcmmode.preview}"

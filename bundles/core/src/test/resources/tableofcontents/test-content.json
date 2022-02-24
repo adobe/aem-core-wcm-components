@@ -30,9 +30,9 @@
             },
             "tableofcontents-configured": {
                 "jcr:primaryType": "nt:unstructured",
-                "titleStartLevel": "2",
+                "startLevel": "2",
                 "jcr:createdBy": "admin",
-                "titleStopLevel": "5",
+                "stopLevel": "5",
                 "jcr:lastModifiedBy": "admin",
                 "jcr:created": "Fri Feb 04 2022 03:37:57 GMT+0530",
                 "id": "toc-sample-id",
@@ -42,9 +42,9 @@
             },
             "tableofcontents-configured-with-policy": {
                 "jcr:primaryType": "nt:unstructured",
-                "titleStartLevel": "2",
+                "startLevel": "2",
                 "jcr:createdBy": "admin",
-                "titleStopLevel": "5",
+                "stopLevel": "5",
                 "jcr:lastModifiedBy": "admin",
                 "jcr:created": "Fri Feb 04 2022 03:37:57 GMT+0530",
                 "id": "toc-sample-id",

@@ -113,37 +113,37 @@ public class TableOfContentsFilter implements Filter {
             ? tocPlaceholderElement.attr("data-list-type")
             : "unordered";
         String listTag = "ordered".contentEquals(listType) ? "ol" : "ul";
-        int titleStartLevel = tocPlaceholderElement.hasAttr("data-title-start-level")
-            ? Math.max(1, Integer.parseInt(tocPlaceholderElement.attr("data-title-start-level")))
+        int startLevel = tocPlaceholderElement.hasAttr("data-start-level")
+            ? Math.max(1, Integer.parseInt(tocPlaceholderElement.attr("data-start-level")))
             : 1;
-        int titleStopLevel = tocPlaceholderElement.hasAttr("data-title-stop-level")
-            ? Math.min(6, Integer.parseInt(tocPlaceholderElement.attr("data-title-stop-level")))
+        int stopLevel = tocPlaceholderElement.hasAttr("data-stop-level")
+            ? Math.min(6, Integer.parseInt(tocPlaceholderElement.attr("data-stop-level")))
             : 6;
-        String[] includeClassNames = tocPlaceholderElement.hasAttr("data-include-class-names")
-            ? tocPlaceholderElement.attr("data-include-class-names").split(",")
+        String[] includeClasses = tocPlaceholderElement.hasAttr("data-include-classes")
+            ? tocPlaceholderElement.attr("data-include-classes").split(",")
             : null;
-        String[] ignoreClassNames = tocPlaceholderElement.hasAttr("data-ignore-class-names")
-            ? tocPlaceholderElement.attr("data-ignore-class-names").split(",")
+        String[] ignoreClasses = tocPlaceholderElement.hasAttr("data-ignore-classes")
+            ? tocPlaceholderElement.attr("data-ignore-classes").split(",")
             : null;
 
         Document document = tocPlaceholderElement.ownerDocument();
 
         String includeCssSelector;
-        if(includeClassNames == null || includeClassNames.length == 0) {
+        if(includeClasses == null || includeClasses.length == 0) {
             List<String> selectors = new ArrayList<>();
-            for(int level = titleStartLevel; level <= titleStopLevel; level++) {
+            for(int level = startLevel; level <= stopLevel; level++) {
                 selectors.add("h" + level);
             }
             includeCssSelector = StringUtils.join(selectors, ",");
         } else {
-            includeCssSelector = getCssSelectorString(includeClassNames, titleStartLevel, titleStopLevel);
+            includeCssSelector = getCssSelectorString(includeClasses, startLevel, stopLevel);
         }
         Elements includeElements = document.select(includeCssSelector);
 
-        if(ignoreClassNames == null || ignoreClassNames.length == 0) {
+        if(ignoreClasses == null || ignoreClasses.length == 0) {
             return getNestedList(listTag, includeElements.listIterator(), 0);
         }
-        String ignoreCssSelector = getCssSelectorString(ignoreClassNames, titleStartLevel, titleStopLevel);
+        String ignoreCssSelector = getCssSelectorString(ignoreClasses, startLevel, stopLevel);
         Elements ignoreElements = document.select(ignoreCssSelector);
 
         Set<Element> ignoreElementsSet = new HashSet<>();
@@ -160,13 +160,13 @@ public class TableOfContentsFilter implements Filter {
         return getNestedList(listTag, validElements.listIterator(), 0);
     }
 
-    private String getCssSelectorString(String[] classNames, int titleStartLevel, int titleStopLevel) {
+    private String getCssSelectorString(String[] classNames, int startLevel, int stopLevel) {
         if(classNames == null || classNames.length == 0) {
             return "";
         }
         List<String> selectors = new ArrayList<>();
         for(String className: classNames) {
-            for(int level = titleStartLevel; level <= titleStopLevel; level++) {
+            for(int level = startLevel; level <= stopLevel; level++) {
                 selectors.add("." + className + " h" + level);
                 selectors.add("h" + level + "." + className);
             }

@@ -52,45 +52,45 @@ public class TableOfContentsImplTest {
     @Test
     void testTableOfContentsDefault() {
         TableOfContents tableOfContents = getTableOfContentsUnderTest(TOC_DEFAULT);
-        assertEquals(TableOfContentsImpl.DEFAULT_TITLE_START_LEVEL, tableOfContents.getTitleStartLevel());
-        assertEquals(TableOfContentsImpl.DEFAULT_TITLE_STOP_LEVEL, tableOfContents.getTitleStopLevel());
+        assertEquals(TableOfContentsImpl.DEFAULT_START_LEVEL, tableOfContents.getStartLevel());
+        assertEquals(TableOfContentsImpl.DEFAULT_STOP_LEVEL, tableOfContents.getStopLevel());
         assertEquals(TableOfContentsImpl.DEFAULT_LIST_TYPE, tableOfContents.getListType());
-        assertNull(tableOfContents.getIncludeClassNames());
-        assertNull(tableOfContents.getIgnoreClassNames());
+        assertNull(tableOfContents.getIncludeClasses());
+        assertNull(tableOfContents.getIgnoreClasses());
         Utils.testJSONExport(tableOfContents, Utils.getTestExporterJSONPath(TEST_BASE, TOC_DEFAULT));
     }
 
     @Test
     void testTableOfContentsDefaultWithPolicy() {
         String listType = "ordered";
-        Integer titleStartLevel = 2;
-        Integer titleStopLevel = 4;
-        String[] includeClassNames = new String[]{"toc-include-1", "toc-include-2"};
-        String[] ignoreClassNames = new String[]{"toc-ignore-1", "toc-ignore-2"};
+        Integer startLevel = 2;
+        Integer stopLevel = 4;
+        String[] includeClasses = new String[]{"toc-include-1", "toc-include-2"};
+        String[] ignoreClasses = new String[]{"toc-ignore-1", "toc-ignore-2"};
         context.contentPolicyMapping(TableOfContentsImpl.RESOURCE_TYPE,
             TableOfContents.PN_RESTRICT_LIST_TYPE, listType,
-            TableOfContents.PN_RESTRICT_TITLE_START_LEVEL, titleStartLevel,
-            TableOfContents.PN_RESTRICT_TITLE_STOP_LEVEL, titleStopLevel,
-            TableOfContents.PN_INCLUDE_CLASS_NAMES, includeClassNames,
-            TableOfContents.PN_IGNORE_CLASS_NAMES, ignoreClassNames
+            TableOfContents.PN_RESTRICT_START_LEVEL, startLevel,
+            TableOfContents.PN_RESTRICT_STOP_LEVEL, stopLevel,
+            TableOfContents.PN_INCLUDE_CLASSES, includeClasses,
+            TableOfContents.PN_IGNORE_CLASSES, ignoreClasses
         );
         TableOfContents tableOfContents = getTableOfContentsUnderTest(TOC_DEFAULT_WITH_POLICY);
-        assertEquals(titleStartLevel, tableOfContents.getTitleStartLevel());
-        assertEquals(titleStopLevel, tableOfContents.getTitleStopLevel());
+        assertEquals(startLevel, tableOfContents.getStartLevel());
+        assertEquals(stopLevel, tableOfContents.getStopLevel());
         assertEquals(listType, tableOfContents.getListType());
-        assertArrayEquals(includeClassNames, tableOfContents.getIncludeClassNames());
-        assertArrayEquals(ignoreClassNames, tableOfContents.getIgnoreClassNames());
+        assertArrayEquals(includeClasses, tableOfContents.getIncludeClasses());
+        assertArrayEquals(ignoreClasses, tableOfContents.getIgnoreClasses());
         Utils.testJSONExport(tableOfContents, Utils.getTestExporterJSONPath(TEST_BASE, TOC_DEFAULT_WITH_POLICY));
     }
 
     @Test
     void testTableOfContentsConfigured() {
         TableOfContents tableOfContents = getTableOfContentsUnderTest(TOC_CONFIGURED);
-        assertEquals(2, (int)tableOfContents.getTitleStartLevel());
-        assertEquals(5, (int)tableOfContents.getTitleStopLevel());
+        assertEquals(2, (int)tableOfContents.getStartLevel());
+        assertEquals(5, (int)tableOfContents.getStopLevel());
         assertEquals("ordered", tableOfContents.getListType());
-        assertNull(tableOfContents.getIncludeClassNames());
-        assertNull(tableOfContents.getIgnoreClassNames());
+        assertNull(tableOfContents.getIncludeClasses());
+        assertNull(tableOfContents.getIgnoreClasses());
         Utils.testJSONExport(tableOfContents, Utils.getTestExporterJSONPath(TEST_BASE, TOC_CONFIGURED));
     }
 
@@ -98,35 +98,35 @@ public class TableOfContentsImplTest {
     void testTableOfContentsConfiguredWithNoRestrictionPolicy() {
         context.contentPolicyMapping(TableOfContentsImpl.RESOURCE_TYPE,
             TableOfContents.PN_RESTRICT_LIST_TYPE, TableOfContentsImpl.NO_RESTRICTION,
-            TableOfContents.PN_RESTRICT_TITLE_START_LEVEL, TableOfContentsImpl.NO_RESTRICTION,
-            TableOfContents.PN_RESTRICT_TITLE_STOP_LEVEL, TableOfContentsImpl.NO_RESTRICTION
+            TableOfContents.PN_RESTRICT_START_LEVEL, TableOfContentsImpl.NO_RESTRICTION,
+            TableOfContents.PN_RESTRICT_STOP_LEVEL, TableOfContentsImpl.NO_RESTRICTION
         );
         TableOfContents tableOfContents = getTableOfContentsUnderTest(TOC_CONFIGURED);
-        assertEquals(2, (int)tableOfContents.getTitleStartLevel());
-        assertEquals(5, (int)tableOfContents.getTitleStopLevel());
+        assertEquals(2, (int)tableOfContents.getStartLevel());
+        assertEquals(5, (int)tableOfContents.getStopLevel());
         assertEquals("ordered", tableOfContents.getListType());
-        assertNull(tableOfContents.getIncludeClassNames());
-        assertNull(tableOfContents.getIgnoreClassNames());
+        assertNull(tableOfContents.getIncludeClasses());
+        assertNull(tableOfContents.getIgnoreClasses());
         Utils.testJSONExport(tableOfContents, Utils.getTestExporterJSONPath(TEST_BASE, TOC_CONFIGURED));
     }
 
     @Test
     void testTableOfContentsConfiguredWithPolicy() {
         String listType = "unordered";
-        Integer titleStopLevel = 4;
-        String[] ignoreClassNames = new String[]{"toc-ignore-1", "toc-ignore-2"};
+        Integer stopLevel = 4;
+        String[] ignoreClasses = new String[]{"toc-ignore-1", "toc-ignore-2"};
         context.contentPolicyMapping(TableOfContentsImpl.RESOURCE_TYPE,
             TableOfContents.PN_RESTRICT_LIST_TYPE, listType,
-            TableOfContents.PN_RESTRICT_TITLE_START_LEVEL, TableOfContentsImpl.NO_RESTRICTION,
-            TableOfContents.PN_RESTRICT_TITLE_STOP_LEVEL, titleStopLevel,
-            TableOfContents.PN_IGNORE_CLASS_NAMES, ignoreClassNames
+            TableOfContents.PN_RESTRICT_START_LEVEL, TableOfContentsImpl.NO_RESTRICTION,
+            TableOfContents.PN_RESTRICT_STOP_LEVEL, stopLevel,
+            TableOfContents.PN_IGNORE_CLASSES, ignoreClasses
         );
         TableOfContents tableOfContents = getTableOfContentsUnderTest(TOC_CONFIGURED_WITH_POLICY);
-        assertEquals(2, (int)tableOfContents.getTitleStartLevel());
-        assertEquals(4, (int)tableOfContents.getTitleStopLevel());
+        assertEquals(2, (int)tableOfContents.getStartLevel());
+        assertEquals(4, (int)tableOfContents.getStopLevel());
         assertEquals(listType, tableOfContents.getListType());
-        assertNull(tableOfContents.getIncludeClassNames());
-        assertArrayEquals(ignoreClassNames, tableOfContents.getIgnoreClassNames());
+        assertNull(tableOfContents.getIncludeClasses());
+        assertArrayEquals(ignoreClasses, tableOfContents.getIgnoreClasses());
         Utils.testJSONExport(tableOfContents, Utils.getTestExporterJSONPath(TEST_BASE, TOC_CONFIGURED_WITH_POLICY));
     }
 

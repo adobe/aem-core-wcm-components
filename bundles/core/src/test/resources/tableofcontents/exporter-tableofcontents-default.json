@@ -1,5 +1,5 @@
 {
     "listType":"unordered",
-    "titleStartLevel":1,
-    "titleStopLevel":6
+    "startLevel":1,
+    "stopLevel":6
 }

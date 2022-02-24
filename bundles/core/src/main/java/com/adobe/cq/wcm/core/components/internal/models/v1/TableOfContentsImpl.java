@@ -47,8 +47,8 @@ public class TableOfContentsImpl implements TableOfContents {
     public static final String RESOURCE_TYPE = "core/wcm/components/tableofcontents/v1/tableofcontents";
 
     public static final String DEFAULT_LIST_TYPE = "unordered";
-    public static final Integer DEFAULT_TITLE_START_LEVEL = 1;
-    public static final Integer DEFAULT_TITLE_STOP_LEVEL = 6;
+    public static final Integer DEFAULT_START_LEVEL = 1;
+    public static final Integer DEFAULT_STOP_LEVEL = 6;
 
     public static final String NO_RESTRICTION = "norestriction";
 
@@ -62,27 +62,27 @@ public class TableOfContentsImpl implements TableOfContents {
     @Nullable
     private String listType;
 
-    @ValueMapValue(name = TableOfContents.PN_TITLE_START_LEVEL, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = TableOfContents.PN_START_LEVEL, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    private Integer titleStartLevel;
+    private Integer startLevel;
 
-    @ValueMapValue(name = TableOfContents.PN_TITLE_STOP_LEVEL, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = TableOfContents.PN_STOP_LEVEL, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    private Integer titleStopLevel;
+    private Integer stopLevel;
 
     private String restrictListType;
-    private String restrictTitleStartLevel;
-    private String restrictTitleStopLevel;
-    private String[] includeClassNames;
-    private String[] ignoreClassNames;
+    private String restrictStartLevel;
+    private String restrictStopLevel;
+    private String[] includeClasses;
+    private String[] ignoreClasses;
 
     @PostConstruct
     private void initModel() {
         restrictListType = currentStyle.get(PN_RESTRICT_LIST_TYPE, String.class);
-        restrictTitleStartLevel = currentStyle.get(PN_RESTRICT_TITLE_START_LEVEL, String.class);
-        restrictTitleStopLevel = currentStyle.get(PN_RESTRICT_TITLE_STOP_LEVEL, String.class);
-        includeClassNames = currentStyle.get(PN_INCLUDE_CLASS_NAMES, String[].class);
-        ignoreClassNames = currentStyle.get(PN_IGNORE_CLASS_NAMES, String[].class);
+        restrictStartLevel = currentStyle.get(PN_RESTRICT_START_LEVEL, String.class);
+        restrictStopLevel = currentStyle.get(PN_RESTRICT_STOP_LEVEL, String.class);
+        includeClasses = currentStyle.get(PN_INCLUDE_CLASSES, String[].class);
+        ignoreClasses = currentStyle.get(PN_IGNORE_CLASSES, String[].class);
         slingHttpServletRequest.setAttribute("contains-table-of-contents", true);
     }
 
@@ -94,30 +94,30 @@ public class TableOfContentsImpl implements TableOfContents {
     }
 
     @Override
-    public Integer getTitleStartLevel() {
-        return (restrictTitleStartLevel == null || NO_RESTRICTION.contentEquals(restrictTitleStartLevel))
-            ? titleStartLevel != null ? titleStartLevel : DEFAULT_TITLE_START_LEVEL
-            : Integer.parseInt(restrictTitleStartLevel);
+    public Integer getStartLevel() {
+        return (restrictStartLevel == null || NO_RESTRICTION.contentEquals(restrictStartLevel))
+            ? startLevel != null ? startLevel : DEFAULT_START_LEVEL
+            : Integer.parseInt(restrictStartLevel);
     }
 
     @Override
-    public Integer getTitleStopLevel() {
-        return (restrictTitleStopLevel == null || NO_RESTRICTION.contentEquals(restrictTitleStopLevel))
-            ? titleStopLevel != null ? titleStopLevel : DEFAULT_TITLE_STOP_LEVEL
-            : Integer.parseInt(restrictTitleStopLevel);
+    public Integer getStopLevel() {
+        return (restrictStopLevel == null || NO_RESTRICTION.contentEquals(restrictStopLevel))
+            ? stopLevel != null ? stopLevel : DEFAULT_STOP_LEVEL
+            : Integer.parseInt(restrictStopLevel);
     }
 
     @Override
-    public String[] getIncludeClassNames() {
-        return includeClassNames != null
-            ? Arrays.copyOf(includeClassNames, includeClassNames.length)
+    public String[] getIncludeClasses() {
+        return includeClasses != null
+            ? Arrays.copyOf(includeClasses, includeClasses.length)
             : null;
     }
 
     @Override
-    public String[] getIgnoreClassNames() {
-        return ignoreClassNames != null
-            ? Arrays.copyOf(ignoreClassNames, ignoreClassNames.length)
+    public String[] getIgnoreClasses() {
+        return ignoreClasses != null
+            ? Arrays.copyOf(ignoreClasses, ignoreClasses.length)
             : null;
     }
 }

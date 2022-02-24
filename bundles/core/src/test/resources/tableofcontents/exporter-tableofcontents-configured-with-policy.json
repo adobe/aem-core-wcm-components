@@ -1,6 +1,6 @@
 {
     "listType":"unordered",
-    "titleStartLevel":2,
-    "titleStopLevel":4,
-    "ignoreClassNames":["toc-ignore-1","toc-ignore-2"]
+    "startLevel":2,
+    "stopLevel":4,
+    "ignoreClasses":["toc-ignore-1","toc-ignore-2"]
 }

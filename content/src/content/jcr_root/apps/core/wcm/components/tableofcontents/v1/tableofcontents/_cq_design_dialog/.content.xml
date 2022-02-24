@@ -41,12 +41,12 @@
                                         value="ordered"/>
                                 </items>
                             </restrictlisttype>
-                            <restricttitlestartlevel
+                            <restrictstartlevel
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                 fieldDescription="Whether the author should be able to choose the minimum title level to report in the table of contents"
                                 fieldLabel="Restrict Title Start Level"
-                                name="./restrictTitleStartLevel">
+                                name="./restrictStartLevel">
                                 <items jcr:primaryType="nt:unstructured">
                                     <norestriction
                                         jcr:primaryType="nt:unstructured"
@@ -77,13 +77,13 @@
                                         text="6"
                                         value="6"/>
                                 </items>
-                            </restricttitlestartlevel>
-                            <restricttitlestoplevel
+                            </restrictstartlevel>
+                            <restrictstoplevel
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                 fieldDescription="Whether the author should be able to choose the maximum title level to report in the table of contents"
                                 fieldLabel="Restrict Title Stop Level"
-                                name="./restrictTitleStopLevel">
+                                name="./restrictStopLevel">
                                 <items jcr:primaryType="nt:unstructured">
                                     <norestriction
                                         jcr:primaryType="nt:unstructured"
@@ -114,8 +114,8 @@
                                         text="1"
                                         value="1"/>
                                 </items>
-                            </restricttitlestoplevel>
-                            <includeclassnames
+                            </restrictstoplevel>
+                            <includeclasses
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                 fieldDescription="If set, only titles with those class names or contained within elements of the indicated class names will be considered"
@@ -123,10 +123,10 @@
                                 <field
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                    name="./includeClassNames"
+                                    name="./includeClasses"
                                     required="{Boolean}true"/>
-                            </includeclassnames>
-                            <ignoreclassnames
+                            </includeclasses>
+                            <ignoreclasses
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                 fieldDescription="If set, titles with those class names or contained within elements of the indicated class names will be ignored"
@@ -134,9 +134,9 @@
                                 <field
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                    name="./ignoreClassNames"
+                                    name="./ignoreClasses"
                                     required="{Boolean}true"/>
-                            </ignoreclassnames>
+                            </ignoreclasses>
                         </items>
                     </settings>
                     <styletab

@@ -29,14 +29,14 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    String PN_TITLE_START_LEVEL = "titleStartLevel";
+    String PN_START_LEVEL = "startLevel";
 
     /**
      * Name of the optional resource property that stores the maximum title level to generate table of contents.
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    String PN_TITLE_STOP_LEVEL = "titleStopLevel";
+    String PN_STOP_LEVEL = "stopLevel";
 
     /**
      * Name of the configuration policy property that controls whether the author should be able to choose the
@@ -52,7 +52,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    String PN_RESTRICT_TITLE_START_LEVEL = "restrictTitleStartLevel";
+    String PN_RESTRICT_START_LEVEL = "restrictStartLevel";
 
     /**
      * Name of the configuration policy property that controls whether the author should be able to choose the
@@ -60,7 +60,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    String PN_RESTRICT_TITLE_STOP_LEVEL = "restrictTitleStopLevel";
+    String PN_RESTRICT_STOP_LEVEL = "restrictStopLevel";
 
     /**
      * Name of the configuration policy property, if set, only titles with those class names or contained within
@@ -68,7 +68,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    String PN_INCLUDE_CLASS_NAMES = "includeClassNames";
+    String PN_INCLUDE_CLASSES = "includeClasses";
 
     /**
      * Name of the configuration policy property, if set, titles with those class names or contained within elements of
@@ -76,7 +76,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    String PN_IGNORE_CLASS_NAMES = "ignoreClassNames";
+    String PN_IGNORE_CLASSES = "ignoreClasses";
 
     /**
      *
@@ -94,7 +94,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    default Integer getTitleStartLevel() {
+    default Integer getStartLevel() {
         return 1;
     }
 
@@ -104,7 +104,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    default Integer getTitleStopLevel() {
+    default Integer getStopLevel() {
         return 6;
     }
 
@@ -114,7 +114,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    default String[] getIncludeClassNames() {
+    default String[] getIncludeClasses() {
         return null;
     }
 
@@ -124,7 +124,7 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    default String[] getIgnoreClassNames() {
+    default String[] getIgnoreClasses() {
         return null;
     }
 }

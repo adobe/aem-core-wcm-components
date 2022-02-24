@@ -55,12 +55,12 @@
                                                     sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
                                                     expression="${cqDesign.restrictListType == null || cqDesign.restrictListType == 'norestriction'}"/>
                                             </listtype>
-                                            <titlestartlevel
+                                            <startlevel
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 fieldDescription="The minimum title level to report in the table of contents"
                                                 fieldLabel="Title Start Level"
-                                                name="./titleStartLevel">
+                                                name="./startLevel">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <one
                                                         jcr:primaryType="nt:unstructured"
@@ -90,14 +90,14 @@
                                                 <granite:rendercondition
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
-                                                    expression="${cqDesign.restrictTitleStartLevel == null || cqDesign.restrictTitleStartLevel == 'norestriction'}"/>
-                                            </titlestartlevel>
-                                            <titlestoplevel
+                                                    expression="${cqDesign.restrictStartLevel == null || cqDesign.restrictStartLevel == 'norestriction'}"/>
+                                            </startlevel>
+                                            <stoplevel
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 fieldDescription="The maximum title level to report in the table of contents"
                                                 fieldLabel="Title Stop Level"
-                                                name="./titleStopLevel">
+                                                name="./stopLevel">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <six
                                                         jcr:primaryType="nt:unstructured"
@@ -127,8 +127,8 @@
                                                 <granite:rendercondition
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
-                                                    expression="${cqDesign.restrictTitleStopLevel == null || cqDesign.restrictTitleStopLevel == 'norestriction'}"/>
-                                            </titlestoplevel>
+                                                    expression="${cqDesign.restrictStopLevel == null || cqDesign.restrictStopLevel == 'norestriction'}"/>
+                                            </stoplevel>
                                             <id
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
