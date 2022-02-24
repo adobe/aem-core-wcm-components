@@ -27,10 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -42,15 +39,12 @@ public class TableOfContentsFilterTest {
 
     private static final String TEST_BASE = "/tableofcontents";
 
-    private static final String TEST_ROOT_PAGE = "/content/toc-page";
-
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
     private TableOfContentsFilter tableOfContentsFilter;
 
     @BeforeEach
     void setUp() throws Exception {
-        context.load().json(TEST_BASE + "/test-content.json", TEST_ROOT_PAGE);
         tableOfContentsFilter = new TableOfContentsFilter();
     }
 
@@ -60,7 +54,29 @@ public class TableOfContentsFilterTest {
      * @throws Exception
      */
     @Test
-    void testDoFilterWithIncludeIgnoreScenarios() throws Exception {
+    void testIncludeIgnoreBehavior() throws Exception {
+        checkFilterResponse(
+            TEST_BASE + "/test-include-ignore-content.html",
+            TEST_BASE + "/exporter-include-ignore-content.html"
+        );
+    }
+
+    /**
+     * Covers all the nesting behavior examples mentioned at
+     * https://github.com/adobe/aem-core-wcm-components/wiki/Table-of-Content-Component#nesting-behavior
+     * @throws Exception
+     */
+    @Test
+    void testNestingBehavior() throws Exception {
+        checkFilterResponse(
+            TEST_BASE + "/test-nesting-content.html",
+            TEST_BASE + "/exporter-nesting-content.html"
+        );
+    }
+
+    private void checkFilterResponse(String htmlContentPagePath, String expectedHtmlContentPagePath)
+        throws Exception {
+
         MockSlingHttpServletRequest request = context.request();
         request.setAttribute("contains-table-of-contents", true);
 
@@ -71,22 +87,19 @@ public class TableOfContentsFilterTest {
         Mockito.when(response.getWriter())
             .thenReturn(new PrintWriter(responseWriter));
 
-        FilterChain filterChain = new FilterChain() {
-            @Override
-            public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse)
-                throws IOException {
-                String testHtmlContent = IOUtils.toString(
-                    ContentLoader.class.getResourceAsStream(TEST_BASE + "/test-content.html"),
-                    StandardCharsets.UTF_8
-                );
-                servletResponse.getWriter()
-                    .write(testHtmlContent);
-                servletResponse.getWriter().flush();
-            }
+        FilterChain filterChain = (servletRequest, servletResponse) -> {
+            String testHtmlContent = IOUtils.toString(
+                ContentLoader.class.getResourceAsStream(htmlContentPagePath),
+                StandardCharsets.UTF_8
+            );
+            servletResponse.getWriter()
+                .write(testHtmlContent);
+            servletResponse.getWriter().flush();
         };
+
         tableOfContentsFilter.doFilter(request, response, filterChain);
         String expectedContent = IOUtils.toString(
-            ContentLoader.class.getResourceAsStream(TEST_BASE + "/exporter-content.html"),
+            ContentLoader.class.getResourceAsStream(expectedHtmlContentPagePath),
             StandardCharsets.UTF_8
         );
         assertEquals(

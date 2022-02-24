@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <title>TOC Include Ignore Behavior Test</title> 
+ </head> 
+ <body> 
+  <!-- TOCs -->
+  <div class="table-of-contents-placeholder"
+   data-list-type="ordered">
+  </div>
+  <div class="table-of-contents-placeholder"
+   data-ignore-class-names="sidebar"> 
+  </div>
+  <div class="table-of-contents-placeholder"
+   data-include-class-names="cmp-title"> 
+  </div>
+  <div class="table-of-contents-placeholder"
+   data-include-class-names="cmp-title,cmp-teaser__title"> 
+  </div>
+  <div class="table-of-contents-placeholder"
+   data-include-class-names="cmp-title"
+   data-ignore-class-names="sidebar"> 
+  </div>
+  <div class="table-of-contents-placeholder"
+   data-include-class-names="cmp-title,cmp-teaser"
+   data-ignore-class-names="sidebar,cmp-teaser__subtitle"> 
+  </div>
+  <div class="table-of-contents-placeholder"
+   data-list-type="ordered"
+   data-include-class-names="cmp-title,main"
+   data-ignore-class-names="cmp-teaser__subtitle"> 
+  </div>
+  
+  <!-- Page Content -->
+  <h1 class="cmp-title">Page title</h1> 
+  <div class="main"> 
+   <div class="cmp-title"> 
+    <h2>Main title</h2> 
+   </div> 
+   <div class="cmp-teaser"> 
+    <h2 class="cmp-teaser__title">Main teaser</h2> 
+    <h3 class="cmp-teaser__subtitle">Main teaser subtitle</h3> 
+   </div> 
+  </div> 
+  <div class="sidebar"> 
+   <div class="cmp-title"> 
+    <h2>Sidebar title</h2> 
+   </div> 
+   <div class="cmp-teaser"> 
+    <h2 class="cmp-teaser__title">Sidebar teaser</h2> 
+    <h3 class="cmp-teaser__subtitle">Sidebar teaser subtitle</h3> 
+   </div> 
+  </div>  
+ </body>
+</html>
