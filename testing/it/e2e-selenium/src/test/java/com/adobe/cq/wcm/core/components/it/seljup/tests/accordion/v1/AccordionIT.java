@@ -49,6 +49,8 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.WebDriverRunner;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.DEFAULT_DELAY;
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.DEFAULT_TIMEOUT;
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_ACCORDION_V1;
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_TEASER_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -92,7 +94,8 @@ public class AccordionIT extends AuthorBaseUITest {
         proxyPath = RT_ACCORDION_V1;
 
         // 6.
-        cmpPath = Commons.addComponent(adminClient, proxyPath,testPage + Commons.relParentCompPath, componentName, null);
+        cmpPath = Commons.addComponentWithRetry(adminClient, proxyPath,testPage + Commons.relParentCompPath, componentName, null,
+                DEFAULT_TIMEOUT, DEFAULT_DELAY, null);
 
         // 7.
         editorPage = new PageEditorPage(testPage);

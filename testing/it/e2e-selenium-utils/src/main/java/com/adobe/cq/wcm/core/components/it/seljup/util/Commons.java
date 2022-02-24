@@ -142,7 +142,8 @@ public class Commons {
     public static String rtFormHidden_v1 = "core/wcm/components/form/hidden/v1/hidden";
     public static String rtFormHidden_v2 = "core/wcm/components/form/hidden/v2/hidden";
 
-
+    public static final long DEFAULT_TIMEOUT = 5000; // 5 seconds
+    public static final long DEFAULT_DELAY = 500; // 0.5 seconds
 
     /**
      * Creates form entity builder
