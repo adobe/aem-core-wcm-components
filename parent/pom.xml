@@ -813,7 +813,7 @@
             <dependency>
                 <groupId>com.adobe.aem</groupId>
                 <artifactId>uber-jar</artifactId>
-                <version>6.4.8.4-1.0</version>
+                <version>6.5.10</version>
                 <scope>provided</scope>
             </dependency>
 
