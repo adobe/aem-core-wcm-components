@@ -123,6 +123,8 @@ public class Commons {
     // content fragment list component
     public static String rtContentFragmentList_v1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
     public static String rtContentFragmentList_v2 = "core/wcm/components/contentfragmentlist/v2/contentfragmentlist";
+    // table of contents component
+    public static String rtTableOfContents_v1 = "core/wcm/components/tableofcontents/v1/tableofcontents";
     // core form container
     public static String rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
     public static String rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
@@ -586,9 +588,16 @@ public class Commons {
     /**
      * Save configuration for component
      */
-
     public static void saveConfigureDialog() throws InterruptedException {
         $(Selectors.SELECTOR_DONE_CONFIG_BUTTON).click();
+        webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+    }
+
+    /**
+     * Close configuration for component
+     */
+    public static void closeConfigureDialog() throws InterruptedException {
+        $(Selectors.SELECTOR_CANCEL_CONFIG_BUTTON).click();
         webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
@@ -602,7 +611,6 @@ public class Commons {
     /**
      * Check if panelselect is present
      */
-
     public static boolean isPanelSelectPresent() {
         return $(Selectors.SELECTOR_PANEL_SELECT).isDisplayed();
     }
