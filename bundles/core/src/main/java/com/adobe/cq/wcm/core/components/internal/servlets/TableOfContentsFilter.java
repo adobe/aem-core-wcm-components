@@ -153,7 +153,8 @@ public class TableOfContentsFilter implements Filter {
 
         List<Element> validElements = new ArrayList<>();
         for(Element element : includeElements) {
-            if(!ignoreElementsSet.contains(element)) {
+            if(!ignoreElementsSet.contains(element)
+                && !"".contentEquals(element.text().trim())) {
                 validElements.add(element);
             }
         }
