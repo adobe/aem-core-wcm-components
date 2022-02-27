@@ -18,11 +18,14 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofconten
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofcontents.TableOfContentsEditDialog;
 
+import static com.codeborne.selenide.Selenide.$;
+
 public class TableOfContents extends BaseComponent {
 
     public static final String COMPONENT_NAME = "Table of Contents (v1)";
 
     private static String tableOfContentsPlaceholder = ".table-of-contents-placeholder";
+    private static String tableOfContents = ".table-of-contents";
 
     public TableOfContents() {
         super("");
@@ -30,5 +33,49 @@ public class TableOfContents extends BaseComponent {
 
     public TableOfContentsEditDialog getEditDialog() {
         return new TableOfContentsEditDialog();
+    }
+
+    public String getListType() {
+        return $(tableOfContentsPlaceholder).attr("data-list-type");
+    }
+
+    public int getStartLevel() {
+        return Integer.parseInt(
+            $(tableOfContentsPlaceholder).attr("data-start-level")
+        );
+    }
+
+    public int getStopLevel() {
+        return Integer.parseInt(
+            $(tableOfContentsPlaceholder).attr("data-stop-level")
+        );
+    }
+
+    public String[] getIncludeClasses() {
+        return $(tableOfContentsPlaceholder).attr("data-include-classes").split(",");
+    }
+
+    public String[] getIgnoreClasses() {
+        return $(tableOfContentsPlaceholder).attr("data-ignore-classes").split(",");
+    }
+
+    public String getId() {
+        return $(tableOfContentsPlaceholder).attr("id");
+    }
+
+    public boolean isTocPlaceholderExists() {
+        return $(tableOfContentsPlaceholder).exists();
+    }
+
+    public boolean isTocPlaceholderVisible() {
+        return $(tableOfContentsPlaceholder).isDisplayed();
+    }
+
+    public boolean isActualTocContentExists() {
+        return $(tableOfContents).exists();
+    }
+
+    public boolean isTextPresentInActualTocContent(String text) {
+        return $(tableOfContents).getText().contains(text);
     }
 }

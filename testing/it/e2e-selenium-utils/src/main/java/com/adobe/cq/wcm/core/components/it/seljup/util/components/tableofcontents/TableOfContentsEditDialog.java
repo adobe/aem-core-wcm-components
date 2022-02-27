@@ -37,15 +37,19 @@ public class TableOfContentsEditDialog extends Dialog {
     private static String listTypeSelect = "[name='./listType']";
     private static String startLevelSelect = "[name='./startLevel']";
     private static String stopLevelSelect = "[name='./stopLevel']";
+    private static String id = "[name='./id']";
 
     private static String[] listTypes = new String[] {
         "unordered",
         "ordered"
     };
-    private static String listTypeSelectItemTemplate = "coral-selectlist-item[value='%s']";
+    private static String listTypeSelectItemTemplate =
+        "coral-popover.is-open coral-selectlist-item[value='%s']";
     private static int minLevel = 1;
     private static int maxLevel = 6;
-    private static String levelSelectItemTemplate = "coral-selectlist-item[value='%d']";
+    private static String levelSelectItemTemplate =
+        "coral-popover.is-open coral-selectlist-item[value='%d']";
+;
 
     public boolean isListTypeSelectPresent() {
         return $(listTypeSelect).isDisplayed();
@@ -87,12 +91,12 @@ public class TableOfContentsEditDialog extends Dialog {
         return isAllLevelsPresent(stopLevelSelect);
     }
 
-    public void selectUnorderedListType() throws InterruptedException {
-        selectItem(listTypeSelect, String.format(listTypeSelectItemTemplate, listTypes[0]));
+    public boolean isIdTextboxPresent() {
+        return $(id).isDisplayed();
     }
 
-    public void selectOrderedListType() throws InterruptedException {
-        selectItem(listTypeSelect, String.format(listTypeSelectItemTemplate, listTypes[1]));
+    public void selectListType(String listType) throws InterruptedException {
+        selectItem(listTypeSelect, String.format(listTypeSelectItemTemplate, listType));
     }
 
     public void selectStartLevel(int startLevel) throws InterruptedException {
@@ -101,6 +105,10 @@ public class TableOfContentsEditDialog extends Dialog {
 
     public void selectStopLevel(int stopLevel) throws InterruptedException {
         selectItem(stopLevelSelect, String.format(levelSelectItemTemplate, stopLevel));
+    }
+
+    public void setId(String id) {
+        $(this.id).setValue(id);
     }
 
     private void openSelectList(String select) throws InterruptedException {
