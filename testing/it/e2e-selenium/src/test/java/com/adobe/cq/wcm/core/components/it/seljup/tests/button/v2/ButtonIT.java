@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.button.v1.ButtonIT {
 
     private void setupResources() {
-        buttonRT = Commons.rtButton_v2;
+        buttonRT = Commons.RT_BUTTON_V2;
         linkPropertyName = "linkURL";
     }
 
@@ -57,8 +57,8 @@ public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.
         String link = "https://www.adobe.com";
         String target = "_blank";
         ButtonEditDialog buttonEditDialog = getButtonEditDialog();
-        buttonEditDialog.setLinkField(link, linkPropertyName);
         buttonEditDialog.clickLinkTarget();
+        buttonEditDialog.setLinkField(link, linkPropertyName);
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");

@@ -103,12 +103,12 @@ public class Commons {
     public static final String RT_IMAGE_V3 = "core-component/components/image-v3";
     public static final String CLIENTLIBS_IMAGE_V3 = "core.wcm.components.image.v3";
     // breadcrumb component
-    public static String RT_BREADCRUMB_V1 = "core-component/components/breadcrumb-v1";
-    public static String RT_BREADCRUMB_V2 = "core-component/components/breadcrumb-v2";
-    public static String RT_BREADCRUMB_V3 = "core-component/components/breadcrumb-v3";
+    public static final String RT_BREADCRUMB_V1 = "core-component/components/breadcrumb-v1";
+    public static final String RT_BREADCRUMB_V2 = "core-component/components/breadcrumb-v2";
+    public static final String RT_BREADCRUMB_V3 = "core-component/components/breadcrumb-v3";
     // button component
-    public static String rtButton_v1 = "core/wcm/components/button/v1/button";
-    public static String rtButton_v2 = "core/wcm/components/button/v2/button";
+    public static final String RT_BUTTON_V1 = "core-component/components/button-v1";
+    public static final String RT_BUTTON_V2 = "core-component/components/button-v2";
     // navigation component
     public static String rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
     public static String rtNavigation_v2 = "core/wcm/components/navigation/v2/navigation";
