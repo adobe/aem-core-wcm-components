@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.NameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.codehaus.jackson.JsonNode;
 import org.json.JSONArray;
@@ -102,6 +103,10 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
     }
 
     public String createComponentPolicy(String componentPath, Map<String, String> properties) throws ClientException {
+        return Commons.createComponentPolicy(adminClient, defaultPageTemplate, label, componentPath, properties);
+    }
+
+    public String createComponentPolicy(String componentPath, List<NameValuePair> properties) throws ClientException {
         return Commons.createComponentPolicy(adminClient, defaultPageTemplate, label, componentPath, properties);
     }
 

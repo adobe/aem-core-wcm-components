@@ -80,7 +80,7 @@ public class Commons {
     public static String template = "/conf/core-components/settings/wcm/templates/core-components";
     // core component resource types
     // accordion component
-    public static String RT_ACCORDION_V1 = "core-component/components/accordion-v1";
+    public static final String RT_ACCORDION_V1 = "core-component/components/accordion-v1";
     // embed component
     public static String rtEmbed_v1 = "core/wcm/components/embed/v1/embed";
     public static String rtEmbed_v2 = "core/wcm/components/embed/v2/embed";
@@ -88,9 +88,12 @@ public class Commons {
     public static String  rtText_v1 = "core/wcm/components/text/v1/text";
     public static String  rtText_v2 = "core/wcm/components/text/v2/text";
     // title component
-    public static String rtTitle_v1 = "core/wcm/components/title/v1/title";
-    public static String rtTitle_v2 = "core/wcm/components/title/v2/title";
-    public static String rtTitle_v3 = "core/wcm/components/title/v3/title";
+    public static final String RT_TITLE_V1 = "core-component/components/title-v1";
+    public static final String CLIENTLIBS_TITLE_V1 = "core.wcm.components.title.v1";
+    public static final String RT_TITLE_V2 = "core-component/components/title-v2";
+    public static final String CLIENTLIBS_TITLE_V2 = "core.wcm.components.title.v2";
+    public static final String RT_TITLE_V3 = "core-component/components/title-v3";
+    public static final String CLIENTLIBS_TITLE_V3 = "core.wcm.components.title.v3";
     // list component
     public static String rtList_v1 = "core/wcm/components/list/v1/list";
     public static String rtList_v2 = "core/wcm/components/list/v2/list";
@@ -146,9 +149,6 @@ public class Commons {
     // hidden field
     public static String rtFormHidden_v1 = "core/wcm/components/form/hidden/v1/hidden";
     public static String rtFormHidden_v2 = "core/wcm/components/form/hidden/v2/hidden";
-
-    public static final long DEFAULT_TIMEOUT = 5000; // 5 seconds
-    public static final long DEFAULT_DELAY = 500; // 0.5 seconds
 
     /**
      * Creates form entity builder
@@ -242,6 +242,27 @@ public class Commons {
         data.put("cq:policy", policyLocation + policySuffix);
         data.put("sling:resourceType", "wcm/core/components/policies/mappings");
         Commons.assignPolicy(adminClient,"", data, policyAssignmentPath);
+
+        return policyPath;
+    }
+
+    public static String createComponentPolicy(CQClient adminClient, String defaultPageTemplate, String siteName, String componentPath, List<NameValuePair> properties) throws ClientException {
+        String randomText= TestContentBuilder.randomSmallText();
+        String policySuffix = componentPath + "/" + randomText;
+        List<NameValuePair> policyProperties = new ArrayList();
+        policyProperties.add(new BasicNameValuePair("jcr:title", randomText + " Policy"));
+        policyProperties.add(new BasicNameValuePair("sling:resourceType", "wcm/core/components/policy/policy"));
+        policyProperties.addAll(properties);
+        String policyRootPath = "/conf/"+ siteName + "/settings/wcm/policies/core-component/components";
+        String policyPath = Commons.createPolicy(adminClient, policySuffix, policyProperties, policyRootPath);
+
+        // add a policy for component
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
+        HashMap<String, String> mappingProperties = new HashMap<>();
+        mappingProperties.put("cq:policy", policyLocation + policySuffix);
+        mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mappings");
+        Commons.assignPolicy(adminClient, componentPath, mappingProperties, policyAssignmentPath, 200, 201);
 
         return policyPath;
     }
@@ -510,6 +531,23 @@ public class Commons {
         } catch (Exception ex) {
             throw new ClientException(" failed to add component " + component + " with error: " + ex, ex);
         }
+    }
+
+    /**
+     * Adds a component to a page with default retry options.
+     *
+     * @param client
+     * @param component
+     * @param parentCompPath
+     * @param nameHint
+     * @return
+     * @throws ClientException
+     */
+    public static String addComponentWithRetry(final CQClient client, final String component, final String parentCompPath, final String nameHint)
+            throws ClientException {
+        return addComponentWithRetry(client, component, parentCompPath, nameHint, null,
+                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+                HttpStatus.SC_OK, HttpStatus.SC_CREATED);
     }
 
     /**
