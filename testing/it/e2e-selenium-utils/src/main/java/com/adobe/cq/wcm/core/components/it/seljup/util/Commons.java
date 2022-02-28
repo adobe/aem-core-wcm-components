@@ -16,21 +16,12 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util;
 
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.InlineEditor;
-import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
-import com.adobe.cq.testing.selenium.utils.ElementUtils;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -42,8 +33,6 @@ import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
-import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import org.apache.sling.testing.clients.util.poller.Polling;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -52,12 +41,23 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InlineEditor;
+import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
+import com.adobe.cq.testing.selenium.utils.ElementUtils;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_SMALL_SIZE;
 import static com.codeborne.selenide.Selenide.$;
@@ -115,8 +115,9 @@ public class Commons {
     public static String rtSearch_v1 = "core/wcm/components/search/v1/search";
     // teaser component
     public static final String RT_TEASER_V1 = "core-component/components/teaser-v1";
-    public static String rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
-    public static String rtTeaser_v2 = "core/wcm/components/teaser/v2/teaser";
+    public static final String CLIENTLIBS_TEASER_V1 = "core.wcm.components.teaser.v1";
+    public static final String RT_TEASER_V2 = "core-component/components/teaser-v2";
+    public static final String CLIENTLIBS_TEASER_V2 = "core.wcm.components.teaser.v2";
     // carousel component
     public static String rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
     // tabs component

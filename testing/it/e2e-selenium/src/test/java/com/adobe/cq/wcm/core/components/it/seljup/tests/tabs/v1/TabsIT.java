@@ -16,21 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.tabs.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
-import com.adobe.cq.testing.selenium.utils.KeyboardShortCuts;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.assertion.EditableToolbarAssertion;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.ChildrenEditor;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.PanelSelector;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.TabsEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.v1.Tabs;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.WebDriverRunner;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -43,8 +31,21 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.testing.selenium.utils.KeyboardShortCuts;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.assertion.EditableToolbarAssertion;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.ChildrenEditor;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.PanelSelector;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.TabsEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.v1.Tabs;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.WebDriverRunner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -438,7 +439,7 @@ public class TabsIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Allowed components")
     public void testAllowedComponents() throws ClientException, InterruptedException, TimeoutException {
-        String teaserProxyPath = Commons.createProxyComponent(adminClient, Commons.rtTeaser_v1, Commons.proxyPath, null, null);
+        String teaserProxyPath = Commons.createProxyComponent(adminClient, Commons.RT_TEASER_V1, Commons.proxyPath, null, null);
         String policySuffix = "/tabs/new_policy";
         HashMap<String, String> data = new HashMap<String, String>();
         data.clear();
