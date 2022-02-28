@@ -97,42 +97,12 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
         return Arrays.asList(GROUPID_CONTENT_AUTHORS, "workflow-users");
     }
 
-    public void createPagePolicy(Map<String, String> policyProperties) throws ClientException {
-        String policySuffix = "/structure/page/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.putAll(policyProperties);
-        String policyPath = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        Commons.createPolicy(adminClient, policySuffix, data , policyPath);
-
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"", data, policyAssignmentPath);
+    public String createPagePolicy(Map<String, String> policyProperties) throws ClientException {
+        return Commons.createPagePolicy(adminClient, defaultPageTemplate, label, policyProperties);
     }
 
     public String createComponentPolicy(String componentPath, Map<String, String> properties) throws ClientException {
-        String randomText= TestContentBuilder.randomSmallText();
-        String policySuffix = componentPath + "/" + randomText;
-        HashMap<String, String> policyProperties = new HashMap<>();
-        policyProperties.put("jcr:title", randomText + " Policy");
-        policyProperties.put("sling:resourceType", "wcm/core/components/policy/policy");
-        policyProperties.putAll(properties);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, policyProperties, policyPath1);
-
-        // add a policy for component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        HashMap<String, String> mappingProperties = new HashMap<>();
-        mappingProperties.put("cq:policy", policyLocation + policySuffix);
-        mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient, componentPath, mappingProperties, policyAssignmentPath, 200, 201);
-
-        return policyPath;
+        return Commons.createComponentPolicy(adminClient, defaultPageTemplate, label, componentPath, properties);
     }
 
     public void deleteComponentPolicy(String componentPath, String policyPath) throws ClientException {

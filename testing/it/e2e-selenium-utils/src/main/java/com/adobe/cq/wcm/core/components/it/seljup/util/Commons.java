@@ -51,6 +51,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InlineEditor;
 import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
 import com.adobe.cq.testing.selenium.utils.ElementUtils;
+import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
 import com.codeborne.selenide.Condition;
@@ -95,9 +96,12 @@ public class Commons {
     public static String rtList_v2 = "core/wcm/components/list/v2/list";
     public static String rtList_v3 = "core/wcm/components/list/v3/list";
     // image component
-    public static String rtImage_v1 = "core/wcm/components/image/v1/image";
-    public static String rtImage_v2 = "core/wcm/components/image/v2/image";
-    public static String rtImage_v3 = "core/wcm/components/image/v3/image";
+    public static final String RT_IMAGE_V1 = "core-component/components/image-v1";
+    public static final String CLIENTLIBS_IMAGE_V1 = "core.wcm.components.image.v1";
+    public static final String RT_IMAGE_V2 = "core-component/components/image-v2";
+    public static final String CLIENTLIBS_IMAGE_V2 = "core.wcm.components.image.v2";
+    public static final String RT_IMAGE_V3 = "core-component/components/image-v3";
+    public static final String CLIENTLIBS_IMAGE_V3 = "core.wcm.components.image.v3";
     // breadcrumb component
     public static String RT_BREADCRUMB_V1 = "core-component/components/breadcrumb-v1";
     public static String RT_BREADCRUMB_V2 = "core-component/components/breadcrumb-v2";
@@ -221,6 +225,46 @@ public class Commons {
         } catch (ClientException ex) {
             throw new ClientException("Policy creation failed for component " + componentPath + "with error : " + ex, ex);
         }
+    }
+
+    public static String createPagePolicy(CQClient adminClient, String defaultPageTemplate, String siteName, Map<String, String> policyProperties) throws ClientException {
+        String policySuffix = "/structure/page/new_policy";
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("jcr:title", "New Policy");
+        data.put("sling:resourceType", "wcm/core/components/policy/policy");
+        data.putAll(policyProperties);
+        String policyRootPath = "/conf/"+ siteName + "/settings/wcm/policies/core-component/components";
+        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyRootPath);
+
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
+        data.clear();
+        data.put("cq:policy", policyLocation + policySuffix);
+        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
+        Commons.assignPolicy(adminClient,"", data, policyAssignmentPath);
+
+        return policyPath;
+    }
+
+    public static String createComponentPolicy(CQClient adminClient, String defaultPageTemplate, String siteName, String componentPath, Map<String, String> properties) throws ClientException {
+        String randomText= TestContentBuilder.randomSmallText();
+        String policySuffix = componentPath + "/" + randomText;
+        HashMap<String, String> policyProperties = new HashMap<>();
+        policyProperties.put("jcr:title", randomText + " Policy");
+        policyProperties.put("sling:resourceType", "wcm/core/components/policy/policy");
+        policyProperties.putAll(properties);
+        String policyRootPath = "/conf/"+ siteName + "/settings/wcm/policies/core-component/components";
+        String policyPath = Commons.createPolicy(adminClient, policySuffix, policyProperties, policyRootPath);
+
+        // add a policy for component
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
+        HashMap<String, String> mappingProperties = new HashMap<>();
+        mappingProperties.put("cq:policy", policyLocation + policySuffix);
+        mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mappings");
+        Commons.assignPolicy(adminClient, componentPath, mappingProperties, policyAssignmentPath, 200, 201);
+
+        return policyPath;
     }
 
     /**
