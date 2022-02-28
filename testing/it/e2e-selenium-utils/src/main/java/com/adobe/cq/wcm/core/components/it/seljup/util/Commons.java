@@ -123,7 +123,7 @@ public class Commons {
     public static final String RT_TEASER_V2 = "core-component/components/teaser-v2";
     public static final String CLIENTLIBS_TEASER_V2 = "core.wcm.components.teaser.v2";
     // carousel component
-    public static String rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
+    public static String RT_CAROUSEL_V1 = "core-component/components/carousel-v1";
     // tabs component
     public static String rtTabs_v1 = "core/wcm/components/tabs/v1/tabs";
     // content fragment component

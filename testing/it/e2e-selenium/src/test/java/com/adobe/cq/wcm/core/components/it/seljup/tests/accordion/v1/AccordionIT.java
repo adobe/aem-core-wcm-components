@@ -62,7 +62,6 @@ public class AccordionIT extends AuthorBaseUITest {
     private static final String clientlibs = "core.wcm.components.accordion.v1";
     private static String componentName = "accordion";
 
-    private String policyPath;
     private String proxyPath;
     private String testPage;
     private Accordion accordion;
