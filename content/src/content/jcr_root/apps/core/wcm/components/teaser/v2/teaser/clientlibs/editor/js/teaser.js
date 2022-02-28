@@ -36,6 +36,9 @@
         if (dialogContent) {
             var $descriptionTextfield = $(descriptionTextfieldSelector);
             if ($descriptionTextfield.length) {
+                if (!$descriptionTextfield[0].hasAttribute("aria-labelledby")) {
+                    associateDescriptionTextFieldWithLabel($descriptionTextfield[0]);
+                }
                 var rteInstance = $descriptionTextfield.data("rteinstance");
                 // wait for the description textfield rich text editor to signal start before initializing.
                 // Ensures that any state adjustments made here will not be overridden.
@@ -130,6 +133,17 @@
                         textField.val(data["jcr:title"]);
                     }
                 });
+            }
+        }
+    }
+
+    function associateDescriptionTextFieldWithLabel(descriptionTextfieldElement) {
+        var richTextContainer = document.querySelector(".cq-RichText.richtext-container");
+        if (richTextContainer) {
+            var richTextContainerParent = richTextContainer.parentNode;
+            var descriptionLabel = richTextContainerParent.querySelector("label.coral-Form-fieldlabel");
+            if (descriptionLabel) {
+                descriptionTextfieldElement.setAttribute("aria-labelledby", descriptionLabel.id);
             }
         }
     }
