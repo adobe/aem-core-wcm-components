@@ -79,8 +79,9 @@ public interface TableOfContents extends Component {
     String PN_IGNORE_CLASSES = "ignoreClasses";
 
     /**
+     * Returns the configured list type taking into account the configuration policy
      *
-     * @return
+     * @return list type, default is 'unordered'
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
@@ -89,8 +90,9 @@ public interface TableOfContents extends Component {
     }
 
     /**
+     * Returns the start level taking into account the configuration policy
      *
-     * @return
+     * @return start level, default is '1'
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
@@ -99,8 +101,9 @@ public interface TableOfContents extends Component {
     }
 
     /**
+     * Returns the stop level taking into account the configuration policy
      *
-     * @return
+     * @return stop level, default is '6'
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
@@ -109,8 +112,9 @@ public interface TableOfContents extends Component {
     }
 
     /**
+     * Returns an array of all include class names set in configuration policy
      *
-     * @return
+     * @return array of include class names, 'null' if not set
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
@@ -119,8 +123,9 @@ public interface TableOfContents extends Component {
     }
 
     /**
+     * Returns an array of all ignore class names set in configuration policy
      *
-     * @return
+     * @return array of ignore class names, 'null' if not set
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
