@@ -31,13 +31,14 @@ import org.junit.jupiter.api.Test;
 
 @Tag("group2")
 public class BreadcrumbIT extends AuthorBaseUITest {
-
+    protected static String breadcrumbClientlib = "/core/wcm/components/breadcrumb/v1/breadcrumb/clientlibs/site.css";
     protected BreadcrumbTests breadcrumbTests;
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         breadcrumbTests = new BreadcrumbTests();
-        breadcrumbTests.setup(adminClient, Commons.rtBreadcrumb_v1, rootPage, defaultPageTemplate, "/core/wcm/components/breadcrumb/v1/breadcrumb/clientlibs/site.css", new BreadcrumbItems());
+        breadcrumbTests.setup(adminClient, Commons.RT_BREADCRUMB_V1, rootPage, defaultPageTemplate,
+            breadcrumbClientlib, new BreadcrumbItems());
     }
 
     @AfterEach

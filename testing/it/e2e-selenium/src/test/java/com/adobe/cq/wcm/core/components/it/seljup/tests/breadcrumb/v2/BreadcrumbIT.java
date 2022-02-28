@@ -29,10 +29,13 @@ import org.junit.jupiter.api.Test;
 @Tag("group2")
 public class BreadcrumbIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.v1.BreadcrumbIT {
 
+    protected static String breadcrumbClientlib = "/core/wcm/components/breadcrumb/v2/breadcrumb/clientlibs/site.css";
+
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         breadcrumbTests = new BreadcrumbTests();
-        breadcrumbTests.setup(adminClient, Commons.rtBreadcrumb_v2, rootPage, defaultPageTemplate, "/core/wcm/components/breadcrumb/v2/breadcrumb/clientlibs/site.css", new BreadcrumbItems());
+        breadcrumbTests.setup(adminClient, Commons.RT_BREADCRUMB_V2, rootPage, defaultPageTemplate,
+            breadcrumbClientlib, new BreadcrumbItems());
     }
 
     @AfterEach

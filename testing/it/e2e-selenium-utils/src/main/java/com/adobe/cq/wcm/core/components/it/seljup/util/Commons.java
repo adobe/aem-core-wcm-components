@@ -99,9 +99,9 @@ public class Commons {
     public static String rtImage_v2 = "core/wcm/components/image/v2/image";
     public static String rtImage_v3 = "core/wcm/components/image/v3/image";
     // breadcrumb component
-    public static String rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
-    public static String rtBreadcrumb_v2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
-    public static String rtBreadcrumb_v3 = "core/wcm/components/breadcrumb/v3/breadcrumb";
+    public static String RT_BREADCRUMB_V1 = "core-component/components/breadcrumb-v1";
+    public static String RT_BREADCRUMB_V2 = "core-component/components/breadcrumb-v2";
+    public static String RT_BREADCRUMB_V3 = "core-component/components/breadcrumb-v3";
     // button component
     public static String rtButton_v1 = "core/wcm/components/button/v1/button";
     public static String rtButton_v2 = "core/wcm/components/button/v2/button";
