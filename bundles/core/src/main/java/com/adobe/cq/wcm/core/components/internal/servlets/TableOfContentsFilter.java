@@ -42,16 +42,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
-import java.util.UUID;
 
-@Component(service = Filter.class,
-    property = {
-        Constants.SERVICE_RANKING + "Integer=999"})
-@SlingServletFilter(scope = {SlingServletFilterScope.REQUEST},
+@Component(
+    service = Filter.class,
+    property = {Constants.SERVICE_RANKING + "Integer=999"}
+)
+@SlingServletFilter(
+    scope = {SlingServletFilterScope.REQUEST},
     pattern = "/content/.*",
     resourceTypes = "cq:Page",
     extensions = {"html"},
-    methods = {"GET"})
+    methods = {"GET"}
+)
 public class TableOfContentsFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TableOfContentsFilter.class);
@@ -84,6 +86,7 @@ public class TableOfContentsFilter implements Filter {
                 Element tableOfContents = getTableOfContents(tocPlaceholderElement);
                 tocPlaceholderElement.empty();
                 tocPlaceholderElement.clearAttributes();
+                tocPlaceholderElement.addClass("table-of-contents");
                 if(tableOfContents != null) {
                     tocPlaceholderElement.appendChild(tableOfContents);
                     WCMMode wcmMode = WCMMode.fromRequest(request);
@@ -146,10 +149,7 @@ public class TableOfContentsFilter implements Filter {
         String ignoreCssSelector = getCssSelectorString(ignoreClasses, startLevel, stopLevel);
         Elements ignoreElements = document.select(ignoreCssSelector);
 
-        Set<Element> ignoreElementsSet = new HashSet<>();
-        for(Element element : ignoreElements) {
-            ignoreElementsSet.add(element);
-        }
+        Set<Element> ignoreElementsSet = new HashSet<>(ignoreElements);
 
         List<Element> validElements = new ArrayList<>();
         for(Element element : includeElements) {
@@ -210,7 +210,7 @@ public class TableOfContentsFilter implements Filter {
      */
     private Element getListItemElement(Element headingElement) {
         String id = headingElement.attr("id");
-        if(id == null || "".contentEquals(id)) {
+        if("".contentEquals(id)) {
             id = headingElement.text()
                 .trim()
                 .toLowerCase()

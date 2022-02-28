@@ -123,7 +123,7 @@ public class TableOfContentsImplTest {
         );
         TableOfContents tableOfContents = getTableOfContentsUnderTest(TOC_CONFIGURED_WITH_POLICY);
         assertEquals(2, (int)tableOfContents.getStartLevel());
-        assertEquals(4, (int)tableOfContents.getStopLevel());
+        assertEquals(stopLevel, tableOfContents.getStopLevel());
         assertEquals(listType, tableOfContents.getListType());
         assertNull(tableOfContents.getIncludeClasses());
         assertArrayEquals(ignoreClasses, tableOfContents.getIgnoreClasses());

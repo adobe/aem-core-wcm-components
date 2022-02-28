@@ -49,8 +49,8 @@ public class TableOfContentsFilterTest {
     }
 
     /**
-     * Covers all the include and ignore scenarios mentioned at
-     * https://github.com/adobe/aem-core-wcm-components/wiki/Table-of-Content-Component#include--ignore-behavior
+     * Covers all the include and ignore scenarios mentioned
+     * <a href="https://github.com/adobe/aem-core-wcm-components/wiki/Table-of-Content-Component#include--ignore-behavior">here</a>
      * @throws Exception
      */
     @Test
@@ -62,8 +62,8 @@ public class TableOfContentsFilterTest {
     }
 
     /**
-     * Covers all the nesting behavior examples mentioned at
-     * https://github.com/adobe/aem-core-wcm-components/wiki/Table-of-Content-Component#nesting-behavior
+     * Covers all the nesting behavior examples mentioned
+     * <a href="https://github.com/adobe/aem-core-wcm-components/wiki/Table-of-Content-Component#nesting-behavior">here</a>
      * @throws Exception
      */
     @Test
