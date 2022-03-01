@@ -85,8 +85,8 @@ public class Commons {
     public static String rtEmbed_v1 = "core/wcm/components/embed/v1/embed";
     public static String rtEmbed_v2 = "core/wcm/components/embed/v2/embed";
     // text component
-    public static String  rtText_v1 = "core/wcm/components/text/v1/text";
-    public static String  rtText_v2 = "core/wcm/components/text/v2/text";
+    public static final String RT_TEXT_V1 = "core-component/components/text-v1";
+    public static final String RT_TEXT_V2 = "core-component/components/text-v2";
     // title component
     public static final String RT_TITLE_V1 = "core-component/components/title-v1";
     public static final String CLIENTLIBS_TITLE_V1 = "core.wcm.components.title.v1";

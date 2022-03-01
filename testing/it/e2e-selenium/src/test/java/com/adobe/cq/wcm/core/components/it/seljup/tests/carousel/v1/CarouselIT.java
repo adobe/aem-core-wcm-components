@@ -48,7 +48,8 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.WebDriverRunner;
 
-import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.*;
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_CAROUSEL_V1;
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_TEASER_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
@@ -82,8 +83,7 @@ public class CarouselIT extends AuthorBaseUITest {
         createPagePolicy(new HashMap<String,String>(){{put("clientlibs",clientlibs); }});
 
         // 3.
-        cmpPath = Commons.addComponentWithRetry(adminClient, RT_CAROUSEL_V1,testPage + Commons.relParentCompPath, componentName, null,
-            DEFAULT_TIMEOUT, DEFAULT_DELAY, null);
+        cmpPath = Commons.addComponentWithRetry(adminClient, RT_CAROUSEL_V1,testPage + Commons.relParentCompPath, componentName);
 
         // 4.
         editorPage = new PageEditorPage(testPage);
@@ -351,8 +351,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
         String testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        String compPath = Commons.addComponentWithRetry(adminClient, RT_CAROUSEL_V1, testPage + Commons.relParentCompPath, "carousel-v1", null,
-            DEFAULT_TIMEOUT, DEFAULT_DELAY, null);
+        String compPath = Commons.addComponentWithRetry(adminClient, RT_CAROUSEL_V1, testPage + Commons.relParentCompPath, "carousel-v1");
 
         // open test page in page editor
         editorPage = new PageEditorPage(testPage);

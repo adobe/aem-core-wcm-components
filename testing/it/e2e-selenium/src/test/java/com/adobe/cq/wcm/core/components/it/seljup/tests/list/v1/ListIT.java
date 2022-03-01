@@ -16,17 +16,11 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.list.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.ListEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.v1.List;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -34,6 +28,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.ListEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.v1.List;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -64,7 +66,7 @@ public class ListIT extends AuthorBaseUITest {
     protected String listRT;
 
     protected void setComponentResources() {
-        textRT = Commons.rtText_v1;
+        textRT = Commons.RT_TEXT_V1;
         listRT = Commons.rtList_v1;
     }
 
@@ -86,7 +88,7 @@ public class ListIT extends AuthorBaseUITest {
         // add page 2
         page2Path = authorClient.createPage("page_2", "page_2", parentPath, defaultPageTemplate).getSlingPath();
         // add a text component
-        String text1Path = Commons.addComponent(adminClient, Commons.rtText_v1, page2Path + Commons.relParentCompPath, "text", null);
+        String text1Path = Commons.addComponent(adminClient, textRT, page2Path + Commons.relParentCompPath, "text", null);
         //set some text in the text component
         data.clear();
         data.put("text", searchValue);
@@ -105,7 +107,7 @@ public class ListIT extends AuthorBaseUITest {
         // create a sub page for page 4
         String page41Path = authorClient.createPage("sub_4_1", "sub_4_1", page4Path, defaultPageTemplate).getSlingPath();
         // add a text component
-        String text2Path = Commons.addComponent(adminClient, Commons.rtText_v1, page41Path + Commons.relParentCompPath, "text", null);
+        String text2Path = Commons.addComponent(adminClient, textRT, page41Path + Commons.relParentCompPath, "text", null);
         //set some text in the text component
         data.clear();
         data.put("text", searchValue);

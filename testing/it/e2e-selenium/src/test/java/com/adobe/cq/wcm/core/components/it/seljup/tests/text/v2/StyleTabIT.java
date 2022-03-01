@@ -41,7 +41,6 @@ public class StyleTabIT extends AuthorBaseUITest {
 
     private static String testValue = "Text styled by Style System.";
 
-    private String proxyPath;
     private String testPage;
     private String compPath;
     private EditorPage editorPage;
@@ -65,22 +64,19 @@ public class StyleTabIT extends AuthorBaseUITest {
     }
 
     private void setup() throws ClientException {
+        String textRT = Commons.RT_TEXT_V2;
         // create the test page, store page path in 'testPagePath'
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtText_v2, Commons.proxyPath, null, null);
-
         // add the core form container component
-        compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "text", null);
+        compPath = Commons.addComponentWithRetry(adminClient, textRT, testPage + Commons.relParentCompPath, "text");
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
 
         // create component policy and add the styles nodes to it
-        String policyPath = createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf('/')), new HashMap<String, String>() {{
-        }});
+        String policyPath = createComponentPolicy(textRT.substring(textRT.lastIndexOf('/')), new HashMap<>());
         addStyleNodesToPolicy(policyPath);
     }
 
@@ -92,11 +88,9 @@ public class StyleTabIT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete the test page we created
-        authorClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+        authorClient.deletePageWithRetry(testPage, true, false,
+                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
                 HttpStatus.SC_OK);
-
-        // delete the proxy component created
-        Commons.deleteProxyComponent(adminClient, proxyPath);
     }
 
     @Test
