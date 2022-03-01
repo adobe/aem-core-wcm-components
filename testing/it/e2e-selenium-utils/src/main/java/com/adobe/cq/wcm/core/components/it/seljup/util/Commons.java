@@ -126,9 +126,9 @@ public class Commons {
     public static final String RT_TEASER_V2 = "core-component/components/teaser-v2";
     public static final String CLIENTLIBS_TEASER_V2 = "core.wcm.components.teaser.v2";
     // carousel component
-    public static String RT_CAROUSEL_V1 = "core-component/components/carousel-v1";
+    public static final String RT_CAROUSEL_V1 = "core-component/components/carousel-v1";
     // tabs component
-    public static String rtTabs_v1 = "core/wcm/components/tabs/v1/tabs";
+    public static final String RT_TABS_V1 = "core-component/components/tabs-v1";
     // content fragment component
     public static String rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
     // content fragment list component
@@ -437,8 +437,10 @@ public class Commons {
      * @param client         CQClient
      * @param proxyCompPath  Mandatory. path to the proxy component to be deleted
      * @throws ClientException
+     *
+     * @deprecated For AEMaaCS testing proxies cannot be created as immutable content must be added via the CM deployment pipeline.
      */
-
+    @Deprecated
     public static void deleteProxyComponent(CQClient client, String proxyCompPath, int... expectedStatus) throws ClientException {
         // mandatory check
         if (proxyPath == null) {
