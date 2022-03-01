@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.it.http;
+package com.adobe.cq.wcm.core.components.it.http.page.v2;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +30,8 @@ import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.junit.assertion.GraniteAssert;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
+import com.adobe.cq.wcm.core.components.it.http.IgnoreOn64;
+import com.adobe.cq.wcm.core.components.it.http.IgnoreOn65;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

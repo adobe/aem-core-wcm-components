@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2022 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2022-02-28T21:41:13.599+01:00"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/core-components/settings/wcm/templates/simple-template-v3"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Simple Page V3"
+        sling:resourceType="core/wcm/components/page/v3/page">
+        <root
+            jcr:lastModified="{Date}2022-02-28T21:16:58.722+01:00"
+            jcr:lastModifiedBy="admin"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="core/wcm/components/container/v1/container">
+            <container
+                jcr:created="{Date}2022-02-28T21:39:47.218+01:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2022-02-28T21:39:55.841+01:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/container/v1/container"
+                layout="responsiveGrid">
+                <title
+                    jcr:created="{Date}2022-02-28T21:41:13.598+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2022-02-28T21:41:13.598+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Basic Title"
+                    sling:resourceType="core/wcm/components/title/v3/title"/>
+            </container>
+        </root>
+    </jcr:content>
+</jcr:root>
