@@ -113,8 +113,8 @@ public class Commons {
     public static final String RT_BUTTON_V1 = "core-component/components/button-v1";
     public static final String RT_BUTTON_V2 = "core-component/components/button-v2";
     // navigation component
-    public static String rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
-    public static String rtNavigation_v2 = "core/wcm/components/navigation/v2/navigation";
+    public static String RT_NAVIGATION_V1 = "core-component/components/navigation-v1";
+    public static String RT_NAVIGATION_V2 = "core-component/components/navigation-v2";
     // language navigation component
     public static String rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
     public static String rtLanguageNavigation_v2 = "core/wcm/components/languagenavigation/v2/languagenavigation";
