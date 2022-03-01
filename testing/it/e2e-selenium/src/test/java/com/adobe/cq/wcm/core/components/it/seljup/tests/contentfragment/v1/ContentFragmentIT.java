@@ -16,6 +16,15 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.contentfragment.v1;
 
+
+import org.apache.http.HttpStatus;
+import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
@@ -24,13 +33,6 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.contentfragmen
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.ElementsCollection;
-import org.apache.http.HttpStatus;
-import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeoutException;
 
