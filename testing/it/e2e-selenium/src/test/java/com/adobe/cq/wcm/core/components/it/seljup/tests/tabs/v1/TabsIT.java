@@ -55,7 +55,7 @@ public class TabsIT extends AuthorBaseUITest {
     private static String pageVar = "tabs_page";
     private static String pageDescription = "tabs page description";
     private static String componentName = "tabs";
-    private static final String clientlibs = "core.wcm.components.tabs.v1";
+    private static final String clientlibs = Commons.CLIENTLIBS_TABS_V1;
 
     private String policyPath;
     private String proxyPath;

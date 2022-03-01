@@ -48,6 +48,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.WebDriverRunner;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.CLIENTLIBS_CAROUSEL_V1;
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_CAROUSEL_V1;
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_TEASER_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -55,7 +56,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag("group2")
 public class CarouselIT extends AuthorBaseUITest {
 
-    private static final String clientlibs = "core.wcm.components.carousel.v1";
+    private static final String clientlibs = CLIENTLIBS_CAROUSEL_V1;
     private static String componentName = "carousel";
 
     protected Carousel carousel;

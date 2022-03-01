@@ -119,7 +119,8 @@ public class Commons {
     public static String rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
     public static String rtLanguageNavigation_v2 = "core/wcm/components/languagenavigation/v2/languagenavigation";
     // search component
-    public static String rtSearch_v1 = "core/wcm/components/search/v1/search";
+    public static final String RT_SEARCH_V1 = "core-component/components/search-v1";
+    public static final String CLIENTLIBS_SEARCH_V1 = "core.wcm.components.search.v1";
     // teaser component
     public static final String RT_TEASER_V1 = "core-component/components/teaser-v1";
     public static final String CLIENTLIBS_TEASER_V1 = "core.wcm.components.teaser.v1";
@@ -127,8 +128,10 @@ public class Commons {
     public static final String CLIENTLIBS_TEASER_V2 = "core.wcm.components.teaser.v2";
     // carousel component
     public static final String RT_CAROUSEL_V1 = "core-component/components/carousel-v1";
+    public static final String CLIENTLIBS_CAROUSEL_V1 = "core.wcm.components.carousel.v1";
     // tabs component
     public static final String RT_TABS_V1 = "core-component/components/tabs-v1";
+    public static final String CLIENTLIBS_TABS_V1 = "core.wcm.components.tabs.v1";
     // content fragment component
     public static String rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
     // content fragment list component
