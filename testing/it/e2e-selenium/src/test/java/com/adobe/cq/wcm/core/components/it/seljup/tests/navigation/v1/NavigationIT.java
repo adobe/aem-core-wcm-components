@@ -16,26 +16,29 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.navigation.v1;
 
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
+import org.apache.http.HttpStatus;
+import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.navigation.NavigationEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.navigation.v1.Navigation;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import org.apache.http.HttpStatus;
-import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.*;
-
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group3")
 public class NavigationIT extends AuthorBaseUITest {
-
-    private String proxyPath;
 
     protected String page1path;
     protected String compPath;
@@ -44,7 +47,7 @@ public class NavigationIT extends AuthorBaseUITest {
     protected String navigationRT;
 
     private void setupResources() {
-        navigationRT = Commons.rtNavigation_v1;
+        navigationRT = Commons.RT_NAVIGATION_V1;
     }
 
     protected void setup() throws ClientException {
@@ -84,11 +87,8 @@ public class NavigationIT extends AuthorBaseUITest {
         data.put("./jcr:content/navTitle", "Page 1.1.3");
         Commons.editNodeProperties(adminClient, page113path, data);
 
-        // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, navigationRT, Commons.proxyPath, null, null);
-
         // add the component to test page
-        compPath = Commons.addComponent(adminClient, proxyPath, page11path + Commons.relParentCompPath, "navigation", null);
+        compPath = Commons.addComponentWithRetry(adminClient, navigationRT, page11path + Commons.relParentCompPath, "navigation");
 
         //open test page in page editor
         editorPage = new PageEditorPage(page11path);
@@ -111,7 +111,6 @@ public class NavigationIT extends AuthorBaseUITest {
      */
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        Commons.deleteProxyComponent(adminClient, proxyPath);
         authorClient.deletePageWithRetry(page1path, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 

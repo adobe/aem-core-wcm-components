@@ -96,9 +96,9 @@ public class Commons {
     public static final String RT_TITLE_V3 = "core-component/components/title-v3";
     public static final String CLIENTLIBS_TITLE_V3 = "core.wcm.components.title.v3";
     // list component
-    public static String rtList_v1 = "core/wcm/components/list/v1/list";
-    public static String rtList_v2 = "core/wcm/components/list/v2/list";
-    public static String rtList_v3 = "core/wcm/components/list/v3/list";
+    public static final String RT_LIST_V1 = "core-component/components/list-v1";
+    public static final String RT_LIST_V2 = "core-component/components/list-v2";
+    public static final String RT_LIST_V3 = "core-component/components/list-v3";
     // image component
     public static final String RT_IMAGE_V1 = "core-component/components/image-v1";
     public static final String CLIENTLIBS_IMAGE_V1 = "core.wcm.components.image.v1";
@@ -114,8 +114,8 @@ public class Commons {
     public static final String RT_BUTTON_V1 = "core-component/components/button-v1";
     public static final String RT_BUTTON_V2 = "core-component/components/button-v2";
     // navigation component
-    public static String rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
-    public static String rtNavigation_v2 = "core/wcm/components/navigation/v2/navigation";
+    public static final String RT_NAVIGATION_V1 = "core-component/components/navigation-v1";
+    public static final String RT_NAVIGATION_V2 = "core-component/components/navigation-v2";
     // language navigation component
     public static String rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
     public static String rtLanguageNavigation_v2 = "core/wcm/components/languagenavigation/v2/languagenavigation";

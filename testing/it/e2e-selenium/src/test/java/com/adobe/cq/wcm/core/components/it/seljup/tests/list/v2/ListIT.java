@@ -27,7 +27,7 @@ public class ListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.lis
 
     protected void setComponentResources() {
         textRT = Commons.RT_TEXT_V2;
-        listRT = Commons.rtList_v2;
+        listRT = Commons.RT_LIST_V2;
     }
 
     @BeforeEach
