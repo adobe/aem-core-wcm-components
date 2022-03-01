@@ -21,12 +21,15 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.CLIENTLIBS_EMBED_V1;
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_EMBED_V2;
+
 @Tag("group3")
 public class EmbedIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.embed.v1.EmbedIT {
 
     private void setupResources() {
-        clientlibs = "core.wcm.components.embed.v1";
-        embedRT = Commons.rtEmbed_v2;
+        clientlibs = CLIENTLIBS_EMBED_V1;
+        embedRT = RT_EMBED_V2;
     }
 
     @BeforeEach

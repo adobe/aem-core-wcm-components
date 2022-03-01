@@ -82,8 +82,9 @@ public class Commons {
     // accordion component
     public static final String RT_ACCORDION_V1 = "core-component/components/accordion-v1";
     // embed component
-    public static String rtEmbed_v1 = "core/wcm/components/embed/v1/embed";
-    public static String rtEmbed_v2 = "core/wcm/components/embed/v2/embed";
+    public static final String RT_EMBED_V1 = "core-component/components/embed-v1";
+    public static final String RT_EMBED_V2 = "core-component/components/embed-v2";
+    public static final String CLIENTLIBS_EMBED_V1 = "core.wcm.components.embed.v1";
     // text component
     public static final String RT_TEXT_V1 = "core-component/components/text-v1";
     public static final String RT_TEXT_V2 = "core-component/components/text-v2";
