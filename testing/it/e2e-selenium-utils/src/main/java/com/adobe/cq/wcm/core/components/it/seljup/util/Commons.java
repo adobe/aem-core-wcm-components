@@ -133,7 +133,7 @@ public class Commons {
     public static final String RT_TABS_V1 = "core-component/components/tabs-v1";
     public static final String CLIENTLIBS_TABS_V1 = "core.wcm.components.tabs.v1";
     // content fragment component
-    public static String rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
+    public static String RT_CONTENTFRAGMENT_V1 = "core-component/components/contentfragment-v1";
     // content fragment list component
     public static String rtContentFragmentList_v1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
     public static String rtContentFragmentList_v2 = "core/wcm/components/contentfragmentlist/v2/contentfragmentlist";

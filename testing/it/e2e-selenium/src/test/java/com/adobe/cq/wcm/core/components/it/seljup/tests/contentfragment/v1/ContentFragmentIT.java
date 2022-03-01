@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeoutException;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_CONTENTFRAGMENT_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
@@ -49,7 +50,6 @@ public class ContentFragmentIT extends AuthorBaseUITest {
     private static String variationName1 = "short";
 
     private String testPage;
-    private String proxyPath;
     private String cmpPath;
     private EditorPage editorPage;
     private ContentFragment contentFragment;
@@ -59,23 +59,19 @@ public class ContentFragmentIT extends AuthorBaseUITest {
         // create the test page, store page path in 'testPagePath'
         testPage = adminClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtContentFragment_v1, Commons.proxyPath, null, null);
-
-        // add the core form container component
-        cmpPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "formtext", null);
-
-        contentFragment = new ContentFragment();
+        // add the content fragment component
+        cmpPath = Commons.addComponentWithRetry(adminClient, RT_CONTENTFRAGMENT_V1,testPage + Commons.relParentCompPath, "contentfragment");
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
+
+        contentFragment = new ContentFragment();
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         adminClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        Commons.deleteProxyComponent(adminClient, proxyPath);
     }
 
     /**
