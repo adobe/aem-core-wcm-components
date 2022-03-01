@@ -117,8 +117,8 @@ public class Commons {
     public static final String RT_NAVIGATION_V1 = "core-component/components/navigation-v1";
     public static final String RT_NAVIGATION_V2 = "core-component/components/navigation-v2";
     // language navigation component
-    public static String rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
-    public static String rtLanguageNavigation_v2 = "core/wcm/components/languagenavigation/v2/languagenavigation";
+    public static final String RT_LANGUAGE_NAVIGATION_V1 = "core-component/components/languagenavigation-v1";
+    public static final String RT_LANGUAGE_NAVIGATION_V2 = "core-component/components/languagenavigation-v2";
     // search component
     public static final String RT_SEARCH_V1 = "core-component/components/search-v1";
     public static final String CLIENTLIBS_SEARCH_V1 = "core.wcm.components.search.v1";

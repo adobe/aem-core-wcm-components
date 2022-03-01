@@ -16,13 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.languagenavigation.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.LanguageNavigationEditConfig;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.v1.LanguageNavigation;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -30,15 +26,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.LanguageNavigationEditConfig;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.v1.LanguageNavigation;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
 public class LanguageNavigationIT extends AuthorBaseUITest {
-
-    private String proxyPath;
 
     protected String siteRoot;
     protected String compPath;
@@ -48,7 +48,7 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
     protected String languageNavigationRT;
 
     private void setupResources() {
-        languageNavigationRT = Commons.rtLanguageNavigation_v1;
+        languageNavigationRT = Commons.RT_LANGUAGE_NAVIGATION_V1;
     }
 
     protected void setup() throws ClientException {
@@ -130,10 +130,7 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
         data.put("./jcr:content/navTitle", "No Structure");
         Commons.editNodeProperties(adminClient, noStructure, data);
 
-        // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, languageNavigationRT, Commons.proxyPath, null, null);
-
-        compPath = Commons.addComponent(adminClient, proxyPath, about1 + Commons.relParentCompPath, "languagenavigation", null);
+        compPath = Commons.addComponentWithRetry(adminClient, languageNavigationRT, about1 + Commons.relParentCompPath, "languagenavigation");
 
         editorPage = new PageEditorPage(about1);
         editorPage.open();
@@ -149,7 +146,6 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        Commons.deleteProxyComponent(adminClient, proxyPath);
         authorClient.deletePageWithRetry(siteRoot, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
