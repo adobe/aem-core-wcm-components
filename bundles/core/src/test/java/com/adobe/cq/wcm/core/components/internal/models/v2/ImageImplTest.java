@@ -58,6 +58,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     private static final String IMAGE38_PATH = PAGE + "/jcr:content/root/image38";
     private static final String IMAGE39_PATH = PAGE + "/jcr:content/root/image39";
     private static final String IMAGE40_PATH = PAGE + "/jcr:content/root/image40";
+    private static final String IMAGE42_PATH = PAGE + "/jcr:content/root/image42";
 
     @BeforeEach
     @Override
@@ -563,5 +564,14 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Image image = getImageUnderTest(IMAGE40_PATH);
         assertTrue(image.isDmImage());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE40_PATH));
+    }
+
+    @Test
+    void testDMWithEncoding() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE42_PATH);
+        assertTrue(image.isDmImage());
+        assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=off", image.getSrc());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
     }
 }
