@@ -46,7 +46,6 @@ public class ListIT extends AuthorBaseUITest {
     private static String tag2 = "joel";
     private static String description = "This is a child page";
 
-    private String proxyPath;
     private String compPath;
     private String parentPath;
     private String testPage;
@@ -67,7 +66,7 @@ public class ListIT extends AuthorBaseUITest {
 
     protected void setComponentResources() {
         textRT = Commons.RT_TEXT_V1;
-        listRT = Commons.rtList_v1;
+        listRT = Commons.RT_LIST_V1;
     }
 
 
@@ -88,7 +87,7 @@ public class ListIT extends AuthorBaseUITest {
         // add page 2
         page2Path = authorClient.createPage("page_2", "page_2", parentPath, defaultPageTemplate).getSlingPath();
         // add a text component
-        String text1Path = Commons.addComponent(adminClient, textRT, page2Path + Commons.relParentCompPath, "text", null);
+        String text1Path = Commons.addComponentWithRetry(adminClient, textRT, page2Path + Commons.relParentCompPath, "text");
         //set some text in the text component
         data.clear();
         data.put("text", searchValue);
@@ -107,7 +106,7 @@ public class ListIT extends AuthorBaseUITest {
         // create a sub page for page 4
         String page41Path = authorClient.createPage("sub_4_1", "sub_4_1", page4Path, defaultPageTemplate).getSlingPath();
         // add a text component
-        String text2Path = Commons.addComponent(adminClient, textRT, page41Path + Commons.relParentCompPath, "text", null);
+        String text2Path = Commons.addComponentWithRetry(adminClient, textRT, page41Path + Commons.relParentCompPath, "text");
         //set some text in the text component
         data.clear();
         data.put("text", searchValue);
@@ -121,11 +120,8 @@ public class ListIT extends AuthorBaseUITest {
         // create the test page containing the list component, store page path in 'testPagePath'
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, listRT, Commons.proxyPath, null, null);
-
         // add the component to test page
-        compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "list", null);
+        compPath = Commons.addComponentWithRetry(adminClient, listRT, testPage + Commons.relParentCompPath, "list");
 
         // open test page in page editor
         editorPage = new PageEditorPage(testPage);
@@ -148,7 +144,6 @@ public class ListIT extends AuthorBaseUITest {
      */
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        Commons.deleteProxyComponent(adminClient, proxyPath);
         authorClient.deletePageWithRetry(parentPath, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         adminClient.deletePath("/content/cq:tags/default/" + tag1Path, HttpStatus.SC_OK);
