@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    Copyright 2018 Adobe. All rights reserved.
+    This file is licensed to you under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License. You may obtain a copy
+    of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software distributed under
+    the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+    OF ANY KIND, either express or implied. See the License for the specific language
+    governing permissions and limitations under the License.
+
+-->
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <profiles>
+        <profile>
+            <id>ossrh</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <releaseRepository-Id>ossrh</releaseRepository-Id>
+                <releaseRepository-URL>https://oss.sonatype.org/service/local/staging/deploy/maven2/</releaseRepository-URL>
+                <snapshotRepository-Id>ossrh</snapshotRepository-Id>
+                <snapshotRepository-URL>https://oss.sonatype.org/content/repositories/snapshots</snapshotRepository-URL>
+                <project.scm.id>github</project.scm.id>
+                <gpg.executable>gpg</gpg.executable>
+                <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
+            </properties>
+        </profile>
+    </profiles>
+
+    <servers>
+        <server>
+            <id>ossrh</id>
+            <username>${env.SONATYPE_USERNAME}</username>
+            <password>${env.SONATYPE_PASSWORD}</password>
+        </server>
+        <server>
+            <id>github</id>
+            <username>${env.X_GITHUB_USERNAME}</username>
+            <password>${env.X_GITHUB_PASSWORD}</password>
+        </server>
+    </servers>
+
+</settings>
