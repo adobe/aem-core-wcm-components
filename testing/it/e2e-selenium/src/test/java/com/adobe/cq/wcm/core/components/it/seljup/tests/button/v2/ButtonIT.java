@@ -26,13 +26,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_BUTTON_V2;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
 public class ButtonIT extends  com.adobe.cq.wcm.core.components.it.seljup.tests.button.v1.ButtonIT {
 
     private void setupResources() {
-        buttonRT = Commons.RT_BUTTON_V2;
+        buttonRT = RT_BUTTON_V2;
         linkPropertyName = "linkURL";
     }
 

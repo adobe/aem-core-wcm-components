@@ -18,11 +18,12 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.v3;
 
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.v2.BreadcrumbItems;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.BreadcrumbTests;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
+
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_BREADCRUMB_V3;
 
 @Tag("group2")
 public class BreadcrumbIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.v2.BreadcrumbIT {
@@ -32,7 +33,7 @@ public class BreadcrumbIT extends com.adobe.cq.wcm.core.components.it.seljup.tes
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         breadcrumbTests = new BreadcrumbTests();
-        breadcrumbTests.setup(adminClient, Commons.RT_BREADCRUMB_V3, rootPage, defaultPageTemplate,
+        breadcrumbTests.setup(adminClient, RT_BREADCRUMB_V3, rootPage, defaultPageTemplate,
             breadcrumbClientlib, new BreadcrumbItems());
     }
 

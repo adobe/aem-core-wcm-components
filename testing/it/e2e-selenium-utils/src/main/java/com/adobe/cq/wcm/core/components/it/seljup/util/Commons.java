@@ -139,20 +139,20 @@ public class Commons {
     public static final String RT_CONTENTFRAGMENTLIST_V1 = "core-component/components/contentfragmentlist-v1";
     public static final String RT_CONTENTFRAGMENTLIST_V2 = "core-component/components/contentfragmentlist-v2";
     // core form container
-    public static String rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
-    public static String rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
+    public static String RT_FORMCONTAINER_V1 = "core-component/components/formcontainer-v1";
+    public static String RT_FORMCONTAINER_V2 = "core-component/components/formcontainer-v2";
     // form button
-    public static String rtFormButton_v1 = "core/wcm/components/form/button/v1/button";
-    public static String rtFormButton_v2 = "core/wcm/components/form/button/v2/button";
+    public static String RT_FORMBUTTON_V1 = "core-component/components/formbutton-v1";
+    public static String RT_FORMBUTTON_V2 = "core-component/components/formbutton-v2";
     // form button
-    public static String rtFormText_v1 = "core/wcm/components/form/text/v1/text";
-    public static String rtFormText_v2 = "core/wcm/components/form/text/v2/text";
+    public static String RT_FORMTEXT_V1 = "core-component/components/formtext-v1";
+    public static String RT_FORMTEXT_V2 = "core-component/components/formtext-v2";
     // form option
-    public static String rtFormOptions_v1 = "core/wcm/components/form/options/v1/options";
-    public static String rtFormOptions_v2 = "core/wcm/components/form/options/v2/options";
+    public static String RT_FORMOPTIONS_V1 = "core-component/components/formoptions-v1";
+    public static String RT_FORMOPTIONS_V2 = "core-component/components/formoptions-v2";
     // hidden field
-    public static String rtFormHidden_v1 = "core/wcm/components/form/hidden/v1/hidden";
-    public static String rtFormHidden_v2 = "core/wcm/components/form/hidden/v2/hidden";
+    public static String RT_FORMHIDDEN_V1 = "core-component/components/formhidden-v1";
+    public static String RT_FORMHIDDEN_V2 = "core-component/components/formhidden-v2";
 
     /**
      * Creates form entity builder

@@ -40,6 +40,7 @@ import org.openqa.selenium.WebDriver;
 
 import javax.servlet.http.HttpServletResponse;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_BUTTON_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
@@ -55,7 +56,7 @@ public class ButtonIT extends AuthorBaseUITest {
     protected String linkPropertyName;
 
     private void setupResources() {
-        buttonRT = Commons.RT_BUTTON_V1;
+        buttonRT = RT_BUTTON_V1;
         linkPropertyName = "link";
     }
 
@@ -63,13 +64,12 @@ public class ButtonIT extends AuthorBaseUITest {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
 
         addPathtoComponentPolicy(responsiveGridPath, buttonRT);
-        cmpPath = Commons.addComponentWithRetry(adminClient, buttonRT,testPage + Commons.relParentCompPath, componentName, null,
-            RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
-            HttpServletResponse.SC_OK, HttpServletResponse.SC_CREATED);
+        cmpPath = Commons.addComponentWithRetry(adminClient, buttonRT,testPage + Commons.relParentCompPath, componentName);
 
         editorPage = new PageEditorPage(testPage);
-        button = new Button();
         editorPage.open();
+
+        button = new Button();
     }
 
     @BeforeEach

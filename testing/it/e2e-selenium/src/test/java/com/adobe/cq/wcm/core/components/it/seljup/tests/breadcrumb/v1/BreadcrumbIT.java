@@ -21,13 +21,14 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.v1.
 import com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.BreadcrumbTests;
 import java.util.concurrent.TimeoutException;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_BREADCRUMB_V1;
 
 @Tag("group2")
 public class BreadcrumbIT extends AuthorBaseUITest {
@@ -37,7 +38,7 @@ public class BreadcrumbIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         breadcrumbTests = new BreadcrumbTests();
-        breadcrumbTests.setup(adminClient, Commons.RT_BREADCRUMB_V1, rootPage, defaultPageTemplate,
+        breadcrumbTests.setup(adminClient, RT_BREADCRUMB_V1, rootPage, defaultPageTemplate,
             breadcrumbClientlib, new BreadcrumbItems());
     }
 
