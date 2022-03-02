@@ -42,6 +42,7 @@ The following JCR properties are used:
 1. `./youtubeVideoId` - defines the YouTube video ID.
 1. `./youtubeWidth` - defines the YouTube video player width.
 1. `./youtubeHeight` - defines the YouTube video player height.
+1. `./youtubeAspectRatio` - defines the YouTube video player aspect ratio.
 1. `./youtubeMute` - the value of the [YouTube mute parameter][yt-parameters].
 1. `./youtubeAutoPlay` - the value of the [YouTube autoplay parameter][yt-parameters]. Be aware that modern browsers restrict the possibilities for autoplay. Further information: [Chrome Autoplay Policy](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes), [Firefox Autoplay Policy](https://support.mozilla.org/en-US/kb/block-autoplay), [MS Edge Autoplay Policy](https://docs.microsoft.com/en-us/microsoft-edge/dev-guide/browser-features/autoplay-policies). In general it is much more likely that autoplay works if combined with `mute`.
 1. `./youtubeLoop` - the value of the [YouTube loop parameter][yt-parameters].

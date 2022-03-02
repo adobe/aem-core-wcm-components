@@ -26,18 +26,70 @@
             fieldLabel="Video ID"
             name="./youtubeVideoId"
             required="{Boolean}true"/>
-        <width
+        <layout
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-            fieldDescription="Width of the YouTube video player."
-            fieldLabel="Width"
-            name="./youtubeWidth"/>
-        <height
+            sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
+            deleteHint="{Boolean}true"
+            fieldLabel="Layout"
+            name="./layout"
+            vertical="{Boolean}false">
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-hook="layoutField"
+                cmp-embed-dialog-edit-showhidetarget="\[data-cmp-youtube-dialog-edit-layout\]"/>
+            <items jcr:primaryType="nt:unstructured">
+                <fixed
+                    jcr:primaryType="nt:unstructured"
+                    checked="{Boolean}true"
+                    text="Fixed"
+                    value="fixed"/>
+                <responsive
+                    jcr:primaryType="nt:unstructured"
+                    text="Responsive"
+                    value="responsive"/>
+            </items>
+        </layout>
+        <fixed
+            granite:class="foundation-toggleable"
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-            fieldDescription="Height of the YouTube video player."
-            fieldLabel="Height"
-            name="./youtubeHeight"/>
+            sling:resourceType="granite/ui/components/coral/foundation/container">
+            <items jcr:primaryType="nt:unstructured">
+                <width
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                    fieldDescription="Width of the YouTube video player."
+                    fieldLabel="Width"
+                    name="./youtubeWidth"/>
+                <height
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                    fieldDescription="Height of the YouTube video player."
+                    fieldLabel="Height"
+                    name="./youtubeHeight"/>
+            </items>
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-type="true"
+                cmp-embed-dialog-edit-showhidetargetvalue="fixed"/>
+        </fixed>
+        <responsive
+            granite:class="foundation-toggleable"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/container">
+            <items jcr:primaryType="nt:unstructured">
+                <aspectRatio
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                    fieldDescription="Aspect ratio of the YouTube video player."
+                    fieldLabel="Aspect ratio"
+                    name="./youtubeAspectRatio"
+                    step="0.0001"/>
+            </items>
+            <granite:data
+                jcr:primaryType="nt:unstructured"
+                cmp-embed-dialog-edit-type="true"
+                cmp-embed-dialog-edit-showhidetargetvalue="responsive"/>
+        </responsive>
         <parameters
             jcr:primaryType="nt:unstructured"
             sling:resourceType="granite/ui/components/coral/foundation/container"

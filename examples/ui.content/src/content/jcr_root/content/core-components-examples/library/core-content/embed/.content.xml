@@ -163,7 +163,7 @@
                         <embed_616254787
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/embed"
-                            embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube/v2/youtube"
+                            embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
                             type="embeddable"
                             youtubeVideoId="f7hbWvHKns0"
                             youtubeAspectRatio="56.25"/>
