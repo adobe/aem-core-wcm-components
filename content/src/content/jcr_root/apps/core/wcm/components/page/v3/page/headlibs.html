@@ -20,8 +20,7 @@
         'cq.authoring.page',
         'cq.wcm.foundation-main',
         'cq.shared'
-        ],
-        async=true}"></sly>
+        ]}"></sly>
     <sly data-sly-include="/libs/cq/cloudserviceconfigs/components/servicelibs/servicelibs.jsp"></sly>
     <sly data-sly-test="${hasCloudconfigSupport}" data-sly-resource="${'cloudconfig-header' @ resourceType='cq/cloudconfig/components/scripttags/header'}"></sly>
     <sly data-sly-test="${clientLibCategoriesJsHead}" data-sly-call="${clientlib.js @ categories=clientLibCategoriesJsHead, async=true}"></sly>
