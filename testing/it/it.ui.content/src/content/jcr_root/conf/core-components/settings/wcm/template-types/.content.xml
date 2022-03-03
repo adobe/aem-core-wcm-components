@@ -18,4 +18,5 @@
     jcr:mixinTypes="[rep:AccessControllable]"
     jcr:primaryType="cq:Page">
     <test-page/>
+    <test-page-v3/>
 </jcr:root>
