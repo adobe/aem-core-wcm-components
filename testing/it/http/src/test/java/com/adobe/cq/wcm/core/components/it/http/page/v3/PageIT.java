@@ -56,6 +56,6 @@ public class PageIT {
     @Test
     public void testHeadJSLibs() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/simple-page/simple-page-v3.html", 200).getContent();
-        GraniteAssert.assertRegExFind(content, "<script src=\"/etc\\.clientlibs/foundation/clientlibs/jquery(\\.[0-9a-z-.]+)?.js\"></script>");
+        GraniteAssert.assertRegExFind(content, "<script src=\"/etc.clientlibs/foundation/clientlibs/jquery.*.js\"></script>");
     }
 }
