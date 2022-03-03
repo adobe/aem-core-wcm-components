@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-Experience Fragment (v2) Work in progress, do not use in production
+Experience Fragment (v2)
 ====
 Experience fragment component written in HTL that renders an experience fragment variation.
 
@@ -45,7 +45,7 @@ those classes are private and should not be used in custom code (e.g. to style t
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_xf\_v2](https://www.adobe.com/go/aem_cmp_xf_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_xf](https://www.adobe.com/go/aem_cmp_library_xf)
 * **Authors**: [Burkhard Pauli](https://github.com/bpauli)

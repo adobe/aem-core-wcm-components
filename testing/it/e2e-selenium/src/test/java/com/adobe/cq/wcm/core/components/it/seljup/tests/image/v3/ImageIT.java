@@ -34,7 +34,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     public void setupBeforeEach() throws ClientException {
         clientlibs = "core.wcm.components.image.v3";
         imageTests = new ImageTests();
-        imageTests.setup(adminClient, label, Commons.rtImage_v3, rootPage, defaultPageTemplate, clientlibs, new Image());
+        imageTests.setup(adminClient, contextPath, label, Commons.rtImage_v3, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
     /**
@@ -193,6 +193,15 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @DisplayName("Test (6.5): set page featured image with linked page")
     public void testPageImageWithLinkedPage65() throws TimeoutException, InterruptedException, ClientException {
         imageTests.testPageImageWithLinkedPage(true);
+    }
+
+    /**
+     * Test: set link with target on image
+     */
+    @Test
+    @DisplayName("Test: set link with target on image")
+    public void testSetLinkWithTarget() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testSetLinkWithTarget();
     }
 
 }

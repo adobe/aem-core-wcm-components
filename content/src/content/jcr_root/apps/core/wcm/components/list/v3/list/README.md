@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-List (v3) Work in progress, do not use in production
+List (v3)
 ====
 List component written in HTL that renders a configurable collection of items or content.
 
@@ -81,6 +81,6 @@ BLOCK cmp-list
 * **Vendor**: Adobe
 * **Version**: v3
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_list\_v3](https://www.adobe.com/go/aem_cmp_list_v3)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_list](https://www.adobe.com/go/aem_cmp_library_list)

@@ -39,29 +39,29 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 
 ### Template Components
 
-1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
-2. [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
-3. [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
-4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v3/page)
+2. [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v2/navigation)
+3. [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v2/languagenavigation)
+4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v3/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 
 ### Page Authoring Components
 
-6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v3/title)
 7. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
-8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
-9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
-10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
-11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
-12. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
+8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v3/image)
+9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v2/button)
+10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v2/teaser)
+11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v3/list)
+12. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v2/download)
 13. [PDF Viewer](content/src/content/jcr_root/apps/core/wcm/components/pdfviewer/v1/pdfviewer)
-14. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
+14. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v2/embed)
 15. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
 16. [Progress Bar](content/src/content/jcr_root/apps/core/wcm/components/progressbar/v1/progressbar)
 17. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
-18. [Experience Fragment](content/src/content/jcr_root/apps/core/wcm/components/experiencefragment/v1/experiencefragment)
+18. [Experience Fragment](content/src/content/jcr_root/apps/core/wcm/components/experiencefragment/v2/experiencefragment)
 19. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
-20. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
+20. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v2/contentfragmentlist)
 
 ### Container Components
 
@@ -90,9 +90,9 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 ### System Requirements
 
-Core Components | AEM as a Cloud Service | AEM 6.5 | AEM 6.4 | Java SE | Maven
-----------------|------------------------|---------|---------|---------|---------
-[2.17.14](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.17.14) | Continual | 6.5.6.0+ (*) | 6.4.8.4+ (*) | 8, 11 | 3.3.9+
+Core Components | AEM as a Cloud Service | AEM 6.5 | Java SE | Maven
+----------------|------------------------|---------|---------|---------
+[2.18.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.18.0) | Continual | 6.5.10.0+ (*) | 8, 11 | 3.3.9+
 
 (*) - Since version 2.11.0 `org.apache.sling.models.impl` version 1.4.12 or higher is required (due to [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
 
@@ -106,7 +106,7 @@ Setup your local development environment for [AEM as a Cloud Service SDK](https:
 
 To compile your own version of the Core Components, you can build and install everything on your running AEM instance by issuing the following command in the top level folder of the project:
 
-    mvn clean install -PautoInstallSinglePackage
+    mvn clean install -PautoInstallPackage
 
 You can also install individual packages/bundles by issuing the following command in the top-level folder of the project:
 
@@ -114,7 +114,7 @@ You can also install individual packages/bundles by issuing the following comman
 
 With AEM as a Cloud Service SDK, use the `cloud` profile as follows to deploy the components into `/libs` instead of `/apps`:
 
-    mvn clean install -PautoInstallSinglePackage,cloud
+    mvn clean install -PautoInstallPackage,cloud
 
 Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install

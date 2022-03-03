@@ -244,6 +244,7 @@
                         <title
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/title"
+                            linkTarget="_blank"
                             linkURL="/content/core-components-examples/library/core-content/title"/>
                     </component>
                     <info

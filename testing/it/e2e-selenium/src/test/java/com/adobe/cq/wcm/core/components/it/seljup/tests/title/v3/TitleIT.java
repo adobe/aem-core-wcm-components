@@ -16,13 +16,46 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.title.v3;
 
+import java.util.concurrent.TimeoutException;
+
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group3")
 public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.title.v2.TitleIT {
+
     public void setupResources() {
         clientlibs = "core.wcm.components.title.v2";
         titleRT = Commons.rtTitle_v3;
     }
+
+    /**
+     * Test: set link and target on title
+     *
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: set link and target on title")
+    public void testSetLinkWithTarget() throws TimeoutException, InterruptedException {
+        Commons.openEditDialog(editorPage, cmpPath);
+        title.getEditDialog().setLinkURL(redirectPage);
+        title.getEditDialog().clickLinkTarget();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        String link = (contextPath != null)? contextPath + redirectPage + ".html": redirectPage + ".html";
+        String target = "_blank";
+        assertTrue(title.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
+    }
+
 }
