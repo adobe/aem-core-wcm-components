@@ -266,7 +266,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>aem-selenium-it-base</artifactId>
-            <version>0.2.24</version>
+            <version>0.2.26</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
