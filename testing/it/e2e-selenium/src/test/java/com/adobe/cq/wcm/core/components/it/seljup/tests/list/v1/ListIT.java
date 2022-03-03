@@ -80,18 +80,18 @@ public class ListIT extends AuthorBaseUITest {
         page1Path = authorClient.createPage("page_1", "page_1", parentPath, defaultPageTemplate).getSlingPath();
         // set tag on the page
         String[] tags = new String[]{tag1};
-        Commons.setTagsToPage(adminClient, page1Path, tags, 200);
+        Commons.setTagsToPage(authorClient, page1Path, tags, 200);
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("jcr:description", description);
-        Commons.editNodeProperties(adminClient, page1Path + "/jcr:content", data);
+        Commons.editNodeProperties(authorClient, page1Path + "/jcr:content", data);
         // add page 2
         page2Path = authorClient.createPage("page_2", "page_2", parentPath, defaultPageTemplate).getSlingPath();
         // add a text component
-        String text1Path = Commons.addComponentWithRetry(adminClient, textRT, page2Path + Commons.relParentCompPath, "text");
+        String text1Path = Commons.addComponentWithRetry(authorClient, textRT, page2Path + Commons.relParentCompPath, "text");
         //set some text in the text component
         data.clear();
         data.put("text", searchValue);
-        Commons.editNodeProperties(adminClient, text1Path, data);
+        Commons.editNodeProperties(authorClient, text1Path, data);
         // create subpage for page 2
         page21Path = authorClient.createPage("sub_2_1", "sub_2_1", page2Path, defaultPageTemplate).getSlingPath();
         // create second sub page for page 2
@@ -100,28 +100,28 @@ public class ListIT extends AuthorBaseUITest {
         page3Path = authorClient.createPage("page_3", "page_3", parentPath, defaultPageTemplate).getSlingPath();
         // set 2 tags on the page
         tags = new String[]{tag1, tag2};
-        Commons.setTagsToPage(adminClient, page3Path, tags, 200);
+        Commons.setTagsToPage(authorClient, page3Path, tags, 200);
         // create page 4
         page4Path = authorClient.createPage("page_4", "page_4", parentPath, defaultPageTemplate).getSlingPath();
         // create a sub page for page 4
         String page41Path = authorClient.createPage("sub_4_1", "sub_4_1", page4Path, defaultPageTemplate).getSlingPath();
         // add a text component
-        String text2Path = Commons.addComponentWithRetry(adminClient, textRT, page41Path + Commons.relParentCompPath, "text");
+        String text2Path = Commons.addComponentWithRetry(authorClient, textRT, page41Path + Commons.relParentCompPath, "text");
         //set some text in the text component
         data.clear();
         data.put("text", searchValue);
-        Commons.editNodeProperties(adminClient, text2Path, data);
+        Commons.editNodeProperties(authorClient, text2Path, data);
         // create page 5
         page5Path = authorClient.createPage("page_5", "page_5", parentPath, defaultPageTemplate).getSlingPath();
         // set tag on the page
         tags = new String[]{tag2};
-        Commons.setTagsToPage(adminClient, page5Path, tags, 200);
+        Commons.setTagsToPage(authorClient, page5Path, tags, 200);
 
         // create the test page containing the list component, store page path in 'testPagePath'
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // add the component to test page
-        compPath = Commons.addComponentWithRetry(adminClient, listRT, testPage + Commons.relParentCompPath, "list");
+        compPath = Commons.addComponentWithRetry(authorClient, listRT, testPage + Commons.relParentCompPath, "list");
 
         // open test page in page editor
         editorPage = new PageEditorPage(testPage);
@@ -443,11 +443,11 @@ public class ListIT extends AuthorBaseUITest {
         // modify page 5
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("jcr:title", "Modified Page 5");
-        Commons.editNodeProperties(adminClient, page5Path + "/jcr:content", data);
+        Commons.editNodeProperties(authorClient, page5Path + "/jcr:content", data);
 
         // modify page 1
         data.put("jcr:title", "Modified Page 1");
-        Commons.editNodeProperties(adminClient, page1Path + "/jcr:content", data);
+        Commons.editNodeProperties(authorClient, page1Path + "/jcr:content", data);
 
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);
@@ -481,11 +481,11 @@ public class ListIT extends AuthorBaseUITest {
         // modify page 3
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("jcr:title", "Modified Page 3");
-        Commons.editNodeProperties(adminClient, page3Path + "/jcr:content", data);
+        Commons.editNodeProperties(authorClient, page3Path + "/jcr:content", data);
 
         // modify page 2
         data.put("jcr:title", "Modified Page 2");
-        Commons.editNodeProperties(adminClient, page2Path + "/jcr:content", data);
+        Commons.editNodeProperties(authorClient, page2Path + "/jcr:content", data);
 
         // open the configuration dialog
         Commons.openEditDialog(editorPage, compPath);

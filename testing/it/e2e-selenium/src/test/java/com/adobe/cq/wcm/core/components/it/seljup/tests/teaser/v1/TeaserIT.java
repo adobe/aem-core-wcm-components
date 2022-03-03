@@ -97,11 +97,11 @@ public class TeaserIT extends AuthorBaseUITest {
         //Update test page description
         java.util.List<NameValuePair> props = new ArrayList();
         props.add(new BasicNameValuePair("jcr:description",pageDescription));
-        Commons.setPageProperties(adminClient, testPage, props, 200, 201);
+        Commons.setPageProperties(authorClient, testPage, props, 200, 201);
 
         createPagePolicy(new HashMap<String, String>() {{put("clientlibs", clientlibs);}});
 
-        cmpPath = Commons.addComponentWithRetry(adminClient, teaserRT,testPage + Commons.relParentCompPath, componentName, null,
+        cmpPath = Commons.addComponentWithRetry(authorClient, teaserRT,testPage + Commons.relParentCompPath, componentName, null,
                 RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
                 HttpServletResponse.SC_OK, HttpServletResponse.SC_CREATED);
 

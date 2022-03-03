@@ -63,7 +63,7 @@ public class FormButtonIT extends AuthorBaseUITest {
 
         addPathtoComponentPolicy(responsiveGridPath, formbuttonRT);
 
-        cmpPath = Commons.addComponentWithRetry(adminClient, formbuttonRT,testPage + Commons.relParentCompPath, componentName);
+        cmpPath = Commons.addComponentWithRetry(authorClient, formbuttonRT,testPage + Commons.relParentCompPath, componentName);
 
         editorPage = new PageEditorPage(testPage);
         editorPage.open();

@@ -69,7 +69,7 @@ public class StyleTabIT extends AuthorBaseUITest {
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // add the core form container component
-        compPath = Commons.addComponentWithRetry(adminClient, textRT, testPage + Commons.relParentCompPath, "text");
+        compPath = Commons.addComponentWithRetry(authorClient, textRT, testPage + Commons.relParentCompPath, "text");
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);

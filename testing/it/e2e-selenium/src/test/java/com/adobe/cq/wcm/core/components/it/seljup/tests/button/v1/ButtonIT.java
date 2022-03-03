@@ -64,7 +64,7 @@ public class ButtonIT extends AuthorBaseUITest {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
 
         addPathtoComponentPolicy(responsiveGridPath, buttonRT);
-        cmpPath = Commons.addComponentWithRetry(adminClient, buttonRT,testPage + Commons.relParentCompPath, componentName);
+        cmpPath = Commons.addComponentWithRetry(authorClient, buttonRT,testPage + Commons.relParentCompPath, componentName);
 
         editorPage = new PageEditorPage(testPage);
         editorPage.open();

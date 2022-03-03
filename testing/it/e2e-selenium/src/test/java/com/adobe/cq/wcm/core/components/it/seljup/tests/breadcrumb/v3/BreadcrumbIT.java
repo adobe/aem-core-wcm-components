@@ -33,13 +33,13 @@ public class BreadcrumbIT extends com.adobe.cq.wcm.core.components.it.seljup.tes
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         breadcrumbTests = new BreadcrumbTests();
-        breadcrumbTests.setup(adminClient, RT_BREADCRUMB_V3, rootPage, defaultPageTemplate,
+        breadcrumbTests.setup(authorClient, RT_BREADCRUMB_V3, rootPage, defaultPageTemplate,
             breadcrumbClientlib, new BreadcrumbItems());
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        breadcrumbTests.cleanup(adminClient);
+        breadcrumbTests.cleanup(authorClient);
     }
 
 }

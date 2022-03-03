@@ -512,7 +512,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
      */
     private void setPageImage(String page, String asset) throws ClientException, InterruptedException {
         // set page resource type to page v3
-        adminClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
+        authorClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
         PropertiesPage pageProperties = new PropertiesPage(page);
         pageProperties.open();
         $("coral-tab[data-foundation-tracking-event*='images']").click();

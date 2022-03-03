@@ -103,7 +103,7 @@ public class SearchIT extends AuthorBaseUITest {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Parent Page 1");
-        Commons.editNodeProperties(adminClient, page1Path, data);
+        Commons.editNodeProperties(authorClient, page1Path, data);
 
         // create 20 pages
         for(int i = 0; i < 20; i++) {
@@ -111,7 +111,7 @@ public class SearchIT extends AuthorBaseUITest {
             data.clear();
             data.put("_charset_", "UTF-8");
             data.put("./jcr:content/jcr:title", "Page " + i);
-            Commons.editNodeProperties(adminClient, pagePath, data);
+            Commons.editNodeProperties(authorClient, pagePath, data);
         }
 
         // level 2
@@ -119,28 +119,28 @@ public class SearchIT extends AuthorBaseUITest {
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Page 1.1");
-        Commons.editNodeProperties(adminClient, page11Path, data);
+        Commons.editNodeProperties(authorClient, page11Path, data);
 
         // level 2 1
         page111Path = authorClient.createPage("page_1_1_1", "page_1_1_1", page11Path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Page 1.1.1");
-        Commons.editNodeProperties(adminClient, page111Path, data);
+        Commons.editNodeProperties(authorClient, page111Path, data);
 
         // level 2 2
         page112Path = authorClient.createPage("page_1_1_2", "page_1_1_2", page11Path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Page 1.1.2");
-        Commons.editNodeProperties(adminClient, page112Path, data);
+        Commons.editNodeProperties(authorClient, page112Path, data);
 
         // level 2 3
         String page113Path = authorClient.createPage("page_1_1_3", "page_1_1_3", page11Path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Page 1.1.3");
-        Commons.editNodeProperties(adminClient, page113Path, data);
+        Commons.editNodeProperties(authorClient, page113Path, data);
 
         // 2.
         createPagePolicy(new HashMap<String, String>() {{
@@ -150,7 +150,7 @@ public class SearchIT extends AuthorBaseUITest {
         proxyPath = Commons.RT_SEARCH_V1;
 
         // add the component to test page
-        compPath = Commons.addComponentWithRetry(adminClient, proxyPath, page11Path + Commons.relParentCompPath, "search");
+        compPath = Commons.addComponentWithRetry(authorClient, proxyPath, page11Path + Commons.relParentCompPath, "search");
 
         // open test page in page editor
         editorPage = new PageEditorPage(page11Path);
@@ -176,7 +176,7 @@ public class SearchIT extends AuthorBaseUITest {
     public void testDefaultConfiguration() throws ClientException, InterruptedException {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
+        assertTrue(pollQuery(authorClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
         search.setInput("Page 1.1.1");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isResultsVisible(), "Results should be displayed");
@@ -258,7 +258,7 @@ public class SearchIT extends AuthorBaseUITest {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
-        assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
+        assertTrue(pollQuery(authorClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
         search.setInput("Page");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isMarkItemsPresent("Page"), "Page should be present in mark item");

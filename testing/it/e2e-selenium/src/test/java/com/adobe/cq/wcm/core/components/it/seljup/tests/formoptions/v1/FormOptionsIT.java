@@ -69,7 +69,7 @@ public class FormOptionsIT extends AuthorBaseUITest {
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // add the core form container component
-        optionPath = Commons.addComponentWithRetry(adminClient, formOptionsRT, testPage + Commons.relParentCompPath, "formoption");
+        optionPath = Commons.addComponentWithRetry(authorClient, formOptionsRT, testPage + Commons.relParentCompPath, "formoption");
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);

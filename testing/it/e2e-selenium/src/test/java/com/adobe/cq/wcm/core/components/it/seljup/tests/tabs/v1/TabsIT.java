@@ -90,7 +90,7 @@ public class TabsIT extends AuthorBaseUITest {
         }});
 
         // 6.
-        cmpPath = Commons.addComponentWithRetry(adminClient, proxyPath, testPage + Commons.relParentCompPath, componentName);
+        cmpPath = Commons.addComponentWithRetry(authorClient, proxyPath, testPage + Commons.relParentCompPath, componentName);
 
         // 7.
         editorPage = new PageEditorPage(testPage);
@@ -179,7 +179,7 @@ public class TabsIT extends AuthorBaseUITest {
     private String addTabsItem(String component, String parentPath,  String itemName) throws ClientException, InterruptedException {
 
         //1.
-        String cmpPath = Commons.addComponentWithRetry(adminClient, component, parentPath + "/", null);
+        String cmpPath = Commons.addComponentWithRetry(authorClient, component, parentPath + "/", null);
 
         //2.
         TabsEditDialog editDialog = tabs.openEditDialog(parentPath);
@@ -423,7 +423,7 @@ public class TabsIT extends AuthorBaseUITest {
 
         String testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        String compPath = Commons.addComponentWithRetry(adminClient, proxyPath, testPage + Commons.relParentCompPath, "tabs");
+        String compPath = Commons.addComponentWithRetry(authorClient, proxyPath, testPage + Commons.relParentCompPath, "tabs");
 
         // open test page in page editor
         editorPage = new PageEditorPage(testPage);

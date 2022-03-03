@@ -64,7 +64,7 @@ public class FormHiddenIT extends AuthorBaseUITest {
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // add the core form container component
-        hiddenPath = Commons.addComponentWithRetry(adminClient, formHiddenRT, testPage + Commons.relParentCompPath, "formhidden");
+        hiddenPath = Commons.addComponentWithRetry(authorClient, formHiddenRT, testPage + Commons.relParentCompPath, "formhidden");
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);

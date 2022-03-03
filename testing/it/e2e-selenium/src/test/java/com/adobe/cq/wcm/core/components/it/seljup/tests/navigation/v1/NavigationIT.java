@@ -56,7 +56,7 @@ public class NavigationIT extends AuthorBaseUITest {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "Page 1");
-        Commons.editNodeProperties(adminClient, page1path, data);
+        Commons.editNodeProperties(authorClient, page1path, data);
 
         // level 2
         String page11path = authorClient.createPage("page_1_1", "page_1_1", page1path, defaultPageTemplate).getSlingPath();
@@ -64,31 +64,31 @@ public class NavigationIT extends AuthorBaseUITest {
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "Page 1.1");
         data.put("./jcr:content/sling:vanityPath", "/page_1_1_vanity");
-        Commons.editNodeProperties(adminClient, page11path, data);
+        Commons.editNodeProperties(authorClient, page11path, data);
 
         // level 2 1
         String page111path = authorClient.createPage("page_1_1_1", "page_1_1_1", page11path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "Page 1.1.1");
-        Commons.editNodeProperties(adminClient, page111path, data);
+        Commons.editNodeProperties(authorClient, page111path, data);
 
         // level 2 2
         String page112path = authorClient.createPage("page_1_1_2", "page_1_1_2", page11path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/hideInNav", "true");
-        Commons.editNodeProperties(adminClient, page112path, data);
+        Commons.editNodeProperties(authorClient, page112path, data);
 
         // level 2 3
         String page113path = authorClient.createPage("page_1_1_3", "page_1_1_3", page11path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "Page 1.1.3");
-        Commons.editNodeProperties(adminClient, page113path, data);
+        Commons.editNodeProperties(authorClient, page113path, data);
 
         // add the component to test page
-        compPath = Commons.addComponentWithRetry(adminClient, navigationRT, page11path + Commons.relParentCompPath, "navigation");
+        compPath = Commons.addComponentWithRetry(authorClient, navigationRT, page11path + Commons.relParentCompPath, "navigation");
 
         //open test page in page editor
         editorPage = new PageEditorPage(page11path);

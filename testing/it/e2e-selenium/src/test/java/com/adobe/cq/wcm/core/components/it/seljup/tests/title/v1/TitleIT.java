@@ -66,7 +66,7 @@ public class TitleIT extends AuthorBaseUITest {
         }});
 
         // 5.
-        cmpPath = Commons.addComponentWithRetry(adminClient, titleRT, testPage + Commons.relParentCompPath, componentName);
+        cmpPath = Commons.addComponentWithRetry(authorClient, titleRT, testPage + Commons.relParentCompPath, componentName);
 
         // 6.
         editorPage = new PageEditorPage(testPage);

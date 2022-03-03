@@ -39,12 +39,12 @@ public class ImageIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         imageTests = new ImageTests();
-        imageTests.setup(adminClient, contextPath, label, Commons.RT_IMAGE_V2, rootPage, defaultPageTemplate, clientlibs, new Image());
+        imageTests.setup(authorClient, contextPath, label, Commons.RT_IMAGE_V2, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        imageTests.cleanup(adminClient);
+        imageTests.cleanup(authorClient);
     }
 
     /**
@@ -102,7 +102,7 @@ public class ImageIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Check image map areas are rendered, navigate correctly and are responsively adjusted on window resize")
     public void testCheckMapAreaNavigationAndResponsiveResize() throws ClientException, TimeoutException, InterruptedException {
-        imageTests.testCheckMapAreaNavigationAndResponsiveResize(adminClient);
+        imageTests.testCheckMapAreaNavigationAndResponsiveResize(authorClient);
     }
 
 }

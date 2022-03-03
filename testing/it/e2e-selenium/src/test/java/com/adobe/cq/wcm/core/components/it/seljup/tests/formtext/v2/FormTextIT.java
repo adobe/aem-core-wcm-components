@@ -31,12 +31,12 @@ public class FormTextIT extends com.adobe.cq.wcm.core.components.it.seljup.tests
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         formTextTests = new FormTextTests();
-        formTextTests.setup(adminClient, RT_FORMTEXT_V2, rootPage, defaultPageTemplate, new FormText());
+        formTextTests.setup(authorClient, RT_FORMTEXT_V2, rootPage, defaultPageTemplate, new FormText());
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        formTextTests.cleanup(adminClient);
+        formTextTests.cleanup(authorClient);
     }
 
 }

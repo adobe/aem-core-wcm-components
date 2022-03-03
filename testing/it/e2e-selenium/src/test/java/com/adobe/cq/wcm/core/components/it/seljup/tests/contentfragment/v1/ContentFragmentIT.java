@@ -59,10 +59,10 @@ public class ContentFragmentIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         // create the test page, store page path in 'testPagePath'
-        testPage = adminClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
+        testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // add the content fragment component
-        cmpPath = Commons.addComponentWithRetry(adminClient, RT_CONTENTFRAGMENT_V1,testPage + Commons.relParentCompPath, "contentfragment");
+        cmpPath = Commons.addComponentWithRetry(authorClient, RT_CONTENTFRAGMENT_V1,testPage + Commons.relParentCompPath, "contentfragment");
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
@@ -73,7 +73,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        adminClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**

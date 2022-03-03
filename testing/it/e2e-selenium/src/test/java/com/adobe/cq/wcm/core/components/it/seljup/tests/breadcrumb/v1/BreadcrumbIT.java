@@ -38,13 +38,13 @@ public class BreadcrumbIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         breadcrumbTests = new BreadcrumbTests();
-        breadcrumbTests.setup(adminClient, RT_BREADCRUMB_V1, rootPage, defaultPageTemplate,
+        breadcrumbTests.setup(authorClient, RT_BREADCRUMB_V1, rootPage, defaultPageTemplate,
             breadcrumbClientlib, new BreadcrumbItems());
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        breadcrumbTests.cleanup(adminClient);
+        breadcrumbTests.cleanup(authorClient);
     }
 
     /**
@@ -62,7 +62,7 @@ public class BreadcrumbIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Set the Show Hidden flag")
     public void testShowHidden() throws InterruptedException, ClientException, TimeoutException {
-        breadcrumbTests.testShowHidden(adminClient);
+        breadcrumbTests.testShowHidden(authorClient);
     }
 
     /**

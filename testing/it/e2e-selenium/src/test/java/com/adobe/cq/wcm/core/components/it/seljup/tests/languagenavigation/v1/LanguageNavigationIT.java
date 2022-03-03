@@ -57,21 +57,21 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "Site Root");
-        Commons.editNodeProperties(adminClient, siteRoot, data);
+        Commons.editNodeProperties(authorClient, siteRoot, data);
 
         // 1
         String locale1 = authorClient.createPage("LOCALE_1", "LOCALE_1", siteRoot, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 1");
-        Commons.editNodeProperties(adminClient, locale1, data);
+        Commons.editNodeProperties(authorClient, locale1, data);
 
         // 1.1
         String locale31 = authorClient.createPage("LOCALE_3", "LOCALE_3", locale1, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 3 1");
-        Commons.editNodeProperties(adminClient, locale31, data);
+        Commons.editNodeProperties(authorClient, locale31, data);
 
         // 1.2
         String locale4 = authorClient.createPage("LOCALE_4", "LOCALE_4", locale1, defaultPageTemplate).getSlingPath();
@@ -79,58 +79,58 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 4");
         data.put("./jcr:content/sling:vanityPath", "/LOCALE_4_vanity");
-        Commons.editNodeProperties(adminClient, locale4, data);
+        Commons.editNodeProperties(authorClient, locale4, data);
 
         // 1.1.1
         String about1 = authorClient.createPage("about", "about", locale31, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "About Us");
-        Commons.editNodeProperties(adminClient, about1, data);
+        Commons.editNodeProperties(authorClient, about1, data);
 
         // 2
         String locale2 = authorClient.createPage("LOCALE_2", "LOCALE_2", siteRoot, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 2");
-        Commons.editNodeProperties(adminClient, locale2, data);
+        Commons.editNodeProperties(authorClient, locale2, data);
 
         // 2.1
         String locale32 = authorClient.createPage("LOCALE_3", "LOCALE_3", locale2, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 3 2");
-        Commons.editNodeProperties(adminClient, locale32, data);
+        Commons.editNodeProperties(authorClient, locale32, data);
 
         // 2.2
         String locale5 = authorClient.createPage("LOCALE_5", "LOCALE_5", locale2, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 5");
-        Commons.editNodeProperties(adminClient, locale5, data);
+        Commons.editNodeProperties(authorClient, locale5, data);
 
         // 2.2.1
         String about2 = authorClient.createPage("about", "about", locale32, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "About Us");
-        Commons.editNodeProperties(adminClient, about2, data);
+        Commons.editNodeProperties(authorClient, about2, data);
 
         // 3
         String hideInNav = authorClient.createPage("hideInNav", "hideInNav", siteRoot, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/hideInNav", "true");
-        Commons.editNodeProperties(adminClient, hideInNav, data);
+        Commons.editNodeProperties(authorClient, hideInNav, data);
 
         // no structure
         noStructure = authorClient.createPage("no_structure", "no_structure", rootPage, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "No Structure");
-        Commons.editNodeProperties(adminClient, noStructure, data);
+        Commons.editNodeProperties(authorClient, noStructure, data);
 
-        compPath = Commons.addComponentWithRetry(adminClient, languageNavigationRT, about1 + Commons.relParentCompPath, "languagenavigation");
+        compPath = Commons.addComponentWithRetry(authorClient, languageNavigationRT, about1 + Commons.relParentCompPath, "languagenavigation");
 
         editorPage = new PageEditorPage(about1);
         editorPage.open();

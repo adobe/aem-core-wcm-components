@@ -73,25 +73,25 @@ public class FormContainerIT extends AuthorBaseUITest {
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // add the core form container component
-        containerPath = Commons.addComponentWithRetry(adminClient, formContainerRT,testPage + Commons.relParentCompPath, "container");
+        containerPath = Commons.addComponentWithRetry(authorClient, formContainerRT,testPage + Commons.relParentCompPath, "container");
 
         // inside the form add a form text input field
-        String inputPath = Commons.addComponentWithRetry(adminClient, formTextRT,containerPath + "/", "text");
+        String inputPath = Commons.addComponentWithRetry(authorClient, formTextRT,containerPath + "/", "text");
 
         // set name and default value for the input field
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("name", "inputName");
         data.put("defaultValue", "inputValue");
-        Commons.editNodeProperties(adminClient, inputPath, data);
+        Commons.editNodeProperties(authorClient, inputPath, data);
 
         // add a button to the form
-        String buttonPath = Commons.addComponentWithRetry(adminClient, formButtonRT,containerPath + "/", "button");
+        String buttonPath = Commons.addComponentWithRetry(authorClient, formButtonRT,containerPath + "/", "button");
 
         // create an option list items
         data.clear();
         data.put("type", "submit");
         data.put("title", "submit");
-        Commons.editNodeProperties(adminClient, buttonPath, data);
+        Commons.editNodeProperties(authorClient, buttonPath, data);
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
@@ -131,7 +131,7 @@ public class FormContainerIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
 
-        JsonNode json_allForm = adminClient.doGetJson(contentJsonUrl_allForm, 1, HttpStatus.SC_OK);
+        JsonNode json_allForm = authorClient.doGetJson(contentJsonUrl_allForm, 1, HttpStatus.SC_OK);
         Iterator<JsonNode> itr = json_allForm.getElements();
         Boolean present = false;
         while(itr.hasNext()) {
@@ -159,7 +159,7 @@ public class FormContainerIT extends AuthorBaseUITest {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
-        JsonNode formContentJson = adminClient.doGetJson(actionInputValue , 1, HttpStatus.SC_OK);
+        JsonNode formContentJson = authorClient.doGetJson(actionInputValue , 1, HttpStatus.SC_OK);
         assertTrue(formContentJson.get("inputName").toString().equals("\"inputValue\""),"inputName field should be saved as inputValue");
     }
 
@@ -191,7 +191,7 @@ public class FormContainerIT extends AuthorBaseUITest {
         FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
         dialog.setMailActionFields(from,subject,new String[] {mailto1,mailto2}, new String[] {cc1, cc2});
         Commons.saveConfigureDialog();
-        JsonNode formContentJson = adminClient.doGetJson(containerPath , 1, HttpStatus.SC_OK);
+        JsonNode formContentJson = authorClient.doGetJson(containerPath , 1, HttpStatus.SC_OK);
         assertTrue(formContentJson.get("from").toString().equals("\""+from+"\""));
         assertTrue(formContentJson.get("subject").toString().equals("\""+subject+"\""));
         assertTrue(formContentJson.get("mailto").get(0).toString().equals("\""+mailto1+"\""));

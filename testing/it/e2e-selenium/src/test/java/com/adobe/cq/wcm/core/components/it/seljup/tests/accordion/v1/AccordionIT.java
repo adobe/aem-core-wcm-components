@@ -91,7 +91,7 @@ public class AccordionIT extends AuthorBaseUITest {
         proxyPath = RT_ACCORDION_V1;
 
         // 6.
-        cmpPath = Commons.addComponentWithRetry(adminClient, proxyPath,testPage + Commons.relParentCompPath, componentName);
+        cmpPath = Commons.addComponentWithRetry(authorClient, proxyPath,testPage + Commons.relParentCompPath, componentName);
 
         // 7.
         editorPage = new PageEditorPage(testPage);
@@ -236,7 +236,7 @@ public class AccordionIT extends AuthorBaseUITest {
     private String addAccordionItem(String component, String parentPath,  String itemName) throws ClientException, InterruptedException {
 
         //1.
-        String cmpPath = Commons.addComponent(adminClient, component, parentPath + "/", null, null);
+        String cmpPath = Commons.addComponentWithRetry(authorClient, component, parentPath + "/", null);
 
         //2.
         AccordionEditDialog editDialog = accordion.openEditDialog(parentPath);
@@ -684,7 +684,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
         String testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        String compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "accordion-v1", null);
+        String compPath = Commons.addComponentWithRetry(authorClient, proxyPath, testPage + Commons.relParentCompPath, "accordion-v1");
 
         // open test page in page editor
         editorPage = new PageEditorPage(testPage);

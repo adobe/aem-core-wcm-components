@@ -60,7 +60,7 @@ public class TextIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.tex
         Commons.switchContext("ContentFrame");
         assertTrue(text.isTextRenderedWithXSSProtection(textXSSProtectedHTL), "Text should have been rendered");
 
-        JsonNode formContentJson = adminClient.doGetJson(compPath , 1, HttpStatus.SC_OK);
+        JsonNode formContentJson = authorClient.doGetJson(compPath , 1, HttpStatus.SC_OK);
         assertTrue(formContentJson.get("text").toString().trim().equals("\"" + textXSSProtectedRTE + "\""), "The text should be rendered with XSS protection");
     }
 

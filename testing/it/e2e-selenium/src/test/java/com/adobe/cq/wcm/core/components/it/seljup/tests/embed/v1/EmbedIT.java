@@ -79,7 +79,7 @@ public class EmbedIT extends AuthorBaseUITest {
         }});
 
         // 3.
-        cmpPath = Commons.addComponentWithRetry(adminClient, embedRT,testPage + Commons.relParentCompPath, componentName);
+        cmpPath = Commons.addComponentWithRetry(authorClient, embedRT,testPage + Commons.relParentCompPath, componentName);
 
         // 4.
         editorPage = new PageEditorPage(testPage);

@@ -84,7 +84,7 @@ public class CarouselIT extends AuthorBaseUITest {
         createPagePolicy(new HashMap<String,String>(){{put("clientlibs",clientlibs); }});
 
         // 3.
-        cmpPath = Commons.addComponentWithRetry(adminClient, RT_CAROUSEL_V1,testPage + Commons.relParentCompPath, componentName);
+        cmpPath = Commons.addComponentWithRetry(authorClient, RT_CAROUSEL_V1,testPage + Commons.relParentCompPath, componentName);
 
         // 4.
         editorPage = new PageEditorPage(testPage);
@@ -352,7 +352,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
         String testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        String compPath = Commons.addComponentWithRetry(adminClient, RT_CAROUSEL_V1, testPage + Commons.relParentCompPath, "carousel-v1");
+        String compPath = Commons.addComponentWithRetry(authorClient, RT_CAROUSEL_V1, testPage + Commons.relParentCompPath, "carousel-v1");
 
         // open test page in page editor
         editorPage = new PageEditorPage(testPage);
