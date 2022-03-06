@@ -109,7 +109,7 @@
     function setVisibilityAndHandleFieldValidation($element, show) {
         if (show) {
             $element.removeClass("hide");
-             $element.find("[aria-required=false],[required]").filter(":not(.hide>*)").each(function(index, field) {
+             $element.find("[aria-required=false]").filter(":not(.hide>*)").each(function(index, field) {
                 toggleValidation($(field));        
             });
         } else {
