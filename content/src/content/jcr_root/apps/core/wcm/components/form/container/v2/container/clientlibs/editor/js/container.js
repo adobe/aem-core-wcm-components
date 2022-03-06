@@ -109,16 +109,20 @@
     function setVisibilityAndHandleFieldValidation($element, show) {
         if (show) {
             $element.removeClass("hide");
-            $element.find("input[aria-required=false], coral-multifield[aria-required=false]").
-                filter(":not(.hide>input)").filter(":not(input.hide)").
-                filter(":not(.hide>coral-multifield)").filter(":not(input.coral-multifield)").each(function(index, field) {
-                    toggleValidation($(field));
+
+            if($element.hasClass("action-type-dialog")){
+                $element.find("[aria-required=false]").filter(":not(.hide>*)").each(function(index, field) {
+                    toggleValidation($(field));        
                 });
+            }
         } else {
             $element.addClass("hide");
-            $element.find("input[aria-required=true], coral-multifield[aria-required=true]").each(function(index, field) {
-                toggleValidation($(field));
-            });
+
+            if($element.hasClass("action-type-dialog")){
+                $element.find("[aria-required=true],[required]").each(function(index, field) {
+                   toggleValidation($(field));
+                });
+            }
         }
     }
 
@@ -129,11 +133,13 @@
      */
     function toggleValidation($field) {
         var notRequired = false;
-        if ($field.attr("aria-required") === "true") {
+         if ($field.attr("aria-required") === "true" || $field.attr("required") === "required") {
             notRequired = true;
             $field.attr("aria-required", "false");
+            $field.removeAttr("required");
         } else if ($field.attr("aria-required") === "false") {
             $field.attr("aria-required", "true");
+            $field.attr("required", "required");
         }
         var api = $field.adaptTo("foundation-validation");
         if (api) {
