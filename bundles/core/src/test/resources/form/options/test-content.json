@@ -15,6 +15,8 @@
         "name"              : "local-name",
         "jcr:title"         : "local-title",
         "helpMessage"       : "local-helpMessage",
+        "required"          : true,
+        "requiredMessage"   : "Required",
         "type"              : "checkbox",
         "jcr:lastModified"  : "Wed Nov 09 2016 14:50:06 GMT+0100",
         "sling:resourceType": "core/wcm/components/form/options",
@@ -25,15 +27,15 @@
                 "jcr:primaryType": "nt:unstructured",
                 "text"           : "local-item1-name",
                 "value"          : "local-item1-value",
-                "selected"       : "true",
-                "disabled"       : "false"
+                "selected"       :  true,
+                "disabled"       :  false
             },
             "item1"          : {
                 "jcr:primaryType": "nt:unstructured",
                 "text"           : "local-item2-name",
                 "value"          : "local-item2-value",
-                "selected"       : "false",
-                "disabled"       : "true"
+                "selected"       : false,
+                "disabled"       : true
             }
         }
     },
@@ -46,15 +48,15 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "text"              : "datasource-item1-name",
                     "value"             : "datasource-item1-value",
-                    "selected"          : "true",
-                    "disabled"          : "false"
+                    "selected"          : true,
+                    "disabled"          : false
                 },
                 "item2": {
                     "jcr:primaryType"   : "nt:unstructured",
                     "text"              : "datasource-item2-name",
                     "value"             : "datasource-item2-value",
-                    "selected"          : "false",
-                    "disabled"          : "true"
+                    "selected"          : false,
+                    "disabled"          : true
                 }
             }
         }
@@ -78,15 +80,15 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "text"              : "list-item1-name",
                     "value"             : "list-item1-value",
-                    "selected"          : "true",
-                    "disabled"          : "false"
+                    "selected"          : true,
+                    "disabled"          : false
                 },
                 "item2": {
                     "jcr:primaryType"   : "nt:unstructured",
                     "text"              : "list-item2-name",
                     "value"             : "list-item2-value",
-                    "selected"          : "false",
-                    "disabled"          : "true"
+                    "selected"          : false,
+                    "disabled"          : true
                 }
             }
         }
@@ -110,6 +112,8 @@
         "jcr:title"           : "jcr:title1",
         "helpMessage"       : "helpMessage1",
         "type"              : "checkbox",
+        "required"          : true,
+        "requiredMessage"   : "Required",
         "jcr:lastModified"  : "Wed Nov 09 2016 14:50:06 GMT+0100",
         "sling:resourceType": "core/wcm/components/form/options",
         "items"       : {
@@ -118,19 +122,22 @@
                 "jcr:primaryType": "nt:unstructured",
                 "text"           : "t1",
                 "value"          : "v1",
-                "selected"       : "true",
-                "disabled"       : "true"
+                "selected"       : true,
+                "disabled"       : true
             },
             "item1"          : {
                 "jcr:primaryType": "nt:unstructured",
                 "text"           : "t2",
                 "value"          : "v2",
-                "selected"       : "true"
+                "disabled"       : false,
+                "selected"       : true
             },
             "item2"          : {
                 "jcr:primaryType": "nt:unstructured",
                 "text"           : "t3",
-                "value"          : "v3"
+                "value"          : "v3",
+                "disabled"       : false,
+                "selected"       : false
             }
         }
     },
@@ -143,6 +150,8 @@
         "jcr:title": "jcr:title1",
         "helpMessage" : "helpMessage1",
         "type" : "drop-down",
+        "required"          : true,
+        "requiredMessage"   : "Required",
         "jcr:lastModified": "Wed Nov 09 2016 14:50:06 GMT+0100",
         "sling:resourceType": "core/wcm/components/form/options",
         "items": {
@@ -151,14 +160,14 @@
                 "jcr:primaryType": "nt:unstructured",
                 "text": "t1",
                 "value": "v1",
-                "selected": "true",
-                "disabled": "true"
+                "selected": true,
+                "disabled": true
             },
             "item1": {
                 "jcr:primaryType": "nt:unstructured",
                 "text": "t2",
                 "value": "v2",
-                "selected": "true"
+                "selected": true
             },
             "item2": {
                 "jcr:primaryType": "nt:unstructured",
@@ -176,6 +185,8 @@
         "jcr:title": "jcr:title1",
         "helpMessage" : "helpMessage1",
         "type" : "radio",
+        "required"          : true,
+        "requiredMessage"   : "Required",
         "jcr:lastModified": "Wed Nov 09 2016 14:50:06 GMT+0100",
         "sling:resourceType": "core/wcm/components/form/options",
         "items": {
@@ -184,14 +195,14 @@
                 "jcr:primaryType": "nt:unstructured",
                 "text": "t1",
                 "value": "v1",
-                "selected": "true",
-                "disabled": "true"
+                "selected": true,
+                "disabled": true
             },
             "item1": {
                 "jcr:primaryType": "nt:unstructured",
                 "text": "t2",
                 "value": "v2",
-                "selected": "true"
+                "selected": true
             },
             "item2": {
                 "jcr:primaryType": "nt:unstructured",
@@ -209,6 +220,8 @@
         "jcr:title": "jcr:title1",
         "helpMessage" : "helpMessage1",
         "type" : "multi-drop-down",
+        "required"          : true,
+        "requiredMessage"   : "Required",
         "jcr:lastModified": "Wed Nov 09 2016 14:50:06 GMT+0100",
         "sling:resourceType": "core/wcm/components/form/options",
         "items": {
@@ -217,14 +230,14 @@
                 "jcr:primaryType": "nt:unstructured",
                 "text": "t1",
                 "value": "v1",
-                "selected": "true",
-                "disabled": "true"
+                "selected": true,
+                "disabled": true
             },
             "item1": {
                 "jcr:primaryType": "nt:unstructured",
                 "text": "t2",
                 "value": "v2",
-                "selected": "true"
+                "selected": true
             },
             "item2": {
                 "jcr:primaryType": "nt:unstructured",

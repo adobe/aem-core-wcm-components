@@ -13,27 +13,30 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.options="com.adobe.cq.wcm.core.components.models.form.Options"
+<div class="cmp-form-option"
+     data-sly-use.options="com.adobe.cq.wcm.core.components.models.form.Options"
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-test.isNotEmpty="${options.items.size}">
-    <fieldset class="cmp-form-options cmp-form-options--${options.type.value}">
+     data-sly-test.isNotEmpty="${options.items.size}"
+     data-cmp-is="formOption"
+     data-cmp-required-message="${options.requiredMessage}">
+    <fieldset class="cmp-form-options cmp-form-options--${options.type.value}" required="${options.type.value == 'checkbox' && options.required ? options.required : ''}">
         <sly data-sly-test="${options.type.value == 'checkbox' || options.type.value == 'radio'}">
             <legend class="cmp-form-options__legend">${options.title}</legend>
             <label class="cmp-form-options__field-label" data-sly-repeat.optionItem="${options.items}">
-                <input class="cmp-form-options__field cmp-form-options__field--${options.type.value}" name="${options.name}"
-                       value="${optionItem.value}" checked="${optionItem.selected}" disabled="${optionItem.disabled}" type="${options.type.value}"/>
+                <input data-cmp-hook-form-option="input" class="cmp-form-options__field cmp-form-options__field--${options.type.value}" name="${options.name}"
+                       value="${optionItem.value}" checked="${optionItem.selected}" disabled="${optionItem.disabled}" type="${options.type.value}" required="${optionItemList.first ? options.required : ''}"/>
                 <span class="cmp-form-options__field-description">${optionItem.text}</span>
             </label>
         </sly>
         <sly data-sly-test="${options.type.value == 'drop-down' || options.type.value == 'multi-drop-down'}">
             <label class="cmp-form-options__label" for="${options.id}">${options.title}</label>
-            <select class="cmp-form-options__field cmp-form-options__field--${options.type.value}" name="${options.name}" id="${options.id}"
+            <select data-cmp-hook-form-option="input" class="cmp-form-options__field cmp-form-options__field--${options.type.value}" name="${options.name}" id="${options.id}"
                     data-sly-list.optionItem="${options.items}"
-                    data-sly-attribute.multiple="${options.type.value == 'multi-drop-down'}">
+                    data-sly-attribute.multiple="${options.type.value == 'multi-drop-down'}" required="${options.required}">
                 <option value="${optionItem.value}" selected="${optionItem.selected}" disabled="${optionItem.disabled}">${optionItem.text}</option>
             </select>
         </sly>
         <p class="cmp-form-options__help-message" data-sly-test="${options.helpMessage}">${options.helpMessage}</p>
     </fieldset>
-</sly>
+</div>
 <sly data-sly-call="${template.placeholder @ isEmpty=!isNotEmpty, classAppend='cmp-form-options'}"></sly>

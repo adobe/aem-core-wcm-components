@@ -80,7 +80,8 @@ public class OptionsImplTest {
         assertNull(options.getValue());
         assertNull(options.getTitle());
         assertNull(options.getHelpMessage());
-
+        assertEquals("", options.getRequiredMessage());
+        assertEquals(false, options.isRequired());
         List<OptionItem> optionItems = options.getItems();
         assertNotNull(optionItems);
         assertEquals(optionItems.size(), 0);
@@ -104,7 +105,8 @@ public class OptionsImplTest {
         List<OptionItem> optionItems = options.getItems();
         assertNotNull(optionItems);
         assertEquals(optionItems.size(), 2);
-
+        assertEquals("Required", options.getRequiredMessage());
+        assertEquals(true, options.isRequired());
         evaluateOptionItem(optionItems.get(0), "local-item1-name", "local-item1-value", false, false);
         evaluateOptionItem(optionItems.get(1), "local-item2-name", "local-item2-value", true, true);
         Utils.testJSONExport(options, Utils.getTestExporterJSONPath(TEST_BASE, OPTIONS_2));
@@ -117,7 +119,8 @@ public class OptionsImplTest {
         List<OptionItem> optionItems = options.getItems();
         assertNotNull(optionItems);
         assertEquals(optionItems.size(), 2);
-
+        assertEquals("", options.getRequiredMessage());
+        assertEquals(false, options.isRequired());
         evaluateOptionItem(optionItems.get(0), "datasource-item1-name", "datasource-item1-value", true, false);
         evaluateOptionItem(optionItems.get(1), "datasource-item2-name", "datasource-item2-value", false, true);
         Utils.testJSONExport(options, Utils.getTestExporterJSONPath(TEST_BASE, OPTIONS_3));
@@ -129,7 +132,8 @@ public class OptionsImplTest {
         List<OptionItem> optionItems = options.getItems();
         assertNotNull(optionItems);
         assertEquals(optionItems.size(), 2);
-
+        assertEquals("", options.getRequiredMessage());
+        assertEquals(false, options.isRequired());
         evaluateOptionItem(optionItems.get(0), "list-item1-name", "list-item1-value", true, false);
         evaluateOptionItem(optionItems.get(1), "list-item2-name", "list-item2-value", false, true);
         Utils.testJSONExport(options, Utils.getTestExporterJSONPath(TEST_BASE, OPTIONS_4));
@@ -143,7 +147,8 @@ public class OptionsImplTest {
         assertEquals("jcr:title1", options.getTitle());
         assertEquals("helpMessage1", options.getHelpMessage());
         assertEquals(Type.CHECKBOX, options.getType());
-
+        assertEquals("Required", options.getRequiredMessage());
+        assertEquals(true, options.isRequired());
         assertNotNull(optionItems);
         assertEquals(optionItems.size(), 3);
 

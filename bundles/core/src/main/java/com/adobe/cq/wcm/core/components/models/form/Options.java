@@ -94,5 +94,26 @@ public interface Options extends Field {
     default Type getType() {
         return null;
     }
+    
+    /**
+     * Checks if the this text field is mandatory.
+     *
+     * @return {@code true} if the field must have a input, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
+     */
+    default boolean isRequired() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the message to be displayed if the field is mandatory.
+     *
+     * @return the message to be displayed if the field is mandatory but has not been filled by the user
+     * @see #isRequired()
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
+     */
+    default String getRequiredMessage() {
+        throw new UnsupportedOperationException();
+    }
 
 }

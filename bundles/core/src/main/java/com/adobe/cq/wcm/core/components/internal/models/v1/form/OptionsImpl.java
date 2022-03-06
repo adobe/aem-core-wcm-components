@@ -31,6 +31,7 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ChildResource;
@@ -61,7 +62,9 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
     private static final String PN_TYPE = "type";
     private static final String OPTION_ITEMS_PATH = "items";
     private static final String ID_PREFIX = "form-options";
-
+    private static final boolean PROP_REQUIRED_DEFAULT = false;
+    private static final String PROP_REQUIRED_MESSAGE_DEFAULT = "";
+    
     @ChildResource(injectionStrategy = InjectionStrategy.OPTIONAL) @Named(OPTION_ITEMS_PATH)
     @Nullable
     private List<Resource> itemResources;
@@ -74,6 +77,14 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
     @Nullable
     private String typeString;
 
+    @ValueMapValue
+    @Default(booleanValues = PROP_REQUIRED_DEFAULT)
+    private boolean required;
+
+    @ValueMapValue
+    @Default(values = PROP_REQUIRED_MESSAGE_DEFAULT)
+    private String requiredMessage;
+    
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String listPath;
@@ -121,7 +132,17 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
         }
         return type;
     }
+    
+    @Override
+    public boolean isRequired() {
+        return required;
+    }
 
+    @Override
+    public String getRequiredMessage() {
+        return requiredMessage;
+    }
+    
     @Override
     protected String getIDPrefix() {
         return ID_PREFIX;
