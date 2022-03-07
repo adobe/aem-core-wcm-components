@@ -60,7 +60,9 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 
+import static com.adobe.cq.testing.selenium.Constants.DEFAULT_RETRY_DELAY;
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_SMALL_SIZE;
+import static com.adobe.cq.testing.selenium.Constants.DEFAULT_TIMEOUT;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static org.awaitility.Awaitility.await;
@@ -231,7 +233,22 @@ public class Commons {
         }
     }
 
+    public static void checkTemplateExists(CQClient adminClient, String templatePath) throws ClientException {
+        Polling templatePolling = new Polling() {
+            @Override
+            public Boolean call() throws Exception {
+                return adminClient.doGet(templatePath + ".json").getStatusLine().getStatusCode() == HttpStatus.SC_OK;
+            }
+        };
+        try {
+            templatePolling.poll(DEFAULT_TIMEOUT, DEFAULT_RETRY_DELAY);
+        } catch (InterruptedException | TimeoutException ex) {
+            throw new ClientException("Page template " + templatePath + " does not exist after " + DEFAULT_TIMEOUT + "ms", ex);
+        }
+    }
+
     public static String createPagePolicy(CQClient adminClient, String defaultPageTemplate, String siteName, Map<String, String> policyProperties) throws ClientException {
+        checkTemplateExists(adminClient, defaultPageTemplate);
         String policySuffix = "/structure/page/new_policy";
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("jcr:title", "New Policy");
@@ -251,6 +268,7 @@ public class Commons {
     }
 
     public static String createComponentPolicy(CQClient adminClient, String defaultPageTemplate, String siteName, String componentPath, List<NameValuePair> properties) throws ClientException {
+        checkTemplateExists(adminClient, defaultPageTemplate);
         String randomText= TestContentBuilder.randomSmallText();
         String policySuffix = componentPath + "/" + randomText;
         List<NameValuePair> policyProperties = new ArrayList();
@@ -272,6 +290,7 @@ public class Commons {
     }
 
     public static String createComponentPolicy(CQClient adminClient, String defaultPageTemplate, String siteName, String componentPath, Map<String, String> properties) throws ClientException {
+        checkTemplateExists(adminClient, defaultPageTemplate);
         String randomText= TestContentBuilder.randomSmallText();
         String policySuffix = componentPath + "/" + randomText;
         HashMap<String, String> policyProperties = new HashMap<>();

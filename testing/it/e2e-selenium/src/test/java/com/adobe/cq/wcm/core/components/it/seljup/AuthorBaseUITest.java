@@ -123,7 +123,7 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
         String existingPolicy = configPath + "/settings/wcm/policies/" + existingPolicyNodePath.get("cq:policy").getValueAsText();
         JsonNode policyNode = authorClient.doGetJson(existingPolicy, 1, 200);
         JSONObject policyNodeJson = new JSONObject(policyNode.toString());
-        JSONArray jsonArray =policyNodeJson.getJSONArray("components");
+        JSONArray jsonArray = policyNodeJson.getJSONArray("components");
         jsonArray.put(pathToAdd);
 
         adminClient.deletePath(existingPolicy, 200);
