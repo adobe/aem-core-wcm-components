@@ -52,7 +52,7 @@ For the main content package there's an extra script:
 
 ### `main` branch
 
-The `master` branch is the trunk development branch, where regular releases are cut from. Please send all pull requests
+The `main` branch is the trunk development branch, where regular releases are cut from. Please send all pull requests
 to `main` branch!
 
 ### Other branches
