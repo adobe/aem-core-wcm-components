@@ -20,18 +20,39 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
 
+/**
+ * HTTP response wrapper for {@link TableOfContentsFilter}.
+ * {@link TableOfContentsFilter} stores the page response in this wrapper, modifies it and copies it in the
+ * original response
+ */
 public class CharResponseWrapper extends HttpServletResponseWrapper {
     private CharArrayWriter writer;
 
+    /**
+     * Creates a wrapper around the original response object of the HTTP request by overriding the
+     * original {@link PrintWriter}. All the HTTP response content after {@link TableOfContentsFilter}
+     * is written in this newly created {@link PrintWriter} object
+     * @param response - original response object of the HTTP request
+     */
     public CharResponseWrapper(HttpServletResponse response) {
         super(response);
         writer = new CharArrayWriter();
     }
 
+    /**
+     * Returns the newly created {@link PrintWriter} object created by this wrapper
+     * @return - newly created {@link PrintWriter}
+     */
+    @Override
     public PrintWriter getWriter() {
         return new PrintWriter(writer);
     }
 
+    /**
+     * Converts the newly created {@link PrintWriter}'s content to string
+     * @return - String containing the content of the {@link PrintWriter}
+     */
+    @Override
     public String toString() {
         return writer.toString();
     }

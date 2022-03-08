@@ -1,7 +1,7 @@
 {
-    "listType":"ordered",
-    "startLevel":2,
-    "stopLevel":4,
+    "listType":"ORDERED",
+    "startLevel":"H2",
+    "stopLevel":"H4",
     "includeClasses":["toc-include-1","toc-include-2"],
     "ignoreClasses":["toc-ignore-1","toc-ignore-2"]
 }

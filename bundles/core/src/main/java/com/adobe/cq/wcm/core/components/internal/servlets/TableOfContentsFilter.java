@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import com.adobe.cq.wcm.core.components.internal.models.v1.TableOfContentsImpl;
+import com.adobe.cq.wcm.core.components.models.TableOfContents;
 import com.day.cq.wcm.api.WCMMode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.servlets.annotations.SlingServletFilter;
@@ -43,6 +45,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+/**
+ * Intercepts all the HTTP requests made to /editor.html or a html page inside /content/.
+ * Creates a response wrapper - {@link CharResponseWrapper} in which all the servlets/filters after this filter,
+ * stores the response content.
+ * Gets the response content from this wrapper, modifies it and copies it into the original response object.
+ */
 @Component(
     service = Filter.class,
     property = {Constants.SERVICE_RANKING + "Integer=999"}
@@ -75,25 +83,25 @@ public class TableOfContentsFilter implements Filter {
         CharResponseWrapper responseWrapper = new CharResponseWrapper((HttpServletResponseWrapper) response);
         chain.doFilter(request, responseWrapper);
         String originalContent = responseWrapper.toString();
-        Boolean containsTableOfContents = (Boolean) request.getAttribute("contains-table-of-contents");
+        Boolean containsTableOfContents = (Boolean) request.getAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG);
         if (responseWrapper.getContentType().contains("text/html") &&
             (containsTableOfContents != null && containsTableOfContents)) {
 
             Document document = Jsoup.parse(originalContent);
 
-            Elements tocPlaceholderElements = document.getElementsByClass("table-of-contents-placeholder");
+            Elements tocPlaceholderElements = document.getElementsByClass(TableOfContentsImpl.TOC_PLACEHOLDER_CLASS);
             for (Element tocPlaceholderElement : tocPlaceholderElements) {
                 Element tableOfContents = getTableOfContents(tocPlaceholderElement);
                 tocPlaceholderElement.empty();
                 tocPlaceholderElement.clearAttributes();
-                tocPlaceholderElement.addClass("table-of-contents");
+                tocPlaceholderElement.addClass(TableOfContentsImpl.TOC_CONTENT_CLASS);
                 if(tableOfContents != null) {
                     tocPlaceholderElement.appendChild(tableOfContents);
                     WCMMode wcmMode = WCMMode.fromRequest(request);
                     if(wcmMode == WCMMode.EDIT || wcmMode == WCMMode.PREVIEW) {
                         Elements tocTemplatePlaceholderElement = tocPlaceholderElement
                             .parent()
-                            .select(".table-of-contents-template-placeholder");
+                            .select("." + TableOfContentsImpl.TOC_TEMPLATE_PLACEHOLDER_CLASS);
                         tocTemplatePlaceholderElement.remove();
                     }
                 }
@@ -111,22 +119,35 @@ public class TableOfContentsFilter implements Filter {
         }
     }
 
+    /**
+     * Creates a TOC {@link Element} by getting all the TOC config from the
+     * TOC placeholder DOM {@link Element}' data attributes.
+     * @param tocPlaceholderElement - TOC placeholder dom element
+     * @return Independent TOC element, not attached to the DOM
+     */
     private Element getTableOfContents(Element tocPlaceholderElement) {
-        String listType = tocPlaceholderElement.hasAttr("data-list-type")
-            ? tocPlaceholderElement.attr("data-list-type")
-            : "unordered";
-        String listTag = "ordered".contentEquals(listType) ? "ol" : "ul";
-        int startLevel = tocPlaceholderElement.hasAttr("data-start-level")
-            ? Math.max(1, Integer.parseInt(tocPlaceholderElement.attr("data-start-level")))
-            : 1;
-        int stopLevel = tocPlaceholderElement.hasAttr("data-stop-level")
-            ? Math.min(6, Integer.parseInt(tocPlaceholderElement.attr("data-stop-level")))
-            : 6;
-        String[] includeClasses = tocPlaceholderElement.hasAttr("data-include-classes")
-            ? tocPlaceholderElement.attr("data-include-classes").split(",")
+        TableOfContents.ListType listType = tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_LIST_TYPE)
+            ? TableOfContents.ListType.fromString(
+                tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_LIST_TYPE))
+            : TableOfContentsImpl.DEFAULT_LIST_TYPE;
+        String listTag = listType.getTagName();
+        TableOfContents.HeadingLevel startLevel =
+            tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_START_LEVEL)
+                ? TableOfContents.HeadingLevel.fromStringOrDefault(
+                    tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_START_LEVEL),
+                    TableOfContentsImpl.DEFAULT_START_LEVEL)
+                : TableOfContentsImpl.DEFAULT_START_LEVEL;
+        TableOfContents.HeadingLevel stopLevel =
+            tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_STOP_LEVEL)
+                ? TableOfContents.HeadingLevel.fromStringOrDefault(
+                    tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_STOP_LEVEL),
+                    TableOfContentsImpl.DEFAULT_STOP_LEVEL)
+                : TableOfContentsImpl.DEFAULT_STOP_LEVEL;
+        String[] includeClasses = tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_INCLUDE_CLASSES)
+            ? tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_INCLUDE_CLASSES).split(",")
             : null;
-        String[] ignoreClasses = tocPlaceholderElement.hasAttr("data-ignore-classes")
-            ? tocPlaceholderElement.attr("data-ignore-classes").split(",")
+        String[] ignoreClasses = tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_IGNORE_CLASSES)
+            ? tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_IGNORE_CLASSES).split(",")
             : null;
 
         Document document = tocPlaceholderElement.ownerDocument();
@@ -134,19 +155,19 @@ public class TableOfContentsFilter implements Filter {
         String includeCssSelector;
         if(includeClasses == null || includeClasses.length == 0) {
             List<String> selectors = new ArrayList<>();
-            for(int level = startLevel; level <= stopLevel; level++) {
-                selectors.add("h" + level);
+            for(int level = startLevel.getValue(); level <= stopLevel.getValue(); level++) {
+                selectors.add(getHeadingTagName(level));
             }
             includeCssSelector = StringUtils.join(selectors, ",");
         } else {
-            includeCssSelector = getCssSelectorString(includeClasses, startLevel, stopLevel);
+            includeCssSelector = getCssSelectorString(includeClasses, startLevel.getValue(), stopLevel.getValue());
         }
         Elements includeElements = document.select(includeCssSelector);
 
         if(ignoreClasses == null || ignoreClasses.length == 0) {
             return getNestedList(listTag, includeElements.listIterator(), 0);
         }
-        String ignoreCssSelector = getCssSelectorString(ignoreClasses, startLevel, stopLevel);
+        String ignoreCssSelector = getCssSelectorString(ignoreClasses, startLevel.getValue(), stopLevel.getValue());
         Elements ignoreElements = document.select(ignoreCssSelector);
 
         Set<Element> ignoreElementsSet = new HashSet<>(ignoreElements);
@@ -161,6 +182,14 @@ public class TableOfContentsFilter implements Filter {
         return getNestedList(listTag, validElements.listIterator(), 0);
     }
 
+    /**
+     * Converts a list of ignore/include class names, heading start level and heading stop level
+     * into a CSS selector string
+     * @param classNames - an array of include or ignore class names of the TOC
+     * @param startLevel - heading start level of the TOC
+     * @param stopLevel - heading stop level of the TOC
+     * @return CSS selector string
+     */
     private String getCssSelectorString(String[] classNames, int startLevel, int stopLevel) {
         if(classNames == null || classNames.length == 0) {
             return "";
@@ -168,13 +197,20 @@ public class TableOfContentsFilter implements Filter {
         List<String> selectors = new ArrayList<>();
         for(String className: classNames) {
             for(int level = startLevel; level <= stopLevel; level++) {
-                selectors.add("." + className + " h" + level);
-                selectors.add("h" + level + "." + className);
+                selectors.add("." + className + " " + getHeadingTagName(level));
+                selectors.add(getHeadingTagName(level) + "." + className);
             }
         }
         return StringUtils.join(selectors, ",");
     }
 
+    /**
+     * Recursive method to create a nested list of TOC depending upon the heading levels of consecutive heading elements
+     * @param listTag - 'ul' for unordered list or 'ol' for ordered list
+     * @param headingElementsIterator - Iterator of list of heading elements to be included in TOC
+     * @param parentHeadingLevel - Heading level of the parent of the current nesting level
+     * @return Current nested TOC element containing all heading elements with levels >= parent heading level
+     */
     private Element getNestedList(String listTag, ListIterator<Element> headingElementsIterator,
                                   int parentHeadingLevel) {
         if(!headingElementsIterator.hasNext()) {
@@ -205,8 +241,11 @@ public class TableOfContentsFilter implements Filter {
     }
 
     /**
-     * Creates list item element from the heading element.
-     * Adds 'id' attribute on heading element if not already present.
+     * Creates list item element('li') from the heading element.
+     * Adds an internal link on the 'li' element to the provided heading element.
+     * Adds 'id' attribute on heading element if not already present, using its text content.
+     * @param headingElement - DOM heading element
+     * @return Independent 'li' element, not attached to the DOM
      */
     private Element getListItemElement(Element headingElement) {
         String id = headingElement.attr("id");
@@ -225,7 +264,21 @@ public class TableOfContentsFilter implements Filter {
         return listItem;
     }
 
+    /**
+     * Returns heading level('1' to '6') of the heading element
+     * @param headingElement DOM heading element
+     * @return Integer representing the heading level of the given heading element
+     */
     private int getHeadingLevel(Element headingElement) {
         return headingElement.tagName().charAt(1) - '0';
+    }
+
+    /**
+     * Returns heading tag name('h1' to 'h6') from integer level
+     * @param level Integer representing the heading level
+     * @return Heading tag name
+     */
+    private String getHeadingTagName(int level) {
+        return "h" + level;
     }
 }

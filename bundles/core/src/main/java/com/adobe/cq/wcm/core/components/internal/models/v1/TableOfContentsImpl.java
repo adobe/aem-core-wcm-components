@@ -46,9 +46,21 @@ public class TableOfContentsImpl implements TableOfContents {
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/tableofcontents/v1/tableofcontents";
 
-    public static final String DEFAULT_LIST_TYPE = "unordered";
-    public static final Integer DEFAULT_START_LEVEL = 1;
-    public static final Integer DEFAULT_STOP_LEVEL = 6;
+    public static final String TOC_REQUEST_ATTR_FLAG = "cmp-toc__present";
+
+    public static final String TOC_CONTENT_CLASS = "cmp-toc__content";
+    public static final String TOC_PLACEHOLDER_CLASS = "cmp-toc__placeholder";
+    public static final String TOC_TEMPLATE_PLACEHOLDER_CLASS = "cmp-toc__template-placeholder";
+
+    public static final String TOC_DATA_ATTR_LIST_TYPE = "data-cmp-toc-list-type";
+    public static final String TOC_DATA_ATTR_START_LEVEL = "data-cmp-toc-start-level";
+    public static final String TOC_DATA_ATTR_STOP_LEVEL = "data-cmp-toc-stop-level";
+    public static final String TOC_DATA_ATTR_INCLUDE_CLASSES = "data-cmp-toc-include-classes";
+    public static final String TOC_DATA_ATTR_IGNORE_CLASSES = "data-cmp-toc-ignore-classes";
+
+    public static final ListType DEFAULT_LIST_TYPE = ListType.UNORDERED;
+    public static final HeadingLevel DEFAULT_START_LEVEL = HeadingLevel.H1;
+    public static final HeadingLevel DEFAULT_STOP_LEVEL = HeadingLevel.H6;
 
     public static final String NO_RESTRICTION = "norestriction";
 
@@ -83,28 +95,28 @@ public class TableOfContentsImpl implements TableOfContents {
         restrictStopLevel = currentStyle.get(PN_RESTRICT_STOP_LEVEL, String.class);
         includeClasses = currentStyle.get(PN_INCLUDE_CLASSES, String[].class);
         ignoreClasses = currentStyle.get(PN_IGNORE_CLASSES, String[].class);
-        slingHttpServletRequest.setAttribute("contains-table-of-contents", true);
+        slingHttpServletRequest.setAttribute(TOC_REQUEST_ATTR_FLAG, true);
     }
 
     @Override
-    public String getListType() {
+    public ListType getListType() {
         return (restrictListType == null || NO_RESTRICTION.contentEquals(restrictListType))
-            ? listType != null ? listType : DEFAULT_LIST_TYPE
-            : restrictListType;
+            ? listType != null ? ListType.fromString(listType) : DEFAULT_LIST_TYPE
+            : ListType.fromString(restrictListType);
     }
 
     @Override
-    public Integer getStartLevel() {
+    public HeadingLevel getStartLevel() {
         return (restrictStartLevel == null || NO_RESTRICTION.contentEquals(restrictStartLevel))
-            ? startLevel != null ? startLevel : DEFAULT_START_LEVEL
-            : Integer.parseInt(restrictStartLevel);
+            ? startLevel != null ? HeadingLevel.fromInteger(startLevel) : DEFAULT_START_LEVEL
+            : HeadingLevel.fromString(restrictStartLevel);
     }
 
     @Override
-    public Integer getStopLevel() {
+    public HeadingLevel getStopLevel() {
         return (restrictStopLevel == null || NO_RESTRICTION.contentEquals(restrictStopLevel))
-            ? stopLevel != null ? stopLevel : DEFAULT_STOP_LEVEL
-            : Integer.parseInt(restrictStopLevel);
+            ? stopLevel != null ? HeadingLevel.fromInteger(stopLevel) : DEFAULT_STOP_LEVEL
+            : HeadingLevel.fromString(restrictStopLevel);
     }
 
     @Override

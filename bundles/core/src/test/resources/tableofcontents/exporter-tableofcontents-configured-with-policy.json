@@ -1,6 +1,6 @@
 {
-    "listType":"unordered",
-    "startLevel":2,
-    "stopLevel":4,
+    "listType":"UNORDERED",
+    "startLevel":"H2",
+    "stopLevel":"H4",
     "ignoreClasses":["toc-ignore-1","toc-ignore-2"]
 }

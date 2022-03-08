@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.models.v1.TableOfContentsImpl;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.commons.io.IOUtils;
@@ -78,7 +79,7 @@ public class TableOfContentsFilterTest {
         throws Exception {
 
         MockSlingHttpServletRequest request = context.request();
-        request.setAttribute("contains-table-of-contents", true);
+        request.setAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG, true);
 
         HttpServletResponseWrapper response = Mockito.mock(HttpServletResponseWrapper.class);
         Mockito.when(response.getContentType())

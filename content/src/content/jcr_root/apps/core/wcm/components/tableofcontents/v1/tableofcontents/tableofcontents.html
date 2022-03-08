@@ -15,14 +15,14 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.toc="com.adobe.cq.wcm.core.components.models.TableOfContents"
      data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
-     class = "table-of-contents-placeholder"
+     class = "cmp-toc__placeholder"
      id = "${component.id}"
-     data-list-type = "${toc.listType}"
-     data-start-level = "${toc.startLevel}"
-     data-stop-level = "${toc.stopLevel}"
-     data-include-classes = "${toc.includeClasses}"
-     data-ignore-classes = "${toc.ignoreClasses}">
+     data-cmp-toc-list-type = "${toc.listType && toc.listType.value}"
+     data-cmp-toc-start-level = "${toc.startLevel && toc.startLevel.value}"
+     data-cmp-toc-stop-level = "${toc.stopLevel && toc.stopLevel.value}"
+     data-cmp-toc-include-classes = "${toc.includeClasses}"
+     data-cmp-toc-ignore-classes = "${toc.ignoreClasses}">
 </div>
 <sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${wcmmode.edit || wcmmode.preview}"
-     data-sly-call="${template.placeholder @ isEmpty = true, classAppend = 'table-of-contents-template-placeholder'}"/>
+     data-sly-call="${template.placeholder @ isEmpty = true, classAppend = 'cmp-toc__template-placeholder'}"/>

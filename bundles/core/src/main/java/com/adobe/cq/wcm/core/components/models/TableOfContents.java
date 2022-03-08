@@ -18,6 +18,165 @@ package com.adobe.cq.wcm.core.components.models;
 public interface TableOfContents extends Component {
 
     /**
+     * Defines the possible list types for table of contents
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    enum ListType {
+        /**
+         * Unordered list type
+         *
+         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+         */
+        UNORDERED("unordered"),
+
+        /**
+         * Ordered list type
+         *
+         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+         */
+        ORDERED("ordered");
+
+        private String value;
+
+        ListType(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return this.value;
+        }
+
+        /**
+         * Returns the HTML tag name for this enum type of list
+         * @return HTML tag name
+         *
+         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+         */
+        public String getTagName() {
+            return this == ORDERED ? "ol" : "ul";
+        }
+
+        /**
+         * Given a {@link String} <code>value</code>, this method returns the enum's value that corresponds to the
+         * provided string representation. If no representation is found, {@link #UNORDERED} will be returned.
+         *
+         * @param value the string representation for which an enum value should be returned
+         * @return the corresponding enum value, if one was found, or {@link #UNORDERED}
+         *
+         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+         */
+        public static ListType fromString(String value) {
+            for (ListType type : values()) {
+                if (type.value.contentEquals(value)) {
+                    return type;
+                }
+            }
+            return UNORDERED;
+        }
+    }
+
+    /**
+     * Defines the possible heading levels for table of contents corresponding to 'h1' through 'h6'
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    enum HeadingLevel {
+
+        H1(1),
+        H2(2),
+        H3(3),
+        H4(4),
+        H5(5),
+        H6(6);
+
+        private int value;
+
+        HeadingLevel(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        /**
+         * Returns the HTML tag name corresponding to this heading level
+         * @return HTML tag name
+         *
+         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+         */
+        public String getTagName() {
+            return "h" + value;
+        }
+
+        /**
+         * Given an {@link Integer} <code>value</code>, this method returns the enum's value that corresponds to
+         * the provided integer representation.
+         * If no representation is found, {@link null} will be returned.
+         *
+         * @param value the integer representation for which an enum value should be returned
+         * @return the corresponding enum value, if one was found, or {@link null}
+         *
+         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+         */
+        public static HeadingLevel fromInteger(Integer value) {
+            for (HeadingLevel type : values()) {
+                if (type.value == value) {
+                    return type;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Given an {@link Integer} <code>value</code>, this method returns the enum's value that corresponds to
+         * the provided integer representation.
+         * If no representation is found, provided default value will be returned.
+         *
+         * @param value the integer representation for which an enum value should be returned
+         * @param defaultLevel default heading level to return
+         * @return the corresponding enum value, if one was found, or the provided default heading level
+         *
+         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+         */
+        public static HeadingLevel fromIntegerOrDefault(Integer value, HeadingLevel defaultLevel) {
+            HeadingLevel level = fromInteger(value);
+            return level != null ? level : defaultLevel;
+        }
+
+        /**
+         * Given an {@link String} <code>strValue</code>, this method parses string to integer and returns the enum's value
+         * that corresponds to the provided integer representation.
+         * If no representation is found, {@link null} will be returned.
+         *
+         * @param strValue the string representation for which an enum value should be returned
+         * @return the corresponding enum value, if one was found, or {@link null}
+         *
+         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+         */
+        public static HeadingLevel fromString(String strValue) {
+            return fromInteger(Integer.parseInt(strValue));
+        }
+
+        /**
+         * Given an {@link String} <code>strValue</code>, this method parses string to integer and returns the enum's value
+         * that corresponds to the provided integer representation.
+         * If no representation is found, provided default value will be returned.
+         *
+         * @param strValue the string representation for which an enum value should be returned
+         * @param defaultLevel default heading level to return
+         * @return the corresponding enum value, if one was found, or the provided default heading level
+         *
+         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+         */
+        public static HeadingLevel fromStringOrDefault(String strValue, HeadingLevel defaultLevel) {
+            HeadingLevel level = fromString(strValue);
+            return level != null ? level : defaultLevel;
+        }
+    }
+
+    /**
      * Name of the optional resource property that stores the list type of table of contents.
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
@@ -85,8 +244,8 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    default String getListType() {
-        return "unordered";
+    default ListType getListType() {
+        return ListType.UNORDERED;
     }
 
     /**
@@ -96,8 +255,8 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    default Integer getStartLevel() {
-        return 1;
+    default HeadingLevel getStartLevel() {
+        return HeadingLevel.H1;
     }
 
     /**
@@ -107,8 +266,8 @@ public interface TableOfContents extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
-    default Integer getStopLevel() {
-        return 6;
+    default HeadingLevel getStopLevel() {
+        return HeadingLevel.H6;
     }
 
     /**
