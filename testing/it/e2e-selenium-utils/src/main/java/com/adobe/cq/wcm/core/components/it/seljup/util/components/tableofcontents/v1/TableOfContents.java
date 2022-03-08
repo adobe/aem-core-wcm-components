@@ -24,8 +24,8 @@ public class TableOfContents extends BaseComponent {
 
     public static final String COMPONENT_NAME = "Table of Contents (v1)";
 
-    private static String tableOfContentsPlaceholder = ".table-of-contents-placeholder";
-    private static String tableOfContents = ".table-of-contents";
+    private static String tableOfContentsPlaceholder = ".cmp-toc__placeholder";
+    private static String tableOfContents = ".cmp-toc__content";
 
     public TableOfContents() {
         super("");
@@ -36,27 +36,27 @@ public class TableOfContents extends BaseComponent {
     }
 
     public String getListType() {
-        return $(tableOfContentsPlaceholder).attr("data-list-type");
+        return $(tableOfContentsPlaceholder).attr("data-cmp-toc-list-type");
     }
 
     public int getStartLevel() {
         return Integer.parseInt(
-            $(tableOfContentsPlaceholder).attr("data-start-level")
+            $(tableOfContentsPlaceholder).attr("data-cmp-toc-start-level")
         );
     }
 
     public int getStopLevel() {
         return Integer.parseInt(
-            $(tableOfContentsPlaceholder).attr("data-stop-level")
+            $(tableOfContentsPlaceholder).attr("data-cmp-toc-stop-level")
         );
     }
 
     public String[] getIncludeClasses() {
-        return $(tableOfContentsPlaceholder).attr("data-include-classes").split(",");
+        return $(tableOfContentsPlaceholder).attr("data-cmp-toc-include-classes").split(",");
     }
 
     public String[] getIgnoreClasses() {
-        return $(tableOfContentsPlaceholder).attr("data-ignore-classes").split(",");
+        return $(tableOfContentsPlaceholder).attr("data-cmp-toc-ignore-classes").split(",");
     }
 
     public String getId() {
