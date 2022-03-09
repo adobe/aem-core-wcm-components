@@ -412,7 +412,7 @@
                 children = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(editable);
             }
 
-            return (children.length > 1 && isPanelContainer);
+            return (children.length > 0 && isPanelContainer);
         },
         isNonMulti: true
     });
