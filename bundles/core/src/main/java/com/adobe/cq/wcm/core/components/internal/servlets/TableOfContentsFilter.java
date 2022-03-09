@@ -150,6 +150,12 @@ public class TableOfContentsFilter implements Filter {
             ? tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_IGNORE_CLASSES).split(",")
             : null;
 
+        if(startLevel.getValue() > stopLevel.getValue()) {
+            LOGGER.warn("Invalid start and stop levels, startLevel={%d}, stopLevel={%d}",
+                startLevel.getValue(), stopLevel.getValue());
+            return null;
+        }
+
         Document document = tocPlaceholderElement.ownerDocument();
 
         String includeCssSelector;

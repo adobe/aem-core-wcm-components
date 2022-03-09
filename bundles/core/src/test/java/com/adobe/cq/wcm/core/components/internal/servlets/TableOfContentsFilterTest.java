@@ -75,6 +75,18 @@ public class TableOfContentsFilterTest {
         );
     }
 
+    /**
+     * Checks the filter response in case invalid start and stop levels are passed
+     * @throws Exception
+     */
+    @Test
+    void testInvalidStartStopLevels() throws Exception {
+        checkFilterResponse(
+            TEST_BASE + "/test-invalid-content.html",
+            TEST_BASE + "/exporter-invalid-content.html"
+        );
+    }
+
     private void checkFilterResponse(String htmlContentPagePath, String expectedHtmlContentPagePath)
         throws Exception {
 
