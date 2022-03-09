@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.models.v1.TableOfContentsImpl;
+import com.day.cq.wcm.api.WCMMode;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.commons.io.IOUtils;
@@ -58,8 +59,9 @@ public class TableOfContentsFilterTest {
     void testIncludeIgnoreBehavior() throws Exception {
         checkFilterResponse(
             TEST_BASE + "/test-include-ignore-content.html",
-            TEST_BASE + "/exporter-include-ignore-content.html"
-        );
+            TEST_BASE + "/exporter-include-ignore-content.html",
+            true,
+            "TOC include and ignore classes behaviour is not correct");
     }
 
     /**
@@ -71,8 +73,9 @@ public class TableOfContentsFilterTest {
     void testNestingBehavior() throws Exception {
         checkFilterResponse(
             TEST_BASE + "/test-nesting-content.html",
-            TEST_BASE + "/exporter-nesting-content.html"
-        );
+            TEST_BASE + "/exporter-nesting-content.html",
+            true,
+            "TOC Nesting behaviour is not correct");
     }
 
     /**
@@ -82,16 +85,48 @@ public class TableOfContentsFilterTest {
     @Test
     void testInvalidStartStopLevels() throws Exception {
         checkFilterResponse(
-            TEST_BASE + "/test-invalid-content.html",
-            TEST_BASE + "/exporter-invalid-content.html"
+            TEST_BASE + "/test-invalid-toc-content.html",
+            TEST_BASE + "/exporter-invalid-toc-content.html",
+            true,
+            "TOC Content should be empty and template placeholder should be present");
+    }
+
+    /**
+     * Checks the filter response in case TOC flag is not set as a request attribute
+     * @throws Exception
+     */
+    @Test
+    void testNoTocFlag() throws Exception {
+        checkFilterResponse(
+            TEST_BASE + "/test-nesting-content.html",
+            TEST_BASE + "/test-nesting-content.html",
+            false,
+            "Page's HTML Content should not be modified if there's no TOC in it"
         );
     }
 
-    private void checkFilterResponse(String htmlContentPagePath, String expectedHtmlContentPagePath)
+    /**
+     * Checks the filter response in case there's no heading element on the page
+     * @throws Exception
+     */
+    @Test
+    void testNoHeadingElementOnPage() throws Exception {
+        checkFilterResponse(
+            TEST_BASE + "/test-no-heading-content.html",
+            TEST_BASE + "/exporter-no-heading-content.html",
+            true,
+            "TOC Content should be empty and not throw any error if there's no heading in it"
+        );
+    }
+
+    private void checkFilterResponse(String htmlContentPagePath, String expectedHtmlContentPagePath, boolean setTocFlag,
+                                     String errorMessage)
         throws Exception {
 
         MockSlingHttpServletRequest request = context.request();
-        request.setAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG, true);
+        if(setTocFlag) {
+            request.setAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG, true);
+        }
 
         HttpServletResponseWrapper response = Mockito.mock(HttpServletResponseWrapper.class);
         Mockito.when(response.getContentType())
@@ -117,7 +152,8 @@ public class TableOfContentsFilterTest {
         );
         assertEquals(
             expectedContent,
-            responseWriter.toString()
+            responseWriter.toString(),
+            errorMessage
         );
     }
 }

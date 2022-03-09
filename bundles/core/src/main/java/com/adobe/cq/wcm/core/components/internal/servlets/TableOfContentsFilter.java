@@ -47,7 +47,7 @@ import java.util.Set;
 
 /**
  * Intercepts all the HTTP requests made to /editor.html or a html page inside /content/.
- * Creates a response wrapper - {@link CharResponseWrapper} in which all the servlets/filters after this filter,
+ * Creates a response wrapper - {@link CharResponseWrapper} in which all the servlets/filters called after this filter
  * stores the response content.
  * Gets the response content from this wrapper, modifies it and copies it into the original response object.
  */
@@ -170,13 +170,13 @@ public class TableOfContentsFilter implements Filter {
         }
         Elements includeElements = document.select(includeCssSelector);
 
-        if(ignoreClasses == null || ignoreClasses.length == 0) {
-            return getNestedList(listTag, includeElements.listIterator(), 0);
-        }
-        String ignoreCssSelector = getCssSelectorString(ignoreClasses, startLevel.getValue(), stopLevel.getValue());
-        Elements ignoreElements = document.select(ignoreCssSelector);
+        Set<Element> ignoreElementsSet = new HashSet<>();
 
-        Set<Element> ignoreElementsSet = new HashSet<>(ignoreElements);
+        if(ignoreClasses != null && ignoreClasses.length != 0) {
+            String ignoreCssSelector = getCssSelectorString(ignoreClasses, startLevel.getValue(), stopLevel.getValue());
+            Elements ignoreElements = document.select(ignoreCssSelector);
+            ignoreElementsSet = new HashSet<>(ignoreElements);
+        }
 
         List<Element> validElements = new ArrayList<>();
         for(Element element : includeElements) {
@@ -191,15 +191,12 @@ public class TableOfContentsFilter implements Filter {
     /**
      * Converts a list of ignore/include class names, heading start level and heading stop level
      * into a CSS selector string
-     * @param classNames - an array of include or ignore class names of the TOC
+     * @param classNames - a non-empty array of include or ignore class names of the TOC
      * @param startLevel - heading start level of the TOC
      * @param stopLevel - heading stop level of the TOC
      * @return CSS selector string
      */
     private String getCssSelectorString(String[] classNames, int startLevel, int stopLevel) {
-        if(classNames == null || classNames.length == 0) {
-            return "";
-        }
         List<String> selectors = new ArrayList<>();
         for(String className: classNames) {
             for(int level = startLevel; level <= stopLevel; level++) {
