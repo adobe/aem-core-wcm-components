@@ -237,7 +237,7 @@ public class TableOfContentsFilter implements Filter {
                 previousHeadingLevel = currentHeadingLevel;
             } else if(currentHeadingLevel > previousHeadingLevel) {
                 headingElementsIterator.previous();
-                list.appendChild(getNestedList(listTag, headingElementsIterator, previousHeadingLevel));
+                list.children().last().appendChild(getNestedList(listTag, headingElementsIterator, previousHeadingLevel));
             } else if(currentHeadingLevel < previousHeadingLevel && currentHeadingLevel <= parentHeadingLevel) {
                 headingElementsIterator.previous();
                 return list;
