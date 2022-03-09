@@ -85,7 +85,7 @@
                             jcr:lastModified="{Date}2020-11-27T19:48:21.555+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/list/v2/list"
+                            sling:resourceType="core/wcm/components/list/v3/list"
                             childDepth="1"
                             linkItems="true"
                             listFrom="static"
@@ -94,6 +94,15 @@
                             showModificationDate="false"
                             sortOrder="asc"
                             tagsMatch="any"/>
+                        <text
+                            jcr:created="{Date}2020-11-27T19:46:40.900+02:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2020-11-27T19:48:21.555+02:00"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/text/v2/text"
+                            text="&lt;p>Simple page text&lt;p>"
+                            textIsRich="true"/>
                     </container>
                     <container_1128719348
                         jcr:created="{Date}2020-11-27T19:46:29.387+02:00"
@@ -114,14 +123,14 @@
                             jcr:lastModified="{Date}2020-11-27T19:46:56.758+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/image/v2/image"
+                            sling:resourceType="core/wcm/components/image/v3/image"
                             fileReference="/content/dam/core-components/core-comp-test-image.jpg"/>
                     </container_1128719348>
                 </container>
                 <title
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Linked Title"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     id="linked-title"
                     linkURL="/content/core-components/simple-page/simple-subpage"
                     type="h2"/>
@@ -131,7 +140,7 @@
                     jcr:lastModified="{Date}2020-11-27T19:42:37.640+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/image/v2/image"
+                    sling:resourceType="core/wcm/components/image/v3/image"
                     fileReference="/content/dam/core-components/Adobe_Systems_logo_and_wordmark.png"/>
             </container>
         </root>

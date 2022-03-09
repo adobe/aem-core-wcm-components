@@ -78,6 +78,15 @@
                         showModificationDate="false"
                         sortOrder="asc"
                         tagsMatch="any"/>
+                    <text
+                        jcr:created="{Date}2020-11-27T19:46:40.900+02:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2020-11-27T19:48:21.555+02:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;p>Simple page text&lt;p>"
+                        textIsRich="true"/>
                 </container>
                 <container_118198959
                     jcr:created="{Date}2020-11-27T18:31:06.330+02:00"
