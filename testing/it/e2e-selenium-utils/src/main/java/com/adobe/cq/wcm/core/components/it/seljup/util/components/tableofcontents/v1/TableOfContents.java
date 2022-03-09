@@ -24,8 +24,9 @@ public class TableOfContents extends BaseComponent {
 
     public static final String COMPONENT_NAME = "Table of Contents (v1)";
 
-    private static String tableOfContentsPlaceholder = ".cmp-toc__placeholder";
-    private static String tableOfContents = ".cmp-toc__content";
+    private static String tocPlaceholder = ".cmp-toc__placeholder";
+    private static String tocTemplatePlaceholder = ".cmp-toc__template-placeholder";
+    private static String tocContent = ".cmp-toc__content";
 
     public TableOfContents() {
         super("");
@@ -36,46 +37,46 @@ public class TableOfContents extends BaseComponent {
     }
 
     public String getListType() {
-        return $(tableOfContentsPlaceholder).attr("data-cmp-toc-list-type");
+        return $(tocPlaceholder).attr("data-cmp-toc-list-type");
     }
 
     public int getStartLevel() {
         return Integer.parseInt(
-            $(tableOfContentsPlaceholder).attr("data-cmp-toc-start-level")
+            $(tocPlaceholder).attr("data-cmp-toc-start-level")
         );
     }
 
     public int getStopLevel() {
         return Integer.parseInt(
-            $(tableOfContentsPlaceholder).attr("data-cmp-toc-stop-level")
+            $(tocPlaceholder).attr("data-cmp-toc-stop-level")
         );
     }
 
     public String[] getIncludeClasses() {
-        return $(tableOfContentsPlaceholder).attr("data-cmp-toc-include-classes").split(",");
+        return $(tocPlaceholder).attr("data-cmp-toc-include-classes").split(",");
     }
 
     public String[] getIgnoreClasses() {
-        return $(tableOfContentsPlaceholder).attr("data-cmp-toc-ignore-classes").split(",");
+        return $(tocPlaceholder).attr("data-cmp-toc-ignore-classes").split(",");
     }
 
     public String getId() {
-        return $(tableOfContentsPlaceholder).attr("id");
+        return $(tocPlaceholder).attr("id");
     }
 
     public boolean isTocPlaceholderExists() {
-        return $(tableOfContentsPlaceholder).exists();
+        return $(tocPlaceholder).exists();
     }
 
-    public boolean isTocPlaceholderVisible() {
-        return $(tableOfContentsPlaceholder).isDisplayed();
+    public boolean isTocTemplatePlaceholderVisible() {
+        return $(tocTemplatePlaceholder).isDisplayed();
     }
 
-    public boolean isActualTocContentExists() {
-        return $(tableOfContents).exists();
+    public boolean isTocContentExists() {
+        return $(tocContent).exists();
     }
 
-    public boolean isTextPresentInActualTocContent(String text) {
-        return $(tableOfContents).getText().contains(text);
+    public boolean isTextPresentInTocContent(String text) {
+        return $(tocContent).getText().contains(text);
     }
 }

@@ -95,12 +95,13 @@ public class TableOfContentsIT extends AuthorBaseUITest {
     }
 
     @Test
-    @DisplayName("Test: Check the visibility of table of contents placeholder")
-    public void testVisibilityOfTocPlaceholder() {
-//        Commons.switchContext("ContentFrame");
-//        assertTrue(tableOfContents.isTocPlaceholderVisible());
+    @DisplayName("Test: Check the visibility of table of contents template placeholder")
+    public void testVisibilityOfTocTemplatePlaceholder() {
+        Commons.switchContext("ContentFrame");
+        assertTrue(tableOfContents.isTocTemplatePlaceholderVisible());
+        Commons.switchToDefaultContext();
         editorPage.enterPreviewMode();
-        assertFalse(tableOfContents.isTocPlaceholderVisible(),
+        assertFalse(tableOfContents.isTocTemplatePlaceholderVisible(),
             "Table of Contents placeholder should not be visible in preview mode");
     }
 
@@ -126,9 +127,9 @@ public class TableOfContentsIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertFalse(tableOfContents.isTocPlaceholderExists(),
             "Table of Contents placeholder should not be visible");
-        assertTrue(tableOfContents.isActualTocContentExists(), "" +
+        assertTrue(tableOfContents.isTocContentExists(), "" +
             "Table of Contents actual content should be rendered");
-        assertTrue(tableOfContents.isTextPresentInActualTocContent(pageTitle),
+        assertTrue(tableOfContents.isTextPresentInTocContent(pageTitle),
             "Table of Contents should contain the required text");
     }
 
