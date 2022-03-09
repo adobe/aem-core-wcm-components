@@ -75,6 +75,10 @@
                                                         jcr:primaryType="nt:unstructured"
                                                         text="Date"
                                                         value="date"/>
+                                                    <time
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Time"
+                                                        value="time"/>
                                                     <number
                                                         jcr:primaryType="nt:unstructured"
                                                         text="Number"
