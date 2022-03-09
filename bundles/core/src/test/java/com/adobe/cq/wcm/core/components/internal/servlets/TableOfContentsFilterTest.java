@@ -119,6 +119,23 @@ public class TableOfContentsFilterTest {
         );
     }
 
+    /**
+     * Checks whether TOC template placeholder will exist or be removed depending upon
+     * TOC content being empty or not
+     * @throws Exception
+     */
+    @Test
+    void testTocTemplatePlaceholderWithWcmEditMode() throws Exception {
+        context.request().setAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME, WCMMode.EDIT);
+        checkFilterResponse(
+            TEST_BASE + "/test-template-placeholder-content.html",
+            TEST_BASE + "/exporter-template-placeholder-content.html",
+            true,
+            "TOC template placeholder should exist & not exist, " +
+                "depending upon TOC content being empty or not"
+        );
+    }
+
     private void checkFilterResponse(String htmlContentPagePath, String expectedHtmlContentPagePath, boolean setTocFlag,
                                      String errorMessage)
         throws Exception {
