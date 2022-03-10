@@ -166,6 +166,7 @@
                             embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
                             type="embeddable"
                             youtubeVideoId="f7hbWvHKns0"
+                            layout="responsive"
                             youtubeAspectRatio="56.25"/>
                     </component>
                     <info

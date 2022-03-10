@@ -42,7 +42,7 @@ public interface YouTube extends Embeddable {
     String PN_ASPECT_RATIO = "youtubeAspectRatio";
 
     /**
-     * Name of the resource property that defines the aspect ratio of the iFrame hosting the YouTube video.
+     * Name of the resource property that defines the layout type of the youtube video.
      */
     String PN_LAYOUT = "layout";
 

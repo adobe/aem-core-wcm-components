@@ -37,6 +37,9 @@
         }
     });
 
+    /**
+     * Initializes radio group for layout options and sets Coral listeners.
+     */
     function initializeLayoutOptions() {
         var radioGroup = dialogContent.querySelector(selectors.radioGroup);
         var radioInputs = radioGroup.querySelectorAll(selectors.radioInput);
@@ -62,6 +65,11 @@
         }
     }
 
+    /**
+     * Toggles all layout options to visible / hidden state.
+     *
+     * @param {String} value The value of the layout option to enable and show
+     */
     function toggleLayoutOptions(value) {
         var layoutOptions = document.querySelectorAll(selectors.layoutOption);
 
@@ -71,6 +79,12 @@
         }
     }
 
+    /**
+     * Toggles specific layout option to visible / hidden state.
+     *
+     * @param {jQuery} $option The layout option DOM reference
+     * @param {Boolean} show true to set $option to be visible, hidden otherwise
+     */
     function toggleLayoutOption($option, show) {
         var field = $option.adaptTo("foundation-field");
         var option = $option.parent(".foundation-toggleable").adaptTo("foundation-toggleable") || $option;
