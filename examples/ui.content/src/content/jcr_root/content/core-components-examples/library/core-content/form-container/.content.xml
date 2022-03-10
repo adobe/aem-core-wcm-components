@@ -90,7 +90,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Set Password"
                                 sling:resourceType="core-components-examples/components/form/text"
-                                helpMessage="password"
+                                helpMessage="Please enter your password"
                                 name="pw"
                                 required="true"
                                 rows="1"
