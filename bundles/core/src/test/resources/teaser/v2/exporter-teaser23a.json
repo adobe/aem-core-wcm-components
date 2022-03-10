@@ -38,16 +38,11 @@
       }
     }
   ],
-  "link": {
-    "valid": true,
-    "url": "/core/core/content/invalid_page2"
-  },
   ":type": "core/wcm/components/teaser/v2/teaser",
   "dataLayer": {
     "teaser-c5db7cbc93": {
       "@type": "core/wcm/components/teaser/v2/teaser",
-      "dc:title": "Adobe",
-      "xdm:linkURL": "/core/core/content/invalid_page2"
+      "dc:title": "Adobe"
     }
   }
 }

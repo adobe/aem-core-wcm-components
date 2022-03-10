@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-(function($) {
+(function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-teaser__editor";
@@ -39,6 +39,9 @@
         if (dialogContent) {
             var $descriptionTextfield = $(descriptionTextfieldSelector);
             if ($descriptionTextfield.length) {
+                if (!$descriptionTextfield[0].hasAttribute("aria-labelledby")) {
+                    associateDescriptionTextFieldWithLabel($descriptionTextfield[0]);
+                }
                 var rteInstance = $descriptionTextfield.data("rteinstance");
                 // wait for the description textfield rich text editor to signal start before initializing.
                 // Ensures that any state adjustments made here will not be overridden.
@@ -162,6 +165,10 @@
         } else {
             url = linkURL;
         }
+        // get the info from the current page in case no link is provided.
+        if (url === undefined && (Granite.author && Granite.author.page)) {
+            url = Granite.author.page.path;
+        }
         if (url && url.startsWith("/")) {
             return $.ajax({
                 url: url + "/_jcr_content.json"
@@ -194,4 +201,15 @@
             }
         }
     }
-})(jQuery);
+
+    function associateDescriptionTextFieldWithLabel(descriptionTextfieldElement) {
+        var richTextContainer = document.querySelector(".cq-RichText.richtext-container");
+        if (richTextContainer) {
+            var richTextContainerParent = richTextContainer.parentNode;
+            var descriptionLabel = richTextContainerParent.querySelector("label.coral-Form-fieldlabel");
+            if (descriptionLabel) {
+                descriptionTextfieldElement.setAttribute("aria-labelledby", descriptionLabel.id);
+            }
+        }
+    }
+})(jQuery, Granite);

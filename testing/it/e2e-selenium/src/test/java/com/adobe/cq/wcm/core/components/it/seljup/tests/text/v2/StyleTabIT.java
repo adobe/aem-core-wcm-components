@@ -16,9 +16,12 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.text.v2;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -29,19 +32,56 @@ import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.text.TextEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group3")
 public class StyleTabIT extends AuthorBaseUITest {
 
-    protected EditorPage editorPage;
+    private static String testValue = "Text styled by Style System.";
 
+    private String proxyPath;
+    private String testPage;
+    private String compPath;
+    private EditorPage editorPage;
 
-    protected void setup() {
-        String simplePageTestPath = "/content/core-components/simple-page";
-        editorPage = new PageEditorPage(simplePageTestPath);
+    private void addStyleNodesToPolicy(String policyPath) throws ClientException {
+        adminClient.createNode(policyPath + "/jcr:content", "nt:unstructured");
+        adminClient.createNode(policyPath + "/cq:styleGroups", "nt:unstructured");
+
+        adminClient.createNode(policyPath + "/cq:styleGroups/item0", "nt:unstructured");
+        adminClient.createNode(policyPath + "/cq:styleGroups/item0/cq:styles", "nt:unstructured");
+
+        adminClient.createNode(policyPath + "/cq:styleGroups/item0/cq:styles/item0", "nt:unstructured");
+        adminClient.setPropertyString(policyPath + "/cq:styleGroups/item0/cq:styles/item0", "cq:styleClasses", "cmp-blue-text", 200, 201);
+        adminClient.setPropertyString(policyPath + "/cq:styleGroups/item0/cq:styles/item0", "cq:styleId", "1547060098888", 200, 201);
+        adminClient.setPropertyString(policyPath + "/cq:styleGroups/item0/cq:styles/item0", "cq:styleLabel", "Blue", 200, 201);
+
+        adminClient.createNode(policyPath + "/cq:styleGroups/item0/cq:styles/item1", "nt:unstructured");
+        adminClient.setPropertyString(policyPath + "/cq:styleGroups/item0/cq:styles/item1", "cq:styleClasses", "cmp-red-text", 200, 201);
+        adminClient.setPropertyString(policyPath + "/cq:styleGroups/item0/cq:styles/item1", "cq:styleId", "1550165689999", 200, 201);
+        adminClient.setPropertyString(policyPath + "/cq:styleGroups/item0/cq:styles/item1", "cq:styleLabel", "Red", 200, 201);
+    }
+
+    private void setup() throws ClientException {
+        // create the test page, store page path in 'testPagePath'
+        testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
+
+        // create a proxy component
+        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtText_v2, Commons.proxyPath, null, null);
+
+        // add the core form container component
+        compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "text", null);
+
+        // open the page in the editor
+        editorPage = new PageEditorPage(testPage);
         editorPage.open();
+
+        // create component policy and add the styles nodes to it
+        String policyPath = createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf('/')), new HashMap<String, String>() {{
+        }});
+        addStyleNodesToPolicy(policyPath);
     }
 
     @BeforeEach
@@ -49,43 +89,77 @@ public class StyleTabIT extends AuthorBaseUITest {
         setup();
     }
 
-    @Test
-    @DisplayName("Test: Edit dialog Style Tab, no default style applied")
-    public void testStyleTabNoDefaultStyle() throws TimeoutException, InterruptedException {
-        String noDefaultStyleTextComponentPath = "/content/core-components/simple-page/jcr:content/root/container/container/container/text";
-        Commons.openEditDialog(editorPage, noDefaultStyleTextComponentPath);
+    @AfterEach
+    public void cleanupAfterEach() throws ClientException, InterruptedException {
+        // delete the test page we created
+        authorClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+                HttpStatus.SC_OK);
 
+        // delete the proxy component created
+        Commons.deleteProxyComponent(adminClient, proxyPath);
+    }
+
+    @Test
+    @DisplayName("Test: Check if the style is not applied by default to the Text component.")
+    public void testNoStyleAppliedByDefault() throws TimeoutException, InterruptedException {
+        Commons.openEditDialog(editorPage, compPath);
         TextEditDialog editDialog = new TextEditDialog();
+        editDialog.setId("text-id");
+        editDialog.setText(testValue);
+        Commons.saveConfigureDialog();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(editDialog.componentHasNoClassesAppliedByTheStyleSystem("#text-id"));
+    }
+
+    @Test
+    @DisplayName("Test: Check if the style is applied correctly to the Text component.")
+    public void testApplyStyle() throws TimeoutException, InterruptedException {
+        Commons.openEditDialog(editorPage, compPath);
+        TextEditDialog editDialog = new TextEditDialog();
+        editDialog.setId("text-id");
+        editDialog.setText(testValue);
         editDialog.openStylesTab();
         assertTrue(editDialog.isStyleSelectMenuDisplayed());
         assertTrue(editDialog.isNoStyleOptionSelectedByDefault());
         editDialog.openStyleSelectDropdown();
-        editDialog.areExpectedOptionsForNoDefaultStylePresentInDropdown();
+        editDialog.areExpectedOptionsForNoStyleAppliedPresentInDropdown();
+        editDialog.pressArrowDown();
+        editDialog.pressEnter();
         Commons.saveConfigureDialog();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
 
-        assertTrue(editDialog.componentHasNoClassesAppliedByTheStyleSystem("#text1"));
+        assertTrue(editDialog.componentHasExpectedClassAppliedByTheStyleSystem("#text-id", ".cmp-blue-text"));
+        assertTrue(editDialog.componentHasNoSpecificClassAppliedByTheStyleSystem("#text-id", ".cmp-red-text"));
     }
 
     @Test
-    @DisplayName("Test: Edit dialog Style Tab, style applied")
-    public void testStyleTabWithAppliedStyle() throws TimeoutException, InterruptedException {
-        String defaultStyleTextComponentPath =
-                "/content/core-components/simple-page/jcr:content/root/container/container/container/text_2093072800";
-        Commons.openEditDialog(editorPage, defaultStyleTextComponentPath);
-
+    @DisplayName("Test: Check if the style of the Text component is changed correctly when another style is already applied.")
+    public void testChangeAppliedStyle() throws TimeoutException, InterruptedException {
+        Commons.openEditDialog(editorPage, compPath);
         TextEditDialog editDialog = new TextEditDialog();
+        editDialog.setId("text-id");
+        editDialog.setText(testValue);
         editDialog.openStylesTab();
-        assertTrue(editDialog.isStyleSelectMenuDisplayed());
-        assertTrue(editDialog.isBlueStyleOptionSelectedByDefault());
         editDialog.openStyleSelectDropdown();
-        editDialog.areExpectedOptionsForDefaultStylePresentInDropdown();
+        editDialog.pressArrowDown();
+        editDialog.pressEnter();
+        Commons.saveConfigureDialog();
+
+        Commons.openEditDialog(editorPage, compPath);
+        editDialog.openStylesTab();
+        editDialog.openStyleSelectDropdown();
+        assertTrue(editDialog.areExpectedOptionsForAppliedStylePresentInDropdown());
+        assertTrue(editDialog.isBlueStyleOptionSelected());
+        editDialog.pressArrowDown();
+        editDialog.pressEnter();
         Commons.saveConfigureDialog();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
 
-        assertTrue(editDialog.componentHasExpectedClassAppliedByTheStyleSystem("#text2", ".cmp-blue-text"));
-        assertTrue(editDialog.componentHasNoSpecificClassAppliedByTheStyleSystem("#text2", ".cmp-red-text"));
+        assertTrue(editDialog.componentHasExpectedClassAppliedByTheStyleSystem("#text-id", ".cmp-red-text"));
+        assertTrue(editDialog.componentHasNoSpecificClassAppliedByTheStyleSystem("#text-id", ".cmp-blue-text"));
     }
 }

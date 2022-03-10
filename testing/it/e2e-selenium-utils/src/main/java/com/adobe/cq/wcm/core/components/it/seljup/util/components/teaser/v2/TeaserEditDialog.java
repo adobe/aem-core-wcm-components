@@ -28,6 +28,18 @@ public class TeaserEditDialog extends com.adobe.cq.wcm.core.components.it.seljup
     private static String altText = ".cmp-teaser__editor input[name='./alt']";
     private static String linkTarget = "coral-checkbox[name='./linkTarget']";
     private static String actionLinkTarget = ".cmp-teaser__editor-actionField-linkTarget";
+    private static String actionLinkURL = "[data-cmp-teaser-v2-dialog-edit-hook='actionLink']";
+    private static String actionText = "[data-cmp-teaser-v2-dialog-edit-hook='actionTitle']";
+
+    @Override
+    protected String getActionLinkURLSelector() {
+        return actionLinkURL;
+    }
+
+    @Override
+    protected String getActionTextSelector() {
+        return actionText;
+    }
 
     public void openAssetsTab() {
         $$(".cmp-teaser__editor coral-tab").get(2).click();

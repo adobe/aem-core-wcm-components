@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.17.15-SNAPSHOT</version>
+        <version>2.18.7-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,7 @@
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.content</artifactId>
-    <version>2.17.15-SNAPSHOT</version>
+    <version>2.18.7-SNAPSHOT</version>
     <packaging>content-package</packaging>
     <name>Adobe Experience Manager Core WCM Components Content Package</name>
 
@@ -258,30 +258,30 @@
                                 <phase>prepare-package</phase>
                                 <configuration>
                                     <tasks>
-                                        <replace file="target/jcr_root/libs/core/wcm/components/breadcrumb/v2/breadcrumb/.content.xml" token=".core-wcm" value="Core Structure" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/languagenavigation/v1/languagenavigation/.content.xml" token=".core-wcm" value="Core Structure" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/navigation/v1/navigation/.content.xml" token=".core-wcm" value="Core Structure" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/breadcrumb/v3/breadcrumb/.content.xml" token=".core-wcm" value="Core Structure" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/languagenavigation/v2/languagenavigation/.content.xml" token=".core-wcm" value="Core Structure" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/navigation/v2/navigation/.content.xml" token=".core-wcm" value="Core Structure" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/search/v1/search/.content.xml" token=".core-wcm" value="Core Structure" />
 
                                         <replace file="target/jcr_root/libs/core/wcm/components/accordion/v1/accordion/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/button/v1/button/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/button/v2/button/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/carousel/v1/carousel/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/container/v1/container/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/contentfragment/v1/contentfragment/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/contentfragmentlist/v1/contentfragmentlist/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/download/v1/download/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/embed/v1/embed/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/experiencefragment/v1/experiencefragment/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/image/v2/image/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/list/v2/list/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/contentfragmentlist/v2/contentfragmentlist/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/download/v2/download/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/embed/v2/embed/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/experiencefragment/v2/experiencefragment/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/image/v3/image/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/list/v3/list/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/pdfviewer/v1/pdfviewer/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/progressbar/v1/progressbar/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/separator/v1/separator/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/sharing/v1/sharing/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/tabs/v1/tabs/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/teaser/v1/teaser/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/teaser/v2/teaser/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/text/v2/text/.content.xml" token=".core-wcm" value="Core Content" />
-                                        <replace file="target/jcr_root/libs/core/wcm/components/title/v2/title/.content.xml" token=".core-wcm" value="Core Content" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/title/v3/title/.content.xml" token=".core-wcm" value="Core Content" />
 
                                         <replace file="target/jcr_root/libs/core/wcm/components/form/container/v2/container/.content.xml" token=".core-wcm-form" value="Core Content" />
 

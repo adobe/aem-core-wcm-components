@@ -19,7 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.adobe.cq.testing.selenium.junit.annotations.Author;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +40,8 @@ import com.adobe.cq.testing.selenium.pageobject.granite.LoginPage;
 import com.adobe.cq.testing.selenium.utils.DisableTour;
 import com.adobe.cq.testing.selenium.junit.extensions.TestContentExtension;
 import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +98,27 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
 
     public List<String> getUserGroupMembership() {
         return Arrays.asList(GROUPID_CONTENT_AUTHORS, "workflow-users");
+    }
+
+
+    public String createComponentPolicy(String componentPath, Map<String, String> properties) throws ClientException {
+        String policySuffix = componentPath +  "/new_policy";
+        HashMap<String, String> policyProperties = new HashMap<>();
+        policyProperties.put("jcr:title", "New Policy");
+        policyProperties.put("sling:resourceType", "wcm/core/components/policy/policy");
+        policyProperties.putAll(properties);
+        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
+        String policyPath = Commons.createPolicy(adminClient, policySuffix, policyProperties, policyPath1);
+
+        // add a policy for component
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
+        HashMap<String, String> mappingProperties = new HashMap<>();
+        mappingProperties.put("cq:policy", policyLocation + policySuffix);
+        mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mapping");
+        Commons.assignPolicy(adminClient, componentPath, mappingProperties, policyAssignmentPath, 200, 201);
+
+        return policyPath;
     }
 
 
