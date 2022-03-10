@@ -15,11 +15,8 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
 <sly data-sly-use.youTube="com.adobe.cq.wcm.core.components.models.embeddable.YouTube">
-  <div
-      class="cmp-embed__youtube"
-      style="padding-bottom: ${youTube.iFrameAspectRatio || 56.25  @ context='scriptString'}%"
-      data-sly-unwrap>
-    <iframe data-sly-test="${!youtube.empty}"
+  <sly data-sly-test="${!youtube.empty}">
+    <iframe data-sly-test="${!youtube.layout || youtube.layout=='fixed'}"
             data-cmp-data-layer="${youtube.data.json}"
             width="${youTube.iFrameWidth || '100%' @ context='scriptString'}"
             height="${youTube.iFrameHeight || 390 @ context='scriptString'}"
@@ -28,6 +25,16 @@
             allowfullscreen
             allow="autoplay; fullscreen"
             aria-label="${'YouTube Video' @ i18n}"></iframe>
+    <div data-sly-test="${youtube.layout=='responsive'}"
+         class="cmp-embed__youtube"
+         style="padding-bottom: ${youTube.iFrameAspectRatio || 56.25  @ context='scriptString'}%">
+      <iframe class="cmp-embed__youtube-iframe"
+              data-cmp-data-layer="${youtube.data.json}"
+              src="${youTube.iFrameSrc}"
+              frameborder="0"
+              allowfullscreen
+              allow="autoplay; fullscreen"
+              aria-label="${'YouTube Video' @ i18n}"></iframe>
     </div>
-  </div>
+  </sly>
 </sly>

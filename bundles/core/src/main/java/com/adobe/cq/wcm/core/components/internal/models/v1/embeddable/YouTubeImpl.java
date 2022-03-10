@@ -88,6 +88,10 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     @Nullable
     private String iFrameAspectRatio;
 
+    @ValueMapValue(name = PN_LAYOUT)
+    @Nullable
+    private String layout;
+
     @ValueMapValue(name = PN_MUTE)
     @Nullable
     private Boolean isMute;
@@ -135,6 +139,11 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     @Override
     public @Nullable String getIFrameAspectRatio() {
         return iFrameAspectRatio;
+    }
+
+    @Override
+    public @Nullable String getLayout() {
+        return layout;
     }
 
     private static @Nullable Resource getWrappedResource(Resource resource) {

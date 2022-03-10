@@ -17,7 +17,8 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="nt:unstructured"
     jcr:title="YouTube"
-    sling:resourceType="granite/ui/components/coral/foundation/container">
+    sling:resourceType="granite/ui/components/coral/foundation/container"
+    granite:class="cmp-embeddable-youtube__editor">
     <items jcr:primaryType="nt:unstructured">
         <videoId
             jcr:primaryType="nt:unstructured"
@@ -35,8 +36,7 @@
             vertical="{Boolean}false">
             <granite:data
                 jcr:primaryType="nt:unstructured"
-                cmp-embed-dialog-edit-hook="layoutField"
-                cmp-embed-dialog-edit-showhidetarget="\[data-cmp-youtube-dialog-edit-layout\]"/>
+                cmp-youtube-dialog-edit="radioGroup"/>
             <items jcr:primaryType="nt:unstructured">
                 <fixed
                     jcr:primaryType="nt:unstructured"
@@ -69,8 +69,7 @@
             </items>
             <granite:data
                 jcr:primaryType="nt:unstructured"
-                cmp-embed-dialog-edit-type="true"
-                cmp-embed-dialog-edit-showhidetargetvalue="fixed"/>
+                cmp-youtube-dialog-layout-option="fixed"/>
         </fixed>
         <responsive
             granite:class="foundation-toggleable"
@@ -87,8 +86,7 @@
             </items>
             <granite:data
                 jcr:primaryType="nt:unstructured"
-                cmp-embed-dialog-edit-type="true"
-                cmp-embed-dialog-edit-showhidetargetvalue="responsive"/>
+                cmp-youtube-dialog-layout-option="responsive"/>
         </responsive>
         <parameters
             jcr:primaryType="nt:unstructured"
@@ -171,6 +169,6 @@
     </items>
     <granite:data
         jcr:primaryType="nt:unstructured"
-        cmp-embed-dialog-edit-embeddableoptions="true"
-        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
+        cmp-youtube-dialog-edit-embeddableoptions="true"
+        cmp-youtube-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
 </jcr:root>
