@@ -37,7 +37,7 @@
                                             <listtype
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                                fieldDescription="Whether to list items in the table of contents with as an unordered list of bullet points, or as an ordered list of numbers"
+                                                fieldDescription="Whether to list items in the table of contents as an unordered list of bullet points, or as an ordered list of numbers"
                                                 fieldLabel="List Type"
                                                 name="./listType">
                                                 <items jcr:primaryType="nt:unstructured">
