@@ -24,14 +24,14 @@ public interface TableOfContents extends Component {
      */
     enum ListType {
         /**
-         * Unordered list type
+         * Bulleted list type
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
         UNORDERED("unordered"),
 
         /**
-         * Ordered list type
+         * Numbered list type
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */

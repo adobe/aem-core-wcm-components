@@ -33,19 +33,19 @@
                                         value="norestriction"/>
                                     <unorderedlist
                                         jcr:primaryType="nt:unstructured"
-                                        text="Unordered List"
+                                        text="Bulleted List"
                                         value="unordered"/>
                                     <orderedlist
                                         jcr:primaryType="nt:unstructured"
-                                        text="Ordered List"
+                                        text="Numbered List"
                                         value="ordered"/>
                                 </items>
                             </restrictlisttype>
                             <restrictstartlevel
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                fieldDescription="Whether the author should be able to choose the minimum title level to report in the table of contents"
-                                fieldLabel="Restrict Title Start Level"
+                                fieldDescription="Whether the author should be able to choose the highest title level to report in the table of contents"
+                                fieldLabel="Restrict the Start Level"
                                 name="./restrictStartLevel">
                                 <items jcr:primaryType="nt:unstructured">
                                     <norestriction
@@ -81,8 +81,8 @@
                             <restrictstoplevel
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                fieldDescription="Whether the author should be able to choose the maximum title level to report in the table of contents"
-                                fieldLabel="Restrict Title Stop Level"
+                                fieldDescription="Whether the author should be able to choose the lowest title level to report in the table of contents"
+                                fieldLabel="Restrict the Stop Level"
                                 name="./restrictStopLevel">
                                 <items jcr:primaryType="nt:unstructured">
                                     <norestriction
