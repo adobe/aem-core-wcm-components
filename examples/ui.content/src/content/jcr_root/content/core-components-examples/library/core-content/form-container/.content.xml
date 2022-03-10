@@ -81,7 +81,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="E-Mail"
                                 sling:resourceType="core-components-examples/components/form/text"
-                                helpMessage="E-Mail"
+                                helpMessage="Please enter your E-Mail"
                                 name="email"
                                 rows="2"
                                 type="email"
