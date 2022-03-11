@@ -35,7 +35,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     public void setupBeforeEach() throws ClientException {
         clientlibs = Commons.CLIENTLIBS_IMAGE_V3;
         imageTests = new ImageTests();
-        imageTests.setup(authorClient, contextPath, label, Commons.RT_IMAGE_V3, rootPage, defaultPageTemplate, clientlibs, new Image());
+        imageTests.setup(adminClient, contextPath, label, Commons.RT_IMAGE_V3, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
     /**
@@ -46,7 +46,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Test
     @DisplayName("Test: Check image map areas are not rendered")
     public void testCheckMapAreaNavigationAndResponsiveResize() throws ClientException {
-        imageTests.testCheckMapAreaNotAvailable(authorClient);
+        imageTests.testCheckMapAreaNotAvailable(adminClient);
     }
 
     /**

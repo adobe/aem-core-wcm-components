@@ -39,12 +39,12 @@ public class ImageIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         imageTests = new ImageTests();
-        imageTests.setup(authorClient, contextPath, label, Commons.RT_IMAGE_V2, rootPage, defaultPageTemplate, clientlibs, new Image());
+        imageTests.setup(adminClient, contextPath, label, Commons.RT_IMAGE_V2, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        imageTests.cleanup(authorClient);
+        imageTests.cleanup(adminClient);
     }
 
     /**
