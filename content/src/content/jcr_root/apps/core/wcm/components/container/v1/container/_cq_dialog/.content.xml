@@ -109,6 +109,7 @@
                                                 autoStart="{Boolean}false"
                                                 class="cq-droptarget"
                                                 fieldLabel="Background Image"
+                                                fieldDescription="Background image for the container, please use images that will provide adequate contrast"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./backgroundImageReference"
                                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff]"
