@@ -17,9 +17,9 @@
      id="${progressBar.id}"
      class="cmp-progressbar"
      data-cmp-data-layer="${progressBar.data.json}">
-    <span class="cmp-progressbar__label--completed">${'#.##' @ format=progressBar.completed}</span>
-    <span class="cmp-progressbar__label--remaining">${'#.##' @ format=progressBar.remaining}</span>
-    <div class="cmp-progressbar__bar" role="progressbar"
+    <span class="cmp-progressbar__label--completed" aria-hidden="true">${'#.##' @ format=progressBar.completed}</span>
+    <span class="cmp-progressbar__label--remaining" aria-hidden="true">${'#.##' @ format=progressBar.remaining}</span>
+    <div class="cmp-progressbar__bar" role="progressbar" aria-label="${'#.##' @ format=progressBar.completed}% completed"
          aria-valuenow="${'#.##' @ format=progressBar.completed}" aria-valuemin="0" aria-valuemax="100"
          style="width: ${progressBar.completed @ context='number'}%">${'#.##' @ format=progressBar.completed}</div>
 </div>
