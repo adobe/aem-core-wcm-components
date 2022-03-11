@@ -92,9 +92,13 @@ public class TableOfContentsFilter implements Filter {
             Elements tocPlaceholderElements = document.getElementsByClass(TableOfContentsImpl.TOC_PLACEHOLDER_CLASS);
             for (Element tocPlaceholderElement : tocPlaceholderElements) {
                 Element tableOfContents = getTableOfContents(tocPlaceholderElement);
+                String id = tocPlaceholderElement.id();
                 tocPlaceholderElement.empty();
                 tocPlaceholderElement.clearAttributes();
                 tocPlaceholderElement.addClass(TableOfContentsImpl.TOC_CONTENT_CLASS);
+                if(!id.isEmpty()) {
+                    tocPlaceholderElement.id(id);
+                }
                 if(tableOfContents != null) {
                     tocPlaceholderElement.appendChild(tableOfContents);
                     WCMMode wcmMode = WCMMode.fromRequest(request);
