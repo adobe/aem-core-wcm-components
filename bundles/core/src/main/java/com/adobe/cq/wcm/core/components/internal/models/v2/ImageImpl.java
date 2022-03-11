@@ -68,6 +68,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     protected String smartCropRendition;
 
+    protected boolean useWebOptimizedService = false;
+
     /**
      * The resource type.
      */
@@ -148,8 +150,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
         boolean isDmFeaturesEnabled = currentStyle.get(PN_DESIGN_DYNAMIC_MEDIA_ENABLED, false);
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
+        useWebOptimizedService = properties.get("useWebOptimizedService", false);
         boolean uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
         String dmImageUrl = null;
+
+
+
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
@@ -199,6 +205,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             dmServerUrl = asset.getMetadataValue(Scene7Constants.PN_S7_DOMAIN) + dmServerPath.substring(1);
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
+                    } else if (useWebOptimizedService && (!hasContent)
+                                // && extra conditions from service
+                                ) {
+                        src
+
+
                     }
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,

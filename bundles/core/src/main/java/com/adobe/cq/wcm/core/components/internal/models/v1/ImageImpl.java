@@ -97,6 +97,11 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     @Source("osgi-services")
     protected MimeTypeService mimeTypeService;
 
+    @Inject
+    @Source("osgi-services")
+    protected MimeTypeService mimeTypeService;
+
+
     @Self
     protected LinkHandler linkHandler;
 

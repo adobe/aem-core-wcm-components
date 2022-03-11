@@ -59,6 +59,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     private boolean imageLinkHidden = false;
 
+
+
     @PostConstruct
     protected void initModel() {
         super.initModel();
@@ -89,6 +91,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public String getSrcset() {
+
+        if (useWebOptimizedService) {
+            LOGGER.error("Web Optimized Service enabled");
+        }
+
         int[] widthsArray = getWidths();
         String srcUritemplate = getSrcUriTemplate();
         String[] srcsetArray = new String[widthsArray.length];
