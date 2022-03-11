@@ -3,6 +3,6 @@
     cq:icon="image"
     jcr:description="Smart Adaptive Image with AMP support"
     jcr:primaryType="cq:Component"
-    jcr:title="Image (AMP v1)"
-    sling:resourceSuperType="core/wcm/components/image/v2/image"
+    jcr:title="Image (AMP v2)"
+    sling:resourceSuperType="core/wcm/components/image/v3/image"
     componentGroup=".core-wcm-ext-amp"/>
