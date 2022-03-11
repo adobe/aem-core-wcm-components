@@ -76,7 +76,7 @@
                         <languageNavigation
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/languagenavigation"
-                            navigationRoot="/content/core-components-examples/library/templating/language-navigation/language-structure/us"/>
+                            navigationRoot="/content/core-components-examples/library/core-structure/language-navigation/language-structure/us"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -118,7 +118,7 @@
                         <languageNavigation
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/languagenavigation"
-                            navigationRoot="/content/core-components-examples/library/templating/language-navigation/language-structure"
+                            navigationRoot="/content/core-components-examples/library/core-structure/language-navigation/language-structure"
                             structureDepth="2"/>
                     </component>
                     <info

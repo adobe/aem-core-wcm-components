@@ -45,6 +45,7 @@ public class ImageEditDialog extends Dialog {
     private static String altValueFromPageImage = "[name='./altValueFromPageImage']";
     private static String imageFromPageImage = "[name='./imageFromPageImage']";
     private static String titleValueFromDAM = "[name='./titleValueFromDAM']";
+    private static String linkTarget = "coral-checkbox[name='./linkTarget']";
 
     public void uploadImageFromSidePanel(String imagePath) {
         $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(fileUpload);
@@ -119,4 +120,10 @@ public class ImageEditDialog extends Dialog {
         CoralCheckbox checkbox = new CoralCheckbox(titleValueFromDAM);
         checkbox.click();
     }
+
+    public void clickLinkTarget() {
+        CoralCheckbox checkbox = new CoralCheckbox(linkTarget);
+        checkbox.click();
+    }
+
 }

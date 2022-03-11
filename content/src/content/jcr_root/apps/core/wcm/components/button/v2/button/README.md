@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Button (v2) Work in progress, do not use in production
+Button (v2)
 ====
 Button component written in HTL.
 
@@ -51,7 +51,7 @@ Icon styling must be done by users of the Core Components. Here's an [example fr
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_button\_v2](https://www.adobe.com/go/aem_cmp_button_v2)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_button](https://www.adobe.com/go/aem_cmp_library_button)
 * **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)

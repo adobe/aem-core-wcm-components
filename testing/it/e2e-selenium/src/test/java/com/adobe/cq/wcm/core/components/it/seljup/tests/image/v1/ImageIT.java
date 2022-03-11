@@ -16,10 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v1;
 
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v1.Image;
-import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,18 +25,21 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v1.Image;
 
 @Tag("group2")
 public class ImageIT extends AuthorBaseUITest {
 
     private ImageTests imageTests;
-    private static final String clientlibs = "core.wcm.components.image.v1";
+    private static final String clientlibs = Commons.CLIENTLIBS_IMAGE_V1;
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         imageTests = new ImageTests();
-        imageTests.setup(adminClient, label, Commons.rtImage_v1, rootPage, defaultPageTemplate, clientlibs, new Image());
+        imageTests.setup(adminClient, contextPath, label, Commons.RT_IMAGE_V1, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
     @AfterEach

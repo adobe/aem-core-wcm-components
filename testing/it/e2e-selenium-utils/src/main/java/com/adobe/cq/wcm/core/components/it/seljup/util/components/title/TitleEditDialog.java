@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.title;
 
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
@@ -39,6 +40,7 @@ public class TitleEditDialog extends Dialog {
     private static String titleWithSize = "coral-selectlist-item[value='h%s']";
     private static String titleType = "[name='./type']";
     private static String linkUrl = "[name='./linkURL']";
+    private static String linkTarget = "coral-checkbox[name='./linkTarget']";
 
     private void openTitleTypeList() throws InterruptedException{
         $( titleType + " > button").click();
@@ -126,4 +128,10 @@ public class TitleEditDialog extends Dialog {
         autoCompleteField.sendKeys(url);
         $("button[is='coral-buttonlist-item'][value='" + url + "']").click();
     }
+
+    public void clickLinkTarget() {
+        CoralCheckbox checkbox = new CoralCheckbox(linkTarget);
+        checkbox.click();
+    }
+
 }

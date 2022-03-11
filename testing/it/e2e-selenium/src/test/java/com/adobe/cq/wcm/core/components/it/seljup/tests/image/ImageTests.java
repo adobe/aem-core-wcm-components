@@ -16,28 +16,28 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.codeborne.selenide.SelenideElement;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.codeborne.selenide.SelenideElement;
 
+import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest.adminClient;
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 
 public class ImageTests {
 
@@ -63,12 +63,13 @@ public class ImageTests {
     private BaseImage image;
     private String redirectPage;
     private PropertiesPage propertiesPage;
+    private String contextPath;
 
     public String getProxyPath() {
         return proxyPath;
     }
 
-    public void setup(CQClient client, String label, String imageRT, String rootPage,
+    public void setup(CQClient client, String contextPath, String label, String imageRT, String rootPage,
                       String defaultPageTemplate, String clientlibs, BaseImage image) throws ClientException {
         // 1.
         testPage = client.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
@@ -76,27 +77,17 @@ public class ImageTests {
         propertiesPage = new PropertiesPage(testPage);
 
         // 2.
-        String policySuffix = "/structure/page/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("clientlibs", clientlibs);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(client, policySuffix, data , policyPath1);
-
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(client,"",data, policyAssignmentPath);
+        policyPath = Commons.createPagePolicy(client, defaultPageTemplate, label, new HashMap<String, String>() {{
+           put("clientlibs", clientlibs);
+        }});
 
         // 4.
-        proxyPath = Commons.createProxyComponent(client, imageRT, Commons.proxyPath, null, null);
+        proxyPath = imageRT;
 
         // 6.
-        compPath = Commons.addComponent(client, proxyPath,testPage + Commons.relParentCompPath, "image", null);
+        compPath = Commons.addComponentWithRetry(client, proxyPath,testPage + Commons.relParentCompPath, "image", null,
+                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+                HttpStatus.SC_OK, HttpStatus.SC_CREATED);
 
         // 7.
         editorPage = new PageEditorPage(testPage);
@@ -104,13 +95,14 @@ public class ImageTests {
 
         this.image = image;
 
+        this.contextPath = contextPath;
+
     }
 
-
-
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
-        client.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        Commons.deleteProxyComponent(client, proxyPath);
+        client.deletePageWithRetry(testPage, true,false,
+                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+                HttpStatus.SC_OK);
     }
 
     public void setMinimalProps() throws InterruptedException, TimeoutException {
@@ -405,6 +397,24 @@ public class ImageTests {
         image.imageClick();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
+    }
+
+    public void testSetLinkWithTarget() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.openMetadataTab();
+        image.getEditDialog().setLinkURL(redirectPage);
+        image.getEditDialog().clickLinkTarget();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        String link = (contextPath != null)? contextPath + redirectPage + ".html": redirectPage + ".html";
+        String target = "_blank";
+        assertTrue(image.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
     // ----------------------------------------------------------

@@ -78,6 +78,7 @@ public class TeaserImplTest {
     protected static final String TEASER_22a = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-22a";
     protected static final String TEASER_23 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-23";
     protected static final String TEASER_23a = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-23a";
+    protected static final String TEASER_24 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-24";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -166,7 +167,7 @@ public class TeaserImplTest {
     }
 
     @Test
-    void testTeaserWithExternalLinkFromAction() {
+    protected void testTeaserWithExternalLinkFromAction() {
         Teaser teaser = getTeaserUnderTest(TEASER_7);
         assertEquals("http://www.adobe.com", teaser.getLinkURL());
     }
