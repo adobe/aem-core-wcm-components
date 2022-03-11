@@ -64,6 +64,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private static final String IMAGE56_PATH = PAGE + "/jcr:content/root/image56";
     private static final String IMAGE57_PATH = PAGE + "/jcr:content/root/image57";
     private static final String IMAGE58_PATH = PAGE + "/jcr:content/root/image58";
+    private static final String IMAGE42_PATH = PAGE + "/jcr:content/root/image42";
 
     private static String PAGE0 = TEST_ROOT + "/test_page0";
     private static String PAGE1 = TEST_ROOT + "/test_page1";
@@ -603,6 +604,15 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     protected void testInheritedPageImage_fromTemplate_withLink() {
         Image image = getImageUnderTest(TEMPLATE_IMAGE_INHERITED_PATH2);
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_INHERITED_PATH2));
+    }
+
+    @Test
+    void testDMWithEncoding() {
+        context.contentPolicyMapping(com.adobe.cq.wcm.core.components.internal.models.v3.ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE42_PATH);
+        assertTrue(image.isDmImage());
+        assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=off", image.getSrc());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
     }
 
 }
