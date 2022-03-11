@@ -1,5 +1,7 @@
 {
     "listType":"UNORDERED",
     "startLevel":"H1",
-    "stopLevel":"H6"
+    "stopLevel":"H6",
+    "id":"tableofcontents-4530a7b414",
+    ":type":"core/wcm/components/tableofcontents/v1/tableofcontents"
 }

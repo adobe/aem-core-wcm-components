@@ -2,5 +2,7 @@
     "listType":"UNORDERED",
     "startLevel":"H2",
     "stopLevel":"H4",
-    "ignoreClasses":["toc-ignore-1","toc-ignore-2"]
+    "ignoreClasses":["toc-ignore-1","toc-ignore-2"],
+    "id":"toc-sample-id-2",
+    ":type":"core/wcm/components/tableofcontents/v1/tableofcontents"
 }

@@ -15,8 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.TableOfContents;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.day.cq.wcm.api.designer.Style;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
@@ -33,13 +36,14 @@ import java.util.Arrays;
 @Model(
     adaptables = SlingHttpServletRequest.class,
     adapters = {
-        TableOfContents.class
+        TableOfContents.class,
+        ComponentExporter.class
     },
     resourceType = TableOfContentsImpl.RESOURCE_TYPE
 )
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
     extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TableOfContentsImpl implements TableOfContents {
+public class TableOfContentsImpl extends AbstractComponentImpl implements TableOfContents {
 
     /**
      * The resource type of the component associated with this Sling model.
@@ -131,5 +135,10 @@ public class TableOfContentsImpl implements TableOfContents {
         return ignoreClasses != null
             ? Arrays.copyOf(ignoreClasses, ignoreClasses.length)
             : null;
+    }
+
+    @Override
+    public ComponentData getData() {
+        return null;
     }
 }

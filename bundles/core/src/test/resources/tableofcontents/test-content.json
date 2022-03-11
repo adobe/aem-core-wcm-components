@@ -47,7 +47,7 @@
                 "stopLevel": "5",
                 "jcr:lastModifiedBy": "admin",
                 "jcr:created": "Fri Feb 04 2022 03:37:57 GMT+0530",
-                "id": "toc-sample-id",
+                "id": "toc-sample-id-2",
                 "jcr:lastModified": "Fri Feb 04 2022 03:38:14 GMT+0530",
                 "sling:resourceType": "core/wcm/components/tableofcontents/v1/tableofcontents",
                 "listType": "ordered"
