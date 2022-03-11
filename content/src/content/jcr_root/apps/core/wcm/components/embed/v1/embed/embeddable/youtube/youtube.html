@@ -27,7 +27,7 @@
             aria-label="${'YouTube Video' @ i18n}"></iframe>
     <div data-sly-test="${youtube.layout=='responsive'}"
          class="cmp-embed__youtube"
-         style="padding-bottom: ${youTube.iFrameAspectRatio || 56.25  @ context='scriptString'}%">
+         style="padding-bottom: ${youTube.iFrameAspectRatio || 56.25  @ context='styleString'}%">
       <iframe class="cmp-embed__youtube-iframe"
               data-cmp-data-layer="${youtube.data.json}"
               src="${youTube.iFrameSrc}"

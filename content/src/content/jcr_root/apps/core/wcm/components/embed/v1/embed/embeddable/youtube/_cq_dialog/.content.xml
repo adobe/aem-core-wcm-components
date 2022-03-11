@@ -79,8 +79,8 @@
                 <aspectRatio
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                    fieldDescription="Aspect ratio of the YouTube video player."
-                    fieldLabel="Aspect ratio"
+                    fieldDescription="Percentage aspect ratio of the YouTube video player (height / width * 100%)."
+                    fieldLabel="Percentage Aspect ratio"
                     name="./youtubeAspectRatio"
                     step="0.0001"/>
             </items>
@@ -169,6 +169,6 @@
     </items>
     <granite:data
         jcr:primaryType="nt:unstructured"
-        cmp-youtube-dialog-edit-embeddableoptions="true"
-        cmp-youtube-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
+        cmp-embed-dialog-edit-embeddableoptions="true"
+        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
 </jcr:root>

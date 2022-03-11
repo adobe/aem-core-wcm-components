@@ -71,7 +71,7 @@
      * @param {String} value The value of the layout option to enable and show
      */
     function toggleLayoutOptions(value) {
-        var layoutOptions = document.querySelectorAll(selectors.layoutOption);
+        var layoutOptions = dialogContent.querySelectorAll(selectors.layoutOption);
 
         for (var i = 0; i < layoutOptions.length; i++) {
             var optionValue = layoutOptions[i].dataset["cmpYoutubeDialogLayoutOption"];
