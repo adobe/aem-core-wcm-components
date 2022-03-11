@@ -22,6 +22,7 @@
     var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     var LAZY_THRESHOLD_DEFAULT = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+    var SRC_URI_TEMPLATE_DPR_VAR = "{dpr}";
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
@@ -225,12 +226,14 @@
             var hasWidths = (that._properties.widths && that._properties.widths.length > 0) || Object.keys(smartCrops).length > 0;
             var replacement;
             if (Object.keys(smartCrops).length > 0) {
-                var optimalWidth = getOptimalWidth(Object.keys(smartCrops));
+                var optimalWidth = getOptimalWidth(Object.keys(smartCrops), false);
                 replacement = smartCrops[optimalWidth];
             } else {
-                replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths) : "";
+                replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths, true) : "";
             }
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
+            url = url.replace(SRC_URI_TEMPLATE_DPR_VAR, devicePixelRatio);
+
             var imgSrcAttribute = that._elements.image.getAttribute("src");
 
             if (url !== imgSrcAttribute) {
@@ -256,14 +259,16 @@
             }
         }
 
-        function getOptimalWidth(widths) {
+        function getOptimalWidth(widths, useDevicePixelRatio) {
             var container = that._elements.self;
             var containerWidth = container.clientWidth;
             while (containerWidth === 0 && container.parentNode) {
                 container = container.parentNode;
                 containerWidth = container.clientWidth;
             }
-            var optimalWidth = containerWidth * devicePixelRatio;
+
+            var dpr = useDevicePixelRatio ? devicePixelRatio : 1;
+            var optimalWidth = containerWidth * dpr;
             var len = widths.length;
             var key = 0;
 
