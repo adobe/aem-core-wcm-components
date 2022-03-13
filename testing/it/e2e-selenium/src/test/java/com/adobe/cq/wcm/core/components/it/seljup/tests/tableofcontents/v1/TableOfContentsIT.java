@@ -62,7 +62,7 @@ public class TableOfContentsIT extends AuthorBaseUITest {
 
         proxyPath = Commons.createProxyComponent(
             adminClient,
-            Commons.rtTableOfContents_v1,
+            Commons.RT_TABLEOFCONTENTS_V1,
             Commons.proxyPath,
             TableOfContents.COMPONENT_NAME,
             null

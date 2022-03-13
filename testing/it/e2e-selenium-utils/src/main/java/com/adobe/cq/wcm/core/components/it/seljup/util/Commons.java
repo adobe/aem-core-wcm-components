@@ -16,21 +16,14 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util;
 
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.InlineEditor;
-import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
-import com.adobe.cq.testing.selenium.utils.ElementUtils;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -40,8 +33,6 @@ import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
-import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import org.apache.sling.testing.clients.util.poller.Polling;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -50,14 +41,28 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InlineEditor;
+import com.adobe.cq.testing.selenium.pagewidgets.sidepanel.SidePanel;
+import com.adobe.cq.testing.selenium.utils.ElementUtils;
+import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 
+import static com.adobe.cq.testing.selenium.Constants.DEFAULT_RETRY_DELAY;
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_SMALL_SIZE;
+import static com.adobe.cq.testing.selenium.Constants.DEFAULT_TIMEOUT;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static org.awaitility.Awaitility.await;
@@ -77,71 +82,81 @@ public class Commons {
     public static String template = "/conf/core-components/settings/wcm/templates/core-components";
     // core component resource types
     // accordion component
-    public static String  rtAccordion_v1 = "core/wcm/components/accordion/v1/accordion";
+    public static final String RT_ACCORDION_V1 = "core-component/components/accordion-v1";
     // embed component
-    public static String rtEmbed_v1 = "core/wcm/components/embed/v1/embed";
-    public static String rtEmbed_v2 = "core/wcm/components/embed/v2/embed";
+    public static final String RT_EMBED_V1 = "core-component/components/embed-v1";
+    public static final String RT_EMBED_V2 = "core-component/components/embed-v2";
+    public static final String CLIENTLIBS_EMBED_V1 = "core.wcm.components.embed.v1";
     // text component
-    public static String  rtText_v1 = "core/wcm/components/text/v1/text";
-    public static String  rtText_v2 = "core/wcm/components/text/v2/text";
+    public static final String RT_TEXT_V1 = "core-component/components/text-v1";
+    public static final String RT_TEXT_V2 = "core-component/components/text-v2";
     // title component
-    public static String rtTitle_v1 = "core/wcm/components/title/v1/title";
-    public static String rtTitle_v2 = "core/wcm/components/title/v2/title";
-    public static String rtTitle_v3 = "core/wcm/components/title/v3/title";
+    public static final String RT_TITLE_V1 = "core-component/components/title-v1";
+    public static final String CLIENTLIBS_TITLE_V1 = "core.wcm.components.title.v1";
+    public static final String RT_TITLE_V2 = "core-component/components/title-v2";
+    public static final String CLIENTLIBS_TITLE_V2 = "core.wcm.components.title.v2";
+    public static final String RT_TITLE_V3 = "core-component/components/title-v3";
+    public static final String CLIENTLIBS_TITLE_V3 = "core.wcm.components.title.v3";
     // list component
-    public static String rtList_v1 = "core/wcm/components/list/v1/list";
-    public static String rtList_v2 = "core/wcm/components/list/v2/list";
-    public static String rtList_v3 = "core/wcm/components/list/v3/list";
+    public static final String RT_LIST_V1 = "core-component/components/list-v1";
+    public static final String RT_LIST_V2 = "core-component/components/list-v2";
+    public static final String RT_LIST_V3 = "core-component/components/list-v3";
     // image component
-    public static String rtImage_v1 = "core/wcm/components/image/v1/image";
-    public static String rtImage_v2 = "core/wcm/components/image/v2/image";
-    public static String rtImage_v3 = "core/wcm/components/image/v3/image";
+    public static final String RT_IMAGE_V1 = "core-component/components/image-v1";
+    public static final String CLIENTLIBS_IMAGE_V1 = "core.wcm.components.image.v1";
+    public static final String RT_IMAGE_V2 = "core-component/components/image-v2";
+    public static final String CLIENTLIBS_IMAGE_V2 = "core.wcm.components.image.v2";
+    public static final String RT_IMAGE_V3 = "core-component/components/image-v3";
+    public static final String CLIENTLIBS_IMAGE_V3 = "core.wcm.components.image.v3";
     // breadcrumb component
-    public static String rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
-    public static String rtBreadcrumb_v2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
-    public static String rtBreadcrumb_v3 = "core/wcm/components/breadcrumb/v3/breadcrumb";
+    public static final String RT_BREADCRUMB_V1 = "core-component/components/breadcrumb-v1";
+    public static final String RT_BREADCRUMB_V2 = "core-component/components/breadcrumb-v2";
+    public static final String RT_BREADCRUMB_V3 = "core-component/components/breadcrumb-v3";
     // button component
-    public static String rtButton_v1 = "core/wcm/components/button/v1/button";
-    public static String rtButton_v2 = "core/wcm/components/button/v2/button";
+    public static final String RT_BUTTON_V1 = "core-component/components/button-v1";
+    public static final String RT_BUTTON_V2 = "core-component/components/button-v2";
     // navigation component
-    public static String rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
-    public static String rtNavigation_v2 = "core/wcm/components/navigation/v2/navigation";
+    public static final String RT_NAVIGATION_V1 = "core-component/components/navigation-v1";
+    public static final String RT_NAVIGATION_V2 = "core-component/components/navigation-v2";
     // language navigation component
-    public static String rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
-    public static String rtLanguageNavigation_v2 = "core/wcm/components/languagenavigation/v2/languagenavigation";
+    public static final String RT_LANGUAGE_NAVIGATION_V1 = "core-component/components/languagenavigation-v1";
+    public static final String RT_LANGUAGE_NAVIGATION_V2 = "core-component/components/languagenavigation-v2";
     // search component
-    public static String rtSearch_v1 = "core/wcm/components/search/v1/search";
+    public static final String RT_SEARCH_V1 = "core-component/components/search-v1";
+    public static final String CLIENTLIBS_SEARCH_V1 = "core.wcm.components.search.v1";
     // teaser component
-    public static String rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
-    public static String rtTeaser_v2 = "core/wcm/components/teaser/v2/teaser";
+    public static final String RT_TEASER_V1 = "core-component/components/teaser-v1";
+    public static final String CLIENTLIBS_TEASER_V1 = "core.wcm.components.teaser.v1";
+    public static final String RT_TEASER_V2 = "core-component/components/teaser-v2";
+    public static final String CLIENTLIBS_TEASER_V2 = "core.wcm.components.teaser.v2";
     // carousel component
-    public static String rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
+    public static final String RT_CAROUSEL_V1 = "core-component/components/carousel-v1";
+    public static final String CLIENTLIBS_CAROUSEL_V1 = "core.wcm.components.carousel.v1";
     // tabs component
-    public static String rtTabs_v1 = "core/wcm/components/tabs/v1/tabs";
+    public static final String RT_TABS_V1 = "core-component/components/tabs-v1";
+    public static final String CLIENTLIBS_TABS_V1 = "core.wcm.components.tabs.v1";
     // content fragment component
-    public static String rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
+    public static final String RT_CONTENTFRAGMENT_V1 = "core-component/components/contentfragment-v1";
     // content fragment list component
-    public static String rtContentFragmentList_v1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
-    public static String rtContentFragmentList_v2 = "core/wcm/components/contentfragmentlist/v2/contentfragmentlist";
+    public static final String RT_CONTENTFRAGMENTLIST_V1 = "core-component/components/contentfragmentlist-v1";
+    public static final String RT_CONTENTFRAGMENTLIST_V2 = "core-component/components/contentfragmentlist-v2";
     // table of contents component
-    public static String rtTableOfContents_v1 = "core/wcm/components/tableofcontents/v1/tableofcontents";
+    public static String RT_TABLEOFCONTENTS_V1 = "core/wcm/components/tableofcontents/v1/tableofcontents";
     // core form container
-    public static String rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
-    public static String rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
+    public static String RT_FORMCONTAINER_V1 = "core-component/components/formcontainer-v1";
+    public static String RT_FORMCONTAINER_V2 = "core-component/components/formcontainer-v2";
     // form button
-    public static String rtFormButton_v1 = "core/wcm/components/form/button/v1/button";
-    public static String rtFormButton_v2 = "core/wcm/components/form/button/v2/button";
+    public static String RT_FORMBUTTON_V1 = "core-component/components/formbutton-v1";
+    public static String RT_FORMBUTTON_V2 = "core-component/components/formbutton-v2";
     // form button
-    public static String rtFormText_v1 = "core/wcm/components/form/text/v1/text";
-    public static String rtFormText_v2 = "core/wcm/components/form/text/v2/text";
+    public static String RT_FORMTEXT_V1 = "core-component/components/formtext-v1";
+    public static String RT_FORMTEXT_V2 = "core-component/components/formtext-v2";
     // form option
-    public static String rtFormOptions_v1 = "core/wcm/components/form/options/v1/options";
-    public static String rtFormOptions_v2 = "core/wcm/components/form/options/v2/options";
+    public static String RT_FORMOPTIONS_V1 = "core-component/components/formoptions-v1";
+    public static String RT_FORMOPTIONS_V2 = "core-component/components/formoptions-v2";
     // hidden field
-    public static String rtFormHidden_v1 = "core/wcm/components/form/hidden/v1/hidden";
-    public static String rtFormHidden_v2 = "core/wcm/components/form/hidden/v2/hidden";
-
-
+    public static String RT_FORMHIDDEN_V1 = "core-component/components/formhidden-v1";
+    public static String RT_FORMHIDDEN_V2 = "core-component/components/formhidden-v2";
 
     /**
      * Creates form entity builder
@@ -218,6 +233,84 @@ public class Commons {
         } catch (ClientException ex) {
             throw new ClientException("Policy creation failed for component " + componentPath + "with error : " + ex, ex);
         }
+    }
+
+    public static void checkTemplateExists(CQClient adminClient, String templatePath) throws ClientException {
+        Polling templatePolling = new Polling() {
+            @Override
+            public Boolean call() throws Exception {
+                return adminClient.doGet(templatePath + ".json").getStatusLine().getStatusCode() == HttpStatus.SC_OK;
+            }
+        };
+        try {
+            templatePolling.poll(DEFAULT_TIMEOUT, DEFAULT_RETRY_DELAY);
+        } catch (InterruptedException | TimeoutException ex) {
+            throw new ClientException("Page template " + templatePath + " does not exist after " + DEFAULT_TIMEOUT + "ms", ex);
+        }
+    }
+
+    public static String createPagePolicy(CQClient adminClient, String defaultPageTemplate, String siteName, Map<String, String> policyProperties) throws ClientException {
+        checkTemplateExists(adminClient, defaultPageTemplate);
+        String policySuffix = "/structure/page/new_policy";
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("jcr:title", "New Policy");
+        data.put("sling:resourceType", "wcm/core/components/policy/policy");
+        data.putAll(policyProperties);
+        String policyRootPath = "/conf/"+ siteName + "/settings/wcm/policies/core-component/components";
+        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyRootPath);
+
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
+        data.clear();
+        data.put("cq:policy", policyLocation + policySuffix);
+        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
+        Commons.assignPolicy(adminClient,"", data, policyAssignmentPath);
+
+        return policyPath;
+    }
+
+    public static String createComponentPolicy(CQClient adminClient, String defaultPageTemplate, String siteName, String componentPath, List<NameValuePair> properties) throws ClientException {
+        checkTemplateExists(adminClient, defaultPageTemplate);
+        String randomText= TestContentBuilder.randomSmallText();
+        String policySuffix = componentPath + "/" + randomText;
+        List<NameValuePair> policyProperties = new ArrayList();
+        policyProperties.add(new BasicNameValuePair("jcr:title", randomText + " Policy"));
+        policyProperties.add(new BasicNameValuePair("sling:resourceType", "wcm/core/components/policy/policy"));
+        policyProperties.addAll(properties);
+        String policyRootPath = "/conf/"+ siteName + "/settings/wcm/policies/core-component/components";
+        String policyPath = Commons.createPolicy(adminClient, policySuffix, policyProperties, policyRootPath);
+
+        // add a policy for component
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
+        HashMap<String, String> mappingProperties = new HashMap<>();
+        mappingProperties.put("cq:policy", policyLocation + policySuffix);
+        mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mappings");
+        Commons.assignPolicy(adminClient, componentPath, mappingProperties, policyAssignmentPath, 200, 201);
+
+        return policyPath;
+    }
+
+    public static String createComponentPolicy(CQClient adminClient, String defaultPageTemplate, String siteName, String componentPath, Map<String, String> properties) throws ClientException {
+        checkTemplateExists(adminClient, defaultPageTemplate);
+        String randomText= TestContentBuilder.randomSmallText();
+        String policySuffix = componentPath + "/" + randomText;
+        HashMap<String, String> policyProperties = new HashMap<>();
+        policyProperties.put("jcr:title", randomText + " Policy");
+        policyProperties.put("sling:resourceType", "wcm/core/components/policy/policy");
+        policyProperties.putAll(properties);
+        String policyRootPath = "/conf/"+ siteName + "/settings/wcm/policies/core-component/components";
+        String policyPath = Commons.createPolicy(adminClient, policySuffix, policyProperties, policyRootPath);
+
+        // add a policy for component
+        String policyLocation = "core-component/components";
+        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
+        HashMap<String, String> mappingProperties = new HashMap<>();
+        mappingProperties.put("cq:policy", policyLocation + policySuffix);
+        mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mappings");
+        Commons.assignPolicy(adminClient, componentPath, mappingProperties, policyAssignmentPath, 200, 201);
+
+        return policyPath;
     }
 
     /**
@@ -332,8 +425,11 @@ public class Commons {
      * @param title              mandatory the title of the component
      * @param componentGroup     optional the group of the component, if empty, 'Core' is used
      * @throws ClientException
+     *
+     * @deprecated For AEMaaCS testing proxies cannot be created as immutable content must be added via the CM deployment pipeline.
      */
 
+    @Deprecated
     public static String createProxyComponent(CQClient client, String component, String proxyCompPath,  String title, String componentGroup, int... expectedStatus)
         throws ClientException {
 
@@ -366,8 +462,10 @@ public class Commons {
      * @param client         CQClient
      * @param proxyCompPath  Mandatory. path to the proxy component to be deleted
      * @throws ClientException
+     *
+     * @deprecated For AEMaaCS testing proxies cannot be created as immutable content must be added via the CM deployment pipeline.
      */
-
+    @Deprecated
     public static void deleteProxyComponent(CQClient client, String proxyCompPath, int... expectedStatus) throws ClientException {
         // mandatory check
         if (proxyPath == null) {
@@ -460,6 +558,23 @@ public class Commons {
         } catch (Exception ex) {
             throw new ClientException(" failed to add component " + component + " with error: " + ex, ex);
         }
+    }
+
+    /**
+     * Adds a component to a page with default retry options.
+     *
+     * @param client
+     * @param component
+     * @param parentCompPath
+     * @param nameHint
+     * @return
+     * @throws ClientException
+     */
+    public static String addComponentWithRetry(final CQClient client, final String component, final String parentCompPath, final String nameHint)
+            throws ClientException {
+        return addComponentWithRetry(client, component, parentCompPath, nameHint, null,
+                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+                HttpStatus.SC_OK, HttpStatus.SC_CREATED);
     }
 
     /**
@@ -778,6 +893,9 @@ public class Commons {
     }
 
     public static boolean isComponentPresentInInsertDialog(String component) {
+        if (!StringUtils.startsWith(component, "/")) {
+            component = "/apps/" + component;
+        }
         return $("coral-selectlist-item[value='" + component + "']").isDisplayed();
     }
 
