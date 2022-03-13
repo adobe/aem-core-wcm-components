@@ -109,7 +109,7 @@ public class TableOfContentsIT extends AuthorBaseUITest {
     @DisplayName("Test: Check the actual rendering of table of contents")
     public void testTocRendering() throws ClientException {
          String titleProxyPath = Commons.createProxyComponent(adminClient,
-             Commons.rtTitle_v3,
+             Commons.RT_TITLE_V3,
              Commons.proxyPath,
              "",
             null
