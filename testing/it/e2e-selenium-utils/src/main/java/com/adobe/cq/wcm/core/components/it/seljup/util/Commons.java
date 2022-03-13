@@ -141,7 +141,7 @@ public class Commons {
     public static final String RT_CONTENTFRAGMENTLIST_V1 = "core-component/components/contentfragmentlist-v1";
     public static final String RT_CONTENTFRAGMENTLIST_V2 = "core-component/components/contentfragmentlist-v2";
     // table of contents component
-    public static String RT_TABLEOFCONTENTS_V1 = "core/wcm/components/tableofcontents/v1/tableofcontents";
+    public static String RT_TABLEOFCONTENTS_V1 = "core-component/components/tableofcontents-v1";
     // core form container
     public static String RT_FORMCONTAINER_V1 = "core-component/components/formcontainer-v1";
     public static String RT_FORMCONTAINER_V2 = "core-component/components/formcontainer-v2";
