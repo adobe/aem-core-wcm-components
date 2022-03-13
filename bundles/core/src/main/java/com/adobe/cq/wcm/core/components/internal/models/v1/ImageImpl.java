@@ -28,6 +28,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
+import com.adobe.cq.wcm.core.components.services.image.DMImageDelivery;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.CharEncoding;
@@ -92,10 +93,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @ScriptVariable
     protected Style currentStyle;
-
-    @Inject
-    @Source("osgi-services")
-    protected MimeTypeService mimeTypeService;
 
     @Inject
     @Source("osgi-services")

@@ -20,12 +20,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
+import com.adobe.cq.wcm.core.components.services.image.DMImageDelivery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Source;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
@@ -67,6 +70,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @ValueMapValue(name = "smartCropRendition", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected String smartCropRendition;
+
+    @Inject
+    @Source("osgi-services")
+    protected DMImageDelivery dmImageDelivery;
 
     protected boolean useWebOptimizedService = false;
 
@@ -207,8 +214,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         dmImageUrl = dmServerUrl + dmAssetName;
                     } else if (useWebOptimizedService && (!hasContent)
                                 // && extra conditions from service
+                                && dmImageDelivery.isWebOptimizedImageDeliveryAllowed()
                                 ) {
-                        src
+                        src = dmImageDelivery.get
 
 
                     }

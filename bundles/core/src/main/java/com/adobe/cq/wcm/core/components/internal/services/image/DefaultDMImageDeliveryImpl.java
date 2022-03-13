@@ -6,7 +6,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(
     service = DMImageDelivery.class,
     property = {
-        org.osgi.framework.Constants.SERVICE_RANKING + ":Integer=" +Integer.MIN_VALUE;
+        org.osgi.framework.Constants.SERVICE_RANKING + ":Integer=" +Integer.MIN_VALUE
     }
 )
 public class DefaultDMImageDeliveryImpl implements DMImageDelivery {
