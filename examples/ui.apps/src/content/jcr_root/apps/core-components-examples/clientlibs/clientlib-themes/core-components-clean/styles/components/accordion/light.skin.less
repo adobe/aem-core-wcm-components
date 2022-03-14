@@ -24,12 +24,32 @@
         border-color: @cmp-clean-light-accordion-button-border-color;
         color: @cmp-clean-light-accordion-button-color;
 
+        .cmp-accordion__icon {
+            background-image: url("../../../resources/images/chevron_right--light-skin.svg");
+            position: absolute;
+            top: 10*@px;
+            right: 8*@px;
+            width: 18px;
+            height: 18px;
+        }
+
         &--expanded {
             color: @cmp-clean-light-accordion-button-expanded-color;
+            .cmp-accordion__icon {
+                background-image: url("../../../resources/images/expand_more--light-skin.svg");
+            }
         }
 
         &:hover {
             color: @cmp-clean-light-accordion-button-hover-color;
+        }
+
+        &:not(.cmp-accordion__button--expanded) {
+            &:hover {
+                .cmp-accordion__icon {
+                    background-image: url("../../../resources/images/chevron_right_hovered--light-skin.svg");
+                }
+            }
         }
     }
 }

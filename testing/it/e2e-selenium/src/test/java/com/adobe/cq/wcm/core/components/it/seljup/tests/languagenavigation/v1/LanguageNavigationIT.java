@@ -16,13 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.languagenavigation.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.LanguageNavigationEditConfig;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.v1.LanguageNavigation;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -30,15 +26,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.LanguageNavigationEditConfig;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.languagenavigation.v1.LanguageNavigation;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
 public class LanguageNavigationIT extends AuthorBaseUITest {
-
-    private String proxyPath;
 
     protected String siteRoot;
     protected String compPath;
@@ -48,7 +48,7 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
     protected String languageNavigationRT;
 
     private void setupResources() {
-        languageNavigationRT = Commons.rtLanguageNavigation_v1;
+        languageNavigationRT = Commons.RT_LANGUAGE_NAVIGATION_V1;
     }
 
     protected void setup() throws ClientException {
@@ -57,21 +57,21 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "Site Root");
-        Commons.editNodeProperties(adminClient, siteRoot, data);
+        Commons.editNodeProperties(authorClient, siteRoot, data);
 
         // 1
         String locale1 = authorClient.createPage("LOCALE_1", "LOCALE_1", siteRoot, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 1");
-        Commons.editNodeProperties(adminClient, locale1, data);
+        Commons.editNodeProperties(authorClient, locale1, data);
 
         // 1.1
         String locale31 = authorClient.createPage("LOCALE_3", "LOCALE_3", locale1, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 3 1");
-        Commons.editNodeProperties(adminClient, locale31, data);
+        Commons.editNodeProperties(authorClient, locale31, data);
 
         // 1.2
         String locale4 = authorClient.createPage("LOCALE_4", "LOCALE_4", locale1, defaultPageTemplate).getSlingPath();
@@ -79,61 +79,58 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 4");
         data.put("./jcr:content/sling:vanityPath", "/LOCALE_4_vanity");
-        Commons.editNodeProperties(adminClient, locale4, data);
+        Commons.editNodeProperties(authorClient, locale4, data);
 
         // 1.1.1
         String about1 = authorClient.createPage("about", "about", locale31, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "About Us");
-        Commons.editNodeProperties(adminClient, about1, data);
+        Commons.editNodeProperties(authorClient, about1, data);
 
         // 2
         String locale2 = authorClient.createPage("LOCALE_2", "LOCALE_2", siteRoot, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 2");
-        Commons.editNodeProperties(adminClient, locale2, data);
+        Commons.editNodeProperties(authorClient, locale2, data);
 
         // 2.1
         String locale32 = authorClient.createPage("LOCALE_3", "LOCALE_3", locale2, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 3 2");
-        Commons.editNodeProperties(adminClient, locale32, data);
+        Commons.editNodeProperties(authorClient, locale32, data);
 
         // 2.2
         String locale5 = authorClient.createPage("LOCALE_5", "LOCALE_5", locale2, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "LOCALE 5");
-        Commons.editNodeProperties(adminClient, locale5, data);
+        Commons.editNodeProperties(authorClient, locale5, data);
 
         // 2.2.1
         String about2 = authorClient.createPage("about", "about", locale32, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "About Us");
-        Commons.editNodeProperties(adminClient, about2, data);
+        Commons.editNodeProperties(authorClient, about2, data);
 
         // 3
         String hideInNav = authorClient.createPage("hideInNav", "hideInNav", siteRoot, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/hideInNav", "true");
-        Commons.editNodeProperties(adminClient, hideInNav, data);
+        Commons.editNodeProperties(authorClient, hideInNav, data);
 
         // no structure
         noStructure = authorClient.createPage("no_structure", "no_structure", rootPage, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/navTitle", "No Structure");
-        Commons.editNodeProperties(adminClient, noStructure, data);
+        Commons.editNodeProperties(authorClient, noStructure, data);
 
-        // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, languageNavigationRT, Commons.proxyPath, null, null);
-
-        compPath = Commons.addComponent(adminClient, proxyPath, about1 + Commons.relParentCompPath, "languagenavigation", null);
+        compPath = Commons.addComponentWithRetry(authorClient, languageNavigationRT, about1 + Commons.relParentCompPath, "languagenavigation");
 
         editorPage = new PageEditorPage(about1);
         editorPage.open();
@@ -149,7 +146,6 @@ public class LanguageNavigationIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        Commons.deleteProxyComponent(adminClient, proxyPath);
         authorClient.deletePageWithRetry(siteRoot, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 

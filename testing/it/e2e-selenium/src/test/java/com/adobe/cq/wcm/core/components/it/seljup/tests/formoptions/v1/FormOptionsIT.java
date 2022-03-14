@@ -16,14 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.formoptions.BaseFormOptions;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.formoptions.FormOptionsEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.formoptions.v1.FormOptions;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -32,15 +26,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formoptions.BaseFormOptions;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formoptions.FormOptionsEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formoptions.v1.FormOptions;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_FORMOPTIONS_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
 public class FormOptionsIT extends AuthorBaseUITest {
 
     protected String testPage;
-    private String compPath;
     private String optionPath;
     private EditorPage editorPage;
 
@@ -59,18 +60,16 @@ public class FormOptionsIT extends AuthorBaseUITest {
     protected BaseFormOptions formOptions;
 
     protected void setComponentResources() {
-        formOptionsRT = Commons.rtFormOptions_v1;
+        formOptionsRT = RT_FORMOPTIONS_V1;
+        formOptions = new FormOptions();
     }
 
     protected void setup() throws ClientException {
         // create the test page, store page path in 'testPagePath'
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        compPath = Commons.createProxyComponent(adminClient, formOptionsRT, Commons.proxyPath, null, null);
-
         // add the core form container component
-        optionPath = Commons.addComponent(adminClient, compPath, testPage + Commons.relParentCompPath, "formoption", null);
+        optionPath = Commons.addComponentWithRetry(authorClient, formOptionsRT, testPage + Commons.relParentCompPath, "formoption");
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
@@ -80,7 +79,6 @@ public class FormOptionsIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         setComponentResources();
-        formOptions = new FormOptions();
         setup();
     }
 
@@ -88,9 +86,6 @@ public class FormOptionsIT extends AuthorBaseUITest {
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete the test page we created
         authorClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
-
-        // delete the proxy component created
-        Commons.deleteProxyComponent(adminClient, compPath);
     }
 
     /**

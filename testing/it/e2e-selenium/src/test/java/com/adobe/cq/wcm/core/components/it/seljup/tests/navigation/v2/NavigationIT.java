@@ -16,16 +16,17 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.navigation.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
+
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 
 @Tag("group3")
 public class NavigationIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.navigation.v1.NavigationIT {
 
     private void setupResources() {
-        navigationRT = Commons.rtNavigation_v2;
+        navigationRT = Commons.RT_NAVIGATION_V2;
     }
 
     /**
