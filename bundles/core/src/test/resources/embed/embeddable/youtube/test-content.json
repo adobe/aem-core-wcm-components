@@ -20,7 +20,8 @@
                         "youtubeVideoId": "2R2gb0MKJlo",
                         "youtubeWidth": "300",
                         "youtubeHeight": "200",
-                        "youtubeAspectRatio": "56.25"
+                        "youtubeAspectRatio": "56.25",
+                        "layout": "responsive"
                     },
                     "video2": {
                         "jcr:primaryType": "nt:unstructured",

@@ -112,6 +112,7 @@ class YouTubeImplTest {
         assertEquals("300", youTube.getIFrameWidth());
         assertEquals("200", youTube.getIFrameHeight());
         assertEquals("56.25", youTube.getIFrameAspectRatio());
+        assertEquals("responsive", youTube.getLayout());
     }
 
     @Test
@@ -124,6 +125,7 @@ class YouTubeImplTest {
         assertEquals("300", youTube.getIFrameWidth());
         assertEquals("200", youTube.getIFrameHeight());
         assertEquals("56.25", youTube.getIFrameAspectRatio());
+        assertEquals("responsive", youTube.getLayout());
     }
 
     @Test
@@ -134,6 +136,7 @@ class YouTubeImplTest {
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
         assertNull(youTube.getIFrameAspectRatio());
+        assertNull(youTube.getLayout());
     }
 
     @Test
@@ -144,6 +147,7 @@ class YouTubeImplTest {
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
         assertNull(youTube.getIFrameAspectRatio());
+        assertNull(youTube.getLayout());
     }
 
     @Test
@@ -159,6 +163,7 @@ class YouTubeImplTest {
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
         assertNull(youTube.getIFrameAspectRatio());
+        assertNull(youTube.getLayout());
     }
 
     @Test
@@ -168,6 +173,7 @@ class YouTubeImplTest {
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
         assertNull(youTube.getIFrameAspectRatio());
+        assertNull(youTube.getLayout());
     }
 
     @Test

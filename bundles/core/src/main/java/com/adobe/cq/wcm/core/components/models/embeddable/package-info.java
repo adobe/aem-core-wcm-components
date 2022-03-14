@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-@Version("2.0.0")
+@Version("1.2.0")
 package com.adobe.cq.wcm.core.components.models.embeddable;
 
 import org.osgi.annotation.versioning.Version;

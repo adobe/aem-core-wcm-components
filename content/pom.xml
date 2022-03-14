@@ -122,6 +122,16 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>lint</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run lint</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>sync pom version to package.json</id>
                         <goals>
                             <goal>npm</goal>
