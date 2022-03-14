@@ -71,7 +71,7 @@
                             var component = item.querySelector(selectors.item.icon + " [title]").getAttribute("title");
                             var title = item.querySelector(selectors.item.input);
                             var name = (title && title.name) ? title.name.match(".?/?(.+)/.*")[1] : "";
-                            var description = component + ((title && title.value) ? ": " + title.value : "");
+                            var description = Granite.I18n.get(component) + ((title && title.value) ? ": " + Granite.I18n.get(title.value) : "");
                             items.push({
                                 name: name,
                                 description: description
