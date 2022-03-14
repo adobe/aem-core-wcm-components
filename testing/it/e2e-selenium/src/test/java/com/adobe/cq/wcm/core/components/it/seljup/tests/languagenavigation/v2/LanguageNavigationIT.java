@@ -16,16 +16,17 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.languagenavigation.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
+
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 
 @Tag("group2")
 public class LanguageNavigationIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.languagenavigation.v1.LanguageNavigationIT {
 
     private void setupResources() {
-        languageNavigationRT = Commons.rtLanguageNavigation_v2;
+        languageNavigationRT = Commons.RT_LANGUAGE_NAVIGATION_V2;
     }
 
     @BeforeEach
