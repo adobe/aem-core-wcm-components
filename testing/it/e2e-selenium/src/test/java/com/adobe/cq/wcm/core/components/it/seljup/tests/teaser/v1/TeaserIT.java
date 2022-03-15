@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -71,32 +73,23 @@ public class TeaserIT extends AuthorBaseUITest {
     protected static String skiingAssetAltText              = "A skier does action skiing at the Rolle Pass in the Dolomites, Italy.";
     protected static String skiingAssetFormatted            = format(skiingAsset);
 
-
-    protected String proxyPath;
-
     protected String clientlibs;
     protected String teaserRT;
     protected String testPage;
     protected String secondTestPage;
     protected String thirdTestPage;
-    protected String imageProxyPath;
     protected String cmpPath;
     protected EditorPage editorPage;
     protected Teaser teaser;
     protected AssetFinder assetFinder;
 
     protected void setupResources() {
-        teaserRT = Commons.rtTeaser_v1;
-        clientlibs = "core.wcm.components.teaser.v1";
+        teaserRT = Commons.RT_TEASER_V1;
+        clientlibs = Commons.CLIENTLIBS_TEASER_V1;
         teaser = new Teaser();
     }
 
-    protected void setup() throws ClientException {
-        setup(Commons.rtImage_v2);
-    }
-
-    protected void setup(String imageResourceType) throws ClientException {
-
+    protected void setup() throws ClientException, InterruptedException {
         testPage = authorClient.createPage(pageName, pageTitle, rootPage, defaultPageTemplate).getSlingPath();
         secondTestPage = authorClient.createPage(secondPageName, secondPageTitle, rootPage, defaultPageTemplate).getSlingPath();
         thirdTestPage = authorClient.createPage(thirdPageName, thirdPageTitle, rootPage, defaultPageTemplate).getSlingPath();
@@ -104,33 +97,13 @@ public class TeaserIT extends AuthorBaseUITest {
         //Update test page description
         java.util.List<NameValuePair> props = new ArrayList();
         props.add(new BasicNameValuePair("jcr:description",pageDescription));
-        Commons.setPageProperties(adminClient, testPage, props, 200, 201);
+        Commons.setPageProperties(authorClient, testPage, props, 200, 201);
 
-        String policySuffix = "/structure/page/new_policy";
-        HashMap<String, String> data = new HashMap();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("clientlibs", clientlibs);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
+        createPagePolicy(new HashMap<String, String>() {{put("clientlibs", clientlibs);}});
 
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"",data, policyAssignmentPath);
-
-
-        proxyPath = Commons.createProxyComponent(adminClient, teaserRT, Commons.proxyPath, null, null);
-        imageProxyPath = Commons.createProxyComponent(adminClient, imageResourceType, Commons.proxyPath, null, null);
-
-        data.clear();
-        data.put("imageDelegate", imageProxyPath);
-        Commons.editNodeProperties(adminClient, proxyPath, data);
-
-        cmpPath = Commons.addComponent(adminClient, proxyPath,testPage + Commons.relParentCompPath, componentName, null);
+        cmpPath = Commons.addComponentWithRetry(authorClient, teaserRT,testPage + Commons.relParentCompPath, componentName, null,
+                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+                HttpServletResponse.SC_OK, HttpServletResponse.SC_CREATED);
 
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
@@ -142,7 +115,7 @@ public class TeaserIT extends AuthorBaseUITest {
     * Before Test Case
     **/
     @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    public void setupBeforeEach() throws ClientException, InterruptedException {
         setupResources();
         setup();
     }
@@ -152,9 +125,6 @@ public class TeaserIT extends AuthorBaseUITest {
      */
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        Commons.deleteProxyComponent(adminClient, proxyPath);
-        Commons.deleteProxyComponent(adminClient, imageProxyPath);
-
         authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
         authorClient.deletePageWithRetry(secondTestPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
@@ -247,23 +217,10 @@ public class TeaserIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Hide elements for Teaser")
     public void testHideElementsTeaser() throws TimeoutException, InterruptedException, ClientException {
-        String policySuffix = "/teaser/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("titleHidden", "true");
-        data.put("descriptionHidden", "true");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
+        createComponentPolicy("/teaser-v1", new HashMap<String, String>() {{
+            put("titleHidden", "true");
+            put("descriptionHidden", "true");
+        }});
 
         Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
@@ -282,23 +239,11 @@ public class TeaserIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Links to elements for Teaser")
     public void testLinksToElementsTeaser() throws TimeoutException, InterruptedException, ClientException {
-        String policySuffix = "/teaser/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("titleLinkHidden", "true");
-        data.put("imageLinkHidden", "true");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
 
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
+        createComponentPolicy("/teaser-v1", new HashMap<String, String>() {{
+            put("titleLinkHidden", "true");
+            put("imageLinkHidden", "true");
+        }});
 
         Commons.openSidePanel();
         assetFinder.setFiltersPath(testAssetsPath);
@@ -324,22 +269,9 @@ public class TeaserIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Disable Actions for Teaser")
     public void testDisableActionsTeaser() throws ClientException, TimeoutException, InterruptedException {
-        String policySuffix = "/teaser/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("actionsDisabled", "true");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
+        createComponentPolicy("/teaser-v1", new HashMap<String, String>() {{
+            put("actionsDisabled", "true");
+        }});
 
         Commons.openSidePanel();
         Commons.openEditDialog(editorPage, cmpPath);

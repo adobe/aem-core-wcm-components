@@ -16,21 +16,21 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.*;
+
 @Tag("group1")
 public class FormComponentsIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v1.FormComponentsIT {
 
-
     public void setComponentResources() {
-        formContainerRT = Commons.rtFormContainer_v2;
-        formTextRT = Commons.rtFormText_v2;
-        formHiddenRT = Commons.rtFormHidden_v2;
-        formOptionsRT = Commons.rtFormOptions_v2;
-        formButtonRT = Commons.rtFormButton_v2;
+        formContainerRT =RT_FORMCONTAINER_V2;
+        formTextRT = RT_FORMTEXT_V2;
+        formHiddenRT = RT_FORMHIDDEN_V2;
+        formOptionsRT = RT_FORMOPTIONS_V2;
+        formButtonRT = RT_FORMBUTTON_V2;
     }
 
     @BeforeEach

@@ -16,6 +16,17 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v1;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
+import org.apache.http.HttpStatus;
+import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formcomponents.FormContainerEditDialog;
@@ -24,21 +35,10 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import org.apache.http.HttpStatus;
-import org.apache.sling.testing.clients.ClientException;
 
 import org.codehaus.jackson.JsonNode;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Iterator;
-
-
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.*;
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,11 +49,6 @@ public class FormComponentsIT extends AuthorBaseUITest {
     // root location where form content will be stored
     private static final String userContent = "/content/usergenerated/core-components";
 
-    private String compPathContainer;
-    private String compPathText;
-    private String compPathHidden;
-    private String compPathOptions;
-    private String compPathButton;
     private EditorPage editorPage;
     private String containerPath;
     private String testPage;
@@ -65,46 +60,42 @@ public class FormComponentsIT extends AuthorBaseUITest {
     protected FormComponents formComponents;
 
 
+    public void setComponentResources() {
+        formContainerRT =RT_FORMCONTAINER_V1;
+        formTextRT = RT_FORMTEXT_V1;
+        formHiddenRT = RT_FORMHIDDEN_V1;
+        formOptionsRT = RT_FORMOPTIONS_V1;
+        formButtonRT = RT_FORMBUTTON_V1;
+    }
 
     protected void setup() throws ClientException  {
         // create the test page, store page path in 'testPagePath'
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        compPathContainer = Commons.createProxyComponent(adminClient, formContainerRT, Commons.proxyPath, null, null);
-
         // add the core form container component
-        containerPath = Commons.addComponent(adminClient, compPathContainer,testPage + Commons.relParentCompPath, "container", null);
-
-        // create a proxy component
-        compPathText = Commons.createProxyComponent(adminClient, formTextRT, Commons.proxyPath, null, null);
+        containerPath = Commons.addComponentWithRetry(authorClient, formContainerRT,testPage + Commons.relParentCompPath, "container");
 
         // inside the form add a form text input field
-        String inputPath = Commons.addComponent(adminClient, compPathText,containerPath + "/", "text", null);
+        String inputPath = Commons.addComponentWithRetry(authorClient, formTextRT,containerPath + "/", "text");
 
         // set name and default value for the input field
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("name", "inputName");
         data.put("defaultValue", "inputValue");
-        Commons.editNodeProperties(adminClient, inputPath, data);
-
-        // create a proxy component
-        compPathHidden = Commons.createProxyComponent(adminClient, formHiddenRT, Commons.proxyPath, null, null);
+        Commons.editNodeProperties(authorClient, inputPath, data);
 
         // inside the form add a hidden field component
-        String hiddenPath = Commons.addComponent(adminClient, compPathHidden,containerPath + "/", "hidden", null);
+        String hiddenPath = Commons.addComponentWithRetry(authorClient, formHiddenRT,containerPath + "/", "hidden");
 
         // set name and default value for the hidden field component
         data.clear();
         data.put("name", "hiddenName");
         data.put("value", "hiddenValue");
-        Commons.editNodeProperties(adminClient, hiddenPath, data);
+        Commons.editNodeProperties(authorClient, hiddenPath, data);
 
-        // create a proxy component
-        compPathOptions = Commons.createProxyComponent(adminClient, formOptionsRT, Commons.proxyPath, null, null);;
 
         // inside the form add a form option component
-        String optionPath = Commons.addComponent(adminClient, compPathOptions,containerPath + "/", "options", null);
+        String optionPath = Commons.addComponentWithRetry(authorClient, formOptionsRT,containerPath + "/", "options");
 
         // create an option list items
         data.clear();
@@ -116,34 +107,22 @@ public class FormComponentsIT extends AuthorBaseUITest {
         data.put("./items/item1/selected", "false");
         data.put("./items/item1/text", "text2");
         data.put("./items/item1/value", "value2");
-        Commons.editNodeProperties(adminClient, optionPath, data);
-
-        // create a proxy component
-        compPathButton = Commons.createProxyComponent(adminClient, formButtonRT, Commons.proxyPath, null, null);
+        Commons.editNodeProperties(authorClient, optionPath, data);
 
         // add a button to the form
-        String buttonPath = Commons.addComponent(adminClient, compPathButton,containerPath + "/", "button", null);
+        String buttonPath = Commons.addComponentWithRetry(authorClient, formButtonRT,containerPath + "/", "button");
 
         // make sure the button is a submit button
         data.clear();
         data.put("type","submit");
         data.put("caption","Submit");
-        Commons.editNodeProperties(adminClient, buttonPath, data);
+        Commons.editNodeProperties(authorClient, buttonPath, data);
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
 
         formComponents = new FormComponents();
-    }
-
-
-    public void setComponentResources() {
-        formContainerRT = Commons.rtFormContainer_v1;
-        formTextRT = Commons.rtFormText_v1;
-        formHiddenRT = Commons.rtFormHidden_v1;
-        formOptionsRT = Commons.rtFormOptions_v1;
-        formButtonRT = Commons.rtFormButton_v1;
     }
 
 
@@ -159,13 +138,6 @@ public class FormComponentsIT extends AuthorBaseUITest {
         authorClient.deletePageWithRetry(userContent, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
         // delete the test page we created
         authorClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
-
-        // delete the proxy components created
-        Commons.deleteProxyComponent(adminClient, compPathContainer);
-        Commons.deleteProxyComponent(adminClient, compPathText);
-        Commons.deleteProxyComponent(adminClient, compPathHidden);
-        Commons.deleteProxyComponent(adminClient, compPathOptions);
-        Commons.deleteProxyComponent(adminClient, compPathButton);
     }
 
     /**
@@ -183,7 +155,7 @@ public class FormComponentsIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
 
-        JsonNode json_allForm = adminClient.doGetJson(contentJsonUrl_allForm, 3, HttpStatus.SC_OK);
+        JsonNode json_allForm = authorClient.doGetJson(contentJsonUrl_allForm, 3, HttpStatus.SC_OK);
         Iterator<JsonNode> itr = json_allForm.getElements();
         Boolean present = false;
         while(itr.hasNext()) {
