@@ -154,8 +154,7 @@
                                     <text
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/text"
-                                        text="Image rendering is delegated to the ${imageDelegate.title} component.">
-                                    </text>
+                                        text="${imageDelegateDescription}"/>
                                 </items>
                             </imageDelegate>
                         </items>
