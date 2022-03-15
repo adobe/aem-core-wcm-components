@@ -19,13 +19,13 @@ package com.adobe.cq.wcm.core.components.it.seljup;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
+import org.apache.http.cookie.Cookie;
 import org.apache.sling.testing.clients.ClientException;
 import org.codehaus.jackson.JsonNode;
 import org.json.JSONArray;
@@ -77,6 +77,10 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
 
         adminClient = adminAuthor;
         authorClient = testContentBuilder.getDefaultUserClient();
+        Cookie affinityCookie = adminClient.getCookieStore().getCookies().stream().filter(c -> c.getName().equals("affinity")).findFirst().orElse(null);
+        if (affinityCookie != null) {
+            authorClient.getCookieStore().addCookie(affinityCookie);
+        }
         rootPage = testContentBuilder.getContentRootPath();
 
         defaultPageTemplate = testContentBuilder.getDefaultPageTemplatePath();
