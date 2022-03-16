@@ -47,8 +47,8 @@ import java.util.Set;
 
 /**
  * Intercepts all the HTTP requests made to /editor.html or a html page inside /content/.
- * Creates a response wrapper - {@link CharResponseWrapper} in which all the servlets/filters called after this filter
- * stores the response content.
+ * Creates a response wrapper - {@link CharResponseWrapper} in which all the servlets/filters called after this filter,
+ * store the response content.
  * Gets the response content from this wrapper, modifies it and copies it into the original response object.
  */
 @Component(
@@ -155,7 +155,7 @@ public class TableOfContentsFilter implements Filter {
             : null;
 
         if(startLevel.getValue() > stopLevel.getValue()) {
-            LOGGER.warn("Invalid start and stop levels, startLevel={%d}, stopLevel={%d}",
+            LOGGER.error("Invalid start and stop levels, startLevel={%d}, stopLevel={%d}",
                 startLevel.getValue(), stopLevel.getValue());
             return null;
         }

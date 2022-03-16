@@ -52,7 +52,7 @@ BLOCK cmp-toc__content
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
-* **Compatibility**: AEM 6.3
+* **Compatibility**: AEM 6.5
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_tableofcontents\_v1](https://www.adobe.com/go/aem_cmp_tableofcontents_v1)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_tableofcontents](https://www.adobe.com/go/aem_cmp_library_tableofcontents)
