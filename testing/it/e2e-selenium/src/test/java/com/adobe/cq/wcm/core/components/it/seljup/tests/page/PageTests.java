@@ -457,7 +457,7 @@ public class PageTests {
 
         final ElementsCollection currentPermissionsList = permissions.permissionsList();
         // Check no permission set
-        currentPermissionsList.shouldHaveSize(0);
+        currentPermissionsList.shouldHave(CollectionCondition.size(0));
 
         // Add permission
         final PermissionsTab.AddPermissionsDialog addPermissionsDialog = permissions.addPermission();
@@ -471,7 +471,7 @@ public class PageTests {
         addPermissionsDialog.clickPrimary();
 
         // Check the permission set
-        currentPermissionsList.shouldHaveSize(1);
+        currentPermissionsList.shouldHave(CollectionCondition.size(1));
         currentPermissionsList.shouldHave(CollectionCondition.texts(userName));
         assertTrue(permissions.isReadPermissionGranted(userName), "Read permission has been given, should be checked");
         assertTrue(permissions.isDeletePermissionGranted(userName), "Delete permission has been given, should be checked");
@@ -488,7 +488,7 @@ public class PageTests {
 
         // Delete the permission
         permissions.deleteUserPermission(userName);
-        currentPermissionsList.shouldHaveSize(0);
+        currentPermissionsList.shouldHave(CollectionCondition.size(0));
     }
 
     public void testEditUserGroupPermissionsPageProperties() {
@@ -500,7 +500,7 @@ public class PageTests {
 
         // Check current CUG list is empty
         final ElementsCollection currentCUGList = permissions.cugList();
-        currentCUGList.shouldHaveSize(0);
+        currentCUGList.shouldHave(CollectionCondition.size(0));
 
         // Add CUG permission
         final PermissionsTab.EditCUGDialog editCUG = permissions.editCUG();
@@ -511,7 +511,7 @@ public class PageTests {
         editCUG.clickPrimary();
 
         // Check the added CUG permission
-        currentCUGList.shouldHaveSize(1);
+        currentCUGList.shouldHave(CollectionCondition.size(1));
         currentCUGList.shouldHave(CollectionCondition.texts("CoreComponent Test"));
     }
 

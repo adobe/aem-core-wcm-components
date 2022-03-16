@@ -101,6 +101,9 @@
                         <jackrabbit-nodetypes>
                             <isDisabled>true</isDisabled>
                         </jackrabbit-nodetypes>
+                        <netcentric-aem-cloud>
+                            <isDisabled>true</isDisabled>
+                        </netcentric-aem-cloud>
                     </validatorsSettings>
                     <dependencies>
                         <dependency>

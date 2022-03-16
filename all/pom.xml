@@ -51,27 +51,27 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>generate-metadata-simple</id>
-                        <goals>
-                            <goal>generate-metadata</goal>
-                        </goals>
+                        <id>default-generate-metadata</id>
                         <configuration>
                             <embeddedTarget>/apps/core/wcm/install</embeddedTarget>
                             <embeddeds>
                                 <embedded>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>core.wcm.components.core</artifactId>
-                                    <target>/apps/core/wcm/install</target>
+                                    <filter>true</filter>
+                                    <isAllVersionsFilter>true</isAllVersionsFilter>
                                 </embedded>
                                 <embedded>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>core.wcm.components.extensions.amp</artifactId>
-                                    <target>/apps/core/wcm/install</target>
+                                    <filter>true</filter>
+                                    <isAllVersionsFilter>true</isAllVersionsFilter>
                                 </embedded>
                                 <embedded>
                                     <groupId>org.apache.sling</groupId>
                                     <artifactId>org.apache.sling.models.impl</artifactId>
-                                    <target>/apps/core/wcm/install</target>
+                                    <filter>true</filter>
+                                    <isAllVersionsFilter>true</isAllVersionsFilter>
                                 </embedded>
                             </embeddeds>
                             <subPackages>
@@ -80,29 +80,23 @@
                                     <artifactId>core.wcm.components.content</artifactId>
                                     <classifier>~cloud</classifier>
                                     <filter>true</filter>
+                                    <isAllVersionsFilter>true</isAllVersionsFilter>
                                 </subPackage>
                                 <subPackage>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>core.wcm.components.config</artifactId>
                                     <filter>true</filter>
+                                    <isAllVersionsFilter>true</isAllVersionsFilter>
                                 </subPackage>
                                 <subPackage>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>core.wcm.components.extensions.amp.content</artifactId>
                                     <classifier>~cloud</classifier>
                                     <filter>true</filter>
+                                    <isAllVersionsFilter>true</isAllVersionsFilter>
                                 </subPackage>
                             </subPackages>
                             <packageType>container</packageType>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>package-simple</id>
-                        <goals>
-                            <goal>package</goal>
-                        </goals>
-                        <configuration>
-
                         </configuration>
                     </execution>
                 </executions>
@@ -194,27 +188,25 @@
                                     <goal>generate-metadata</goal>
                                 </goals>
                                 <configuration>
-                                    <filters>
-                                        <filter>
-                                            <root>/libs/core/wcm/install</root>
-                                        </filter>
-                                    </filters>
                                     <embeddedTarget>/libs/core/wcm/install</embeddedTarget>
                                     <embeddeds>
                                         <embedded>
                                             <groupId>${project.groupId}</groupId>
                                             <artifactId>core.wcm.components.core</artifactId>
-                                            <target>/libs/core/wcm/install</target>
+                                            <filter>true</filter>
+                                            <isAllVersionsFilter>true</isAllVersionsFilter>
                                         </embedded>
                                         <embedded>
                                             <groupId>${project.groupId}</groupId>
                                             <artifactId>core.wcm.components.extensions.amp</artifactId>
-                                            <target>/libs/core/wcm/install</target>
+                                            <filter>true</filter>
+                                            <isAllVersionsFilter>true</isAllVersionsFilter>
                                         </embedded>
                                         <embedded>
                                             <groupId>org.apache.sling</groupId>
                                             <artifactId>org.apache.sling.models.impl</artifactId>
-                                            <target>/libs/core/wcm/install</target>
+                                            <filter>true</filter>
+                                            <isAllVersionsFilter>true</isAllVersionsFilter>
                                         </embedded>
                                     </embeddeds>
                                     <subPackages>
@@ -223,17 +215,20 @@
                                             <artifactId>core.wcm.components.content</artifactId>
                                             <classifier>cloud</classifier>
                                             <filter>true</filter>
+                                            <isAllVersionsFilter>true</isAllVersionsFilter>
                                         </subPackage>
                                         <subPackage>
                                             <groupId>${project.groupId}</groupId>
                                             <artifactId>core.wcm.components.config</artifactId>
                                             <filter>true</filter>
+                                            <isAllVersionsFilter>true</isAllVersionsFilter>
                                         </subPackage>
                                         <subPackage>
                                             <groupId>${project.groupId}</groupId>
                                             <artifactId>core.wcm.components.extensions.amp.content</artifactId>
                                             <classifier>cloud</classifier>
                                             <filter>true</filter>
+                                            <isAllVersionsFilter>true</isAllVersionsFilter>
                                         </subPackage>
                                     </subPackages>
                                     <packageType>container</packageType>
@@ -247,7 +242,6 @@
                                 </goals>
                                 <configuration>
                                     <classifier>cloud</classifier>
-                                    <workDirectory>${project.build.directory}/vault-work-cloud</workDirectory>
                                 </configuration>
                             </execution>
                         </executions>
