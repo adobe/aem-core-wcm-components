@@ -16,6 +16,7 @@
 
 <sly data-sly-template.youtube="${@ youtube}">
     <iframe data-cmp-data-layer="${youtube.data.json}"
+            title="youtube video"
             width="${youTube.iFrameWidth || '100%' @ context='scriptString'}"
             height="${youTube.iFrameHeight || 390 @ context='scriptString'}"
             src="${youTube.iFrameSrc}"
