@@ -47,13 +47,13 @@ public class DataLayerIT extends AuthorBaseUITest {
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
-        testPage = authorClient.createPage("testPage-" + System.currentTimeMillis(), "Test Page Title", "/content/core-components", "/conf/core-components/settings/wcm/templates/simple-template").getSlingPath();
+        testPage = adminClient.createPage("testPage-" + System.currentTimeMillis(), "Test Page Title", "/content/core-components", "/conf/core-components/settings/wcm/templates/simple-template").getSlingPath();
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
     }
 
     @Test
-    public void testDataLayerInitialized() throws InterruptedException {
+    public void testDataLayerInitialized() {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
@@ -80,6 +80,6 @@ public class DataLayerIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        authorClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+        adminClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
     }
 }
