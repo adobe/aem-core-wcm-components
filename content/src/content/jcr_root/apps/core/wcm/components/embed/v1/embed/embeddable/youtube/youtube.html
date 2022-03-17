@@ -19,9 +19,9 @@
      data-sly-use.responsiveTemplate="youtuberesponsive.html">
   <sly data-sly-test="${!youtube.empty}">
     <sly data-sly-test="${!youtube.layout || youtube.layout!='responsive'}"
-         data-sly-call="${youtubefixed.youtube @ youtube=youtube}"></sly>
+         data-sly-call="${fixedTemplate.youtube @ youtube=youtube}"></sly>
 
     <sly data-sly-test="${youtube.layout=='responsive'}"
-         data-sly-call="${youtuberesponsive.youtube @ youtube=youtube}"></sly>
+         data-sly-call="${responsiveTemplate.youtube @ youtube=youtube}"></sly>
   </sly>
 </sly>
