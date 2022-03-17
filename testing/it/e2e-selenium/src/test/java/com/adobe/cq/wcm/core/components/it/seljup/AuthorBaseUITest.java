@@ -49,6 +49,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import static com.adobe.cq.testing.selenium.Constants.GROUPID_CONTENT_AUTHORS;
 import static com.adobe.cq.testing.selenium.Constants.RUNMODE_AUTHOR;
 import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.setAffinityCookie;
+import static org.junit.Assume.assumeNotNull;
 
 @Execution(ExecutionMode.CONCURRENT)
 public abstract class AuthorBaseUITest extends UIAbstractTest {
@@ -78,9 +79,9 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
         adminClient = adminAuthor;
         authorClient = testContentBuilder.getDefaultUserClient();
         Cookie affinityCookie = adminClient.getCookieStore().getCookies().stream().filter(c -> c.getName().equals("affinity")).findFirst().orElse(null);
-        if (affinityCookie != null) {
-            authorClient.getCookieStore().addCookie(affinityCookie);
-        }
+        assumeNotNull(affinityCookie);
+        authorClient.getCookieStore().addCookie(affinityCookie);
+
         rootPage = testContentBuilder.getContentRootPath();
 
         defaultPageTemplate = testContentBuilder.getDefaultPageTemplatePath();
