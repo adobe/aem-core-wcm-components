@@ -111,6 +111,8 @@ class YouTubeImplTest {
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=en_US&mute=1&autoplay=1&loop=1&playlist=2R2gb0MKJlo&rel=1&playsinline=1"), youTube.getIFrameSrc(style).get());
         assertEquals("300", youTube.getIFrameWidth());
         assertEquals("200", youTube.getIFrameHeight());
+        assertEquals("56.25", youTube.getIFrameAspectRatio());
+        assertEquals("responsive", youTube.getLayout());
     }
 
     @Test
@@ -122,6 +124,8 @@ class YouTubeImplTest {
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=en_US&mute=1&loop=1&playlist=2R2gb0MKJlo&rel=1&playsinline=1"), youTube.getIFrameSrc(style).get());
         assertEquals("300", youTube.getIFrameWidth());
         assertEquals("200", youTube.getIFrameHeight());
+        assertEquals("56.25", youTube.getIFrameAspectRatio());
+        assertEquals("responsive", youTube.getLayout());
     }
 
     @Test
@@ -131,6 +135,8 @@ class YouTubeImplTest {
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=de_DE&mute=0&autoplay=0&loop=0&rel=0&playsinline=0"), youTube.getIFrameSrc(style).get());
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
+        assertNull(youTube.getIFrameAspectRatio());
+        assertNull(youTube.getLayout());
     }
 
     @Test
@@ -140,6 +146,8 @@ class YouTubeImplTest {
         assertEquals("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=de_DE", youTube.getIFrameSrc());
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
+        assertNull(youTube.getIFrameAspectRatio());
+        assertNull(youTube.getLayout());
     }
 
     @Test
@@ -154,6 +162,8 @@ class YouTubeImplTest {
         assertEquals(new URI("https://www.youtube.com/embed/2R2gb0MKJlo?origin=http%3A%2F%2Flocalhost&hl=en_US"), youTube.getIFrameSrc(style).get());
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
+        assertNull(youTube.getIFrameAspectRatio());
+        assertNull(youTube.getLayout());
     }
 
     @Test
@@ -162,6 +172,8 @@ class YouTubeImplTest {
         assertFalse(youTube.getIFrameSrc(style).isPresent());
         assertNull(youTube.getIFrameWidth());
         assertNull(youTube.getIFrameHeight());
+        assertNull(youTube.getIFrameAspectRatio());
+        assertNull(youTube.getLayout());
     }
 
     @Test
