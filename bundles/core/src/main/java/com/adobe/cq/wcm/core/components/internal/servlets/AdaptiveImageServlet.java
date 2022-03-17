@@ -73,6 +73,7 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.commons.WCMUtils;
@@ -262,7 +263,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 metrics.markImageStreamed();
             }
         } catch (IllegalArgumentException e) {
-            LOGGER.error("Invalid image request", e.getMessage());
+            LOGGER.error("Invalid image request" + e.getMessage());
             metrics.markImageErrors();
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } finally {
@@ -831,7 +832,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the content policy bound to the given component.
      *
      * @param imageResource the resource identifying the accessed image component
-     * @return the content policy. May be {@code nulll} in case no content policy can be found.
+     * @return the content policy. May be {@code null} in case no content policy can be found.
      */
     private ContentPolicy getContentPolicy(@NotNull Resource imageResource) {
         ResourceResolver resourceResolver = imageResource.getResourceResolver();
@@ -853,6 +854,17 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             LOGGER.warn("Could not get policy manager from resource resolver!");
         }
         return null;
+    }
+
+    /**
+     * Returns the designer bound to the given component.
+     *
+     * @param imageResource the resource identifying the accessed image component
+     * @return the designer. May be {@code null} in case no designer can be found.
+     */
+    private Designer getDesginer(@NotNull Resource imageResource) {
+        ResourceResolver resourceResolver = imageResource.getResourceResolver();
+        return resourceResolver.adaptTo(Designer.class);
     }
 
     /**
@@ -935,15 +947,23 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource) {
         List<Integer> list = new ArrayList<>();
         ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        Designer designer = getDesginer(imageResource);
+        ValueMap properties = null;
+
         if (contentPolicy != null) {
-            String[] allowedRenditionWidths = contentPolicy.getProperties()
-                    .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
+            properties = contentPolicy.getProperties();
+        } else if (designer != null) {
+            properties = designer.getStyle(imageResource);
+        }
+
+        if (properties != null) {
+            String[] allowedRenditionWidths = properties
+                .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
             for (String width : allowedRenditionWidths) {
                 try {
                     list.add(Integer.parseInt(width));
                 } catch (NumberFormatException e) {
-                    LOGGER.warn("One of the configured widths ({}) from the {} content policy is not a valid Integer.", width,
-                            contentPolicy.getPath());
+                    LOGGER.warn("One of the configured widths ({}) is not a valid Integer.", width);
                     return list;
                 }
             }
@@ -964,9 +984,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private Integer getAllowedJpegQuality(@NotNull Resource imageResource) {
         Integer allowedJpegQuality = DEFAULT_JPEG_QUALITY;
         ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        Designer designer = getDesginer(imageResource);
         if (contentPolicy != null) {
             allowedJpegQuality = contentPolicy.getProperties()
                     .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_JPEG_QUALITY, DEFAULT_JPEG_QUALITY);
+        } else if (designer != null){
+            allowedJpegQuality = designer.getStyle(imageResource)
+                .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_JPEG_QUALITY, DEFAULT_JPEG_QUALITY);
         }
         return allowedJpegQuality;
     }
