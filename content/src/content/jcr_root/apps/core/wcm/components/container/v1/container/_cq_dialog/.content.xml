@@ -109,6 +109,7 @@
                                                 autoStart="{Boolean}false"
                                                 class="cq-droptarget"
                                                 fieldLabel="Background Image"
+                                                fieldDescription="Background image for the container. For accessibility purposes use images that provide adequate contrast with the text"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./backgroundImageReference"
                                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff]"
