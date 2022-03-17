@@ -22,7 +22,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.adobe.cq.wcm.core.components.services.image.DMImageDelivery;
+import com.adobe.cq.wcm.core.components.services.image.DMNextImageDelivery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -70,12 +70,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @ValueMapValue(name = "smartCropRendition", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected String smartCropRendition;
-
-    @Inject
-    @Source("osgi-services")
-    protected DMImageDelivery dmImageDelivery;
-
-    protected boolean useWebOptimizedService = false;
 
     /**
      * The resource type.
@@ -153,12 +147,15 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @PostConstruct
     protected void initModel() {
         super.initModel();
+        useDmNextService = false;
         boolean altValueFromDAM = properties.get(PN_ALT_VALUE_FROM_DAM, currentStyle.get(PN_ALT_VALUE_FROM_DAM, true));
         boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
         boolean isDmFeaturesEnabled = currentStyle.get(PN_DESIGN_DYNAMIC_MEDIA_ENABLED, false);
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
-        useWebOptimizedService = properties.get("useWebOptimizedService", false);
+        useDmNextService = properties.get("useWebOptimizedService", false);
         boolean uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
+        // if content policy delegate path is provided pass it to the image Uri
+        String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
         String dmImageUrl = null;
 
 
@@ -212,13 +209,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             dmServerUrl = asset.getMetadataValue(Scene7Constants.PN_S7_DOMAIN) + dmServerPath.substring(1);
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
-                    } else if (useWebOptimizedService && (!hasContent)
-                                // && extra conditions from service
-                                && dmImageDelivery.isWebOptimizedImageDeliveryAllowed()
-                                ) {
-                        src = dmImageDelivery.get
-
-
+                    } else {
+                        if (dmNextImageDeliveryService.isWebOptimizedImageDeliveryAllowed() &&
+                            StringUtils.isEmpty(policyDelegatePath)) {
+                            useDmNextService = true;
+                        }
                     }
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
@@ -243,8 +238,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         (lastModifiedDate > 0 ?("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                         (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
 
-                // if content policy delegate path is provided pass it to the image Uri
-                String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
+
                 if (StringUtils.isNotBlank(policyDelegatePath)) {
                     srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
                     src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;

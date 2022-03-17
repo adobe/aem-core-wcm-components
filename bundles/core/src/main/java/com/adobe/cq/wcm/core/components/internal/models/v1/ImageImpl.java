@@ -28,7 +28,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
-import com.adobe.cq.wcm.core.components.services.image.DMImageDelivery;
+import com.adobe.cq.wcm.core.components.services.image.DMNextImageDelivery;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.CharEncoding;
@@ -98,6 +98,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     @Source("osgi-services")
     protected MimeTypeService mimeTypeService;
 
+    @Inject
+    @Source("osgi-services")
+    protected DMNextImageDelivery dmNextImageDeliveryService;
+
 
     @Self
     protected LinkHandler linkHandler;
@@ -127,6 +131,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected String imageName;
     protected Resource fileResource;
     protected Optional<Link> link;
+    protected boolean useDmNextService = false;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
@@ -173,6 +178,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
                     imageName = getImageNameFromDam(fileReference);
                     hasContent = true;
+                    useDmNextService = dmNextImageDeliveryService.isWebOptimizedImageDeliveryAllowed();
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
                 }
@@ -260,6 +266,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                     (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "")) : "") +
                     (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+
+
             if (!isDecorative) {
                 link = linkHandler.getLink(resource);
             } else {
@@ -310,6 +318,11 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @Override
     public String getSrc() {
+
+        if (useDmNextService) {
+            //getSRc
+        }
+
         return src;
     }
 

@@ -2,24 +2,36 @@ package com.adobe.cq.wcm.core.components.internal.helper.image;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 public class WebOptimizedHelper {
 
-    private String DM_DELIVERY_BASE_URL = "/adobe/api/dynamicmedia.deliver";
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebOptimizedHelper.class);
 
-    private String QUESTION_SYMBOL = "?";
+    private String DM_DELIVERY_BASE_URL = "https://publish-p56138-e410068.adobeaemcloud.com/api/dynamicmedia.deliver";
 
-    private String EQUAL_SYMBOL = "=";
+    private static String QUESTION_SYMBOL = "?";
 
-    private String AND_SYMBOL = "&";
+    private static String EQUAL_SYMBOL = "=";
+
+    private static String AND_SYMBOL = "&";
+
+    private static final String PATH_SEPARATOR = "/";
+
+    private static String DOT = ".";
 
     private int DEFAULT_WIDTH = 800;
 
     private int DEFAULT_QUALITY = 75;
 
-    private String WIDTH_PARAMETER = "w";
+    private static String WIDTH_PARAMETER = "width";
 
-    private String QUALITY_PARAMETER = "q";
+    private static String QUALITY_PARAMETER = "quality";
 
     private String PATH_PARAMETER = "path";
 
@@ -85,18 +97,36 @@ public class WebOptimizedHelper {
         this.seoName = seoName;
     }
 
-    public String getUrl() {
-        StringBuilder stringBuilder = new StringBuilder(DM_DELIVERY_BASE_URL + QUESTION_SYMBOL +  WIDTH_PARAMETER + EQUAL_SYMBOL + width +
-                                                            AND_SYMBOL + QUALITY_PARAMETER + EQUAL_SYMBOL + quality);
+    public static String getSrcSet(String dmNextBaseUrl, String assetPath, String imageName, String mimeType, int[] widths, int jpegQuality) {
+        if (widths.length == 0) {
+            return null;
+        }
+        String widthPlaceHolder = "{.width}";
+        String[] srcsetArray = new String[widths.length];
+        String srcUritemplate = dmNextBaseUrl + assetPath +
+                                PATH_SEPARATOR + imageName + DOT + mimeType +
+                                QUESTION_SYMBOL + WIDTH_PARAMETER + EQUAL_SYMBOL + widthPlaceHolder +
+                                AND_SYMBOL + QUALITY_PARAMETER + EQUAL_SYMBOL + jpegQuality;
 
-        if (!StringUtils.isEmpty(cropParameter)) {
-            stringBuilder.append(AND_SYMBOL + CROP_PARAMETER + EQUAL_SYMBOL + cropParameter);
+        String srcUriTemplateDecoded = "";
+        try {
+            srcUriTemplateDecoded = URLDecoder.decode(srcUritemplate, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error("Character Decoding failed for " + assetPath);
         }
 
-        if (rotate != 0) {
-            stringBuilder.append(AND_SYMBOL + ROTATE_PARAMETER + EQUAL_SYMBOL + rotate);
+        if (srcUriTemplateDecoded.contains(widthPlaceHolder)) {
+            for (int i = 0; i < widths.length; i++) {
+                    srcsetArray[i] = srcUriTemplateDecoded.replace(widthPlaceHolder, String.format("%s", widths[i])) + " " + widths[i] + "w";
+            }
+            return StringUtils.join(srcsetArray, ',');
         }
+        return null;
+    }
 
+    public String getSrc(String dmNextBaseUrl, String assetPath, String imageName, String mimeType, int[] widths, int originalWidth, int originalHeight, int jpegQuality) {
+
+        return StringUtils.EMPTY;
     }
 
 }

@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.internal.helper.image.WebOptimizedHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -92,11 +93,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     public String getSrcset() {
 
-        if (useWebOptimizedService) {
-            LOGGER.error("Web Optimized Service enabled");
-        }
-
         int[] widthsArray = getWidths();
+//        if (useDmNextService) {
+//            return WebOptimizedHelper.getSrcSet(dmNextImageDeliveryService.getDMNextServiceUrl(), fileReference, imageName, extension, widthsArray, jpegQuality);
+//        }
+
         String srcUritemplate = getSrcUriTemplate();
         String[] srcsetArray = new String[widthsArray.length];
         if (widthsArray.length > 0 && srcUritemplate != null) {
