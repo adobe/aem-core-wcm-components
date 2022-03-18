@@ -506,7 +506,11 @@
      */
     function onHashChange() {
         if (location.hash && location.hash !== "#") {
+            var unvalidSelectorRegex = /^#[0-9]/;
             var anchorLocation = decodeURIComponent(location.hash);
+            if (unvalidSelectorRegex.test(anchorLocation)) {
+                return;
+            }
             var anchorElement = document.querySelector(anchorLocation);
             if (anchorElement && anchorElement.classList.contains("cmp-accordion__item") && !anchorElement.hasAttribute("data-cmp-expanded")) {
                 var anchorElementButton = document.querySelector(anchorLocation + "-button");
