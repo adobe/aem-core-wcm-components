@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2019 Adobe
+  ~ Copyright 2022 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
-<sly data-sly-use.youTube="com.adobe.cq.wcm.core.components.models.embeddable.YouTube"
-     data-sly-use.fixedTemplate="youtubefixed.html"
-     data-sly-use.responsiveTemplate="youtuberesponsive.html">
-  <sly data-sly-test="${!youtube.empty}">
-    <sly data-sly-test="${!youtube.layout || youtube.layout!='responsive'}"
-         data-sly-call="${fixedTemplate.youtube @ youtube=youtube}"></sly>
-
-    <sly data-sly-test="${youtube.layout=='responsive'}"
-         data-sly-call="${responsiveTemplate.youtube @ youtube=youtube}"></sly>
-  </sly>
+<sly data-sly-template.youtube="${@ youtube}">
+    <iframe data-cmp-data-layer="${youtube.data.json}"
+            title="youtube video"
+            width="${youTube.iFrameWidth || '100%' @ context='scriptString'}"
+            height="${youTube.iFrameHeight || 390 @ context='scriptString'}"
+            src="${youTube.iFrameSrc}"
+            frameborder="0"
+            allowfullscreen
+            allow="autoplay; fullscreen"
+            aria-label="${'YouTube Video' @ i18n}"></iframe>
 </sly>
