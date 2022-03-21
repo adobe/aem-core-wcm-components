@@ -19,10 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -46,6 +44,8 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.scene7.api.constants.Scene7AssetType;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.net.UrlEscapers;
 
 /**
  * V2 Image model implementation.
@@ -178,6 +178,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     //check DM asset - check for "dam:scene7File" metadata value
                     String dmAssetName = asset.getMetadataValue(Scene7Constants.PN_S7_FILE);
                     if(isDmFeaturesEnabled && (!StringUtils.isEmpty(dmAssetName))){
+                        dmAssetName = UrlEscapers.urlFragmentEscaper().escape(dmAssetName);
                         //image is DM
                         dmImage = true;
                         //check for publish side
@@ -367,4 +368,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt ) {
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }
+
+
 }

@@ -193,6 +193,11 @@
                                         cq:styleId="1544759676459"
                                         cq:styleLabel="Heading 3"
                                         jcr:primaryType="nt:unstructured"/>
+                                <item3
+                                        cq:styleClasses="cmp-examples-title--background-color"
+                                        cq:styleId="1544759676678"
+                                        cq:styleLabel="Background Color"
+                                        jcr:primaryType="nt:unstructured"/>
                             </cq:styles>
                         </item0>
                     </cq:styleGroups>
@@ -332,6 +337,16 @@
                                         cq:styleId="1544762734201"
                                         cq:styleLabel="Hero"
                                         jcr:primaryType="nt:unstructured"/>
+                                <item3
+                                        cq:styleClasses="cmp-examples-text--no-results"
+                                        cq:styleId="1550360114923"
+                                        cq:styleLabel="No Results"
+                                        jcr:primaryType="nt:unstructured"/>
+                                <item4
+                                    cq:styleClasses="cmp-examples-text--background-color"
+                                    cq:styleId="1544759676731"
+                                    cq:styleLabel="Background Color"
+                                    jcr:primaryType="nt:unstructured"/>
                             </cq:styles>
                         </item0>
                     </cq:styleGroups>

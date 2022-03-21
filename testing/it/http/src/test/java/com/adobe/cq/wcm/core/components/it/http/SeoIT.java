@@ -158,8 +158,9 @@ public class SeoIT {
                 .replaceAll(timeRegex, "test");
             assertEquals(expectedSitemapIndex, index);
 
+            String xmlnsRegex = "\\s?xmlns(:[^=]+)?=\"[^\"]+\"";
             String expectedSitemap = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">"
+                + "<urlset>"
                 + "<url>"
                 + "<loc>http://integrationtest.local:" + publisherPort + cp + "gb/en.html</loc>"
                 + "<xhtml:link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:" + publisherPort + cp + "gb/en.html\"/>"
@@ -173,7 +174,8 @@ public class SeoIT {
                 + "</url>"
                 + "</urlset>";
             String sitemap = publish.doGet("/content/core-components/seo-site/gb/en.sitemap.xml", HttpStatus.SC_OK)
-                .getContent();
+                .getContent()
+                .replaceAll(xmlnsRegex,"");
             assertEquals(expectedSitemap, sitemap);
         } finally {
             try {

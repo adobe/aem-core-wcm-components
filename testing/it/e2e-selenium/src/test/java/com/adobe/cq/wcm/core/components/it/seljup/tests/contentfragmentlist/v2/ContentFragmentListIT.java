@@ -16,16 +16,17 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.contentfragmentlist.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
+
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_CONTENTFRAGMENTLIST_V2;
 
 @Tag("group2")
 public class ContentFragmentListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.contentfragmentlist.v1.ContentFragmentListIT {
 
     protected void setupResources() {
-        contentFragmentListRT = Commons.rtContentFragmentList_v2;
+        contentFragmentListRT = RT_CONTENTFRAGMENTLIST_V2;
     }
 
     @BeforeEach

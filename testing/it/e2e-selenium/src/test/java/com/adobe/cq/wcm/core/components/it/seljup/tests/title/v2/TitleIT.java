@@ -16,9 +16,10 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.title.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.title.TitleEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
@@ -26,9 +27,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.title.TitleEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,8 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.title.v1.TitleIT {
 
     public void setupResources() {
-        clientlibs = "core.wcm.components.title.v2";
-        titleRT = Commons.rtTitle_v2;
+        clientlibs = Commons.CLIENTLIBS_TITLE_V2;
+        titleRT = Commons.RT_TITLE_V2;
     }
 
     /**
@@ -72,26 +73,14 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
     @Test
     @DisplayName("Test: Check the existence of all available title types defined in a policy.")
     public void testCheckExistenceOfTypesUsingPolicy() throws ClientException, TimeoutException, InterruptedException {
-        String policySuffix = "/title/new_policy";
-        java.util.List<NameValuePair> props = new ArrayList();
-        props.add(new BasicNameValuePair("jcr:title","New Policy"));
-        props.add(new BasicNameValuePair("sling:resourceType","wcm/core/components/policy/policy"));
-        props.add(new BasicNameValuePair("type","h2"));
-        props.add(new BasicNameValuePair("allowedTypes","h2"));
-        props.add(new BasicNameValuePair("allowedTypes","h3"));
-        props.add(new BasicNameValuePair("allowedTypes","h4"));
-        props.add(new BasicNameValuePair("allowedTypes","h6"));
-        props.add(new BasicNameValuePair("allowedTypes@TypeHint","String[]"));
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, props, policyPath1);
-
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/title", data, policyAssignmentPath, 200, 201);
+        createComponentPolicy(titleRT.substring(titleRT.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
+            add(new BasicNameValuePair("type", "h2"));
+            add(new BasicNameValuePair("allowedTypes", "h2"));
+            add(new BasicNameValuePair("allowedTypes", "h3"));
+            add(new BasicNameValuePair("allowedTypes", "h4"));
+            add(new BasicNameValuePair("allowedTypes", "h6"));
+            add(new BasicNameValuePair("allowedTypes@TypeHint", "String[]"));
+        }});
 
         editorPage.refresh();
 
@@ -116,23 +105,11 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
     @Test
     @DisplayName("Test: Check the existence of all available title types defined in a policy.")
     public void testCheckExistenceOfOneTypeUsingPolicy() throws ClientException, TimeoutException, InterruptedException {
-        String policySuffix = "/title/new_policy";
-        java.util.List<NameValuePair> props = new ArrayList();
-        props.add(new BasicNameValuePair("jcr:title","New Policy"));
-        props.add(new BasicNameValuePair("sling:resourceType","wcm/core/components/policy/policy"));
-        props.add(new BasicNameValuePair("type","h1"));
-        props.add(new BasicNameValuePair("allowedTypes","h1"));
-        props.add(new BasicNameValuePair("allowedTypes@TypeHint","String[]"));
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, props, policyPath1);
-
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/title", data, policyAssignmentPath, 200, 201);
+        createComponentPolicy(titleRT.substring(titleRT.lastIndexOf("/")), new HashMap<String, String>() {{
+            put("type", "h1");
+            put("allowedTypes", "h1");
+            put("allowedTypes@TypeHint", "String[]");
+        }});
 
         editorPage.refresh();
 
@@ -142,6 +119,6 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
-        assertTrue(title.isTitleWithTypePresent("1"), "Title with type h2 should be present");
+        assertTrue(title.isTitleWithTypePresent("1"), "Title with type h1 should be present");
     }
 }
