@@ -19,8 +19,8 @@ Component written in HTL and HTTP Request Filter that renders a table of content
 
 ## Features
 * **List Type** - Whether to list items in the table of contents as an unordered list of bullet points, or as an ordered list of numbers.
-* **Title Start Level** - The highest title level to report in the table of contents, where 1 corresponds to H1 and includes all top-level titles.
-* **Title Stop Level** - The lowest title level to report in the table of contents, where 6 corresponds to H6 and includes all lowest-level titles.
+* **Title Start Level** - The highest title level to report in the table of contents, where `H1` corresponds to `h1` and includes all top-level titles.
+* **Title Stop Level** - The lowest title level to report in the table of contents, where `H6` corresponds to `h6` and includes all lowest-level titles.
 * **Styles**
 
 ### Use Object
@@ -29,18 +29,18 @@ The Table of Contents component uses the `com.adobe.cq.wcm.core.components.model
 ### Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./restrictListType` - defines whether the author should be able to choose the list type or not - `norestriction` or `unordered` or `ordered`
-2. `./restrictStartLevel` - defines whether the author should be able to choose the highest title level to report in the TOC - `norestriction` or `1` to `6`
-3. `./restrictStopLevel` - defines whether the author should be able to choose the lowest title level to report in the TOC - `norestriction` or `6` to `1`
+1. `./restrictListType` - defines whether the author should be able to choose the list type or not - `norestriction` or `bulleted` or `numbered`
+2. `./restrictStartLevel` - defines whether the author should be able to choose the highest title level to report in the TOC - `norestriction` or `H1` to `H6`
+3. `./restrictStopLevel` - defines whether the author should be able to choose the lowest title level to report in the TOC - `norestriction` or `H6` to `H1`
 4. `./includeClasses` - defines an array of strings representing the configured class names to include in the TOC.
 5. `./ignoreClasses` - defines an array of strings representing the configured class names to ignore in the TOC.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Table of Contents component and are expected to be available as `Resource` properties:
 
-1. `./listType` - defines the list type of the TOC - `unordered` or `ordered`
-2. `./startLevel` - defines the lowest title level to report in the TOC - `1` to `6`
-3. `./stopLevel` - defines the highest title level to report in the TOC - `6` to `1`
+1. `./listType` - defines the list type of the TOC - `bulleted` or `numbered`
+2. `./startLevel` - defines the lowest title level to report in the TOC - `H1` to `H6`
+3. `./stopLevel` - defines the highest title level to report in the TOC - `H6` to `H1`
 4. `./id` - defines the component's HTML ID attribute.
 
 ## BEM Description

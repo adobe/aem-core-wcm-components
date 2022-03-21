@@ -40,8 +40,8 @@ public class TableOfContentsEditDialog extends Dialog {
     private static String id = "[name='./id']";
 
     private static String[] listTypes = new String[] {
-        "unordered",
-        "ordered"
+        "bulleted",
+        "numbered"
     };
     private static String listTypeSelectItemTemplate =
         "coral-popover.is-open coral-selectlist-item[value='%s']";
@@ -99,11 +99,11 @@ public class TableOfContentsEditDialog extends Dialog {
         selectItem(listTypeSelect, String.format(listTypeSelectItemTemplate, listType));
     }
 
-    public void selectStartLevel(int startLevel) throws InterruptedException {
+    public void selectStartLevel(String startLevel) throws InterruptedException {
         selectItem(startLevelSelect, String.format(levelSelectItemTemplate, startLevel));
     }
 
-    public void selectStopLevel(int stopLevel) throws InterruptedException {
+    public void selectStopLevel(String stopLevel) throws InterruptedException {
         selectItem(stopLevelSelect, String.format(levelSelectItemTemplate, stopLevel));
     }
 
@@ -131,15 +131,15 @@ public class TableOfContentsEditDialog extends Dialog {
     private boolean isAllLevelsPresent(String levelSelect) throws InterruptedException {
         openSelectList(levelSelect);
         CoralSelectList coralSelectList = getSelectList(levelSelect);
-        List<Integer> selectListItems = new ArrayList();
+        List<String> selectListItems = new ArrayList();
         for(int i = 0; i < coralSelectList.items().size(); i++) {
             selectListItems.add(
-                Integer.parseInt(coralSelectList.items().get(i).getValue().trim())
+                coralSelectList.items().get(i).getValue().trim()
             );
         }
         boolean present = true;
         for(int level = minLevel; level <= maxLevel; level++) {
-            if(!selectListItems.contains(level)) {
+            if(!selectListItems.contains("h" + level)) {
                 present = false;
                 break;
             }

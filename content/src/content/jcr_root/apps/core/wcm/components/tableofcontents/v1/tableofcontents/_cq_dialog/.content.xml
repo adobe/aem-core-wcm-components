@@ -33,7 +33,7 @@
                                             <pagerefresh
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/text"
-                                                text="In order to update its preview, this component requires a page reload after edits are done to itself or to other components that affect it"/>
+                                                text="In order to update its preview, this component requires a page reload after edits are done to other components that affect it"/>
                                             <listtype
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
@@ -41,14 +41,14 @@
                                                 fieldLabel="List Type"
                                                 name="./listType">
                                                 <items jcr:primaryType="nt:unstructured">
-                                                    <unordered
+                                                    <bulleted
                                                         jcr:primaryType="nt:unstructured"
                                                         text="Bulleted List"
-                                                        value="unordered"/>
-                                                    <ordered
+                                                        value="bulleted"/>
+                                                    <numbered
                                                         jcr:primaryType="nt:unstructured"
                                                         text="Numbered List"
-                                                        value="ordered"/>
+                                                        value="numbered"/>
                                                 </items>
                                                 <granite:rendercondition
                                                     jcr:primaryType="nt:unstructured"
@@ -62,30 +62,30 @@
                                                 fieldLabel="Title Start Level"
                                                 name="./startLevel">
                                                 <items jcr:primaryType="nt:unstructured">
-                                                    <one
+                                                    <h1
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="1"
-                                                        value="1"/>
-                                                    <two
+                                                        text="H1"
+                                                        value="h1"/>
+                                                    <h2
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="2"
-                                                        value="2"/>
-                                                    <three
+                                                        text="H2"
+                                                        value="h2"/>
+                                                    <h3
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="3"
-                                                        value="3"/>
-                                                    <four
+                                                        text="H3"
+                                                        value="h3"/>
+                                                    <h4
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="4"
-                                                        value="4"/>
-                                                    <five
+                                                        text="H4"
+                                                        value="h4"/>
+                                                    <h5
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="5"
-                                                        value="5"/>
-                                                    <six
+                                                        text="H5"
+                                                        value="h5"/>
+                                                    <h6
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="6"
-                                                        value="6"/>
+                                                        text="H6"
+                                                        value="h6"/>
                                                 </items>
                                                 <granite:rendercondition
                                                     jcr:primaryType="nt:unstructured"
@@ -99,30 +99,30 @@
                                                 fieldLabel="Title Stop Level"
                                                 name="./stopLevel">
                                                 <items jcr:primaryType="nt:unstructured">
-                                                    <six
+                                                    <h6
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="6"
-                                                        value="6"/>
-                                                    <five
+                                                        text="H6"
+                                                        value="h6"/>
+                                                    <h5
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="5"
-                                                        value="5"/>
-                                                    <four
+                                                        text="H5"
+                                                        value="h5"/>
+                                                    <h4
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="4"
-                                                        value="4"/>
-                                                    <three
+                                                        text="H4"
+                                                        value="h4"/>
+                                                    <h3
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="3"
-                                                        value="3"/>
-                                                    <two
+                                                        text="H3"
+                                                        value="h3"/>
+                                                    <h2
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="2"
-                                                        value="2"/>
-                                                    <one
+                                                        text="H2"
+                                                        value="h2"/>
+                                                    <h1
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="1"
-                                                        value="1"/>
+                                                        text="H1"
+                                                        value="h1"/>
                                                 </items>
                                                 <granite:rendercondition
                                                     jcr:primaryType="nt:unstructured"

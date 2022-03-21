@@ -151,9 +151,9 @@ public class TableOfContentsIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Check if changing the config changes the toc placeholder data attributes")
     public void testTocConfigChange() throws InterruptedException, TimeoutException {
-        String listType = "ordered";
-        int startLevel = 2;
-        int stopLevel = 5;
+        String listType = "bulleted";
+        String startLevel = "h2";
+        String stopLevel = "h5";
         String id = "toc-sample-id";
 
         Commons.openEditDialog(editorPage, componentPath);
@@ -175,16 +175,16 @@ public class TableOfContentsIT extends AuthorBaseUITest {
     @DisplayName("Test: Check the non existence of list type, start level and stop level select fields " +
         "if overridden by design dialog")
     public void testTocConfigOverrideByDesignDialog() throws ClientException, InterruptedException, TimeoutException {
-        String listType = "ordered";
-        int startLevel = 3;
-        int stopLevel = 4;
+        String listType = "bulleted";
+        String startLevel = "h3";
+        String stopLevel = "h4";
         String[] includeClasses = new String[] { "include-1", "include-2" };
         String[] ignoreClasses = new String[] { "ignore-1", "ignore-2" };
 
         createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf('/')), new HashMap<String, String>() {{
             put("restrictListType", listType);
-            put("restrictStartLevel", String.valueOf(startLevel));
-            put("restrictStopLevel", String.valueOf(stopLevel));
+            put("restrictStartLevel", startLevel);
+            put("restrictStopLevel", stopLevel);
             put("includeClasses", StringUtils.join(includeClasses, ","));
             put("ignoreClasses", StringUtils.join(ignoreClasses, ","));
         }});
@@ -192,8 +192,8 @@ public class TableOfContentsIT extends AuthorBaseUITest {
         Commons.openEditDialog(editorPage, componentPath);
         TableOfContentsEditDialog tableOfContentsEditDialog = tableOfContents.getEditDialog();
         assertFalse(tableOfContentsEditDialog.isListTypeSelectPresent(), "List Type should not be visible");
-        assertFalse(tableOfContentsEditDialog.isStartLevelSelectPresent(), "Start Level should be visible");
-        assertFalse(tableOfContentsEditDialog.isStopLevelSelectPresent(), "Stop Level should be visible");
+        assertFalse(tableOfContentsEditDialog.isStartLevelSelectPresent(), "Start Level should not be visible");
+        assertFalse(tableOfContentsEditDialog.isStopLevelSelectPresent(), "Stop Level should not be visible");
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");

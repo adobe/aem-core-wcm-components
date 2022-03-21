@@ -50,19 +50,9 @@ public class TableOfContentsImpl extends AbstractComponentImpl implements TableO
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/tableofcontents/v1/tableofcontents";
 
-    public static final String TOC_REQUEST_ATTR_FLAG = "cmp-toc__present";
+    public static final String TOC_REQUEST_ATTR_FLAG = "cmp-toc-present";
 
-    public static final String TOC_CONTENT_CLASS = "cmp-toc__content";
-    public static final String TOC_PLACEHOLDER_CLASS = "cmp-toc__placeholder";
-    public static final String TOC_TEMPLATE_PLACEHOLDER_CLASS = "cmp-toc__template-placeholder";
-
-    public static final String TOC_DATA_ATTR_LIST_TYPE = "data-cmp-toc-list-type";
-    public static final String TOC_DATA_ATTR_START_LEVEL = "data-cmp-toc-start-level";
-    public static final String TOC_DATA_ATTR_STOP_LEVEL = "data-cmp-toc-stop-level";
-    public static final String TOC_DATA_ATTR_INCLUDE_CLASSES = "data-cmp-toc-include-classes";
-    public static final String TOC_DATA_ATTR_IGNORE_CLASSES = "data-cmp-toc-ignore-classes";
-
-    public static final ListType DEFAULT_LIST_TYPE = ListType.UNORDERED;
+    public static final ListType DEFAULT_LIST_TYPE = ListType.BULLETED;
     public static final HeadingLevel DEFAULT_START_LEVEL = HeadingLevel.H1;
     public static final HeadingLevel DEFAULT_STOP_LEVEL = HeadingLevel.H6;
 
@@ -80,11 +70,11 @@ public class TableOfContentsImpl extends AbstractComponentImpl implements TableO
 
     @ValueMapValue(name = TableOfContents.PN_START_LEVEL, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    private Integer startLevel;
+    private String startLevel;
 
     @ValueMapValue(name = TableOfContents.PN_STOP_LEVEL, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    private Integer stopLevel;
+    private String stopLevel;
 
     private String restrictListType;
     private String restrictStartLevel;
@@ -112,14 +102,14 @@ public class TableOfContentsImpl extends AbstractComponentImpl implements TableO
     @Override
     public HeadingLevel getStartLevel() {
         return (restrictStartLevel == null || NO_RESTRICTION.contentEquals(restrictStartLevel))
-            ? startLevel != null ? HeadingLevel.fromInteger(startLevel) : DEFAULT_START_LEVEL
+            ? startLevel != null ? HeadingLevel.fromString(startLevel) : DEFAULT_START_LEVEL
             : HeadingLevel.fromString(restrictStartLevel);
     }
 
     @Override
     public HeadingLevel getStopLevel() {
         return (restrictStopLevel == null || NO_RESTRICTION.contentEquals(restrictStopLevel))
-            ? stopLevel != null ? HeadingLevel.fromInteger(stopLevel) : DEFAULT_STOP_LEVEL
+            ? stopLevel != null ? HeadingLevel.fromString(stopLevel) : DEFAULT_STOP_LEVEL
             : HeadingLevel.fromString(restrictStopLevel);
     }
 

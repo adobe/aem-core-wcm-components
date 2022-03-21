@@ -1,5 +1,5 @@
 {
-    "listType":"ORDERED",
+    "listType":"NUMBERED",
     "startLevel":"H2",
     "stopLevel":"H5",
     "id":"toc-sample-id",

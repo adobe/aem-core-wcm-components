@@ -89,13 +89,13 @@ public class TableOfContentsFilter implements Filter {
 
             Document document = Jsoup.parse(originalContent);
 
-            Elements tocPlaceholderElements = document.getElementsByClass(TableOfContentsImpl.TOC_PLACEHOLDER_CLASS);
+            Elements tocPlaceholderElements = document.getElementsByClass(TableOfContents.TOC_PLACEHOLDER_CLASS);
             for (Element tocPlaceholderElement : tocPlaceholderElements) {
                 Element tableOfContents = getTableOfContents(tocPlaceholderElement);
                 String id = tocPlaceholderElement.id();
                 tocPlaceholderElement.empty();
                 tocPlaceholderElement.clearAttributes();
-                tocPlaceholderElement.addClass(TableOfContentsImpl.TOC_CONTENT_CLASS);
+                tocPlaceholderElement.addClass(TableOfContents.TOC_CONTENT_CLASS);
                 if(!id.isEmpty()) {
                     tocPlaceholderElement.id(id);
                 }
@@ -105,7 +105,7 @@ public class TableOfContentsFilter implements Filter {
                     if(wcmMode == WCMMode.EDIT || wcmMode == WCMMode.PREVIEW) {
                         Elements tocTemplatePlaceholderElement = tocPlaceholderElement
                             .parent()
-                            .select("." + TableOfContentsImpl.TOC_TEMPLATE_PLACEHOLDER_CLASS);
+                            .select("." + TableOfContents.TOC_TEMPLATE_PLACEHOLDER_CLASS);
                         tocTemplatePlaceholderElement.remove();
                     }
                 }
@@ -130,32 +130,32 @@ public class TableOfContentsFilter implements Filter {
      * @return Independent TOC element, not attached to the DOM
      */
     private Element getTableOfContents(Element tocPlaceholderElement) {
-        TableOfContents.ListType listType = tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_LIST_TYPE)
+        TableOfContents.ListType listType = tocPlaceholderElement.hasAttr(TableOfContents.TOC_DATA_ATTR_LIST_TYPE)
             ? TableOfContents.ListType.fromString(
-                tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_LIST_TYPE))
+                tocPlaceholderElement.attr(TableOfContents.TOC_DATA_ATTR_LIST_TYPE))
             : TableOfContentsImpl.DEFAULT_LIST_TYPE;
         String listTag = listType.getTagName();
         TableOfContents.HeadingLevel startLevel =
-            tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_START_LEVEL)
+            tocPlaceholderElement.hasAttr(TableOfContents.TOC_DATA_ATTR_START_LEVEL)
                 ? TableOfContents.HeadingLevel.fromStringOrDefault(
-                    tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_START_LEVEL),
+                    tocPlaceholderElement.attr(TableOfContents.TOC_DATA_ATTR_START_LEVEL),
                     TableOfContentsImpl.DEFAULT_START_LEVEL)
                 : TableOfContentsImpl.DEFAULT_START_LEVEL;
         TableOfContents.HeadingLevel stopLevel =
-            tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_STOP_LEVEL)
+            tocPlaceholderElement.hasAttr(TableOfContents.TOC_DATA_ATTR_STOP_LEVEL)
                 ? TableOfContents.HeadingLevel.fromStringOrDefault(
-                    tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_STOP_LEVEL),
+                    tocPlaceholderElement.attr(TableOfContents.TOC_DATA_ATTR_STOP_LEVEL),
                     TableOfContentsImpl.DEFAULT_STOP_LEVEL)
                 : TableOfContentsImpl.DEFAULT_STOP_LEVEL;
-        String[] includeClasses = tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_INCLUDE_CLASSES)
-            ? tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_INCLUDE_CLASSES).split(",")
+        String[] includeClasses = tocPlaceholderElement.hasAttr(TableOfContents.TOC_DATA_ATTR_INCLUDE_CLASSES)
+            ? tocPlaceholderElement.attr(TableOfContents.TOC_DATA_ATTR_INCLUDE_CLASSES).split(",")
             : null;
-        String[] ignoreClasses = tocPlaceholderElement.hasAttr(TableOfContentsImpl.TOC_DATA_ATTR_IGNORE_CLASSES)
-            ? tocPlaceholderElement.attr(TableOfContentsImpl.TOC_DATA_ATTR_IGNORE_CLASSES).split(",")
+        String[] ignoreClasses = tocPlaceholderElement.hasAttr(TableOfContents.TOC_DATA_ATTR_IGNORE_CLASSES)
+            ? tocPlaceholderElement.attr(TableOfContents.TOC_DATA_ATTR_IGNORE_CLASSES).split(",")
             : null;
 
-        if(startLevel.getValue() > stopLevel.getValue()) {
-            LOGGER.error("Invalid start and stop levels, startLevel={%d}, stopLevel={%d}",
+        if(startLevel.getIntValue() > stopLevel.getIntValue()) {
+            LOGGER.error("Invalid start and stop levels, startLevel={}, stopLevel={}",
                 startLevel.getValue(), stopLevel.getValue());
             return null;
         }
@@ -165,19 +165,23 @@ public class TableOfContentsFilter implements Filter {
         String includeCssSelector;
         if(includeClasses == null || includeClasses.length == 0) {
             List<String> selectors = new ArrayList<>();
-            for(int level = startLevel.getValue(); level <= stopLevel.getValue(); level++) {
+            for(int level = startLevel.getIntValue(); level <= stopLevel.getIntValue(); level++) {
                 selectors.add(getHeadingTagName(level));
             }
             includeCssSelector = StringUtils.join(selectors, ",");
         } else {
-            includeCssSelector = getCssSelectorString(includeClasses, startLevel.getValue(), stopLevel.getValue());
+            includeCssSelector = getCssSelectorString(
+                includeClasses, startLevel.getIntValue(), stopLevel.getIntValue()
+            );
         }
         Elements includeElements = document.select(includeCssSelector);
 
         Set<Element> ignoreElementsSet = new HashSet<>();
 
         if(ignoreClasses != null && ignoreClasses.length != 0) {
-            String ignoreCssSelector = getCssSelectorString(ignoreClasses, startLevel.getValue(), stopLevel.getValue());
+            String ignoreCssSelector = getCssSelectorString(
+                ignoreClasses, startLevel.getIntValue(), stopLevel.getIntValue()
+            );
             Elements ignoreElements = document.select(ignoreCssSelector);
             ignoreElementsSet = new HashSet<>(ignoreElements);
         }

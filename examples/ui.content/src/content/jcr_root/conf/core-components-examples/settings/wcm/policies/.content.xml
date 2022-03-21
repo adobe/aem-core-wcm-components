@@ -410,6 +410,20 @@
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1636447752632>
             </image>
+            <tableofcontents jcr:primaryType="nt:unstructured">
+                <policy_1647854034891
+                    jcr:lastModified="{Date}2022-03-21T14:46:37.470+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="core-components-examples-policy"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    ignoreClasses="cmp-accordion__header"
+                    restrictListType="norestriction"
+                    restrictStartLevel="norestriction"
+                    restrictStopLevel="norestriction">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1647854034891>
+            </tableofcontents>
         </components>
     </core-components-examples>
 </jcr:root>

@@ -28,14 +28,14 @@ public interface TableOfContents extends Component {
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
-        UNORDERED("unordered"),
+        BULLETED("bulleted"),
 
         /**
          * Numbered list type
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
-        ORDERED("ordered");
+        NUMBERED("numbered");
 
         private String value;
 
@@ -54,15 +54,15 @@ public interface TableOfContents extends Component {
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
         public String getTagName() {
-            return this == ORDERED ? "ol" : "ul";
+            return this == NUMBERED ? "ol" : "ul";
         }
 
         /**
          * Given a {@link String} <code>value</code>, this method returns the enum's value that corresponds to the
-         * provided string representation. If no representation is found, {@link #UNORDERED} will be returned.
+         * provided string representation. If no representation is found, {@link #BULLETED} will be returned.
          *
          * @param value the string representation for which an enum value should be returned
-         * @return the corresponding enum value, if one was found, or {@link #UNORDERED}
+         * @return the corresponding enum value, if one was found, or {@link #BULLETED}
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
@@ -72,32 +72,36 @@ public interface TableOfContents extends Component {
                     return type;
                 }
             }
-            return UNORDERED;
+            return BULLETED;
         }
     }
 
     /**
-     * Defines the possible heading levels for table of contents corresponding to 'h1' through 'h6'
+     * Defines the possible heading levels for table of contents corresponding to 'h1' till 'h6'
      *
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
     enum HeadingLevel {
 
-        H1(1),
-        H2(2),
-        H3(3),
-        H4(4),
-        H5(5),
-        H6(6);
+        H1("h1"),
+        H2("h2"),
+        H3("h3"),
+        H4("h4"),
+        H5("h5"),
+        H6("h6");
 
-        private int value;
+        private String value;
 
-        HeadingLevel(int value) {
+        HeadingLevel(String value) {
             this.value = value;
         }
 
-        public int getValue() {
+        public String getValue() {
             return value;
+        }
+
+        public Integer getIntValue() {
+            return value.charAt(1) - '0';
         }
 
         /**
@@ -107,22 +111,22 @@ public interface TableOfContents extends Component {
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
         public String getTagName() {
-            return "h" + value;
+            return value;
         }
 
         /**
-         * Given an {@link Integer} <code>value</code>, this method returns the enum's value that corresponds to
-         * the provided integer representation.
+         * Given an {@link String} <code>value</code>, this method returns the enum's value that corresponds to the
+         * provided string representation.
          * If no representation is found, {@link null} will be returned.
          *
-         * @param value the integer representation for which an enum value should be returned
+         * @param value the string representation for which an enum value should be returned
          * @return the corresponding enum value, if one was found, or {@link null}
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
-        public static HeadingLevel fromInteger(Integer value) {
+        public static HeadingLevel fromString(String value) {
             for (HeadingLevel type : values()) {
-                if (type.value == value) {
+                if (type.value.contentEquals(value)) {
                     return type;
                 }
             }
@@ -130,48 +134,18 @@ public interface TableOfContents extends Component {
         }
 
         /**
-         * Given an {@link Integer} <code>value</code>, this method returns the enum's value that corresponds to
-         * the provided integer representation.
+         * Given an {@link String} <code>value</code>, this method returns the enum's value that corresponds to the
+         * provided string representation.
          * If no representation is found, provided default value will be returned.
          *
-         * @param value the integer representation for which an enum value should be returned
+         * @param value the string representation for which an enum value should be returned
          * @param defaultLevel default heading level to return
          * @return the corresponding enum value, if one was found, or the provided default heading level
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
-        public static HeadingLevel fromIntegerOrDefault(Integer value, HeadingLevel defaultLevel) {
-            HeadingLevel level = fromInteger(value);
-            return level != null ? level : defaultLevel;
-        }
-
-        /**
-         * Given an {@link String} <code>strValue</code>, this method parses string to integer and returns the enum's value
-         * that corresponds to the provided integer representation.
-         * If no representation is found, {@link null} will be returned.
-         *
-         * @param strValue the string representation for which an enum value should be returned
-         * @return the corresponding enum value, if one was found, or {@link null}
-         *
-         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
-         */
-        public static HeadingLevel fromString(String strValue) {
-            return fromInteger(Integer.parseInt(strValue));
-        }
-
-        /**
-         * Given an {@link String} <code>strValue</code>, this method parses string to integer and returns the enum's value
-         * that corresponds to the provided integer representation.
-         * If no representation is found, provided default value will be returned.
-         *
-         * @param strValue the string representation for which an enum value should be returned
-         * @param defaultLevel default heading level to return
-         * @return the corresponding enum value, if one was found, or the provided default heading level
-         *
-         * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
-         */
-        public static HeadingLevel fromStringOrDefault(String strValue, HeadingLevel defaultLevel) {
-            HeadingLevel level = fromString(strValue);
+        public static HeadingLevel fromStringOrDefault(String value, HeadingLevel defaultLevel) {
+            HeadingLevel level = fromString(value);
             return level != null ? level : defaultLevel;
         }
     }
@@ -238,6 +212,67 @@ public interface TableOfContents extends Component {
     String PN_IGNORE_CLASSES = "ignoreClasses";
 
     /**
+     * HTML class name added on the final TOC render.
+     * It contains the numbered/bulleted nested list of contents of the page.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String TOC_CONTENT_CLASS = "cmp-toc__content";
+
+    /**
+     * HTML class name added on the TOC placeholder rendered by the component's HTL.
+     * It contains all the TOC configuration properties (from its resource and configuration policy properties) as data
+     * attributes.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String TOC_PLACEHOLDER_CLASS = "cmp-toc__placeholder";
+
+    /**
+     * HTML class name added on the TOC template placeholder which is only viewed in EDIT mode on page editor.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String TOC_TEMPLATE_PLACEHOLDER_CLASS = "cmp-toc__template-placeholder";
+
+    /**
+     * HTML data attribute added on the TOC placeholder containing the configured list type of the TOC .
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String TOC_DATA_ATTR_LIST_TYPE = "data-cmp-toc-list-type";
+
+    /**
+     * HTML data attribute added on the TOC placeholder containing the configured start level of the TOC.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String TOC_DATA_ATTR_START_LEVEL = "data-cmp-toc-start-level";
+
+    /**
+     * HTML data attribute added on the TOC placeholder containing the configured stop level of the TOC.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String TOC_DATA_ATTR_STOP_LEVEL = "data-cmp-toc-stop-level";
+
+    /**
+     * HTML data attribute added on the TOC placeholder containing the configured include classes of the TOC as a comma
+     * separated list.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String TOC_DATA_ATTR_INCLUDE_CLASSES = "data-cmp-toc-include-classes";
+
+    /**
+     * HTML data attribute added on the TOC placeholder containing the configured ignore classes of the TOC as a comma
+     * separated list.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
+     */
+    String TOC_DATA_ATTR_IGNORE_CLASSES = "data-cmp-toc-ignore-classes";
+
+    /**
      * Returns the configured list type taking into account the configuration policy
      *
      * @return list type, default is 'unordered'
@@ -245,7 +280,7 @@ public interface TableOfContents extends Component {
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
     default ListType getListType() {
-        return ListType.UNORDERED;
+        return ListType.BULLETED;
     }
 
     /**

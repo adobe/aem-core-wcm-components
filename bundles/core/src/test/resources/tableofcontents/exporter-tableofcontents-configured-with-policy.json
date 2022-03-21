@@ -1,5 +1,5 @@
 {
-    "listType":"UNORDERED",
+    "listType":"BULLETED",
     "startLevel":"H2",
     "stopLevel":"H4",
     "ignoreClasses":["toc-ignore-1","toc-ignore-2"],
