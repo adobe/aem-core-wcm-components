@@ -183,16 +183,16 @@ public class WOIDUrlHelper {
         boolean flipHorizontally = properties.get(com.adobe.cq.wcm.core.components.models.Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
         boolean flipVertically = properties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
 
-        String flip = "";
+        StringBuilder flip = new StringBuilder();
 
         if (flipHorizontally) {
-            flip.concat("h");
+            flip.append("h");
         }
 
         if (flipVertically) {
-            flip.concat("v");
+            flip.append("v");
         }
-        return flip;
+        return flip.toString();
     }
 
 }

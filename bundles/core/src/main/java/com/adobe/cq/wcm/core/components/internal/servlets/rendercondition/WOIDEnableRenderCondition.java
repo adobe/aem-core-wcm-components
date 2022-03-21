@@ -7,6 +7,7 @@ import com.adobe.granite.ui.components.rendercondition.SimpleRenderCondition;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.ServletResolverConstants;
+import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -22,7 +23,7 @@ import java.io.IOException;
         ServletResolverConstants.SLING_SERVLET_RESOURCE_TYPES + "=core/wcm/components/rendercondition/isWOIDEnabled"
     }
 )
-public class WOIDEnableRenderCondition {
+public class WOIDEnableRenderCondition extends SlingSafeMethodsServlet {
 
     @Reference
     protected WOIDelivery WOIDeliveryService;
