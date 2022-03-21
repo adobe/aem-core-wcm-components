@@ -189,7 +189,7 @@ public interface Image extends Component {
     /**
      * Name of the configuration policy property that controls whether Dynamic Media Next features are used by Core component.
      */
-    String PN_DESIGN_DYNAMIC_MEDIA_NEXT_ENABLED = "enableDmNextFeatures";
+    String PN_DESIGN_WOID_ENABLED = "enableWOID";
 
     /**
      * Name of the configuration policy property that will be used for resizing the base images, the ones from {@code src} attribute.

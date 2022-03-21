@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.DMNextUrlHelper;
+import com.adobe.cq.wcm.core.components.internal.helper.image.WOIDUrlHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -94,8 +94,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getSrcset() {
 
         int[] widthsArray = getWidths();
-        if (useDmNextService) {
-            String srcSetUrl = DMNextUrlHelper.getSrcSet(dmNextImageDeliveryService.getDMNextServiceUrl(), imageName, extension, properties, smartSizes,
+        if (useWOID) {
+            String srcSetUrl = WOIDUrlHelper.getSrcSet(WOIDeliveryService.getWOIDBaseUrl(), imageName, extension, properties, smartSizes,
                 getOriginalDimension(), jpegQuality);
 
             if (!StringUtils.isEmpty(srcSetUrl)) {

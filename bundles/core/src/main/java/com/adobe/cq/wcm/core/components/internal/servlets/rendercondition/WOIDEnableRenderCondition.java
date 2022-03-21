@@ -1,12 +1,11 @@
 package com.adobe.cq.wcm.core.components.internal.servlets.rendercondition;
 
-import com.adobe.cq.wcm.core.components.services.image.DMNextImageDelivery;
+import com.adobe.cq.wcm.core.components.services.image.WOIDelivery;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
 import com.adobe.granite.ui.components.rendercondition.SimpleRenderCondition;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.ServletResolverConstants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -20,16 +19,16 @@ import java.io.IOException;
     service = { Servlet.class },
     property = {
         ServletResolverConstants.SLING_SERVLET_METHODS + "=GET",
-        ServletResolverConstants.SLING_SERVLET_RESOURCE_TYPES + "=core/wcm/components/rendercondition/dmNextEnabled"
+        ServletResolverConstants.SLING_SERVLET_RESOURCE_TYPES + "=core/wcm/components/rendercondition/isWOIDEnabled"
     }
 )
-public class DMNextImageRenderCondition {
+public class WOIDEnableRenderCondition {
 
     @Reference
-    protected DMNextImageDelivery dmNextImageDeliveryService;
+    protected WOIDelivery WOIDeliveryService;
 
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
         throws ServletException, IOException {
-        request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(dmNextImageDeliveryService.isWebOptimizedImageDeliveryAllowed()));
+        request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(WOIDeliveryService.isWOIDAllowed()));
     }
 }

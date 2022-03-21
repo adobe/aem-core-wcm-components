@@ -16,9 +16,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DMNextUrlHelper {
+public class WOIDUrlHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DMNextUrlHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WOIDUrlHelper.class);
 
     private static String QUESTION = "?";
 
@@ -46,7 +46,7 @@ public class DMNextUrlHelper {
     private static String SIZE_PARAMETER = "sz";
 
 
-    public static String getSrcSet(@NotNull String dmNextBaseUrl, @NotNull String imageName,
+    public static String getSrcSet(@NotNull String WOIDBaseUrl, @NotNull String imageName,
                                    @NotNull String mimeType, @NotNull ValueMap componentProperties,
                                    int[] smartSizes, Dimension originalDimension, int jpegQuality) {
 
@@ -55,7 +55,7 @@ public class DMNextUrlHelper {
         }
         List<String> srcsetList = new ArrayList<String>();
         for (int i = 0; i < smartSizes.length; i++) {
-            String src =  getSrc(dmNextBaseUrl, imageName, mimeType, componentProperties, new int[]{smartSizes[i]}, originalDimension, jpegQuality);
+            String src =  getSrc(WOIDBaseUrl, imageName, mimeType, componentProperties, new int[]{smartSizes[i]}, originalDimension, jpegQuality);
             if (!StringUtils.isEmpty(src)) {
                 srcsetList.add(src);
             }
@@ -68,18 +68,18 @@ public class DMNextUrlHelper {
         return null;
     }
 
-    public static  String getSrc(@NotNull String dmNextBaseUrl, @NotNull String imageName,
+    public static  String getSrc(@NotNull String WOIDBaseUrl, @NotNull String imageName,
                                  @NotNull String mimeType, @NotNull ValueMap componentProperties,
                                  int[] smartSizes, Dimension originalDimension, int jpegQuality) {
 
         String assetPath = componentProperties.get(DownloadResource.PN_REFERENCE, String.class);
 
-        if (StringUtils.isEmpty(dmNextBaseUrl) || StringUtils.isEmpty(imageName) || StringUtils.isEmpty(assetPath)
+        if (StringUtils.isEmpty(WOIDBaseUrl) || StringUtils.isEmpty(imageName) || StringUtils.isEmpty(assetPath)
                 || StringUtils.isEmpty(mimeType) || "svg".equalsIgnoreCase(mimeType)) {
             return null;
         }
 
-        String srcUrl = dmNextBaseUrl + assetPath +
+        String srcUrl = WOIDBaseUrl + assetPath +
             PATH_SEPARATOR + imageName + DOT + mimeType;
 
         StringBuilder stringBuilder = new StringBuilder();
