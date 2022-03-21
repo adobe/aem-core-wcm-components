@@ -36,32 +36,8 @@ public class TableOfContents extends BaseComponent {
         return new TableOfContentsEditDialog();
     }
 
-    public String getListType() {
-        return $(tocPlaceholder).attr("data-cmp-toc-list-type");
-    }
-
-    public int getStartLevel() {
-        return Integer.parseInt(
-            $(tocPlaceholder).attr("data-cmp-toc-start-level")
-        );
-    }
-
-    public int getStopLevel() {
-        return Integer.parseInt(
-            $(tocPlaceholder).attr("data-cmp-toc-stop-level")
-        );
-    }
-
-    public String[] getIncludeClasses() {
-        return $(tocPlaceholder).attr("data-cmp-toc-include-classes").split(",");
-    }
-
-    public String[] getIgnoreClasses() {
-        return $(tocPlaceholder).attr("data-cmp-toc-ignore-classes").split(",");
-    }
-
     public String getId() {
-        return $(tocPlaceholder).attr("id");
+        return $(tocContent).attr("id");
     }
 
     public boolean isTocPlaceholderExists() {

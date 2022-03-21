@@ -113,7 +113,7 @@ public class TableOfContentsIT extends AuthorBaseUITest {
              Commons.proxyPath,
              "",
             null
-        );
+         );
 
         Commons.addComponent(
             adminClient,
@@ -141,7 +141,7 @@ public class TableOfContentsIT extends AuthorBaseUITest {
         assertTrue(tableOfContentsEditDialog.isListTypeSelectPresent(), "List Type should be visible");
         assertTrue(tableOfContentsEditDialog.isStartLevelSelectPresent(), "Start Level should be visible");
         assertTrue(tableOfContentsEditDialog.isStopLevelSelectPresent(), "Stop Level should be visible");
-        assertTrue(tableOfContentsEditDialog.isIdTextboxPresent(), "ID text box should be present");
+        assertTrue(tableOfContentsEditDialog.isIdTextBoxPresent(), "ID text box should be present");
         assertTrue(tableOfContentsEditDialog.isAllListTypesPresent(), "All list types should be present");
         assertTrue(tableOfContentsEditDialog.isAllStartLevelsPresent(), "All start levels should be present");
         assertTrue(tableOfContentsEditDialog.isAllStopLevelsPresent(), "All stop levels should be present");
@@ -149,25 +149,16 @@ public class TableOfContentsIT extends AuthorBaseUITest {
     }
 
     @Test
-    @DisplayName("Test: Check if changing the config changes the toc placeholder data attributes")
-    public void testTocConfigChange() throws InterruptedException, TimeoutException {
-        String listType = "bulleted";
-        String startLevel = "h2";
-        String stopLevel = "h5";
+    @DisplayName("Test: Check if setting the id renders the id attribute on TOC content HTML element")
+    public void testTocIdConfig() throws InterruptedException, TimeoutException {
         String id = "toc-sample-id";
 
         Commons.openEditDialog(editorPage, componentPath);
         TableOfContentsEditDialog tableOfContentsEditDialog = tableOfContents.getEditDialog();
-        tableOfContentsEditDialog.selectListType(listType);
-        tableOfContentsEditDialog.selectStartLevel(startLevel);
-        tableOfContentsEditDialog.selectStopLevel(stopLevel);
         tableOfContentsEditDialog.setId(id);
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
-        assertEquals(listType, tableOfContents.getListType(), "List type should be configured");
-        assertEquals(startLevel, tableOfContents.getStartLevel() ,"Start level should be configured");
-        assertEquals(stopLevel, tableOfContents.getStopLevel(), "Stop level should be configured");
         assertEquals(id, tableOfContents.getId(), "ID should be configured");
     }
 
@@ -195,17 +186,5 @@ public class TableOfContentsIT extends AuthorBaseUITest {
         assertFalse(tableOfContentsEditDialog.isStartLevelSelectPresent(), "Start Level should not be visible");
         assertFalse(tableOfContentsEditDialog.isStopLevelSelectPresent(), "Stop Level should not be visible");
         Commons.saveConfigureDialog();
-
-        Commons.switchContext("ContentFrame");
-        assertEquals(listType, tableOfContents.getListType(),
-            "List type should be overridden by design dialog");
-        assertEquals(startLevel, tableOfContents.getStartLevel(),
-            "Start Level should be overridden by design dialog");
-        assertEquals(stopLevel, tableOfContents.getStopLevel(),
-            "Stop level should be overridden by design dialog");
-        assertArrayEquals(includeClasses, tableOfContents.getIncludeClasses(),
-            "Include class names should be configured by design dialog");
-        assertArrayEquals(ignoreClasses, tableOfContents.getIgnoreClasses(),
-            "Ignore class names should be configured by design dialog");
     }
 }

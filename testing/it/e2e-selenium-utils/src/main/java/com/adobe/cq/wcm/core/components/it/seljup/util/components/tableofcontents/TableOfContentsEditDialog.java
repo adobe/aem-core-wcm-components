@@ -91,7 +91,7 @@ public class TableOfContentsEditDialog extends Dialog {
         return isAllLevelsPresent(stopLevelSelect);
     }
 
-    public boolean isIdTextboxPresent() {
+    public boolean isIdTextBoxPresent() {
         return $(id).isDisplayed();
     }
 
