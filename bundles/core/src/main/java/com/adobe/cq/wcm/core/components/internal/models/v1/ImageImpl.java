@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Calendar;
@@ -28,6 +29,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
+import com.adobe.cq.wcm.core.components.internal.helper.image.DMNextUrlHelper;
 import com.adobe.cq.wcm.core.components.services.image.DMNextImageDelivery;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.io.FilenameUtils;
@@ -167,6 +169,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
+        useDmNextService = currentStyle.get(PN_DESIGN_DYNAMIC_MEDIA_NEXT_ENABLED, false);
+
         Asset asset = null;
 
         if (StringUtils.isNotEmpty(fileReference)) {
@@ -263,10 +267,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             } else {
                 src += extension;
             }
-            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "")) : "") +
-                    (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
-
 
             if (!isDecorative) {
                 link = linkHandler.getLink(resource);
@@ -318,9 +318,14 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @Override
     public String getSrc() {
-
         if (useDmNextService) {
-            //getSRc
+
+            String dmNextUrl = DMNextUrlHelper.getSrc(dmNextImageDeliveryService.getDMNextServiceUrl(), imageName, extension, properties, smartSizes,
+                getOriginalDimension(), jpegQuality);
+
+            if (!StringUtils.isEmpty(dmNextUrl)) {
+                return dmNextUrl;
+            }
         }
 
         return src;
@@ -429,6 +434,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                                 .map(AssetDataBuilder::build)
                                 .orElse(null))
                 .build();
+    }
+
+    protected Dimension getOriginalDimension() {
+        return new Dimension(0, 0);
     }
 
 }

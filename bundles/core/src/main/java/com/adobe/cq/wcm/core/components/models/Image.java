@@ -184,6 +184,14 @@ public interface Image extends Component {
     String PN_DESIGN_DYNAMIC_MEDIA_ENABLED = "enableDmFeatures";
 
     /**
+     *
+     */
+    /**
+     * Name of the configuration policy property that controls whether Dynamic Media Next features are used by Core component.
+     */
+    String PN_DESIGN_DYNAMIC_MEDIA_NEXT_ENABLED = "enableDmNextFeatures";
+
+    /**
      * Name of the configuration policy property that will be used for resizing the base images, the ones from {@code src} attribute.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.23.0

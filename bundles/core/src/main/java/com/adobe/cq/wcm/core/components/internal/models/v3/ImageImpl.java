@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.WebOptimizedHelper;
+import com.adobe.cq.wcm.core.components.internal.helper.image.DMNextUrlHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -94,9 +94,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getSrcset() {
 
         int[] widthsArray = getWidths();
-//        if (useDmNextService) {
-//            return WebOptimizedHelper.getSrcSet(dmNextImageDeliveryService.getDMNextServiceUrl(), fileReference, imageName, extension, widthsArray, jpegQuality);
-//        }
+        if (useDmNextService) {
+            String srcSetUrl = DMNextUrlHelper.getSrcSet(dmNextImageDeliveryService.getDMNextServiceUrl(), imageName, extension, properties, smartSizes,
+                getOriginalDimension(), jpegQuality);
+
+            if (!StringUtils.isEmpty(srcSetUrl)) {
+                return srcSetUrl;
+            }
+        }
 
         String srcUritemplate = getSrcUriTemplate();
         String[] srcsetArray = new String[widthsArray.length];
@@ -180,7 +185,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         resource = getWrappedImageResourceWithInheritance(resource, linkHandler, currentStyle, currentPage);
     }
 
-    private Dimension getOriginalDimension() {
+    @Override
+    protected Dimension getOriginalDimension() {
         ValueMap inheritedResourceProperties = resource.getValueMap();
         String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
         Asset asset;

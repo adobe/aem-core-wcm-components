@@ -139,6 +139,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      */
     public ImageImpl() {
         selector = AdaptiveImageServlet.CORE_DEFAULT_SELECTOR;
+
+
     }
 
     /**
@@ -147,12 +149,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @PostConstruct
     protected void initModel() {
         super.initModel();
-        useDmNextService = false;
         boolean altValueFromDAM = properties.get(PN_ALT_VALUE_FROM_DAM, currentStyle.get(PN_ALT_VALUE_FROM_DAM, true));
         boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
         boolean isDmFeaturesEnabled = currentStyle.get(PN_DESIGN_DYNAMIC_MEDIA_ENABLED, false);
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
-        useDmNextService = properties.get("useWebOptimizedService", false);
         boolean uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
         // if content policy delegate path is provided pass it to the image Uri
         String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
@@ -191,6 +191,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         dmAssetName = UrlEscapers.urlFragmentEscaper().escape(dmAssetName);
                         //image is DM
                         dmImage = true;
+                        useDmNextService = false;
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         //sets to '/is/image/ or '/is/content' based on dam:scene7Type property
@@ -209,12 +210,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             dmServerUrl = asset.getMetadataValue(Scene7Constants.PN_S7_DOMAIN) + dmServerPath.substring(1);
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
-                    } else {
-                        if (dmNextImageDeliveryService.isWebOptimizedImageDeliveryAllowed() &&
-                            StringUtils.isEmpty(policyDelegatePath)) {
-                            useDmNextService = true;
-                        }
                     }
+                    useDmNextService = useDmNextService && StringUtils.isEmpty(policyDelegatePath);
+
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
                             request.getResource().getPath());
