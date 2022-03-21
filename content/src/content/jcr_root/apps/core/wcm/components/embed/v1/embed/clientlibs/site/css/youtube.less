@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Adobe
+ *  Copyright 2022 Adobe
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,23 +14,18 @@
  *  limitations under the License.
  */
 
-@cmp-clean-light-breadcrumb-item-link-color: @cmp-clean-color-gray-600;
-@cmp-clean-light-breadcrumb-item-link-hover-color: @cmp-clean-color-gray-900;
+.cmp-embed__youtube {
+    position: relative;
+    width: 100%;
+    height: 0;
+    // video ratio of 16:9
+    padding-bottom: 56.25%;
+}
 
-.t-cmp-clean--light {
-    .cmp-breadcrumb__item {
-        &:after {
-            content: url("../../../resources/images/chevron_right--light-skin.svg");
-        }
-    }
-
-    .cmp-breadcrumb__item-link {
-        color: @cmp-clean-light-breadcrumb-item-link-color;
-
-        &:hover {
-            color: @cmp-clean-light-breadcrumb-item-link-hover-color;
-        }
-    }
-
-
+.cmp-embed__youtube-iframe {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
 }
