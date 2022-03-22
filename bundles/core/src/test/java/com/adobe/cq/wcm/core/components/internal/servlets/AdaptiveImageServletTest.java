@@ -353,8 +353,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
-        verify(testLogger, times(1)).warn("One of the configured widths ({}) from the {} content policy is not a " +
-                "valid Integer.", "invalid", "/conf/$aem-mock$/settings/wcm/policies/core/wcm/components/image/v1/image/$mock-policy");
+        verify(testLogger, times(1)).warn("One of the configured widths ({}) is not a " +
+                "valid Integer.", "invalid");
     }
 
     @Test
