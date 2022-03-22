@@ -263,7 +263,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 metrics.markImageStreamed();
             }
         } catch (IllegalArgumentException e) {
-            LOGGER.error("Invalid image request" + e);
+            LOGGER.error("Invalid image request", e);
             metrics.markImageErrors();
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } finally {
@@ -944,7 +944,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param imageResource the resource identifying the accessed image component
      * @return the list of the allowed widths; the list will be <i>empty</i> if the component doesn't have a content policy
      */
-    private List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource) {
+    List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource) {
         List<Integer> list = new ArrayList<>();
         ContentPolicy contentPolicy = getContentPolicy(imageResource);
         ValueMap properties = null;
@@ -983,7 +983,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param imageResource the resource identifying the accessed image component
      * @return the JPEG quality in the range 0..100 or {@link #DEFAULT_JPEG_QUALITY} if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
      */
-    private Integer getAllowedJpegQuality(@NotNull Resource imageResource) {
+    Integer getAllowedJpegQuality(@NotNull Resource imageResource) {
         Integer allowedJpegQuality = DEFAULT_JPEG_QUALITY;
         ContentPolicy contentPolicy = getContentPolicy(imageResource);
         if (contentPolicy != null) {
