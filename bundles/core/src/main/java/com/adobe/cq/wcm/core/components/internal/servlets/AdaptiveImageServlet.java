@@ -263,7 +263,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 metrics.markImageStreamed();
             }
         } catch (IllegalArgumentException e) {
-            LOGGER.error("Invalid image request" + e);
+            LOGGER.error("Invalid image request", e);
             metrics.markImageErrors();
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } finally {
