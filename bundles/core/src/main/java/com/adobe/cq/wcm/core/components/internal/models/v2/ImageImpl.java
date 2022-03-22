@@ -270,10 +270,19 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     srcUriTemplate += imageModifiersCommand;
                     src += imageModifiersCommand;
                 }
-                //add "dpr=off" parameter to image source url
-                String dprOffParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=off";
-                srcUriTemplate += dprOffParameter;
-                src += dprOffParameter;
+
+                String dprParameter = "";
+                // If DM is enabled, use smart imaging for smartcrop renditions
+                if (getClass().equals(com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl.class) && isDmFeaturesEnabled && !StringUtils.isBlank(smartCropRendition)) {
+                    dprParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=on,{dpr}";
+                } else {
+                    //add "dpr=off" parameter to image source url
+                    dprParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=off";
+                }
+
+                srcUriTemplate += dprParameter;
+                src += dprParameter;
+
                 if (srcUriTemplate.equals(src)) {
                     srcUriTemplate = null;
                 }
