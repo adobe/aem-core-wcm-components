@@ -594,7 +594,7 @@
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
           "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
-          "sling:resourceType": "core/wcm/components/image/v2/image",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
           "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
           "fileReference"     : "/content/dam/core/images/Adobe Systems logo and wordmark DM.png",
           "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
