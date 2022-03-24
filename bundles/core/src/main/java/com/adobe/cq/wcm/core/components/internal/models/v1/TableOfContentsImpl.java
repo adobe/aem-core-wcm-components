@@ -52,9 +52,9 @@ public class TableOfContentsImpl extends AbstractComponentImpl implements TableO
 
     public static final String TOC_REQUEST_ATTR_FLAG = "cmp-toc-present";
 
-    public static final ListType DEFAULT_LIST_TYPE = ListType.BULLETED;
-    public static final HeadingLevel DEFAULT_START_LEVEL = HeadingLevel.H1;
-    public static final HeadingLevel DEFAULT_STOP_LEVEL = HeadingLevel.H6;
+    public static final ListType DEFAULT_LIST_TYPE = ListType.bulleted;
+    public static final HeadingLevel DEFAULT_START_LEVEL = HeadingLevel.h1;
+    public static final HeadingLevel DEFAULT_STOP_LEVEL = HeadingLevel.h6;
 
     public static final String NO_RESTRICTION = "norestriction";
 

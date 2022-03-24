@@ -40,9 +40,11 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -90,8 +92,9 @@ public class TableOfContentsFilter implements Filter {
             Document document = Jsoup.parse(originalContent);
 
             Elements tocPlaceholderElements = document.getElementsByClass(TableOfContents.TOC_PLACEHOLDER_CLASS);
+            Map<String, Integer> customIDs = new HashMap<String, Integer>();
             for (Element tocPlaceholderElement : tocPlaceholderElements) {
-                Element tableOfContents = getTableOfContents(tocPlaceholderElement);
+                Element tableOfContents = getTableOfContents(tocPlaceholderElement, customIDs);
                 String id = tocPlaceholderElement.id();
                 tocPlaceholderElement.empty();
                 tocPlaceholderElement.clearAttributes();
@@ -115,10 +118,8 @@ public class TableOfContentsFilter implements Filter {
             charWriter.write(document.outerHtml());
             String alteredContent = charWriter.toString();
 
-            response.setContentLength(alteredContent.length());
             response.getWriter().write(alteredContent);
         } else {
-            response.setContentLength(originalContent.length());
             response.getWriter().write(originalContent);
         }
     }
@@ -127,9 +128,10 @@ public class TableOfContentsFilter implements Filter {
      * Creates a TOC {@link Element} by getting all the TOC config from the
      * TOC placeholder DOM {@link Element}' data attributes.
      * @param tocPlaceholderElement - TOC placeholder dom element
+     * @param customIDs - A map of custom generated IDs to their count in the dom
      * @return Independent TOC element, not attached to the DOM
      */
-    private Element getTableOfContents(Element tocPlaceholderElement) {
+    private Element getTableOfContents(Element tocPlaceholderElement, Map<String, Integer> customIDs) {
         TableOfContents.ListType listType = tocPlaceholderElement.hasAttr(TableOfContents.TOC_DATA_ATTR_LIST_TYPE)
             ? TableOfContents.ListType.fromString(
                 tocPlaceholderElement.attr(TableOfContents.TOC_DATA_ATTR_LIST_TYPE))
@@ -155,7 +157,7 @@ public class TableOfContentsFilter implements Filter {
             : null;
 
         if(startLevel.getIntValue() > stopLevel.getIntValue()) {
-            LOGGER.error("Invalid start and stop levels, startLevel={}, stopLevel={}",
+            LOGGER.warn("Invalid start and stop levels, startLevel={}, stopLevel={}",
                 startLevel.getValue(), stopLevel.getValue());
             return null;
         }
@@ -193,7 +195,7 @@ public class TableOfContentsFilter implements Filter {
                 validElements.add(element);
             }
         }
-        return getNestedList(listTag, validElements.listIterator(), 0);
+        return getNestedList(listTag, validElements.listIterator(), 0, customIDs);
     }
 
     /**
@@ -220,16 +222,17 @@ public class TableOfContentsFilter implements Filter {
      * @param listTag - 'ul' for unordered list or 'ol' for ordered list
      * @param headingElementsIterator - Iterator of list of heading elements to be included in TOC
      * @param parentHeadingLevel - Heading level of the parent of the current nesting level
+     * @param customIDs - A map of custom generated IDs to their count in the dom
      * @return Current nested TOC element containing all heading elements with levels >= parent heading level
      */
     private Element getNestedList(String listTag, ListIterator<Element> headingElementsIterator,
-                                  int parentHeadingLevel) {
+                                  int parentHeadingLevel, Map<String, Integer> customIDs) {
         if(!headingElementsIterator.hasNext()) {
             return null;
         }
         Element list = new Element(listTag);
         Element headingElement = headingElementsIterator.next();
-        Element listItem = getListItemElement(headingElement);
+        Element listItem = getListItemElement(headingElement, customIDs);
         int previousHeadingLevel = getHeadingLevel(headingElement);
         list.appendChild(listItem);
         while(headingElementsIterator.hasNext()) {
@@ -237,12 +240,14 @@ public class TableOfContentsFilter implements Filter {
             int currentHeadingLevel = getHeadingLevel(headingElement);
             if(currentHeadingLevel == previousHeadingLevel ||
                 (currentHeadingLevel < previousHeadingLevel && currentHeadingLevel > parentHeadingLevel)) {
-                listItem = getListItemElement(headingElement);
+                listItem = getListItemElement(headingElement, customIDs);
                 list.appendChild(listItem);
                 previousHeadingLevel = currentHeadingLevel;
             } else if(currentHeadingLevel > previousHeadingLevel) {
                 headingElementsIterator.previous();
-                list.children().last().appendChild(getNestedList(listTag, headingElementsIterator, previousHeadingLevel));
+                list.children().last().appendChild(
+                    getNestedList(listTag, headingElementsIterator, previousHeadingLevel, customIDs)
+                );
             } else {
                 headingElementsIterator.previous();
                 return list;
@@ -256,15 +261,20 @@ public class TableOfContentsFilter implements Filter {
      * Adds an internal link on the 'li' element to the provided heading element.
      * Adds 'id' attribute on heading element if not already present, using its text content.
      * @param headingElement - DOM heading element
+     * @param customIDs - A map of custom generated IDs to their count in the dom
      * @return Independent 'li' element, not attached to the DOM
      */
-    private Element getListItemElement(Element headingElement) {
+    private Element getListItemElement(Element headingElement, Map<String, Integer> customIDs) {
         String id = headingElement.attr("id");
         if("".contentEquals(id)) {
             id = headingElement.text()
                 .trim()
                 .toLowerCase()
                 .replaceAll("\\s", "-");
+            customIDs.put(id, 1 + customIDs.getOrDefault(id, 0));
+            id += customIDs.get(id) == 1
+                ? ""
+                : "-" + customIDs.get(id);
             headingElement.attr("id", id);
         }
         Element listItem = new Element("li");

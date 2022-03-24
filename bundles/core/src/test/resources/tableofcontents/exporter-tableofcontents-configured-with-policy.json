@@ -1,7 +1,7 @@
 {
-    "listType":"BULLETED",
-    "startLevel":"H2",
-    "stopLevel":"H4",
+    "listType":"bulleted",
+    "startLevel":"h2",
+    "stopLevel":"h4",
     "ignoreClasses":["toc-ignore-1","toc-ignore-2"],
     "id":"toc-sample-id-2",
     ":type":"core/wcm/components/tableofcontents/v1/tableofcontents"

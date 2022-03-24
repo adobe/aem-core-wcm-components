@@ -43,6 +43,7 @@
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <bulleted
                                                         jcr:primaryType="nt:unstructured"
+                                                        selected="{Boolean}true"
                                                         text="Bulleted List"
                                                         value="bulleted"/>
                                                     <numbered
@@ -64,6 +65,7 @@
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <h1
                                                         jcr:primaryType="nt:unstructured"
+                                                        selected="{Boolean}true"
                                                         text="H1"
                                                         value="h1"/>
                                                     <h2
@@ -99,30 +101,31 @@
                                                 fieldLabel="Title Stop Level"
                                                 name="./stopLevel">
                                                 <items jcr:primaryType="nt:unstructured">
-                                                    <h6
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H6"
-                                                        value="h6"/>
-                                                    <h5
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H5"
-                                                        value="h5"/>
-                                                    <h4
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H4"
-                                                        value="h4"/>
-                                                    <h3
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H3"
-                                                        value="h3"/>
-                                                    <h2
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H2"
-                                                        value="h2"/>
                                                     <h1
                                                         jcr:primaryType="nt:unstructured"
                                                         text="H1"
                                                         value="h1"/>
+                                                    <h2
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="H2"
+                                                        value="h2"/>
+                                                    <h3
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="H3"
+                                                        value="h3"/>
+                                                    <h4
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="H4"
+                                                        value="h4"/>
+                                                    <h5
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="H5"
+                                                        value="h5"/>
+                                                    <h6
+                                                        jcr:primaryType="nt:unstructured"
+                                                        selected="{Boolean}true"
+                                                        text="H6"
+                                                        value="h6"/>
                                                 </items>
                                                 <granite:rendercondition
                                                     jcr:primaryType="nt:unstructured"

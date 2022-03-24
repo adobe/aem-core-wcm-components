@@ -1,7 +1,7 @@
 {
-    "listType":"NUMBERED",
-    "startLevel":"H2",
-    "stopLevel":"H4",
+    "listType":"numbered",
+    "startLevel":"h2",
+    "stopLevel":"h4",
     "includeClasses":["toc-include-1","toc-include-2"],
     "ignoreClasses":["toc-ignore-1","toc-ignore-2"],
     "id":"tableofcontents-c2dd194bbd",

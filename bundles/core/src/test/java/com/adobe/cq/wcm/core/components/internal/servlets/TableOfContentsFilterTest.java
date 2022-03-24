@@ -136,6 +136,20 @@ public class TableOfContentsFilterTest {
         );
     }
 
+    /**
+     * Checks whether TOC generates unique IDs for h1-h6 elements having exactly same textual content
+     * @throws Exception
+     */
+    @Test
+    void testDuplicateIDs() throws Exception {
+        checkFilterResponse(
+            TEST_BASE + "/test-duplicate-ids-content.html",
+            TEST_BASE + "/exporter-duplicate-ids-content.html",
+            true,
+            "TOC should generate unique IDs for h1-h6 elements having exactly same textual content"
+        );
+    }
+
     private void checkFilterResponse(String htmlContentPagePath, String expectedHtmlContentPagePath, boolean setTocFlag,
                                      String errorMessage)
         throws Exception {

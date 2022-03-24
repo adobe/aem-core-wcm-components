@@ -62,9 +62,9 @@ public class TableOfContentsImplTest {
 
     @Test
     void testTableOfContentsDefaultWithPolicy() {
-        TableOfContents.ListType listType = TableOfContents.ListType.NUMBERED;
-        TableOfContents.HeadingLevel startLevel = TableOfContents.HeadingLevel.H2;
-        TableOfContents.HeadingLevel stopLevel = TableOfContents.HeadingLevel.H4;
+        TableOfContents.ListType listType = TableOfContents.ListType.numbered;
+        TableOfContents.HeadingLevel startLevel = TableOfContents.HeadingLevel.h2;
+        TableOfContents.HeadingLevel stopLevel = TableOfContents.HeadingLevel.h4;
         String[] includeClasses = new String[]{"toc-include-1", "toc-include-2"};
         String[] ignoreClasses = new String[]{"toc-ignore-1", "toc-ignore-2"};
         context.contentPolicyMapping(TableOfContentsImpl.RESOURCE_TYPE,
@@ -86,9 +86,9 @@ public class TableOfContentsImplTest {
     @Test
     void testTableOfContentsConfigured() {
         TableOfContents tableOfContents = getTableOfContentsUnderTest(TOC_CONFIGURED);
-        assertEquals(TableOfContents.HeadingLevel.H2, tableOfContents.getStartLevel());
-        assertEquals(TableOfContents.HeadingLevel.H5, tableOfContents.getStopLevel());
-        assertEquals(TableOfContents.ListType.NUMBERED, tableOfContents.getListType());
+        assertEquals(TableOfContents.HeadingLevel.h2, tableOfContents.getStartLevel());
+        assertEquals(TableOfContents.HeadingLevel.h5, tableOfContents.getStopLevel());
+        assertEquals(TableOfContents.ListType.numbered, tableOfContents.getListType());
         assertNull(tableOfContents.getIncludeClasses());
         assertNull(tableOfContents.getIgnoreClasses());
         Utils.testJSONExport(tableOfContents, Utils.getTestExporterJSONPath(TEST_BASE, TOC_CONFIGURED));
@@ -102,9 +102,9 @@ public class TableOfContentsImplTest {
             TableOfContents.PN_RESTRICT_STOP_LEVEL, TableOfContentsImpl.NO_RESTRICTION
         );
         TableOfContents tableOfContents = getTableOfContentsUnderTest(TOC_CONFIGURED);
-        assertEquals(TableOfContents.HeadingLevel.H2, tableOfContents.getStartLevel());
-        assertEquals(TableOfContents.HeadingLevel.H5, tableOfContents.getStopLevel());
-        assertEquals(TableOfContents.ListType.NUMBERED, tableOfContents.getListType());
+        assertEquals(TableOfContents.HeadingLevel.h2, tableOfContents.getStartLevel());
+        assertEquals(TableOfContents.HeadingLevel.h5, tableOfContents.getStopLevel());
+        assertEquals(TableOfContents.ListType.numbered, tableOfContents.getListType());
         assertNull(tableOfContents.getIncludeClasses());
         assertNull(tableOfContents.getIgnoreClasses());
         Utils.testJSONExport(tableOfContents, Utils.getTestExporterJSONPath(TEST_BASE, TOC_CONFIGURED));
@@ -112,8 +112,8 @@ public class TableOfContentsImplTest {
 
     @Test
     void testTableOfContentsConfiguredWithPolicy() {
-        TableOfContents.ListType listType = TableOfContents.ListType.BULLETED;
-        TableOfContents.HeadingLevel stopLevel = TableOfContents.HeadingLevel.H4;
+        TableOfContents.ListType listType = TableOfContents.ListType.bulleted;
+        TableOfContents.HeadingLevel stopLevel = TableOfContents.HeadingLevel.h4;
         String[] ignoreClasses = new String[]{"toc-ignore-1", "toc-ignore-2"};
         context.contentPolicyMapping(TableOfContentsImpl.RESOURCE_TYPE,
             TableOfContents.PN_RESTRICT_LIST_TYPE, listType.getValue(),
@@ -122,7 +122,7 @@ public class TableOfContentsImplTest {
             TableOfContents.PN_IGNORE_CLASSES, ignoreClasses
         );
         TableOfContents tableOfContents = getTableOfContentsUnderTest(TOC_CONFIGURED_WITH_POLICY);
-        assertEquals(TableOfContents.HeadingLevel.H2, tableOfContents.getStartLevel());
+        assertEquals(TableOfContents.HeadingLevel.h2, tableOfContents.getStartLevel());
         assertEquals(stopLevel, tableOfContents.getStopLevel());
         assertEquals(listType, tableOfContents.getListType());
         assertNull(tableOfContents.getIncludeClasses());

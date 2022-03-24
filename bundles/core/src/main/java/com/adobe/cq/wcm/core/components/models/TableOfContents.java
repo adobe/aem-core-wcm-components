@@ -28,14 +28,14 @@ public interface TableOfContents extends Component {
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
-        BULLETED("bulleted"),
+        bulleted("bulleted"),
 
         /**
          * Numbered list type
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
-        NUMBERED("numbered");
+        numbered("numbered");
 
         private String value;
 
@@ -54,15 +54,15 @@ public interface TableOfContents extends Component {
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
         public String getTagName() {
-            return this == NUMBERED ? "ol" : "ul";
+            return this == numbered ? "ol" : "ul";
         }
 
         /**
          * Given a {@link String} <code>value</code>, this method returns the enum's value that corresponds to the
-         * provided string representation. If no representation is found, {@link #BULLETED} will be returned.
+         * provided string representation. If no representation is found, {@link #bulleted} will be returned.
          *
          * @param value the string representation for which an enum value should be returned
-         * @return the corresponding enum value, if one was found, or {@link #BULLETED}
+         * @return the corresponding enum value, if one was found, or {@link #bulleted}
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */
@@ -72,7 +72,7 @@ public interface TableOfContents extends Component {
                     return type;
                 }
             }
-            return BULLETED;
+            return bulleted;
         }
     }
 
@@ -83,12 +83,12 @@ public interface TableOfContents extends Component {
      */
     enum HeadingLevel {
 
-        H1("h1"),
-        H2("h2"),
-        H3("h3"),
-        H4("h4"),
-        H5("h5"),
-        H6("h6");
+        h1("h1"),
+        h2("h2"),
+        h3("h3"),
+        h4("h4"),
+        h5("h5"),
+        h6("h6");
 
         private String value;
 
@@ -280,7 +280,7 @@ public interface TableOfContents extends Component {
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
     default ListType getListType() {
-        return ListType.BULLETED;
+        return ListType.bulleted;
     }
 
     /**
@@ -291,7 +291,7 @@ public interface TableOfContents extends Component {
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
     default HeadingLevel getStartLevel() {
-        return HeadingLevel.H1;
+        return HeadingLevel.h1;
     }
 
     /**
@@ -302,7 +302,7 @@ public interface TableOfContents extends Component {
      * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
      */
     default HeadingLevel getStopLevel() {
-        return HeadingLevel.H6;
+        return HeadingLevel.h6;
     }
 
     /**
