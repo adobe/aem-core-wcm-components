@@ -98,6 +98,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public static final String PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS = "renderAlternateLanguageLinks";
 
     /**
+     * Attribute value for robots noindex
+     */
+    public static final String ROBOTS_TAG_NOINDEX = "noindex";
+
+    /**
      * Flag indicating if cloud configuration support is enabled.
      */
     private Boolean hasCloudconfigSupport;
@@ -335,9 +340,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             } catch (NoClassDefFoundError ex) {
                 canonicalUrl = null;
             }
-            this.canonicalUrl = canonicalUrl != null
-                ? canonicalUrl
-                : linkHandler.getLink(currentPage).map(Link::getExternalizedURL).orElse(null);
+            if (!getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
+                this.canonicalUrl = canonicalUrl != null
+                    ? canonicalUrl
+                    : linkHandler.getLink(currentPage).map(Link::getExternalizedURL).orElse(null);
+            }
         }
         return canonicalUrl;
     }
