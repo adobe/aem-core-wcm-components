@@ -47,6 +47,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.resource.external.ExternalizableInputStream;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.metrics.Timer;
@@ -697,6 +698,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void stream(@NotNull SlingHttpServletResponse response, @NotNull InputStream inputStream, @NotNull String contentType,
                         String imageName)
             throws IOException {
+        // similar to what is done in https://github.com/apache/sling-org-apache-sling-servlets-get/blob/edfaf307e4257dd34cc5b71121dfb8dfc43c12cb/src/main/java/org/apache/sling/servlets/get/impl/helpers/StreamRenderer.java#L159-L162
+        if (inputStream instanceof ExternalizableInputStream) {
+            response.sendRedirect(ExternalizableInputStream.class.cast(inputStream).getURI().toString());
+            return;
+        }
         response.setContentType(contentType);
         response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
         IOUtils.copy(inputStream, response.getOutputStream());
