@@ -23,6 +23,7 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -49,6 +50,13 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertEquals("Templated Page", redirectTarget.getPage().getTitle());
         assertEquals("/core/content/page/templated-page.html", redirectTarget.getURL());
         assertValidLink(redirectTarget.getLink(), "/content/page/templated-page.html", context.request());
+    }
+
+    @Test
+    protected void testIsCustomJsClientlibsAsync() {
+        Page page = getPageUnderTest(REDIRECT_PAGE);
+        boolean async = page.isCustomJsClientlibsAsync();
+        assertFalse(async);
     }
 
 }

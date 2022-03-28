@@ -16,7 +16,7 @@
 <template data-sly-template.footer="${ @ page, pwa }">
     <sly data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html"
          data-sly-test.clientlibCategoriesJsBody="${page.clientLibCategoriesJsBody}"
-         data-sly-call="${clientlib.js @ categories=clientlibCategoriesJsBody, async=true}"></sly>
+         data-sly-call="${clientlib.js @ categories=clientlibCategoriesJsBody, async=page.isCustomJsClientlibsAsync}"></sly>
     <sly data-sly-include="customfooterlibs.html"></sly>
     <sly data-sly-resource="${'cloudservices' @ resourceType='cq/cloudserviceconfigs/components/servicecomponents'}"></sly>
     <sly data-sly-test="${page.hasCloudconfigSupport}" data-sly-resource="${'cloudconfig-footer' @ resourceType='cq/cloudconfig/components/scripttags/footer'}"></sly>
