@@ -1,4 +1,4 @@
-package com.adobe.cq.wcm.core.components.internal.servlets.rendercondition;
+package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import com.adobe.cq.wcm.core.components.services.image.WOIDelivery;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
