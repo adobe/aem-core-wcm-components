@@ -37,13 +37,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     /**
      * Style property name to load custom Javascript libraries asynchronously.
      */
-    protected static final String PN_IS_CUSTOM_JS_CLIENTLIBS_ASYNC = "isCustomJsClientlibsAsync";
+    protected static final String PN_CLIENTLIBS_ASYNC = "clientlibsAsync";
 
     @Override
     @JsonIgnore
-    public boolean isCustomJsClientlibsAsync() {
+    public boolean isClientlibsAsync() {
         if (currentStyle != null) {
-            return currentStyle.get(PN_IS_CUSTOM_JS_CLIENTLIBS_ASYNC, false);
+            return currentStyle.get(PN_CLIENTLIBS_ASYNC, false);
         }
         return false;
     }

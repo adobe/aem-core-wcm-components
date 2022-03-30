@@ -53,9 +53,9 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     }
 
     @Test
-    protected void testIsCustomJsClientlibsAsync() {
+    protected void testIsClientlibsAsync() {
         Page page = getPageUnderTest(REDIRECT_PAGE);
-        boolean async = page.isCustomJsClientlibsAsync();
+        boolean async = page.isClientlibsAsync();
         assertFalse(async);
     }
 

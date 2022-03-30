@@ -82,7 +82,7 @@
                     ampMode="pairedAmp"
                     appResourcesClientlib="cmp-examples.site"
                     clientlibs="cmp-examples.base"
-                    isCustomJsClientlibsAsync="true">
+                    clientlibsAsync="true">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_212634895490169>
             </page>

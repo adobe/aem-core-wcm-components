@@ -141,6 +141,29 @@
                             </policy_1606475224445>
                         </page>
                     </v2>
+                    <v3 jcr:primaryType="nt:unstructured">
+                        <page jcr:primaryType="nt:unstructured">
+                            <policy_1648547608770
+                                jcr:lastModified="{Date}2020-11-27T13:34:34.670+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Page policy with sync clientlibs"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                clientlibs="core.wcm.components.accordion.v1">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_1648547608770>
+                            <policy_1648547608779
+                                jcr:lastModified="{Date}2020-11-27T13:34:34.670+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Page policy with async clientlibs"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                clientlibs="core.wcm.components.accordion.v1"
+                                clientlibsAsync="true">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_1648547608779>
+                        </page>
+                    </v3>
                 </page>
                 <image jcr:primaryType="nt:unstructured">
                     <v2 jcr:primaryType="nt:unstructured">

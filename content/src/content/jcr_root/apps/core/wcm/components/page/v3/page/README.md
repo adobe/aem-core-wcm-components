@@ -72,7 +72,7 @@ The following configuration properties are used:
 1. `./clientlibs` - allows definition of a list of client libraries to be loaded by the pages associated with this policy configuration
 2. `./clientlibsJsHead` - allows definition of client libraries for which JavaScript is specifically intended to be loaded
 in the document head (JavaScript only) of pages associated with this policy configuration
-3. `./isCustomJsClientlibsAsync` - allows custom Javascript libraries to be loaded asynchronously
+3. `./clientlibsAsync` - allows custom Javascript libraries to be loaded asynchronously
 4. `./appResourcesClientlib` - allows definition of the client library that is used to serve web resources such as favicons
 5. `./renderAlternateLanguageLinks` - toggles on/off the rendering of links to alternate language versions of the page in its head
 

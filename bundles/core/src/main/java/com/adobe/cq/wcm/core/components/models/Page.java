@@ -452,11 +452,11 @@ public interface Page extends ContainerExporter, Component {
     }
 
     /**
-     * Checks if the custom Javascript libraries should be loaded asynchronously.
+     * Checks if the Javascript libraries should be loaded asynchronously.
      *
-     * @return {@code true} if the custom Javascript libraries should be loaded asynchronously
+     * @return {@code true} if the Javascript libraries should be loaded asynchronously
      * @since om.adobe.cq.wcm.core.components.models 12.24.0
      */
-    default boolean isCustomJsClientlibsAsync() {return false;}
+    default boolean isClientlibsAsync() {return false;}
 
 }
