@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.lang.reflect.Field;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,6 +57,19 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     @Test
     protected void testIsClientlibsAsync() {
         Page page = getPageUnderTest(REDIRECT_PAGE);
+        boolean async = page.isClientlibsAsync();
+        assertFalse(async);
+    }
+
+    @Test
+    protected void testIsClientlibsAsyncWithNullPolicy() throws Exception {
+        Page page = getPageUnderTest(REDIRECT_PAGE);
+
+        // Set currentStyle = null
+        Field currentStyleField = Class.forName("com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl").getDeclaredField("currentStyle");
+        currentStyleField.setAccessible(true);
+        currentStyleField.set(page, null);
+
         boolean async = page.isClientlibsAsync();
         assertFalse(async);
     }
