@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.lang.reflect.Field;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +25,8 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -49,6 +53,40 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertEquals("Templated Page", redirectTarget.getPage().getTitle());
         assertEquals("/core/content/page/templated-page.html", redirectTarget.getURL());
         assertValidLink(redirectTarget.getLink(), "/content/page/templated-page.html", context.request());
+    }
+
+    @Test
+    protected void testIsClientlibsAsync_undefined() {
+        Page page = getPageUnderTest(REDIRECT_PAGE);
+        boolean async = page.isClientlibsAsync();
+        assertFalse(async);
+    }
+
+    @Test
+    protected void testIsClientlibsAsync_true() throws Exception {
+        Page page = getPageUnderTest(REDIRECT_PAGE, PageImpl.PN_CLIENTLIBS_ASYNC, "true");
+        boolean async = page.isClientlibsAsync();
+        assertTrue(async);
+    }
+
+    @Test
+    protected void testIsClientlibsAsync_false() throws Exception {
+        Page page = getPageUnderTest(REDIRECT_PAGE, PageImpl.PN_CLIENTLIBS_ASYNC, "false");
+        boolean async = page.isClientlibsAsync();
+        assertFalse(async);
+    }
+
+    @Test
+    protected void testIsClientlibsAsync_undefinedPolicy() throws Exception {
+        Page page = getPageUnderTest(REDIRECT_PAGE);
+
+        // Set currentStyle = null
+        Field currentStyleField = Class.forName("com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl").getDeclaredField("currentStyle");
+        currentStyleField.setAccessible(true);
+        currentStyleField.set(page, null);
+
+        boolean async = page.isClientlibsAsync();
+        assertFalse(async);
     }
 
 }

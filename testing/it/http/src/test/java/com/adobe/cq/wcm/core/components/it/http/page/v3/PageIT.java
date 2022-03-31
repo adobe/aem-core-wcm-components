@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.http.page.v3;
 
+import java.util.regex.Pattern;
+
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -58,4 +60,23 @@ public class PageIT {
         String content = adminAuthor.doGet("/content/core-components/simple-page/simple-page-v3.html", 200).getContent();
         GraniteAssert.assertRegExFind(content, "<script src=\".*/etc.clientlibs/foundation/clientlibs/jquery.*.js\"></script>");
     }
+
+    @Test
+    public void testIsClientlibsSync() throws ClientException {
+        String message = "The clientlib script should not contain the async attribute";
+        // async loading is disabled in the page policy
+        String content = adminAuthor.doGet("/content/core-components/simple-page/simple-page-v3-clientlibs-sync.html", 200).getContent();
+        Pattern pattern = Pattern.compile("<script src=\".*/etc.clientlibs/core/wcm/components/accordion/v1/accordion/clientlibs/site.*.js\"></script>");
+        GraniteAssert.assertRegExFind(message, content, pattern);
+    }
+
+    @Test
+    public void testIsClientlibsAsync() throws ClientException {
+        String message = "The clientlib script should contain the async attribute";
+        // async loading is enabled in the page policy
+        String content = adminAuthor.doGet("/content/core-components/simple-page/simple-page-v3-clientlibs-async.html", 200).getContent();
+        Pattern pattern = Pattern.compile("<script async src=\".*/etc.clientlibs/core/wcm/components/accordion/v1/accordion/clientlibs/site.*.js\"></script>");
+        GraniteAssert.assertRegExFind(message, content, pattern);
+    }
+
 }
