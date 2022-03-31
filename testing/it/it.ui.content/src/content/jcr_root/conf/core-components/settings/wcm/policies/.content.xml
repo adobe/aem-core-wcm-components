@@ -123,6 +123,27 @@
                                 layoutDisabled="false">
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
                             </policy_1606467713472>
+                            <policy_1648728186333
+                                jcr:lastModified="{Date}2022-03-31T14:44:50.751+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Content Container"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                components="group:.test"
+                                layoutDisabled="false">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                                <cq:styleGroups jcr:primaryType="nt:unstructured">
+                                    <item0 jcr:primaryType="nt:unstructured">
+                                        <cq:styles jcr:primaryType="nt:unstructured">
+                                            <item0
+                                                cq:styleClasses="fixed-width"
+                                                cq:styleId="1648730666615"
+                                                cq:styleLabel="fixed"
+                                                jcr:primaryType="nt:unstructured"/>
+                                        </cq:styles>
+                                    </item0>
+                                </cq:styleGroups>
+                            </policy_1648728186333>
                         </container>
                     </v1>
                 </container>
