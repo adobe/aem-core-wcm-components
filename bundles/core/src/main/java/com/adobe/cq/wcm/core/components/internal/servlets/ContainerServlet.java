@@ -25,6 +25,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.PersistenceException;
@@ -54,9 +55,7 @@ import com.day.crx.JcrConstants;
         service = Servlet.class,
         property = {
                 "sling.servlet.methods=" + HttpConstants.METHOD_POST,
-                "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE,
-                "sling.servlet.resourceTypes=" + TabsImpl.RESOURCE_TYPE,
-                "sling.servlet.resourceTypes=" + AccordionImpl.RESOURCE_TYPE,
+                "sling.servlet.resourceTypes=" + PanelContainerImpl.RESOURCE_TYPE,
                 "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
                 "sling.servlet.extensions=" + ContainerServlet.EXTENSION
         }
