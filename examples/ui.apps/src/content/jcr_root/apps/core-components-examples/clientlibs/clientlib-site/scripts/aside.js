@@ -18,6 +18,7 @@
 
     var selectors = {
         self: '.cmp-examples-structure__aside',
+        menuContainer: '#mainNavigation', 
         showMenu: '[data-cmp-examples-is="showMenu"]'
     };
 
@@ -33,10 +34,12 @@
 
     ready(function() {
         var showMenuActions = document.querySelectorAll(selectors.showMenu);
+        var menuContainer = document.querySelector(selectors.menuContainer);
         var aside = document.querySelector(selectors.self);
         mask = document.createElement('div');
         mask.classList.add(cssClasses.mask.self);
         document.body.appendChild(mask);
+        menuContainer.setAttribute('aria-expanded', 'false');
 
         if (aside) {
             for (var i = 0; i < showMenuActions.length; ++i) {
@@ -44,12 +47,19 @@
                     event.stopPropagation();
                     aside.classList.add(cssClasses.open);
                     mask.classList.add(cssClasses.mask.open);
+                    menuContainer.setAttribute('aria-expanded', 'true');
+                    this.setAttribute('aria-hidden', 'true');
                 });
             }
 
             mask.addEventListener('click', function (event) {
                 aside.classList.remove(cssClasses.open);
                 mask.classList.remove(cssClasses.mask.open);
+                menuContainer.setAttribute('aria-expanded', 'false');
+
+                for (var i = 0; i < showMenuActions.length; ++i) {
+                    showMenuActions[i].removeAttribute('aria-hidden');
+                }
             }, false);
 
             aside.addEventListener('click', function (event) {
