@@ -25,6 +25,7 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -55,14 +56,28 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     }
 
     @Test
-    protected void testIsClientlibsAsync() {
+    protected void testIsClientlibsAsync_undefined() {
         Page page = getPageUnderTest(REDIRECT_PAGE);
         boolean async = page.isClientlibsAsync();
         assertFalse(async);
     }
 
     @Test
-    protected void testIsClientlibsAsyncWithNullPolicy() throws Exception {
+    protected void testIsClientlibsAsync_true() throws Exception {
+        Page page = getPageUnderTest(REDIRECT_PAGE, PageImpl.PN_CLIENTLIBS_ASYNC, "true");
+        boolean async = page.isClientlibsAsync();
+        assertTrue(async);
+    }
+
+    @Test
+    protected void testIsClientlibsAsync_false() throws Exception {
+        Page page = getPageUnderTest(REDIRECT_PAGE, PageImpl.PN_CLIENTLIBS_ASYNC, "false");
+        boolean async = page.isClientlibsAsync();
+        assertFalse(async);
+    }
+
+    @Test
+    protected void testIsClientlibsAsync_undefinedPolicy() throws Exception {
         Page page = getPageUnderTest(REDIRECT_PAGE);
 
         // Set currentStyle = null
