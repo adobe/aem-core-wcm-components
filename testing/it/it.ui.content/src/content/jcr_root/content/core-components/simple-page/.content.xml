@@ -23,6 +23,8 @@
         jcr:primaryType="cq:PageContent"
         jcr:title="Simple Page"
         sling:resourceType="core/wcm/components/page/v2/page"
+        brandSlug="Core Components"
+        brandSlug_override="true"
         pwaBackgroundColor="#B10DC9"
         pwaCachestrategy="staleWhileRevalidate"
         pwaCachingpaths="[http://fonts.gstatic.com]"
@@ -33,9 +35,7 @@
         pwaOrientation="any"
         pwaPrecache="[/content/dam/foo/pwa-logo.png,/content/foo/us/en.html,/content/foo/us/en/manifest.webmanifest]"
         pwaStartURL="/content/foo/us/en.html"
-        pwaThemeColor="#FF851B"
-        brandSlug="Core Components"
-        brandSlug_override="true">
+        pwaThemeColor="#FF851B">
         <root
             jcr:lastModified="{Date}2020-11-27T17:51:51.431+02:00"
             jcr:lastModifiedBy="admin"
@@ -138,4 +138,5 @@
     </jcr:content>
     <simple-subpage/>
     <simple-page-v3/>
+    <test-page-xf-component/>
 </jcr:root>
