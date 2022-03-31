@@ -58,6 +58,7 @@ public class ExperienceFragmentIT {
         String expectedJson = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("xf-page.model.json"),
                 StandardCharsets.UTF_8);
         String json = adminAuthor.doGet("/content/core-components/simple-page/test-page-xf-component.model.json", 200).getContent();
-        GraniteAssert.assertJsonEquals(expectedJson, json, ImmutableList.of("lastModifiedDate", "repo:modifyDate"));
+        GraniteAssert.assertJsonEquals(expectedJson, json, ImmutableList.of("lastModifiedDate", "repo:modifyDate", "xdm:language",
+                "language", "components"));
     }
 }
