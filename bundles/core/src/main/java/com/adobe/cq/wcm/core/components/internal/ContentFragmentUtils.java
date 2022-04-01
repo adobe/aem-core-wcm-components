@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -40,6 +41,7 @@ import com.adobe.cq.dam.cfm.ContentElement;
 import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.FragmentTemplate;
 import com.adobe.cq.export.json.ComponentExporter;
+import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.text.Text;
@@ -281,6 +283,13 @@ public class ContentFragmentUtils {
 
         while (resourceIterator.hasNext()) {
             Resource resource = resourceIterator.next();
+
+            if (!(resource instanceof TemplatedResource)) {
+                resource = Optional.ofNullable((Resource) resource.adaptTo(TemplatedResource.class))
+                        .orElse(Optional.ofNullable((Resource) slingHttpServletRequest.adaptTo(TemplatedResource.class))
+                                .orElse(resource));
+            }
+
             ComponentExporter exporter = modelFactory.getModelFromWrappedRequest(wrappedSlingHttpServletRequest, resource, ComponentExporter.class);
 
             if (exporter != null) {

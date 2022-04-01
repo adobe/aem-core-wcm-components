@@ -65,6 +65,7 @@ public class Page {
     public void setOffTime() throws InterruptedException {
         CalendarPicker calendarPicker = new CalendarPicker(offTime);
         calendarPicker.calendarButton().click();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         calendarPicker.next().click();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         calendarPicker.date(2).click();

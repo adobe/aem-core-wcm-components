@@ -123,6 +123,27 @@
                                 layoutDisabled="false">
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
                             </policy_1606467713472>
+                            <policy_1648728186333
+                                jcr:lastModified="{Date}2022-03-31T14:44:50.751+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Content Container"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                components="group:.test"
+                                layoutDisabled="false">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                                <cq:styleGroups jcr:primaryType="nt:unstructured">
+                                    <item0 jcr:primaryType="nt:unstructured">
+                                        <cq:styles jcr:primaryType="nt:unstructured">
+                                            <item0
+                                                cq:styleClasses="fixed-width"
+                                                cq:styleId="1648730666615"
+                                                cq:styleLabel="fixed"
+                                                jcr:primaryType="nt:unstructured"/>
+                                        </cq:styles>
+                                    </item0>
+                                </cq:styleGroups>
+                            </policy_1648728186333>
                         </container>
                     </v1>
                 </container>
@@ -141,6 +162,29 @@
                             </policy_1606475224445>
                         </page>
                     </v2>
+                    <v3 jcr:primaryType="nt:unstructured">
+                        <page jcr:primaryType="nt:unstructured">
+                            <policy_1648547608770
+                                jcr:lastModified="{Date}2020-11-27T13:34:34.670+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Page policy with sync clientlibs"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                clientlibs="core.wcm.components.accordion.v1">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_1648547608770>
+                            <policy_1648547608779
+                                jcr:lastModified="{Date}2020-11-27T13:34:34.670+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Page policy with async clientlibs"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                clientlibs="core.wcm.components.accordion.v1"
+                                clientlibsAsync="true">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_1648547608779>
+                        </page>
+                    </v3>
                 </page>
                 <image jcr:primaryType="nt:unstructured">
                     <v2 jcr:primaryType="nt:unstructured">

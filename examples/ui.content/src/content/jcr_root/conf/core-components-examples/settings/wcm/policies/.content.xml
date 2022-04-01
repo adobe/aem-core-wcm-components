@@ -81,7 +81,8 @@
                     sling:resourceType="wcm/core/components/policy/policy"
                     ampMode="pairedAmp"
                     appResourcesClientlib="cmp-examples.site"
-                    clientlibs="cmp-examples.base">
+                    clientlibs="cmp-examples.base"
+                    clientlibsAsync="true">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_212634895490169>
             </page>
