@@ -36,8 +36,8 @@ public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.s
 
     @Override
     protected void setupResources() {
-        searchRT = Commons.rtSearch_v2;
-        clientlibs = "core.wcm.components.search.v2";
+        clientlibs = Commons.CLIENTLIBS_SEARCH_V2;
+        proxyPath = Commons.RT_SEARCH_V2;
         search = new Search();
     }
 
@@ -60,23 +60,23 @@ public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.s
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isSearchResultsStatusMessageVisible());
         assertTrue(search.hasSearchResultsStatusMessageExpectedText(search.getResultsCount() + " results"),
-                "Search results status message containing the number of results should be displayed");
+            "Search results status message containing the number of results should be displayed");
 
         search.clickClear();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertFalse(search.isSearchResultsStatusMessageVisible(),
-                "Search results status message should not be displayed after clicking the Clear button");
+            "Search results status message should not be displayed after clicking the Clear button");
 
 
         search.setInput("no-results-expected-text");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isSearchResultsStatusMessageVisible());
         assertTrue(search.hasSearchResultsStatusMessageExpectedText("No results"),
-                "No results status message should be displayed when there are no search results");
+            "No results status message should be displayed when there are no search results");
 
         search.setInput("");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertFalse(search.isSearchResultsStatusMessageVisible(),
-                "Search results status message should not be displayed when no character is inserted in the search input");
+            "Search results status message should not be displayed when no character is inserted in the search input");
     }
 }

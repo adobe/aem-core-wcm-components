@@ -20,7 +20,7 @@
         self: '[name="cmp-examples-component-search"]',
         componentGroup: '.cmp-examples-container--component-group',
         componentTeaser: '.cmp-examples-teaser--component',
-        searchResultsStatus: '.cmp-examples-search-results-status'
+        searchResultsStatusMessage: '.cmp-examples-search-results-status'
     };
 
     var search;
@@ -61,35 +61,36 @@
             }
         });
 
-        updateSearchResultsStatusMessage(token, foundComponentTeasers);
+        updateSearchResultsStatusMessageElement(token, foundComponentTeasers);
     }
 
     // useful for Accessibility, helping users with low vision and users with cognitive disabilities to identify the change in results
-    function updateSearchResultsStatusMessage(token, foundComponentTeasers) {
+    function updateSearchResultsStatusMessageElement(token, foundComponentTeasers) {
+        var searchResultsStatusMessage = document.querySelector(selectors.searchResultsStatusMessage);
         if (!token) {
-            document.querySelector(selectors.searchResultsStatus).innerHTML = "";
+            searchResultsStatusMessage.innerHTML = "";
         } else {
             var searchResultsFoundMessage = `<p aria-live="polite" role="status">${foundComponentTeasers} ${foundComponentTeasers === 1 ?
                 "component" : "components"} found based on your search.</p>`;
             var searchResultsNotFoundMessage = `<p aria-live="polite" role="status">No components found. Please try a different search.</p>`;
-            document.querySelector(selectors.searchResultsStatus).innerHTML = foundComponentTeasers > 0 ?
+            searchResultsStatusMessage.innerHTML = foundComponentTeasers > 0 ?
                 searchResultsFoundMessage : searchResultsNotFoundMessage;
         }
     }
 
-    function createSearchResultsStatusElement() {
+    function createSearchResultsStatusMessageElement() {
         var searchInput = document.querySelector(selectors.self);
-        var infoMessageContainer = document.createElement("div");
-        infoMessageContainer.setAttribute("class", "cmp-examples-search-results-status");
-        infoMessageContainer.setAttribute("aria-live", "polite");
-        infoMessageContainer.setAttribute("role", "status");
-        searchInput.parentNode.insertBefore(infoMessageContainer , searchInput.parentNode.firstChild);
+        var searchResultsStatusMessage = document.createElement("div");
+        searchResultsStatusMessage.setAttribute("class", "cmp-examples-search-results-status");
+        searchResultsStatusMessage.setAttribute("aria-live", "polite");
+        searchResultsStatusMessage.setAttribute("role", "status");
+        searchInput.parentNode.insertBefore(searchResultsStatusMessage, searchInput.parentNode.firstChild);
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    function onDocumentReady() {
         search = document.querySelector(selectors.self);
         if (search) {
-            createSearchResultsStatusElement();
+            createSearchResultsStatusMessageElement();
             componentGroups = document.querySelectorAll(selectors.componentGroup);
             componentGroups = [].slice.call(componentGroups);
             componentTeasers = document.querySelectorAll(selectors.componentTeaser);
@@ -99,5 +100,11 @@
                 updateResults(search.value);
             })
         }
-    });
+    }
+
+    if (document.readyState !== 'loading') {
+        onDocumentReady();
+    } else {
+        document.addEventListener('DOMContentLoaded', onDocumentReady);
+    }
 }());

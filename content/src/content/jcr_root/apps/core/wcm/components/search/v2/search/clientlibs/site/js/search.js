@@ -152,13 +152,12 @@
     }
 
     // useful for Accessibility, helping users with low vision and users with cognitive disabilities to identify the change in results
-    function updateSearchResultsStatusMessage(searchElementId, totalResults) {
-        var searchStatusMessageContainer = document.querySelector("#" + searchElementId + "> .cmp_search__info");
-        searchStatusMessageContainer.style.visibility = "visible";
-        var searchResultsFoundMessageText = totalResults === 1 ? totalResults + " result" : totalResults + " results";
-        var searchResultsFoundMessage = "<p aria-live='polite' role='status'>" + searchResultsFoundMessageText + "</p>";
-        var searchResultsNotFoundMessage = "<p aria-live='polite' role='status'>No results</p>";
-        searchStatusMessageContainer.innerHTML = totalResults > 0 ? searchResultsFoundMessage : searchResultsNotFoundMessage;
+    function updateSearchResultsStatusMessageElement(searchElementId, totalResults) {
+        var searchResultsStatusMessage = document.querySelector("#" + searchElementId + "> .cmp_search__info");
+        searchResultsStatusMessage.style.visibility = "visible";
+        var searchResultsFoundMessage = totalResults === 1 ? totalResults + " result" : totalResults + " results";
+        var searchResultsNotFoundMessage = "No results";
+        searchResultsStatusMessage.innerText = totalResults > 0 ? searchResultsFoundMessage : searchResultsNotFoundMessage;
     }
 
     function Search(config) {
@@ -379,7 +378,7 @@
                 if (request.status >= 200 && request.status < 400) {
                     // success status
                     var data = JSON.parse(request.responseText);
-                    updateSearchResultsStatusMessage(self._elements.self.id, data.length);
+                    updateSearchResultsStatusMessageElement(self._elements.self.id, data.length);
                     if (data.length > 0) {
                         self._generateItems(data, self._elements.results);
                         self._markResults();
@@ -415,8 +414,8 @@
     };
 
     Search.prototype._hideSearchResultsStatusMessage = function() {
-        var searchStatusMessageContainer = document.querySelector("#" + this._elements.self.id + "> .cmp_search__info");
-        searchStatusMessageContainer.style.visibility = "hidden";
+        var searchResultsStatusMessage = document.querySelector("#" + this._elements.self.id + "> .cmp_search__info");
+        searchResultsStatusMessage.style.visibility = "hidden";
     };
 
     Search.prototype._cacheElements = function(wrapper) {

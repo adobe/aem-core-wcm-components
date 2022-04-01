@@ -14,9 +14,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    cq:icon="search"
-    jcr:description="Full-text search"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     jcr:primaryType="cq:Component"
-    jcr:title="Quick Search (v2)"
-    componentGroup=".core-wcm"/>
+    jcr:title="Search"
+    sling:resourceSuperType="core/wcm/components/search/v2/search"
+    componentGroup=".test"/>
