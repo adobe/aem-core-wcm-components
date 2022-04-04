@@ -24,12 +24,15 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.rules.ErrorCollector;
 
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.junit.assertion.GraniteAssert;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
+import com.adobe.cq.wcm.core.components.it.http.IgnoreOn64;
+import com.adobe.cq.wcm.core.components.it.http.IgnoreOn65;
 import com.google.common.collect.ImmutableList;
 
 public class ExperienceFragmentIT {
@@ -54,11 +57,12 @@ public class ExperienceFragmentIT {
     }
 
     @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testAppliedStylesJson() throws ClientException, IOException {
         String expectedJson = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("xf-page.model.json"),
                 StandardCharsets.UTF_8);
         String json = adminAuthor.doGet("/content/core-components/simple-page/test-page-xf-component.model.json", 200).getContent();
         GraniteAssert.assertJsonEquals(expectedJson, json, ImmutableList.of("lastModifiedDate", "repo:modifyDate", "xdm:language",
-                "language", "components"));
+                "language", "components", "repo:path"));
     }
 }
