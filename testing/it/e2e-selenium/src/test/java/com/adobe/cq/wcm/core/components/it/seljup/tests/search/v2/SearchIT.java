@@ -36,6 +36,7 @@ public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.s
 
     @Override
     protected void setupResources() {
+        super.setupResources();
         clientlibs = Commons.CLIENTLIBS_SEARCH_V2;
         proxyPath = Commons.RT_SEARCH_V2;
         search = new Search();
