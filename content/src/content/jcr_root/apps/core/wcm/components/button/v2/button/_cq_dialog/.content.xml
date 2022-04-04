@@ -18,7 +18,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Button"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.button.v1.editor]"
+    extraClientlibs="[core.wcm.components.button.v2.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_button_v2"
     trackingFeature="core-components:button:v2">
     <content
