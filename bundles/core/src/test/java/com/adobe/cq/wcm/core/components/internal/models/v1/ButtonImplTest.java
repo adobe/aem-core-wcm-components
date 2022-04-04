@@ -33,9 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ButtonImplTest {
 
     private static final String TEST_BASE = "/button";
-    private static final String TEST_ROOT_PAGE = "/content";
-    private static final String TEST_ROOT_PAGE_GRID = "/button/jcr:content/root/responsivegrid";
-    private static final String BUTTON_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/button-1";
+    protected static final String TEST_ROOT_PAGE = "/content";
+    protected static final String TEST_ROOT_PAGE_GRID = "/button/jcr:content/root/responsivegrid";
+    protected static final String BUTTON_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/button-1";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -82,8 +82,12 @@ public class ButtonImplTest {
     }
 
     protected Button getButtonUnderTest(Object... properties) {
+        return getButtonUnderTest(ButtonImplTest.BUTTON_1, properties);
+    }
+
+    protected Button getButtonUnderTest(String path, Object... properties) {
         Utils.enableDataLayer(context, true);
-        Resource resource = context.currentResource(ButtonImplTest.BUTTON_1);
+        Resource resource = context.currentResource(path);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);
         }
