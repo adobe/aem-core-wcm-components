@@ -44,6 +44,10 @@ public class ButtonImpl extends com.adobe.cq.wcm.core.components.internal.models
     @PostConstruct
     private void initModel() {
         link = linkHandler.getLink(resource);
+        // Fall back to the Button v1 'link' property
+        if (!link.isPresent()) {
+            link = linkHandler.getLink(resource, "link");
+        }
     }
 
     @Override
