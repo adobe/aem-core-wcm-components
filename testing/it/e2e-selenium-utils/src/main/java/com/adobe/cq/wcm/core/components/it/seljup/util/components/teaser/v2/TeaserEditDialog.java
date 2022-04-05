@@ -69,8 +69,8 @@ public class TeaserEditDialog extends com.adobe.cq.wcm.core.components.it.seljup
     }
 
     public boolean isDecorativeChecked() {
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        return (Boolean) ((JavascriptExecutor) webDriver).executeScript("return arguments[0].hasAttribute(\"checked\");", $(isDecorative));
+        CoralCheckbox checkbox = new CoralCheckbox(isDecorative);
+        return checkbox.isChecked();
     }
 
     public void setAltText(String value) {
