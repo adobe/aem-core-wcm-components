@@ -124,6 +124,9 @@ public class Commons {
     // search component
     public static final String RT_SEARCH_V1 = "core-component/components/search-v1";
     public static final String CLIENTLIBS_SEARCH_V1 = "core.wcm.components.search.v1";
+    public static final String RT_SEARCH_V2 = "core-component/components/search-v2";
+    public static final String CLIENTLIBS_SEARCH_V2 = "core.wcm.components.search.v2";
+    public static String rtSearch_v2 = "core/wcm/components/search/v2/search";
     // teaser component
     public static final String RT_TEASER_V1 = "core-component/components/teaser-v1";
     public static final String CLIENTLIBS_TEASER_V1 = "core.wcm.components.teaser.v1";

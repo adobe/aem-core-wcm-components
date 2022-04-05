@@ -46,16 +46,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SearchIT extends AuthorBaseUITest {
 
     private static final String QUERY_BUILDER_URL = "/bin/querybuilder.json";
-    private static final String clientlibs = Commons.CLIENTLIBS_SEARCH_V1;
+    protected String clientlibs;
     private String page1Path;
     private String page11Path;
     private String page111Path;
     private String page112Path;
     private String policyPath;
-    private String proxyPath;
+    protected String proxyPath;
     private String compPath;
-    private EditorPage editorPage;
-    private Search search;
+    protected EditorPage editorPage;
+    protected Search search;
 
     private boolean pollQuery(CQClient client, String path, String searchTerm, String expected) throws ClientException {
         int timeout = 2000;
@@ -93,11 +93,13 @@ public class SearchIT extends AuthorBaseUITest {
         return match;
     }
 
-    /**
-     * Before Test Case
-     */
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    protected void setupResources() {
+        clientlibs = Commons.CLIENTLIBS_SEARCH_V1;;
+        proxyPath = Commons.RT_SEARCH_V1;
+        search = new Search();
+    }
+
+    public void setup() throws ClientException {
         // level 1
         page1Path = authorClient.createPage("page_1", "page_1", rootPage, defaultPageTemplate).getSlingPath();
         HashMap<String, String> data = new HashMap<String, String>();
@@ -147,17 +149,21 @@ public class SearchIT extends AuthorBaseUITest {
             put("clientlibs", clientlibs);
         }});
 
-        proxyPath = Commons.RT_SEARCH_V1;
-
         // add the component to test page
         compPath = Commons.addComponentWithRetry(authorClient, proxyPath, page11Path + Commons.relParentCompPath, "search");
 
         // open test page in page editor
         editorPage = new PageEditorPage(page11Path);
         editorPage.open();
+    }
 
-        search = new Search();
-
+    /**
+     * Before Test Case
+     **/
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setupResources();
+        setup();
     }
 
     /**
