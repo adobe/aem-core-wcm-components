@@ -11,14 +11,22 @@
                 "responsivegrid"    : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "sling:resourceType": "wcm/foundation/components/responsivegrid",
-                    "button-1"          : {
-                        "jcr:primaryType"   : "nt:unstructured",
-                        "jcr:title"         : "Adobe",
-                        "sling:resourceType": "core/wcm/components/button/v2/button",
-                        "linkURL"           : "https://www.adobe.com",
-                        "linkTarget"        : "_blank",
-                        "icon"              : "adobe"
-                    }
+                  "button-1"          : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:title"         : "Adobe",
+                    "sling:resourceType": "core/wcm/components/button/v2/button",
+                    "linkURL"           : "https://www.adobe.com",
+                    "linkTarget"        : "_blank",
+                    "icon"              : "adobe"
+                  },
+                  "button-2"          : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:title"         : "Adobe",
+                    "sling:resourceType": "core/wcm/components/button/v2/button",
+                    "link"              : "https://www.adobe.com",
+                    "linkTarget"        : "_blank",
+                    "icon"              : "adobe"
+                  }
                 }
             }
         }
