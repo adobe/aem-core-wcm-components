@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.imageio.spi.IIORegistry;
@@ -35,6 +37,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.servlets.HttpConstants;
@@ -60,6 +63,8 @@ import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.api.handler.AssetHandler;
 import com.day.cq.dam.api.handler.store.AssetStore;
 import com.day.cq.dam.commons.handler.StandardImageHandler;
+import com.day.cq.wcm.api.designer.Designer;
+import com.day.cq.wcm.api.designer.Style;
 import com.day.image.Layer;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -348,8 +353,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
-        verify(testLogger, times(1)).warn("One of the configured widths ({}) from the {} content policy is not a " +
-                "valid Integer.", "invalid", "/conf/$aem-mock$/settings/wcm/policies/core/wcm/components/image/v1/image/$mock-policy");
+        verify(testLogger, times(1)).warn("One of the configured widths ({}) is not a " +
+                "valid Integer.", "invalid");
     }
 
     @Test
@@ -981,6 +986,28 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Assertions.assertEquals("image/tiff", response.getContentType(), "Expected a TIFF image.");
 
         Assertions.assertEquals(3, response.getOutput().length, "Expected three-byte original TIFF");
+    }
+
+    @Test
+    void testStaticDesignWidthAndQuality() {
+        Resource mockResource = mock(Resource.class);
+        ResourceResolver mockResourceResolver = mock(ResourceResolver.class);
+        when(mockResource.getResourceResolver()).thenReturn(mockResourceResolver);
+        Designer mockDesigner = mock(Designer.class);
+        when(mockResourceResolver.adaptTo(Designer.class)).thenReturn(mockDesigner);
+        Style mockStyle = mock(Style.class);
+        when(mockDesigner.getStyle(mockResource)).thenReturn(mockStyle);
+        String[] configuredWidths = { "400", "600", "800"};
+        when(mockStyle.get(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0])).thenReturn(configuredWidths);
+        List<Integer> allowedWidths = servlet.getAllowedRenditionWidths(mockResource);
+        Assertions.assertEquals(
+                Arrays.stream(configuredWidths).map(Integer::valueOf).sorted().collect(Collectors.toList()),
+                allowedWidths);
+
+        int configuredQuality = 75;
+        when(mockStyle.get(Image.PN_DESIGN_JPEG_QUALITY, AdaptiveImageServlet.DEFAULT_JPEG_QUALITY)).thenReturn(configuredQuality);
+        Integer allowedQuality = servlet.getAllowedJpegQuality(mockResource);
+        Assertions.assertEquals(configuredQuality, allowedQuality.intValue());
     }
 
     private Rendition mockRendition(Asset asset, String name, long size, String mimeType, int width, int length) {
