@@ -274,7 +274,7 @@ public class TableOfContentsFilter implements Filter {
             customIDs.put(id, 1 + customIDs.getOrDefault(id, 0));
             id += customIDs.get(id) == 1
                 ? ""
-                : "-" + customIDs.get(id);
+                : "-" + (customIDs.get(id) - 1);
             headingElement.attr("id", id);
         }
         Element listItem = new Element("li");
