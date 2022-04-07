@@ -3,9 +3,10 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Table of Contents"
     sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.tableofcontents.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_tableofcontents_v1">
     <content
-        granite:class="cmp-tableofcontents__editor"
+        granite:class="cmp-toc__design"
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
@@ -29,11 +30,11 @@
                                 <items jcr:primaryType="nt:unstructured">
                                     <norestriction
                                         jcr:primaryType="nt:unstructured"
+                                        selected="{Boolean}true"
                                         text="No Restriction"
                                         value="norestriction"/>
                                     <bulleted
                                         jcr:primaryType="nt:unstructured"
-                                        selected="{Boolean}true"
                                         text="Bulleted List"
                                         value="bulleted"/>
                                     <numbered
@@ -45,6 +46,7 @@
                             <restrictstartlevel
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                granite:class="cmp-toc__validate"
                                 fieldDescription="Whether the author should be able to choose the highest title level to report in the table of contents"
                                 fieldLabel="Restrict the Start Level"
                                 name="./restrictStartLevel">
@@ -83,6 +85,7 @@
                             <restrictstoplevel
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                granite:class="cmp-toc__validate"
                                 fieldDescription="Whether the author should be able to choose the lowest title level to report in the table of contents"
                                 fieldLabel="Restrict the Stop Level"
                                 name="./restrictStopLevel">
