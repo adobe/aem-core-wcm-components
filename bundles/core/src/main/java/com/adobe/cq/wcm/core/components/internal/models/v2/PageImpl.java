@@ -363,8 +363,10 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             try {
                 // if enabled, alternate language links should only be included on pages that are canonical (don't have a custom canonical
                 // url set) and are not marked with noindex.
-                if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, Boolean.FALSE) &&
-                    customCanonicalUrl == null && !getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
+                String currentPath = currentPage.getPath();
+                boolean isCanonical = StringUtils.isEmpty(customCanonicalUrl) || StringUtils.equals(customCanonicalUrl, currentPath);
+                if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, Boolean.FALSE)
+                    && isCanonical && !getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
                     SeoTags seoTags = resource.adaptTo(SeoTags.class);
                     alternateLanguageLinks = seoTags != null && seoTags.getAlternateLanguages().size() > 0
                         ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())
