@@ -7,8 +7,8 @@
         jcr:title="Core Structure"
         sling:resourceType="core-components-examples/components/page"
         cq:redirectTarget="/content/core-components-examples/library"/>
-    <page/>
-    <navigation/>
-    <language-navigation/>
     <breadcrumb/>
+    <language-navigation/>
+    <navigation/>
+    <page/>
 </jcr:root>
