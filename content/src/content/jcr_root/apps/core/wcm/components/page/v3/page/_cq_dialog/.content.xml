@@ -57,6 +57,7 @@
                                                 granite:class="cq-siteadmin-admin-properties-basic-brandSlug"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="core/wcm/components/commons/editor/dialog/inherited/v1/inherited"
+                                                cq:showOnCreate="true"
                                                 prop="brandSlug"
                                                 heading="Brand Slug"
                                                 path="${empty param.item ? requestPathInfo.suffix : param.item}"/>
@@ -70,6 +71,7 @@
                                             <id
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                cq:showOnCreate="true"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
                                                 name="./id"/>
