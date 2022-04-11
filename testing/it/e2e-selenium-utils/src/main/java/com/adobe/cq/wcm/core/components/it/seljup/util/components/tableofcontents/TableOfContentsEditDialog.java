@@ -39,6 +39,8 @@ public class TableOfContentsEditDialog extends Dialog {
     private static String stopLevelSelect = "[name='./stopLevel']";
     private static String id = "[name='./id']";
 
+    private static String invalidLevelsErrorTooltip = ".cmp-toc__editor coral-tooltip.is-open[variant='error']";
+
     private static String[] listTypes = new String[] {
         "bulleted",
         "numbered"
@@ -48,7 +50,7 @@ public class TableOfContentsEditDialog extends Dialog {
     private static int minLevel = 1;
     private static int maxLevel = 6;
     private static String levelSelectItemTemplate =
-        "coral-popover.is-open coral-selectlist-item[value='%d']";
+        "coral-popover.is-open coral-selectlist-item[value='%s']";
 ;
 
     public boolean isListTypeSelectPresent() {
@@ -105,6 +107,10 @@ public class TableOfContentsEditDialog extends Dialog {
 
     public void selectStopLevel(String stopLevel) throws InterruptedException {
         selectItem(stopLevelSelect, String.format(levelSelectItemTemplate, stopLevel));
+    }
+
+    public boolean isInvalidLevelsErrorTooltipPresent() {
+        return $(invalidLevelsErrorTooltip).isDisplayed();
     }
 
     public void setId(String id) {

@@ -187,4 +187,21 @@ public class TableOfContentsIT extends AuthorBaseUITest {
         assertFalse(tableOfContentsEditDialog.isStopLevelSelectPresent(), "Stop Level should not be visible");
         Commons.saveConfigureDialog();
     }
+
+    @Test
+    @DisplayName("Test: Check that user is unable to select start level greater than stop level in edit dialog")
+    public void testInvalidLevelsErrorTooltipInEditDialog() throws InterruptedException, TimeoutException {
+        String startLevel = "h4";
+        String invalidStopLevel = "h3";
+        String validStopLevel = "h5";
+
+        Commons.openEditDialog(editorPage, componentPath);
+        TableOfContentsEditDialog tableOfContentsEditDialog = tableOfContents.getEditDialog();
+        tableOfContentsEditDialog.selectStartLevel(startLevel);
+        tableOfContentsEditDialog.selectStopLevel(invalidStopLevel);
+        assertTrue(tableOfContentsEditDialog.isInvalidLevelsErrorTooltipPresent());
+        tableOfContentsEditDialog.selectStopLevel(validStopLevel);
+        assertFalse(tableOfContentsEditDialog.isInvalidLevelsErrorTooltipPresent());
+        Commons.saveConfigureDialog();
+    }
 }
