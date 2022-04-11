@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function($) {
+(function($, Granite) {
     "use strict";
 
     var ERROR_MESSAGE = "Start level is greater than stop level";
