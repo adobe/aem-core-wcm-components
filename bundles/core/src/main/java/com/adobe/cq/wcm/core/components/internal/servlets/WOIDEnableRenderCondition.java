@@ -1,5 +1,6 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import com.adobe.cq.wcm.core.components.internal.services.image.DefaultWOIDeliveryImpl;
 import com.adobe.cq.wcm.core.components.services.image.WOIDelivery;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
 import com.adobe.granite.ui.components.rendercondition.SimpleRenderCondition;
@@ -30,6 +31,11 @@ public class WOIDEnableRenderCondition extends SlingSafeMethodsServlet {
 
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
         throws ServletException, IOException {
+
+        if (WOIDeliveryService == null) {
+            WOIDeliveryService = new DefaultWOIDeliveryImpl();
+        }
+
         request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(WOIDeliveryService.isWOIDAllowed()));
     }
 }

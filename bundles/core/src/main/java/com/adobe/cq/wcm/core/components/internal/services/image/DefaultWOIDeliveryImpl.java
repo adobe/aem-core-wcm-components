@@ -3,12 +3,6 @@ package com.adobe.cq.wcm.core.components.internal.services.image;
 import com.adobe.cq.wcm.core.components.services.image.WOIDelivery;
 import org.osgi.service.component.annotations.Component;
 
-@Component(
-    service = WOIDelivery.class,
-    property = {
-        org.osgi.framework.Constants.SERVICE_RANKING + ":Integer=" + Integer.MIN_VALUE
-    }
-)
 public class DefaultWOIDeliveryImpl implements WOIDelivery {
 
 
