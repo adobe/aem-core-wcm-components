@@ -31,7 +31,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.title.TitleEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("group3")
 public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.title.v1.TitleIT {
@@ -60,7 +60,7 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
         title.clickLink();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchToDefaultContext();
-        assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"), "Current page should be Root page after navigation");
+        assertTrue(Commons.getCurrentUrl().endsWith(redirectPage + ".html"), "Current page should be Root page after navigation");
     }
 
     /**
@@ -87,7 +87,7 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
         Commons.openEditDialog(editorPage, cmpPath);
         TitleEditDialog editDialog = title.getEditDialog();
         assertTrue(editDialog.isTitleTypesPresent(new String[]{"2", "3", "4", "6"}), "h2, h3, h4, h6 title types should be present");
-        assertTrue(!editDialog.isTitleTypePresent("5"), "h5 title type should not be present");
+        assertFalse(editDialog.isTitleTypePresent("5"), "h5 title type should not be present");
 
         Commons.saveConfigureDialog();
 
@@ -97,13 +97,14 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
     }
 
     /**
-     * Test: Check the existence of all available title types defined in a policy.
+     * Test: Check the absence of the title type select dropdown if only one title type is defined in a policy.
+     *
      * @throws ClientException
      * @throws TimeoutException
      * @throws InterruptedException
      */
     @Test
-    @DisplayName("Test: Check the existence of all available title types defined in a policy.")
+    @DisplayName("Test: Check the absence of the title type select dropdown if only one title type is defined in a policy.")
     public void testCheckExistenceOfOneTypeUsingPolicy() throws ClientException, TimeoutException, InterruptedException {
         createComponentPolicy(titleRT.substring(titleRT.lastIndexOf("/")), new HashMap<String, String>() {{
             put("type", "h1");
@@ -115,10 +116,62 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
 
         Commons.openEditDialog(editorPage, cmpPath);
         TitleEditDialog editDialog = title.getEditDialog();
-        assertTrue(!editDialog.isTitleTypeSelectPresent(), "Title select dropdown should not be present");
+        assertFalse(editDialog.isTitleTypeSelectPresent(), "Title select dropdown should not be present");
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
         assertTrue(title.isTitleWithTypePresent("1"), "Title with type h1 should be present");
+    }
+
+    /**
+     * Test: Check the default option selected in the title type select dropdown if the default type set in a policy is a valid option.
+     *
+     * @throws ClientException
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the default option selected in the title type select dropdown if the default type set in a policy is a valid option.")
+    public void testDefaultSelectedDropdownValueUsingValidOption() throws ClientException, TimeoutException, InterruptedException {
+        createComponentPolicy(titleRT.substring(titleRT.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
+            add(new BasicNameValuePair("type", "h4"));
+            add(new BasicNameValuePair("allowedTypes", "h1"));
+            add(new BasicNameValuePair("allowedTypes", "h2"));
+            add(new BasicNameValuePair("allowedTypes", "h3"));
+            add(new BasicNameValuePair("allowedTypes", "h4"));
+            add(new BasicNameValuePair("allowedTypes", "h6"));
+            add(new BasicNameValuePair("allowedTypes@TypeHint", "String[]"));
+        }});
+
+        editorPage.refresh();
+
+        Commons.openEditDialog(editorPage, cmpPath);
+        TitleEditDialog editDialog = title.getEditDialog();
+        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "h4");
+    }
+
+    /**
+     * Test: Check the default option selected in the title type select dropdown if the default type set in a policy is an invalid option.
+     *
+     * @throws ClientException
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the default option selected in the title type select dropdown if the default type set in a policy is an invalid option.")
+    public void testDefaultSelectedDropdownValueUsingInvalidOption() throws ClientException, TimeoutException, InterruptedException {
+        createComponentPolicy(titleRT.substring(titleRT.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
+            add(new BasicNameValuePair("type", "h5"));
+            add(new BasicNameValuePair("allowedTypes", "h3"));
+            add(new BasicNameValuePair("allowedTypes", "h4"));
+            add(new BasicNameValuePair("allowedTypes", "h6"));
+            add(new BasicNameValuePair("allowedTypes@TypeHint", "String[]"));
+        }});
+
+        editorPage.refresh();
+
+        Commons.openEditDialog(editorPage, cmpPath);
+        TitleEditDialog editDialog = title.getEditDialog();
+        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "h3");
     }
 }
