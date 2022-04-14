@@ -360,6 +360,8 @@
         function setItemExpanded(item, expanded) {
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
+                var index = that._elements["item"].indexOf(item);
+                containerUtils.updateUrlHash(that, "item", index);
                 if (dataLayerEnabled) {
                     dataLayer.push({
                         event: "cmp:show",
@@ -371,6 +373,7 @@
 
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
+                containerUtils.removeUrlHash();
                 if (dataLayerEnabled) {
                     dataLayer.push({
                         event: "cmp:hide",

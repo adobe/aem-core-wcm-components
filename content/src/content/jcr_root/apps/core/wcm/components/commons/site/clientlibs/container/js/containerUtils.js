@@ -31,6 +31,28 @@
     window.CQ.CoreComponents.container.utils = {
 
         /**
+         * Removes the hash from the URL.
+         */
+        removeUrlHash: function() {
+            history.replaceState(undefined, undefined, " ");
+        },
+
+        /**
+         * Updates the URL hash with the panel ID without scrolling to it.
+         *
+         * @param {Object} component The container component (e.g. Accordion, Carousel, Tabs).
+         * @param {String} itemType The type of the item as defined in the component.
+         * @param {Number} index The index of the container item
+         */
+        updateUrlHash: function(component, itemType, index) {
+            if (component && component._elements && component._elements[itemType] &&
+                component._elements[itemType][index] && component._elements[itemType][index].id) {
+                var ID = component._elements[itemType][index].id;
+                history.replaceState(undefined, undefined, "#" + ID);
+            }
+        },
+
+        /**
          * Returns index of the container component item (accordion, tabs) that corresponds to the deep link in the URL fragment.
          *
          * @param {Object} component The Accordion or Tabs component.
