@@ -15,10 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -59,15 +59,14 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     private Map<String, String> overriddenProperties = new HashMap<>();
     private List<String> hiddenProperties = new ArrayList<>();
 
-    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId,
-                            boolean isShadowingDisabled, Component component) {
-        super(linkHandler, page, parentId, isShadowingDisabled, component);
+    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, Component component) {
+        super(linkHandler, page, parentId, component);
         this.component = component;
     }
 
-    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId,
-                            boolean isShadowingDisabled, Component component, boolean showDescription, boolean linkItems) {
-        super(linkHandler, page, parentId, isShadowingDisabled, component);
+    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, Component component,
+                            boolean showDescription, boolean linkItems) {
+        super(linkHandler, page, parentId, component);
         this.component = component;
         this.showDescription = showDescription;
         this.linkItems = linkItems;

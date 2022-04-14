@@ -1,0 +1,504 @@
+{
+  ":items":
+  {
+    "root":
+    {
+      ":items":
+      {
+        "container":
+        {
+          ":items":
+          {
+            "experiencefragment_v":
+            {
+              ":items":
+              {
+                "root":
+                {
+                  ":items":
+                  {
+                    "container":
+                    {
+                      ":items":
+                      {
+                        "title_v3":
+                        {
+                          ":type": "core-component/components/title-v3",
+                          "dataLayer":
+                          {
+                            "title-v3-7c0a90bd3b":
+                            {
+                              "@type": "core-component/components/title-v3",
+                              "dc:title": "Test Page XF Component",
+                              "repo:modifyDate": "2022-03-31T13:10:23Z"
+                            }
+                          },
+                          "id": "title-v3-7c0a90bd3b",
+                          "linkDisabled": false,
+                          "text": "Test Page XF Component"
+                        }
+                      },
+                      ":itemsOrder":
+                      [
+                        "title_v3"
+                      ],
+                      ":type": "core/wcm/components/container/v1/container",
+                      "allowedComponents":
+                      {
+                        "applicable": false,
+                        "components":
+                        [
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/accordion-v1",
+                            "title": "Accordion"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/breadcrumb-v1",
+                            "title": "Breadcrumb V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/breadcrumb-v2",
+                            "title": "Breadcrumb V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/breadcrumb-v3",
+                            "title": "Breadcrumb V3"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/button-v1",
+                            "title": "Button V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/button-v2",
+                            "title": "Button V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/carousel-v1",
+                            "title": "Carousel V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/contentfragment-v1",
+                            "title": "Contentfragment V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/contentfragmentlist-v1",
+                            "title": "Contentfragmentlist V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/contentfragmentlist-v2",
+                            "title": "Contentfragmentlist V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/embed-v1",
+                            "title": "Embed V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/embed-v2",
+                            "title": "Embed V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/experiencefragment-v2",
+                            "title": "Experience Fragment V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formbutton-v1",
+                            "title": "Formbutton V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formbutton-v2",
+                            "title": "Formbutton V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formcontainer-v1",
+                            "title": "Formcontainer V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formcontainer-v2",
+                            "title": "Formcontainer V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formhidden-v1",
+                            "title": "Formhidden V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formhidden-v2",
+                            "title": "Formhidden V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formoptions-v1",
+                            "title": "Formoptions V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formoptions-v2",
+                            "title": "Formoptions V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formtext-v1",
+                            "title": "Formtext V1"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/formtext-v2",
+                            "title": "Formtext V2"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/image-v1",
+                            "title": "Image"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/image-v2",
+                            "title": "Image"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/image-v3",
+                            "title": "Image"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/languagenavigation-v1",
+                            "title": "Language Navigation"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/languagenavigation-v2",
+                            "title": "Language Navigation"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/list-v1",
+                            "title": "List"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/list-v2",
+                            "title": "List"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/list-v3",
+                            "title": "List"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/navigation-v1",
+                            "title": "Navigation"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/navigation-v2",
+                            "title": "Navigation"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/search-v1",
+                            "title": "Search"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/tabs-v1",
+                            "title": "Tabs"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/teaser-v1",
+                            "title": "Teaser"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/teaser-v2",
+                            "title": "Teaser"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/text-v1",
+                            "title": "Text"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/text-v2",
+                            "title": "Text"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/title-v1",
+                            "title": "Title"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/title-v2",
+                            "title": "Title"
+                          },
+                          {
+                            "path": "/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template/structure/jcr:content/root/container/core-component/components/title-v3",
+                            "title": "Title V3"
+                          }
+                        ]
+                      },
+                      "appliedCssClassNames": "fixed-width",
+                      "columnClassNames":
+                      {
+                        "title_v3": "aem-GridColumn aem-GridColumn--default--12"
+                      },
+                      "columnCount": 12,
+                      "gridClassNames": "aem-Grid aem-Grid--12 aem-Grid--default--12"
+                    }
+                  },
+                  ":itemsOrder":
+                  [
+                    "container"
+                  ],
+                  ":type": "core/wcm/components/container/v1/container",
+                  "allowedComponents":
+                  {
+                    "applicable": false,
+                    "components":
+                    []
+                  },
+                  "columnClassNames":
+                  {
+                    "container": "aem-GridColumn aem-GridColumn--default--12"
+                  },
+                  "columnCount": 12,
+                  "gridClassNames": "aem-Grid aem-Grid--12 aem-Grid--default--12"
+                }
+              },
+              ":itemsOrder":
+              [
+                "root"
+              ],
+              ":type": "core-component/components/experiencefragment-v2",
+              "classNames": "aem-xf",
+              "configured": true,
+              "dataLayer":
+              {
+                "experiencefragment-v2-c501ce6eda":
+                {
+                  "@type": "core-component/components/experiencefragment-v2",
+                  "repo:modifyDate": "2022-03-31T13:13:11Z"
+                }
+              },
+              "id": "experiencefragment-v2-c501ce6eda",
+              "localizedFragmentVariationPath": "/content/experience-fragments/core-components-test/container-experience-fragment/master/jcr:content"
+            }
+          },
+          ":itemsOrder":
+          [
+            "experiencefragment_v"
+          ],
+          ":type": "core/wcm/components/container/v1/container",
+          "allowedComponents":
+          {
+            "applicable": false,
+            "components":
+            [
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/accordion-v1",
+                "title": "Accordion"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/breadcrumb-v1",
+                "title": "Breadcrumb V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/breadcrumb-v2",
+                "title": "Breadcrumb V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/breadcrumb-v3",
+                "title": "Breadcrumb V3"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/button-v1",
+                "title": "Button V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/button-v2",
+                "title": "Button V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/carousel-v1",
+                "title": "Carousel V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/contentfragment-v1",
+                "title": "Contentfragment V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/contentfragmentlist-v1",
+                "title": "Contentfragmentlist V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/contentfragmentlist-v2",
+                "title": "Contentfragmentlist V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/embed-v1",
+                "title": "Embed V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/embed-v2",
+                "title": "Embed V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/experiencefragment-v2",
+                "title": "Experience Fragment V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formbutton-v1",
+                "title": "Formbutton V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formbutton-v2",
+                "title": "Formbutton V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formcontainer-v1",
+                "title": "Formcontainer V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formcontainer-v2",
+                "title": "Formcontainer V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formhidden-v1",
+                "title": "Formhidden V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formhidden-v2",
+                "title": "Formhidden V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formoptions-v1",
+                "title": "Formoptions V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formoptions-v2",
+                "title": "Formoptions V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formtext-v1",
+                "title": "Formtext V1"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/formtext-v2",
+                "title": "Formtext V2"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/image-v1",
+                "title": "Image"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/image-v2",
+                "title": "Image"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/image-v3",
+                "title": "Image"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/languagenavigation-v1",
+                "title": "Language Navigation"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/languagenavigation-v2",
+                "title": "Language Navigation"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/list-v1",
+                "title": "List"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/list-v2",
+                "title": "List"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/list-v3",
+                "title": "List"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/navigation-v1",
+                "title": "Navigation"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/navigation-v2",
+                "title": "Navigation"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/search-v1",
+                "title": "Search"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/tabs-v1",
+                "title": "Tabs"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/teaser-v1",
+                "title": "Teaser"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/teaser-v2",
+                "title": "Teaser"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/text-v1",
+                "title": "Text"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/text-v2",
+                "title": "Text"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/title-v1",
+                "title": "Title"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/title-v2",
+                "title": "Title"
+              },
+              {
+                "path": "/content/core-components/simple-page/test-page-xf-component/jcr:content/root/container/core-component/components/title-v3",
+                "title": "Title V3"
+              }
+            ]
+          },
+          "columnClassNames":
+          {
+            "experiencefragment_v": "aem-GridColumn aem-GridColumn--default--12"
+          },
+          "columnCount": 12,
+          "gridClassNames": "aem-Grid aem-Grid--12 aem-Grid--default--12"
+        }
+      },
+      ":itemsOrder":
+      [
+        "container"
+      ],
+      ":type": "core/wcm/components/container/v1/container",
+      "allowedComponents":
+      {
+        "applicable": false,
+        "components":
+        []
+      },
+      "columnClassNames":
+      {
+        "container": "aem-GridColumn aem-GridColumn--default--12"
+      },
+      "columnCount": 12,
+      "gridClassNames": "aem-Grid aem-Grid--12 aem-Grid--default--12"
+    }
+  },
+  ":itemsOrder":
+  [
+    "root"
+  ],
+  ":type": "core/wcm/components/page/v3/page",
+  "brandSlug": "Core Components",
+  "cssClassNames": "page basicpage",
+  "dataLayer":
+  {
+    "page-ffae0de7c4":
+    {
+      "@type": "core/wcm/components/page/v3/page",
+      "dc:title": "Test Page XF Component",
+      "repo:modifyDate": "2022-03-31T12:00:40Z",
+      "repo:path": "/content/core-components/simple-page/test-page-xf-component.html",
+      "xdm:language": "en-DE",
+      "xdm:tags":
+      [],
+      "xdm:template": "/conf/core-components/settings/wcm/templates/simple-template-v3"
+    }
+  },
+  "designPath": "/libs/settings/wcm/designs/default",
+  "htmlPageItems":
+  [],
+  "id": "page-ffae0de7c4",
+  "language": "en-DE",
+  "lastModifiedDate": 1648732391600,
+  "templateName": "simple-template-v3",
+  "title": "Test Page XF Component"
+}

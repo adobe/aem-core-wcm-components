@@ -16,15 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.text.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.InlineEditor;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.RichTextToolbar;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.text.BaseText;
-import com.adobe.cq.wcm.core.components.it.seljup.components.text.v1.Text;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -33,7 +26,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InlineEditor;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.RichTextToolbar;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.text.BaseText;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.text.v1.Text;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -43,9 +44,6 @@ public class TextIT extends AuthorBaseUITest {
     private static String elemName = "text";
     private static String testValue = "<b>This</b> is a <i>rich</i> <u>text</u>.";
 
-
-    private String proxyPath;
-
     protected String testPage;
     protected String compPath;
     protected EditorPage editorPage;
@@ -53,18 +51,15 @@ public class TextIT extends AuthorBaseUITest {
     protected BaseText text;
 
     protected void setComponentResources() {
-        textRT = Commons.rtText_v1;
+        textRT = Commons.RT_TEXT_V1;
     }
 
     protected void setup() throws ClientException {
         // create the test page, store page path in 'testPagePath'
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, textRT, Commons.proxyPath, null, null);
-
         // add the core form container component
-        compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "text", null);
+        compPath = Commons.addComponentWithRetry(authorClient, textRT, testPage + Commons.relParentCompPath, "text");
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
@@ -81,10 +76,7 @@ public class TextIT extends AuthorBaseUITest {
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete the test page we created
-        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
-
-        // delete the proxy component created
-        Commons.deleteProxyComponent(adminClient, proxyPath);
+        authorClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
     }
 
     /**
@@ -93,7 +85,7 @@ public class TextIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check if text is stored/rendered correctly using the inline editor")
-    public void testSetTextValueUsingInlineEditor() throws TimeoutException {
+    public void testSetTextValueUsingInlineEditor() throws TimeoutException, InterruptedException {
         InlineEditor inlineEditor = Commons.openInlineEditor(editorPage, compPath);
         RichTextToolbar rte = inlineEditor.getRichTextToolbar();
         Commons.switchContext("ContentFrame");
@@ -102,9 +94,11 @@ public class TextIT extends AuthorBaseUITest {
         Commons.saveInlineEditor();
 
         Commons.switchContext("ContentFrame");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(text.isTextRendered(testValue), "Text should have been rendered");
 
         Commons.switchToDefaultContext();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editorPage.refresh();
         Commons.switchContext("ContentFrame");
         assertTrue(text.isTextRendered(testValue), "Text should have been rendered");

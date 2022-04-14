@@ -8,7 +8,9 @@
       "location"       : "header",
       "attributes"     : {
         "jcr:primaryType": "nt:unstructured",
-        "href"           : "/theme.css"
+        "href"           : "/theme.css",
+        "rel"            : "preload",
+        "as"             : "style"
       }
     },
     "theme.js"       : {
@@ -17,6 +19,8 @@
       "location"       : "footer",
       "attributes"     : {
         "jcr:primaryType": "nt:unstructured",
+        "async"      : "true",
+        "defer"      : "false",
         "src"            : "/theme.js"
       }
     },

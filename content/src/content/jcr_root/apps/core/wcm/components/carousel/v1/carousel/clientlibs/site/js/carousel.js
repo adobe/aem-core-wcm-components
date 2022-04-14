@@ -183,7 +183,7 @@
             that._properties = {};
 
             for (var key in properties) {
-                if (properties.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(properties, key)) {
                     var property = properties[key];
                     var value = null;
 
@@ -612,7 +612,7 @@
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
                 var value = data[key];
 
                 if (key.indexOf(NS) === 0) {
@@ -637,11 +637,14 @@
      * @returns {String} dataLayerId or undefined
      */
     function getDataLayerId(item) {
-        if (item && item.dataset.cmpDataLayer) {
-            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
-        } else {
-            return item.id;
+        if (item) {
+            if (item.dataset.cmpDataLayer) {
+                return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+            } else {
+                return item.id;
+            }
         }
+        return null;
     }
 
     /**

@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.17.3-SNAPSHOT</version>
+        <version>2.19.1-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
@@ -33,23 +33,12 @@
     <!-- ====================================================================== -->
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.it.e2e-selenium</artifactId>
-    <version>2.17.3-SNAPSHOT</version>
+    <version>2.19.1-SNAPSHOT</version>
     <name>Adobe Experience Manager Core WCM Components Selenium Base Test Framework</name>
 
     <build>
         <pluginManagement>
             <plugins>
-                <!-- Compile for custom Java version -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.0</version>
-                    <configuration>
-                        <source>1.${cq.java.version}</source>
-                        <target>1.${cq.java.version}</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -259,6 +248,11 @@
     <!-- ====================================================================== -->
     <dependencies>
         <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.it.e2e-selenium-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
@@ -272,7 +266,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>aem-selenium-it-base</artifactId>
-            <version>0.2.16</version>
+            <version>0.2.18</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

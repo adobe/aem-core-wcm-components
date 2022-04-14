@@ -16,14 +16,13 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.commons.AssetFinder;
-import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.TeaserEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.teaser.v1.Teaser;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -34,87 +33,81 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.AssetFinder;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.Teaser;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.TeaserEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group3")
 public class TeaserIT extends AuthorBaseUITest {
-    private static String  testAssetsPath                   = "/content/dam/core-components";
-    private static String  testImagePath                    = testAssetsPath + "/core-comp-test-image.jpg";
-    private static String  preTitle                         = "Teaser PreTitle";
-    private static String  title                            = "Teaser Title";
-    private static String  description                      = "Teaser Description";
+    protected static String  testAssetsPath                   = "/content/dam/core-components";
+    protected static String  testImagePath                    = testAssetsPath + "/core-comp-test-image.jpg";
+    protected static String  preTitle                         = "Teaser PreTitle";
+    protected static String  title                            = "Teaser Title";
+    protected static String  description                      = "Teaser Description";
+    protected static String  alt                              = "Teaser alt text";
     private static String  pageName                         = "teaser-page";
-    private static String  pageTitle                        = "teaser_page";
+    protected static String  pageTitle                        = "teaser_page";
     private static String  secondPageName                   = "teaser-second-page";
-    private static String  secondPageTitle                  = "teaser_second_page";
-    private static String  pageDescription                  = "teaser page description";
-    private static String  actionText2                      = "Action Text 2";
-    private static String  actionExternalLink               = "http://www.adobe.com";
-    private static String  actionExternalText               = "Adobe";
+    protected static String  secondPageTitle                  = "teaser_second_page";
+    private static String  thirdPageName                   = "teaser-third-page";
+    protected static String  thirdPageTitle                  = "teaser_third_page";
+    public static String  pageDescription                  = "teaser page description";
+    protected static String  actionText2                      = "Action Text 2";
+    protected static String  actionExternalLink               = "http://www.adobe.com";
+    protected static String  actionExternalText               = "Adobe";
     private static String componentName                     = "teaser";
-
-
-    private String proxyPath;
+    protected static String climbingAsset                   = "AdobeStock_140634652_climbing.jpeg";
+    protected static String climbingAssetAltText            = "Rock Climbing and Bouldering above the lake and mountains";
+    protected static String climbingAssetFormatted          = format(climbingAsset);
+    protected static String surfingAsset                    = "AdobeStock_175749320_surfing.jpg";
+    protected static String surfingAssetAltText             = "Surfers. Balangan beach. Bali, Indonesia.";
+    protected static String surfingAssetFormatted           = format(surfingAsset).replace("jpg", "jpeg");
+    protected static String skiingAsset                     = "AdobeStock_185234795_skiing.jpeg";
+    protected static String skiingAssetAltText              = "A skier does action skiing at the Rolle Pass in the Dolomites, Italy.";
+    protected static String skiingAssetFormatted            = format(skiingAsset);
 
     protected String clientlibs;
     protected String teaserRT;
     protected String testPage;
     protected String secondTestPage;
-    protected String imageProxyPath;
+    protected String thirdTestPage;
     protected String cmpPath;
     protected EditorPage editorPage;
     protected Teaser teaser;
     protected AssetFinder assetFinder;
 
-    private void setupResources() {
-        teaserRT = Commons.rtTeaser_v1;
-        clientlibs = "core.wcm.components.teaser.v1";
+    protected void setupResources() {
+        teaserRT = Commons.RT_TEASER_V1;
+        clientlibs = Commons.CLIENTLIBS_TEASER_V1;
+        teaser = new Teaser();
     }
 
-    protected void setup() throws ClientException {
-
+    protected void setup() throws ClientException, InterruptedException {
         testPage = authorClient.createPage(pageName, pageTitle, rootPage, defaultPageTemplate).getSlingPath();
         secondTestPage = authorClient.createPage(secondPageName, secondPageTitle, rootPage, defaultPageTemplate).getSlingPath();
+        thirdTestPage = authorClient.createPage(thirdPageName, thirdPageTitle, rootPage, defaultPageTemplate).getSlingPath();
 
         //Update test page description
         java.util.List<NameValuePair> props = new ArrayList();
         props.add(new BasicNameValuePair("jcr:description",pageDescription));
-        Commons.setPageProperties(adminClient, testPage, props, 200, 201);
+        Commons.setPageProperties(authorClient, testPage, props, 200, 201);
 
-        String policySuffix = "/structure/page/new_policy";
-        HashMap<String, String> data = new HashMap();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("clientlibs", clientlibs);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
+        createPagePolicy(new HashMap<String, String>() {{put("clientlibs", clientlibs);}});
 
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"",data, policyAssignmentPath);
-
-
-        proxyPath = Commons.createProxyComponent(adminClient, teaserRT, Commons.proxyPath, null, null);
-        imageProxyPath = Commons.createProxyComponent(adminClient, Commons.rtImage_v2, Commons.proxyPath, null, null);
-
-        data.clear();
-        data.put("imageDelegate", imageProxyPath);
-        Commons.editNodeProperties(adminClient, proxyPath, data);
-
-        cmpPath = Commons.addComponent(adminClient, proxyPath,testPage + Commons.relParentCompPath, componentName, null);
+        cmpPath = Commons.addComponentWithRetry(authorClient, teaserRT,testPage + Commons.relParentCompPath, componentName, null,
+                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+                HttpServletResponse.SC_OK, HttpServletResponse.SC_CREATED);
 
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
 
-        teaser = new Teaser();
         assetFinder = new AssetFinder();
     }
 
@@ -122,7 +115,7 @@ public class TeaserIT extends AuthorBaseUITest {
     * Before Test Case
     **/
     @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    public void setupBeforeEach() throws ClientException, InterruptedException {
         setupResources();
         setup();
     }
@@ -132,11 +125,8 @@ public class TeaserIT extends AuthorBaseUITest {
      */
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        Commons.deleteProxyComponent(adminClient, proxyPath);
-        Commons.deleteProxyComponent(adminClient, imageProxyPath);
-
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        authorClient.deletePageWithRetry(secondTestPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(secondTestPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**
@@ -227,23 +217,10 @@ public class TeaserIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Hide elements for Teaser")
     public void testHideElementsTeaser() throws TimeoutException, InterruptedException, ClientException {
-        String policySuffix = "/teaser/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("titleHidden", "true");
-        data.put("descriptionHidden", "true");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
+        createComponentPolicy("/teaser-v1", new HashMap<String, String>() {{
+            put("titleHidden", "true");
+            put("descriptionHidden", "true");
+        }});
 
         Commons.openEditDialog(editorPage, cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
@@ -262,23 +239,11 @@ public class TeaserIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Links to elements for Teaser")
     public void testLinksToElementsTeaser() throws TimeoutException, InterruptedException, ClientException {
-        String policySuffix = "/teaser/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("titleLinkHidden", "true");
-        data.put("imageLinkHidden", "true");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
 
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
+        createComponentPolicy("/teaser-v1", new HashMap<String, String>() {{
+            put("titleLinkHidden", "true");
+            put("imageLinkHidden", "true");
+        }});
 
         Commons.openSidePanel();
         assetFinder.setFiltersPath(testAssetsPath);
@@ -291,7 +256,6 @@ public class TeaserIT extends AuthorBaseUITest {
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
-        assertTrue(teaser.isTitleHidden(), "Title and Link should not be displayed");
         assertTrue(!teaser.isTitleLinkPresent(testPage, title),"Title link should not be present");
     }
 
@@ -305,22 +269,9 @@ public class TeaserIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Disable Actions for Teaser")
     public void testDisableActionsTeaser() throws ClientException, TimeoutException, InterruptedException {
-        String policySuffix = "/teaser/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("actionsDisabled", "true");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
+        createComponentPolicy("/teaser-v1", new HashMap<String, String>() {{
+            put("actionsDisabled", "true");
+        }});
 
         Commons.openSidePanel();
         Commons.openEditDialog(editorPage, cmpPath);
@@ -351,7 +302,8 @@ public class TeaserIT extends AuthorBaseUITest {
         editDialog.openLinkAndActionsTab();
         editDialog.clickActionEnabled();
         editDialog.setActionLinkUrl(testPage);
-        editDialog.addActionLinkUrl(secondTestPage);
+        editDialog.addActionLink();
+        editDialog.setActionLinkUrl(secondTestPage);
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
@@ -381,7 +333,8 @@ public class TeaserIT extends AuthorBaseUITest {
         editDialog.clickActionEnabled();
         editDialog.setActionLinkUrl(actionExternalLink);
         editDialog.setActionText(actionExternalText);
-        editDialog.addActionLinkUrl(secondTestPage);
+        editDialog.addActionLink();
+        editDialog.setActionLinkUrl(secondTestPage);
         editDialog.setActionText(actionText2);
         Commons.saveConfigureDialog();
 
@@ -452,4 +405,13 @@ public class TeaserIT extends AuthorBaseUITest {
         assertTrue(editDialog.getTitleValue().equals(title) && editDialog.isTitleEnabled(),
             "Title should be enabled and should be set to " + title);
     }
+
+    // ----------------------------------------------------------
+    // private stuff
+    // ----------------------------------------------------------
+
+    private static String format(String name) {
+        return StringUtils.lowerCase(name).replace("_", "-");
+    }
+
 }

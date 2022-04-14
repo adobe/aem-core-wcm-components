@@ -2,7 +2,7 @@
     "id": "teaser-c8b7c5c73f",
     "title": "Teaser",
     "description": "Description",
-    "actionsEnabled": false,
+    "actionsEnabled": true,
     "imageLinkHidden": false,
     "titleLinkHidden": false,
     "actions": [],
@@ -11,7 +11,7 @@
         "url": "/core/content/teasers.html"
     },
     ":type": "core/wcm/components/teaser/v2/teaser",
-    "imagePath": "/core/content/teasers/_jcr_content/_cq_featuredimage.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+    "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-9.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
     "dataLayer": {
         "teaser-c8b7c5c73f": {
             "@type": "core/wcm/components/teaser/v2/teaser",

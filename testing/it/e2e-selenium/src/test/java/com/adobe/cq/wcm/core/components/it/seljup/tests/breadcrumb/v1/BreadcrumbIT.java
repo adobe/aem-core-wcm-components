@@ -17,11 +17,10 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.v1;
 
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.breadcrumb.v1.BreadcrumbItems;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.breadcrumb.v1.BreadcrumbItems;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.breadcrumb.BreadcrumbTests;
 import java.util.concurrent.TimeoutException;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,20 +28,23 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_BREADCRUMB_V1;
+
 @Tag("group2")
 public class BreadcrumbIT extends AuthorBaseUITest {
-
+    protected static String breadcrumbClientlib = "/core/wcm/components/breadcrumb/v1/breadcrumb/clientlibs/site.css";
     protected BreadcrumbTests breadcrumbTests;
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         breadcrumbTests = new BreadcrumbTests();
-        breadcrumbTests.setup(adminClient, Commons.rtBreadcrumb_v1, rootPage, defaultPageTemplate, "/core/wcm/components/breadcrumb/v1/breadcrumb/clientlibs/site.css", new BreadcrumbItems());
+        breadcrumbTests.setup(authorClient, RT_BREADCRUMB_V1, rootPage, defaultPageTemplate,
+            breadcrumbClientlib, new BreadcrumbItems());
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        breadcrumbTests.cleanup(adminClient);
+        breadcrumbTests.cleanup(authorClient);
     }
 
     /**
@@ -60,7 +62,7 @@ public class BreadcrumbIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Set the Show Hidden flag")
     public void testShowHidden() throws InterruptedException, ClientException, TimeoutException {
-        breadcrumbTests.testShowHidden(adminClient);
+        breadcrumbTests.testShowHidden(authorClient);
     }
 
     /**

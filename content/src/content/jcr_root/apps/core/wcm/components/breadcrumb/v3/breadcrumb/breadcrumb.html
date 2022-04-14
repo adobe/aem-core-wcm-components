@@ -24,6 +24,7 @@
         itemscope itemtype="http://schema.org/BreadcrumbList"
         data-sly-list.navItem="${breadcrumb.items}">
         <li class="cmp-breadcrumb__item${navItem.active ? ' cmp-breadcrumb__item--active' : ''}"
+            aria-current="${navItem.active ? 'page' : false}"
             data-cmp-data-layer="${navItem.data.json}"
             itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
             <a data-sly-attribute="${navItem.link.htmlAttributes}"

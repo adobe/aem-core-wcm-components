@@ -16,14 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v1;
 
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.FormContainerEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formcomponents.v1.FormComponents;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.Selectors;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import java.util.HashMap;
+import java.util.Iterator;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.codehaus.jackson.JsonNode;
@@ -33,9 +28,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formcomponents.FormContainerEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formcomponents.v1.FormComponents;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.*;
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,10 +53,7 @@ public class FormContainerIT extends AuthorBaseUITest {
     private static final String mailto2 = "mailto2@components.com";
     private static final String cc1 = "cc1@components.com";
     private static final String cc2 = "cc2@components.com";
-    private String compPathContainer;
     private String containerPath;
-    private String compPathText;
-    private String compPathButton;
     private EditorPage editorPage;
     private String testPage;
 
@@ -63,50 +62,41 @@ public class FormContainerIT extends AuthorBaseUITest {
     protected String formButtonRT;
     protected FormComponents formComponents;
 
-
     public void setComponentResources() {
-        formContainerRT = Commons.rtFormContainer_v1;
-        formTextRT = Commons.rtFormText_v1;
-        formButtonRT = Commons.rtFormButton_v1;
+        formContainerRT = RT_FORMCONTAINER_V1;
+        formTextRT = RT_FORMTEXT_V1;
+        formButtonRT = RT_FORMBUTTON_V1;
     }
 
     protected void setup() throws ClientException {
         // create the test page, store page path in 'testPagePath'
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        compPathContainer = Commons.createProxyComponent(adminClient, formContainerRT, Commons.proxyPath, null, null);
-
         // add the core form container component
-        containerPath = Commons.addComponent(adminClient, compPathContainer,testPage + Commons.relParentCompPath, "container", null);
-
-        // create a proxy component
-        compPathText = Commons.createProxyComponent(adminClient, formTextRT, Commons.proxyPath, null, null);
+        containerPath = Commons.addComponentWithRetry(authorClient, formContainerRT,testPage + Commons.relParentCompPath, "container");
 
         // inside the form add a form text input field
-        String inputPath = Commons.addComponent(adminClient, compPathText,containerPath + "/", "text", null);
+        String inputPath = Commons.addComponentWithRetry(authorClient, formTextRT,containerPath + "/", "text");
 
         // set name and default value for the input field
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("name", "inputName");
         data.put("defaultValue", "inputValue");
-        Commons.editNodeProperties(adminClient, inputPath, data);
-
-        // create a proxy component
-        compPathButton = Commons.createProxyComponent(adminClient, formButtonRT, Commons.proxyPath, null, null);
+        Commons.editNodeProperties(authorClient, inputPath, data);
 
         // add a button to the form
-        String buttonPath = Commons.addComponent(adminClient, compPathButton,containerPath + "/", "button", null);
+        String buttonPath = Commons.addComponentWithRetry(authorClient, formButtonRT,containerPath + "/", "button");
 
         // create an option list items
         data.clear();
         data.put("type", "submit");
         data.put("title", "submit");
-        Commons.editNodeProperties(adminClient, buttonPath, data);
+        Commons.editNodeProperties(authorClient, buttonPath, data);
 
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
+
         formComponents = new FormComponents();
     }
 
@@ -120,15 +110,10 @@ public class FormContainerIT extends AuthorBaseUITest {
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete any user generated content
         if(authorClient.pageExists(userContent)) {
-            authorClient.deletePageWithRetry(userContent, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
+            authorClient.deletePageWithRetry(userContent, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
         }
         // delete the test page we created
-        authorClient.deletePageWithRetry(testPage, true, false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
-
-        // delete the proxy components created
-        Commons.deleteProxyComponent(adminClient, compPathContainer);
-        Commons.deleteProxyComponent(adminClient, compPathText);
-        Commons.deleteProxyComponent(adminClient, compPathButton);
+        authorClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
     }
 
     /**
@@ -146,7 +131,7 @@ public class FormContainerIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
 
-        JsonNode json_allForm = adminClient.doGetJson(contentJsonUrl_allForm, 1, HttpStatus.SC_OK);
+        JsonNode json_allForm = authorClient.doGetJson(contentJsonUrl_allForm, 1, HttpStatus.SC_OK);
         Iterator<JsonNode> itr = json_allForm.getElements();
         Boolean present = false;
         while(itr.hasNext()) {
@@ -174,7 +159,7 @@ public class FormContainerIT extends AuthorBaseUITest {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
-        JsonNode formContentJson = adminClient.doGetJson(actionInputValue , 1, HttpStatus.SC_OK);
+        JsonNode formContentJson = authorClient.doGetJson(actionInputValue , 1, HttpStatus.SC_OK);
         assertTrue(formContentJson.get("inputName").toString().equals("\"inputValue\""),"inputName field should be saved as inputValue");
     }
 
@@ -206,7 +191,7 @@ public class FormContainerIT extends AuthorBaseUITest {
         FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
         dialog.setMailActionFields(from,subject,new String[] {mailto1,mailto2}, new String[] {cc1, cc2});
         Commons.saveConfigureDialog();
-        JsonNode formContentJson = adminClient.doGetJson(containerPath , 1, HttpStatus.SC_OK);
+        JsonNode formContentJson = authorClient.doGetJson(containerPath , 1, HttpStatus.SC_OK);
         assertTrue(formContentJson.get("from").toString().equals("\""+from+"\""));
         assertTrue(formContentJson.get("subject").toString().equals("\""+subject+"\""));
         assertTrue(formContentJson.get("mailto").get(0).toString().equals("\""+mailto1+"\""));

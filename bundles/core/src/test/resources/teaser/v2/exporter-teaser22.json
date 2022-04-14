@@ -1,0 +1,19 @@
+{
+  "id": "teaser-a43f32d012",
+  "actionsEnabled": true,
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actions": [],
+  "link": {
+    "valid": true,
+    "url": "/core/content/page1.html"
+  },
+  ":type": "core/wcm/components/teaser/v2/teaser",
+  "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-22.coreimg.png/1490005239000/asset1.png",
+  "dataLayer": {
+    "teaser-a43f32d012": {
+      "@type": "core/wcm/components/teaser/v2/teaser",
+      "xdm:linkURL": "/core/content/page1.html"
+    }
+  }
+}

@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import org.apache.commons.lang3.StringUtils;

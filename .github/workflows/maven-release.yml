@@ -31,8 +31,8 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    # Only release from master branch
-    if: github.ref == 'refs/heads/master'
+    # Only release from `release/...` branch
+    if: startsWith(github.ref, 'refs/heads/release/')
     steps:
       # Check out Git repository
       - uses: actions/checkout@v2

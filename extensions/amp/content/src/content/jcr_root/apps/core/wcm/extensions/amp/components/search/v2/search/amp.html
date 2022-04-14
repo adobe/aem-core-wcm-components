@@ -1,0 +1,49 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2022 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<section data-sly-use.search="com.adobe.cq.wcm.core.components.models.Search"
+         id="${search.id}"
+         data-cmp-is="search"
+         class="cmp-search"
+         role="search">
+    <form class="cmp-search__form"
+          method="post"
+          action-xhr="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}"
+          target="_top">
+        <amp-autocomplete class="cmp-search__field"
+                          filter="substring"
+                          filter-value="title"
+                          items="."
+                          on="select:AMP.navigateTo(url=event.value)"
+                          src="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}?fulltext=*">
+            <i class="cmp-search__icon"></i>
+            <input class="cmp-search__input"
+                   type="text"
+                   name="fulltext"
+                   placeholder="${'Search' @ i18n}"
+                   role="combobox"
+                   aria-autocomplete="list"
+                   aria-haspopup="true"
+                   aria-invalid="false">
+            <!--/* search result template */-->
+            <template type="amp-mustache" id="amp-template-custom">
+                <div data-value="{{ url }}">
+                    <a href="{{ url }}">{{ title }}</a>
+                </div>
+            </template>
+        </amp-autocomplete>
+    </form>
+    <div class="cmp_search__info" aria-live="polite" role="status"></div>
+</section>

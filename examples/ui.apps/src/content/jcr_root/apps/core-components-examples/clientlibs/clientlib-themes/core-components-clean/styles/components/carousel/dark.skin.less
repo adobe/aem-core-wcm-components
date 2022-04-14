@@ -16,8 +16,7 @@
 
 @cmp-clean-dark-carousel-action-background-color: @cmp-clean-color-gray-800;
 @cmp-clean-dark-carousel-action-background-color-hover: @cmp-clean-color-gray-700;
-@cmp-clean-dark-carousel-indicator-color: @cmp-clean-color-gray-800;
-@cmp-clean-dark-carousel-indicator-color-active: @cmp-clean-color-gray-100;
+@cmp-clean-dark-carousel-indicator-color: @cmp-clean-color-gray-100;
 
 .t-cmp-clean--dark {
     .cmp-carousel__action {
@@ -32,7 +31,11 @@
         background-color: @cmp-clean-dark-carousel-indicator-color;
 
         &--active {
-            background-color: @cmp-clean-dark-carousel-indicator-color-active;
+            background-clip: content-box;
+            width: 16px;
+            height: 16px;
+            padding: 2px;
+            border: 2px solid @cmp-clean-dark-carousel-indicator-color;
         }
     }
 }

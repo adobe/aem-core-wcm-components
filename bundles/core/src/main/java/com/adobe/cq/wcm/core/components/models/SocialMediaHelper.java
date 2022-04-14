@@ -23,7 +23,10 @@ import org.osgi.annotation.versioning.ConsumerType;
  * Defines the Sling Model for the {@code /apps/core/wcm/components/sharing} component.
  *
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
+ *
+ * @deprecated The Social Media Sharing component is deprecated since Core Components 2.18.0 and should not be used in new projects.
  */
+@Deprecated
 @ConsumerType
 public interface SocialMediaHelper extends Component {
 
@@ -34,6 +37,7 @@ public interface SocialMediaHelper extends Component {
      * @see #PV_PINTEREST
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
+    @Deprecated
     String PN_SOCIAL_MEDIA = "socialMedia";
 
     /**
@@ -41,6 +45,7 @@ public interface SocialMediaHelper extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
+    @Deprecated
     String PN_VARIANT_PATH = "variantPath";
 
     /**
@@ -48,6 +53,7 @@ public interface SocialMediaHelper extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
+    @Deprecated
     String PV_FACEBOOK = "facebook";
 
     /**
@@ -55,6 +61,7 @@ public interface SocialMediaHelper extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
+    @Deprecated
     String PN_FACEBOOK_APP_ID = "facebookAppId";
 
     /**
@@ -62,6 +69,7 @@ public interface SocialMediaHelper extends Component {
      *
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
+    @Deprecated
     String PV_PINTEREST = "pinterest";
 
     /**
@@ -70,6 +78,7 @@ public interface SocialMediaHelper extends Component {
      * @return {@code true} if Facebook sharing is enabled in page configuration, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
+    @Deprecated
     default boolean isFacebookEnabled() {
         return false;
     }
@@ -80,6 +89,7 @@ public interface SocialMediaHelper extends Component {
      * @return {@code true} if Pinterest sharing is enabled in page configuration, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
+    @Deprecated
     default boolean isPinterestEnabled() {
         return false;
     }
@@ -90,6 +100,7 @@ public interface SocialMediaHelper extends Component {
      * @return {@code true} if a supported social media sharing is enabled in page configuration, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
+    @Deprecated
     default boolean isSocialMediaEnabled() {
         return false;
     }
@@ -100,6 +111,7 @@ public interface SocialMediaHelper extends Component {
      * @return the value of the Facebook App ID if specified, null otherwise.
      * @since com.adobe.cq.wcm.core.components.models 12.14.0; marked <code>default</code> in 12.14.0
      */
+    @Deprecated
     default String getFacebookAppId() {
         return null;
     }
@@ -112,6 +124,7 @@ public interface SocialMediaHelper extends Component {
      * false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
+    @Deprecated
     default boolean hasFacebookSharing() {
         return false;
     }
@@ -124,6 +137,7 @@ public interface SocialMediaHelper extends Component {
      * false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
+    @Deprecated
     default boolean hasPinterestSharing() {
         return false;
     }
@@ -134,6 +148,7 @@ public interface SocialMediaHelper extends Component {
      * @return the social media metadata for the current page; the {@link Map} can be empty if there's no social media configuration
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
+    @Deprecated
     default Map<String, String> getMetadata() {
         return null;
     }

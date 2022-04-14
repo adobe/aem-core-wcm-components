@@ -16,15 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formbutton.v1.FormButton;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formbutton.BaseFormButton;
-import com.adobe.cq.wcm.core.components.it.seljup.components.button.ButtonEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.codeborne.selenide.WebDriverRunner;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.http.HttpStatus;
@@ -39,39 +30,52 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.WebDriver;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formbutton.v1.FormButton;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formbutton.BaseFormButton;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.button.ButtonEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.codeborne.selenide.WebDriverRunner;
+
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_FORMBUTTON_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
 public class FormButtonIT extends AuthorBaseUITest {
 
     protected String testPage;
-    protected String proxyComponentPath;
+    protected String formbuttonRT;
     protected EditorPage editorPage;
     protected BaseFormButton formButton;
     protected String cmpPath;
     protected String componentName = "formbutton";
 
-
-    private ButtonEditDialog openButtonEditDialog() throws TimeoutException {
-        String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
-        return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+    protected void setupResources() {
+        formbuttonRT = RT_FORMBUTTON_V1;
+        formButton = new FormButton();
     }
 
+    protected void setup() throws ClientException, InterruptedException {
+        testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
+
+        addPathtoComponentPolicy(responsiveGridPath, formbuttonRT);
+
+        cmpPath = Commons.addComponentWithRetry(authorClient, formbuttonRT,testPage + Commons.relParentCompPath, componentName);
+
+        editorPage = new PageEditorPage(testPage);
+        editorPage.open();
+    }
 
     /**
      * Before Test Case
      */
     @BeforeEach
-    public void setupBefore() throws ClientException {
-        testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyComponentPath = Commons.creatProxyComponent(adminClient, Commons.rtFormButton_v1, "Proxy Form Button", componentName);
-        addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
-        cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
-        formButton = new FormButton();
-        editorPage = new PageEditorPage(testPage);
-        editorPage.open();
+    public void setupBeforeEach() throws ClientException, InterruptedException {
+        setupResources();
+        setup();
     }
 
     /**
@@ -79,7 +83,14 @@ public class FormButtonIT extends AuthorBaseUITest {
      */
     @AfterEach
     public void cleanup() throws ClientException, InterruptedException {
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+    }
+
+    private ButtonEditDialog openButtonEditDialog() throws TimeoutException {
+        String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
     }
 
     /**
@@ -138,7 +149,7 @@ public class FormButtonIT extends AuthorBaseUITest {
         buttonEditDialog.setNameField(buttonName);
         Commons.saveConfigureDialog();
 
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchContext("ContentFrame");
         assertTrue(formButton.isButtonPresentByName(buttonName), "Button should be present with name " + buttonName);
         assertTrue(formButton.getButtonText().contains(buttonLabel), "Button should contain " + buttonLabel + " text");
@@ -159,7 +170,7 @@ public class FormButtonIT extends AuthorBaseUITest {
         buttonEditDialog.setValueField(buttonValue);
         Commons.saveConfigureDialog();
 
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchContext("ContentFrame");
         assertTrue(formButton.isButtonPresentByValue(buttonValue), "Button should be present with value " + buttonValue);
         assertTrue(formButton.getButtonText().contains(buttonLabel), "Button should contain " + buttonLabel + "text");

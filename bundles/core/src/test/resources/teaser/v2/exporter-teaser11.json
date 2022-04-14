@@ -1,10 +1,6 @@
 {
   "title": "Teasers Test",
-  "description": "Teasers description",
-  "link": {
-    "valid": true,
-    "url": "/core/content/teasers.html"
-  },
+  "description": "Teasers description from &lt;page properties&gt;",
   "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
@@ -46,8 +42,7 @@
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-8.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
   "dataLayer": {
     "teaser-84f85e5d32": {
-      "xdm:linkURL": "/core/content/teasers.html",
-      "dc:description": "Teasers description",
+      "dc:description": "Teasers description from &lt;page properties&gt;",
       "@type": "core/wcm/components/teaser/v2/teaser",
       "dc:title": "Teasers Test"
     }

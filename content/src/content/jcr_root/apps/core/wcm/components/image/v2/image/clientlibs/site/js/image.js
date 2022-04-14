@@ -22,6 +22,7 @@
     var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     var LAZY_THRESHOLD_DEFAULT = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+    var SRC_URI_TEMPLATE_DPR_VAR = "{dpr}";
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
@@ -132,7 +133,7 @@
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
                 var value = data[key];
 
                 if (key.indexOf(NS) === 0) {
@@ -161,7 +162,7 @@
             setupProperties(config.options);
             cacheElements(config.element);
             // check image is DM asset; if true try to make req=set
-            if (config.options.src && config.options.hasOwnProperty("dmimage") && (config.options["smartcroprendition"] === "SmartCrop:Auto")) {
+            if (config.options.src && Object.prototype.hasOwnProperty.call(config.options, "dmimage") && (config.options["smartcroprendition"] === "SmartCrop:Auto")) {
                 var request = new XMLHttpRequest();
                 var url = decodeURIComponent(config.options.src).split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
 
@@ -225,27 +226,31 @@
             var hasWidths = (that._properties.widths && that._properties.widths.length > 0) || Object.keys(smartCrops).length > 0;
             var replacement;
             if (Object.keys(smartCrops).length > 0) {
-                var optimalWidth = getOptimalWidth(Object.keys(smartCrops));
+                var optimalWidth = getOptimalWidth(Object.keys(smartCrops), false);
                 replacement = smartCrops[optimalWidth];
             } else {
-                replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths) : "";
+                replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths, true) : "";
             }
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
+            url = url.replace(SRC_URI_TEMPLATE_DPR_VAR, devicePixelRatio);
+
             var imgSrcAttribute = that._elements.image.getAttribute("src");
 
-            if (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL) {
-                that._elements.image.setAttribute("src", url);
-            } else {
-                var urlTemplateParts = that._properties.src.split(SRC_URI_TEMPLATE_WIDTH_VAR);
-                // check if image src was dynamically swapped meanwhile (e.g. by Target)
-                var isImageRefSame = imgSrcAttribute.startsWith(urlTemplateParts[0]);
-                if (isImageRefSame && urlTemplateParts.length > 1) {
-                    isImageRefSame = imgSrcAttribute.endsWith(urlTemplateParts[urlTemplateParts.length - 1]);
-                }
-                if (isImageRefSame) {
+            if (url !== imgSrcAttribute) {
+                if (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL) {
                     that._elements.image.setAttribute("src", url);
-                    if (!hasWidths) {
-                        window.removeEventListener("scroll", that.update);
+                } else {
+                    var urlTemplateParts = that._properties.src.split(SRC_URI_TEMPLATE_WIDTH_VAR);
+                    // check if image src was dynamically swapped meanwhile (e.g. by Target)
+                    var isImageRefSame = imgSrcAttribute.startsWith(urlTemplateParts[0]);
+                    if (isImageRefSame && urlTemplateParts.length > 1) {
+                        isImageRefSame = imgSrcAttribute.endsWith(urlTemplateParts[urlTemplateParts.length - 1]);
+                    }
+                    if (isImageRefSame) {
+                        that._elements.image.setAttribute("src", url);
+                        if (!hasWidths) {
+                            window.removeEventListener("scroll", that.update);
+                        }
                     }
                 }
             }
@@ -254,14 +259,16 @@
             }
         }
 
-        function getOptimalWidth(widths) {
+        function getOptimalWidth(widths, useDevicePixelRatio) {
             var container = that._elements.self;
             var containerWidth = container.clientWidth;
             while (containerWidth === 0 && container.parentNode) {
                 container = container.parentNode;
                 containerWidth = container.clientWidth;
             }
-            var optimalWidth = containerWidth * devicePixelRatio;
+
+            var dpr = useDevicePixelRatio ? devicePixelRatio : 1;
+            var optimalWidth = containerWidth * dpr;
             var len = widths.length;
             var key = 0;
 
@@ -283,7 +290,7 @@
                 styles["padding-bottom"] = ratio + "%";
 
                 for (var s in styles) {
-                    if (styles.hasOwnProperty(s)) {
+                    if (Object.prototype.hasOwnProperty.call(styles, s)) {
                         that._elements.image.style[s] = styles[s];
                     }
                 }
@@ -322,7 +329,7 @@
         function removeLazyLoader() {
             that._elements.image.classList.remove(lazyLoader.cssClass);
             for (var property in lazyLoader.style) {
-                if (lazyLoader.style.hasOwnProperty(property)) {
+                if (Object.prototype.hasOwnProperty.call(lazyLoader.style, property)) {
                     that._elements.image.style[property] = "";
                 }
             }
@@ -388,7 +395,7 @@
             that._properties = {};
 
             for (var key in properties) {
-                if (properties.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(properties, key)) {
                     var property = properties[key];
                     if (options && options[key] != null) {
                         if (property && typeof property.transform === "function") {

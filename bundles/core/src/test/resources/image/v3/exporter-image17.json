@@ -1,6 +1,5 @@
 {
-  "widths": [],
-  "lazyEnabled" : true,
+  "lazyEnabled" : false,
   "title" : "Adobe Logo",
   "alt" : "Adobe Logo",
   "imageLink": {

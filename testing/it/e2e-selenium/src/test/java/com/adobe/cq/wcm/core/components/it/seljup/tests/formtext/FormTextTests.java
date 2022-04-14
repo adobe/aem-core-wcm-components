@@ -19,9 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formtext;
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formtext.FormTextEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.formtext.BaseFormText;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.FormTextEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.BaseFormText;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
@@ -54,11 +54,8 @@ public class FormTextTests {
         // create the test page, store page path in 'testPagePath'
         testPage = client.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        compPath = Commons.createProxyComponent(client, formTextRT, Commons.proxyPath, null, null);
-
         // add the core form container component
-        formTextPath = Commons.addComponent(client, compPath, testPage + Commons.relParentCompPath, "formtext", null);
+        formTextPath = Commons.addComponentWithRetry(client, formTextRT, testPage + Commons.relParentCompPath, "formtext");
 
         this.formText = formText;
         // open the page in the editor
@@ -67,8 +64,7 @@ public class FormTextTests {
     }
 
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
-        client.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        Commons.deleteProxyComponent(client, compPath);
+        client.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     public void testCheckLabelMandatory() throws InterruptedException, TimeoutException {

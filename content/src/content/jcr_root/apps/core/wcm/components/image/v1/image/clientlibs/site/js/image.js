@@ -117,7 +117,7 @@
                 var styles = options.lazyLoaderStyle;
                 styles["padding-bottom"] = ratio + "%";
                 for (var s in styles) {
-                    if (styles.hasOwnProperty(s)) {
+                    if (Object.prototype.hasOwnProperty.call(styles, s)) {
                         image.style[s] = styles[s];
                     }
                 }
@@ -130,7 +130,7 @@
         function removeLazyLoader() {
             image.classList.remove(options.lazyLoaderClass);
             for (var property in options.lazyLoaderStyle) {
-                if (options.lazyLoaderStyle.hasOwnProperty(property)) {
+                if (Object.prototype.hasOwnProperty.call(options.lazyLoaderStyle, property)) {
                     image.style[property] = "";
                 }
             }

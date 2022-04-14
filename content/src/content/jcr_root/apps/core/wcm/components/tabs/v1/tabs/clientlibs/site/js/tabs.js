@@ -19,6 +19,11 @@
 (function() {
     "use strict";
 
+    var containerUtils = window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils ? window.CQ.CoreComponents.container.utils : undefined;
+    if (!containerUtils) {
+        // eslint-disable-next-line no-console
+        console.warn("Tabs: container utilities at window.CQ.CoreComponents.container.utils are not available. This can lead to missing features. Ensure the core.wcm.components.commons.site.container client library is included on the page.");
+    }
     var dataLayerEnabled;
     var dataLayer;
 
@@ -85,11 +90,13 @@
             }
 
             // Show the tab based on deep-link-id if it matches with any existing tab item id
-            var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tab");
-            if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
-                var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
-                if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
-                    navigateAndFocusTab(deepLinkItemIdx);
+            if (containerUtils) {
+                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "tab");
+                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                    var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
+                    if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
+                        navigateAndFocusTab(deepLinkItemIdx);
+                    }
                 }
             }
 
@@ -320,7 +327,6 @@
     /**
      * Scrolls the browser when the URI fragment is changed to the item of the container Tab component that corresponds to the deep link in the URI fragment,
        and displays its content.
-     * This method fixes the issue existent with Chrome and related browsers, which are just scrolling to the item without displaying its content.
      */
     function onHashChange() {
         if (location.hash && location.hash !== "#") {
@@ -347,7 +353,7 @@
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
                 var value = data[key];
 
                 if (key.indexOf(NS) === 0) {
@@ -372,11 +378,14 @@
      * @returns {String} dataLayerId or undefined
      */
     function getDataLayerId(item) {
-        if (item && item.dataset.cmpDataLayer) {
-            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
-        } else {
-            return item.id;
+        if (item) {
+            if (item.dataset.cmpDataLayer) {
+                return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+            } else {
+                return item.id;
+            }
         }
+        return null;
     }
 
     /**
@@ -425,7 +434,9 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    window.addEventListener("load", window.CQ.CoreComponents.container.utils.scrollToAnchor, false);
+    if (containerUtils) {
+        window.addEventListener("load", containerUtils.scrollToAnchor, false);
+    }
     window.addEventListener("hashchange", onHashChange, false);
 
 }());

@@ -154,6 +154,14 @@
                     "jcr:title"      : "XF Page Template",
                     "cq:template"    : "/conf/test/settings/wcm/templates/xf-search-template"
                 }
+            },
+            "redirect-page" : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType"  : "cq:PageContent",
+                    "jcr:title"        : "Redirect Page",
+                    "cq:redirectTarget": "/content/en/search"
+                }
             }
         }
     },

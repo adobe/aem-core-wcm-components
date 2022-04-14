@@ -20,7 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Page"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[cq.common.wcm,core.wcm.components.page.v3.editor,cq.wcm.msm.properties,granite.contexthub.configuration,cq.siteadmin.admin.properties]"
+    extraClientlibs="[cq.common.wcm,core.wcm.components.page.v3.editor,cq.wcm.msm.properties,granite.contexthub.configuration,cq.siteadmin.admin.properties,core.wcm.components.image.v3.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_page_v3"
     mode="edit"
     trackingFeature="core-components:page:v3">
@@ -57,6 +57,7 @@
                                                 granite:class="cq-siteadmin-admin-properties-basic-brandSlug"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="core/wcm/components/commons/editor/dialog/inherited/v1/inherited"
+                                                cq:showOnCreate="true"
                                                 prop="brandSlug"
                                                 heading="Brand Slug"
                                                 path="${empty param.item ? requestPathInfo.suffix : param.item}"/>
@@ -70,6 +71,7 @@
                                             <id
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                cq:showOnCreate="true"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
                                                 name="./id"/>
@@ -101,32 +103,52 @@
                                 sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <items jcr:primaryType="nt:unstructured">
                                     <featuredimage
+                                        granite:class="cmp-image__editor"
                                         jcr:primaryType="nt:unstructured"
                                         jcr:title="Featured Image"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
                                         <items jcr:primaryType="nt:unstructured">
                                             <file
+                                                granite:class="cmp-image__editor-file-upload"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
                                                 allowDrop="{Boolean}false"
                                                 allowUpload="{Boolean}true"
-                                                autoStart="{Boolean}false"
                                                 class="cq-droptarget"
                                                 fieldDescription="Used in components referencing the page (e.g. teaser, list of pages)"
                                                 fieldLabel="Image"
                                                 fileNameParameter="./cq:featuredimage/fileName"
                                                 fileReferenceParameter="./cq:featuredimage/fileReference"
                                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
-                                                multiple="{Boolean}false"
-                                                name="./cq:featuredimage/file"
-                                                title="Upload Image Asset"
-                                                uploadUrl="${suffix.path}"
-                                                useHTML5="{Boolean}true"/>
+                                                name="./cq:featuredimage/file"/>
                                             <type
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
                                                 name="./cq:featuredimage/sling:resourceType"
-                                                value="core/wcm/components/image"/>
+                                                value="core/wcm/components/image/v3/image"/>
+                                            <alternativeGroup
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/well"
+                                                granite:class="cmp-image__editor-alt">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <alt
+                                                        granite:class="cmp-image__editor-alt-text"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        fieldDescription="Textual alternative of the meaning or function of the image, for visually impaired readers."
+                                                        fieldLabel="Alternative Text"
+                                                        name="./cq:featuredimage/alt"/>
+                                                    <altValueFromDAM
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="true"
+                                                        fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
+                                                        name="./cq:featuredimage/altValueFromDAM"
+                                                        text="Inherit - Value taken from the DAM asset"
+                                                        uncheckedValue="false"
+                                                        value="{Boolean}true"/>
+                                                </items>
+                                            </alternativeGroup>
                                         </items>
                                     </featuredimage>
                                     <thumbnail
@@ -173,97 +195,6 @@
                             </column>
                         </items>
                     </thumbnail>
-                    <socialmedia
-                        cq:showOnCreate="{Boolean}true"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Social Media"
-                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
-                        sling:orderBefore="cloudservices">
-                        <items jcr:primaryType="nt:unstructured">
-                            <column
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <section
-                                        jcr:primaryType="nt:unstructured"
-                                        jcr:title="Social Media sharing"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
-                                        <items jcr:primaryType="nt:unstructured">
-                                            <inputgroup
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/text"
-                                                text="Enable user sharing for"/>
-                                            <field
-                                                cq:showOnCreate="{Boolean}true"
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <facebook
-                                                        cq:showOnCreate="{Boolean}true"
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        name="./socialMedia"
-                                                        renderReadOnly="{Boolean}true"
-                                                        text="Facebook"
-                                                        value="facebook">
-                                                        <granite:data
-                                                            jcr:primaryType="nt:unstructured"
-                                                            cq-msm-lockable="socialMedia"/>
-                                                    </facebook>
-                                                    <pinterest
-                                                        cq:showOnCreate="{Boolean}true"
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        name="./socialMedia"
-                                                        renderReadOnly="{Boolean}true"
-                                                        text="Pinterest"
-                                                        value="pinterest">
-                                                        <granite:data
-                                                            jcr:primaryType="nt:unstructured"
-                                                            cq-msm-lockable="socialMedia"/>
-                                                    </pinterest>
-                                                </items>
-                                            </field>
-                                            <facebookAppId
-                                                cq:showOnCreate="{Boolean}true"
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                name="./facebookAppId"
-                                                fieldLabel="Facebook App ID"
-                                                fieldDescription="Facebook APP ID to be used if Facebook sharing is enabled. See https://developers.facebook.com/apps for details">
-                                                <granite:data
-                                                        jcr:primaryType="nt:unstructured"
-                                                        cq-msm-lockable="facebookAppId"/>
-                                            </facebookAppId>
-                                            <variantpath
-                                                cq:showOnCreate="{Boolean}true"
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="cq/experience-fragments/editor/components/xffield"
-                                                fieldDescription="Choose the social media variation of experience fragment to be used for generating page meta data for social media."
-                                                fieldLabel="Preferred XF variation"
-                                                filter="folderOrVariant"
-                                                name="./variantPath"
-                                                renderReadOnly="{Boolean}true"
-                                                translateOptions="{Boolean}false"
-                                                variant="sm">
-                                                <granite:data
-                                                    jcr:primaryType="nt:unstructured"
-                                                    cq-msm-lockable="fragmentPath"/>
-                                            </variantpath>
-                                            <socialmedia_type
-                                                cq:showOnCreate="{Boolean}true"
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
-                                                allowBulkEdit="{Boolean}true"
-                                                ignoreData="{Boolean}true"
-                                                name="./socialMedia@TypeHint"
-                                                value="String[]"/>
-                                        </items>
-                                    </section>
-                                </items>
-                            </column>
-                        </items>
-                    </socialmedia>
                     <pwa
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"

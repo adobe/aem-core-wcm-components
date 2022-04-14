@@ -61,12 +61,14 @@
          *
          */
         a {
-            position: absolute;
-            bottom: 13*@px;
+            display: inline-block;
+            position: relative;
+            bottom: 8*@px;
             right: 0;
 
             height: @cmp-examples-text-page-title-tag-height;
             white-space: nowrap;
+            padding: 0 0.5rem;
             border: @cmp-examples-text-page-title-tag-border-width solid @cmp-examples-color-gray-600;
             border-radius: @cmp-examples-border-radius;
             line-height: @cmp-examples-text-page-title-tag-line-height;
@@ -82,6 +84,11 @@
                 border-color: @cmp-examples-color-gray-700;
                 text-decoration: none;
             }
+
+            @media @cmp-examples-screen-m-min {
+                position: absolute;
+                bottom: 16*@px;
+            }
         }
     }
 }
@@ -95,12 +102,21 @@
     }
 }
 
-// no results variant (home search results, no result message)
-.cmp-examples-text--no-results {
+.cmp-examples-search-results-status {
+    position: absolute;
+    top: -28px;
+    z-index: 1;
+    margin-top: @cmp-examples-spacing-2;
+    font-size: .875rem;
+    font-style: italic;
+}
+
+.cmp-examples-text--background-color {
     .cmp-text {
-        margin-top: @cmp-examples-spacing-6;
-        padding: 0 0 1.5rem;
-        font-size: 0.875rem;
-        font-style: italic;
+        margin-bottom: 24px;
+    }
+    .cmp-text p {
+        background-color: #e1e1e1;
+        display: inline;
     }
 }

@@ -63,7 +63,7 @@ public class CoreResourceWrapperTest {
         }};
         Resource wrappedResource = new CoreResourceWrapper(prepareResourceToBeWrapped(properties), "d/e/f", new ArrayList<String>() {{
             add("b");
-        }}, new HashMap<>());
+        }}, new HashMap<>(), null);
 
         Map<String, Object> expectedProperties = new HashMap<>(properties);
         expectedProperties.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, "d/e/f");
@@ -85,7 +85,7 @@ public class CoreResourceWrapperTest {
         Map<String, String> overriddenProperties = new HashMap<>();
         overriddenProperties.put("a", "1");
         overriddenProperties.put("b", "2");
-        Resource wrappedResource = new CoreResourceWrapper(toBeWrapped, "a/b/c", new ArrayList<>(), overriddenProperties);
+        Resource wrappedResource = new CoreResourceWrapper(toBeWrapped, "a/b/c", new ArrayList<>(), overriddenProperties, null);
 
         // isResourceType()
         assertTrue(wrappedResource.isResourceType("a/b/c"));
@@ -98,6 +98,29 @@ public class CoreResourceWrapperTest {
         ValueMap properties = wrappedResource.getValueMap();
         assertEquals("1", properties.get("a", String.class), "getValueMap()");
         assertEquals("2", properties.get("b", String.class), "getValueMap()");
+    }
+
+    @Test
+    public void testWrappingWithOverriddenChildren() {
+        Resource toBeWrapped = mock(Resource.class);
+        when(toBeWrapped.getValueMap()).thenReturn(new ValueMapDecorator(Collections.emptyMap()));
+        Resource child1 = mock(Resource.class);
+        when(toBeWrapped.getChild("path/to/child1")).thenReturn(child1);
+        Resource child2 = mock(Resource.class);
+        when(toBeWrapped.getChild("path/to/child2")).thenReturn(child2);
+        Resource child3 = mock(Resource.class);
+        when(toBeWrapped.getChild("path/to/child3")).thenReturn(child3);
+
+        Map<String, Resource> overriddenChildren = new HashMap<>();
+        Resource overriddenChild1 = mock(Resource.class);
+        Resource overriddenChild2 = mock(Resource.class);
+        overriddenChildren.put("path/to/child1", overriddenChild1);
+        overriddenChildren.put("path/to/child2", overriddenChild2);
+
+        Resource wrappedResource = new CoreResourceWrapper(toBeWrapped, "a/b/c", null, null, overriddenChildren);
+        assertEquals(wrappedResource.getChild("path/to/child1"), overriddenChild1, "child should be overridden");
+        assertEquals(wrappedResource.getChild("path/to/child2"), overriddenChild2, "child should be overridden");
+        assertEquals(wrappedResource.getChild("path/to/child3"), child3, "child should not be overridden");
     }
 
     @Test

@@ -16,6 +16,16 @@
               "jcr:primaryType": "nt:unstructured",
               "name"           : "href",
               "value"          : "/theme.css"
+            },
+            "rel" : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "rel",
+              "value"          : "preload"
+            },
+            "as" : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "as",
+              "value"          : "style"
             }
           }
         },
@@ -25,6 +35,16 @@
           "location"       : "footer",
           "attributes"     : {
             "jcr:primaryType": "nt:unstructured",
+            "async"            : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "async",
+              "value"          : "true"
+            },
+            "defer"            : {
+              "jcr:primaryType": "nt:unstructured",
+              "name"           : "defer",
+              "value"          : "false"
+            },
             "src"            : {
               "jcr:primaryType": "nt:unstructured",
               "name"           : "src",

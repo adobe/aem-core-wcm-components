@@ -19,10 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.servlets.DMAssetPostProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -46,6 +44,8 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.scene7.api.constants.Scene7AssetType;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.net.UrlEscapers;
 
 /**
  * V2 Image model implementation.
@@ -92,6 +92,16 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * The path of the delegated content policy.
      */
     private static final String CONTENT_POLICY_DELEGATE_PATH = "contentPolicyDelegatePath";
+
+    /**
+     * Server path for dynamic media
+     */
+    private static final String DM_IMAGE_SERVER_PATH = "/is/image/";
+
+    /**
+     * Content path for Scene7
+     */
+    private static final String DM_CONTENT_SERVER_PATH = "/is/content/";
 
     /**
      * Placeholder for the SRC URI template.
@@ -161,31 +171,32 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         }
                     }
                     if (titleValueFromDAM) {
-                        String damTitle = asset.getMetadataValue(DamConstants.DC_TITLE);
-                        if (StringUtils.isNotEmpty(damTitle)) {
-                            title = damTitle;
-                        }
+                        title = StringUtils.trimToNull(asset.getMetadataValue(DamConstants.DC_TITLE));
                     }
 
                     //check "Enable DM features" checkbox
                     //check DM asset - check for "dam:scene7File" metadata value
                     String dmAssetName = asset.getMetadataValue(Scene7Constants.PN_S7_FILE);
                     if(isDmFeaturesEnabled && (!StringUtils.isEmpty(dmAssetName))){
+                        dmAssetName = UrlEscapers.urlFragmentEscaper().escape(dmAssetName);
                         //image is DM
                         dmImage = true;
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
+                        //sets to '/is/image/ or '/is/content' based on dam:scene7Type property
+                        String dmServerPath;
+                        if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
+                            dmServerPath = DM_CONTENT_SERVER_PATH;
+                        } else {
+                            dmServerPath = DM_IMAGE_SERVER_PATH;
+                        }
                         String dmServerUrl;
                         // for Author
                         if (!isWCMDisabled) {
-                            if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
-                                dmServerUrl = DMAssetPostProcessor.CONTENT_SERVER_PATH;
-                            } else {
-                                dmServerUrl = DMAssetPostProcessor.IMAGE_SERVER_PATH;
-                            }
+                            dmServerUrl = dmServerPath;
                         } else {
                             // for Publish
-                            dmServerUrl = (String) properties.get(PN_IMAGE_SERVER_URL);
+                            dmServerUrl = asset.getMetadataValue(Scene7Constants.PN_S7_DOMAIN) + dmServerPath.substring(1);
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
                     }
@@ -259,10 +270,19 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     srcUriTemplate += imageModifiersCommand;
                     src += imageModifiersCommand;
                 }
-                //add "dpr=off" parameter to image source url
-                String dprOffParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=off";
-                srcUriTemplate += dprOffParameter;
-                src += dprOffParameter;
+
+                String dprParameter = "";
+                // If DM is enabled, use smart imaging for smartcrop renditions
+                if (getClass().equals(com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl.class) && isDmFeaturesEnabled && !StringUtils.isBlank(smartCropRendition)) {
+                    dprParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=on,{dpr}";
+                } else {
+                    //add "dpr=off" parameter to image source url
+                    dprParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=off";
+                }
+
+                srcUriTemplate += dprParameter;
+                src += dprParameter;
+
                 if (srcUriTemplate.equals(src)) {
                     srcUriTemplate = null;
                 }
@@ -304,6 +324,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     @Override
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public List<ImageArea> getAreas() {
         if (areas == null) {
             return Collections.emptyList();
@@ -356,4 +377,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt ) {
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }
+
+
 }

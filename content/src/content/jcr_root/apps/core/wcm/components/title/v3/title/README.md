@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Title (v3) Work in progress, do not use in production
+Title (v3)
 ====
 Title component written in HTL, allowing to define a section heading.
 
@@ -60,7 +60,7 @@ BLOCK cmp-title
 * **Vendor**: Adobe
 * **Version**: v3
 * **Compatibility**: AEM 6.3
-* **Status**: work-in-progress
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_title\_v3](https://www.adobe.com/go/aem_cmp_title_v3)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_title](https://www.adobe.com/go/aem_cmp_library_title)
 * **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann)

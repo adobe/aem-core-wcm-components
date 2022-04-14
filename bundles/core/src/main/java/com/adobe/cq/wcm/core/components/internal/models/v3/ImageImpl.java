@@ -15,16 +15,20 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -34,29 +38,40 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
+import com.adobe.cq.wcm.core.components.internal.servlets.EnhancedRendition;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.day.cq.commons.DownloadResource;
+import com.day.cq.dam.api.Asset;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
+import static com.adobe.cq.wcm.core.components.models.Teaser.PN_IMAGE_LINK_HIDDEN;
+
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
 
-    @ValueMapValue(name = "width", injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    protected String width;
+    private boolean imageLinkHidden = false;
 
-    @ValueMapValue(name = "height", injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    protected String height;
+    @PostConstruct
+    protected void initModel() {
+        super.initModel();
+        if (hasContent) {
+            disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+            imageLinkHidden = properties.get(PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
+        }
+    }
 
     @Override
     @Nullable
     public Link getImageLink() {
-        return link.orElse(null);
+        return imageLinkHidden ? null : link.orElse(null);
     }
 
     @Override
@@ -74,8 +89,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public String getSrcset() {
-        int[] widthsArray = super.getWidths();
-        String srcUritemplate = super.getSrcUriTemplate();
+        int[] widthsArray = getWidths();
+        String srcUritemplate = getSrcUriTemplate();
         String[] srcsetArray = new String[widthsArray.length];
         if (widthsArray.length > 0 && srcUritemplate != null) {
             String srcUriTemplateDecoded = "";
@@ -100,13 +115,89 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Nullable
     @Override
-    public String getWidth() {
-        return width;
+    @JsonIgnore
+    public String getHeight () {
+        int height = getOriginalDimension().height;
+        if (height > 0) {
+            return String.valueOf(height);
+        }
+        return null;
     }
 
     @Nullable
     @Override
-    public String getHeight() {
-        return height;
+    @JsonIgnore
+    public String getWidth () {
+        int width = getOriginalDimension().width;
+        if (width > 0) {
+            return String.valueOf(width);
+        }
+        return null;
     }
+
+    @Override
+    @JsonIgnore
+    public String getSrcUriTemplate() {
+        return super.getSrcUriTemplate();
+    }
+
+    @Override
+    @JsonIgnore
+    @Deprecated
+    public int getLazyThreshold() {
+        return 0;
+    }
+
+    @Override
+    @JsonIgnore
+    public int @NotNull [] getWidths() {
+        return super.getWidths();
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isDmImage() {
+        return super.isDmImage();
+    }
+
+    @Override
+    @JsonIgnore
+    @Deprecated
+    public List<ImageArea> getAreas() {
+        return super.getAreas();
+    }
+
+    @Override
+    protected void initResource() {
+        resource = getWrappedImageResourceWithInheritance(resource, linkHandler, currentStyle, currentPage);
+    }
+
+    private Dimension getOriginalDimension() {
+        ValueMap inheritedResourceProperties = resource.getValueMap();
+        String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
+        Asset asset;
+        String resizeWidth = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, String.class);
+        if (StringUtils.isNotEmpty(inheritedFileReference)) {
+            final Resource assetResource = request.getResourceResolver().getResource(inheritedFileReference);
+            if (assetResource != null) {
+                asset = assetResource.adaptTo(Asset.class);
+                EnhancedRendition original = null;
+                if (asset != null) {
+                    original = new EnhancedRendition(asset.getOriginal());
+                }
+                if (original != null) {
+                    Dimension dimension = original.getDimension();
+                    if (dimension != null) {
+                        if (resizeWidth != null && Integer.parseInt(resizeWidth) > 0 && Integer.parseInt(resizeWidth) < dimension.getWidth()) {
+                            int calculatedHeight = (int) Math.round(Integer.parseInt(resizeWidth) * (dimension.getHeight() / (float)dimension.getWidth()));
+                            return new Dimension(Integer.parseInt(resizeWidth), calculatedHeight);
+                        }
+                        return dimension;
+                    }
+                }
+            }
+        }
+        return new Dimension(0, 0);
+    }
+
 }

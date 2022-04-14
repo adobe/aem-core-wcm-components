@@ -1,0 +1,13 @@
+{
+  "id": "teaser-d0aa736ec6",
+  "actionsEnabled": true,
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actions": [],
+  ":type": "core/wcm/components/teaser/v2/teaser",
+  "dataLayer": {
+    "teaser-d0aa736ec6": {
+      "@type": "core/wcm/components/teaser/v2/teaser"
+    }
+  }
+}

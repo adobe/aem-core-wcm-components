@@ -16,9 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.text.v2;
 
-import com.adobe.cq.wcm.core.components.it.seljup.components.text.TextEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.text.v2.Text;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.codehaus.jackson.JsonNode;
@@ -27,7 +26,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.text.TextEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.text.v2.Text;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,7 +40,7 @@ public class TextIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.tex
     private static String textXSSProtectedRTE = "Hello World! <img />";
 
     protected void setComponentResources() {
-        textRT = Commons.rtText_v2;
+        textRT = Commons.RT_TEXT_V2;
     }
 
     @BeforeEach
@@ -59,7 +60,7 @@ public class TextIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.tex
         Commons.switchContext("ContentFrame");
         assertTrue(text.isTextRenderedWithXSSProtection(textXSSProtectedHTL), "Text should have been rendered");
 
-        JsonNode formContentJson = adminClient.doGetJson(compPath , 1, HttpStatus.SC_OK);
+        JsonNode formContentJson = authorClient.doGetJson(compPath , 1, HttpStatus.SC_OK);
         assertTrue(formContentJson.get("text").toString().trim().equals("\"" + textXSSProtectedRTE + "\""), "The text should be rendered with XSS protection");
     }
 

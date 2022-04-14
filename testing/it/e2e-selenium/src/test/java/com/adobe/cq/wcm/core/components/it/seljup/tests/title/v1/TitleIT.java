@@ -16,13 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.title.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.title.TitleEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.title.v1.Title;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -30,8 +26,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.title.TitleEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.title.v1.Title;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -40,7 +42,6 @@ public class TitleIT extends AuthorBaseUITest {
 
     private static String componentName = "title";
 
-    protected String proxyPath;
     protected String testPage;
     protected String redirectPage;
     protected String cmpPath;
@@ -51,8 +52,8 @@ public class TitleIT extends AuthorBaseUITest {
     protected String titleRT;
 
     public void setupResources() {
-        clientlibs = "core.wcm.components.title.v1";
-        titleRT = Commons.rtTitle_v1;
+        clientlibs = Commons.CLIENTLIBS_TITLE_V1;
+        titleRT = Commons.RT_TITLE_V1;
     }
 
     public void setup() throws ClientException {
@@ -60,28 +61,12 @@ public class TitleIT extends AuthorBaseUITest {
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
         redirectPage = authorClient.createPage("redirectPage", "Redirect Page Title", rootPage, defaultPageTemplate).getSlingPath();
         // 2.
-        String policySuffix = "/structure/page/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("clientlibs", clientlibs);
-        String policyPath1 = "/conf/" + label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data, policyPath1);
-
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient, "", data, policyAssignmentPath);
-
-
-        // 4.
-        proxyPath = Commons.createProxyComponent(adminClient, titleRT, Commons.proxyPath, null, null);
+        createPagePolicy(new HashMap<String, String>() {{
+            put("clientlibs", clientlibs);
+        }});
 
         // 5.
-        cmpPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, componentName, null);
+        cmpPath = Commons.addComponentWithRetry(authorClient, titleRT, testPage + Commons.relParentCompPath, componentName);
 
         // 6.
         editorPage = new PageEditorPage(testPage);
@@ -114,11 +99,8 @@ public class TitleIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        // 1.
-        Commons.deleteProxyComponent(adminClient, proxyPath);
-
         // 2.
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
 
     }
 

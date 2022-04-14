@@ -16,25 +16,10 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.accordion.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.assertion.EditableToolbarAssertion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.accordion.AccordionEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.components.accordion.v1.Accordion;
-import com.adobe.cq.wcm.core.components.it.seljup.components.commons.ChildrenEditor;
-import com.adobe.cq.wcm.core.components.it.seljup.components.commons.PanelSelector;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.WebDriverRunner;
 import java.util.ArrayList;
-import java.util.concurrent.TimeoutException;
 import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -43,10 +28,29 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.assertion.EditableToolbarAssertion;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.accordion.AccordionEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.accordion.v1.Accordion;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.ChildrenEditor;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.PanelSelector;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.WebDriverRunner;
+
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_ACCORDION_V1;
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_TEASER_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
@@ -56,7 +60,6 @@ public class AccordionIT extends AuthorBaseUITest {
     private static final String clientlibs = "core.wcm.components.accordion.v1";
     private static String componentName = "accordion";
 
-    private String policyPath;
     private String proxyPath;
     private String testPage;
     private Accordion accordion;
@@ -82,35 +85,13 @@ public class AccordionIT extends AuthorBaseUITest {
     public void setupBeforeEach() throws ClientException {
         // 1.
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
-
-        // 2.
-        String policySuffix = "/structure/page/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("clientlibs", clientlibs);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"",data, policyAssignmentPath);
-
+        createPagePolicy(new HashMap<String, String>() {{ put ("clientlibs", clientlibs); }});
 
         // 4.
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtAccordion_v1, Commons.proxyPath, null, null);
-
-        // 5.
-        data.clear();
-        data.put("cq:isContainer","true");
-        Commons.editNodeProperties(adminClient, proxyPath, data);
+        proxyPath = RT_ACCORDION_V1;
 
         // 6.
-        cmpPath = Commons.addComponent(adminClient, proxyPath,testPage + Commons.relParentCompPath, componentName, null);
+        cmpPath = Commons.addComponentWithRetry(authorClient, proxyPath,testPage + Commons.relParentCompPath, componentName);
 
         // 7.
         editorPage = new PageEditorPage(testPage);
@@ -119,8 +100,6 @@ public class AccordionIT extends AuthorBaseUITest {
         //8.
         accordion = new Accordion();
     }
-
-
 
     /**
      * After Test Case
@@ -134,11 +113,8 @@ public class AccordionIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        // 1.
-        Commons.deleteProxyComponent(adminClient, proxyPath);
-
         // 2.
-        authorClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
 
@@ -260,12 +236,12 @@ public class AccordionIT extends AuthorBaseUITest {
     private String addAccordionItem(String component, String parentPath,  String itemName) throws ClientException, InterruptedException {
 
         //1.
-        String cmpPath = Commons.addComponent(adminClient, component, parentPath + "/", null, null);
+        String cmpPath = Commons.addComponentWithRetry(authorClient, component, parentPath + "/", null);
 
         //2.
         AccordionEditDialog editDialog = accordion.openEditDialog(parentPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editDialog.openItemsTab();
 
         //3.
@@ -476,7 +452,7 @@ public class AccordionIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
 
         //wait for configuration changes to reflect
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         //7.
         items.clear();
         items.add("item1");
@@ -561,7 +537,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //1.
         String component = "[data-type='Editable'][data-path='" + cmpPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(cmpPath);
 
         //2.
@@ -585,7 +561,7 @@ public class AccordionIT extends AuthorBaseUITest {
         PanelSelector panelSelector = new PanelSelector();
         assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
 
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         //7.
         ElementsCollection items = panelSelector.getItems();
@@ -642,7 +618,7 @@ public class AccordionIT extends AuthorBaseUITest {
         editableToolbar.clickPanelSelect();
         PanelSelector panelSelector = new PanelSelector();
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
 
         //4.
         panelSelector.reorderItems(0, 2);
@@ -652,7 +628,7 @@ public class AccordionIT extends AuthorBaseUITest {
         ElementsCollection accordionItems = accordion.getAccordionItem();
 
         //wait for the reordering to reflect
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(accordionItems.size() == 3, "Number to items added should be 3");
         assertTrue(accordion.getAccordionItemButton(0).getText().contains("item1"), "First panel select item should be item1");
         assertTrue(accordion.getAccordionItemButton(1).getText().contains("item2"), "Second panel select item should be item0");
@@ -703,27 +679,12 @@ public class AccordionIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Allowed components")
     public void testAllowedComponents() throws ClientException, InterruptedException, TimeoutException {
-        String teaserProxyPath = Commons.createProxyComponent(adminClient, Commons.rtTeaser_v1, Commons.proxyPath, null, null);
-        String policySuffix = "/accordion/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("components",teaserProxyPath);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // add a policy for accordion component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/accordion",data, policyAssignmentPath, 200, 201);
+        String teaserProxyPath = RT_TEASER_V1;
+        String policyPath = createComponentPolicy("/accordion-v1", new HashMap<String, String>() {{ put("components", teaserProxyPath); }} );
 
         String testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        String compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "accordion", null);
+        String compPath = Commons.addComponentWithRetry(authorClient, proxyPath, testPage + Commons.relParentCompPath, "accordion-v1");
 
         // open test page in page editor
         editorPage = new PageEditorPage(testPage);
@@ -731,7 +692,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, CoreComponentConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
 
         //2.
@@ -741,10 +702,9 @@ public class AccordionIT extends AuthorBaseUITest {
         editableToolbarAssertion.assertInsertButton(true);
 
         editableToolbar.getInsertButton().click();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.isComponentPresentInInsertDialog(teaserProxyPath), "teaser component should be present in insert dialog");
 
-        Commons.deleteProxyComponent(adminClient, teaserProxyPath);
+        deleteComponentPolicy("/accordion-v1", policyPath);
     }
 }
-

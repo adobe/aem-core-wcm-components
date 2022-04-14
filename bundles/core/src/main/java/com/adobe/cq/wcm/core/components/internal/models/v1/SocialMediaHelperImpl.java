@@ -57,10 +57,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Helper class for page functionality related to page sharing by user on social media platforms.
+ *
+ * @deprecated The Social Media Sharing component is deprecated since Core Components 2.18.0 and should not be used in new projects.
  */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {SocialMediaHelper.class, ComponentExporter.class}, resourceType =
         SocialMediaHelperImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Deprecated
 public class SocialMediaHelperImpl implements SocialMediaHelper {
 
     static final String RESOURCE_TYPE = "core/wcm/components/sharing/v1/sharing";
@@ -110,38 +113,45 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     //*************** WEB INTERFACE METHODS *******************
 
     @Override
+    @Deprecated
     public boolean isFacebookEnabled() {
         return facebookEnabled;
     }
 
     @Override
+    @Deprecated
     public boolean isPinterestEnabled() {
         return pinterestEnabled;
     }
 
     @Override
+    @Deprecated
     public boolean isSocialMediaEnabled() {
         return socialMediaEnabled;
     }
 
     @Override
+    @Deprecated
     public String getFacebookAppId() {
         return facebookAppId;
     }
 
     @Override
     @JsonProperty("hasFacebookSharing")
+    @Deprecated
     public boolean hasFacebookSharing() {
         return facebookEnabled && hasSharingComponent();
     }
 
     @Override
     @JsonProperty("hasPinteresSharing")
+    @Deprecated
     public boolean hasPinterestSharing() {
         return pinterestEnabled && hasSharingComponent();
     }
 
     @Override
+    @Deprecated
     public Map<String, String> getMetadata() {
         if (metadata == null) {
             initMetadata();
@@ -151,6 +161,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
 
     @NotNull
     @Override
+    @Deprecated
     public String getExportedType() {
         return request.getResource().getResourceType();
     }
@@ -263,18 +274,25 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     private interface WebsiteMetadata {
         enum Type {website, product}
 
+        @Deprecated
         String getTitle();
 
+        @Deprecated
         String getURL();
 
+        @Deprecated
         Type getType();
 
+        @Deprecated
         String getTypeName();
 
+        @Deprecated
         String getImage();
 
+        @Deprecated
         String getDescription();
 
+        @Deprecated
         String getSiteName();
     }
 
@@ -291,6 +309,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         private static final String PN_IMAGE_FILE_JCR_CONTENT = "image/file/" + JcrConstants.JCR_CONTENT;
 
         @Override
+        @Deprecated
         public String getTitle() {
             String title = currentPage.getTitle();
             if (StringUtils.isBlank(title)) {
@@ -300,6 +319,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
 
         @Override
+        @Deprecated
         public String getURL() {
             String pagePath = currentPage.getPath();
             String extension = request.getRequestPathInfo().getExtension();
@@ -308,16 +328,19 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
 
         @Override
+        @Deprecated
         public Type getType() {
             return Type.website;
         }
 
         @Override
+        @Deprecated
         public String getTypeName() {
             return getType().name();
         }
 
         @Override
+        @Deprecated
         public String getImage() {
             String image = getThumbnailUrl(currentPage, 800, 480);
             image = externalizer.publishLink(resourceResolver, image);
@@ -345,11 +368,13 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
 
 
         @Override
+        @Deprecated
         public String getDescription() {
             return currentPage.getDescription();
         }
 
         @Override
+        @Deprecated
         public String getSiteName() {
             Page page = findRootPage();
 
@@ -386,11 +411,13 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         private Product product;
         private PriceInfo priceInfo;
 
+        @Deprecated
         public ProductMetadataProvider(Product product) {
             this.product = product;
         }
 
         @Override
+        @Deprecated
         public String getTitle() {
             String title = product.getTitle();
             if (StringUtils.isBlank(title)) {
@@ -400,11 +427,13 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
 
         @Override
+        @Deprecated
         public Type getType() {
             return Type.product;
         }
 
         @Override
+        @Deprecated
         public String getImage() {
             final ImageResource imageResource = product.getImage();
             if (imageResource == null)
@@ -420,6 +449,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
 
         @Override
+        @Deprecated
         public String getDescription() {
             String description = product.getDescription();
             if (StringUtils.isBlank(description)) {
@@ -429,6 +459,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
 
         @Override
+        @Deprecated
         public String getProductPriceAmount() {
             String amount = null;
             try {
@@ -443,6 +474,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
 
         @Override
+        @Deprecated
         public String getProductPriceCurrency() {
             String currency = null;
             try {
@@ -474,10 +506,12 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     private class ExperienceFragmentMetadataProvider {
         private ExperienceFragmentSocialVariation variation;
 
+        @Deprecated
         public ExperienceFragmentMetadataProvider(ExperienceFragmentSocialVariation variation) {
             this.variation = variation;
         }
 
+        @Deprecated
         public String getDescription(String defaultDescription) {
             if (variation == null)
                 return defaultDescription;
@@ -490,6 +524,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
             return defaultDescription;
         }
 
+        @Deprecated
         public String getImage(String defaultImage) {
             if (variation == null)
                 return defaultImage;
@@ -507,16 +542,19 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     private class ExperienceFragmentWebsiteMetadataProvider extends WebsiteMetadataProvider {
         private final ExperienceFragmentMetadataProvider xfMetadata;
 
+        @Deprecated
         public ExperienceFragmentWebsiteMetadataProvider(ExperienceFragmentSocialVariation variation) {
             xfMetadata = new ExperienceFragmentMetadataProvider(variation);
         }
 
         @Override
+        @Deprecated
         public String getDescription() {
             return xfMetadata.getDescription(super.getDescription());
         }
 
         @Override
+        @Deprecated
         public String getImage() {
             return xfMetadata.getImage(super.getImage());
         }
@@ -525,17 +563,20 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     private class ExperienceFragmentProductMetadataProvider extends ProductMetadataProvider {
         private final ExperienceFragmentMetadataProvider xfMetadata;
 
+        @Deprecated
         public ExperienceFragmentProductMetadataProvider(Product product, ExperienceFragmentSocialVariation variation) {
             super(product);
             xfMetadata = new ExperienceFragmentMetadataProvider(variation);
         }
 
         @Override
+        @Deprecated
         public String getDescription() {
             return xfMetadata.getDescription(super.getDescription());
         }
 
         @Override
+        @Deprecated
         public String getImage() {
             return xfMetadata.getImage(super.getImage());
         }

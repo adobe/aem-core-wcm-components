@@ -43,6 +43,7 @@ public class TeaserImplTest {
 
     private static final String TEST_BASE = "/teaser";
     protected static final String CONTENT_ROOT = "/content";
+    protected static final String CONF_ROOT = "/conf";
     protected static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.png";
     protected static final String PNG_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_BINARY_NAME;
     protected static final String CONTEXT_PATH = "/core";
@@ -53,6 +54,11 @@ public class TeaserImplTest {
     protected static final String PRETITLE = "Teaser's Pretitle";
     protected static final String DESCRIPTION = "Description";
     protected static final String LINK = "https://www.adobe.com";
+    protected static final String TEMPLATE_PATH = "/conf/coretest/settings/wcm/templates/testtemplate";
+    protected static final String TEMPLATE_STRUCTURE_PATH = TEMPLATE_PATH + "/structure";
+    protected static final String TEMPLATE_TEASER_1 = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/template_teaser1";
+    protected static final String TEMPLATE_TEASER_2 = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/template_teaser2";
+    protected static final String TEMPLATE_TEASER_3 = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/template_teaser3";
     protected static final String TEASER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-1";
     protected static final String TEASER_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-2";
     protected static final String TEASER_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-3";
@@ -67,6 +73,12 @@ public class TeaserImplTest {
     protected static final String TEASER_12 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-12";
     protected static final String TEASER_13 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-13";
     protected static final String TEASER_20 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-20";
+    protected static final String TEASER_21 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-21";
+    protected static final String TEASER_22 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-22";
+    protected static final String TEASER_22a = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-22a";
+    protected static final String TEASER_23 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-23";
+    protected static final String TEASER_23a = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-23a";
+    protected static final String TEASER_24 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-24";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -82,6 +94,7 @@ public class TeaserImplTest {
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_DAM_JSON, "/content/dam/core/images");
         context.load().json(testBase + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+        context.load().json(testBase + CoreComponentTestContext.TEST_CONF_JSON, CONF_ROOT);
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
     }
 
@@ -122,7 +135,8 @@ public class TeaserImplTest {
     protected void testPageInheritedProperties() {
         Teaser teaser = getTeaserUnderTest(TEASER_6);
         assertEquals("Teasers Test", teaser.getTitle());
-        assertEquals("Teasers description", teaser.getDescription());
+        // < and > are expected escaped, because the page properties provide only a plain text field for the page description
+        assertEquals("Teasers description from &lt;page properties&gt;", teaser.getDescription());
     }
 
     @Test
@@ -153,7 +167,7 @@ public class TeaserImplTest {
     }
 
     @Test
-    void testTeaserWithExternalLinkFromAction() {
+    protected void testTeaserWithExternalLinkFromAction() {
         Teaser teaser = getTeaserUnderTest(TEASER_7);
         assertEquals("http://www.adobe.com", teaser.getLinkURL());
     }
@@ -196,7 +210,8 @@ public class TeaserImplTest {
         assertTrue(teaser.isActionsEnabled(), "Expected teaser with actions");
         assertEquals(2, teaser.getActions().size(), "Expected to find two Actions");
         assertEquals("Teasers Test", teaser.getTitle());
-        assertEquals("Teasers description", teaser.getDescription());
+        // < and > are expected escaped, because the page properties provide only a plain text field for the page description
+        assertEquals("Teasers description from &lt;page properties&gt;", teaser.getDescription());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser11"));
     }
 

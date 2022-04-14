@@ -1,0 +1,21 @@
+{
+  "id": "teaser-6660c08c08",
+  "title": "",
+  "actionsEnabled": true,
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actions": [],
+  "link": {
+    "valid": true,
+    "url": "/core/content/page1.html"
+  },
+  ":type": "core/wcm/components/teaser/v2/teaser",
+  "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-24.coreimg.png/1490005239000/asset1.png",
+  "dataLayer": {
+    "teaser-6660c08c08": {
+      "@type": "core/wcm/components/teaser/v2/teaser",
+      "dc:title":"",
+      "xdm:linkURL": "/core/content/page1.html"
+    }
+  }
+}

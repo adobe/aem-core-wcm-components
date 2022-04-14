@@ -15,7 +15,7 @@
   ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <template data-sly-template.itemContent="${@ item='The navigation item'}">
-    <a data-sly-attribute="${item.link.htmlAttributes}" title="${item.title}" aria-current="${item.active && 'page'}"
+    <a data-sly-attribute="${item.link.htmlAttributes}" aria-current="${item.current && 'page'}"
        data-sly-unwrap="${!item.link.valid}"
        data-cmp-clickable="${item.data ? true : false}"
        class="cmp-navigation__item-link">${item.title}</a>

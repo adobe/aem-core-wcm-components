@@ -20,6 +20,7 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -58,9 +59,6 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
     private SlingHttpServletRequest request;
 
     @ScriptVariable
-    private Resource resource;
-
-    @ScriptVariable
     private PageManager pageManager;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -77,7 +75,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
     protected String accessibilityLabel;
 
     @Self
-    private LinkHandler linkHandler;
+    protected LinkHandler linkHandler;
     protected Optional<Link> link;
 
     @PostConstruct

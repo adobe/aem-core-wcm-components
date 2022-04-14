@@ -2,6 +2,7 @@
   "id": "page-bb590de134",
   "designPath": "/etc/designs/mysite",
   "title": "Templated Page",
+  "description": "Description",
   "brandSlug": "Brand Slug",
   "lastModifiedDate": 1453282416000,
   "templateName": "product-page",
@@ -11,13 +12,17 @@
       "element": "link",
       "location": "header",
       "attributes": {
-        "href": "/_theme/theme.css"
+        "href": "/_theme/theme.css",
+        "rel": "preload",
+        "as": "style"
       }
     },
     {
       "element": "script",
       "location": "footer",
       "attributes": {
+        "async": true,
+        "defer": false,
         "src": "/_theme/theme.js"
       }
     },

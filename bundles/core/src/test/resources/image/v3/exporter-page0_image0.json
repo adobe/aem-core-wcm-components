@@ -1,0 +1,10 @@
+{
+  "id": "image-c7ca64a6e5",
+  "lazyEnabled": true,
+  "dataLayer": {
+    "image-c7ca64a6e5": {
+      "@type": "core/wcm/components/image/v3/image"
+    }
+  },
+  ":type": "core/wcm/components/image/v3/image"
+}

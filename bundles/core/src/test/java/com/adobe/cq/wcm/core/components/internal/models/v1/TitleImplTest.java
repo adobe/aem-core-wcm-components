@@ -42,6 +42,8 @@ public class TitleImplTest {
     protected static final String TITLE_WRONGTYPE = TEST_PAGE + "/jcr:content/par/title-wrongtype";
     protected static final String TITLE_RESOURCE_JCR_TITLE_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-v2";
     protected static final String TITLE_RESOURCE_JCR_TITLE_LINK_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-link-v2";
+    protected static final String TITLE_RESOURCE_TITLE_V2_REDIRECT_CHAIN = TEST_PAGE + "/jcr:content/par/title-v2-redirect-chain";
+    protected static final String TITLE_RESOURCE_TITLE_V2_REDIRECT_EXTERNAL_URL = TEST_PAGE + "/jcr:content/par/title-v2-redirect-external-url";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -117,6 +119,20 @@ public class TitleImplTest {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
         assertValidLink(title.getLink(), "https://www.adobe.com", "World", "World title");
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
+    }
+
+    @Test
+    protected void testGetLinkFromRedirectChain() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_TITLE_V2_REDIRECT_CHAIN);
+        assertValidLink(title.getLink(), "/content/title/redirect/redirect-page-3.html", "Should Redirect to Page 3 (accessibility label)", "Should Redirect to Page 3 (title)");
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_TITLE_V2_REDIRECT_CHAIN));
+    }
+
+    @Test
+    protected void testGetLinkFromRedirectToExternalURL() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_TITLE_V2_REDIRECT_EXTERNAL_URL);
+        assertValidLink(title.getLink(), "https://www.adobe.com", "Adobe", "Adobe title");
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_TITLE_V2_REDIRECT_EXTERNAL_URL));
     }
 
     @Test

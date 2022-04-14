@@ -29,6 +29,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -37,7 +38,6 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -102,6 +102,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     protected String designPath;
     protected String staticDesignPath;
     protected String title;
+    protected String description;
     protected String brandSlug;
 
     protected String[] clientLibCategories = new String[0];
@@ -123,6 +124,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @PostConstruct
     protected void initModel() {
         title = currentPage.getTitle();
+        description = currentPage.getDescription();
         if (StringUtils.isBlank(title)) {
             title = currentPage.getName();
         }
@@ -199,6 +201,11 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @Override
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     @Override

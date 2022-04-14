@@ -45,8 +45,8 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Testing utilities.
@@ -162,8 +162,8 @@ public class Utils {
     public static void enableDataLayer(AemContext context, boolean enabled) {
         ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
         DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
-        when(dataLayerConfig.enabled()).thenReturn(enabled);
-        when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
+        lenient().when(dataLayerConfig.enabled()).thenReturn(enabled);
+        lenient().when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
         context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
     }
 

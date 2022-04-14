@@ -7,7 +7,7 @@
     "url": "https://www.adobe.com"
   },
   "titleType": "h5",
-  "actionsEnabled": false,
+  "actionsEnabled": true,
   "imageLinkHidden": false,
   "titleLinkHidden": false,
   "actions": [],

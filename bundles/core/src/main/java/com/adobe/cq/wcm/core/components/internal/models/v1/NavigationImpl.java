@@ -25,6 +25,7 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
@@ -126,13 +127,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     private Page navigationRootPage;
 
     /**
-     * Flag indicating if showing is disabled.
-     * If shadowing is enabled, then the navigation will traverse redirects - where possible - to present information
-     * relevant to the target page that the user would navigate to if selected.
-     */
-    private boolean isShadowingDisabled;
-
-    /**
      * Placeholder for the list of results.
      */
     private List<NavigationItem> items;
@@ -159,8 +153,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
                 structureStart = 0;
             }
         }
-        isShadowingDisabled = properties.get(PageListItemImpl.PN_DISABLE_SHADOWING,
-            currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
     /**
@@ -195,8 +187,8 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     }
 
     protected NavigationItem newNavigationItem(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level,
-                                               List<NavigationItem> children, String parentId, boolean isShadowingDisabled, Component component) {
-        return new NavigationItemImpl(page, active, current, linkHandler, level, children, parentId, isShadowingDisabled, component);
+                                               List<NavigationItem> children, String parentId, Component component) {
+        return new NavigationItemImpl(page, active, current, linkHandler, level, children, parentId, component);
     }
 
     @Override
@@ -257,7 +249,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         int level = page.getDepth() - (this.getNavigationRoot().getDepth() + structureStart);
         boolean current = checkCurrent(page);
         boolean selected = checkSelected(page, current);
-        return newNavigationItem(page, selected, current, linkHandler, level, children, getId(), isShadowingDisabled, component);
+        return newNavigationItem(page, selected, current, linkHandler, level, children, getId(), component);
     }
 
     /**
@@ -289,9 +281,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @return True if the specified page redirects to the current page.
      */
     private boolean currentPageIsRedirectTarget(@NotNull final Page page) {
-        return NavigationItemImpl.getRedirectTarget(page)
-            .filter(target -> target.equals(currentPage))
-            .isPresent();
+        return currentPage.equals(linkHandler.resolveRedirects(page).getLeft());
     }
 
 }

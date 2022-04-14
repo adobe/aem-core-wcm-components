@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Form Text"
+        jcr:description="Display an input field"
+        sling:resourceType="core-components-examples/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid
+                cq:styleIds="[1545309110033]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <text
+                    cq:styleIds="[1644862132301]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;h1>Form Text&lt;sub>v2&lt;/sub>&lt;/h1>"
+                    textIsRich="true"/>
+                <text_1408574198
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Form Text allows a user to create different input fields to collect information the user can use later on.&amp;nbsp;&lt;/p>"
+                    textIsRich="true"/>
+                <teaser
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Technical Documentation"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/tree/master/content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <teaser_556024830
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Using Core Components"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                    linkURL="https://docs.adobe.com/content/help/en/experience-manager-core-components/using/components/forms/form-text.html"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <title_865328580
+                    cq:styleIds="[1544759664489]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Examples"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h2"/>
+                <title
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Form Text Field"
+                    sling:resourceType="core-components-examples/components/title"/>
+                <text_1910564414
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>This is a Core Form Container with the Form Texts: Text, Textarea, and Email as child elements.&lt;p>"
+                    textIsRich="true"/>
+                <demo
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <container
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/form/container"
+                            action="/content/usergenerated/core-components-examples/library/form/cq-gen1576157004947/"
+                            actionType="foundation/components/form/actions/store">
+                            <cq:responsive jcr:primaryType="nt:unstructured"/>
+                            <text
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Name"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                helpMessage="Please enter your name"
+                                name="firstName"
+                                rows="2"
+                                type="text"
+                                usePlaceholder="true"/>
+                            <text_141321348
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="E-Mail"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                helpMessage="Please enter your E-Mail"
+                                name="email"
+                                required="true"
+                                requiredMessage="You need to add your email to log in"
+                                rows="1"
+                                type="email"
+                                usePlaceholder="true"/>
+                            <text_2015789815
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Message"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                helpMessage="Please enter your message"
+                                name="textarea"
+                                rows="2"
+                                type="textarea"
+                                usePlaceholder="true"/>
+                        </container>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo>
+                <title_1975440126
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Form Text Numbers"
+                    sling:resourceType="core-components-examples/components/title"/>
+                <text_1068966881
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Core Form Container with Form Text variations: Phone Number, Date, Number fields as child elements.&amp;nbsp;&lt;/p>"
+                    textIsRich="true"/>
+                <demo_881795653
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <container
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/form/container"
+                            action="/content/usergenerated/core-components-examples/library/form/cq-gen1576159867766/"
+                            actionType="foundation/components/form/actions/store">
+                            <cq:responsive jcr:primaryType="nt:unstructured"/>
+                            <text_217965579
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Phone Number"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                helpMessage="+44 87 299 777 22"
+                                name="phonenumber"
+                                rows="1"
+                                type="tel"
+                                usePlaceholder="true"/>
+                            <text_1768656118
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Date"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                helpMessage="01.01.2020"
+                                name="date"
+                                rows="1"
+                                type="date"
+                                usePlaceholder="true"/>
+                            <text_1361995724
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Favorite number"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                name="favoritenumber"
+                                rows="1"
+                                type="number"/>
+                        </container>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_881795653>
+                <title_431879464
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Form Text Password"
+                    sling:resourceType="core-components-examples/components/title"/>
+                <text_203677928
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Core Form Container with Form Text Password. It hides the input from being visible.&amp;nbsp;&lt;/p>"
+                    textIsRich="true"/>
+                <demo_665944747
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <container
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/form/container"
+                            action="/content/usergenerated/core-components-examples/library/form/cq-gen1576161785602/"
+                            actionType="foundation/components/form/actions/store">
+                            <cq:responsive jcr:primaryType="nt:unstructured"/>
+                            <text_854476329
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Set Password"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                helpMessage="password"
+                                name="pw"
+                                required="true"
+                                rows="1"
+                                type="password"
+                                usePlaceholder="true"
+                                value="12345"/>
+                            <text
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Confirm"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                helpMessage="password"
+                                name="confirmpw"
+                                required="true"
+                                requiredMessage="It is required to insert password twice "
+                                rows="1"
+                                type="password"
+                                usePlaceholder="true"/>
+                        </container>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_665944747>
+            </responsivegrid>
+        </root>
+    </jcr:content>
+</jcr:root>

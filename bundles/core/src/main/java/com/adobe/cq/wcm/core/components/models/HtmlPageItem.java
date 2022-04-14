@@ -91,7 +91,7 @@ public interface HtmlPageItem {
      * @return HTML attributes and values
      * @since com.adobe.cq.wcm.core.components.models 12.16.0
      */
-    default Map<String, String> getAttributes() {
+    default Map<String, Object> getAttributes() {
         return null;
     }
 
@@ -161,7 +161,7 @@ public interface HtmlPageItem {
         public String[] getAttributeNames() {
             switch(this) {
                 case LINK:
-                    return new String[] {"crossorigin", PN_HREF, "hreflang", "media", "referrerpolicy", "rel", "sizes", "title", "type"};
+                    return new String[] {"as", "crossorigin", PN_HREF, "hreflang", "media", "referrerpolicy", "rel", "sizes", "title", "type"};
                 case SCRIPT:
                     return new String[] {"async", "charset", "defer", PN_SRC, "type"};
                 case META:

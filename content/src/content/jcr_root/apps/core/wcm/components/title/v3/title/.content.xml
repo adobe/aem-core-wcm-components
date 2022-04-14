@@ -18,5 +18,5 @@
     cq:icon="text"
     jcr:description="Section Heading"
     jcr:primaryType="cq:Component"
-    jcr:title="Title (v3) (work-in-progress)"
-    componentGroup=".wip"/>
+    jcr:title="Title (v3)"
+    componentGroup=".core-wcm"/>

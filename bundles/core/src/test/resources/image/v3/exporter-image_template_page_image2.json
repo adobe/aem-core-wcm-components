@@ -1,0 +1,24 @@
+{
+  "id": "image-cffba324b8",
+  "alt": "asset1.png description",
+  "src": "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.gif/structure/jcr%3acontent/root/image_template_page_image2/1490005239000/asset1.gif",
+  "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+  "imageLink": {
+    "valid": true,
+    "url": "/core/content/test_page4.html"
+  },
+  "lazyEnabled": true,
+  "dataLayer": {
+    "image-cffba324b8": {
+      "@type": "core/wcm/components/image/v3/image",
+      "xdm:linkURL": "/core/content/test_page4.html",
+      "image": {
+        "repo:id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+        "repo:modifyDate": "2017-03-20T10:20:39Z",
+        "@type": "image/gif",
+        "repo:path": "/content/dam/core/images/asset1.png"
+      }
+    }
+  },
+  ":type": "core/wcm/components/image/v3/image"
+}

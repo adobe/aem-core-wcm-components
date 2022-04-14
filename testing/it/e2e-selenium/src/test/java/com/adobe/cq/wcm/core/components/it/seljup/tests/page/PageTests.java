@@ -22,6 +22,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralMultiField;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.RolloutDialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.AdvancedTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.BlueprintTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.CloudServicesTab;
@@ -30,16 +31,19 @@ import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.LiveCopyTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.PermissionsTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.SocialMediaTab;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.tabs.ThumbnailTab;
-import com.adobe.cq.wcm.core.components.it.seljup.components.page.v1.Page;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.page.v1.Page;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
+import org.codehaus.jackson.JsonNode;
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PageTests {
@@ -90,7 +94,7 @@ public class PageTests {
     }
 
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        adminClient.deletePageWithRetry(testPage, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        adminClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     public void testBasicTitleAndTagsPageProperties() throws ClientException, InterruptedException {
@@ -109,7 +113,7 @@ public class PageTests {
 
         // change the page title
         basicTab.title().setValue("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         // add two tags
         Commons.selectInTags("[name='./cq:tags']", tag1Path);
@@ -120,7 +124,7 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
 
         // check the page title
@@ -149,7 +153,7 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
 
         //Check if edited properties are saved
@@ -170,7 +174,7 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
 
         // Check if on time and off time are correctly set
@@ -195,7 +199,7 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
 
         // check if the vanity url was saved
@@ -222,7 +226,7 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
         advancedTab = propertiesPage.clickTab("advanced", AdvancedTab.class);
 
@@ -250,7 +254,7 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
         propertiesPage.clickTab("advanced", AdvancedTab.class);
 
@@ -271,7 +275,7 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
         propertiesPage.clickTab("advanced", AdvancedTab.class);
 
@@ -293,12 +297,43 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
         propertiesPage.clickTab("advanced", AdvancedTab.class);
 
         // check the Export Configuration
         assertTrue(page.getExportTemplate().equals(exportConfiguration), "Export Templates should be set to " + exportConfiguration);
+    }
+
+    public void testAdvancedSeoPageProperties() throws InterruptedException, ClientException {
+        // Open properties page
+        PropertiesPage propertiesPage = new PropertiesPage(testPage);
+        propertiesPage.open();
+        // open the Advanced tab
+        propertiesPage.clickTab("advanced", AdvancedTab.class);
+
+        // tests for the SEO options
+        page.setRobotsTags("index", "follow");
+        page.setGenerateSitemap(true);
+
+        // save the configuration and open again the page property
+        propertiesPage.saveAndClose();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        propertiesPage.open();
+        propertiesPage.clickTab("advanced", AdvancedTab.class);
+
+        // check the SEO Configuration
+        assertArrayEquals(new String[] {"index", "follow"}, page.getRobotsTags());
+        assertTrue(page.getGenerateSitemap());
+        // validate the actual persisted values
+        JsonNode content = adminClient.doGetJson(testPage + "/_jcr_content", 1, HttpStatus.SC_OK);
+        JsonNode robotsTags = content.get("cq:robotsTags");
+        assertTrue(robotsTags.isArray());
+        assertEquals(2, robotsTags.size());
+        assertEquals("index", robotsTags.get(0).getTextValue());
+        assertEquals("follow", robotsTags.get(1).getTextValue());
+        JsonNode sitemapRoot = content.get("sling:sitemapRoot");
+        assertEquals("true", sitemapRoot.getTextValue());
     }
 
     public void testThumbnailPageProperties() {
@@ -349,7 +384,7 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
         socialMediaTab = propertiesPage.clickTab("social media", SocialMediaTab.class);
 
@@ -380,10 +415,10 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
         propertiesPage.clickTab("cloud services", CloudServicesTab.class);
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         // Check is cloud configuration is set
         assertTrue(page.isCloudServiceConfigAdded(), "Cloud Service Config should be set");
     }
@@ -399,11 +434,11 @@ public class PageTests {
         page.setContextHubPath(contextHubPath);
         // set the segments path
         page.setContextHubSegmentsPath(segmentPath);
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
         clickableClick(propertiesPage.getCoralTabs().filter(Condition.matchText("Personalization")).first());
 
@@ -422,7 +457,7 @@ public class PageTests {
 
         final ElementsCollection currentPermissionsList = permissions.permissionsList();
         // Check no permission set
-        currentPermissionsList.shouldHaveSize(0);
+        currentPermissionsList.shouldHave(CollectionCondition.size(0));
 
         // Add permission
         final PermissionsTab.AddPermissionsDialog addPermissionsDialog = permissions.addPermission();
@@ -436,7 +471,7 @@ public class PageTests {
         addPermissionsDialog.clickPrimary();
 
         // Check the permission set
-        currentPermissionsList.shouldHaveSize(1);
+        currentPermissionsList.shouldHave(CollectionCondition.size(1));
         currentPermissionsList.shouldHave(CollectionCondition.texts(userName));
         assertTrue(permissions.isReadPermissionGranted(userName), "Read permission has been given, should be checked");
         assertTrue(permissions.isDeletePermissionGranted(userName), "Delete permission has been given, should be checked");
@@ -448,12 +483,12 @@ public class PageTests {
         final PermissionsTab.EditPermissionDialog editPermissionDialog = permissions.editPermission(userName);
         editPermissionDialog.replicate().click();
         editPermissionDialog.clickPrimary();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(permissions.isReplicatePermissionGranted(userName), "Replicate permission has been given, should be checked");
 
         // Delete the permission
         permissions.deleteUserPermission(userName);
-        currentPermissionsList.shouldHaveSize(0);
+        currentPermissionsList.shouldHave(CollectionCondition.size(0));
     }
 
     public void testEditUserGroupPermissionsPageProperties() {
@@ -465,7 +500,7 @@ public class PageTests {
 
         // Check current CUG list is empty
         final ElementsCollection currentCUGList = permissions.cugList();
-        currentCUGList.shouldHaveSize(0);
+        currentCUGList.shouldHave(CollectionCondition.size(0));
 
         // Add CUG permission
         final PermissionsTab.EditCUGDialog editCUG = permissions.editCUG();
@@ -476,7 +511,7 @@ public class PageTests {
         editCUG.clickPrimary();
 
         // Check the added CUG permission
-        currentCUGList.shouldHaveSize(1);
+        currentCUGList.shouldHave(CollectionCondition.size(1));
         currentCUGList.shouldHave(CollectionCondition.texts("CoreComponent Test"));
     }
 
@@ -489,7 +524,7 @@ public class PageTests {
 
         PermissionsTab.EffectivePermissionDialog effectivePermissionDialog = permissions.openEffectivePermissions();
         //Wait for Dialog to open
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(effectivePermissionDialog.isVisible(), "Effective Permission dialog should be open");
         //Close Effective Permission Dialog
         effectivePermissionDialog.close();
@@ -507,62 +542,62 @@ public class PageTests {
 
         // check the Synchronize button
         Dialog liveCopySync = liveCopyTab.synchronize();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(liveCopySync.isVisible(), "livecopy sync dialog should be visible");
         liveCopySync.clickPrimary();
 
         // Open Live Copy tab
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.clickTab("live copy", LiveCopyTab.class);
 
         // check the Reset button
         Dialog revert = liveCopyTab.reset();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(revert.isVisible(), "revert dialog should be visible");
         revert.clickWarning();
 
         // Open Live Copy tab
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.clickTab("live copy", LiveCopyTab.class);
 
         // check the Suspend without children button
         Dialog suspendWithoutChildrenDialog = liveCopyTab.suspendWithoutChild();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(suspendWithoutChildrenDialog.isVisible(), "Suspend livecopy without children dialog should be visible");
         suspendWithoutChildrenDialog.clickWarning();
 
         // Open Live Copy tab
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.clickTab("live copy", LiveCopyTab.class);
 
         // check the Resume button
         Dialog resumeDialog = liveCopyTab.resume();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(resumeDialog.isVisible(), "resume livecopy dialog should be visible");
         resumeDialog.clickWarning();
 
         // Open Live Copy tab
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.clickTab("live copy", LiveCopyTab.class);
 
         // check the Suspend without children button
         Dialog suspendWithChildrenDialog = liveCopyTab.suspendWithoutChild();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(suspendWithChildrenDialog.isVisible(), "Suspend livecopy with children dialog should be visible");
         suspendWithChildrenDialog.clickWarning();
 
         // Open Live Copy tab
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.clickTab("live copy", LiveCopyTab.class);
 
         // check the Detach button
         Dialog detachDialog = liveCopyTab.detach();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(detachDialog.isVisible(), "detach livecopy dialog should be visible");
         detachDialog.clickWarning();
 
         //Delete the created livecopy page
-        adminClient.deletePageWithRetry(testLiveCopyPagePath, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        adminClient.deletePageWithRetry(testLiveCopyPagePath, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
 
     }
 
@@ -584,7 +619,7 @@ public class PageTests {
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
         advancedTab = propertiesPage.clickTab("advanced", AdvancedTab.class);
 
@@ -603,8 +638,8 @@ public class PageTests {
         // open the Blueprint tab
         BlueprintTab blueprintTab = propertiesPage.clickTab("blueprint", BlueprintTab.class);
 
-        BlueprintTab.RolloutDialog rolloutDialog = blueprintTab.rollout();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        RolloutDialog rolloutDialog = blueprintTab.rollout();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         // check livecopy is present for rollout
         assertTrue(rolloutDialog.numberOfLiveCopies() == 1, "There should be 1 livecopy");
         assertTrue(rolloutDialog.isLiveCopySelected(testLiveCopyPagePath), "Livecopy should be selected");
@@ -613,7 +648,7 @@ public class PageTests {
         rolloutDialog.close();
 
         // Open Blueprint tab
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.clickTab("blueprint", BlueprintTab.class);
 
         rolloutDialog = blueprintTab.rollout();
@@ -622,6 +657,6 @@ public class PageTests {
         rolloutDialog.rolloutNow();
 
         //Delete the created livecopy page
-        adminClient.deletePageWithRetry(testLiveCopyPagePath, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        adminClient.deletePageWithRetry(testLiveCopyPagePath, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 }

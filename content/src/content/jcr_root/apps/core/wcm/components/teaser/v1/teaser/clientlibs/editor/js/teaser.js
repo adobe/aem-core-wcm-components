@@ -13,8 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* global jQuery */
-(function($) {
+(function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-teaser__editor";
@@ -25,6 +24,7 @@
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionFromPage"]';
     var descriptionTextfieldSelector = '.cq-RichText-editable[name="./jcr:description"]';
     var linkURLSelector = '[name="./linkURL"]';
+    var linkTargetSelector = '.cmp-link-target [name="./linkTarget"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var actionsEnabled;
     var titleTuple;
@@ -37,16 +37,24 @@
         var dialogContent = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
 
         if (dialogContent) {
-
-            var rteInstance = $(descriptionTextfieldSelector).data("rteinstance");
-            // wait for the description textfield rich text editor to signal start before initializing.
-            // Ensures that any state adjustments made here will not be overridden.
-            if (rteInstance && rteInstance.isActive) {
-                init(e, $dialog, $dialogContent, dialogContent);
-            } else {
-                $(descriptionTextfieldSelector).on("editing-start", function() {
+            var $descriptionTextfield = $(descriptionTextfieldSelector);
+            if ($descriptionTextfield.length) {
+                if (!$descriptionTextfield[0].hasAttribute("aria-labelledby")) {
+                    associateDescriptionTextFieldWithLabel($descriptionTextfield[0]);
+                }
+                var rteInstance = $descriptionTextfield.data("rteinstance");
+                // wait for the description textfield rich text editor to signal start before initializing.
+                // Ensures that any state adjustments made here will not be overridden.
+                if (rteInstance && rteInstance.isActive) {
                     init(e, $dialog, $dialogContent, dialogContent);
-                });
+                } else {
+                    $descriptionTextfield.on("editing-start", function() {
+                        init(e, $dialog, $dialogContent, dialogContent);
+                    });
+                }
+            } else {
+                // init without description field
+                init(e, $dialog, $dialogContent, dialogContent);
             }
         }
     });
@@ -94,10 +102,14 @@
     function toggleInputs(dialogContent) {
         var $actionsMultifield = dialogContent.find(actionsMultifieldSelector);
         var linkURLField = dialogContent.find(linkURLSelector).adaptTo("foundation-field");
+        var linkTargetField = dialogContent.find(linkTargetSelector).adaptTo("foundation-field");
         var actions = $actionsMultifield.adaptTo("foundation-field");
         if (linkURLField && actions) {
             if (actionsEnabled) {
                 linkURLField.setDisabled(true);
+                if (linkTargetField) {
+                    linkTargetField.setDisabled(true);
+                }
                 actions.setDisabled(false);
                 if ($actionsMultifield.size() > 0) {
                     var actionsMultifield = $actionsMultifield[0];
@@ -117,6 +129,9 @@
                 }
             } else {
                 linkURLField.setDisabled(false);
+                if (linkTargetField) {
+                    linkTargetField.setDisabled(false);
+                }
                 actions.setDisabled(true);
                 toggleActionItems($actionsMultifield, true);
             }
@@ -126,12 +141,20 @@
     function toggleActionItems(actionsMultifield, disabled) {
         actionsMultifield.find("coral-multifield-item").each(function(ix, item) {
             var linkField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']").adaptTo("foundation-field");
+            var targetField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionTarget']").adaptTo("foundation-field");
             var textField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionTitle']").adaptTo("foundation-field");
             if (disabled && linkField.getValue() === "" && textField.getValue() === "") {
                 actionsMultifield[0].items.remove(item);
             }
-            linkField.setDisabled(disabled);
-            textField.setDisabled(disabled);
+            if (linkField) {
+                linkField.setDisabled(disabled);
+            }
+            if (targetField) {
+                targetField.setDisabled(disabled);
+            }
+            if (textField) {
+                textField.setDisabled(disabled);
+            }
         });
     }
 
@@ -141,6 +164,10 @@
             url = dialogContent.find('.cmp-teaser__editor-multifield_actions [data-cmp-teaser-v1-dialog-edit-hook="actionLink"]').val();
         } else {
             url = linkURL;
+        }
+        // get the info from the current page in case no link is provided.
+        if (url === undefined && (Granite.author && Granite.author.page)) {
+            url = Granite.author.page.path;
         }
         if (url && url.startsWith("/")) {
             return $.ajax({
@@ -174,4 +201,15 @@
             }
         }
     }
-})(jQuery);
+
+    function associateDescriptionTextFieldWithLabel(descriptionTextfieldElement) {
+        var richTextContainer = document.querySelector(".cq-RichText.richtext-container");
+        if (richTextContainer) {
+            var richTextContainerParent = richTextContainer.parentNode;
+            var descriptionLabel = richTextContainerParent.querySelector("label.coral-Form-fieldlabel");
+            if (descriptionLabel) {
+                descriptionTextfieldElement.setAttribute("aria-labelledby", descriptionLabel.id);
+            }
+        }
+    }
+})(jQuery, Granite);

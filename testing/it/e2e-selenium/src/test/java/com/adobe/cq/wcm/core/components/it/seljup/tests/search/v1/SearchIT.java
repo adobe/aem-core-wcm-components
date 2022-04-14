@@ -15,15 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.seljup.tests.search.v1;
 
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.components.search.v1.Search;
-import com.adobe.cq.wcm.core.components.it.seljup.constant.CoreComponentConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
@@ -37,6 +31,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.search.v1.Search;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,16 +46,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SearchIT extends AuthorBaseUITest {
 
     private static final String QUERY_BUILDER_URL = "/bin/querybuilder.json";
-    private static final String clientlibs = "core.wcm.components.search.v1";
+    protected String clientlibs;
     private String page1Path;
     private String page11Path;
     private String page111Path;
     private String page112Path;
     private String policyPath;
-    private String proxyPath;
+    protected String proxyPath;
     private String compPath;
-    private EditorPage editorPage;
-    private Search search;
+    protected EditorPage editorPage;
+    protected Search search;
 
     private boolean pollQuery(CQClient client, String path, String searchTerm, String expected) throws ClientException {
         int timeout = 2000;
@@ -92,17 +93,19 @@ public class SearchIT extends AuthorBaseUITest {
         return match;
     }
 
-    /**
-     * Before Test Case
-     */
-    @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    protected void setupResources() {
+        clientlibs = Commons.CLIENTLIBS_SEARCH_V1;;
+        proxyPath = Commons.RT_SEARCH_V1;
+        search = new Search();
+    }
+
+    public void setup() throws ClientException {
         // level 1
         page1Path = authorClient.createPage("page_1", "page_1", rootPage, defaultPageTemplate).getSlingPath();
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Parent Page 1");
-        Commons.editNodeProperties(adminClient, page1Path, data);
+        Commons.editNodeProperties(authorClient, page1Path, data);
 
         // create 20 pages
         for(int i = 0; i < 20; i++) {
@@ -110,7 +113,7 @@ public class SearchIT extends AuthorBaseUITest {
             data.clear();
             data.put("_charset_", "UTF-8");
             data.put("./jcr:content/jcr:title", "Page " + i);
-            Commons.editNodeProperties(adminClient, pagePath, data);
+            Commons.editNodeProperties(authorClient, pagePath, data);
         }
 
         // level 2
@@ -118,60 +121,49 @@ public class SearchIT extends AuthorBaseUITest {
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Page 1.1");
-        Commons.editNodeProperties(adminClient, page11Path, data);
+        Commons.editNodeProperties(authorClient, page11Path, data);
 
         // level 2 1
         page111Path = authorClient.createPage("page_1_1_1", "page_1_1_1", page11Path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Page 1.1.1");
-        Commons.editNodeProperties(adminClient, page111Path, data);
+        Commons.editNodeProperties(authorClient, page111Path, data);
 
         // level 2 2
         page112Path = authorClient.createPage("page_1_1_2", "page_1_1_2", page11Path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Page 1.1.2");
-        Commons.editNodeProperties(adminClient, page112Path, data);
+        Commons.editNodeProperties(authorClient, page112Path, data);
 
         // level 2 3
         String page113Path = authorClient.createPage("page_1_1_3", "page_1_1_3", page11Path, defaultPageTemplate).getSlingPath();
         data.clear();
         data.put("_charset_", "UTF-8");
         data.put("./jcr:content/jcr:title", "Page 1.1.3");
-        Commons.editNodeProperties(adminClient, page113Path, data);
-
-
+        Commons.editNodeProperties(authorClient, page113Path, data);
 
         // 2.
-        String policySuffix = "/structure/page/new_policy";
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("clientlibs", clientlibs);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"",data, policyAssignmentPath);
-
-        // create a proxy component
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtSearch_v1, Commons.proxyPath, null, null);
+        createPagePolicy(new HashMap<String, String>() {{
+            put("clientlibs", clientlibs);
+        }});
 
         // add the component to test page
-        compPath = Commons.addComponent(adminClient, proxyPath, page11Path + Commons.relParentCompPath, "search", null);
+        compPath = Commons.addComponentWithRetry(authorClient, proxyPath, page11Path + Commons.relParentCompPath, "search");
 
         // open test page in page editor
         editorPage = new PageEditorPage(page11Path);
         editorPage.open();
+    }
 
-        search = new Search();
-
+    /**
+     * Before Test Case
+     **/
+    @BeforeEach
+    public void setupBeforeEach() throws ClientException {
+        setupResources();
+        setup();
     }
 
     /**
@@ -179,8 +171,7 @@ public class SearchIT extends AuthorBaseUITest {
      */
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        Commons.deleteProxyComponent(adminClient, proxyPath);
-        authorClient.deletePageWithRetry(page1Path, true,false, CoreComponentConstants.TIMEOUT_TIME_MS, CoreComponentConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+        authorClient.deletePageWithRetry(page1Path, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
     }
 
     /**
@@ -191,9 +182,9 @@ public class SearchIT extends AuthorBaseUITest {
     public void testDefaultConfiguration() throws ClientException, InterruptedException {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
+        assertTrue(pollQuery(authorClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
         search.setInput("Page 1.1.1");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isResultsVisible(), "Results should be displayed");
         assertTrue(search.isPagePresentInSearch(contextPath + page111Path), "page_1_1_1 should be present in search results");
     }
@@ -210,7 +201,7 @@ public class SearchIT extends AuthorBaseUITest {
 
         Commons.switchContext("ContentFrame");
         search.setInput("Page 1");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(!search.isPagePresentInSearch(contextPath + page1Path), "Parent page 1 should not be present in search results");
     }
 
@@ -224,10 +215,10 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isClearVisible(), "Clear button should be visible");
         search.clickClear();
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
         assertTrue(!search.isResultsVisible(), "Results should not be displayed after clearing search");
         assertTrue(search.getInputValue().equals(""), "Input should be empty after clearing search");
@@ -242,7 +233,7 @@ public class SearchIT extends AuthorBaseUITest {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         search.pressEnter();
         assertTrue(Commons.getCurrentUrl().contains("page_1_1"), "Current page should be page_1_1");
         assertTrue(search.getInputValue().equals("Page"), "Search input should be Page");
@@ -258,7 +249,7 @@ public class SearchIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isClearVisible(), "Clear button should be visible");
         search.clickOutside();
         assertTrue(!search.isResultsVisible(), "Results should not be displayed");
@@ -273,9 +264,9 @@ public class SearchIT extends AuthorBaseUITest {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         assertTrue(!search.isClearVisible(), "Clear button should not be visible");
-        assertTrue(pollQuery(adminClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
+        assertTrue(pollQuery(authorClient, rootPage, "Page", page111Path), "page_1_1_1 should come on search");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.isMarkItemsPresent("Page"), "Page should be present in mark item");
     }
 
@@ -285,31 +276,18 @@ public class SearchIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Input Length - minimum length of the search term")
     public void testMinLength() throws ClientException, InterruptedException {
-        String policySuffix = "/search/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("searchTermMinimumLength","5");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/search",data, policyAssignmentPath, 200, 201);
+        createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf("/")), new HashMap<String, String>() {{
+            put("searchTermMinimumLength", "5");
+        }});
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() == 0, "No result should be present since minimum search key size is 5");
 
         search.setInput("Page ");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() > 0, "Results should be present");
     }
 
@@ -319,26 +297,13 @@ public class SearchIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Results Size - Amount of fetched results")
     public void testResultsSize() throws ClientException, InterruptedException {
-        String policySuffix = "/search/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("resultsSize","2");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/search",data, policyAssignmentPath, 200, 201);
+        createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf("/")), new HashMap<String, String>() {{
+            put("resultsSize", "2");
+        }});
 
         Commons.switchContext("ContentFrame");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() == 2, "2 Results should be present");
     }
 
@@ -354,10 +319,10 @@ public class SearchIT extends AuthorBaseUITest {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         search.setInput("Page");
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() == 10, "10 Results should be present");
         search.scrollResults(10);
-        Commons.webDriverWait(CoreComponentConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(search.getResultsCount() == 20, "20 Results should be present after scrolling");
     }
 

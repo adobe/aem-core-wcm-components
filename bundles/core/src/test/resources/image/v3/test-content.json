@@ -8,6 +8,7 @@
       "cq:featuredimage"    : {
         "jcr:primaryType"   : "nt:unstructured",
         "jcr:createdBy"     : "admin",
+        "sling:resourceType": "core/wcm/components/image/v3/image",
         "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
       },
       "root"            : {
@@ -65,9 +66,7 @@
           "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
           "isDecorative"      : true,
           "linkURL"           : "https://www.adobe.com",
-          "alt"               : "Adobe Logo",
-          "width"             : "850",
-          "height"            : "450"
+          "alt"               : "Adobe Logo"
         },
         "image5"            : {
           "jcr:primaryType"   : "nt:unstructured",
@@ -591,9 +590,117 @@
             }
           }
         },
+        "image42"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe Systems logo and wordmark DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "dmpResetType"      : "smartCrop",
+          "smartCropRendition": "SmartCrop:Auto",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Auto Smart Crop",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
         "image50"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image51"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "true",
+          "altValueFromPageImage"   : "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image52"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "true",
+          "altValueFromPageImage"   : "false",
+          "alt"               : "image52 alt",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image53"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage"   : "true",
+          "altValueFromPageImage"   : "true",
+          "isDecorative"      : "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image54"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage"   : "true",
+          "altValueFromPageImage"   : "false",
+          "alt"               : "image54 alt",
+          "isDecorative"      : "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image55"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "false",
+          "altValueFromDAM"   : "true",
+          "alt"               : "image51a alt",
+          "fileReference"     : "/content/dam/core/images/transparent_hd.png",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image56"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "false",
+          "altValueFromDAM"   : "false",
+          "alt"               : "image52a alt",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/gif",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088",
+              "metadata"          : {
+                "dam:scene7Type"    : "AnimatedGif"
+              }
+            }
+          },
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image57"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "false",
+          "altValueFromDAM"   : "true",
+          "alt"               : "image53a alt",
+          "fileReference"     : "/content/dam/core/images/transparent_hd.png",
+          "isDecorative"      : "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image58"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "false",
+          "altValueFromDAM"   : "false",
+          "alt"               : "image53a alt",
+          "fileReference"     : "/content/dam/core/images/transparent_hd.png",
+          "isDecorative"      : "true",
           "sling:resourceType": "core/wcm/components/image/v3/image"
         },
         "container"             : {
@@ -622,6 +729,146 @@
             }
           }
         }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page0"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "page0_image0": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "page0_image1": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "imageFromPageImage": "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "page0_image2": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "alt": "alt from page0_image2",
+          "altValueFromPageImage": "true",
+          "imageFromPageImage": "true",
+          "linkURL": "/content/test_page4",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "page0_image3": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "alt": "alt from page0_image2",
+          "altValueFromPageImage": "true",
+          "imageFromPageImage": "true",
+          "linkURL": "/wrong_page",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page1"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "true",
+        "alt"               : "featured image alt",
+        "fileReference": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+        "sling:resourceType": "core/wcm/components/image/v3/image"
+      },
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "page1_image0": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "imageFromPageImage": "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page2"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "false",
+        "alt"               : "featured image alt",
+        "fileReference": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+        "sling:resourceType": "core/wcm/components/image/v3/image"
+      },
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "page2_image0": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "imageFromPageImage": "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page3"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "false",
+        "alt"               : "featured image alt",
+        "file"              : {
+          "jcr:primaryType": "nt:file",
+          "jcr:createdBy"  : "admin",
+          "jcr:content"    : {
+            "jcr:primaryType"   : "nt:resource",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:mimeType"      : "image/png",
+            ":jcr:data"         : 10453365,
+            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+          }
+        },
+        "sling:resourceType": "core/wcm/components/image/v3/image"
+      },
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "page3_image0": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "imageFromPageImage": "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page4"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "true",
+        "alt"               : "featured image alt",
+        "fileReference": "/content/dam/core/images/asset1.png",
+        "sling:resourceType": "core/wcm/components/image/v3/image"
       },
       "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
     }

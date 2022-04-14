@@ -74,7 +74,9 @@ class CarouselImplTest {
                 { "item_2", "Teaser 2", "cq:Component/item",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2" },
                 { "item_3", "Carousel Panel 3", "cq:Component/item",
-                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" }, };
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" },
+                { "item_4", "Carousel Panel 4", "cq:Component/item",
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_4" }, };
         verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }

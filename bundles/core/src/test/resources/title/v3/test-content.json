@@ -67,6 +67,74 @@
                 "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
                 "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
                 "sling:resourceType": "core/wcm/components/title/v3/title"
+            },
+            "title-redirect-chain" : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "linkURL"           : "/content/title/redirect/redirect-page-1",
+                "linkAccessibilityLabel": "Should Redirect to Page 3 (accessibility label)",
+                "linkTitleAttribute": "Should Redirect to Page 3 (title)",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
+                "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
+                "sling:resourceType": "core/wcm/components/title/v3/title"
+            },
+            "title-redirect-external-url" : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "linkURL"           : "/content/title/redirect/redirect-page-4",
+                "linkAccessibilityLabel": "Adobe",
+                "linkTitleAttribute": "Adobe title",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
+                "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
+                "sling:resourceType": "core/wcm/components/title/v3/title"
+            }
+        }
+    },
+    "redirect": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Redirect",
+            "jcr:created": "Thu Jun 29 2017 12:13:52 GMT+0200",
+            "root": {
+                "jcr:primaryType": "nt:unstructured"
+            }
+        },
+        "redirect-page-1": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title": "Redirect Page 1",
+                "jcr:created": "Thu Jun 29 2017 12:13:52 GMT+0200",
+                "cq:redirectTarget": "/content/title/redirect/redirect-page-2"
+            }
+        },
+        "redirect-page-2": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title": "Redirect Page 2",
+                "jcr:created": "Thu Jun 29 2017 12:13:52 GMT+0200",
+                "cq:redirectTarget": "/content/title/redirect/redirect-page-3"
+            }
+        },
+        "redirect-page-3": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title": "Redirect Page 3",
+                "jcr:created": "Thu Jun 29 2017 12:13:52 GMT+0200"
+            }
+        },
+        "redirect-page-4": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title": "Redirect Page 4",
+                "jcr:created": "Thu Jun 29 2017 12:13:52 GMT+0200",
+                "cq:redirectTarget": "https://www.adobe.com"
             }
         }
     }

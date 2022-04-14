@@ -135,23 +135,24 @@ public class PageIT extends AdminBaseUITest {
     }
 
     /**
+     * Test: Check the Advanced Seo options of a page properties
+     * @throws InterruptedException
+     */
+    @Tag("IgnoreOn65")
+    @Tag("IgnoreOn64")
+    @Test
+    @DisplayName("Test: Check the Advanced SEO options of a page properties.")
+    public void testAdvancedSeoPageProperties() throws InterruptedException, ClientException {
+        pageTests.testAdvancedSeoPageProperties();
+    }
+
+    /**
      * Test: Check the Thumbnail options of a page properties.
      */
     @Test
     @DisplayName("Test: Check the Image options of a page properties.")
     public void testImagePageProperties() {
         pageTests.testImagePageProperties();
-    }
-
-    /**
-     * Test: Check the Social Media options of a page properties.
-     *
-     * @throws InterruptedException
-     */
-    @Test
-    @DisplayName("Test: Check the Social Media options of a page properties.")
-    public void testSocialMediaPageProperties() throws InterruptedException {
-        pageTests.testSocialMediaPageProperties();
     }
 
     /**
@@ -188,6 +189,7 @@ public class PageIT extends AdminBaseUITest {
     /**
      * Test: Check the Edit Closed User Group options of a page properties.
      */
+    @Tag("IgnoreOnSDK")
     @Test
     @DisplayName("Test: Check the Edit Closed User Group options of a page properties.")
     public void testEditUserGroupPermissionsPageProperties() {

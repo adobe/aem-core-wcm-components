@@ -19,7 +19,8 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 
-import com.day.cq.wcm.api.WCMMode;
+import javax.json.Json;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,17 +30,16 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.day.cq.wcm.api.WCMMode;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import javax.json.Json;
 
 import static com.day.cq.wcm.api.WCMMode.REQUEST_ATTRIBUTE_NAME;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
@@ -58,6 +58,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     private static final String IMAGE38_PATH = PAGE + "/jcr:content/root/image38";
     private static final String IMAGE39_PATH = PAGE + "/jcr:content/root/image39";
     private static final String IMAGE40_PATH = PAGE + "/jcr:content/root/image40";
+    private static final String IMAGE42_PATH = PAGE + "/jcr:content/root/image42";
 
     @BeforeEach
     @Override
@@ -151,7 +152,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Image image = getImageUnderTest(IMAGE6_PATH);
         assertNotNull(image.getData());
 
-        String expected = "{\"image-db7ae5b54e\":{\"@type\":\"" + resourceType + "\",\"repo:modifyDate\":\"2017-03-20T08:33:42Z\",\"dc:title\":\"Adobe Systems Logo and Wordmark\",\"xdm:linkURL\":\"/core/content/test-image.html\",\"image\":{\"repo:id\":\"60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\",\"@type\":\"image/gif\",\"repo:path\":\"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif\",\"xdm:tags\":[],\"xdm:smartTags\":{\"nature\":0.74,\"lake\":0.79,\"water\":0.78,\"landscape\":0.75}}}}";
+        String expected = "{\"image-db7ae5b54e\":{\"@type\":\"" + resourceType + "\",\"repo:modifyDate\":\"2017-03-20T08:33:42Z\",\"dc:title\":\"Adobe Systems Logo and Wordmark\",\"xdm:linkURL\":\"/core/content/test-image.html\",\"image\":{\"repo:id\":\"60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5\",\"repo:modifyDate\":\"2017-03-20T10:20:39Z\",\"@type\":\"image/gif\",\"repo:path\":\"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif\",\"xdm:smartTags\":{\"nature\":0.74,\"lake\":0.79,\"water\":0.78,\"landscape\":0.75}}}}";
         assertEquals(Json.createReader(new StringReader(expected)).read(),
                 Json.createReader(new StringReader(image.getData().getJson())).read());
     }
@@ -563,5 +564,14 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Image image = getImageUnderTest(IMAGE40_PATH);
         assertTrue(image.isDmImage());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE40_PATH));
+    }
+
+    @Test
+    void testDMWithEncoding() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE42_PATH);
+        assertTrue(image.isDmImage());
+        assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=on,{dpr}", image.getSrc());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
     }
 }
