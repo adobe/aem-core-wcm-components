@@ -16,7 +16,8 @@
 (function($, Granite) {
     "use strict";
 
-    var ERROR_MESSAGE = "Start level is greater than stop level";
+    var START_LEVEL_ERROR_MESSAGE = "Start level is higher than stop level";
+    var STOP_LEVEL_ERROR_MESSAGE = "Stop level is smaller than start level";
 
     var selectors = {
         edit: {
@@ -32,20 +33,42 @@
     };
 
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
-        selector: ".cmp-toc__editor .cmp-toc__validate",
-        validate: validateStartStopLevels,
+        selector: ".cmp-toc__editor .cmp-toc__validate[name='./startLevel']",
+        validate: function() {
+            return validateStartStopLevels(START_LEVEL_ERROR_MESSAGE);
+        },
         show: showError,
         clear: clearError
     });
 
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
-        selector: ".cmp-toc__design .cmp-toc__validate",
-        validate: validateRestrictStartStopLevels,
+        selector: ".cmp-toc__editor .cmp-toc__validate[name='./stopLevel']",
+        validate: function() {
+            return validateStartStopLevels(STOP_LEVEL_ERROR_MESSAGE);
+        },
         show: showError,
         clear: clearError
     });
 
-    function validateStartStopLevels() {
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: ".cmp-toc__design .cmp-toc__validate[name='./restrictStartLevel']",
+        validate: function() {
+            return validateRestrictStartStopLevels(START_LEVEL_ERROR_MESSAGE);
+        },
+        show: showError,
+        clear: clearError
+    });
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: ".cmp-toc__design .cmp-toc__validate[name='./restrictStopLevel']",
+        validate: function() {
+            return validateRestrictStartStopLevels(STOP_LEVEL_ERROR_MESSAGE);
+        },
+        show: showError,
+        clear: clearError
+    });
+
+    function validateStartStopLevels(errorMessage) {
         var restrictedStartLevel = $(selectors.edit.restrictedStartLevel)[0].value;
         var restrictedStopLevel = $(selectors.edit.restrictedStopLevel)[0].value;
         var startLevel = restrictedStartLevel === "norestriction"
@@ -55,16 +78,16 @@
             ? $(selectors.edit.stopLevel)[0].value
             : restrictedStopLevel;
         if (startLevel > stopLevel) {
-            return Granite.I18n.get(ERROR_MESSAGE);
+            return Granite.I18n.get(errorMessage);
         }
     }
 
-    function validateRestrictStartStopLevels() {
+    function validateRestrictStartStopLevels(errorMessage) {
         var restrictStartLevel = $(selectors.design.restrictStartLevel)[0].value;
         var restrictStopLevel = $(selectors.design.restrictStopLevel)[0].value;
         if (restrictStartLevel !== "norestriction" && restrictStopLevel !== "norestriction" &&
                 restrictStartLevel > restrictStopLevel) {
-            return Granite.I18n.get(ERROR_MESSAGE);
+            return Granite.I18n.get(errorMessage);
         }
     }
 
