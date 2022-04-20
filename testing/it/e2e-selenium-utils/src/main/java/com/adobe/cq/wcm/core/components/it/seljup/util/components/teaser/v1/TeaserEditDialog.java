@@ -36,6 +36,8 @@ public class TeaserEditDialog {
     private static String actionLinkURL = "[data-cmp-teaser-v1-dialog-edit-hook='actionLink']";
     private static String actionText = "[data-cmp-teaser-v1-dialog-edit-hook='actionTitle']";
     private static String imageFromPageImage = "[name='./imageFromPageImage']";
+    private static String titleTypeSelectDropdown = "coral-select[name='./titleType']";
+    private static String titleTypeSelectDropdownDefaultSelected = "coral-select[name='./titleType'] coral-select-item[selected]";
 
     protected String getActionLinkURLSelector() {
         return actionLinkURL;
@@ -147,6 +149,14 @@ public class TeaserEditDialog {
             CoralCheckbox checkbox = new CoralCheckbox(imageFromPageImage);
             checkbox.click();
         }
+    }
+
+    public Boolean isTitleTypeSelectDropdownDisplayed() {
+        return $(titleTypeSelectDropdown).isDisplayed();
+    }
+
+    public String getTitleTypeSelectDropdownDefaultSelectedText() {
+        return $(titleTypeSelectDropdownDefaultSelected).innerText();
     }
 
 }
