@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <title>TOC Nesting Behaviour Test</title> 
+ </head> 
+ <body> <!-- TOCs --> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#bla">Bla</a>
+     <ul>
+      <li><a href="#bli">Bli</a>
+       <ul>
+        <li><a href="#blo">Blo</a>
+         <ul>
+          <li><a href="#blu">Blu</a></li>
+         </ul></li>
+       </ul></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#bla-1">Bla</a>
+     <ul>
+      <li><a href="#bli-1">Bli</a></li>
+     </ul></li>
+    <li><a href="#blo-1">Blo</a>
+     <ul>
+      <li><a href="#blu-1">Blu</a></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#bla-2">Bla</a>
+     <ul>
+      <li><a href="#bli-2">Bli</a>
+       <ul>
+        <li><a href="#blo-2">Blo</a>
+         <ul>
+          <li><a href="#blu-2">Blu</a></li>
+         </ul></li>
+       </ul></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#bla-3">Bla</a>
+     <ul>
+      <li><a href="#bli-3">Bli</a></li>
+     </ul></li>
+    <li><a href="#blo-3">Blo</a>
+     <ul>
+      <li><a href="#blu-3">Blu</a></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#bla-4">Bla</a></li>
+    <li><a href="#bli-4">Bli</a></li>
+    <li><a href="#blo-4">Blo</a>
+     <ul>
+      <li><a href="#blu-4">Blu</a></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#bla-5">Bla</a>
+     <ul>
+      <li><a href="#bli-5">Bli</a></li>
+      <li><a href="#blo-5">Blo</a>
+       <ul>
+        <li><a href="#blu-5">Blu</a></li>
+       </ul></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#bla-6">Bla</a>
+     <ul>
+      <li><a href="#bli-6">Bli</a></li>
+      <li><a href="#blo-6">Blo</a></li>
+     </ul></li>
+    <li><a href="#blu-6">Blu</a>
+     <ul>
+      <li><a href="#ble">Ble</a></li>
+     </ul></li>
+   </ul>
+  </div> <!-- Page Content --> 
+  <div class="example-1"> 
+   <h1 id="bla">Bla</h1> 
+   <h2 id="bli">Bli</h2> 
+   <h3 id="blo">Blo</h3> 
+   <h4 id="blu">Blu</h4> 
+  </div> 
+  <div class="example-2"> 
+   <h1 id="bla-1">Bla</h1> 
+   <h2 id="bli-1">Bli</h2> 
+   <h1 id="blo-1">Blo</h1> 
+   <h2 id="blu-1">Blu</h2> 
+  </div> 
+  <div class="example-3"> 
+   <h1 id="bla-2">Bla</h1> 
+   <h3 id="bli-2">Bli</h3> 
+   <h5 id="blo-2">Blo</h5> 
+   <h6 id="blu-2">Blu</h6> 
+  </div> 
+  <div class="example-4"> 
+   <h3 id="bla-3">Bla</h3> 
+   <h4 id="bli-3">Bli</h4> 
+   <h3 id="blo-3">Blo</h3> 
+   <h4 id="blu-3">Blu</h4> 
+  </div> 
+  <div class="example-5"> 
+   <h4 id="bla-4">Bla</h4> 
+   <h3 id="bli-4">Bli</h3> 
+   <h2 id="blo-4">Blo</h2> 
+   <h4 id="blu-4">Blu</h4> 
+  </div> 
+  <div class="example-6"> 
+   <h1 id="bla-5">Bla</h1> 
+   <h3 id="bli-5">Bli</h3> 
+   <h2 id="blo-5">Blo</h2> 
+   <h3 id="blu-5">Blu</h3> 
+  </div> 
+  <div class="example-7"> 
+   <h3 id="bla-6">Bla</h3> 
+   <h6 id="bli-6">Bli</h6> 
+   <h5 id="blo-6">Blo</h5> 
+   <h2 id="blu-6">Blu</h2> 
+   <h3 id="ble">Ble</h3> 
+  </div>  
+ </body>
+</html>
