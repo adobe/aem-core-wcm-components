@@ -81,7 +81,8 @@
                     sling:resourceType="wcm/core/components/policy/policy"
                     ampMode="pairedAmp"
                     appResourcesClientlib="cmp-examples.site"
-                    clientlibs="cmp-examples.base">
+                    clientlibs="cmp-examples.base"
+                    clientlibsAsync="true">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_212634895490169>
             </page>
@@ -192,6 +193,11 @@
                                         cq:styleClasses="cmp-examples-title--heading3"
                                         cq:styleId="1544759676459"
                                         cq:styleLabel="Heading 3"
+                                        jcr:primaryType="nt:unstructured"/>
+                                <item3
+                                        cq:styleClasses="cmp-examples-title--background-color"
+                                        cq:styleId="1544759676678"
+                                        cq:styleLabel="Background Color"
                                         jcr:primaryType="nt:unstructured"/>
                             </cq:styles>
                         </item0>
@@ -337,6 +343,11 @@
                                         cq:styleId="1550360114923"
                                         cq:styleLabel="No Results"
                                         jcr:primaryType="nt:unstructured"/>
+                                <item4
+                                    cq:styleClasses="cmp-examples-text--background-color"
+                                    cq:styleId="1544759676731"
+                                    cq:styleLabel="Background Color"
+                                    jcr:primaryType="nt:unstructured"/>
                             </cq:styles>
                         </item0>
                     </cq:styleGroups>
@@ -400,6 +411,20 @@
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1636447752632>
             </image>
+            <tableofcontents jcr:primaryType="nt:unstructured">
+                <policy_1647854034891
+                    jcr:lastModified="{Date}2022-03-21T14:46:37.470+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="core-components-examples-policy"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    ignoreClasses="cmp-accordion__header"
+                    restrictListType="norestriction"
+                    restrictStartLevel="norestriction"
+                    restrictStopLevel="norestriction">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1647854034891>
+            </tableofcontents>
         </components>
     </core-components-examples>
 </jcr:root>

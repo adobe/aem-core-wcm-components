@@ -253,11 +253,13 @@
                             backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
                             layout="simple">
                             <title
+                                cq:styleIds="[1544759676678]"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
                                 sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
+                                cq:styleIds="[1544759676731]"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>"
@@ -308,11 +310,13 @@
                             backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
                             layout="responsiveGrid">
                             <title_copy
+                                cq:styleIds="[1544759676678]"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Lorem Ipsum"
                                 sling:resourceType="core-components-examples/components/title"
                                 type="h3"/>
                             <text
+                                cq:styleIds="[1544759676731]"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>"
@@ -320,7 +324,7 @@
                             <container_793091227
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/container"
-                                backgroundColor="rgba(255,133,27,0.75)"
+                                backgroundColor="rgb(255,133,27)"
                                 layout="responsiveGrid">
                                 <title_copy
                                     jcr:primaryType="nt:unstructured"
@@ -342,7 +346,7 @@
                             <container_793091227_
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/container"
-                                backgroundColor="rgba(127,219,255,0.5)"
+                                backgroundColor="rgb(127,219,255)"
                                 layout="responsiveGrid">
                                 <title
                                     jcr:primaryType="nt:unstructured"

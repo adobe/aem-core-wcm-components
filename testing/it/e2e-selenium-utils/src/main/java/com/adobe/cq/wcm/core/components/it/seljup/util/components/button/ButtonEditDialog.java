@@ -90,6 +90,12 @@ public class ButtonEditDialog extends Dialog {
         autoCompleteField.sendKeys(value);
     }
 
+    public String getLinkFieldValue() {
+        String selector = "./linkURL";
+        AutoCompleteField autoCompleteField = new AutoCompleteField(selector);
+        return autoCompleteField.value();
+    }
+
     public void clickLinkTarget() {
         CoralCheckbox checkbox = new CoralCheckbox(linkTarget);
         checkbox.click();

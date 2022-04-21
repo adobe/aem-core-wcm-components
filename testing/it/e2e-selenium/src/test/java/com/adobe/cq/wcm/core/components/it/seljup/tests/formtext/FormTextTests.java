@@ -54,11 +54,8 @@ public class FormTextTests {
         // create the test page, store page path in 'testPagePath'
         testPage = client.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        compPath = Commons.createProxyComponent(client, formTextRT, Commons.proxyPath, null, null);
-
         // add the core form container component
-        formTextPath = Commons.addComponent(client, compPath, testPage + Commons.relParentCompPath, "formtext", null);
+        formTextPath = Commons.addComponentWithRetry(client, formTextRT, testPage + Commons.relParentCompPath, "formtext");
 
         this.formText = formText;
         // open the page in the editor
@@ -68,7 +65,6 @@ public class FormTextTests {
 
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
         client.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        Commons.deleteProxyComponent(client, compPath);
     }
 
     public void testCheckLabelMandatory() throws InterruptedException, TimeoutException {

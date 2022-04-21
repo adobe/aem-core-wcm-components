@@ -41,14 +41,10 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
     protected Teaser teaser;
 
-    protected void setup() throws ClientException {
-        super.setup(Commons.rtImage_v3);
-    }
-
     protected void setupResources() {
         super.setupResources();
-        teaserRT = Commons.rtTeaser_v2;
-        clientlibs = "core.wcm.components.teaser.v2";
+        teaserRT = Commons.RT_TEASER_V2;
+        clientlibs = Commons.CLIENTLIBS_TEASER_V2;
         teaser = new Teaser();
     }
 
@@ -56,7 +52,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
      * Before Test Case
      **/
     @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    public void setupBeforeEach() throws ClientException, InterruptedException {
         setupResources();
         setup();
     }
@@ -69,22 +65,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
      */
     @Test
     @DisplayName("Test: Links to elements for Teaser")
-    public void testLinksToElementsTeaser() throws TimeoutException, InterruptedException, ClientException {
-        String policySuffix = "/teaser/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
+    public void testLinksToElementsTeaser() throws TimeoutException, InterruptedException {
 
         Commons.openSidePanel();
         assetFinder.setFiltersPath(testAssetsPath);
@@ -343,15 +324,19 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
         editDialog.checkInheritAltFromPage();
-        editDialog.setAltText(alt);
+        editDialog.setAltText("");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        editDialog.scrollToIsDecorativeCheckbox();
         editDialog.checkIsDecorative();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        assertTrue(editDialog.isDecorativeChecked());
         Commons.saveConfigureDialog();
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        assertTrue(teaser.isImagePresentWithAltText(testPage, ""),"image should be rendered without alt text");
-        assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted), "image should be rendered with file name: " + climbingAssetFormatted);
+        assertTrue(teaser.isImagePresentWithEmptyAltAttribute(testPage), "image should be rendered with alt attribute empty");
     }
 
     @Test
@@ -460,7 +445,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
     @DisplayName("Test: Hide elements for Teaser")
     @Override
     public void testHideElementsTeaser() throws TimeoutException, InterruptedException, ClientException {
-        createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf('/')), new HashMap<String, String>() {{
+        createComponentPolicy("/teaser-v2", new HashMap<String, String>() {{
             put("titleHidden", "true");
             put("descriptionHidden", "true");
         }});
@@ -482,7 +467,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
     @Test
     @DisplayName("Disable Actions for Teaser")
     public void testDisableActionsTeaser() throws ClientException, TimeoutException, InterruptedException {
-        createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf('/')), new HashMap<String, String>() {{
+        createComponentPolicy("/teaser-v2", new HashMap<String, String>() {{
             put("actionsDisabled", "true");
         }});
 
@@ -531,7 +516,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
      */
     private void setPageImage(String page, String asset) throws ClientException, InterruptedException {
         // set page resource type to page v3
-        adminClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
+        authorClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
         PropertiesPage pageProperties = new PropertiesPage(page);
         pageProperties.open();
         $("coral-tab[data-foundation-tracking-event*='images']").click();
@@ -556,7 +541,4 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editorPage.open();
     }
-
-
-
 }

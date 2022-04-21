@@ -41,6 +41,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.resource.external.ExternalizableInputStream;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.osgi.service.component.annotations.Component;
@@ -183,6 +184,11 @@ public class DownloadServlet extends SlingAllMethodsServlet {
 
     private void sendResponse(InputStream stream, long size, String mimeType, String filename, long lastModifiedDate, SlingHttpServletResponse response,
             boolean inline) throws IOException {
+        // similar to what is done in https://github.com/apache/sling-org-apache-sling-servlets-get/blob/edfaf307e4257dd34cc5b71121dfb8dfc43c12cb/src/main/java/org/apache/sling/servlets/get/impl/helpers/StreamRenderer.java#L159-L162
+        if (stream instanceof ExternalizableInputStream) {
+            response.sendRedirect(ExternalizableInputStream.class.cast(stream).getURI().toString());
+            return;
+        }
         response.setContentType(mimeType);
 
         // only set the size contentLength header if we have valid data
@@ -197,9 +203,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         if (lastModifiedDate > 0) {
             response.setHeader(HttpConstants.HEADER_LAST_MODIFIED, getLastModifiedDate(lastModifiedDate));
         }
-        try (ServletOutputStream outputStream = response.getOutputStream()) {
-            IOUtils.copy(stream, outputStream);
-        }
+        IOUtils.copy(stream, response.getOutputStream());
     }
 
     private String getLastModifiedDate(long lastModifiedDate) {
