@@ -1,5 +1,5 @@
 <!--
-Copyright 2021 Adobe
+Copyright 2022 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Image (v3)
+Image (v4)
 ====
 Image component written in HTL that renders an adaptive image.
 
@@ -36,8 +36,9 @@ component; the actual size will be requested by the client device;
 2. `./jpegQuality` - defines the image quality for JPEGs (0 lowest quality / size to 100 highest quality / size). Default value is 82.
 3. `./disableLazyLoading` - if `true`, the browser's native lazy loading of images (loading only when the image is visible on the client
 device) is disabled.
-4.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
+4. `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
 5. `./resizeWidth` - Defines a resize width for resizing the images which are DAM assets, while keeping the original aspect ratio. If the value is bigger than the natural width of the image, it will have no effect. It will also have no effect on SVG images.
+6. `./enableWOID` - If `true`, web optimised image delivery is enabled
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Image component and are expected to be available as `Resource` properties:
@@ -61,7 +62,7 @@ otherwise a caption will be rendered
 ## Extending from This Component
 1. In case you overwrite the image's HTL script, make sure the necessary attributes for the JavaScript loading script are contained in the markup at the right position (see section below).
 2. In case your own component does not only render an image but does also renders something else, use the following approach:
-  1. `resourceSuperType` should be set to `core/wcm/components/image/v3/image` (to make sure the image rendering servlet is being used)
+  1. `resourceSuperType` should be set to `core/wcm/components/image/v4/image` (to make sure the image rendering servlet is being used)
   2. Your HTL script should include the image markup via `<div class="cmp-image" data-sly-include="image.html"></div>`
   3. You derived component should reset `cq:htmlTags`
   4. You component's dialog should overwrite the dialog fully from the image component via `sling:hideResource="true"` on the node `cq:dialog/content/items/image`
@@ -94,10 +95,10 @@ Publish:
 ```
 
 ## Client Libraries
-The component provides a `core.wcm.components.image.v3` client library category that contains a recommended base
+The component provides a `core.wcm.components.image.v4` client library category that contains a recommended base
 CSS styling. It should be added to a relevant site client library using the `embed` property.
 
-It also provides a `core.wcm.components.image.v3.editor` editor client library category that includes JavaScript
+It also provides a `core.wcm.components.image.v4.editor` editor client library category that includes JavaScript
 handling for dialog interaction. It is already included by its edit dialog.
 
 ## BEM Description
@@ -123,9 +124,9 @@ In addition, SVG image types have a more limited set of editing options availabl
 
 ## Information
 * **Vendor**: Adobe
-* **Version**: v3
+* **Version**: v4
 * **Compatibility**: AEM 6.5
 * **Status**: production-ready
-* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_image\_v3](https://www.adobe.com/go/aem_cmp_image_v3)
+* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_image\_v4](https://www.adobe.com/go/aem_cmp_image_v4)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_image](https://www.adobe.com/go/aem_cmp_library_image)
 * **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann), [Vlad Coman](https://github.com/comanV)

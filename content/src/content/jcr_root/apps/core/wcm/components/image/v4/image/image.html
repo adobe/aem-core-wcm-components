@@ -21,17 +21,20 @@
      id="${image.id}"
      data-cmp-data-layer="${image.data.json}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
-     itemscope itemtype="http://schema.org/ImageObject">
+     itemscope itemtype="http://schema.org/ImageObject" xmlns="http://www.w3.org/1999/html">
     <a data-sly-unwrap="${!image.imageLink.valid}"
        class="cmp-image__link"
        data-sly-attribute="${image.imageLink.htmlAttributes}"
        data-cmp-clickable="${image.data ? true : false}">
-        <img srcset="${image.srcset}" src="${image.src}"
+        <picture>
+            <source srcset="${image.srcset}">
+            <img src="${image.src}"
              loading="${image.lazyEnabled ? 'lazy' : ''}"
              class="cmp-image__image"
              itemprop="contentUrl"
              width="${image.width}" height="${image.height}"
              alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+        </picture>
     </a>
     <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>
     <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
