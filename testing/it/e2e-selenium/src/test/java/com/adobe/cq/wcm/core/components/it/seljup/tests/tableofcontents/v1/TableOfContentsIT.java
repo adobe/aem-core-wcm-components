@@ -20,6 +20,7 @@ import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofcontents.TableOfContentsEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofcontents.TableOfContentsEditDialog65;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofcontents.v1.TableOfContents;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import org.apache.commons.lang3.StringUtils;
@@ -188,6 +189,7 @@ public class TableOfContentsIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
     }
 
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Check that user is unable to select start level greater than stop level in edit dialog")
     public void testInvalidLevelsErrorTooltipInEditDialog() throws InterruptedException, TimeoutException {
@@ -199,9 +201,30 @@ public class TableOfContentsIT extends AuthorBaseUITest {
         TableOfContentsEditDialog tableOfContentsEditDialog = tableOfContents.getEditDialog();
         tableOfContentsEditDialog.selectStartLevel(startLevel);
         tableOfContentsEditDialog.selectStopLevel(invalidStopLevel);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(tableOfContentsEditDialog.isInvalidLevelsErrorTooltipPresent());
         tableOfContentsEditDialog.selectStopLevel(validStopLevel);
         assertFalse(tableOfContentsEditDialog.isInvalidLevelsErrorTooltipPresent());
         Commons.saveConfigureDialog();
     }
+
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test: Check that user is unable to select start level greater than stop level in edit dialog")
+    public void testInvalidLevelsErrorTooltipInEditDialog65() throws InterruptedException, TimeoutException {
+        String startLevel = "h4";
+        String invalidStopLevel = "h3";
+        String validStopLevel = "h5";
+
+        Commons.openEditDialog(editorPage, componentPath);
+        TableOfContentsEditDialog65 tableOfContentsEditDialog65 = tableOfContents.getEditDialog65();
+        tableOfContentsEditDialog65.selectStartLevel(startLevel);
+        tableOfContentsEditDialog65.selectStopLevel(invalidStopLevel);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        assertTrue(tableOfContentsEditDialog65.isInvalidLevelsErrorTooltipPresent());
+        tableOfContentsEditDialog65.selectStopLevel(validStopLevel);
+        assertFalse(tableOfContentsEditDialog65.isInvalidLevelsErrorTooltipPresent());
+        Commons.saveConfigureDialog();
+    }
+
 }

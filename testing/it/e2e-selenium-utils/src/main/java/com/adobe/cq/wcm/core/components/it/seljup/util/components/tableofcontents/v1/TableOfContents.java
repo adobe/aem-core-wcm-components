@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofconten
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofcontents.TableOfContentsEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofcontents.TableOfContentsEditDialog65;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -34,6 +35,10 @@ public class TableOfContents extends BaseComponent {
 
     public TableOfContentsEditDialog getEditDialog() {
         return new TableOfContentsEditDialog();
+    }
+
+    public TableOfContentsEditDialog65 getEditDialog65() {
+        return new TableOfContentsEditDialog65();
     }
 
     public String getId() {
