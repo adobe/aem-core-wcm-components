@@ -35,8 +35,8 @@ import static com.codeborne.selenide.Selenide.$;
 public class TableOfContentsEditDialog extends Dialog {
 
     private static String listTypeSelect = "[name='./listType']";
-    private static String startLevelSelect = "[name='./startLevel']";
-    private static String stopLevelSelect = "[name='./stopLevel']";
+    protected static String startLevelSelect = "[name='./startLevel']";
+    protected static String stopLevelSelect = "[name='./stopLevel']";
     private static String id = "[name='./id']";
 
     private static String invalidLevelsErrorTooltip = ".cmp-toc__editor coral-tooltip.is-open[variant='error']";
@@ -49,7 +49,7 @@ public class TableOfContentsEditDialog extends Dialog {
         "coral-popover.is-open coral-selectlist-item[value='%s']";
     private static int minLevel = 1;
     private static int maxLevel = 6;
-    private static String levelSelectItemTemplate =
+    protected static String levelSelectItemTemplate =
         "coral-popover.is-open coral-selectlist-item[value='%s']";
 ;
 
@@ -154,7 +154,7 @@ public class TableOfContentsEditDialog extends Dialog {
         return present;
     }
 
-    private void selectItem(String select, String item) throws InterruptedException {
+    void selectItem(String select, String item) throws InterruptedException {
         openSelectList(select);
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector(item));
