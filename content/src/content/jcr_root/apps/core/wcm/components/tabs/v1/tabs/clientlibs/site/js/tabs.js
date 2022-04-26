@@ -87,17 +87,7 @@
             if (that._elements.tabpanel) {
                 refreshActive();
                 bindEvents();
-            }
-
-            // Show the tab based on deep-link-id if it matches with any existing tab item id
-            if (containerUtils) {
-                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "tab");
-                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
-                    var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
-                    if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
-                        navigateAndFocusTab(deepLinkItemIdx);
-                    }
-                }
+                scrollToDeepLinkIdInTabs();
             }
 
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
@@ -115,6 +105,27 @@
                         }
                     }
                 });
+            }
+        }
+
+        /**
+         * Displays the panel containing the element that corresponds to the deep link in the URI fragment
+         * and scrolls the browser to this element.
+         */
+        function scrollToDeepLinkIdInTabs() {
+            if (containerUtils) {
+                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "tab", "tabpanel");
+                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                    var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
+                    if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
+                        navigateAndFocusTab(deepLinkItemIdx, true);
+                    }
+                    var hashId = window.location.hash.substring(1);
+                    var hashItem = document.querySelector("[id='" + hashId + "']");
+                    if (hashItem) {
+                        hashItem.scrollIntoView();
+                    }
+                }
             }
         }
 
@@ -171,6 +182,7 @@
          * @private
          */
         function bindEvents() {
+            window.addEventListener("hashchange", scrollToDeepLinkIdInTabs, false);
             var tabs = that._elements["tab"];
             if (tabs) {
                 for (var i = 0; i < tabs.length; i++) {
@@ -286,10 +298,13 @@
          *
          * @private
          * @param {Number} index The index of the item to navigate to
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function navigateAndFocusTab(index) {
+        function navigateAndFocusTab(index, keepHash) {
             var exActive = that._active;
-            containerUtils.updateUrlHash(that, "tab", index);
+            if (!keepHash && containerUtils) {
+                containerUtils.updateUrlHash(that, "tab", index);
+            }
             navigate(index);
             focusWithoutScroll(that._elements["tab"][index]);
 
@@ -321,20 +336,6 @@
 
                 dataLayer.push(removePayload);
                 dataLayer.push(uploadPayload);
-            }
-        }
-    }
-
-    /**
-     * Scrolls the browser when the URI fragment is changed to the item of the container Tab component that corresponds to the deep link in the URI fragment,
-       and displays its content.
-     */
-    function onHashChange() {
-        if (location.hash && location.hash !== "#") {
-            var anchorLocation = decodeURIComponent(location.hash);
-            var anchorElement = document.querySelector(anchorLocation);
-            if (anchorElement && anchorElement.classList.contains("cmp-tabs__tab") && !anchorElement.classList.contains("cmp-tabs__tab--active")) {
-                anchorElement.click();
             }
         }
     }
@@ -438,6 +439,5 @@
     if (containerUtils) {
         window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }
-    window.addEventListener("hashchange", onHashChange, false);
 
 }());

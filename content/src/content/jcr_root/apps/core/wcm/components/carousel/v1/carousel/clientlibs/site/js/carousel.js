@@ -129,10 +129,8 @@
                 bindEvents();
                 resetAutoplayInterval();
                 refreshPlayPauseActions();
+                scrollToDeepLinkIdInCarousel();
             }
-
-            showSlideFromHash();
-            window.addEventListener("hashchange", showSlideFromHash, false);
 
             // TODO: This section is only relevant in edit mode and should move to the editor clientLib
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
@@ -156,18 +154,23 @@
         }
 
         /**
-         * Shows and scrolls to the slide based on deep-link-id if it matches with any existing slide item id
+         * Displays the slide containing the element that corresponds to the deep link in the URI fragment
+         * and scrolls the browser to this element.
          */
-        function showSlideFromHash() {
+        function scrollToDeepLinkIdInCarousel() {
             if (containerUtils) {
-                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item");
+                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item", "item");
                 if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
                     var deepLinkItem = that._elements["item"][deepLinkItemIdx];
                     if (deepLinkItem && that._elements["item"][that._active].id !== deepLinkItem.id) {
-                        navigateAndFocusIndicator(deepLinkItemIdx);
-                        deepLinkItem.scrollIntoView();
+                        navigateAndFocusIndicator(deepLinkItemIdx, true);
                         // pause the carousel auto-rotation
                         pause();
+                    }
+                    var hashId = window.location.hash.substring(1);
+                    var hashItem = document.querySelector("[id='" + hashId + "']");
+                    if (hashItem) {
+                        hashItem.scrollIntoView();
                     }
                 }
             }
@@ -240,6 +243,7 @@
          * @private
          */
         function bindEvents() {
+            window.addEventListener("hashchange", scrollToDeepLinkIdInCarousel, false);
             if (that._elements["previous"]) {
                 that._elements["previous"].addEventListener("click", function() {
                     var index = getPreviousIndex();
@@ -520,9 +524,9 @@
          *
          * @private
          * @param {Number} index The index of the item to navigate to
-         * @param {Boolean} auto true when the item was advanced automatically, false otherwise
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function navigate(index, auto) {
+        function navigate(index, keepHash) {
             if (index < 0 || index > (that._elements["item"].length - 1)) {
                 return;
             }
@@ -530,8 +534,7 @@
             that._active = index;
             refreshActive();
 
-            // update the URL hash only when the user interacts with a slide
-            if (!auto) {
+            if (!keepHash && containerUtils) {
                 containerUtils.updateUrlHash(that, "item", index);
             }
 
@@ -561,10 +564,10 @@
          *
          * @private
          * @param {Number} index The index of the item to navigate to
-         * @param {Boolean} auto true when the item was advanced automatically, false otherwise
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function navigateAndFocusIndicator(index, auto) {
-            navigate(index, auto);
+        function navigateAndFocusIndicator(index, keepHash) {
+            navigate(index, keepHash);
             focusWithoutScroll(that._elements["indicator"][index]);
 
             if (dataLayerEnabled) {
@@ -726,6 +729,9 @@
         onDocumentReady();
     } else {
         document.addEventListener("DOMContentLoaded", onDocumentReady);
+    }
+    if (containerUtils) {
+        window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }
 
 }());
