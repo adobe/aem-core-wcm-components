@@ -23,6 +23,7 @@
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionFromPage"]';
     var descriptionTextfieldSelector = '.cq-RichText-editable[name="./jcr:description"]';
+    var titleTypeSelectElementSelector = "coral-select[name='./titleType']";
     var linkURLSelector = '[name="./linkURL"]';
     var linkTargetSelector = '.cmp-link-target [name="./linkTarget"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
@@ -56,6 +57,7 @@
                 // init without description field
                 init(e, $dialog, $dialogContent, dialogContent);
             }
+            manageTitleTypeSelectDropdownFieldVisibility(dialogContent);
         }
     });
 
@@ -210,6 +212,24 @@
             if (descriptionLabel) {
                 descriptionTextfieldElement.setAttribute("aria-labelledby", descriptionLabel.id);
             }
+        }
+    }
+
+    /**
+     * Hides the title type select dropdown field if there's only one allowed heading element defined in a policy
+     *
+     * @param {HTMLElement} dialogContent The dialog content
+     */
+    function manageTitleTypeSelectDropdownFieldVisibility(dialogContent) {
+        var titleTypeElement = dialogContent.querySelector(titleTypeSelectElementSelector);
+        if (titleTypeElement) {
+            Coral.commons.ready(titleTypeElement, function(element) {
+                var titleTypeElementToggleable = $(element.parentNode).adaptTo("foundation-toggleable");
+                var itemCount = element.items.getAll().length;
+                if (itemCount < 2) {
+                    titleTypeElementToggleable.hide();
+                }
+            });
         }
     }
 })(jQuery, Granite);
