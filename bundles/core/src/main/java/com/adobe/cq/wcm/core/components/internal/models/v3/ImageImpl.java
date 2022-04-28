@@ -16,11 +16,12 @@
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.awt.*;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,10 +30,9 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -42,7 +42,9 @@ import com.adobe.cq.wcm.core.components.internal.servlets.EnhancedRendition;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.commons.DownloadResource;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.api.renditions.DynamicMediaRenditionProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
@@ -55,9 +57,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
+    private static final String URI_WIDTH_PLACEHOLDER_ENCODED = "%7B.width%7D";
+    private static final String URI_WIDTH_PLACEHOLDER = "{.width}";
 
     private boolean imageLinkHidden = false;
+
+    @OSGiService
+    DynamicMediaRenditionProvider dynamicMediaRenditionProvider;
 
     @PostConstruct
     protected void initModel() {
@@ -86,31 +92,58 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }
 
-
     @Override
     public String getSrcset() {
-        int[] widthsArray = getWidths();
-        String srcUritemplate = getSrcUriTemplate();
-        String[] srcsetArray = new String[widthsArray.length];
-        if (widthsArray.length > 0 && srcUritemplate != null) {
-            String srcUriTemplateDecoded = "";
-            try {
-                srcUriTemplateDecoded = URLDecoder.decode(srcUritemplate, StandardCharsets.UTF_8.name());
-            } catch (UnsupportedEncodingException e) {
-                LOGGER.error("Character Decoding failed for " + resource.getPath());
-            }
-            if (srcUriTemplateDecoded.contains("{.width}")) {
-                for (int i = 0; i < widthsArray.length; i++) {
-                    if (srcUriTemplateDecoded.contains("={.width}")) {
-                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
-                    } else {
-                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+        String srcUriTemplate = getSrcUriTemplate();
+        if (srcUriTemplate != null) {
+            srcUriTemplate = StringUtils.replace(srcUriTemplate, URI_WIDTH_PLACEHOLDER_ENCODED, URI_WIDTH_PLACEHOLDER);
+            if (this.isDmImage() && StringUtils.equals(this.getSmartCropRendition(), SMART_CROP_AUTO)) {
+                Map<String, String> dmSrcSetMap = getDMSrcSetMap();
+                if (!dmSrcSetMap.isEmpty()) {
+                    String[] srcsetArray = new String[dmSrcSetMap.size()];
+                    int i = 0;
+                    for (Map.Entry<String, String> item : dmSrcSetMap.entrySet()) {
+                        srcsetArray[i] =
+                                srcUriTemplate.replace(URI_WIDTH_PLACEHOLDER, String.format(":%s", item.getKey())) + " " + item.getValue() +
+                                        "w";
+                        i++;
+                    }
+                    return StringUtils.join(srcsetArray, ',');
+                }
+            } else {
+                int[] widthsArray = getWidths();
+
+                String[] srcsetArray = new String[widthsArray.length];
+                if (widthsArray.length > 0) {
+                    if (srcUriTemplate.contains(URI_WIDTH_PLACEHOLDER)) {
+                        for (int i = 0; i < widthsArray.length; i++) {
+                            if (srcUriTemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
+                                srcsetArray[i] = srcUriTemplate.replace(URI_WIDTH_PLACEHOLDER, String.format("%s", widthsArray[i])) + " " +
+                                        widthsArray[i] + "w";
+                            } else {
+                                srcsetArray[i] = srcUriTemplate.replace(URI_WIDTH_PLACEHOLDER, String.format(".%s", widthsArray[i])) + " " +
+                                        widthsArray[i] + "w";
+                            }
+                        }
+                        return StringUtils.join(srcsetArray, ',');
                     }
                 }
-                return StringUtils.join(srcsetArray, ',');
             }
         }
         return null;
+    }
+
+    private Map<String, String> getDMSrcSetMap() {
+        Map<String, String> dmSrcSetMap = new HashMap<>();
+        if (asset != null) {
+            dynamicMediaRenditionProvider.getRenditions(asset, Collections.emptyMap()).stream()
+                    .map(rendition -> rendition.getResourceResolver().getResource(rendition.getPath()))
+                    .filter(Objects::nonNull)
+                    .forEach(renditionResource -> Optional.ofNullable(renditionResource.getChild(JcrConstants.JCR_CONTENT))
+                            .ifPresent(contentResource -> Optional.ofNullable(contentResource.getValueMap().get("width", Long.class))
+                                    .ifPresent(width -> dmSrcSetMap.put(renditionResource.getName(), String.valueOf(width)))));
+        }
+        return dmSrcSetMap;
     }
 
     @Nullable

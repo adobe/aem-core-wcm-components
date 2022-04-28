@@ -29,10 +29,12 @@ import org.apache.sling.testing.mock.sling.ResourceResolverType;
 
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.link.DefaultPathProcessor;
+import com.adobe.cq.wcm.core.components.testing.MockDynamicMediaRenditionProvider;
 import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import com.day.cq.commons.Externalizer;
+import com.day.cq.dam.api.renditions.DynamicMediaRenditionProvider;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.msm.api.MSMNameConstants;
 import com.google.common.collect.ImmutableMap;
@@ -92,6 +94,7 @@ public final class CoreComponentTestContext {
                                 .collect(Collectors.toList());
                         }
                     });
+                    context.registerService(DynamicMediaRenditionProvider.class, new MockDynamicMediaRenditionProvider());
                     context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
                     context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
                     context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(

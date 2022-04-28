@@ -905,6 +905,49 @@
                         "jcr:lastModified"  : "Mon Mar 20 2017 11:20:37 GMT+0100",
                         ":jcr:data"         : 49069
                     }
+                },
+                "Large"                   : {
+                    "jcr:content"       : {
+                        "croptype"            : "banner",
+                        "dam:scene7ID"        : "sa|702420536",
+                        "height"              : 720,
+                        "jcr:lastModified"    : "Tue Apr 26 2022 21:39:23 GMT+0200",
+                        "jcr:lastModifiedBy"  : "dam-writer-service",
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "left"                : 0.0,
+                        "manualCrop"          : true,
+                        "normalizedHeight"    : 0.761,
+                        "normalizedWidth"     : 1.0,
+                        "rendition.handler.id": "smartcrop.rendition.handler",
+                        "source"              : "dm",
+                        "top"                 : 0.1616,
+                        "width"               : 1260
+                    },
+                    "jcr:created"       : "Tue Apr 26 2022 21:39:23 GMT+0200",
+                    "jcr:createdBy"     : "dam-writer-service",
+                    "jcr:primaryType"   : "sling:OrderedFolder",
+                    "sling:resourceType": "dam/rendition/smartcrop"
+                },
+                "Medium": {
+                    "jcr:content"       : {
+                        "croptype"            : "banner",
+                        "dam:scene7ID"        : "sa|702419040",
+                        "height"              : 525,
+                        "jcr:lastModified"    : "Tue Apr 26 2022 21:39:23 GMT+0200",
+                        "jcr:lastModifiedBy"  : "dam-writer-service",
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "left"                : 0.0,
+                        "normalizedHeight"    : 1.0,
+                        "normalizedWidth"     : 1.0,
+                        "rendition.handler.id": "smartcrop.rendition.handler",
+                        "source"              : "dm",
+                        "top"                 : 0.0,
+                        "width"               : 700
+                    },
+                    "jcr:created"       : "Tue Apr 26 2022 21:39:23 GMT+0200",
+                    "jcr:createdBy"     : "dam-writer-service",
+                    "jcr:primaryType"   : "sling:OrderedFolder",
+                    "sling:resourceType": "dam/rendition/smartcrop"
                 }
             },
             "related"           : {

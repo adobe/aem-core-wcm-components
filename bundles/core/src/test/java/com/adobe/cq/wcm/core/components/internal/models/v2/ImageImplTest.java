@@ -18,9 +18,12 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.json.Json;
 
+import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +33,10 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.adobe.cq.wcm.core.components.testing.MockDynamicMediaRenditionProvider;
+import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.api.Rendition;
+import com.day.cq.dam.api.renditions.DynamicMediaRenditionProvider;
 import com.day.cq.wcm.api.WCMMode;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -522,6 +529,10 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     }
 
     protected void testDMImageWithAutoSmartCropOneSmartSize(String resourceType) {
+        Resource resource = context.currentResource("/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png");
+        Asset asset = resource.adaptTo(Asset.class);
+        ((MockDynamicMediaRenditionProvider)context.getService(DynamicMediaRenditionProvider.class)).setRenditions(asset.getRenditions().stream().filter(
+                rendition -> rendition.adaptTo(Resource.class).isResourceType("dam/rendition/smartcrop")).limit(1).collect(Collectors.toList()));
         context.contentPolicyMapping(resourceType, new HashMap<String, Object>() {{
             put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
             put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600});
@@ -537,6 +548,10 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     }
 
     protected void testDMImageWithAutoSmartCropTwoSmartSizes(String resourceType) {
+        Resource resource = context.currentResource("/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png");
+        Asset asset = resource.adaptTo(Asset.class);
+        ((MockDynamicMediaRenditionProvider)context.getService(DynamicMediaRenditionProvider.class)).setRenditions(asset.getRenditions().stream().filter(
+                rendition -> rendition.adaptTo(Resource.class).isResourceType("dam/rendition/smartcrop")).limit(2).collect(Collectors.toList()));
         context.contentPolicyMapping(resourceType, new HashMap<String, Object>() {{
             put(Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
             put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600, 800});
