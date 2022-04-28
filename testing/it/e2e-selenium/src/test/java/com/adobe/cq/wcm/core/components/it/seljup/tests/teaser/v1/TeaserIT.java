@@ -27,11 +27,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
@@ -43,6 +39,9 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.Teas
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @Tag("group3")
 public class TeaserIT extends AuthorBaseUITest {
@@ -406,6 +405,92 @@ public class TeaserIT extends AuthorBaseUITest {
             "Title should be enabled and should be set to " + title);
     }
 
+    /**
+     * Test: Check the title type select dropdown to not be displayed when showTitleType is set to false in a policy.
+     *
+     * @throws ClientException
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the title type select dropdown to not be displayed when showTitleType is set to false in a policy.")
+    public void testNoTitleTypeSelectDropdownDisplayed() throws ClientException, TimeoutException, InterruptedException {
+        createComponentPolicy(teaserRT.substring(teaserRT.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
+            add(new BasicNameValuePair("titleType", "h4"));
+            add(new BasicNameValuePair("showTitleType", "false"));
+            add(new BasicNameValuePair("allowedTypes", "h1"));
+            add(new BasicNameValuePair("allowedTypes", "h2"));
+            add(new BasicNameValuePair("allowedTypes", "h3"));
+            add(new BasicNameValuePair("allowedTypes", "h4"));
+            add(new BasicNameValuePair("allowedTypes", "h6"));
+            add(new BasicNameValuePair("allowedTypes@TypeHint", "String[]"));
+        }});
+
+        editorPage.refresh();
+
+        Commons.openEditDialog(editorPage, cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openTextTab();
+        assertFalse(editDialog.isTitleTypeSelectDropdownDisplayed());
+    }
+
+    /**
+     * Test: Check the default option selected in the title type select dropdown if the default type set in a policy is a valid option.
+     *
+     * @throws ClientException
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the default option selected in the title type select dropdown if the default type set in a policy is a valid option.")
+    public void testTitleTypeSelectDropdownValueUsingValidOption() throws ClientException, TimeoutException, InterruptedException {
+        createComponentPolicy(teaserRT.substring(teaserRT.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
+            add(new BasicNameValuePair("titleType", "h4"));
+            add(new BasicNameValuePair("showTitleType", "true"));
+            add(new BasicNameValuePair("allowedTypes", "h1"));
+            add(new BasicNameValuePair("allowedTypes", "h2"));
+            add(new BasicNameValuePair("allowedTypes", "h3"));
+            add(new BasicNameValuePair("allowedTypes", "h4"));
+            add(new BasicNameValuePair("allowedTypes", "h6"));
+            add(new BasicNameValuePair("allowedTypes@TypeHint", "String[]"));
+        }});
+
+        editorPage.refresh();
+
+        Commons.openEditDialog(editorPage, cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openTextTab();
+        assertTrue(editDialog.isTitleTypeSelectDropdownDisplayed());
+        assertEquals(editDialog.getTitleTypeSelectDropdownDefaultSelectedText(), "h4");
+    }
+
+    /**
+     * Test: Check the default option selected in the title type select dropdown if the default type set in a policy is an invalid option.
+     *
+     * @throws ClientException
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Check the default option selected in the title type select dropdown if the default type set in a policy is an invalid option.")
+    public void testTitleTypeSelectDropdownValueUsingInvalidOption() throws ClientException, TimeoutException, InterruptedException {
+        createComponentPolicy(teaserRT.substring(teaserRT.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
+            add(new BasicNameValuePair("titleType", "h5"));
+            add(new BasicNameValuePair("showTitleType", "true"));
+            add(new BasicNameValuePair("allowedTypes", "h3"));
+            add(new BasicNameValuePair("allowedTypes", "h4"));
+            add(new BasicNameValuePair("allowedTypes", "h6"));
+            add(new BasicNameValuePair("allowedTypes@TypeHint", "String[]"));
+        }});
+
+        editorPage.refresh();
+
+        Commons.openEditDialog(editorPage, cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openTextTab();
+        assertTrue(editDialog.isTitleTypeSelectDropdownDisplayed());
+        assertEquals(editDialog.getTitleTypeSelectDropdownDefaultSelectedText(), "h3");
+    }
     // ----------------------------------------------------------
     // private stuff
     // ----------------------------------------------------------
