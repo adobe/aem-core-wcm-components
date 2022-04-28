@@ -27,222 +27,177 @@
 (function($, Granite, ns, $document) {
     "use strict";
 
-    var DEFAULT_SIZE_SELECTOR       = "coral-select.core-title-size-default";
-    var DEFAULT_SIZES_SELECTOR      = "coral-select.core-title-sizes-default";
-    var ALLOWED_SIZES_SELECTOR      = ".core-title-sizes-allowed coral-checkbox";
-    var DATA_ATTR_VALIDATION_STATE  = "checkboxes.validation.state";
-    var SIZES_SELECTOR              = "coral-select.core-title-sizes";
-    var LINK_URL_SELECTOR           = ".cmp-title-link-url";
-    var LINK_LABEL_SELECTOR         = ".cmp-title-link-label";
-    var LINK_TITLE_SELECTOR         = ".cmp-title-link-title";
+    var selectors = {
+        designDialogContent: ".cmp-title__design-editor",
+        editDialogContent: ".cmp-title__editor",
+        titleTypeSelectElement: "coral-select[name='./type']",
+        allowedHeadingElements: "coral-select[name='./allowedTypes']",
+        linkUrl: ".cmp-title-link-url",
+        linkLabel: ".cmp-title-link-label",
+        linkTitle: ".cmp-title-link-title"
+    };
 
-    // Update the select field that defines the default value
-    function updateDefaultSizeSelect(checkboxToggled) {
+    var SELECT_FIX_PADDING = "240px";
 
-        var select = $(DEFAULT_SIZE_SELECTOR).get(0);
-        var $checkboxes = $(ALLOWED_SIZES_SELECTOR);
-        var checkedTotal = 0;
-        var selectValue = "";
-
-        if (select === null || select === undefined) {
-            return;
-        }
-
-        // clear the select items to work around a Coral.Select issue (CUI-5584)
-        select.items.clear();
-
-        // for each checked checkbox, add an option to the default sizes dropdown
-        $checkboxes.each(function(i, checkbox) {
-            if (checkbox.checked) {
-                var newItem = new Coral.Select.Item();
-                newItem.content.textContent = checkbox.label.innerHTML;
-                newItem.value = checkbox.value;
-                select.items.add(newItem);
-                checkedTotal++;
-            }
-        });
-
-        // set the default value of the size dropdown
-        if (checkboxToggled) {
-            selectValue = getAppropriateCheckedBoxValue($checkboxes, select.value);
-        } else {
-            // the default value is read from the repository
-            selectValue = select.value;
-        }
-
-        // hide/show the select
-        // Note: we use Coral.commons.nextFrame to make sure that the select widget has been updated
-        Coral.commons.nextFrame(function() {
-            select.value = selectValue;
-            if (checkedTotal === 0 || checkedTotal === 1) {
-                $(select).parent().hide();
-            } else {
-                $(select).parent().show();
-            }
-        });
-    }
-
-    // get the appropriate checked box value by checking if the current value of the default type is a valid option in the list of allowed types/sizes
-    function getAppropriateCheckedBoxValue(checkboxes, currentDefaultTypeValue) {
-        var isCurrentDefaultTypeValueValidOption = false;
-        checkboxes.each(function(i, checkbox) {
-            if (checkbox.checked && checkbox.value === currentDefaultTypeValue) {
-                isCurrentDefaultTypeValueValidOption = true;
-                return false;
-            }
-        });
-        // if the current value of the default type is a valid option, it will return it
-        if (isCurrentDefaultTypeValueValidOption) {
-            return currentDefaultTypeValue;
-        } else {
-            // if the current value of the default type is a not valid option, it will return the value of the first checked box
-            var firstCheckedValue = "";
-            checkboxes.each(function(i, checkbox) {
-                if (checkbox.checked) {
-                    firstCheckedValue = checkbox.value;
-                    return false;
+    /**
+     * Executes when the dialog is loaded and is a Title dialog
+     */
+    $(document).on("dialog-loaded", function(e) {
+        var $dialog = e.dialog;
+        if ($dialog.length) {
+            var $designDialogContent = $dialog.find(selectors.designDialogContent);
+            var $editDialogContent = $dialog.find(selectors.editDialogContent);
+            if ($designDialogContent) {
+                var designDialogContent = $designDialogContent.length > 0 ? $designDialogContent[0] : undefined;
+                if (designDialogContent) {
+                    handleDesignDialog(designDialogContent);
                 }
+            }
+            if ($editDialogContent) {
+                var editDialogContent = $editDialogContent.length > 0 ? $editDialogContent[0] : undefined;
+                if (editDialogContent) {
+                    handleEditDialog(editDialogContent);
+                }
+            }
+        }
+    });
+
+    /**
+     * Binds the design dialog handling
+     *
+     * @param {HTMLElement} designDialogContent The design dialog content wrapper
+     */
+    function handleDesignDialog(designDialogContent) {
+        var allowedHeadingElements = designDialogContent.querySelector(selectors.allowedHeadingElements);
+        var titleTypeElement = designDialogContent.querySelector(selectors.titleTypeSelectElement);
+
+        if (allowedHeadingElements && titleTypeElement) {
+            Coral.commons.ready(allowedHeadingElements, function() {
+                updateTitleTypeElement(allowedHeadingElements, titleTypeElement);
             });
-            return firstCheckedValue;
+
+            allowedHeadingElements.on("change", function() {
+                updateTitleTypeElement(allowedHeadingElements, titleTypeElement);
+            });
+
+            fixSelectDisplay(designDialogContent);
         }
     }
 
-    // toggles the disable attribute of the Link Label and Link Title Attribute inputs, based on the Link Url existence
-    function toggleDisableAttributeOnLinkLabelAndTitleInputs() {
-        $(LINK_LABEL_SELECTOR).prop("disabled", !$(LINK_URL_SELECTOR).val());
-        $(LINK_TITLE_SELECTOR).prop("disabled", !$(LINK_URL_SELECTOR).val());
-    }
+    /**
+     * Binds the edit dialog handling
+     *
+     * @param {HTMLElement} editDialogContent The edit dialog content wrapper
+     */
+    function handleEditDialog(editDialogContent) {
 
-    // temporary workaround until CQ-4206495 and CUI-1818 are fixed:
-    // add a margin when opening the dropdown
-    $document.on("coral-select:showitems", DEFAULT_SIZE_SELECTOR, function(e) {
-        var select = e.currentTarget;
-        var buttonHeight = $(select).find("button").outerHeight(true);
-        var count = select.items.length;
-        var totalHeight = count * (buttonHeight + 5);
-        var maxHeight = parseInt($(select).find("coral-selectlist").css("max-height"), 10);
-        var marginBottom = Math.min(totalHeight, maxHeight);
-        $(select).css("margin-bottom", marginBottom);
-    });
+        manageTitleTypeSelectDropdownFieldVisibility(editDialogContent);
 
-    // temporary workaround until CQ-4206495 and CUI-1818 are fixed:
-    // remove the margin when closing the dropdown
-    $document.on("coral-select:hideitems", DEFAULT_SIZE_SELECTOR, function(e) {
-        var select = e.currentTarget;
-        $(select).css("margin-bottom", 0);
-    });
-
-    // Update the default size select when an allowed size is checked/unchecked
-    $document.on("change", ALLOWED_SIZES_SELECTOR, function(e) {
-        updateDefaultSizeSelect(true);
-    });
-
-    $document.on("foundation-contentloaded", function(e) {
-        // Update the default size select when the design title dialog is opened
-        Coral.commons.ready($(ALLOWED_SIZES_SELECTOR), function(component) {
-            updateDefaultSizeSelect(false);
+        $document.on("foundation-contentloaded", function(e) {
+            Coral.commons.ready($(selectors.linkUrl, selectors.linkLabel, selectors.linkTitle), function(component) {
+                toggleDisableAttributeOnLinkLabelAndTitleInputs();
+            });
         });
 
-        // Hide/display the edit dialog size dropdown
-        Coral.commons.ready($(SIZES_SELECTOR, DEFAULT_SIZES_SELECTOR), function(component) {
-            var select = $(SIZES_SELECTOR).get(0);
-            var defaultSelect = $(DEFAULT_SIZES_SELECTOR).get(0);
-            if (select === null || select === undefined || defaultSelect === null || defaultSelect === undefined) {
-                return;
-            }
-            var itemsCount = select.items.getAll().length;
-            if (itemsCount === 0) {
-                // display all the sizes
-                $(select).parent().remove();
-            } else if (itemsCount === 1) {
-                // don't display anything
-                $(select).parent().remove();
-                $(defaultSelect).parent().remove();
-            } else {
-                // display the values defined in the design policy
-                $(defaultSelect).parent().remove();
-            }
-        });
-        Coral.commons.ready($(LINK_URL_SELECTOR, LINK_LABEL_SELECTOR, LINK_TITLE_SELECTOR), function(component) {
+        $(document).on("input", selectors.linkUrl, function(input) {
+            $(selectors.linkUrl).val(input.target.value);
             toggleDisableAttributeOnLinkLabelAndTitleInputs();
         });
-    });
 
-    $(document).on("input", LINK_URL_SELECTOR, function(input) {
-        $(LINK_URL_SELECTOR).val(input.target.value);
-        toggleDisableAttributeOnLinkLabelAndTitleInputs();
-    });
+        $(document).on("change", selectors.linkUrl, function(input) {
+            toggleDisableAttributeOnLinkLabelAndTitleInputs();
+        });
+    }
 
-    $(document).on("change", LINK_URL_SELECTOR, function(input) {
-        toggleDisableAttributeOnLinkLabelAndTitleInputs();
-    });
+    /**
+     * Updates the title type element
+     *
+     * @param {HTMLElement} allowedHeadingElements Allowed heading elements select field
+     * @param {HTMLElement} titleTypeElement Title type element select field
+     */
+    function updateTitleTypeElement(allowedHeadingElements, titleTypeElement) {
+        var allowedItems = allowedHeadingElements.items.getAll();
+        var titleElementToggleable = $(titleTypeElement.parentNode).adaptTo("foundation-toggleable");
+        var titleElementValue = titleTypeElement.value;
 
-    // Display an error if all checkboxes are empty
-    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
-        selector: ALLOWED_SIZES_SELECTOR,
-        validate: function(el) {
+        titleTypeElement.items.clear();
 
-            var $checkboxes = $(el).parent().children(ALLOWED_SIZES_SELECTOR);
-            var firstEl = $checkboxes.get(0);
-            var isValid = $(firstEl).data(DATA_ATTR_VALIDATION_STATE);
-            var validationDone = isValid !== undefined;
-
-            // if the validation has already been done, we get the status from the first checkbox
-            if (validationDone) {
-                $(firstEl).removeData(DATA_ATTR_VALIDATION_STATE);
-                if (!isValid) {
-                    return Granite.I18n.get("Select at least one size option.");
-                } else {
-                    return;
-                }
-            }
-
-            // set the validation status on the first checkbox
-            isValid = false;
-            $checkboxes.each(function(i, checkbox) {
-                if (checkbox.checked) {
-                    isValid = true;
-                    return false;
-                }
-            });
-            $(firstEl).data(DATA_ATTR_VALIDATION_STATE, isValid);
-
-            // trigger the validation on the first checkbox
-            var api = $(firstEl).adaptTo("foundation-validation");
-            api.checkValidity();
-            api.updateUI();
-        },
-        show: function(el, message) {
-            var $el = $(el);
-
-            var fieldAPI = $el.adaptTo("foundation-field");
-            if (fieldAPI && fieldAPI.setInvalid) {
-                fieldAPI.setInvalid(true);
-            }
-
-            var error = $el.data("foundation-validation.internal.error");
-
-            if (error) {
-                error.content.innerHTML = message;
-
-                if (!error.parentNode) {
-                    $el.after(error);
-                    error.show();
-                }
-            } else {
-                error = new Coral.Tooltip();
-                error.variant = "error";
-                error.interaction = "off";
-                error.placement = "bottom";
-                error.target = el;
-                error.content.innerHTML = message;
-                error.open = true;
-                error.id = Coral.commons.getUID();
-
-                $el.data("foundation-validation.internal.error", error);
-                $el.after(error);
+        for (var i = 0; i < allowedItems.length; i++) {
+            var allowedItem = allowedItems[i];
+            if (allowedHeadingElements.values.indexOf(allowedItem.value) > -1) {
+                var item = new Coral.Select.Item();
+                item.content.textContent = allowedItem.content.textContent;
+                item.value = allowedItem.value;
+                titleTypeElement.items.add(item);
             }
         }
-    });
+
+        Coral.commons.nextFrame(function() {
+            var value = (allowedItems.length) ? allowedItems.values[0] : "";
+
+            if (allowedHeadingElements.values.indexOf(titleElementValue) > -1) {
+                value = titleElementValue;
+            }
+
+            titleTypeElement.value = value;
+
+            if (allowedHeadingElements.values.length < 2) {
+                titleElementToggleable.hide();
+            } else {
+                titleElementToggleable.show();
+            }
+        });
+    }
+
+    /**
+     * Temporary workaround for select dropdown display in the title policy dialog. CQ-4206495, CUI-1818
+     *
+     * @param {HTMLElement} dialogContent The dialog content
+     */
+    function fixSelectDisplay(dialogContent) {
+        // sets the collision property for select overlays to "none"
+        var selects = dialogContent.querySelectorAll("coral-select");
+
+        for (var i = 0; i < selects.length; i++) {
+            var overlay = selects[i].querySelector("coral-overlay");
+            if (overlay) {
+                overlay.collision = Coral.Overlay.collision.NONE;
+            }
+        }
+
+        // adds a sufficient padding to the bottom of the wrapper such that selects
+        // have a guaranteed space to expand into.
+        if (selects.length) {
+            var field = selects[0].parentNode;
+            var wrapper = field.parentNode;
+            wrapper.style.paddingBottom = SELECT_FIX_PADDING;
+        }
+    }
+
+    /**
+     * Toggles the disable attribute of the Link Label and Link Title Attribute inputs, based on the Link Url existence
+     */
+    function toggleDisableAttributeOnLinkLabelAndTitleInputs() {
+        $(selectors.linkLabel).prop("disabled", !$(selectors.linkUrl).val());
+        $(selectors.linkTitle).prop("disabled", !$(selectors.linkUrl).val());
+    }
+
+    /**
+     * Hides the title type select dropdown field in the edit dialog if there's only one allowed heading element defined in a policy
+     *
+     * @param {HTMLElement} dialogContent The dialog content
+     */
+    function manageTitleTypeSelectDropdownFieldVisibility(dialogContent) {
+        var titleTypeElement = dialogContent.querySelector(selectors.titleTypeSelectElement);
+        if (titleTypeElement) {
+            Coral.commons.ready(titleTypeElement, function(element) {
+                var titleTypeElementToggleable = $(element.parentNode).adaptTo("foundation-toggleable");
+                var itemCount = element.items.getAll().length;
+                if (itemCount < 2) {
+                    titleTypeElementToggleable.hide();
+                }
+            });
+        }
+    }
 
 }(jQuery, Granite, Granite.author, jQuery(document)));
