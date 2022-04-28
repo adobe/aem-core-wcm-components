@@ -67,12 +67,16 @@
                 var deepLinkId = window.location.hash.substring(1);
                 if (deepLinkId && document.getElementById(deepLinkId) &&
                     component && component._config && component._config.element &&
-                    component._elements[itemType] && component._elements[itemContentType] &&
+                    component._elements[itemType] &&
                     component._config.element.querySelector("[id='" + deepLinkId + "']")) {
                     for (var i = 0; i < component._elements[itemType].length; i++) {
                         var item = component._elements[itemType][i];
-                        var itemContent = component._elements[itemContentType][i];
-                        if (item.id === deepLinkId || itemContent.querySelector("[id='" + deepLinkId + "']")) {
+                        var itemContentContainsId = false;
+                        if (component._elements[itemContentType]) {
+                            var itemContent = component._elements[itemContentType][i];
+                            itemContentContainsId = itemContent && itemContent.querySelector("[id='" + deepLinkId + "']");
+                        }
+                        if (item.id === deepLinkId || itemContentContainsId) {
                             return i;
                         }
                     }
