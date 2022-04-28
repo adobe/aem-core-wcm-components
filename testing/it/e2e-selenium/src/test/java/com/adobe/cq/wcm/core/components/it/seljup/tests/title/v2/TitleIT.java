@@ -202,7 +202,7 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
 
         Commons.openEditDialog(editorPage, cmpPath);
         TitleEditDialog editDialog = title.getEditDialog();
-        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "h4");
+        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "H4");
     }
 
     /**
@@ -227,6 +227,6 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
 
         Commons.openEditDialog(editorPage, cmpPath);
         TitleEditDialog editDialog = title.getEditDialog();
-        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "h3");
+        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "H3");
     }
 }

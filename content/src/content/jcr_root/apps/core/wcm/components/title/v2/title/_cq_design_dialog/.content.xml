@@ -55,32 +55,32 @@
                                             <h1
                                                 jcr:primaryType="nt:unstructured"
                                                 selected="{Boolean}true"
-                                                text="h1"
+                                                text="H1"
                                                 value="h1"/>
                                             <h2
                                                 jcr:primaryType="nt:unstructured"
                                                 selected="{Boolean}true"
-                                                text="h2"
+                                                text="H2"
                                                 value="h2"/>
                                             <h3
                                                 jcr:primaryType="nt:unstructured"
                                                 selected="{Boolean}true"
-                                                text="h3"
+                                                text="H3"
                                                 value="h3"/>
                                             <h4
                                                 jcr:primaryType="nt:unstructured"
                                                 selected="{Boolean}true"
-                                                text="h4"
+                                                text="H4"
                                                 value="h4"/>
                                             <h5
                                                 jcr:primaryType="nt:unstructured"
                                                 selected="{Boolean}true"
-                                                text="h5"
+                                                text="H5"
                                                 value="h5"/>
                                             <h6
                                                 jcr:primaryType="nt:unstructured"
                                                 selected="{Boolean}true"
-                                                text="h6"
+                                                text="H6"
                                                 value="h6"/>
                                         </items>
                                     </allowedHeadingElements>
