@@ -8,6 +8,7 @@
     trackingFeature="core-components:title:v2">
     <content
         jcr:primaryType="nt:unstructured"
+        granite:class="cmp-title__editor"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
             <tabs
@@ -37,48 +38,17 @@
                                                 fieldLabel="Title"
                                                 name="./jcr:title"/>
                                             <types
-                                                granite:class="core-title-sizes"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                                fieldLabel="Type / Size"
-                                                name="./type">
+                                                fieldLabel="Heading Element"
+                                                fieldDescription="The heading HTML element used for the title type."
+                                                name="./type"
+                                                ordered="{Boolean}true"
+                                                wrapperClass="foundation-toggleable">
                                                 <datasource
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="core/wcm/components/title/v1/datasource/allowedtypes"/>
                                             </types>
-                                            <defaulttypes
-                                                granite:class="core-title-sizes-default"
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                                fieldLabel="Type / Size"
-                                                name="./type">
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <h1
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H1"
-                                                        value="h1"/>
-                                                    <h2
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H2"
-                                                        value="h2"/>
-                                                    <h3
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H3"
-                                                        value="h3"/>
-                                                    <h4
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H4"
-                                                        value="h4"/>
-                                                    <h5
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H5"
-                                                        value="h5"/>
-                                                    <h6
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H6"
-                                                        value="h6"/>
-                                                </items>
-                                            </defaulttypes>
                                             <linkURL
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/coral/common/form/pagefield"
