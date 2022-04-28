@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,6 +45,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.granite.BasePage;
 import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
@@ -906,4 +909,62 @@ public class Commons {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         ((JavascriptExecutor) webDriver).executeScript("document.getElementsByName('actionUpdate')[0].style.display='inline'");
     }
+
+    /**
+     * Class representing a simple page that can be opened in a Selenium browser.
+     */
+    public static class SimplePage extends BasePage {
+
+        public SimplePage(String pagePath) {
+            super(null, pagePath);
+        }
+
+        public void waitReady() {
+            Helpers.waitNetworkIdled(250L);
+            Helpers.waitDocumentLoadCompleted();
+        }
+    }
+
+    /**
+     * Scrolls the browser to the top of the window.
+     */
+    public static void scrollToTop() {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        ((JavascriptExecutor) webDriver).executeScript("window.scrollTo(0, 0);");
+    }
+
+    /**
+     * Checks if the element is visible and in the viewport.
+     *
+     * @param element The element
+     * @return true if the element is visible and in the viewport, false otherwise
+     */
+    public static boolean isElementVisibleAndInViewport(SelenideElement element) {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        return (Boolean)((JavascriptExecutor)webDriver).executeScript(
+                "     var el = arguments[0];" +
+                        "var rect = el.getBoundingClientRect();" +
+                        "return (" +
+                        "   el.offsetParent !== null &&" +
+                        "   rect.top >= 0 &&" +
+                        "   rect.left >= 0 &&" +
+                        "   rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&" +
+                        "   rect.right <= (window.innerWidth || document.documentElement.clientWidth)" +
+                        ");"
+                , element);
+    }
+
+    /**
+     * Returns the URL fragment from the requested URL.
+     *
+     * @return the URL fragment from the requested URL.
+     * @throws MalformedURLException
+     */
+    public static String getUrlFragment() throws MalformedURLException {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        String urlStg = webDriver.getCurrentUrl();
+        URL url = new URL(urlStg);
+        return url.getRef();
+    }
+
 }

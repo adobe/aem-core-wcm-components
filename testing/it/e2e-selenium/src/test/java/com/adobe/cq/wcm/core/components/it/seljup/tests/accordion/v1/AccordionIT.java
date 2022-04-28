@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.accordion.v1;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
@@ -30,15 +29,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pageobject.granite.BasePage;
-import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
@@ -728,30 +724,30 @@ public class AccordionIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Deep Link: clicking accordion items")
     public void testDeepLink_clickingAccordionItem() throws MalformedURLException {
-        SimplePage page = new SimplePage(deepLinkPagePath);
+        Commons.SimplePage page = new Commons.SimplePage(deepLinkPagePath);
         page.open();
 
         // clicking a closed accordion item expands it and modifies the URL fragment
         SelenideElement itemTitle = Selenide.$("#" + itemTitleId1 + "-button");
         itemTitle.click();
-        String fragment = getUrlFragment();
+        String fragment = Commons.getUrlFragment();
         SelenideElement itemContent = Selenide.$("#" + itemContentId1);
-        assertTrue(isElementVisibleAndInViewport(itemTitle));
-        assertTrue(isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
         assertEquals(itemTitleId1, fragment, "The URL fragment should be updated");
 
         // clicking an expanded accordion item closes it and removes the URL fragment
         itemTitle.click();
-        fragment = getUrlFragment();
-        assertTrue(isElementVisibleAndInViewport(itemTitle), "the item title should be visible");
-        assertFalse(isElementVisibleAndInViewport(itemContent), "the item content should be closed");
+        fragment = Commons.getUrlFragment();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle), "the item title should be visible");
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent), "the item content should be closed");
         assertNull(fragment, "The URL fragment should be empty");
     }
 
     @Test
     @DisplayName("Test: Deep Link: clicking links referencing accordion items")
     public void testDeepLink_clickingLinksReferencingAccordionItems() {
-        SimplePage page = new SimplePage(deepLinkPagePath);
+        Commons.SimplePage page = new Commons.SimplePage(deepLinkPagePath);
         page.open();
         SelenideElement itemTitle1 = Selenide.$("#" + itemTitleId1);
         SelenideElement itemContent1 = Selenide.$("#" + itemContentId1);
@@ -761,117 +757,71 @@ public class AccordionIT extends AuthorBaseUITest {
         SelenideElement itemContent3 = Selenide.$("#" + itemContentId3);
 
         // make sure accordion items are closed before clicking the links
-        assertTrue(isElementVisibleAndInViewport(itemTitle1));
-        assertFalse(isElementVisibleAndInViewport(itemContent1));
-        assertFalse(isElementVisibleAndInViewport(itemTitle2));
-        assertFalse(isElementVisibleAndInViewport(itemContent2));
-        assertFalse(isElementVisibleAndInViewport(itemTitle3));
-        assertFalse(isElementVisibleAndInViewport(itemContent3));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent1));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle2));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent2));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle3));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent3));
 
-        // clicking a link referencing an accordion item expands it
+        // clicking a link referencing an accordion item expands it and scrolls to it
         Selenide.$("#link-1").click();
-        assertTrue(isElementVisibleAndInViewport(itemTitle1));
-        assertTrue(isElementVisibleAndInViewport(itemContent1));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
 
         // clicking a link referencing a nested accordion item expands all intermediary items and scrolls to it
-        scrollToTop();
+        Commons.scrollToTop();
         Selenide.$("#link-2").click();
-        assertTrue(isElementVisibleAndInViewport(itemTitle2));
-        assertTrue(isElementVisibleAndInViewport(itemContent2));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle2));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent2));
 
         // clicking a link referencing a text element within a nested accordion item expands all intermediary items
         // and scrolls to the ID
-        scrollToTop();
+        Commons.scrollToTop();
         Selenide.$("#link-3").click();
-        assertFalse(isElementVisibleAndInViewport(itemTitle3));
-        assertTrue(isElementVisibleAndInViewport(itemContent3));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle3));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent3));
     }
 
     @Test
     @DisplayName("Test: Deep Link: URL fragment referencing a simple accordion item")
     public void testDeepLink_UrlFragmentReferencingAccordionItem() {
         String pagePath = deepLinkPagePath + "#" + itemTitleId1;
-        SimplePage page = new SimplePage(pagePath);
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
         page.open();
         SelenideElement itemTitle = Selenide.$("#" + itemTitleId1);
         SelenideElement itemContent = Selenide.$("#" + itemContentId1);
         // when the URL fragment references an accordion item, the accordion item is expanded and scrolled to
-        assertTrue(isElementVisibleAndInViewport(itemTitle));
-        assertTrue(isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
     }
 
     @Test
     @DisplayName("Test: Deep Link: URL fragment referencing a nested accordion item")
     public void testDeepLinkFromHash_nestedAccordionItem() {
         String pagePath = deepLinkPagePath + "#" + itemTitleId2;
-        SimplePage page = new SimplePage(pagePath);
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
         page.open();
         SelenideElement itemTitle = Selenide.$("#" + itemTitleId2);
         SelenideElement itemContent = Selenide.$("#" + itemContentId2);
         // when the URL fragment references a nested accordion item, all intermediary accordion items are expanded and
         // the last item is scrolled to
-        assertTrue(isElementVisibleAndInViewport(itemTitle));
-        assertTrue(isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
     }
 
     @Test
     @DisplayName("Test: Deep Link: URL fragment referencing a text element within a nested accordion item")
     public void testDeepLinkFromHash_IdInNestedAccordionItem() {
         String pagePath = deepLinkPagePath + "#" + itemContentId3;
-        SimplePage page = new SimplePage(pagePath);
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
         page.open();
         SelenideElement itemTitle = Selenide.$("#" + itemTitleId3);
         SelenideElement itemContent = Selenide.$("#" + itemContentId3);
         // when the URL fragment references an element ID that is part of a nested accordion item, all intermediary
         // accordion items are expanded and the element ID is scrolled to
-        assertFalse(isElementVisibleAndInViewport(itemTitle));
-        assertTrue(isElementVisibleAndInViewport(itemContent));
-    }
-
-    // ----------------------------------------------------------
-    // private stuff
-    // ----------------------------------------------------------
-
-    private static class SimplePage extends BasePage {
-
-        public SimplePage(String pagePath) {
-            super(null, pagePath);
-        }
-
-        public void waitReady() {
-            Helpers.waitNetworkIdled(250L);
-            Helpers.waitDocumentLoadCompleted();
-        }
-    }
-
-    // scrolls the browser to the top of the window
-    private void scrollToTop() {
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        ((JavascriptExecutor) webDriver).executeScript("window.scrollTo(0, 0);");
-    }
-
-    // checks if the element is visible and in the viewport
-    private boolean isElementVisibleAndInViewport(SelenideElement element) {
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        return (Boolean)((JavascriptExecutor)webDriver).executeScript(
-                "     var el = arguments[0];" +
-                        "var rect = el.getBoundingClientRect();" +
-                        "return (" +
-                        "   el.offsetParent !== null &&" +
-                        "   rect.top >= 0 &&" +
-                        "   rect.left >= 0 &&" +
-                        "   rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&" +
-                        "   rect.right <= (window.innerWidth || document.documentElement.clientWidth)" +
-                        ");"
-                , element);
-    }
-
-    // returns the URL fragment
-    private String getUrlFragment() throws MalformedURLException {
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        String urlStg = webDriver.getCurrentUrl();
-        URL url = new URL(urlStg);
-        return url.getRef();
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
     }
 
 }
