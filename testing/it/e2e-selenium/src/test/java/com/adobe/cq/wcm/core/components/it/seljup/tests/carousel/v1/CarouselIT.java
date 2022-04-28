@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.carousel.v1;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
@@ -46,12 +47,17 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.Childr
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.PanelSelector;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.CLIENTLIBS_CAROUSEL_V1;
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_CAROUSEL_V1;
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_TEASER_V1;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("group2")
 public class CarouselIT extends AuthorBaseUITest {
@@ -59,12 +65,18 @@ public class CarouselIT extends AuthorBaseUITest {
     private static final String clientlibs = CLIENTLIBS_CAROUSEL_V1;
     private static String componentName = "carousel";
 
+    private static final String deepLinkPagePath = "/content/core-components/deep-link/carousel/v1.html";
+    private static final String itemId1 = "carousel-2a81de66e5-item-858ba740ca";
+    private static final String itemContentId1 = "text-1";
+    private static final String itemId2 = "carousel-2a81de66e5-item-48148b56a1";
+    private static final String itemContentId2 = "text-2";
+    private static final String itemId3 = "carousel-2a81de66e5-item-5fb9d15664";
+    private static final String itemContentId3 = "text-3";
+
     protected Carousel carousel;
     protected EditorPage editorPage;
     protected String cmpPath;
     protected String testPage;
-
-
 
     /**
      * Before Test Case
@@ -74,7 +86,6 @@ public class CarouselIT extends AuthorBaseUITest {
      * 3. add the proxy component to the page
      * 4. open the test page in the editor
      */
-
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         // 1.
@@ -101,7 +112,6 @@ public class CarouselIT extends AuthorBaseUITest {
      * 2. delete the clientlib page policy
      * 3. reassign the default policy
      */
-
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
 
@@ -117,7 +127,6 @@ public class CarouselIT extends AuthorBaseUITest {
      * 2. add item via the children editor
      * 3. save the edit dialog
      */
-
     private ElementsCollection createItems() throws  InterruptedException {
         CarouselEditDialog editDialog = carousel.openEditDialog(cmpPath);
         ChildrenEditor childrenEditor = editDialog.getChildrenEditor();
@@ -165,7 +174,6 @@ public class CarouselIT extends AuthorBaseUITest {
      * 6. verify the expanded items select
      * 7. save the edit dialog
      */
-
     @Test
     @DisplayName("Test: Edit Dialog : Remove items")
     public void testRemoveItem() throws InterruptedException {
@@ -197,7 +205,6 @@ public class CarouselIT extends AuthorBaseUITest {
      * 7. verify the expanded items select
      * 8. save the edit dialog
      */
-
     @Test
     @DisplayName("Test: Edit Dialog : Reorder items")
     public void testReorderItem() throws InterruptedException {
@@ -289,7 +296,6 @@ public class CarouselIT extends AuthorBaseUITest {
         assertTrue(panelSelector.isVisible() == false, "Panel selector should not be visible");
     }
 
-
     /**
      * Test: Accessibility : Navigate Right
      */
@@ -375,4 +381,86 @@ public class CarouselIT extends AuthorBaseUITest {
 
         deleteComponentPolicy("/carousel-v1", policyPath);
     }
+
+
+
+
+
+
+    @Test
+    @DisplayName("Test: Deep Link: clicking carousel items")
+    public void testDeepLink_clickingCarouselItem() throws MalformedURLException {
+        Commons.SimplePage page = new Commons.SimplePage(deepLinkPagePath);
+        page.open();
+
+        // clicking a carousel item expands it and modifies the URL fragment
+        SelenideElement itemButton = Selenide.$("#" + itemId3 + "-tab");
+        itemButton.click();
+        String fragment = Commons.getUrlFragment();
+        SelenideElement itemContent = Selenide.$("#" + itemContentId3);
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertEquals(itemId3 + "-tabpanel", fragment, "The URL fragment should be updated");
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: clicking links referencing carousel items")
+    public void testDeepLink_clickingLinksReferencingCarouselItems() {
+        Commons.SimplePage page = new Commons.SimplePage(deepLinkPagePath);
+        page.open();
+        SelenideElement itemButton1 = Selenide.$("#" + itemId1 + "-tab");
+        SelenideElement itemContent1 = Selenide.$("#" + itemContentId1);
+        SelenideElement itemButton2 = Selenide.$("#" + itemId2 + "-tab");
+        SelenideElement itemContent2 = Selenide.$("#" + itemContentId2);
+        SelenideElement itemButton3 = Selenide.$("#" + itemId3 + "-tab");
+        SelenideElement itemContent3 = Selenide.$("#" + itemContentId3);
+
+        // make sure carousel items are not displayed before clicking the links
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton1));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton2));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent2));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton3));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent3));
+
+        // clicking a link referencing a carousel item displays it and scrolls to it
+        Selenide.$("#link-1").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton2));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent2));
+
+        // clicking a link referencing a text element within a carousel item expands the item
+        // and scrolls to the ID
+        Commons.scrollToTop();
+        Selenide.$("#link-2").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton3));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent3));
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: URL fragment referencing a carousel item")
+    public void testDeepLink_UrlFragmentReferencingCarouselItem() {
+        String pagePath = deepLinkPagePath + "#" + itemId2 + "-tabpanel";
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
+        page.open();
+        SelenideElement itemButton = Selenide.$("#" + itemId2 + "-tab");
+        SelenideElement itemContent = Selenide.$("#" + itemContentId2);
+        // when the URL fragment references a carousel item, the carousel item is expanded and scrolled to
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: URL fragment referencing a text element within a carousel item")
+    public void testDeepLinkFromHash_IdInNestedTabsItem() {
+        String pagePath = deepLinkPagePath + "#" + itemContentId3;
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
+        page.open();
+        SelenideElement itemButton = Selenide.$("#" + itemId3 + "-tab");
+        SelenideElement itemContent = Selenide.$("#" + itemContentId3);
+        // when the URL fragment references an element ID that is part of a carousel item,
+        // the carousel item is expanded and the element ID is scrolled to
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+    }
+
 }
