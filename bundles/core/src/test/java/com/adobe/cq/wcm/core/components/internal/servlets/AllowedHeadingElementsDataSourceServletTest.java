@@ -51,17 +51,17 @@ class AllowedHeadingElementsDataSourceServletTest {
     @Test
     void testDataSource() throws Exception {
         context.contentPolicyMapping("core/wcm/components/title/v1/title",
-                "type", "h3",
-                AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_TYPES, new String[]{"h3", "h4"});
+                "type", "H3",
+                AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_TYPES, new String[]{"H3", "H4"});
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         dataSource.iterator().forEachRemaining(resource -> {
             assertTrue(TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()), "Expected class");
             TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
-            assertTrue(textValueDataResourceSource.getText().matches("h[3|4]"), "Expected type in (h3, h4)");
-            assertTrue(textValueDataResourceSource.getValue().matches("h[3|4]"), "Expected value in (h3, h4)");
-            if (textValueDataResourceSource.getValue().equals("h3")) {
+            assertTrue(textValueDataResourceSource.getText().matches("H[3|4]"), "Expected type in (H3, H4)");
+            assertTrue(textValueDataResourceSource.getValue().matches("H[3|4]"), "Expected value in (H3, H4)");
+            if (textValueDataResourceSource.getValue().equals("H3")) {
                 assertTrue(textValueDataResourceSource.getSelected());
             } else {
                 assertFalse(textValueDataResourceSource.getSelected());
@@ -72,7 +72,7 @@ class AllowedHeadingElementsDataSourceServletTest {
     @Test
     void testDataSourceWithInvalidValues() throws Exception {
         context.contentPolicyMapping("core/wcm/components/title/v1/title",
-                AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_TYPES, new String[]{"foo", "h10"});
+                AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_TYPES, new String[]{"foo", "H10"});
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
@@ -80,7 +80,7 @@ class AllowedHeadingElementsDataSourceServletTest {
             assertTrue(TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()), "Expected class");
             TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
             assertNull(textValueDataResourceSource.getText(), "Expected null type");
-            assertTrue(textValueDataResourceSource.getValue().matches("foo|h10"), "Expected value in (foo, h10)");
+            assertTrue(textValueDataResourceSource.getValue().matches("foo|H10"), "Expected value in (foo, H10)");
         });
     }
 }
