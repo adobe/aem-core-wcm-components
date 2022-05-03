@@ -23,7 +23,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 
 ## Features
 
-* **Production-Ready:** 28 robust components that are well tested, widely used, and that perform well.
+* **Production-Ready:** 29 robust components that are well tested, widely used, and that perform well.
 * **Cloud-Ready:** Whether on [AEM as a Cloud Service](https://docs.adobe.com/content/help/en/experience-manager-cloud-service/landing/home.html), on [Adobe Managed Services](https://github.com/adobe/aem-project-archetype/tree/master/src/main/archetype/dispatcher.ams), or on-premise, they just work.
 * **Versatile:** The components represent generic concepts with which the authors can assemble nearly any layout.
 * **Configurable:** Template-level [content policies](https://docs.adobe.com/content/help/en/experience-manager-65/developing/platform/templates/page-templates-editable.html#content-policies) define which features the page authors are allowed to use or not.
@@ -44,6 +44,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 3. [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v2/languagenavigation)
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v3/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
+6. [Table of Contents](content/src/content/jcr_root/apps/core/wcm/components/tableofcontents/v1/tableofcontents)
 
 ### Page Authoring Components
 
