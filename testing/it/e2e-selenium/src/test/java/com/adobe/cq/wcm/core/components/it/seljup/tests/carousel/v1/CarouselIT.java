@@ -382,11 +382,6 @@ public class CarouselIT extends AuthorBaseUITest {
         deleteComponentPolicy("/carousel-v1", policyPath);
     }
 
-
-
-
-
-
     @Test
     @DisplayName("Test: Deep Link: clicking carousel items")
     public void testDeepLink_clickingCarouselItem() throws MalformedURLException {
