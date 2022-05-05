@@ -16,9 +16,11 @@
 package com.adobe.cq.wcm.core.components.internal.helper.image;
 
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.spi.AssetDelivery;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +31,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WOIDUrlHelper {
 
@@ -59,9 +63,14 @@ public class WOIDUrlHelper {
     private static String FLIP_PARAMETER = "flip";
 
     private static String SIZE_PARAMETER = "sz";
+    private static String FORMAT_PARAMETER = "format";
+
+    private static String PATH_PARAMETER = "path";
+
+    private static String SEO_PARAMETER = "seoname";
 
 
-    public static String getSrcSet(@NotNull String WOIDBaseUrl, @NotNull String imageName,
+    public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource assetResource, @NotNull String imageName,
                                    @NotNull String mimeType, @NotNull ValueMap componentProperties,
                                    int[] smartSizes, Dimension originalDimension, int jpegQuality) {
 
@@ -70,7 +79,7 @@ public class WOIDUrlHelper {
         }
         List<String> srcsetList = new ArrayList<String>();
         for (int i = 0; i < smartSizes.length; i++) {
-            String src =  getSrc(WOIDBaseUrl, imageName, mimeType, componentProperties, new int[]{smartSizes[i]}, originalDimension, jpegQuality);
+            String src =  getSrc(assetDelivery, assetResource,  imageName, mimeType, componentProperties, new int[]{smartSizes[i]}, originalDimension, jpegQuality);
             if (!StringUtils.isEmpty(src)) {
                 srcsetList.add(src);
             }
@@ -83,22 +92,32 @@ public class WOIDUrlHelper {
         return null;
     }
 
-    public static  String getSrc(@NotNull String WOIDBaseUrl, @NotNull String imageName,
+    public static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource assetResource, @NotNull String imageName,
                                  @NotNull String mimeType, @NotNull ValueMap componentProperties,
                                  int[] smartSizes, Dimension originalDimension, int jpegQuality) {
 
+        Map<String, Object> params = new HashMap<>();
+
         String assetPath = componentProperties.get(DownloadResource.PN_REFERENCE, String.class);
 
-        if (StringUtils.isEmpty(WOIDBaseUrl) || StringUtils.isEmpty(imageName) || StringUtils.isEmpty(assetPath)
+        if (StringUtils.isEmpty(imageName) || StringUtils.isEmpty(assetPath)
                 || StringUtils.isEmpty(mimeType) || "svg".equalsIgnoreCase(mimeType)) {
             return null;
         }
 
-        String srcUrl = WOIDBaseUrl + assetPath +
-            PATH_SEPARATOR + imageName + DOT + mimeType;
+//        String srcUrl = WOIDBaseUrl + assetPath +
+//            PATH_SEPARATOR + imageName + DOT + mimeType;
+        params.put(PATH_PARAMETER, assetPath);
+        params.put(SEO_PARAMETER, imageName);
+        params.put(FORMAT_PARAMETER, mimeType);
+
+
 
         StringBuilder stringBuilder = new StringBuilder();
         if (smartSizes.length == 1) {
+            params.put(QUALITY_PARAMETER, "" + jpegQuality);
+            params.put(WIDTH_PARAMETER, "" + smartSizes[0]);
+
             stringBuilder.append(WIDTH_PARAMETER + EQUAL + smartSizes[0] +
                 AND + QUALITY_PARAMETER + EQUAL + jpegQuality);
         } else if (originalDimension.width != 0 && originalDimension.height != 0) {
@@ -106,32 +125,36 @@ public class WOIDUrlHelper {
             // better to get image from dm with weight and hight
             // this needs to be confirm though
             stringBuilder.append(SIZE_PARAMETER + EQUAL + originalDimension.width + "," + originalDimension.height);
+            params.put(SIZE_PARAMETER, originalDimension.width + "," + originalDimension.height);
         }
 
         String cropParameter = getCropRect(componentProperties);
         if (!StringUtils.isEmpty(cropParameter)) {
             stringBuilder.append(AND + CROP_PARAMETER  + EQUAL + cropParameter);
+            params.put(CROP_PARAMETER, cropParameter);
         }
         int rotate = getRotation(componentProperties);
         if (Integer.valueOf(rotate) != null && rotate != 0) {
             stringBuilder.append(AND + ROTATE_PARAMETER  + EQUAL + rotate);
+            params.put(ROTATE_PARAMETER, "" + rotate);
         }
 
         String flipParameter = getFlip(componentProperties);
         if (!StringUtils.isEmpty(flipParameter)) {
             stringBuilder.append(AND + FLIP_PARAMETER  + EQUAL + flipParameter);
+            params.put(FLIP_PARAMETER, flipParameter);
         }
 
-        if (stringBuilder.length() > 0) {
-            stringBuilder.insert(0, srcUrl + QUESTION);
-        } else {
-            // no parameter added so far
-            stringBuilder.append(srcUrl);
-        }
+//        if (stringBuilder.length() > 0) {
+//            stringBuilder.insert(0, srcUrl + QUESTION);
+//        } else {
+//            // no parameter added so far
+//            stringBuilder.append(srcUrl);
+//        }
 
         String srcUriTemplateDecoded = "";
         try {
-            srcUriTemplateDecoded = URLDecoder.decode(stringBuilder.toString(), StandardCharsets.UTF_8.name());
+            srcUriTemplateDecoded = URLDecoder.decode(assetDelivery.getDeliveryURL(assetResource, params), StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             LOGGER.error("Character Decoding failed for " + assetPath);
         }

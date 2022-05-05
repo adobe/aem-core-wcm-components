@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import com.adobe.cq.wcm.core.components.internal.services.image.DefaultWOIDeliveryImpl;
 import com.adobe.cq.wcm.core.components.services.image.WOIDelivery;
+import com.adobe.cq.wcm.spi.AssetDelivery;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
 import com.adobe.granite.ui.components.rendercondition.SimpleRenderCondition;
 
@@ -42,15 +43,16 @@ import java.io.IOException;
 public class WOIDEnableRenderCondition extends SlingSafeMethodsServlet {
 
     @Reference
-    protected WOIDelivery WOIDeliveryService;
+    protected AssetDelivery assetDelivery;
 
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
         throws ServletException, IOException {
 
-        if (WOIDeliveryService == null) {
-            WOIDeliveryService = new DefaultWOIDeliveryImpl();
+        boolean woidEnable = false;
+        if (assetDelivery != null) {
+            woidEnable = true;
         }
 
-        request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(WOIDeliveryService.isWOIDAllowed()));
+        request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(woidEnable));
     }
 }

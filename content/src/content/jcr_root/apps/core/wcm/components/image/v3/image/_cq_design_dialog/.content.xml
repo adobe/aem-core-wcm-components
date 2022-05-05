@@ -69,10 +69,9 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/renderconditions/featuretoggle"
                                                 toggleName="ft-sites-4700"/>
-                                            <environment
+                                            <woid
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="dam/gui/coral/components/commons/renderconditions/deploymenttype"
-                                                deploymentType="SKYLINE"/>
+                                                sling:resourceType="core/wcm/components/rendercondition/isWOIDEnabled"/>
                                         </granite:rendercondition>
                                     </enableWOID>
                                     <disableLazyLoading

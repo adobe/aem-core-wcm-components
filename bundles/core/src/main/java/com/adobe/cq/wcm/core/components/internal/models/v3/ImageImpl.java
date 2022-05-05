@@ -95,7 +95,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
         int[] widthsArray = getWidths();
         if (useWOID) {
-            String srcSetUrl = WOIDUrlHelper.getSrcSet(WOIDeliveryService.getWOIDBaseUrl(), imageName, extension, properties, smartSizes,
+            String srcSetUrl = WOIDUrlHelper.getSrcSet(WOIDeliveryService, resource, imageName, extension, properties, smartSizes,
                 getOriginalDimension(), jpegQuality);
 
             if (!StringUtils.isEmpty(srcSetUrl)) {

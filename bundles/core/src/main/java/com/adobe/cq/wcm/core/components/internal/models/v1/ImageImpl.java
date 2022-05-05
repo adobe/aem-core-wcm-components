@@ -32,6 +32,7 @@ import javax.json.JsonObjectBuilder;
 import com.adobe.cq.wcm.core.components.internal.helper.image.WOIDUrlHelper;
 import com.adobe.cq.wcm.core.components.services.image.WOIDelivery;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
+import com.adobe.cq.wcm.spi.AssetDelivery;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
@@ -102,7 +103,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @Inject
     @Source("osgi-services")
-    protected WOIDelivery WOIDeliveryService;
+    protected AssetDelivery WOIDeliveryService;
 
 
     @Self
@@ -182,7 +183,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
                     imageName = getImageNameFromDam(fileReference);
                     hasContent = true;
-                    useWOID = useWOID && WOIDeliveryService.isWOIDAllowed();
+                    useWOID = useWOID && WOIDeliveryService != null;
                 } else {
                     useWOID = false;
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
@@ -323,7 +324,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     public String getSrc() {
         if (useWOID) {
 
-            String woidUrl = WOIDUrlHelper.getSrc(WOIDeliveryService.getWOIDBaseUrl(), imageName, extension, properties, smartSizes,
+            String woidUrl = WOIDUrlHelper.getSrc(WOIDeliveryService,resource,  imageName, extension, properties, smartSizes,
                 getOriginalDimension(), jpegQuality);
 
             if (!StringUtils.isEmpty(woidUrl)) {
