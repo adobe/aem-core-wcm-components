@@ -169,6 +169,7 @@
                         <releaseProfiles>release</releaseProfiles>
                         <projectVersionPolicyId>OddEvenVersionPolicy</projectVersionPolicyId>
                         <useReleaseProfile>false</useReleaseProfile>
+                        <arguments>-Dspotbugs.skip=true -DskipTests</arguments>
                     </configuration>
                 </plugin>
                 <plugin>
