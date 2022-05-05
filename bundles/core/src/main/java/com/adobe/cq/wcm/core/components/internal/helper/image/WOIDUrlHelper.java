@@ -113,35 +113,35 @@ public class WOIDUrlHelper {
 
 
 
-        StringBuilder stringBuilder = new StringBuilder();
+        //StringBuilder stringBuilder = new StringBuilder();
         if (smartSizes.length == 1) {
             params.put(QUALITY_PARAMETER, "" + jpegQuality);
             params.put(WIDTH_PARAMETER, "" + smartSizes[0]);
 
-            stringBuilder.append(WIDTH_PARAMETER + EQUAL + smartSizes[0] +
-                AND + QUALITY_PARAMETER + EQUAL + jpegQuality);
+//            stringBuilder.append(WIDTH_PARAMETER + EQUAL + smartSizes[0] +
+//                AND + QUALITY_PARAMETER + EQUAL + jpegQuality);
         } else if (originalDimension.width != 0 && originalDimension.height != 0) {
             // in image component v3, img tag has width and height set, so if smart size is not width paramater,
             // better to get image from dm with weight and hight
             // this needs to be confirm though
-            stringBuilder.append(SIZE_PARAMETER + EQUAL + originalDimension.width + "," + originalDimension.height);
+//            stringBuilder.append(SIZE_PARAMETER + EQUAL + originalDimension.width + "," + originalDimension.height);
             params.put(SIZE_PARAMETER, originalDimension.width + "," + originalDimension.height);
         }
 
         String cropParameter = getCropRect(componentProperties);
         if (!StringUtils.isEmpty(cropParameter)) {
-            stringBuilder.append(AND + CROP_PARAMETER  + EQUAL + cropParameter);
+//            stringBuilder.append(AND + CROP_PARAMETER  + EQUAL + cropParameter);
             params.put(CROP_PARAMETER, cropParameter);
         }
         int rotate = getRotation(componentProperties);
         if (Integer.valueOf(rotate) != null && rotate != 0) {
-            stringBuilder.append(AND + ROTATE_PARAMETER  + EQUAL + rotate);
+            //stringBuilder.append(AND + ROTATE_PARAMETER  + EQUAL + rotate);
             params.put(ROTATE_PARAMETER, "" + rotate);
         }
 
         String flipParameter = getFlip(componentProperties);
         if (!StringUtils.isEmpty(flipParameter)) {
-            stringBuilder.append(AND + FLIP_PARAMETER  + EQUAL + flipParameter);
+           // stringBuilder.append(AND + FLIP_PARAMETER  + EQUAL + flipParameter);
             params.put(FLIP_PARAMETER, flipParameter);
         }
 
