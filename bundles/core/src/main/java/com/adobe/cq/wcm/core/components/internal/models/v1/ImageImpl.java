@@ -30,7 +30,6 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
 import com.adobe.cq.wcm.core.components.internal.helper.image.WOIDUrlHelper;
-import com.adobe.cq.wcm.core.components.services.image.WOIDelivery;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.spi.AssetDelivery;
 import org.apache.commons.io.FilenameUtils;
@@ -46,6 +45,8 @@ import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Source;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
@@ -101,8 +102,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     @Source("osgi-services")
     protected MimeTypeService mimeTypeService;
 
-    @Inject
-    @Source("osgi-services")
+    @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
     protected AssetDelivery WOIDeliveryService;
 
 
