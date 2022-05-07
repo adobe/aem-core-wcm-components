@@ -135,7 +135,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected Resource fileResource;
     protected Optional<Link> link;
     protected boolean useWOID = false;
-
+    protected boolean useMIF = false;
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
     }
@@ -171,6 +171,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
         useWOID = currentStyle.get(PN_DESIGN_WOID_ENABLED, false);
+        useMIF = currentStyle.get(PN_DESIGN_MIF_ENABLED, false);
 
         Asset asset = null;
 

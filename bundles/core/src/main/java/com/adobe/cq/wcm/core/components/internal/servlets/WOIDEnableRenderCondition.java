@@ -27,6 +27,8 @@ import org.apache.sling.api.servlets.ServletResolverConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import javax.servlet.Servlet;
 import javax.annotation.Nonnull;
@@ -42,7 +44,7 @@ import java.io.IOException;
 )
 public class WOIDEnableRenderCondition extends SlingSafeMethodsServlet {
 
-    @Reference
+    @Reference(cardinality= ReferenceCardinality.OPTIONAL, policyOption = ReferencePolicyOption.GREEDY)
     protected AssetDelivery assetDelivery;
 
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)

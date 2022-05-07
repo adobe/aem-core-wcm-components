@@ -19,7 +19,10 @@ import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
@@ -60,7 +63,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     private boolean imageLinkHidden = false;
 
-
+    private List<String> ALLOWED_MODERN_IMAGE_FORMAT = Arrays.asList("image/webp");
 
     @PostConstruct
     protected void initModel() {
@@ -125,6 +128,32 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
         return null;
     }
+
+    private boolean isMIFAllowed() {
+        return useWOID && useMIF;
+    }
+
+
+    public Map<String, String> getSrcsetWithMimeType() {
+
+        if (!isMIFAllowed()) {
+            return Collections.EMPTY_MAP;
+        }
+        Map<String, String> srcSetMap = new HashMap<>();
+        List<String> completeMimeTypeList = Stream.concat(ALLOWED_MODERN_IMAGE_FORMAT.stream(), Stream.of(mimeType))
+            .collect(Collectors.toList());
+        for (String currentMimeType : completeMimeTypeList) {
+            String currentImageExtension = mimeTypeService.getExtension(currentMimeType);
+            String currentSrcSetUrl = WOIDUrlHelper.getSrcSet(WOIDeliveryService, resource, imageName, currentImageExtension, properties, smartSizes,
+                getOriginalDimension(), jpegQuality);
+
+            if (!StringUtils.isEmpty(currentSrcSetUrl)) {
+                srcSetMap.put(currentMimeType, currentSrcSetUrl);
+            }
+        }
+        return srcSetMap;
+    }
+
 
     @Nullable
     @Override
