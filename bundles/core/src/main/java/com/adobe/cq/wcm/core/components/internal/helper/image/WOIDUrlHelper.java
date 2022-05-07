@@ -71,7 +71,7 @@ public class WOIDUrlHelper {
 
 
     public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource assetResource, @NotNull String imageName,
-                                   @NotNull String mimeType, @NotNull ValueMap componentProperties,
+                                   @NotNull String extension, @NotNull ValueMap componentProperties,
                                    int[] smartSizes, Dimension originalDimension, int jpegQuality) {
 
         if (smartSizes.length == 0) {
@@ -79,7 +79,7 @@ public class WOIDUrlHelper {
         }
         List<String> srcsetList = new ArrayList<String>();
         for (int i = 0; i < smartSizes.length; i++) {
-            String src =  getSrc(assetDelivery, assetResource,  imageName, mimeType, componentProperties, new int[]{smartSizes[i]}, originalDimension, jpegQuality);
+            String src =  getSrc(assetDelivery, assetResource,  imageName, extension, componentProperties, new int[]{smartSizes[i]}, originalDimension, jpegQuality);
             if (!StringUtils.isEmpty(src)) {
                 srcsetList.add(src);
             }
@@ -93,7 +93,7 @@ public class WOIDUrlHelper {
     }
 
     public static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource assetResource, @NotNull String imageName,
-                                 @NotNull String mimeType, @NotNull ValueMap componentProperties,
+                                 @NotNull String extension, @NotNull ValueMap componentProperties,
                                  int[] smartSizes, Dimension originalDimension, int jpegQuality) {
 
         Map<String, Object> params = new HashMap<>();
@@ -101,7 +101,7 @@ public class WOIDUrlHelper {
         String assetPath = componentProperties.get(DownloadResource.PN_REFERENCE, String.class);
 
         if (StringUtils.isEmpty(imageName) || StringUtils.isEmpty(assetPath)
-                || StringUtils.isEmpty(mimeType) || "svg".equalsIgnoreCase(mimeType)) {
+                || StringUtils.isEmpty(extension) || "svg".equalsIgnoreCase(extension)) {
             return null;
         }
 
@@ -109,7 +109,7 @@ public class WOIDUrlHelper {
 //            PATH_SEPARATOR + imageName + DOT + mimeType;
         params.put(PATH_PARAMETER, assetPath);
         params.put(SEO_PARAMETER, imageName);
-        params.put(FORMAT_PARAMETER, mimeType);
+        params.put(FORMAT_PARAMETER, extension);
 
 
 
