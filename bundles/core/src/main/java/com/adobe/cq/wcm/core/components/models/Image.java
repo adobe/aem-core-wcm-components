@@ -419,6 +419,12 @@ public interface Image extends Component {
         return null;
     }
 
+    /**
+     * Returns the value for the {@code srcset} along with their mimetype for srcset and type attribute of picture tag.
+     *
+     * @return A map consist of mimeType as key for {@code type} attribute and value of the {@code srcset} attribute as value of map, if one was set, or Empty Map.
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
     default Map<String, String> getSrcsetWithMimeType() {return Collections.EMPTY_MAP;}
 
 }
