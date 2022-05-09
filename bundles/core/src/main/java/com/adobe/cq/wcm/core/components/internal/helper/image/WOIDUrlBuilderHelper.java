@@ -35,38 +35,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WOIDUrlHelper {
+public class WOIDUrlBuilderHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WOIDUrlHelper.class);
-
-    private static String QUESTION = "?";
-
-    private static String EQUAL = "=";
-
-    private static String AND = "&";
-
-    private static final String PATH_SEPARATOR = "/";
-
-    private static String DOT = ".";
+    private static final Logger LOGGER = LoggerFactory.getLogger(WOIDUrlBuilderHelper.class);
 
     private static String COMMA = ",";
-
     private static String WIDTH_PARAMETER = "width";
-
     private static String QUALITY_PARAMETER = "quality";
-
-
     private static String CROP_PARAMETER = "c";
-
     private static String ROTATE_PARAMETER = "r";
-
     private static String FLIP_PARAMETER = "flip";
-
     private static String SIZE_PARAMETER = "sz";
     private static String FORMAT_PARAMETER = "format";
-
     private static String PATH_PARAMETER = "path";
-
     private static String SEO_PARAMETER = "seoname";
 
 
@@ -79,7 +60,7 @@ public class WOIDUrlHelper {
         }
         List<String> srcsetList = new ArrayList<String>();
         for (int i = 0; i < smartSizes.length; i++) {
-            String src =  getSrc(assetDelivery, assetResource,  imageName, extension, componentProperties, new int[]{smartSizes[i]}, originalDimension, jpegQuality);
+            String src =  getSrc(assetDelivery, assetResource,  imageName, extension, componentProperties, new int[]{smartSizes[i]}, jpegQuality, originalDimension);
             if (!StringUtils.isEmpty(src)) {
                 srcsetList.add(src);
             }
@@ -94,7 +75,7 @@ public class WOIDUrlHelper {
 
     public static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource assetResource, @NotNull String imageName,
                                  @NotNull String extension, @NotNull ValueMap componentProperties,
-                                 int[] smartSizes, Dimension originalDimension, int jpegQuality) {
+                                 @NotNull int[] smartSizes, @NotNull int jpegQuality, Dimension originalDimension) {
 
         Map<String, Object> params = new HashMap<>();
 
@@ -105,56 +86,38 @@ public class WOIDUrlHelper {
             return null;
         }
 
-//        String srcUrl = WOIDBaseUrl + assetPath +
-//            PATH_SEPARATOR + imageName + DOT + mimeType;
         params.put(PATH_PARAMETER, assetPath);
         params.put(SEO_PARAMETER, imageName);
         params.put(FORMAT_PARAMETER, extension);
 
-
-
-        //StringBuilder stringBuilder = new StringBuilder();
         if (smartSizes.length == 1) {
             params.put(QUALITY_PARAMETER, "" + jpegQuality);
             params.put(WIDTH_PARAMETER, "" + smartSizes[0]);
 
-//            stringBuilder.append(WIDTH_PARAMETER + EQUAL + smartSizes[0] +
-//                AND + QUALITY_PARAMETER + EQUAL + jpegQuality);
-        } else if (originalDimension.width != 0 && originalDimension.height != 0) {
-            // in image component v3, img tag has width and height set, so if smart size is not width paramater,
-            // better to get image from dm with weight and hight
-            // this needs to be confirm though
-//            stringBuilder.append(SIZE_PARAMETER + EQUAL + originalDimension.width + "," + originalDimension.height);
+        } else if (originalDimension != null && originalDimension.width != 0 && originalDimension.height != 0) {
             params.put(SIZE_PARAMETER, originalDimension.width + "," + originalDimension.height);
         }
 
         String cropParameter = getCropRect(componentProperties);
         if (!StringUtils.isEmpty(cropParameter)) {
-//            stringBuilder.append(AND + CROP_PARAMETER  + EQUAL + cropParameter);
             params.put(CROP_PARAMETER, cropParameter);
         }
         int rotate = getRotation(componentProperties);
         if (Integer.valueOf(rotate) != null && rotate != 0) {
-            //stringBuilder.append(AND + ROTATE_PARAMETER  + EQUAL + rotate);
             params.put(ROTATE_PARAMETER, "" + rotate);
         }
 
         String flipParameter = getFlip(componentProperties);
         if (!StringUtils.isEmpty(flipParameter)) {
-           // stringBuilder.append(AND + FLIP_PARAMETER  + EQUAL + flipParameter);
             params.put(FLIP_PARAMETER, flipParameter);
         }
 
-//        if (stringBuilder.length() > 0) {
-//            stringBuilder.insert(0, srcUrl + QUESTION);
-//        } else {
-//            // no parameter added so far
-//            stringBuilder.append(srcUrl);
-//        }
-
         String srcUriTemplateDecoded = "";
         try {
-            srcUriTemplateDecoded = URLDecoder.decode(assetDelivery.getDeliveryURL(assetResource, params), StandardCharsets.UTF_8.name());
+            String woidUrl = assetDelivery.getDeliveryURL(assetResource, params);
+            if (!StringUtils.isEmpty(woidUrl)) {
+                srcUriTemplateDecoded = URLDecoder.decode(assetDelivery.getDeliveryURL(assetResource, params), StandardCharsets.UTF_8.name());
+            }
         } catch (UnsupportedEncodingException e) {
             LOGGER.error("Character Decoding failed for " + assetPath);
         }
@@ -220,17 +183,14 @@ public class WOIDUrlHelper {
     private static String getFlip(@NotNull ValueMap properties) {
         boolean flipHorizontally = properties.get(com.adobe.cq.wcm.core.components.models.Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
         boolean flipVertically = properties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
-
-        StringBuilder flip = new StringBuilder();
-
-        if (flipHorizontally) {
-            flip.append("h");
+        if (flipHorizontally && flipVertically) {
+            return "HORIZONTAL_AND_VERTICAL";
+        } else if (flipHorizontally) {
+            return "HORIZONTAL";
+        } else if (flipVertically){
+            return "VERTICAL";
         }
-
-        if (flipVertically) {
-            flip.append("v");
-        }
-        return flip.toString();
+        return StringUtils.EMPTY;
     }
 
 }

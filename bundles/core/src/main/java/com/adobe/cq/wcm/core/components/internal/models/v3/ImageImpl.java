@@ -19,14 +19,16 @@ import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
 import java.util.List;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.WOIDUrlHelper;
+import com.adobe.cq.wcm.core.components.internal.helper.image.WOIDUrlBuilderHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -95,10 +97,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public String getSrcset() {
-
         int[] widthsArray = getWidths();
         if (useWOID) {
-            String srcSetUrl = WOIDUrlHelper.getSrcSet(WOIDeliveryService, resource, imageName, extension, properties, smartSizes,
+            String srcSetUrl = WOIDUrlBuilderHelper.getSrcSet(WOIDeliveryService, resource, imageName, extension, properties, smartSizes,
                 getOriginalDimension(), jpegQuality);
 
             if (!StringUtils.isEmpty(srcSetUrl)) {
@@ -144,7 +145,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             .collect(Collectors.toList());
         for (String currentMimeType : completeMimeTypeList) {
             String currentImageExtension = mimeTypeService.getExtension(currentMimeType);
-            String currentSrcSetUrl = WOIDUrlHelper.getSrcSet(WOIDeliveryService, resource, imageName, currentImageExtension, properties, smartSizes,
+            String currentSrcSetUrl = WOIDUrlBuilderHelper.getSrcSet(WOIDeliveryService, resource, imageName, currentImageExtension, properties, smartSizes,
                 getOriginalDimension(), jpegQuality);
 
             if (!StringUtils.isEmpty(currentSrcSetUrl)) {
@@ -214,8 +215,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         resource = getWrappedImageResourceWithInheritance(resource, linkHandler, currentStyle, currentPage);
     }
 
-    @Override
-    protected Dimension getOriginalDimension() {
+    private Dimension getOriginalDimension() {
         ValueMap inheritedResourceProperties = resource.getValueMap();
         String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
         Asset asset;

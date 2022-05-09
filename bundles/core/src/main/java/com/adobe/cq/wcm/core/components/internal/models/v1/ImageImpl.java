@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Calendar;
@@ -29,7 +28,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.WOIDUrlHelper;
+import com.adobe.cq.wcm.core.components.internal.helper.image.WOIDUrlBuilderHelper;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.spi.AssetDelivery;
 import org.apache.commons.io.FilenameUtils;
@@ -327,8 +326,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     public String getSrc() {
         if (useWOID) {
 
-            String woidUrl = WOIDUrlHelper.getSrc(WOIDeliveryService,resource,  imageName, extension, properties, smartSizes,
-                getOriginalDimension(), jpegQuality);
+            String woidUrl = WOIDUrlBuilderHelper.getSrc(WOIDeliveryService, resource, imageName, extension, properties, smartSizes,
+                jpegQuality, null);
 
             if (!StringUtils.isEmpty(woidUrl)) {
                 return woidUrl;
@@ -441,10 +440,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                                 .map(AssetDataBuilder::build)
                                 .orElse(null))
                 .build();
-    }
-
-    protected Dimension getOriginalDimension() {
-        return new Dimension(0, 0);
     }
 
 }

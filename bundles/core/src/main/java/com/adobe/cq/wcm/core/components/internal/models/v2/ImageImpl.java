@@ -136,8 +136,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      */
     public ImageImpl() {
         selector = AdaptiveImageServlet.CORE_DEFAULT_SELECTOR;
-
-
     }
 
     /**
@@ -154,9 +152,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         // if content policy delegate path is provided pass it to the image Uri
         String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
         String dmImageUrl = null;
-
-
-
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
