@@ -32,7 +32,7 @@
         if ($(enableWOIDCheckbox)[0].checked) {
             enableMIFCheckboxField.setDisabled(false);
         } else {
-            $(enableMIFCheckbox).attr('checked', false);
+            $(enableMIFCheckbox).attr("checked", false);
             enableMIFCheckboxField.setValue(false);
             enableMIFCheckboxField.setDisabled(true);
         }
