@@ -272,7 +272,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             } else {
                 src += extension;
             }
-
+            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "")) : "") +
+                    (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
             if (!isDecorative) {
                 link = linkHandler.getLink(resource);
             } else {

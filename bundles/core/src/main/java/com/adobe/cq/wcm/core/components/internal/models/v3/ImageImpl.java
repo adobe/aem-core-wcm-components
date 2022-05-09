@@ -137,7 +137,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public Map<String, String> getSrcsetWithMimeType() {
 
         if (!isMIFAllowed()) {
-            return Collections.EMPTY_MAP;
+            return null;
         }
         Map<String, String> srcSetMap = new HashMap<>();
         List<String> completeMimeTypeList = Stream.concat(ALLOWED_MODERN_IMAGE_FORMAT.stream(), Stream.of(mimeType))
