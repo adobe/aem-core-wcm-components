@@ -52,15 +52,14 @@ public class AssetDeliveryHelper {
 
 
     public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
-                                   @NotNull String extension, @NotNull ValueMap componentProperties,
-                                   int[] smartSizes, Dimension originalDimension, int jpegQuality) {
+                                   @NotNull String extension, int[] smartSizes, int jpegQuality, Dimension originalDimension) {
 
         if (smartSizes.length == 0) {
             return null;
         }
         List<String> srcsetList = new ArrayList<String>();
         for (int i = 0; i < smartSizes.length; i++) {
-            String src =  getSrc(assetDelivery, imageComponentResource,  imageName, extension, componentProperties, new int[]{smartSizes[i]}, jpegQuality, originalDimension);
+            String src =  getSrc(assetDelivery, imageComponentResource,  imageName, extension, new int[]{smartSizes[i]}, jpegQuality, originalDimension);
             if (!StringUtils.isEmpty(src)) {
                 srcsetList.add(src + " " + smartSizes[i] + "w");
             }
@@ -74,11 +73,11 @@ public class AssetDeliveryHelper {
     }
 
     public static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
-                                 @NotNull String extension, @NotNull ValueMap componentProperties,
-                                 @NotNull int[] smartSizes, @NotNull int jpegQuality, Dimension originalDimension) {
+                                 @NotNull String extension, @NotNull int[] smartSizes, int jpegQuality, Dimension originalDimension) {
 
         Map<String, Object> params = new HashMap<>();
 
+        ValueMap componentProperties = imageComponentResource.getValueMap();
         String assetPath = componentProperties.get(DownloadResource.PN_REFERENCE, String.class);
 
         if (StringUtils.isEmpty(imageName) || StringUtils.isEmpty(assetPath)
@@ -104,10 +103,14 @@ public class AssetDeliveryHelper {
 
         String srcUriTemplateDecoded = "";
         try {
-            String woidUrl = assetDelivery.getDeliveryURL(imageComponentResource, params);
-            if (!StringUtils.isEmpty(woidUrl)) {
-                srcUriTemplateDecoded = URLDecoder.decode(assetDelivery.getDeliveryURL(imageComponentResource, params), StandardCharsets.UTF_8.name());
+            Resource assetResource = imageComponentResource.getResourceResolver().getResource(assetPath);
+            if (assetResource != null) {
+                String assetDeliveryURL = assetDelivery.getDeliveryURL(assetResource, params);
+                if (!StringUtils.isEmpty(assetDeliveryURL)) {
+                    srcUriTemplateDecoded = URLDecoder.decode(assetDeliveryURL, StandardCharsets.UTF_8.name());
+                }
             }
+
         } catch (UnsupportedEncodingException e) {
             LOGGER.error("Character Decoding failed for " + assetPath);
         }

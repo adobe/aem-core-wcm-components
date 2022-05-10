@@ -104,8 +104,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
 
         if (useAssetDeliveryService) {
-            srcSet = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, extension, properties, smartSizes,
-            getOriginalDimension(), jpegQuality);
+            srcSet = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, extension, smartSizes,
+                jpegQuality, getOriginalDimension());
 
             if (!StringUtils.isEmpty(srcSet)) {
                 return srcSet;
@@ -157,8 +157,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             .collect(Collectors.toList());
         for (String currentMimeType : completeMimeTypeList) {
             String currentImageExtension = mimeTypeService.getExtension(currentMimeType);
-            String currentSrcSetUrl = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, currentImageExtension, properties, smartSizes,
-                getOriginalDimension(), jpegQuality);
+            String currentSrcSetUrl = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, currentImageExtension, smartSizes,
+                jpegQuality, getOriginalDimension());
 
             if (!StringUtils.isEmpty(currentSrcSetUrl)) {
                 srcSetMap.put(currentMimeType, currentSrcSetUrl);
