@@ -85,6 +85,11 @@ public class AssetDeliveryHelper {
             return null;
         }
 
+        Resource assetResource = imageComponentResource.getResourceResolver().getResource(assetPath);
+        if (assetResource == null) { 
+            return null;
+        }
+
         params.put(PATH_PARAMETER, assetPath);
         params.put(SEO_PARAMETER, imageName);
         params.put(FORMAT_PARAMETER, extension);
@@ -103,12 +108,9 @@ public class AssetDeliveryHelper {
 
         String srcUriTemplateDecoded = "";
         try {
-            Resource assetResource = imageComponentResource.getResourceResolver().getResource(assetPath);
-            if (assetResource != null) {
-                String assetDeliveryURL = assetDelivery.getDeliveryURL(assetResource, params);
-                if (!StringUtils.isEmpty(assetDeliveryURL)) {
-                    srcUriTemplateDecoded = URLDecoder.decode(assetDeliveryURL, StandardCharsets.UTF_8.name());
-                }
+            String assetDeliveryURL = assetDelivery.getDeliveryURL(assetResource, params);
+            if (!StringUtils.isEmpty(assetDeliveryURL)) {
+                srcUriTemplateDecoded = URLDecoder.decode(assetDeliveryURL, StandardCharsets.UTF_8.name());
             }
 
         } catch (UnsupportedEncodingException e) {
