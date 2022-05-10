@@ -39,6 +39,7 @@ import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.*;
 import static com.codeborne.selenide.Selenide.$;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
@@ -51,8 +52,12 @@ public class FormContainerIT extends AuthorBaseUITest {
     private static final String subject = "subject line";
     private static final String mailto1 = "mailto1@components.com";
     private static final String mailto2 = "mailto2@components.com";
+    private static final String invalidMailto = "mailto2components";
+    private static final String emptyMailto = "";
     private static final String cc1 = "cc1@components.com";
     private static final String cc2 = "cc2@components.com";
+    private static final String invalidCC = "cc2components.com";
+    private static final String emptyCC = "";
     private String containerPath;
     private EditorPage editorPage;
     private String testPage;
@@ -198,6 +203,42 @@ public class FormContainerIT extends AuthorBaseUITest {
         assertTrue(formContentJson.get("mailto").get(1).toString().equals("\""+mailto2+"\""));
         assertTrue(formContentJson.get("cc").get(0).toString().equals("\""+cc1+"\""));
         assertTrue(formContentJson.get("cc").get(1).toString().equals("\""+cc2+"\""));
+    }
+
+    /**
+     * Test: check if invalid 'Mail' validation messages are displayed.
+     *
+     */
+    @Test
+    @DisplayName("Test: check if invalid 'Mail' validation messages are displayed.")
+    public void testInvalidEmailValidationMessages() throws InterruptedException, ClientException {
+        FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
+        dialog.setMailActionFields(from,subject,new String[] {invalidMailto}, new String[] {invalidCC});
+        Commons.saveConfigureDialog();
+        String mailToErrorMessage = "coral-multifield-item-content input[name='./mailto'] + coral-tooltip[variant='error']";
+        String ccErrorMessage = "coral-multifield-item-content input[name='./mailto'] + coral-tooltip[variant='error']";
+        assertTrue($(mailToErrorMessage).isDisplayed());
+        assertEquals($(mailToErrorMessage).getText(), "Error: Invalid Email Address.");
+        assertTrue($(ccErrorMessage).isDisplayed());
+        assertEquals($(ccErrorMessage).getText(), "Error: Invalid Email Address.");
+    }
+
+    /**
+     * Test: check if empty 'Mail' validation messages are displayed.
+     *
+     */
+    @Test
+    @DisplayName("Test: check if empty 'Mail' validation messages are displayed.")
+    public void testEmptyEmailValidationMessages() throws InterruptedException, ClientException {
+        FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
+        dialog.setMailActionFields(from,subject,new String[] {emptyMailto}, new String[] {emptyCC});
+        Commons.saveConfigureDialog();
+        String mailToErrorMessage = "coral-multifield-item-content input[name='./mailto'] + coral-tooltip[variant='error']";
+        String ccErrorMessage = "coral-multifield-item-content input[name='./mailto'] + coral-tooltip[variant='error']";
+        assertTrue($(mailToErrorMessage).isDisplayed());
+        assertEquals($(mailToErrorMessage).getText(), "Error: Please fill out this field.");
+        assertTrue($(ccErrorMessage).isDisplayed());
+        assertEquals($(ccErrorMessage).getText(), "Error: Please fill out this field.");
     }
 
 }
