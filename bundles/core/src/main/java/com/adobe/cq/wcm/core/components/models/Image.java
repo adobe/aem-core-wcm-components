@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -191,7 +190,7 @@ public interface Image extends Component {
     /**
      * Name of the configuration policy property that controls whether Dynamic Media Next features are used by Core component.
      */
-    String PN_DESIGN_WOID_ENABLED = "enableAssetDeliveryService";
+    String PN_DESIGN_ASSET_DELIVERY_SERVICE_ENABLED = "enableAssetDeliveryService";
 
     /**
      *
@@ -199,7 +198,7 @@ public interface Image extends Component {
     /**
      * Name of the configuration policy property that controls whether modern image formats should be allowed.
      */
-    String PN_DESIGN_MIF_ENABLED = "enableModernImageFormats";
+    String PN_DESIGN_MODERN_IMAGE_FORMATS_ENABLED = "enableModernImageFormats";
 
 
     /**
