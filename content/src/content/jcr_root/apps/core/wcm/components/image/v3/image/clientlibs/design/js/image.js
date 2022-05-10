@@ -16,11 +16,11 @@
 (function($) {
     "use strict";
 
-    var enableWOIDCheckbox = "coral-checkbox[name='./enableWOID']";
-    var enableMIFCheckbox = "coral-checkbox[name='./enableMIF']";
+    var enableAssetDeliveryServiceCheckbox = "coral-checkbox[name='./enableAssetDeliveryService']";
+    var enableModernImageFormatsCheckbox = "coral-checkbox[name='./enableModernImageFormats']";
 
     $(document).on("dialog-loaded", function(e) {
-        $(enableWOIDCheckbox).on("change", function() {
+        $(enableAssetDeliveryServiceCheckbox).on("change", function() {
             toggleMIFCheckbox();
         });
 
@@ -28,13 +28,13 @@
     });
 
     function toggleMIFCheckbox() {
-        var enableMIFCheckboxField = $(enableMIFCheckbox).adaptTo("foundation-field");
-        if ($(enableWOIDCheckbox)[0].checked) {
-            enableMIFCheckboxField.setDisabled(false);
+        var enableModernImageFormatsCheckboxField = $(enableModernImageFormatsCheckbox).adaptTo("foundation-field");
+        if ($(enableAssetDeliveryServiceCheckbox)[0].checked) {
+            enableModernImageFormatsCheckboxField.setDisabled(false);
         } else {
-            $(enableMIFCheckbox).attr("checked", false);
-            enableMIFCheckboxField.setValue(false);
-            enableMIFCheckboxField.setDisabled(true);
+            $(enableModernImageFormatsCheckbox).attr("checked", false);
+            enableModernImageFormatsCheckboxField.setValue(false);
+            enableModernImageFormatsCheckboxField.setDisabled(true);
         }
     }
 

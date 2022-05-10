@@ -35,9 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WOIDUrlBuilderHelper {
+public class AssetDeliveryHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WOIDUrlBuilderHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AssetDeliveryHelper.class);
 
     private static String COMMA = ",";
     private static String WIDTH_PARAMETER = "width";
@@ -51,7 +51,7 @@ public class WOIDUrlBuilderHelper {
     private static String SEO_PARAMETER = "seoname";
 
 
-    public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource assetResource, @NotNull String imageName,
+    public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
                                    @NotNull String extension, @NotNull ValueMap componentProperties,
                                    int[] smartSizes, Dimension originalDimension, int jpegQuality) {
 
@@ -60,7 +60,7 @@ public class WOIDUrlBuilderHelper {
         }
         List<String> srcsetList = new ArrayList<String>();
         for (int i = 0; i < smartSizes.length; i++) {
-            String src =  getSrc(assetDelivery, assetResource,  imageName, extension, componentProperties, new int[]{smartSizes[i]}, jpegQuality, originalDimension);
+            String src =  getSrc(assetDelivery, imageComponentResource,  imageName, extension, componentProperties, new int[]{smartSizes[i]}, jpegQuality, originalDimension);
             if (!StringUtils.isEmpty(src)) {
                 srcsetList.add(src + " " + smartSizes[i] + "w");
             }
@@ -73,7 +73,7 @@ public class WOIDUrlBuilderHelper {
         return null;
     }
 
-    public static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource assetResource, @NotNull String imageName,
+    public static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
                                  @NotNull String extension, @NotNull ValueMap componentProperties,
                                  @NotNull int[] smartSizes, @NotNull int jpegQuality, Dimension originalDimension) {
 
@@ -91,32 +91,22 @@ public class WOIDUrlBuilderHelper {
         params.put(FORMAT_PARAMETER, extension);
 
         if (smartSizes.length == 1) {
-            params.put(QUALITY_PARAMETER, "" + jpegQuality);
-            params.put(WIDTH_PARAMETER, "" + smartSizes[0]);
+            addQualityParameter(params, jpegQuality);
+            addWidthParameter(params, smartSizes[0]);
 
-        } else if (originalDimension != null && originalDimension.width != 0 && originalDimension.height != 0) {
-            params.put(SIZE_PARAMETER, originalDimension.width + "," + originalDimension.height);
-        }
-
-        String cropParameter = getCropRect(componentProperties);
-        if (!StringUtils.isEmpty(cropParameter)) {
-            params.put(CROP_PARAMETER, cropParameter);
-        }
-        int rotate = getRotation(componentProperties);
-        if (Integer.valueOf(rotate) != null && rotate != 0) {
-            params.put(ROTATE_PARAMETER, "" + rotate);
+        } else if (originalDimension != null) {
+            addSizeParameter(params, originalDimension);
         }
 
-        String flipParameter = getFlip(componentProperties);
-        if (!StringUtils.isEmpty(flipParameter)) {
-            params.put(FLIP_PARAMETER, flipParameter);
-        }
+        addCropParameter(params, componentProperties);
+        addRotationParameter(params, componentProperties);
+        addFlipParameter(params, componentProperties);
 
         String srcUriTemplateDecoded = "";
         try {
-            String woidUrl = assetDelivery.getDeliveryURL(assetResource, params);
+            String woidUrl = assetDelivery.getDeliveryURL(imageComponentResource, params);
             if (!StringUtils.isEmpty(woidUrl)) {
-                srcUriTemplateDecoded = URLDecoder.decode(assetDelivery.getDeliveryURL(assetResource, params), StandardCharsets.UTF_8.name());
+                srcUriTemplateDecoded = URLDecoder.decode(assetDelivery.getDeliveryURL(imageComponentResource, params), StandardCharsets.UTF_8.name());
             }
         } catch (UnsupportedEncodingException e) {
             LOGGER.error("Character Decoding failed for " + assetPath);
@@ -124,6 +114,42 @@ public class WOIDUrlBuilderHelper {
 
         return srcUriTemplateDecoded;
     }
+
+    private static void addQualityParameter(@NotNull Map<String, Object> params, @NotNull int quality) {
+        params.put(QUALITY_PARAMETER, "" + quality);
+    }
+
+    private static void addWidthParameter(@NotNull Map<String, Object> params, @NotNull int width) {
+        params.put(WIDTH_PARAMETER, "" + width);
+    }
+
+    private static void addSizeParameter(@NotNull Map<String, Object> params, @NotNull Dimension dimension) {
+        if (dimension.width != 0 && dimension.height != 0) {
+            params.put(SIZE_PARAMETER, dimension.width + "," + dimension.height);
+        }
+    }
+
+    private static void addCropParameter(@NotNull Map<String, Object> params, @NotNull ValueMap componentProperties) {
+        String cropParameter = getCropRect(componentProperties);
+        if (!StringUtils.isEmpty(cropParameter)) {
+            params.put(CROP_PARAMETER, cropParameter);
+        }
+    }
+
+    private static void addRotationParameter(@NotNull Map<String, Object> params, @NotNull ValueMap componentProperties) {
+        int rotate = getRotation(componentProperties);
+        if (Integer.valueOf(rotate) != null && rotate != 0) {
+            params.put(ROTATE_PARAMETER, "" + rotate);
+        }
+    }
+
+    private static void addFlipParameter(@NotNull Map<String, Object> params, @NotNull ValueMap componentProperties) {
+        String flipParameter = getFlip(componentProperties);
+        if (!StringUtils.isEmpty(flipParameter)) {
+            params.put(FLIP_PARAMETER, flipParameter);
+        }
+    }
+
 
     /**
      * Retrieves the cropping rectangle, if one is defined for the image.

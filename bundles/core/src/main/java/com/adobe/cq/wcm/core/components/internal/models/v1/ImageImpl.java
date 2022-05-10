@@ -28,7 +28,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.WOIDUrlBuilderHelper;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.spi.AssetDelivery;
 import org.apache.commons.io.FilenameUtils;
@@ -102,7 +102,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected MimeTypeService mimeTypeService;
 
     @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
-    protected AssetDelivery WOIDeliveryService;
+    protected AssetDelivery assetDeliveryService;
 
 
     @Self
@@ -133,8 +133,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected String imageName;
     protected Resource fileResource;
     protected Optional<Link> link;
-    protected boolean useWOID = false;
-    protected boolean useMIF = false;
+    protected boolean useAssetDeliveryService = false;
+    protected boolean useModernImageFormats = false;
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
     }
@@ -169,8 +169,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
-        useWOID = currentStyle.get(PN_DESIGN_WOID_ENABLED, false);
-        useMIF = currentStyle.get(PN_DESIGN_MIF_ENABLED, false);
+        useAssetDeliveryService = currentStyle.get(PN_DESIGN_WOID_ENABLED, false) && assetDeliveryService != null;
+        useModernImageFormats = currentStyle.get(PN_DESIGN_MIF_ENABLED, false);
 
         Asset asset = null;
 
@@ -183,17 +183,16 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
                     imageName = getImageNameFromDam(fileReference);
                     hasContent = true;
-                    useWOID = useWOID && WOIDeliveryService != null;
                 } else {
-                    useWOID = false;
+                    useAssetDeliveryService = false;
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
                 }
             } else {
-                useWOID = false;
+                useAssetDeliveryService = false;
                 LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
             }
         } else {
-            useWOID = false;
+            useAssetDeliveryService = false;
             if (fileResource != null) {
                 mimeType = PropertiesUtil.toString(fileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), null);
                 if (StringUtils.isEmpty(mimeType)) {
@@ -265,15 +264,24 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 smartImages = new String[0];
                 smartSizes = new int[0];
             }
-            src = baseResourcePath + DOT + selector + DOT;
-            if (smartSizes.length == 1) {
-                src += jpegQuality + DOT + smartSizes[0] + DOT + extension;
-            } else {
-                src += extension;
+
+            if (useAssetDeliveryService) {
+                src = AssetDeliveryHelper.getSrc(assetDeliveryService, resource, imageName, extension, properties, smartSizes,
+                    jpegQuality, null);
             }
-            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "")) : "") +
+
+            if (StringUtils.isEmpty(src)) {
+                src = baseResourcePath + DOT + selector + DOT;
+                if (smartSizes.length == 1) {
+                    src += jpegQuality + DOT + smartSizes[0] + DOT + extension;
+                } else {
+                    src += extension;
+                }
+                src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                     (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+            }
+
             if (!isDecorative) {
                 link = linkHandler.getLink(resource);
             } else {
@@ -324,16 +332,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @Override
     public String getSrc() {
-        if (useWOID) {
-
-            String woidUrl = WOIDUrlBuilderHelper.getSrc(WOIDeliveryService, resource, imageName, extension, properties, smartSizes,
-                jpegQuality, null);
-
-            if (!StringUtils.isEmpty(woidUrl)) {
-                return woidUrl;
-            }
-        }
-
         return src;
     }
 

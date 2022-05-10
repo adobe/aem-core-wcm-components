@@ -191,7 +191,7 @@ public interface Image extends Component {
     /**
      * Name of the configuration policy property that controls whether Dynamic Media Next features are used by Core component.
      */
-    String PN_DESIGN_WOID_ENABLED = "enableWOID";
+    String PN_DESIGN_WOID_ENABLED = "enableAssetDeliveryService";
 
     /**
      *
@@ -199,7 +199,7 @@ public interface Image extends Component {
     /**
      * Name of the configuration policy property that controls whether modern image formats should be allowed.
      */
-    String PN_DESIGN_MIF_ENABLED = "enableMIF";
+    String PN_DESIGN_MIF_ENABLED = "enableModernImageFormats";
 
 
     /**

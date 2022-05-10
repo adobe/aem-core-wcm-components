@@ -19,16 +19,14 @@ import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.List;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.WOIDUrlBuilderHelper;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -67,6 +65,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     private List<String> ALLOWED_MODERN_IMAGE_FORMAT = Arrays.asList("image/webp");
 
+    private String srcSet = StringUtils.EMPTY;
+    private Map<String, String> srcSetWithMimeType = Collections.EMPTY_MAP;
+
     @PostConstruct
     protected void initModel() {
         super.initModel();
@@ -97,16 +98,21 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public String getSrcset() {
-        int[] widthsArray = getWidths();
-        if (useWOID) {
-            String srcSetUrl = WOIDUrlBuilderHelper.getSrcSet(WOIDeliveryService, resource, imageName, extension, properties, smartSizes,
-                getOriginalDimension(), jpegQuality);
 
-            if (!StringUtils.isEmpty(srcSetUrl)) {
-                return srcSetUrl;
+        if (!StringUtils.isEmpty(srcSet)) {
+            return srcSet;
+        }
+
+        if (useAssetDeliveryService) {
+            srcSet = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, extension, properties, smartSizes,
+            getOriginalDimension(), jpegQuality);
+
+            if (!StringUtils.isEmpty(srcSet)) {
+                return srcSet;
             }
         }
 
+        int[] widthsArray = getWidths();
         String srcUritemplate = getSrcUriTemplate();
         String[] srcsetArray = new String[widthsArray.length];
         if (widthsArray.length > 0 && srcUritemplate != null) {
@@ -124,35 +130,42 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                     }
                 }
-                return StringUtils.join(srcsetArray, ',');
+                srcSet = StringUtils.join(srcsetArray, ',');
+                return srcSet;
             }
         }
         return null;
     }
 
-    private boolean isMIFAllowed() {
-        return useWOID && useMIF;
+    private boolean useModernImageFormats() {
+        return useAssetDeliveryService && useModernImageFormats;
     }
 
 
     public Map<String, String> getSrcsetWithMimeType() {
 
-        if (!isMIFAllowed()) {
+        if (!useModernImageFormats()) {
             return null;
         }
+
+        if (srcSetWithMimeType.size() != 0) {
+            return srcSetWithMimeType;
+        }
+
         Map<String, String> srcSetMap = new HashMap<>();
         List<String> completeMimeTypeList = Stream.concat(ALLOWED_MODERN_IMAGE_FORMAT.stream(), Stream.of(mimeType))
             .collect(Collectors.toList());
         for (String currentMimeType : completeMimeTypeList) {
             String currentImageExtension = mimeTypeService.getExtension(currentMimeType);
-            String currentSrcSetUrl = WOIDUrlBuilderHelper.getSrcSet(WOIDeliveryService, resource, imageName, currentImageExtension, properties, smartSizes,
+            String currentSrcSetUrl = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, currentImageExtension, properties, smartSizes,
                 getOriginalDimension(), jpegQuality);
 
             if (!StringUtils.isEmpty(currentSrcSetUrl)) {
                 srcSetMap.put(currentMimeType, currentSrcSetUrl);
             }
         }
-        return srcSetMap;
+        srcSetWithMimeType = srcSetMap;
+        return srcSetWithMimeType;
     }
 
 
