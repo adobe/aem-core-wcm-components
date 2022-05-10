@@ -160,6 +160,8 @@ public class Commons {
     // hidden field
     public static String RT_FORMHIDDEN_V1 = "core-component/components/formhidden-v1";
     public static String RT_FORMHIDDEN_V2 = "core-component/components/formhidden-v2";
+    // download component
+    public static final String RT_DOWNLOAD_V1 = "core-component/components/download-v1";
 
     /**
      * Creates form entity builder
