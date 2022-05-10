@@ -54,6 +54,7 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
     public final static String PN_DEFAULT_HEADING_ELEMENT = "headingElement";
     public final static String PN_ALLOWED_TYPES = "allowedTypes";
     public final static String PN_DEFAULT_TYPE = "type";
+    public final static String PN_DEFAULT_TITLE_TYPE = "titleType";
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
@@ -75,6 +76,9 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
                     String[] headingElements = props.get(PN_ALLOWED_HEADING_ELEMENTS, String[].class);
                     String[] allowedTypes = props.get(PN_ALLOWED_TYPES, String[].class);
                     String defaultHeadingElement = props.get(PN_DEFAULT_HEADING_ELEMENT, props.get(PN_DEFAULT_TYPE, StringUtils.EMPTY));
+                    if (defaultHeadingElement.isEmpty() ) {
+                        defaultHeadingElement = props.get(PN_DEFAULT_TITLE_TYPE, StringUtils.EMPTY);
+                    }
                     if (headingElements == null || headingElements.length == 0) {
                         headingElements = allowedTypes;
                     }
@@ -123,12 +127,12 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
 
     private enum Heading {
 
-        H1("h1"),
-        H2("h2"),
-        H3("h3"),
-        H4("h4"),
-        H5("h5"),
-        H6("h6");
+        H1("H1"),
+        H2("H2"),
+        H3("H3"),
+        H4("H4"),
+        H5("H5"),
+        H6("H6");
 
         private String element;
 

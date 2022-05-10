@@ -275,6 +275,7 @@
                                         <replace file="target/jcr_root/libs/core/wcm/components/navigation/v1/navigation/.content.xml" token=".core-wcm" value="Core Structure" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/navigation/v2/navigation/.content.xml" token=".core-wcm" value="Core Structure" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/search/v1/search/.content.xml" token=".core-wcm" value="Core Structure" />
+                                        <replace file="target/jcr_root/libs/core/wcm/components/tableofcontents/v1/tableofcontents/.content.xml" token=".core-wcm" value="Core Structure" />
 
                                         <replace file="target/jcr_root/libs/core/wcm/components/accordion/v1/accordion/.content.xml" token=".core-wcm" value="Core Content" />
                                         <replace file="target/jcr_root/libs/core/wcm/components/button/v1/button/.content.xml" token=".core-wcm" value="Core Content" />
