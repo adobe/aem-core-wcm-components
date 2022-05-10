@@ -62,7 +62,7 @@ public class WOIDUrlBuilderHelper {
         for (int i = 0; i < smartSizes.length; i++) {
             String src =  getSrc(assetDelivery, assetResource,  imageName, extension, componentProperties, new int[]{smartSizes[i]}, jpegQuality, originalDimension);
             if (!StringUtils.isEmpty(src)) {
-                srcsetList.add(src);
+                srcsetList.add(src + " " + smartSizes[i] + "w");
             }
         }
 
