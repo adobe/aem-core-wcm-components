@@ -20,7 +20,7 @@ import java.io.StringReader;
 import javax.json.Json;
 import javax.json.JsonReader;
 
-import com.adobe.cq.wcm.spi.AssetDelivery;
+import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,14 +29,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(AemContextExtension.class)
 public class ImageImplTest extends AbstractImageTest {
@@ -253,7 +250,7 @@ public class ImageImplTest extends AbstractImageTest {
         context.contentPolicyMapping(resourceType,
             "enableAssetDeliveryService", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
-        assertEquals(ASSET_DELIVERY_TEST_URL + ".png", image.getSrc());
+        assertEquals(MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png", image.getSrc());
     }
 
     @Test

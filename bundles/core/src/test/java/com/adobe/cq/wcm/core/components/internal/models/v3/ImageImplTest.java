@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -29,7 +30,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
@@ -43,7 +43,6 @@ import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.designer.Style;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import org.mockito.stubbing.Answer;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_RESIZE_WIDTH;
@@ -623,7 +622,6 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     @Test
     void testSrcSetWithAssetDeliveryEnabledWithoutSmartSizes() {
         registerAssetDelivery();
-        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         context.contentPolicyMapping(resourceType,
             "enableAssetDeliveryService", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
@@ -638,7 +636,9 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             "enableAssetDeliveryService", true,
             "allowedRenditionWidths", new int[]{600, 800});
         Image image = getImageUnderTest(IMAGE0_PATH);
-        assertEquals(ASSET_DELIVERY_TEST_URL + ".png" + " 600w," + ASSET_DELIVERY_TEST_URL + ".png" + " 800w" , image.getSrcset());
+        String expectedSrcSet = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82 600w," +
+                                MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82 800w";
+        assertEquals(expectedSrcSet , image.getSrcset());
     }
 
     @Test
@@ -673,8 +673,14 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             "allowedRenditionWidths", new int[]{600, 800});
         Image image = getImageUnderTest(IMAGE0_PATH);
         Map<String, String> expectedMap = new HashMap<>();
-        expectedMap.put("image/png", "/asset/delivery/test/url.png 600w,/asset/delivery/test/url.png 800w");
-        expectedMap.put("image/webp", "/asset/delivery/test/url.webp 600w,/asset/delivery/test/url.webp 800w");
+        String expectedSrcSetForPNG = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82 600w," +
+            MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82 800w";
+
+        String expectedSrcSetForWebP = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".webp?width=600&quality=82 600w," +
+            MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".webp?width=800&quality=82 800w";
+
+        expectedMap.put("image/png", expectedSrcSetForPNG);
+        expectedMap.put("image/webp", expectedSrcSetForWebP);
         Map<String, String> actualMap = image.getSrcsetWithMimeType();
         assertTrue(expectedMap.equals(actualMap));
     }

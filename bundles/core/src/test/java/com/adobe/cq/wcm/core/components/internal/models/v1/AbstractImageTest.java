@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import com.adobe.cq.wcm.core.components.testing.MockPublishUtils;
 import com.adobe.cq.wcm.spi.AssetDelivery;
@@ -30,14 +29,6 @@ import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import org.mockito.Answers;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.opentest4j.AssertionFailedError;
-
-import javax.annotation.Nullable;
-
-import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -167,17 +158,7 @@ public class AbstractImageTest {
     }
 
     protected void registerAssetDelivery() {
-        AssetDelivery assetDelivery = mock(AssetDelivery.class, new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Object[] args = invocationOnMock.getArguments();
-                Map<String, Object> paramMap = (Map<String, Object>) args[1];
-                if (paramMap.containsKey("format")) {
-                    return ASSET_DELIVERY_TEST_URL + "." + paramMap.get("format");
-                }
-                return ASSET_DELIVERY_TEST_URL;
-            }
-        });
+        AssetDelivery assetDelivery = new MockAssetDelivery();
         context.registerService(AssetDelivery.class, assetDelivery);
     }
 
