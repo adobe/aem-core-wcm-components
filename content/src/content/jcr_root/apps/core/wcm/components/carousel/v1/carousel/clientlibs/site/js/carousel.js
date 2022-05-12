@@ -280,6 +280,8 @@
                     (function(index) {
                         indicators[i].addEventListener("click", function(event) {
                             navigateAndFocusIndicator(index);
+                            // pause the carousel auto-rotation
+                            pause();
                         });
                     })(i);
                 }
