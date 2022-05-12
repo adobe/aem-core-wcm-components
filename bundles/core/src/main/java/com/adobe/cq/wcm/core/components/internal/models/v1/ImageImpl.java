@@ -170,7 +170,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
         useAssetDeliveryService = currentStyle.get(PN_DESIGN_ASSET_DELIVERY_SERVICE_ENABLED, false) && assetDeliveryService != null;
-        useModernImageFormats = currentStyle.get(PN_DESIGN_MODERN_IMAGE_FORMATS_ENABLED, false);
+        useModernImageFormats = useAssetDeliveryService && currentStyle.get(PN_DESIGN_MODERN_IMAGE_FORMATS_ENABLED, false);
 
         Asset asset = null;
 

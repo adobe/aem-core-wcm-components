@@ -88,7 +88,7 @@
                                                 toggleName="FT_SITES-4700"/>
                                             <woid
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="core/wcm/components/rendercondition/isWOIDEnabled"/>
+                                                sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryServiceEnabled"/>
                                         </granite:rendercondition>
                                     </enableAssetDeliveryService>
                                 </items>

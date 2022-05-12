@@ -15,7 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
+import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import com.adobe.cq.wcm.core.components.testing.MockPublishUtils;
+import com.adobe.cq.wcm.spi.AssetDelivery;
 import com.day.cq.dam.api.s7dam.utils.PublishUtils;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.commons.mime.MimeTypeService;
@@ -27,6 +30,14 @@ import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.mockito.Answers;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.opentest4j.AssertionFailedError;
+
+import javax.annotation.Nullable;
+
+import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -104,6 +115,7 @@ public class AbstractImageTest {
     protected static final String SVG_FILE_PATH = IMAGE24_PATH + "/file";
     protected static final String LARGE_PNG_ASSET_PATH = "/content/dam/core/images/20000x20000.png";
     protected static final String TRANSPARENT_PNG_ASSET_PATH = "/content/dam/core/images/transparent_hd.png";
+    protected static final String ASSET_DELIVERY_TEST_URL="/asset/delivery/test/url";
 
     protected static ContentPolicyManager contentPolicyManager;
     protected static MimeTypeService mockedMimeTypeService;
@@ -152,6 +164,21 @@ public class AbstractImageTest {
         context.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_FILE_PATH, MIME_TYPE_SVG);
         context.load().binaryFile("/image/" + _40MPX_IMAGE_BINARY_NAME, LARGE_PNG_ASSET_PATH + "/jcr:content/renditions/original");
         context.load().binaryFile("/image/" + TRANSPARENT_IMAGE_BINARY_NAME, TRANSPARENT_PNG_ASSET_PATH + "/jcr:content/renditions/original");
+    }
+
+    protected void registerAssetDelivery() {
+        AssetDelivery assetDelivery = mock(AssetDelivery.class, new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                Object[] args = invocationOnMock.getArguments();
+                Map<String, Object> paramMap = (Map<String, Object>) args[1];
+                if (paramMap.containsKey("format")) {
+                    return ASSET_DELIVERY_TEST_URL + "." + paramMap.get("format");
+                }
+                return ASSET_DELIVERY_TEST_URL;
+            }
+        });
+        context.registerService(AssetDelivery.class, assetDelivery);
     }
 
 }

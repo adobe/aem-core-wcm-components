@@ -15,7 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -27,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
@@ -40,6 +43,7 @@ import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.designer.Style;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.mockito.stubbing.Answer;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_RESIZE_WIDTH;
@@ -614,5 +618,78 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=off", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
     }
+
+
+    @Test
+    void testSrcSetWithAssetDeliveryEnabledWithoutSmartSizes() {
+        registerAssetDelivery();
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDeliveryService", true);
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(null , image.getSrcset());
+    }
+
+    @Test
+    void testSrcSetWithAssetDeliveryEnabledWithSmartSizes() {
+        registerAssetDelivery();
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDeliveryService", true,
+            "allowedRenditionWidths", new int[]{600, 800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(ASSET_DELIVERY_TEST_URL + ".png" + " 600w," + ASSET_DELIVERY_TEST_URL + ".png" + " 800w" , image.getSrcset());
+    }
+
+    @Test
+    void testSrcSetWithMimeTypeAssetDeliveryEnabledAndMIFDisabled() {
+        registerAssetDelivery();
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDeliveryService", true,
+            "allowedRenditionWidths", new int[]{600, 800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(null , image.getSrcsetWithMimeType());
+    }
+
+    @Test
+    void testSrcSetWithMimeTypeAssetDeliveryDisabledAndMIFEnabled() {
+        registerAssetDelivery();
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "enableModernImageFormats", true,
+            "allowedRenditionWidths", new int[]{600, 800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(null , image.getSrcsetWithMimeType());
+    }
+
+    @Test
+    void testSrcSetWithMimeTypeAssetDeliveryEnabledAndMIFEnabled() {
+        registerAssetDelivery();
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDeliveryService", true,
+            "enableModernImageFormats", true,
+            "allowedRenditionWidths", new int[]{600, 800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        Map<String, String> expectedMap = new HashMap<>();
+        expectedMap.put("image/png", "/asset/delivery/test/url.png 600w,/asset/delivery/test/url.png 800w");
+        expectedMap.put("image/webp", "/asset/delivery/test/url.webp 600w,/asset/delivery/test/url.webp 800w");
+        Map<String, String> actualMap = image.getSrcsetWithMimeType();
+        assertTrue(expectedMap.equals(actualMap));
+    }
+
+    @Test
+    void testAssetDeliveryServiceWithoutFileReference() {
+        String escapedResourcePath = IMAGE27_PATH.replace("jcr:content", "_jcr_content");
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDeliveryService", true);
+        Image image = getImageUnderTest(IMAGE27_PATH);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000" + ".png", image.getSrc());
+    }
+
+
+
 
 }

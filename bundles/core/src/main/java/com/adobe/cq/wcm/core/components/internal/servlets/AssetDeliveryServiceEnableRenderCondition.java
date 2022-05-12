@@ -37,10 +37,10 @@ import java.io.IOException;
     service = { Servlet.class },
     property = {
         ServletResolverConstants.SLING_SERVLET_METHODS + "=GET",
-        ServletResolverConstants.SLING_SERVLET_RESOURCE_TYPES + "=core/wcm/components/rendercondition/isWOIDEnabled"
+        ServletResolverConstants.SLING_SERVLET_RESOURCE_TYPES + "=core/wcm/components/rendercondition/isAssetDeliveryServiceEnabled"
     }
 )
-public class WOIDEnableRenderCondition extends SlingSafeMethodsServlet {
+public class AssetDeliveryServiceEnableRenderCondition extends SlingSafeMethodsServlet {
 
     @Reference(cardinality= ReferenceCardinality.OPTIONAL, policyOption = ReferencePolicyOption.GREEDY)
     protected AssetDelivery assetDelivery;
@@ -48,11 +48,11 @@ public class WOIDEnableRenderCondition extends SlingSafeMethodsServlet {
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
         throws ServletException, IOException {
 
-        boolean woidEnable = false;
+        boolean assetDeliveryServiceEnable = false;
         if (assetDelivery != null) {
-            woidEnable = true;
+            assetDeliveryServiceEnable = true;
         }
 
-        request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(woidEnable));
+        request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(assetDeliveryServiceEnable));
     }
 }

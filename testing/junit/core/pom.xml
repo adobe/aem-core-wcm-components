@@ -199,6 +199,12 @@
             <artifactId>mockito-core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.day.cq.wcm</groupId>
+            <artifactId>cq-wcm-api</artifactId>
+            <version>5.15.18</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- Sling Models -->
         <dependency>

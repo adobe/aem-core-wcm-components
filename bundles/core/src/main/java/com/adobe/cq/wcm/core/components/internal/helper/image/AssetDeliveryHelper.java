@@ -86,7 +86,7 @@ public class AssetDeliveryHelper {
         }
 
         Resource assetResource = imageComponentResource.getResourceResolver().getResource(assetPath);
-        if (assetResource == null) { 
+        if (assetResource == null) {
             return null;
         }
 
