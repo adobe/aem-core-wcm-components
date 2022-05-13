@@ -15,7 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -672,17 +673,17 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             "enableModernImageFormats", true,
             "allowedRenditionWidths", new int[]{600, 800});
         Image image = getImageUnderTest(IMAGE0_PATH);
-        Map<String, String> expectedMap = new HashMap<>();
+        Map<String, String> expectedMap = new LinkedHashMap<>();
         String expectedSrcSetForPNG = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82 600w," +
             MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82 800w";
 
         String expectedSrcSetForWebP = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".webp?width=600&quality=82 600w," +
             MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".webp?width=800&quality=82 800w";
 
-        expectedMap.put("image/png", expectedSrcSetForPNG);
         expectedMap.put("image/webp", expectedSrcSetForWebP);
+        expectedMap.put("image/png", expectedSrcSetForPNG);
         Map<String, String> actualMap = image.getSrcsetWithMimeType();
-        assertTrue(expectedMap.equals(actualMap));
+        compareSrcSetMap(expectedMap, actualMap);
     }
 
     @Test
@@ -693,6 +694,19 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             "enableAssetDeliveryService", true);
         Image image = getImageUnderTest(IMAGE27_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000" + ".png", image.getSrc());
+    }
+
+    private void compareSrcSetMap(Map<String, String> expectedMap, Map<String, String> actualMap) {
+        assertEquals(expectedMap.size(), actualMap.size());
+        Iterator<String> expectedMapIterator = expectedMap.keySet().iterator();
+        Iterator<String> actualMapIterator = actualMap.keySet().iterator();
+
+        while (expectedMapIterator.hasNext()) {
+            String expectedKey = expectedMapIterator.next();
+            String actualKey = actualMapIterator.next();
+            assertEquals(expectedKey, actualKey);
+            assertEquals(expectedMap.get(expectedKey), actualMap.get(actualKey));
+        }
     }
 
 

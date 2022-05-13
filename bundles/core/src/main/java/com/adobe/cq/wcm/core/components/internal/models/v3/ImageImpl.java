@@ -19,11 +19,8 @@ import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -155,9 +152,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             return srcSetWithMimeType;
         }
 
-        Map<String, String> srcSetMap = new HashMap<>();
-        List<String> completeMimeTypeList = Stream.concat(ALLOWED_MODERN_IMAGE_FORMAT.stream(), Stream.of(mimeType))
-            .collect(Collectors.toList());
+        Map<String, String> srcSetMap = new LinkedHashMap<>();
+        List<String> completeMimeTypeList = new ArrayList<>(ALLOWED_MODERN_IMAGE_FORMAT);
+        completeMimeTypeList.add(mimeType);
         for (String currentMimeType : completeMimeTypeList) {
             String currentImageExtension = mimeTypeService.getExtension(currentMimeType);
             String currentSrcSetUrl = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, currentImageExtension, smartSizes,
