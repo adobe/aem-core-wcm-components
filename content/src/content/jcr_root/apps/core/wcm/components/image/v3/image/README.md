@@ -36,9 +36,9 @@ component; the actual size will be requested by the client device;
 2. `./jpegQuality` - defines the image quality for JPEGs (0 lowest quality / size to 100 highest quality / size). Default value is 82.
 3. `./disableLazyLoading` - if `true`, the browser's native lazy loading of images (loading only when the image is visible on the client
 device) is disabled.
-4. `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
+4.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
 5. `./resizeWidth` - Defines a resize width for resizing the images which are DAM assets, while keeping the original aspect ratio. If the value is bigger than the natural width of the image, it will have no effect. It will also have no effect on SVG images.
-6. `./enableAssetDeliveryService` - If `true`, Dynamic Media Next features are enabled.
+6. `./enableAssetDeliveryService` - If `true`, assets will be delivered through Dynamic Media.
 7. `./enableModernImageFormats` - If `true`, modern image formats are allowed. Available only if `./enableAssetDeliveryService` is enabled.
 
 ### Edit Dialog Properties

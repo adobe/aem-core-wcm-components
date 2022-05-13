@@ -40,6 +40,7 @@ device) is disabled.
 4. `./lazyThreshold` - defines the number of pixel an image is getting loaded before it gets visible and lazy loading is enabled. 
 Default is set to 0.
 5.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
+6. `./enableAssetDeliveryService` - If `true`, assets will be delivered through Dynamic Media.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Image component and are expected to be available as `Resource` properties:

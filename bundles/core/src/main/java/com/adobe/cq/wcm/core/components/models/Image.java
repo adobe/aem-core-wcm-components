@@ -185,7 +185,7 @@ public interface Image extends Component {
     String PN_DESIGN_DYNAMIC_MEDIA_ENABLED = "enableDmFeatures";
 
     /**
-     * Name of the configuration policy property that controls whether Dynamic Media Next features are used by Core component.
+     * Name of the configuration policy property that controls whether assets will be delivered through Dynamic Media.
      */
     String PN_DESIGN_ASSET_DELIVERY_SERVICE_ENABLED = "enableAssetDeliveryService";
 
