@@ -267,7 +267,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
             if (useAssetDeliveryService) {
                 src = AssetDeliveryHelper.getSrc(assetDeliveryService, resource, imageName, extension, smartSizes,
-                    jpegQuality, null);
+                    jpegQuality);
             }
 
             if (StringUtils.isEmpty(src)) {

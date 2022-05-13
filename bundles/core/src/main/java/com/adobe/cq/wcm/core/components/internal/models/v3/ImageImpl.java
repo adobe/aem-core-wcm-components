@@ -19,14 +19,16 @@ import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -48,6 +50,7 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.dam.api.Asset;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
 import static com.adobe.cq.wcm.core.components.models.Teaser.PN_IMAGE_LINK_HIDDEN;
@@ -105,7 +108,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
         if (useAssetDeliveryService) {
             srcSet = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, extension, smartSizes,
-                jpegQuality, getOriginalDimension());
+                jpegQuality);
 
             if (!StringUtils.isEmpty(srcSet)) {
                 return srcSet;
@@ -158,7 +161,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         for (String currentMimeType : completeMimeTypeList) {
             String currentImageExtension = mimeTypeService.getExtension(currentMimeType);
             String currentSrcSetUrl = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, currentImageExtension, smartSizes,
-                jpegQuality, getOriginalDimension());
+                jpegQuality);
 
             if (!StringUtils.isEmpty(currentSrcSetUrl)) {
                 srcSetMap.put(currentMimeType, currentSrcSetUrl);

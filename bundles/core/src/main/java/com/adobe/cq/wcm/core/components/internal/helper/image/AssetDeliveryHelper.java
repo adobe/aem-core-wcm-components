@@ -45,21 +45,20 @@ public class AssetDeliveryHelper {
     private static String CROP_PARAMETER = "c";
     private static String ROTATE_PARAMETER = "r";
     private static String FLIP_PARAMETER = "flip";
-    private static String SIZE_PARAMETER = "sz";
     private static String FORMAT_PARAMETER = "format";
     private static String PATH_PARAMETER = "path";
     private static String SEO_PARAMETER = "seoname";
 
 
     public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
-                                   @NotNull String extension, int[] smartSizes, int jpegQuality, Dimension originalDimension) {
+                                   @NotNull String extension, int[] smartSizes, int jpegQuality) {
 
         if (smartSizes.length == 0) {
             return null;
         }
         List<String> srcsetList = new ArrayList<String>();
         for (int i = 0; i < smartSizes.length; i++) {
-            String src =  getSrc(assetDelivery, imageComponentResource,  imageName, extension, new int[]{smartSizes[i]}, jpegQuality, originalDimension);
+            String src =  getSrc(assetDelivery, imageComponentResource,  imageName, extension, new int[]{smartSizes[i]}, jpegQuality);
             if (!StringUtils.isEmpty(src)) {
                 srcsetList.add(src + " " + smartSizes[i] + "w");
             }
@@ -73,7 +72,7 @@ public class AssetDeliveryHelper {
     }
 
     public static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
-                                 @NotNull String extension, @NotNull int[] smartSizes, int jpegQuality, Dimension originalDimension) {
+                                 @NotNull String extension, @NotNull int[] smartSizes, int jpegQuality) {
 
         Map<String, Object> params = new HashMap<>();
 
@@ -98,8 +97,6 @@ public class AssetDeliveryHelper {
             addQualityParameter(params, jpegQuality);
             addWidthParameter(params, smartSizes[0]);
 
-        } else if (originalDimension != null) {
-            addSizeParameter(params, originalDimension);
         }
 
         addCropParameter(params, componentProperties);
@@ -126,12 +123,6 @@ public class AssetDeliveryHelper {
 
     private static void addWidthParameter(@NotNull Map<String, Object> params, @NotNull int width) {
         params.put(WIDTH_PARAMETER, "" + width);
-    }
-
-    private static void addSizeParameter(@NotNull Map<String, Object> params, @NotNull Dimension dimension) {
-        if (dimension.width != 0 && dimension.height != 0) {
-            params.put(SIZE_PARAMETER, dimension.width + "," + dimension.height);
-        }
     }
 
     private static void addCropParameter(@NotNull Map<String, Object> params, @NotNull ValueMap componentProperties) {

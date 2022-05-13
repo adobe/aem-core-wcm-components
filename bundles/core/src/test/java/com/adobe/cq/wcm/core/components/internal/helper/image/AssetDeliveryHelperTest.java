@@ -28,7 +28,6 @@ import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,7 +50,7 @@ public class AssetDeliveryHelperTest {
     public void testSrcWithoutPath() throws Exception {
         AssetDelivery assetDelivery = new MockAssetDelivery();
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         assertNull(src);
     }
 
@@ -61,7 +60,7 @@ public class AssetDeliveryHelperTest {
         Map<String, Object> imageResourceProperties = new HashMap<>();
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         assertNull(src);
     }
 
@@ -72,7 +71,7 @@ public class AssetDeliveryHelperTest {
         Map<String, Object> imageResourceProperties = new HashMap<>();
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, "", JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, "", JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         assertNull(src);
     }
 
@@ -83,7 +82,7 @@ public class AssetDeliveryHelperTest {
         Map<String, Object> imageResourceProperties = new HashMap<>();
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, "svg", new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, "svg", new int[]{200}, JPEG_QUALITY);
         assertNull(src);
     }
 
@@ -94,36 +93,24 @@ public class AssetDeliveryHelperTest {
         Map<String, Object> imageResourceProperties = new HashMap<>();
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, new Dimension(200, 400));
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION + "?" +
             "width=" + 200 + "&" + "quality=" + JPEG_QUALITY;
         assertEquals(expectedSrcUrl, src);
     }
 
     @Test
-    public void testSrcWithMultipleWidthWithoutSize() throws Exception {
+    public void testSrcWithMultipleWidths() throws Exception {
         AssetDelivery assetDelivery = new MockAssetDelivery();
         context.create().resource(TEST_ASSET_RESOURCE_PATH);
         Map<String, Object> imageResourceProperties = new HashMap<>();
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200, 300}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200, 300}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION;
         assertEquals(expectedSrcUrl, src);
     }
 
-    @Test
-    public void testSrcWithMultipleWidthWithSize() throws Exception {
-        AssetDelivery assetDelivery = new MockAssetDelivery();
-        context.create().resource(TEST_ASSET_RESOURCE_PATH);
-        Map<String, Object> imageResourceProperties = new HashMap<>();
-        imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
-        Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200, 300}, JPEG_QUALITY, new Dimension(200, 400));
-        String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
-                                "?" + "sz=" + 200 + "," + 400;
-        assertEquals(expectedSrcUrl, src);
-    }
 
     @Test
     public void testSrcWithCropParameter() throws Exception {
@@ -133,7 +120,7 @@ public class AssetDeliveryHelperTest {
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         imageResourceProperties.put(ImageResource.PN_IMAGE_CROP, "10,20,100,200");
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
             "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 10 + "," + 20 + "," + 90 + "," + 180;
         assertEquals(expectedSrcUrl, src);
@@ -147,7 +134,7 @@ public class AssetDeliveryHelperTest {
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         imageResourceProperties.put(ImageResource.PN_IMAGE_ROTATE, "90");
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
             "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "r=" + 90;
         assertEquals(expectedSrcUrl, src);
@@ -161,7 +148,7 @@ public class AssetDeliveryHelperTest {
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         imageResourceProperties.put(Image.PN_FLIP_HORIZONTAL, true);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
             "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "flip=HORIZONTAL";
         assertEquals(expectedSrcUrl, src);
@@ -175,7 +162,7 @@ public class AssetDeliveryHelperTest {
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         imageResourceProperties.put(Image.PN_FLIP_VERTICAL, true);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
             "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "flip=VERTICAL";
         assertEquals(expectedSrcUrl, src);
@@ -190,7 +177,7 @@ public class AssetDeliveryHelperTest {
         imageResourceProperties.put(Image.PN_FLIP_VERTICAL, true);
         imageResourceProperties.put(Image.PN_FLIP_HORIZONTAL, true);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
             "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "flip=HORIZONTAL_AND_VERTICAL";
         assertEquals(expectedSrcUrl, src);
@@ -207,7 +194,7 @@ public class AssetDeliveryHelperTest {
         imageResourceProperties.put(Image.PN_FLIP_VERTICAL, true);
         imageResourceProperties.put(Image.PN_FLIP_HORIZONTAL, true);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY, null);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
             "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY +
             "&" + "c=" + 10 + "," + 20 + "," + 90 + "," + 180 +
@@ -223,7 +210,7 @@ public class AssetDeliveryHelperTest {
         Map<String, Object> imageResourceProperties = new HashMap<>();
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String srcSet = AssetDeliveryHelper.getSrcSet(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{}, JPEG_QUALITY, new Dimension(200, 400));
+        String srcSet = AssetDeliveryHelper.getSrcSet(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{}, JPEG_QUALITY);
         assertNull(srcSet);
     }
 
@@ -232,7 +219,7 @@ public class AssetDeliveryHelperTest {
         AssetDelivery assetDelivery = new MockAssetDelivery();
         context.create().resource(TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH);
-        String srcSet = AssetDeliveryHelper.getSrcSet(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{}, JPEG_QUALITY, new Dimension(200, 400));
+        String srcSet = AssetDeliveryHelper.getSrcSet(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{}, JPEG_QUALITY);
         assertNull(srcSet);
     }
 
@@ -244,7 +231,7 @@ public class AssetDeliveryHelperTest {
         Map<String, Object> imageResourceProperties = new HashMap<>();
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
-        String srcSet = AssetDeliveryHelper.getSrcSet(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200, 400}, JPEG_QUALITY, new Dimension(200, 400));
+        String srcSet = AssetDeliveryHelper.getSrcSet(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200, 400}, JPEG_QUALITY);
         String expectedSrcSet = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION + "?" +
                                    "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + " 200w"
                                    + "," +
