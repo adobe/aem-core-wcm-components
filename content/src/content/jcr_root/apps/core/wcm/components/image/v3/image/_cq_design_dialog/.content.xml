@@ -65,15 +65,7 @@
                                         value="{Boolean}true">
                                         <granite:rendercondition
                                             jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/renderconditions/and">
-                                            <featuretoggle
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/renderconditions/featuretoggle"
-                                                toggleName="FT_SITES-4700"/>
-                                            <woid
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryServiceEnabled"/>
-                                        </granite:rendercondition>
+                                            sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryServiceEnabled"/>
                                     </enableAssetDeliveryService>
                                     <enableModernImageFormats
                                         jcr:primaryType="nt:unstructured"
@@ -85,15 +77,7 @@
                                         value="{Boolean}true">
                                         <granite:rendercondition
                                             jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/renderconditions/and">
-                                            <featuretoggle
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/renderconditions/featuretoggle"
-                                                toggleName="FT_SITES-4700"/>
-                                            <woid
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryServiceEnabled"/>
-                                        </granite:rendercondition>
+                                            sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryServiceEnabled"/>
                                     </enableModernImageFormats>
                                     <disableLazyLoading
                                         jcr:primaryType="nt:unstructured"
