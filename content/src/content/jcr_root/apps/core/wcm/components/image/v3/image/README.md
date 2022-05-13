@@ -36,8 +36,10 @@ component; the actual size will be requested by the client device;
 2. `./jpegQuality` - defines the image quality for JPEGs (0 lowest quality / size to 100 highest quality / size). Default value is 82.
 3. `./disableLazyLoading` - if `true`, the browser's native lazy loading of images (loading only when the image is visible on the client
 device) is disabled.
-4.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
+4. `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
 5. `./resizeWidth` - Defines a resize width for resizing the images which are DAM assets, while keeping the original aspect ratio. If the value is bigger than the natural width of the image, it will have no effect. It will also have no effect on SVG images.
+6. `./enableAssetDeliveryService` - If `true`, Dynamic Media Next features are enabled.
+7. `./enableModernImageFormats` - If `true`, modern image formats are allowed. Available only if `./enableAssetDeliveryService` is enabled.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Image component and are expected to be available as `Resource` properties:
@@ -128,4 +130,4 @@ In addition, SVG image types have a more limited set of editing options availabl
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_image\_v3](https://www.adobe.com/go/aem_cmp_image_v3)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_image](https://www.adobe.com/go/aem_cmp_library_image)
-* **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann), [Vlad Coman](https://github.com/comanV)
+* **Authors**: [Stefan Seifert](https://github.com/stefanseifert), [Vlad Bailescu](https://github.com/vladbailescu), [Jean-Christophe Kautzmann](https://github.com/jckautzmann), [Vlad Coman](https://github.com/comanV), [Ankit Agarwal](https://github.com/anagarwa), [Vishal Singh Arya](https://github.com/vsarya)
