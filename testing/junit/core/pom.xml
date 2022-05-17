@@ -54,6 +54,9 @@
                         <goals>
                             <goal>baseline</goal>
                         </goals>
+                        <configuration>
+                            <comparisonVersion>${project.version}</comparisonVersion>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
