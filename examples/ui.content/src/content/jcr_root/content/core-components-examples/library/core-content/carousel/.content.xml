@@ -234,6 +234,34 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core-components-examples/components/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
+                            <item_331258757
+                                cq:panelTitle="Item 3.3"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 3.3"
+                                sling:resourceType="wcm/foundation/components/responsivegrid">
+                                <image
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core-components-examples/components/image"
+                                    fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg">
+                                    <cq:responsive jcr:primaryType="nt:unstructured">
+                                        <default
+                                            jcr:primaryType="nt:unstructured"
+                                            width="6"/>
+                                    </cq:responsive>
+                                </image>
+                                <text
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core-components-examples/components/text"
+                                    id="123"
+                                    text="&lt;p>Libero id faucibus nisl tincidunt eget nullam non nisi. Hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris. Velit aliquet sagittis id consectetur purus ut. Orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt.&lt;/p>"
+                                    textIsRich="true">
+                                    <cq:responsive jcr:primaryType="nt:unstructured">
+                                        <default
+                                            jcr:primaryType="nt:unstructured"
+                                            width="6"/>
+                                    </cq:responsive>
+                                </text>
+                            </item_331258757>
                         </carousel_7304850024>
                     </component>
                     <info
@@ -313,6 +341,41 @@
                             reference="../../component"/>
                     </info>
                 </demo_293658729>
+                <title_290386009
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Deep Linking"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337506002
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Linking to a carousel item displays the item and scrolls to it.&lt;/p>"
+                    textIsRich="true"/>
+                <button_1
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to a carousel item ID (same browser tab)."
+                    linkTarget="_self"
+                    linkURL="#carousel-bfe4fa6647-item-47f1a7ca67-tabpanel"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_3
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to an ID within a carousel item (same browser tab)."
+                    linkTarget="_self"
+                    linkURL="#123"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_1b
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to a carousel item ID (new browser tab)."
+                    linkTarget="_blank"
+                    linkURL="#carousel-bfe4fa6647-item-47f1a7ca67-tabpanel"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_3b
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to an ID within a carousel item (new browser tab)."
+                    linkTarget="_blank"
+                    linkURL="#123"
+                    sling:resourceType="core-components-examples/components/button"/>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">
