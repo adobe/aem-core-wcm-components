@@ -105,4 +105,13 @@ public class ImageIT extends AuthorBaseUITest {
         imageTests.testCheckMapAreaNavigationAndResponsiveResize(authorClient);
     }
 
+    /**
+     * Test: set asset from DAM without description
+     */
+    @Test
+    @DisplayName("Test: set asset from DAM without description")
+    public void testSetAssetWithoutDescription() throws TimeoutException, InterruptedException {
+        imageTests.testSetAssetWithoutDescription();
+    }
+
 }
