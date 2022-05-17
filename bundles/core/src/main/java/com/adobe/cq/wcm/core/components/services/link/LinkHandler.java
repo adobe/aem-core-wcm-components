@@ -28,7 +28,7 @@ import com.day.cq.wcm.api.Page;
 public interface LinkHandler {
 
     /**
-     * Builds a link based on the given resource and based on link attributes (e.g. target, accessibility label, title).
+     * Builds a link based on the given resource and sets its link attributes (e.g. target, accessibility label, title).
      *
      * @param resource Resource
      * @param linkURLPropertyName Property name to read link URL from.
@@ -40,7 +40,7 @@ public interface LinkHandler {
     Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName, Map<String, String> attributes);
 
     /**
-     * Builds a link pointing to the given target page and based on link attributes (e.g. target, accessibility label, title).
+     * Builds a link pointing to the given target page and sets its link attributes (e.g. target, accessibility label, title).
      * @param page Target page
      * @param attributes Link attributes
      *
@@ -51,7 +51,7 @@ public interface LinkHandler {
     Optional<Link> getLink(@Nullable Page page, Map<String, String> attributes);
 
     /**
-     * Builds a link pointing to the given Link URL and based on link attributes (e.g. target, accessibility label, title).
+     * Builds a link pointing to the given Link URL and sets its link attributes (e.g. target, accessibility label, title).
      * @param linkURL Link URL
      * @param attributes Link attributes
      *
