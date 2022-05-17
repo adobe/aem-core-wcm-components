@@ -182,9 +182,11 @@
                         setItemExpanded(deepLinkItem, true, true);
                     }
                     var hashId = window.location.hash.substring(1);
-                    var hashItem = document.querySelector("[id='" + hashId + "']");
-                    if (hashItem) {
-                        hashItem.scrollIntoView();
+                    if (hashId) {
+                        var hashItem = document.querySelector("[id='" + hashId + "']");
+                        if (hashItem) {
+                            hashItem.scrollIntoView();
+                        }
                     }
                 }
             }
