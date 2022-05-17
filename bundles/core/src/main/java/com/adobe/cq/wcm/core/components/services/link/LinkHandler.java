@@ -28,25 +28,27 @@ import com.day.cq.wcm.api.Page;
 public interface LinkHandler {
 
     /**
-     * Builds a link based on the given resource.
+     * Builds a link based on the given resource and based on link attributes (e.g. target, accessibility label, title).
      *
      * @param resource Resource
      * @param linkURLPropertyName Property name to read link URL from.
+     * @param attributes Link attributes
      * @return {@link Optional} of  {@link Link}
      */
     @NotNull
     @SuppressWarnings("rawtypes")
-    Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName);
+    Optional<Link> getLink(@NotNull Resource resource, String linkURLPropertyName, Map<String, String> attributes);
 
     /**
-     * Builds a link pointing to the given target page.
+     * Builds a link pointing to the given target page and based on link attributes (e.g. target, accessibility label, title).
      * @param page Target page
+     * @param attributes Link attributes
      *
      * @return {@link Optional} of  {@link Link<Page>}
      */
     @NotNull
     @SuppressWarnings("rawtypes")
-    Optional<Link> getLink(@Nullable Page page);
+    Optional<Link> getLink(@Nullable Page page, Map<String, String> attributes);
 
     /**
      * Builds a link pointing to the given Link URL and based on link attributes (e.g. target, accessibility label, title).
