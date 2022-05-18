@@ -32,6 +32,7 @@
              data-sly-call="${clientlib.css @ categories='core.wcm.components.page.v2.pwa'}"></sly>
         <meta name="cq:sw_path" content="${pwa.serviceWorkerPath @ context ='text'}"/>
     </sly>
+    <sly>${page.resourceAttribute @ context = 'unsafe'}</sly>
     <sly data-sly-include="head.links.html"></sly>
     <sly data-sly-include="customheaderlibs.html"></sly>
     <sly data-sly-call="${headlibRenderer.headlibs @
