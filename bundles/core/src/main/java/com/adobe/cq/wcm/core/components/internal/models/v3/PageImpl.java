@@ -15,10 +15,16 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.jetbrains.annotations.NotNull;
+
+
+import org.apache.sling.api.resource.Resource;
+import org.apache.commons.lang3.StringUtils;
 
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -33,6 +39,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v3/page";
+    public static final String LINK_ATTRIBUTE_NAME = "linkAttributeName";
+    public static final String LINK_ATTRIBUTE_VALUE = "linkAttributeValue";
+    public static final String RESOURCE_LOADING = "resourceloading";
+    public static final String LINK = "link";
 
     /**
      * Style property name to load custom Javascript libraries asynchronously.
@@ -51,5 +61,53 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
         return new RedirectItemImpl(redirectTarget, request, linkHandler);
     }
+    
+    public String getResourceAttribute() {
+		String linkVal = StringUtils.EMPTY;
+		if (currentPage.getPath() != null) {
+			linkVal = getResourcesOfAttr(currentPage.getContentResource(), linkVal);
+		}
+		return linkVal;
+	}
+
+	public String getResourcesOfAttr(Resource resource, String linkVal) {
+		Resource link = resource.getChild(LINK);
+		String attrName = StringUtils.EMPTY;
+		String attrValue = StringUtils.EMPTY;
+		String attributes = StringUtils.EMPTY;
+		if (link != null) {
+			for (Resource linkres : link.getChildren()) {
+				Resource resourceloading = linkres.getChild(RESOURCE_LOADING);
+				if (resourceloading != null) {
+					String result = StringUtils.EMPTY;
+					List<String> list = new ArrayList<String>();
+					for (Resource res : resourceloading.getChildren()) {
+						attrName = StringUtils.EMPTY;
+						attrValue = StringUtils.EMPTY;
+						if (res.getValueMap().containsKey(LINK_ATTRIBUTE_NAME)) {
+							attrName = res.getValueMap().get(LINK_ATTRIBUTE_NAME, String.class);
+						}
+						if (res.getValueMap().containsKey(LINK_ATTRIBUTE_VALUE)) {
+							attrValue = res.getValueMap().get(LINK_ATTRIBUTE_VALUE, String.class);
+						}
+						if (attrValue == null || attrValue.equals(StringUtils.EMPTY)) {
+							attributes = attrName;
+						} else {
+							attributes = attrName + "=" + "\"" + attrValue + "\"";
+						}
+
+						list.add(attributes);
+						result = StringUtils.join(list, " ");
+					}
+					if (linkVal.equals(StringUtils.EMPTY)) {
+						linkVal = "<link " + result + " />";
+					} else {
+						linkVal = linkVal + "\n" + "\t" + "<link " + result + " />";
+					}
+				}
+			}
+		}
+		return linkVal;
+	}
 
 }
