@@ -199,6 +199,70 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
                         path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/pwa"/>
+                  <pagelevelconfig
+                          jcr:primaryType="nt:unstructured"
+                          jcr:title="Page Level Configurations"
+                          sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                          <items jcr:primaryType="nt:unstructured">
+                              <column
+                                  jcr:primaryType="nt:unstructured"
+                                  sling:resourceType="granite/ui/components/coral/foundation/container">
+                                  <items jcr:primaryType="nt:unstructured">
+                                      <resourceLoadingAttributes
+                                          jcr:primaryType="nt:unstructured"
+                                          jcr:title="Resource Loading Attributes"
+                                          sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                          <items jcr:primaryType="nt:unstructured">
+                                              <column
+                                                  jcr:primaryType="nt:unstructured"
+                                                  sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                  <items jcr:primaryType="nt:unstructured">
+                                                      <link
+                                                          jcr:primaryType="nt:unstructured"
+                                                          sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                          composite="{Boolean}true"
+                                                          fieldLabel="Link Details">
+                                                          <field
+                                                              jcr:primaryType="nt:unstructured"
+                                                              sling:resourceType="granite/ui/components/coral/foundation/container"
+                                                              name="./link">
+                                                              <items jcr:primaryType="nt:unstructured">
+                                                                  <resourceloading
+                                                                      jcr:primaryType="nt:unstructured"
+                                                                      sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                                      composite="{Boolean}true"
+                                                                      fieldLabel="Link Attributes">
+                                                                      <field
+                                                                          jcr:primaryType="nt:unstructured"
+                                                                          sling:resourceType="granite/ui/components/coral/foundation/container"
+                                                                          name="./resourceloading">
+                                                                          <items jcr:primaryType="nt:unstructured">
+                                                                              <linkAttributeName
+                                                                                  jcr:primaryType="nt:unstructured"
+                                                                                  sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                                                  fieldDescription="Ex: href, rel, as, type, crossorigin etc"
+                                                                                  fieldLabel="Link Attribute Name"
+                                                                                  name="./linkAttributeName"/>
+                                                                              <linkAttributeValue
+                                                                                  jcr:primaryType="nt:unstructured"
+                                                                                  sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                                                  fieldDescription="Enter a valid Attribute Value against the Attribute Name"
+                                                                                  fieldLabel="Link Attribute Value"
+                                                                                  name="./linkAttributeValue"/>
+                                                                          </items>
+                                                                      </field>
+                                                                  </resourceloading>
+                                                              </items>
+                                                          </field>
+                                                      </link>
+                                                  </items>
+                                              </column>
+                                          </items>
+                                      </resourceLoadingAttributes>
+                                  </items>
+                              </column>
+                          </items>
+                      </pagelevelconfig>
                 </items>
             </tabs>
         </items>
