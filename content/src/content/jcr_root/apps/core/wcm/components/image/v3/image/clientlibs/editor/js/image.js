@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-(function($) {
+(function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-image__editor";
@@ -154,6 +154,18 @@
     $(window).on("focus", function() {
         if (fileReference) {
             retrieveDAMInfo(fileReference);
+        }
+    });
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: altInputSelector,
+        validate: function() {
+            var seededValue = $(altInputSelector).attr("data-seeded-value");
+            var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
+            if (isAltCheckboxChecked && !seededValue) {
+                return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
+            }
         }
     });
 
@@ -476,4 +488,4 @@
         }
     }
 
-})(jQuery);
+})(jQuery, Granite);
