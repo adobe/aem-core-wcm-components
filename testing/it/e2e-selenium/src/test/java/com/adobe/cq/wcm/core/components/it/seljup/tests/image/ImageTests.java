@@ -19,6 +19,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
@@ -32,28 +33,30 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImag
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest.adminClient;
 import static com.codeborne.selenide.Selenide.$;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ImageTests {
 
-    private static String testAssetsPath         = "/content/dam/core-components";
-    private static String testImagePath          = testAssetsPath + "/core-comp-test-image.jpg";
-    private static String altText                = "Return to Arkham";
-    private static String captionText            = "The Last Guardian";
-    private static String originalDamTitle       = "Beach house";
+    private static String testAssetsPath = "/content/dam/core-components";
+    private static String testImagePath = testAssetsPath + "/core-comp-test-image.jpg";
+    private static String testImageWithoutDescriptionPath = testAssetsPath + "/Adobe_Systems_logo_and_wordmark.png";
+    private static String altText = "Return to Arkham";
+    private static String captionText = "The Last Guardian";
+    private static String originalDamTitle = "Beach house";
     private static String originalDamDescription = "House on a beach with blue sky";
-    private static String logoNodeName           = "Adobe_Systems_logo_and_wordmark.png";
-    private static String logoFileName           = "adobe-systems-logo-and-wordmark.png";
-    private static String imageFileName          = "core-comp-test-image.jpeg";
-    private static String pageImageAlt           = "page image alt";
-    private static String climbingAsset          = "AdobeStock_140634652_climbing.jpeg";
+    private static String logoNodeName = "Adobe_Systems_logo_and_wordmark.png";
+    private static String logoFileName = "adobe-systems-logo-and-wordmark.png";
+    private static String imageFileName = "core-comp-test-image.jpeg";
+    private static String pageImageAlt = "page image alt";
+    private static String climbingAsset = "AdobeStock_140634652_climbing.jpeg";
     private static String climbingAssetFormatted = StringUtils.lowerCase(climbingAsset).replace("_", "-");
-    private static String climbingAssetAltText   = "Rock Climbing and Bouldering above the lake and mountains";
+    private static String climbingAssetAltText = "Rock Climbing and Bouldering above the lake and mountains";
 
     private String testPage;
     private String proxyPath;
@@ -195,6 +198,27 @@ public class ImageTests {
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
                 + " and title " + captionText);
+    }
+
+    public void testSetAssetWithoutDescription() throws InterruptedException, TimeoutException {
+        Commons.openSidePanel();
+        dragImageWithoutDescription();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.openMetadataTab();
+        Commons.saveConfigureDialog();
+        String assetWithoutDescriptionErrorMessageSelector = "coral-tooltip[variant='error'] coral-tooltip-content";
+        assertEquals("Error: Please provide an asset which has a description that can be used as alt text.", $(assetWithoutDescriptionErrorMessageSelector).innerText());
+    }
+
+    public void testSetAssetWithoutDescriptionV3() throws InterruptedException, TimeoutException {
+        Commons.openSidePanel();
+        dragImageWithoutDescription();
+        Commons.saveConfigureDialog();
+        String assetWithoutDescriptionErrorMessageSelector = "coral-tooltip[variant='error'] coral-tooltip-content";
+        String errorIcon = "input[name='./alt'] + coral-icon[icon='alert']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", $(errorIcon));
+        assertEquals("Error: Please provide an asset which has a description that can be used as alt text.", $(assetWithoutDescriptionErrorMessageSelector).innerText());
     }
 
     public void testAddAltTextAndTitleV3() throws TimeoutException, InterruptedException {
@@ -427,6 +451,14 @@ public class ImageTests {
         Commons.openEditDialog(editorPage, compPath);
         editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
+    }
+
+    private void dragImageWithoutDescription() throws TimeoutException, InterruptedException {
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.setAssetFilter(testAssetsPath);
+        Commons.openEditDialog(editorPage, compPath);
+        editDialog.checkImageFromPageImage();
+        editDialog.uploadImageFromSidePanel(testImageWithoutDescriptionPath);
     }
 
     /**
