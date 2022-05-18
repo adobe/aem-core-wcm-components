@@ -458,5 +458,18 @@ public interface Page extends ContainerExporter, Component {
      * @since om.adobe.cq.wcm.core.components.models 12.24.0
      */
     default boolean isClientlibsAsync() {return false;}
+    
+    /**
+     * Returns a list of resource loading attributes configured for the page.
+     * <p>
+     * The list is cleared from duplicates and conflicting combinations.
+     *
+     * @return a list of resource loading attributes
+     * @since om.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    @Nullable
+    default String getResourceAttribute() {
+    	 return null;
+    }
 
 }
