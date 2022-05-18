@@ -198,8 +198,7 @@ public class AssetDeliveryHelper {
     }
 
     /**
-     * Retrieves the rotation angle for the image, if one is present. Typically this should be a value between 0 and 360.
-     *
+     * Retrieves the flip parameters for the image, if one is present.
      * @param properties the image component's properties
      * @return the rotation angle
      */

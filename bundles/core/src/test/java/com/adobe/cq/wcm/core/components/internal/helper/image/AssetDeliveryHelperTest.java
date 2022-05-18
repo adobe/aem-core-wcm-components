@@ -95,7 +95,7 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION + "?" +
-            "width=" + 200 + "&" + "quality=" + JPEG_QUALITY;
+            "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -107,7 +107,7 @@ public class AssetDeliveryHelperTest {
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200, 300}, JPEG_QUALITY);
-        String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION;
+        String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION + "?" + "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -122,7 +122,7 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
-            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 10 + "," + 20 + "," + 90 + "," + 180;
+            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 10 + "," + 20 + "," + 90 + "," + 180 + "&" + "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -136,7 +136,7 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
-            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "r=" + 90;
+            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "r=" + 90 + "&" + "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -150,7 +150,7 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
-            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "flip=HORIZONTAL";
+            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "flip=HORIZONTAL" + "&" + "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -164,7 +164,7 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
-            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "flip=VERTICAL";
+            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "flip=VERTICAL" + "&" + "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -179,7 +179,7 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200}, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
-            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "flip=HORIZONTAL_AND_VERTICAL";
+            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "flip=HORIZONTAL_AND_VERTICAL" + "&" + "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -199,7 +199,8 @@ public class AssetDeliveryHelperTest {
             "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY +
             "&" + "c=" + 10 + "," + 20 + "," + 90 + "," + 180 +
             "&" + "r=" + 90 +
-            "&" + "flip=HORIZONTAL_AND_VERTICAL";
+            "&" + "flip=HORIZONTAL_AND_VERTICAL" +
+            "&" + "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -233,10 +234,10 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String srcSet = AssetDeliveryHelper.getSrcSet(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200, 400}, JPEG_QUALITY);
         String expectedSrcSet = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION + "?" +
-                                   "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + " 200w"
+                                   "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "preferwebp=true" + " 200w"
                                    + "," +
                                    MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION + "?" +
-                                   "width=" + 400 + "&" + "quality=" + JPEG_QUALITY + " 400w";
+                                   "width=" + 400 + "&" + "quality=" + JPEG_QUALITY + "&" + "preferwebp=true" + " 400w";
         assertEquals(expectedSrcSet, srcSet);
     }
 }
