@@ -21,8 +21,6 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
@@ -103,8 +101,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             return srcSet;
         }
 
-        if (useAssetDeliveryService) {
-            srcSet = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, extension, smartSizes,
+        if (useAssetDelivery) {
+            srcSet = AssetDeliveryHelper.getSrcSet(assetDelivery, resource, imageName, extension, smartSizes,
                 jpegQuality);
 
             if (!StringUtils.isEmpty(srcSet)) {
@@ -135,37 +133,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             }
         }
         return null;
-    }
-
-    private boolean useModernImageFormats() {
-        return useAssetDeliveryService && useModernImageFormats;
-    }
-
-
-    public Map<String, String> getSrcsetWithMimeType() {
-
-        if (!useModernImageFormats()) {
-            return null;
-        }
-
-        if (srcSetWithMimeType.size() != 0) {
-            return srcSetWithMimeType;
-        }
-
-        Map<String, String> srcSetMap = new LinkedHashMap<>();
-        List<String> completeMimeTypeList = new ArrayList<>(ALLOWED_MODERN_IMAGE_FORMAT);
-        completeMimeTypeList.add(mimeType);
-        for (String currentMimeType : completeMimeTypeList) {
-            String currentImageExtension = mimeTypeService.getExtension(currentMimeType);
-            String currentSrcSetUrl = AssetDeliveryHelper.getSrcSet(assetDeliveryService, resource, imageName, currentImageExtension, smartSizes,
-                jpegQuality);
-
-            if (!StringUtils.isEmpty(currentSrcSetUrl)) {
-                srcSetMap.put(currentMimeType, currentSrcSetUrl);
-            }
-        }
-        srcSetWithMimeType = srcSetMap;
-        return srcSetWithMimeType;
     }
 
 

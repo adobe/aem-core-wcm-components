@@ -235,29 +235,29 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    void testEnableAssetDeliveryServiceWithoutService() throws Exception {
+    void testenableAssetDeliveryWithoutService() throws Exception {
         String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         context.contentPolicyMapping(resourceType,
-            "enableAssetDeliveryService", true);
+            "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
     }
 
     @Test
-    void testEnableAssetDeliveryServiceWithServiceRegistered() throws Exception {
+    void testEnableAssetDeliveryWithServiceRegistered() throws Exception {
         registerAssetDelivery();
         String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         context.contentPolicyMapping(resourceType,
-            "enableAssetDeliveryService", true);
+            "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
-        assertEquals(MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png", image.getSrc());
+        assertEquals(MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?preferwebp=true", image.getSrc());
     }
 
     @Test
     void testAssetDeliveryServiceWithoutFileReference() {
         registerAssetDelivery();
         context.contentPolicyMapping(resourceType,
-            "enableAssetDeliveryService", true);
+            "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE2_PATH);
         assertEquals(null, image.getSrc());
     }
@@ -267,7 +267,7 @@ public class ImageImplTest extends AbstractImageTest {
         String escapedResourcePath = IMAGE5_PATH.replace("jcr:content", "_jcr_content");
         registerAssetDelivery();
         context.contentPolicyMapping(resourceType,
-            "enableAssetDeliveryService", true);
+            "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE5_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".gif/1489998822138/" + ASSET_NAME + ".gif", image.getSrc());
     }

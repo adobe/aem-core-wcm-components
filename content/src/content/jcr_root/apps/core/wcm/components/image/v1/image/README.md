@@ -35,7 +35,8 @@ component; the actual size will be requested by the client device;
 2. `./jpegQuality` - defines the image quality for JPEGs (0 lowest quality / size to 100 highest quality / size). Default value is 82.
 3. `./disableLazyLoading` - allows to disable lazy loading for images (loading the image only when the image is visible on the client
 device)
-4`./enableAssetDeliveryService` - If `true`, assets will be delivered through Dynamic Media.
+4. `./enableAssetDelivery` - If `true`, assets will be delivered through Dynamic Media. This will also enable optimizations based on
+   [content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation). Currently, this optimization is available only for webp.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Image component and are expected to be available as `Resource` properties:

@@ -183,7 +183,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         dmAssetName = UrlEscapers.urlFragmentEscaper().escape(dmAssetName);
                         //image is DM
                         dmImage = true;
-                        useAssetDeliveryService = false;
+                        useAssetDelivery = false;
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         //sets to '/is/image/ or '/is/content' based on dam:scene7Type property
@@ -203,7 +203,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
                     }
-                    useAssetDeliveryService = useAssetDeliveryService && StringUtils.isEmpty(policyDelegatePath);
+                    useAssetDelivery = useAssetDelivery && StringUtils.isEmpty(policyDelegatePath);
 
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,

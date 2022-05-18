@@ -102,7 +102,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected MimeTypeService mimeTypeService;
 
     @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
-    protected AssetDelivery assetDeliveryService;
+    protected AssetDelivery assetDelivery;
 
 
     @Self
@@ -133,8 +133,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected String imageName;
     protected Resource fileResource;
     protected Optional<Link> link;
-    protected boolean useAssetDeliveryService = false;
-    protected boolean useModernImageFormats = false;
+    protected boolean useAssetDelivery = false;
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
     }
@@ -169,8 +168,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
-        useAssetDeliveryService = currentStyle.get(PN_DESIGN_ASSET_DELIVERY_SERVICE_ENABLED, false) && assetDeliveryService != null;
-        useModernImageFormats = useAssetDeliveryService && currentStyle.get(PN_DESIGN_MODERN_IMAGE_FORMATS_ENABLED, false);
+        useAssetDelivery = currentStyle.get(PN_DESIGN_ASSET_DELIVERY_ENABLED, false) && assetDelivery != null;
 
         Asset asset = null;
 
@@ -184,15 +182,15 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     imageName = getImageNameFromDam(fileReference);
                     hasContent = true;
                 } else {
-                    useAssetDeliveryService = false;
+                    useAssetDelivery = false;
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
                 }
             } else {
-                useAssetDeliveryService = false;
+                useAssetDelivery = false;
                 LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
             }
         } else {
-            useAssetDeliveryService = false;
+            useAssetDelivery = false;
             if (fileResource != null) {
                 mimeType = PropertiesUtil.toString(fileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), null);
                 if (StringUtils.isEmpty(mimeType)) {
@@ -265,8 +263,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 smartSizes = new int[0];
             }
 
-            if (useAssetDeliveryService) {
-                src = AssetDeliveryHelper.getSrc(assetDeliveryService, resource, imageName, extension, smartSizes,
+            if (useAssetDelivery) {
+                src = AssetDeliveryHelper.getSrc(assetDelivery, resource, imageName, extension, smartSizes,
                     jpegQuality);
             }
 

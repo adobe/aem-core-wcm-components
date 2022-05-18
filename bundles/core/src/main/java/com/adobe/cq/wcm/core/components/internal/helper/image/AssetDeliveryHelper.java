@@ -47,6 +47,7 @@ public class AssetDeliveryHelper {
     private static String FORMAT_PARAMETER = "format";
     private static String PATH_PARAMETER = "path";
     private static String SEO_PARAMETER = "seoname";
+    private static String PREFER_WEBP_PARAMETER = "preferwebp";
 
 
     public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
@@ -91,6 +92,7 @@ public class AssetDeliveryHelper {
         params.put(PATH_PARAMETER, assetPath);
         params.put(SEO_PARAMETER, imageName);
         params.put(FORMAT_PARAMETER, extension);
+        params.put(PREFER_WEBP_PARAMETER, "true");
 
         if (smartSizes.length == 1) {
             addQualityParameter(params, jpegQuality);

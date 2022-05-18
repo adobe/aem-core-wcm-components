@@ -38,6 +38,7 @@ public class MockAssetDelivery implements AssetDelivery {
                                                 add("r");
                                                 add("flip");
                                                 add("sz");
+                                                add("preferwebp");
                                             }
                                         };
 

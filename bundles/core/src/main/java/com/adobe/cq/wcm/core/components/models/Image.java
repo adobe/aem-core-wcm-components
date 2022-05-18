@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import java.util.List;
-import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -187,13 +186,7 @@ public interface Image extends Component {
     /**
      * Name of the configuration policy property that controls whether assets will be delivered through Dynamic Media.
      */
-    String PN_DESIGN_ASSET_DELIVERY_SERVICE_ENABLED = "enableAssetDeliveryService";
-
-    /**
-     * Name of the configuration policy property that controls whether modern image formats should be allowed.
-     */
-    String PN_DESIGN_MODERN_IMAGE_FORMATS_ENABLED = "enableModernImageFormats";
-
+    String PN_DESIGN_ASSET_DELIVERY_ENABLED = "enableAssetDelivery";
 
     /**
      * Name of the configuration policy property that will be used for resizing the base images, the ones from {@code src} attribute.
@@ -411,13 +404,5 @@ public interface Image extends Component {
     default ImageData getComponentData() {
         return null;
     }
-
-    /**
-     * Returns the value for the {@code srcset} along with their mimetype for srcset and type attribute of picture tag.
-     *
-     * @return A map consist of mimeType as key for {@code type} attribute and value of the {@code srcset} attribute as value of map, if one was set, or Empty Map.
-     * @since com.adobe.cq.wcm.core.components.models 12.27.0
-     */
-    default Map<String, String> getSrcsetWithMimeType() {return null;}
 
 }

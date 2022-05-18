@@ -15,10 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import org.apache.commons.lang3.StringUtils;
@@ -624,7 +621,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     void testSrcSetWithAssetDeliveryEnabledWithoutSmartSizes() {
         registerAssetDelivery();
         context.contentPolicyMapping(resourceType,
-            "enableAssetDeliveryService", true);
+            "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
         assertEquals(null , image.getSrcset());
     }
@@ -634,56 +631,12 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         registerAssetDelivery();
         String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         context.contentPolicyMapping(resourceType,
-            "enableAssetDeliveryService", true,
+            "enableAssetDelivery", true,
             "allowedRenditionWidths", new int[]{600, 800});
         Image image = getImageUnderTest(IMAGE0_PATH);
-        String expectedSrcSet = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82 600w," +
-                                MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82 800w";
+        String expectedSrcSet = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82&preferwebp=true 600w," +
+                                MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true 800w";
         assertEquals(expectedSrcSet , image.getSrcset());
-    }
-
-    @Test
-    void testSrcSetWithMimeTypeAssetDeliveryEnabledAndMIFDisabled() {
-        registerAssetDelivery();
-        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
-        context.contentPolicyMapping(resourceType,
-            "enableAssetDeliveryService", true,
-            "allowedRenditionWidths", new int[]{600, 800});
-        Image image = getImageUnderTest(IMAGE0_PATH);
-        assertEquals(null , image.getSrcsetWithMimeType());
-    }
-
-    @Test
-    void testSrcSetWithMimeTypeAssetDeliveryDisabledAndMIFEnabled() {
-        registerAssetDelivery();
-        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
-        context.contentPolicyMapping(resourceType,
-            "enableModernImageFormats", true,
-            "allowedRenditionWidths", new int[]{600, 800});
-        Image image = getImageUnderTest(IMAGE0_PATH);
-        assertEquals(null , image.getSrcsetWithMimeType());
-    }
-
-    @Test
-    void testSrcSetWithMimeTypeAssetDeliveryEnabledAndMIFEnabled() {
-        registerAssetDelivery();
-        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
-        context.contentPolicyMapping(resourceType,
-            "enableAssetDeliveryService", true,
-            "enableModernImageFormats", true,
-            "allowedRenditionWidths", new int[]{600, 800});
-        Image image = getImageUnderTest(IMAGE0_PATH);
-        Map<String, String> expectedMap = new LinkedHashMap<>();
-        String expectedSrcSetForPNG = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82 600w," +
-            MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82 800w";
-
-        String expectedSrcSetForWebP = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".webp?width=600&quality=82 600w," +
-            MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".webp?width=800&quality=82 800w";
-
-        expectedMap.put("image/webp", expectedSrcSetForWebP);
-        expectedMap.put("image/png", expectedSrcSetForPNG);
-        Map<String, String> actualMap = image.getSrcsetWithMimeType();
-        compareSrcSetMap(expectedMap, actualMap);
     }
 
     @Test
@@ -691,25 +644,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         String escapedResourcePath = IMAGE27_PATH.replace("jcr:content", "_jcr_content");
         registerAssetDelivery();
         context.contentPolicyMapping(resourceType,
-            "enableAssetDeliveryService", true);
+            "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE27_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000" + ".png", image.getSrc());
     }
-
-    private void compareSrcSetMap(Map<String, String> expectedMap, Map<String, String> actualMap) {
-        assertEquals(expectedMap.size(), actualMap.size());
-        Iterator<String> expectedMapIterator = expectedMap.keySet().iterator();
-        Iterator<String> actualMapIterator = actualMap.keySet().iterator();
-
-        while (expectedMapIterator.hasNext()) {
-            String expectedKey = expectedMapIterator.next();
-            String actualKey = actualMapIterator.next();
-            assertEquals(expectedKey, actualKey);
-            assertEquals(expectedMap.get(expectedKey), actualMap.get(actualKey));
-        }
-    }
-
-
-
-
 }

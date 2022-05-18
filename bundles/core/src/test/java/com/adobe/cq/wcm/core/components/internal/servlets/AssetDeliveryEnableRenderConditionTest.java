@@ -27,15 +27,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(AemContextExtension.class)
-public class AssetDeliveryServiceEnableRenderConditionTest {
+public class AssetDeliveryEnableRenderConditionTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private AssetDeliveryServiceEnableRenderCondition assetDeliveryServiceEnableRenderCondition;
+    private AssetDeliveryEnableRenderCondition assetDeliveryServiceEnableRenderCondition;
 
     @Test
     void testRenderConditionDisabled() throws Exception {
-        assetDeliveryServiceEnableRenderCondition = new AssetDeliveryServiceEnableRenderCondition();
+        assetDeliveryServiceEnableRenderCondition = new AssetDeliveryEnableRenderCondition();
         context.registerInjectActivateService(assetDeliveryServiceEnableRenderCondition);
         assetDeliveryServiceEnableRenderCondition.doGet(context.request(), context.response());
         RenderCondition renderCondition = (RenderCondition) context.request().getAttribute(RenderCondition.class.getName());
@@ -45,7 +45,7 @@ public class AssetDeliveryServiceEnableRenderConditionTest {
     @Test
     void testRenderConditionEnabled() throws Exception {
         context.registerService(AssetDelivery.class, mock(AssetDelivery.class));
-        assetDeliveryServiceEnableRenderCondition = new AssetDeliveryServiceEnableRenderCondition();
+        assetDeliveryServiceEnableRenderCondition = new AssetDeliveryEnableRenderCondition();
         context.registerInjectActivateService(assetDeliveryServiceEnableRenderCondition);
         assetDeliveryServiceEnableRenderCondition.doGet(context.request(), context.response());
         RenderCondition renderCondition = (RenderCondition) context.request().getAttribute(RenderCondition.class.getName());

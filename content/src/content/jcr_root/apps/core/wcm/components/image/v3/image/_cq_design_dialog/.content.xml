@@ -55,30 +55,18 @@
                                                       sling:resourceType="granite/ui/components/coral/foundation/renderconditions/feature"
                                                       feature="com.adobe.dam.asset.scene7.feature.flag"/>
                                     </enableDmFeatures>
-                                    <enableAssetDeliveryService
+                                    <enableAssetDelivery
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                         fieldDescription="When checked, Web Optimized Image Delivery is enabled."
-                                        name="./enableAssetDeliveryService"
+                                        name="./enableAssetDelivery"
                                         text="Enable Web Optimized Images"
                                         uncheckedValue="false"
                                         value="{Boolean}true">
                                         <granite:rendercondition
                                             jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryServiceEnabled"/>
-                                    </enableAssetDeliveryService>
-                                    <enableModernImageFormats
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        fieldDescription="When checked, Modern Image Format is enabled."
-                                        name="./enableModernImageFormats"
-                                        text="Enable Modern Image Format"
-                                        uncheckedValue="false"
-                                        value="{Boolean}true">
-                                        <granite:rendercondition
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryServiceEnabled"/>
-                                    </enableModernImageFormats>
+                                            sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryEnabled"/>
+                                    </enableAssetDelivery>
                                     <disableLazyLoading
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
