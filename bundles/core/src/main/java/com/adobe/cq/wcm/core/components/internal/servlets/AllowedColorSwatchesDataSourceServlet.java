@@ -19,12 +19,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -43,9 +49,9 @@ import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
 @Component(
-        service = { Servlet.class },
+        service = {Servlet.class},
         property = {
-                "sling.servlet.resourceTypes="+ AllowedColorSwatchesDataSourceServlet.RESOURCE_TYPE,
+                "sling.servlet.resourceTypes=" + AllowedColorSwatchesDataSourceServlet.RESOURCE_TYPE,
                 "sling.servlet.methods=GET",
                 "sling.servlet.extensions=html"
         }
@@ -65,22 +71,31 @@ public class AllowedColorSwatchesDataSourceServlet extends SlingSafeMethodsServl
 
     protected List<Resource> getAllowedColorSwatches(@NotNull SlingHttpServletRequest request) {
         List<Resource> colors = new ArrayList<>();
-        ResourceResolver resolver = request.getResourceResolver();
-        Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
-        ContentPolicyManager policyMgr = resolver.adaptTo(ContentPolicyManager.class);
-        if (policyMgr != null) {
-            ContentPolicy policy = policyMgr.getPolicy(contentResource);
-            if (policy != null) {
-                ValueMap color = null;
-                ValueMap properties = policy.getProperties();
-                if (properties != null) {
-                    String[] allowedColorSwatches = properties.get(PN_ALLOWED_COLOR_SWATCHES, String[].class);
-                    if (allowedColorSwatches != null && allowedColorSwatches.length > 0) {
-                        for (String allowedColorSwatch : allowedColorSwatches) {
-                            color = new ValueMapDecorator(new HashMap<String, Object>());
-                            color.put(PN_COLOR_VALUE, allowedColorSwatch);
-                            colors.add(new ValueMapResource(resolver, new ResourceMetadata(), JcrConstants.NT_UNSTRUCTURED,
-                                color));
+        String contentPath = Optional.ofNullable((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE)).orElseGet(
+                () -> {
+                    RequestPathInfo requestPathInfo = request.getRequestPathInfo();
+                    return Optional.ofNullable(requestPathInfo.getSuffix()).orElse(StringUtils.EMPTY);
+                });
+        if (StringUtils.isNotEmpty(contentPath)) {
+            ResourceResolver resolver = request.getResourceResolver();
+            Resource contentResource = resolver.getResource(contentPath);
+            if (contentResource != null) {
+                ContentPolicyManager policyMgr = resolver.adaptTo(ContentPolicyManager.class);
+                if (policyMgr != null) {
+                    ContentPolicy policy = policyMgr.getPolicy(contentResource);
+                    if (policy != null) {
+                        ValueMap color = null;
+                        ValueMap properties = policy.getProperties();
+                        if (properties != null) {
+                            String[] allowedColorSwatches = properties.get(PN_ALLOWED_COLOR_SWATCHES, String[].class);
+                            if (allowedColorSwatches != null && allowedColorSwatches.length > 0) {
+                                for (String allowedColorSwatch : allowedColorSwatches) {
+                                    color = new ValueMapDecorator(new HashMap<>());
+                                    color.put(PN_COLOR_VALUE, allowedColorSwatch);
+                                    colors.add(new ValueMapResource(resolver, new ResourceMetadata(), JcrConstants.NT_UNSTRUCTURED,
+                                            color));
+                                }
+                            }
                         }
                     }
                 }
