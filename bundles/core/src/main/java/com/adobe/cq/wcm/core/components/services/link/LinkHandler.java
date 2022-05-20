@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2021 Adobe
+ ~ Copyright 2022 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,7 +13,16 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-@Version("1.2.0")
 package com.adobe.cq.wcm.core.components.services.link;
 
-import org.osgi.annotation.versioning.Version;
+import java.util.Optional;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+
+public interface LinkHandler {
+
+    Optional<Link> getLink(@NotNull LinkBuilder builder);
+
+}
