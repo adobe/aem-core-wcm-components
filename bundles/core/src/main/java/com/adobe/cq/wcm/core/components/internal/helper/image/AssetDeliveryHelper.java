@@ -104,18 +104,13 @@ public class AssetDeliveryHelper {
         addRotationParameter(params, componentProperties);
         addFlipParameter(params, componentProperties);
 
-        String srcUriTemplateDecoded = "";
-        try {
-            String assetDeliveryURL = assetDelivery.getDeliveryURL(assetResource, params);
-            if (!StringUtils.isEmpty(assetDeliveryURL)) {
-                srcUriTemplateDecoded = URLDecoder.decode(assetDeliveryURL, StandardCharsets.UTF_8.name());
-            }
-
-        } catch (UnsupportedEncodingException e) {
-            LOGGER.error("Character Decoding failed for " + assetPath);
+        String assetDeliveryURL = assetDelivery.getDeliveryURL(assetResource, params);
+        if (!StringUtils.isEmpty(assetDeliveryURL)) {
+            return  assetDeliveryURL;
         }
 
-        return srcUriTemplateDecoded;
+
+        return StringUtils.EMPTY;
     }
 
     private static void addQualityParameter(@NotNull Map<String, Object> params, @NotNull int quality) {
