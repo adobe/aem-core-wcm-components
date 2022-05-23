@@ -42,11 +42,18 @@ import com.day.cq.wcm.foundation.Image;
 import com.day.text.Text;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import static com.adobe.cq.wcm.core.components.util.ComponentUtils.ID_SEPARATOR;
+
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
+
+    /**
+     * Image ID prefix.
+     */
+    private static final String IMAGE_ID_PREFIX = "image";
 
     /**
      * The title.
@@ -73,6 +80,8 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     protected void initImage() {
         overriddenImageResourceProperties.put(Image.PN_LINK_URL, getTargetPage().map(Page::getPath).orElse(null));
         overriddenImageResourceProperties.put(Teaser.PN_ACTIONS_ENABLED, Boolean.valueOf(actionsEnabled).toString());
+        overriddenImageResourceProperties.put(PN_ID, String.join(ID_SEPARATOR, this.getId(), IMAGE_ID_PREFIX));
+
         if (StringUtils.isNotEmpty(getTitle()) || getTeaserActions().size() > 0) {
             overriddenImageResourceProperties.put(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.TRUE.toString());
         }
