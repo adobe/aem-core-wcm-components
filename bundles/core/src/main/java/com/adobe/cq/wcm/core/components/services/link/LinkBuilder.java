@@ -21,57 +21,17 @@ import org.apache.sling.api.resource.Resource;
 
 import com.adobe.cq.wcm.core.components.models.Page;
 
-public class LinkBuilder {
+public interface LinkBuilder {
 
-    Resource resource;
-    String linkURLPropertyName;
-    Page page;
-    String URL;
-    Map<String, String> attributes;
-
-    Resource getResource() {
-        return this.resource;
-    }
-
-    LinkBuilder setResource(Resource resource) {
-        this.resource = resource;
-        return this;
-    }
-
-    String getResourcePropertyName() {
-        return this.linkURLPropertyName;
-    }
-
-    LinkBuilder setResourcePropertyName(String linkURLPropertyName) {
-        this.linkURLPropertyName = linkURLPropertyName;
-        return this;
-    }
-
-    Page getTarget() {
-        return this.page;
-    }
-
-    LinkBuilder setTarget(Page page) {
-        this.page = page;
-        return this;
-    }
-
-    String getURL() {
-        return this.URL;
-    }
-
-    LinkBuilder setURL(String URL){
-        this.URL = URL;
-        return this;
-    }
-
-    Map<String, String> setAttributes() {
-        return this.attributes;
-    }
-
-    LinkBuilder setAttributes(Map<String, String> attributes) {
-        this.attributes = attributes;
-        return this;
-    }
+    Resource getResource();
+    LinkBuilder setResource(Resource resource);
+    String getResourcePropertyName();
+    LinkBuilder setResourcePropertyName(String linkURLPropertyName);
+    Page getTarget();
+    LinkBuilder setTarget(Page page);
+    String getURL();
+    LinkBuilder setURL(String URL);
+    Map<String, String> getAttributes();
+    LinkBuilder setAttributes(Map<String, String> attributes);
 
 }
