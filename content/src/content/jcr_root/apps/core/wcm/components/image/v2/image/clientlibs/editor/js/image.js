@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-(function($) {
+(function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-image__editor";
@@ -30,6 +30,8 @@
     var $dynamicMediaGroup;
     var areDMFeaturesEnabled;
     var fileReference;
+    var altInputSelector = 'input[name="./alt"]';
+    var altCheckboxSelector = 'coral-checkbox[name="./altValueFromDAM"]';
     var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
     var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
     var smartCropRenditionDropDownSelector = ".cmp-image__editor-dynamicmedia-smartcroprendition";
@@ -44,7 +46,7 @@
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
             isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
-            altTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
+            altTuple = new CheckboxTextfieldTuple(dialogContent, altCheckboxSelector, altInputSelector);
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
             $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
@@ -119,6 +121,18 @@
     $(window).on("focus", function() {
         if (fileReference) {
             retrieveDAMInfo(fileReference);
+        }
+    });
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: altInputSelector,
+        validate: function() {
+            var seededValue = $(altInputSelector).attr("data-seeded-value");
+            var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
+            if (isAltCheckboxChecked && !seededValue) {
+                return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
+            }
         }
     });
 
@@ -346,4 +360,4 @@
         }
     }
 
-})(jQuery);
+})(jQuery, Granite);

@@ -28,6 +28,7 @@ Carousel component written in HTL.
   * Pause/play buttons.
   * Automatic pausing when the document is hidden, making use of the [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API).
 * Editing features for items (adding, removing, editing, re-ordering).
+* Allows deep linking into a specific panel by passing the panel id as the URL fragment
 
 ### Use Object
 The Carousel component uses the `com.adobe.cq.wcm.core.components.models.Carousel` Sling model as its Use-object.

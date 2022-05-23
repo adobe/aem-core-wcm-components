@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_TABLEOFCONTENTS_V1;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,9 +44,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @Tag("group2")  // TODO
 public class TableOfContentsIT extends AuthorBaseUITest {
 
+    private static String componentName = "button";
     private String pageTitle;
     private String testPage;
-    private String proxyPath;
     private String componentPath;
     private EditorPage editorPage;
     private TableOfContents tableOfContents;
@@ -61,20 +62,11 @@ public class TableOfContentsIT extends AuthorBaseUITest {
             defaultPageTemplate
         ).getSlingPath();
 
-        proxyPath = Commons.createProxyComponent(
+        componentPath = Commons.addComponentWithRetry(
             adminClient,
-            Commons.RT_TABLEOFCONTENTS_V1,
-            Commons.proxyPath,
-            TableOfContents.COMPONENT_NAME,
-            null
-        );
-
-        componentPath = Commons.addComponent(
-            adminClient,
-            proxyPath,
+            RT_TABLEOFCONTENTS_V1,
             testPage + Commons.relParentCompPath,
-            null,
-            null
+            componentName
         );
 
         tableOfContents = new TableOfContents();
@@ -92,7 +84,6 @@ public class TableOfContentsIT extends AuthorBaseUITest {
             RequestConstants.RETRY_TIME_INTERVAL,
             HttpStatus.SC_OK
         );
-        Commons.deleteProxyComponent(adminClient, proxyPath);
     }
 
     @Test
@@ -173,7 +164,7 @@ public class TableOfContentsIT extends AuthorBaseUITest {
         String[] includeClasses = new String[] { "include-1", "include-2" };
         String[] ignoreClasses = new String[] { "ignore-1", "ignore-2" };
 
-        createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf('/')), new HashMap<String, String>() {{
+        createComponentPolicy("/tableofcontents-v1", new HashMap<String, String>() {{
             put("restrictListType", listType);
             put("restrictStartLevel", startLevel);
             put("restrictStopLevel", stopLevel);

@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.tabs.v1;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
@@ -45,9 +46,13 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.TabsEditD
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.v1.Tabs;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("group3")
 public class TabsIT extends AuthorBaseUITest {
@@ -56,6 +61,14 @@ public class TabsIT extends AuthorBaseUITest {
     private static String pageDescription = "tabs page description";
     private static String componentName = "tabs";
     private static final String clientlibs = Commons.CLIENTLIBS_TABS_V1;
+
+    private static final String deepLinkPagePath = "/content/core-components/deep-link/tabs/v1.html";
+    private static final String itemTitleId1 = "tabs-4e44202276-item-7db3b7c485-tab";
+    private static final String itemContentId1 = "text-1";
+    private static final String itemTitleId2 = "tabs-5ec1f408ee-item-2c2b4d5083-tab";
+    private static final String itemContentId2 = "text-2";
+    private static final String itemTitleId3 = "tabs-fac5c2a775-item-343a3d8a51-tab";
+    private static final String itemContentId3 = "text-3";
 
     private String policyPath;
     private String proxyPath;
@@ -162,20 +175,19 @@ public class TabsIT extends AuthorBaseUITest {
     }
 
     /**
-     * Create and title a single accordion item
+     * Create and title a single tabs item
      *
      * @param component component path
      * @param parentPath parent component path
      * @param itemName name of the item to be set
-     * 1. add a component to the accordion
+     * 1. add a component to the tabs
      * 2. open the edit dialog
-     * 3. name the accordion item
+     * 3. name the tabs item
      * 4. save the edit dialog
      *
      * @throws ClientException
      * @throws InterruptedException
      */
-
     private String addTabsItem(String component, String parentPath,  String itemName) throws ClientException, InterruptedException {
 
         //1.
@@ -527,4 +539,101 @@ public class TabsIT extends AuthorBaseUITest {
         assertTrue(tabItems.get(3).getText().contains("Tab 1.2"), "Fourth tab item should be Tab 1.2");
         assertTrue(tabItems.get(4).getText().contains("Tab 1.1.1"), "Fifth tab item should be Tab 1.1.1");
     }
+
+    @Test
+    @DisplayName("Test: Deep Link: clicking tabs items")
+    public void testDeepLink_clickingTabsItem() throws MalformedURLException {
+        Commons.SimplePage page = new Commons.SimplePage(deepLinkPagePath);
+        page.open();
+
+        // clicking a tabs item expands it and modifies the URL fragment
+        SelenideElement itemTitle = Selenide.$("#" + itemTitleId1);
+        itemTitle.click();
+        String fragment = Commons.getUrlFragment();
+        SelenideElement itemContent = Selenide.$("#" + itemContentId1);
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertEquals(itemTitleId1, fragment, "The URL fragment should be updated");
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: clicking links referencing tabs items")
+    public void testDeepLink_clickingLinksReferencingTabsItems() {
+        Commons.SimplePage page = new Commons.SimplePage(deepLinkPagePath);
+        page.open();
+        SelenideElement itemTitle1 = Selenide.$("#" + itemTitleId1);
+        SelenideElement itemContent1 = Selenide.$("#" + itemContentId1);
+        SelenideElement itemTitle2 = Selenide.$("#" + itemTitleId2);
+        SelenideElement itemContent2 = Selenide.$("#" + itemContentId2);
+        SelenideElement itemTitle3 = Selenide.$("#" + itemTitleId3);
+        SelenideElement itemContent3 = Selenide.$("#" + itemContentId3);
+
+        // make sure tabs items are not displayed before clicking the links
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent1));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle2));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent2));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle3));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent3));
+
+        // clicking a link referencing a tabs item displays it and scrolls to it
+        Selenide.$("#link-1").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+
+        // clicking a link referencing a nested tabs item expands all intermediary items and scrolls to it
+        Commons.scrollToTop();
+        Selenide.$("#link-2").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle2));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent2));
+
+        // clicking a link referencing a text element within a nested tabs item expands all intermediary items
+        // and scrolls to the ID
+        Commons.scrollToTop();
+        Selenide.$("#link-3").click();
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle3));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent3));
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: URL fragment referencing a tabs item")
+    public void testDeepLink_UrlFragmentReferencingTabsItem() {
+        String pagePath = deepLinkPagePath + "#" + itemTitleId1;
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
+        page.open();
+        SelenideElement itemTitle = Selenide.$("#" + itemTitleId1);
+        SelenideElement itemContent = Selenide.$("#" + itemContentId1);
+        // when the URL fragment references a tabs item, the tabs item is expanded and scrolled to
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: URL fragment referencing a nested tabs item")
+    public void testDeepLinkFromHash_nestedTabsItem() {
+        String pagePath = deepLinkPagePath + "#" + itemTitleId2;
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
+        page.open();
+        SelenideElement itemTitle = Selenide.$("#" + itemTitleId2);
+        SelenideElement itemContent = Selenide.$("#" + itemContentId2);
+        // when the URL fragment references a nested tabs item, all intermediary tabs items are expanded and
+        // the last item is scrolled to
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: URL fragment referencing a text element within a nested tabs item")
+    public void testDeepLinkFromHash_IdInNestedTabsItem() {
+        String pagePath = deepLinkPagePath + "#" + itemContentId3;
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
+        page.open();
+        SelenideElement itemTitle = Selenide.$("#" + itemTitleId3);
+        SelenideElement itemContent = Selenide.$("#" + itemContentId3);
+        // when the URL fragment references an element ID that is part of a nested tabs item, all intermediary
+        // tabs items are expanded and the element ID is scrolled to
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+    }
+
 }
