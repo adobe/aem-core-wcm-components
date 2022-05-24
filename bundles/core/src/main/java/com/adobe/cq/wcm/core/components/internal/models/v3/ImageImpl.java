@@ -19,9 +19,10 @@ import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -104,7 +105,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (useAssetDelivery) {
             srcSet = AssetDeliveryHelper.getSrcSet(assetDelivery, resource, imageName, extension, smartSizes,
                 jpegQuality);
-
             if (!StringUtils.isEmpty(srcSet)) {
                 return srcSet;
             }
@@ -134,8 +134,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
         return null;
     }
-
-
+    
     @Nullable
     @Override
     @JsonIgnore

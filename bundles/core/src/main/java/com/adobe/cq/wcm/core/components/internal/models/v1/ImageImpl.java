@@ -104,7 +104,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
     protected AssetDelivery assetDelivery;
 
-
     @Self
     protected LinkHandler linkHandler;
 

@@ -48,6 +48,9 @@ public class AssetDeliveryHelper {
     private static String PATH_PARAMETER = "path";
     private static String SEO_PARAMETER = "seoname";
     private static String PREFER_WEBP_PARAMETER = "preferwebp";
+    private static String HORIZONTAL_FLIP = "HORIZONTAL";
+    private static String VERTICAL_FLIP = "VERTICAL";
+    private static String HORIZONTAL_AND_VERTICAL_FLIP = "HORIZONTAL_AND_VERTICAL";
 
 
     public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
@@ -142,7 +145,6 @@ public class AssetDeliveryHelper {
         }
     }
 
-
     /**
      * Retrieves the cropping rectangle, if one is defined for the image.
      *
@@ -201,11 +203,11 @@ public class AssetDeliveryHelper {
         boolean flipHorizontally = properties.get(com.adobe.cq.wcm.core.components.models.Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
         boolean flipVertically = properties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
         if (flipHorizontally && flipVertically) {
-            return "HORIZONTAL_AND_VERTICAL";
+            return HORIZONTAL_AND_VERTICAL_FLIP;
         } else if (flipHorizontally) {
-            return "HORIZONTAL";
+            return HORIZONTAL_FLIP;
         } else if (flipVertically){
-            return "VERTICAL";
+            return VERTICAL_FLIP;
         }
         return StringUtils.EMPTY;
     }
