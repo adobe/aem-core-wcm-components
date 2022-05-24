@@ -421,7 +421,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
     public void testNoImageTeaser() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         Commons.openEditDialog(editorPage,cmpPath);
-        com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.TeaserEditDialog editDialog = teaser.getEditDialog();
+        TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openTextTab();
         editDialog.clickTitleFromPage();
         editDialog.setTitle(title);
