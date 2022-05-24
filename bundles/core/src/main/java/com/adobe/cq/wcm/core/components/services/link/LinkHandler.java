@@ -27,11 +27,11 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 public interface LinkHandler {
 
     /**
-     * Returns a link based on the configuration defined in the link builder.
+     * Returns a link based on the configuration defined in the link configuration.
      *
-     * @param builder {@link LinkBuilder} holding the configuration for the link.
+     * @param configuration {@link LinkConfiguration} holding the configuration for the link.
      * @return {@link Optional} of  {@link Link}
      */
-    Optional<Link> getLink(@NotNull LinkBuilder builder);
+    Optional<Link> getLink(@NotNull LinkConfiguration configuration);
 
 }

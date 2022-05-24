@@ -24,7 +24,7 @@ import com.adobe.cq.wcm.core.components.models.Page;
 /**
  * Interface used to hold the configuration of a link.
  */
-public interface LinkBuilder {
+public interface LinkConfiguration {
 
     /**
      * Returns the resource holding the link properties.
@@ -37,7 +37,7 @@ public interface LinkBuilder {
      * @param resource The resource holding the link properties.
      * @return the link builder holding the link configuration.
      */
-    LinkBuilder setResource(Resource resource);
+    LinkConfiguration setResource(Resource resource);
 
     /**
      * Returns the name of the property holding the link URL.
@@ -50,7 +50,7 @@ public interface LinkBuilder {
      * @param linkURLPropertyName The name of the property holding the link URL.
      * @return the link builder holding the link configuration.
      */
-    LinkBuilder setResourcePropertyName(String linkURLPropertyName);
+    LinkConfiguration setResourcePropertyName(String linkURLPropertyName);
 
     /**
      * Returns the target page used to define the link.
@@ -63,7 +63,7 @@ public interface LinkBuilder {
      * @param page The page used as the link target.
      * @return the link builder holding the link configuration.
      */
-    LinkBuilder setTarget(Page page);
+    LinkConfiguration setTarget(Page page);
 
     /**
      * Returns the URL used to define the link.
@@ -76,7 +76,7 @@ public interface LinkBuilder {
      * @param URL The link URL.
      * @return the link builder holding the link configuration.
      */
-    LinkBuilder setURL(String URL);
+    LinkConfiguration setURL(String URL);
 
     /**
      * Returns the link attributes.
@@ -89,6 +89,6 @@ public interface LinkBuilder {
      * @param attributes The link attributes.
      * @return the link builder holding the link configuration.
      */
-    LinkBuilder setAttributes(Map<String, String> attributes);
+    LinkConfiguration setAttributes(Map<String, String> attributes);
 
 }

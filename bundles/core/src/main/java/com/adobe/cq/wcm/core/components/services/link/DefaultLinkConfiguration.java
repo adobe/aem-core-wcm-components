@@ -21,7 +21,7 @@ import org.apache.sling.api.resource.Resource;
 
 import com.adobe.cq.wcm.core.components.models.Page;
 
-public class DefaultLinkBuilder implements LinkBuilder {
+public class DefaultLinkConfiguration implements LinkConfiguration {
 
     Resource resource;
     String linkURLPropertyName;
@@ -33,7 +33,7 @@ public class DefaultLinkBuilder implements LinkBuilder {
         return this.resource;
     }
 
-    public LinkBuilder setResource(Resource resource) {
+    public LinkConfiguration setResource(Resource resource) {
         this.resource = resource;
         return this;
     }
@@ -42,7 +42,7 @@ public class DefaultLinkBuilder implements LinkBuilder {
         return this.linkURLPropertyName;
     }
 
-    public LinkBuilder setResourcePropertyName(String linkURLPropertyName) {
+    public LinkConfiguration setResourcePropertyName(String linkURLPropertyName) {
         this.linkURLPropertyName = linkURLPropertyName;
         return this;
     }
@@ -51,7 +51,7 @@ public class DefaultLinkBuilder implements LinkBuilder {
         return this.page;
     }
 
-    public LinkBuilder setTarget(Page page) {
+    public LinkConfiguration setTarget(Page page) {
         this.page = page;
         return this;
     }
@@ -60,7 +60,7 @@ public class DefaultLinkBuilder implements LinkBuilder {
         return this.URL;
     }
 
-    public LinkBuilder setURL(String URL){
+    public LinkConfiguration setURL(String URL){
         this.URL = URL;
         return this;
     }
@@ -69,7 +69,7 @@ public class DefaultLinkBuilder implements LinkBuilder {
         return this.attributes;
     }
 
-    public LinkBuilder setAttributes(Map<String, String> attributes) {
+    public LinkConfiguration setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
         return this;
     }
