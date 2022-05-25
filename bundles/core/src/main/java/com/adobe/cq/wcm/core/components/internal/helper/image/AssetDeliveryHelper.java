@@ -193,7 +193,7 @@ public class AssetDeliveryHelper {
     }
 
     /**
-     * Retrieves the flip parameters for the image, if one is present.
+     * Retrieves the flip parameter for the image, if one is present.
      * @param properties the image component's properties
      * @return the flip parameter
      */
