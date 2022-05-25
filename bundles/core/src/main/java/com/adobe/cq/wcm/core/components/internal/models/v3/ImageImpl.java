@@ -62,8 +62,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     private boolean imageLinkHidden = false;
 
-    private List<String> ALLOWED_MODERN_IMAGE_FORMAT = Arrays.asList("image/webp");
-
     private String srcSet = StringUtils.EMPTY;
     private Map<String, String> srcSetWithMimeType = Collections.EMPTY_MAP;
 
@@ -134,7 +132,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
         return null;
     }
-    
+
     @Nullable
     @Override
     @JsonIgnore

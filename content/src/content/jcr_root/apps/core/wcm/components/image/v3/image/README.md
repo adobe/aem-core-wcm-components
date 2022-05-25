@@ -38,7 +38,7 @@ component; the actual size will be requested by the client device;
 device) is disabled.
 4.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
 5. `./resizeWidth` - Defines a resize width for resizing the images which are DAM assets, while keeping the original aspect ratio. If the value is bigger than the natural width of the image, it will have no effect. It will also have no effect on SVG images.
-6. `./enableAssetDelivery` - If `true`, assets will be delivered through Dynamic Media. This will also enable optimizations based on
+6. `./enableAssetDelivery` - If `true`, assets will be delivered through the Asset Delivery system (based on Dynamic Media for AEMaaCS). This will also enable optimizations based on
    [content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation). Currently, this optimization is available only for webp.
 
 ### Edit Dialog Properties

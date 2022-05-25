@@ -20,7 +20,6 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Image"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.image.v3.design]"
     helpPath="https://www.adobe.com/go/aem_cmp_image_v3">
     <content
         jcr:primaryType="nt:unstructured"

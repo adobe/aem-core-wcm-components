@@ -111,8 +111,6 @@ public class AssetDeliveryHelper {
         if (!StringUtils.isEmpty(assetDeliveryURL)) {
             return  assetDeliveryURL;
         }
-
-
         return StringUtils.EMPTY;
     }
 
