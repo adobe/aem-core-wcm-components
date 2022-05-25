@@ -195,10 +195,10 @@ public class AssetDeliveryHelper {
     /**
      * Retrieves the flip parameters for the image, if one is present.
      * @param properties the image component's properties
-     * @return the rotation angle
+     * @return the flip parameter
      */
     private static String getFlip(@NotNull ValueMap properties) {
-        boolean flipHorizontally = properties.get(com.adobe.cq.wcm.core.components.models.Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
+        boolean flipHorizontally = properties.get(Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
         boolean flipVertically = properties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
         if (flipHorizontally && flipVertically) {
             return HORIZONTAL_AND_VERTICAL_FLIP;
