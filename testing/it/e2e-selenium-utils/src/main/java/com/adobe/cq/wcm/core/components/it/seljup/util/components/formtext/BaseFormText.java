@@ -114,4 +114,35 @@ public class BaseFormText {
     public boolean isHelpRenderedAsTooltip(String elemName, String helpMessage) {
         return $("input[type='text'][name='" + elemName + "'][placeholder='" + helpMessage + "']").isDisplayed();
     }
+
+    public boolean textareaHasExpectedAriaDescribedByAttribute(String message) {
+        if ($x(String.format(helpMessage, message)).isDisplayed()) {
+            String helpMessageId = $x(String.format(helpMessage, message)).getAttribute("id");
+            String ariaDescribedByAttribute = $("textarea").getAttribute("aria-describedby");
+            return ariaDescribedByAttribute != null && ariaDescribedByAttribute.equals(helpMessageId);
+        }
+        return false;
+    }
+
+    public boolean textareaHasNoAriaDescribedByAttribute() {
+        return $("textarea").getAttribute("aria-describedby") == null;
+    }
+
+    public boolean inputHasExpectedAriaDescribedByAttribute(String message) {
+        if ($x(String.format(helpMessage, message)).isDisplayed()) {
+            String helpMessageId = $x(String.format(helpMessage, message)).getAttribute("id");
+            String ariaDescribedByAttribute = $("input[type='text']").getAttribute("aria-describedby");
+            return ariaDescribedByAttribute != null && ariaDescribedByAttribute.equals(helpMessageId);
+        }
+        return false;
+    }
+
+    public boolean inputHasNoAriaDescribedByAttribute() {
+        return $("input[type='text']").getAttribute("aria-describedby") == null;
+    }
+
+
+
+
+
 }

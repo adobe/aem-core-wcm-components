@@ -277,4 +277,50 @@ public class FormTextTests {
         Commons.switchContext("ContentFrame");
         assertTrue(formText.isInputConstraintMessageSet(elemName, requiredMessage), "Constraint message should be set");
     }
+
+    public void testTextareaAccessibilityWhenHelpMessageIsSet() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("textarea");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        configDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(formText.textareaHasExpectedAriaDescribedByAttribute(helpMessage));
+    }
+
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("textarea");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(formText.textareaHasNoAriaDescribedByAttribute());
+    }
+
+    public void testInputAccessibilityWhenHelpMessageIsSet() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("text");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        configDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(formText.inputHasExpectedAriaDescribedByAttribute(helpMessage));
+    }
+
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("text");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(formText.inputHasNoAriaDescribedByAttribute());
+    }
 }

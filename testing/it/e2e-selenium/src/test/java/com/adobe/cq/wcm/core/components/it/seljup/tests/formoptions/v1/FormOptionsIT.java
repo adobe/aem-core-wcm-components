@@ -365,4 +365,71 @@ public class FormOptionsIT extends AuthorBaseUITest {
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isMultiSelectDropDownDisabled(value),"Checkbox should be disabled");
     }
+
+    /**
+     * Test: Set the help message and verify the option element of the drop-down to have the aria-describedby attribute equal with the help message id
+     */
+    @Test
+    @DisplayName("Test: Set the help message and verify the option element of the drop-down to have the aria-describedby attribute equal with the help message id")
+    public void testAccessibilityWhenHelpMessageIsSetOnDropDownType() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setOptionType("drop-down");
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        editDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(formOptions.dropDownOptionHasExpectedAriaDescribedByAttribute());
+    }
+
+    /**
+     * Test: Without setting a help message, verify the option element of the drop-down to have no aria-describedby attribute
+     */
+    @Test
+    @DisplayName("Test: Without setting a help message, verify the option element of the drop-down to have no aria-describedby attribute")
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnDropDownType() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setOptionType("drop-down");
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(formOptions.dropDownOptionHasNoAriaDescribedByAttribute());
+    }
+
+    /**
+     * Test: Set the help message and verify the checkbox input to have the aria-describedby attribute equal with the help message id
+     */
+    @Test
+    @DisplayName("Test: Set the help message and verify the checkbox input to have the aria-describedby attribute equal with the help message id")
+    public void testAccessibilityWhenHelpMessageIsSetOnCheckboxType() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setOptionType("checkbox");
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        editDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(formOptions.checkboxHasExpectedAriaDescribedByAttribute());
+    }
+
+    /**
+     * Test: Without setting a help message, verify the checkbox input to have no aria-describedby attribute
+     */
+    @Test
+    @DisplayName("Test: Without setting a help message, verify the checkbox input to have no aria-describedby attribute")
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnCheckboxType() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setOptionType("checkbox");
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(formOptions.checkboxHasNoAriaDescribedByAttribute());
+    }
 }

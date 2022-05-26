@@ -20,20 +20,28 @@
         <sly data-sly-test="${options.type.value == 'checkbox' || options.type.value == 'radio'}">
             <legend class="cmp-form-options__legend">${options.title}</legend>
             <label class="cmp-form-options__field-label" data-sly-repeat.optionItem="${options.items}">
-                <input class="cmp-form-options__field cmp-form-options__field--${options.type.value}" name="${options.name}"
-                       value="${optionItem.value}" checked="${optionItem.selected}" disabled="${optionItem.disabled}" type="${options.type.value}"/>
+                <input class="cmp-form-options__field cmp-form-options__field--${options.type.value}"
+                       name="${options.name}"
+                       value="${optionItem.value}" checked="${optionItem.selected}" disabled="${optionItem.disabled}"
+                       type="${options.type.value}"
+                       data-sly-attribute.aria-describedby="${options.helpMessage ? [options.id, 'helpMessage'] : '' @ join = '-'}"/>
                 <span class="cmp-form-options__field-description">${optionItem.text}</span>
             </label>
         </sly>
         <sly data-sly-test="${options.type.value == 'drop-down' || options.type.value == 'multi-drop-down'}">
             <label class="cmp-form-options__label" for="${options.id}">${options.title}</label>
-            <select class="cmp-form-options__field cmp-form-options__field--${options.type.value}" name="${options.name}" id="${options.id}"
+            <select class="cmp-form-options__field cmp-form-options__field--${options.type.value}"
+                    name="${options.name}" id="${options.id}"
                     data-sly-list.optionItem="${options.items}"
                     data-sly-attribute.multiple="${options.type.value == 'multi-drop-down'}">
-                <option value="${optionItem.value}" selected="${optionItem.selected}" disabled="${optionItem.disabled}">${optionItem.text}</option>
+                <option value="${optionItem.value}" selected="${optionItem.selected}" disabled="${optionItem.disabled}"
+                        data-sly-attribute.aria-describedby="${options.helpMessage ? [options.id, 'helpMessage'] : '' @ join = '-'}">
+                    ${optionItem.text}
+                </option>
             </select>
         </sly>
-        <p class="cmp-form-options__help-message" data-sly-test="${options.helpMessage}">${options.helpMessage}</p>
+        <p id="${options.id}-helpMessage" class="cmp-form-options__helpMessage" data-sly-test="${options.helpMessage}">
+            ${options.helpMessage}</p>
     </fieldset>
 </sly>
 <sly data-sly-call="${template.placeholder @ isEmpty=!isNotEmpty, classAppend='cmp-form-options'}"></sly>
