@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Objects;
 
+import com.adobe.cq.wcm.core.components.models.Component;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,6 +111,15 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertEquals("/content/teasers", linkURL, "image resource: linkURL");
         assertNull(fileReference, "image resource: fileReference");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser20"));
+    }
+
+    /**
+     * Asserts that the ID property on the image resource is set to the Teaser ID + `-image`.
+     */
+    @Test
+    protected void testTeaserImageID() {
+        Teaser teaser = getTeaserUnderTest(TEASER_21);
+        assertEquals(teaser.getId() + "-image", teaser.getImageResource().getValueMap().get(Component.PN_ID, String.class));
     }
 
     @Test
