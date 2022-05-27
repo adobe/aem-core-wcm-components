@@ -222,7 +222,7 @@ public class FormTextIT extends AuthorBaseUITest {
      * Test: without setting a help message, verify the textarea element to have no aria-describedby attribute
      */
     @Test
-    @DisplayName("without setting a help message, verify the textarea element to have no aria-describedby attribute")
+    @DisplayName("Test : without setting a help message, verify the textarea element to have no aria-describedby attribute")
     public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea() throws InterruptedException, TimeoutException {
         formTextTests.testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea();
     }
@@ -240,7 +240,7 @@ public class FormTextIT extends AuthorBaseUITest {
      * Test: without setting a help message, verify the input element to have no aria-describedby attribute
      */
     @Test
-    @DisplayName("without setting a help message, verify the input element to have no aria-describedby attribute")
+    @DisplayName("Test : without setting a help message, verify the input element to have no aria-describedby attribute")
     public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput() throws InterruptedException, TimeoutException {
         formTextTests.testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput();
     }
