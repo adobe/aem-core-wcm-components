@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v1;
 
 import java.util.concurrent.TimeoutException;
 
+import com.codeborne.selenide.SelenideElement;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -36,6 +37,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_FORMOPTIONS_V1;
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
@@ -380,7 +382,8 @@ public class FormOptionsIT extends AuthorBaseUITest {
         editDialog.setHelpMessage(helpMessage);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(formOptions.dropDownOptionHasExpectedAriaDescribedByAttribute());
+        SelenideElement dropDownOptionElement = $("option");
+        assertTrue(formOptions.elementHasExpectedAriaDescribedByAttribute(dropDownOptionElement));
     }
 
     /**
@@ -396,7 +399,8 @@ public class FormOptionsIT extends AuthorBaseUITest {
         editDialog.addOption(value, text);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(formOptions.dropDownOptionHasNoAriaDescribedByAttribute());
+        SelenideElement dropDownOptionElement = $("option");
+        assertTrue(formOptions.elementHasNoAriaDescribedByAttribute(dropDownOptionElement));
     }
 
     /**
@@ -413,7 +417,8 @@ public class FormOptionsIT extends AuthorBaseUITest {
         editDialog.setHelpMessage(helpMessage);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(formOptions.checkboxHasExpectedAriaDescribedByAttribute());
+        SelenideElement checkboxElement = $("input[type='checkbox']");
+        assertTrue(formOptions.elementHasExpectedAriaDescribedByAttribute(checkboxElement));
     }
 
     /**
@@ -429,7 +434,7 @@ public class FormOptionsIT extends AuthorBaseUITest {
         editDialog.addOption(value, text);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-
-        assertTrue(formOptions.checkboxHasNoAriaDescribedByAttribute());
+        SelenideElement checkboxElement = $("input[type='checkbox']");
+        assertTrue(formOptions.elementHasNoAriaDescribedByAttribute(checkboxElement));
     }
 }

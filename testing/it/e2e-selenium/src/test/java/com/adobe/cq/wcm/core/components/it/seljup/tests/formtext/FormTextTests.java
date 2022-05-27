@@ -23,11 +23,13 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.FormT
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.BaseFormText;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.SelenideElement;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
 import java.util.concurrent.TimeoutException;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FormTextTests {
@@ -287,7 +289,8 @@ public class FormTextTests {
         configDialog.setHelpMessage(helpMessage);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(formText.textareaHasExpectedAriaDescribedByAttribute(helpMessage));
+        SelenideElement textareaElement = $("textarea");
+        assertTrue(formText.elementHasExpectedAriaDescribedByAttribute(textareaElement, helpMessage));
     }
 
     public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea() throws InterruptedException, TimeoutException {
@@ -298,7 +301,8 @@ public class FormTextTests {
         configDialog.openAboutTab();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(formText.textareaHasNoAriaDescribedByAttribute());
+        SelenideElement textareaElement = $("textarea");
+        assertTrue(formText.elementHasNoAriaDescribedByAttribute(textareaElement));
     }
 
     public void testInputAccessibilityWhenHelpMessageIsSet() throws InterruptedException, TimeoutException {
@@ -310,7 +314,8 @@ public class FormTextTests {
         configDialog.setHelpMessage(helpMessage);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(formText.inputHasExpectedAriaDescribedByAttribute(helpMessage));
+        SelenideElement inputElement = $("input[type='text']");
+        assertTrue(formText.elementHasExpectedAriaDescribedByAttribute(inputElement, helpMessage));
     }
 
     public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput() throws InterruptedException, TimeoutException {
@@ -321,6 +326,7 @@ public class FormTextTests {
         configDialog.openAboutTab();
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
-        assertTrue(formText.inputHasNoAriaDescribedByAttribute());
+        SelenideElement inputElement = $("input[type='text']");
+        assertTrue(formText.elementHasNoAriaDescribedByAttribute(inputElement));
     }
 }

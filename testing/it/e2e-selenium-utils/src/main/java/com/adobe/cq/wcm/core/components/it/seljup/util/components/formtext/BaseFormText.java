@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext;
 
+import com.codeborne.selenide.SelenideElement;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
@@ -115,34 +117,16 @@ public class BaseFormText {
         return $("input[type='text'][name='" + elemName + "'][placeholder='" + helpMessage + "']").isDisplayed();
     }
 
-    public boolean textareaHasExpectedAriaDescribedByAttribute(String message) {
+    public boolean elementHasExpectedAriaDescribedByAttribute(SelenideElement element, String message) {
         if ($x(String.format(helpMessage, message)).isDisplayed()) {
             String helpMessageId = $x(String.format(helpMessage, message)).getAttribute("id");
-            String ariaDescribedByAttribute = $("textarea").getAttribute("aria-describedby");
+            String ariaDescribedByAttribute = element.getAttribute("aria-describedby");
             return ariaDescribedByAttribute != null && ariaDescribedByAttribute.equals(helpMessageId);
         }
         return false;
     }
 
-    public boolean textareaHasNoAriaDescribedByAttribute() {
-        return $("textarea").getAttribute("aria-describedby") == null;
+    public boolean elementHasNoAriaDescribedByAttribute(SelenideElement element) {
+        return element.getAttribute("aria-describedby") == null;
     }
-
-    public boolean inputHasExpectedAriaDescribedByAttribute(String message) {
-        if ($x(String.format(helpMessage, message)).isDisplayed()) {
-            String helpMessageId = $x(String.format(helpMessage, message)).getAttribute("id");
-            String ariaDescribedByAttribute = $("input[type='text']").getAttribute("aria-describedby");
-            return ariaDescribedByAttribute != null && ariaDescribedByAttribute.equals(helpMessageId);
-        }
-        return false;
-    }
-
-    public boolean inputHasNoAriaDescribedByAttribute() {
-        return $("input[type='text']").getAttribute("aria-describedby") == null;
-    }
-
-
-
-
-
 }
