@@ -74,6 +74,7 @@
                             javax.annotation;version=0.0.0,
                             javax.annotation.meta;resolution:=optional,
                             com.day.cq.dam.api;version="[1.24,2.0)",
+                            com.day.cq.dam.api.handler;version="[2,3)",
                             *
                         </Import-Package>
                     </instructions>
