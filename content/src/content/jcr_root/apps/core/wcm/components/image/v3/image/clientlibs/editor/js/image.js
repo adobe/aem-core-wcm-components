@@ -550,9 +550,12 @@
             });
         });
 
-        observer.observe(document.querySelector(altInputSelector), {
-            attributeFilter: ["data-seeded-value", "disabled", "invalid"]
-        });
+        var altInput = document.querySelector(altInputSelector);
+        if (altInput) {
+            observer.observe(altInput, {
+                attributeFilter: ["data-seeded-value", "disabled", "invalid"]
+            });
+        }
     }
 
 })(jQuery, Granite);
