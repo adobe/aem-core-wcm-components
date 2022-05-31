@@ -34,13 +34,13 @@
     </sly>
     <sly data-sly-include="head.links.html"></sly>
     <sly data-sly-include="head.socialmedia.html"></sly>
-    <sly data-sly-include="customheaderlibs.html"></sly>
     <sly data-sly-call="${headlibRenderer.headlibs @
                                 designPath                = page.designPath,
                                 staticDesignPath          = page.staticDesignPath,
                                 clientLibCategories       = page.clientLibCategories,
                                 clientLibCategoriesJsHead = page.clientLibCategoriesJsHead,
                                 hasCloudconfigSupport     = page.hasCloudconfigSupport}"></sly>
+                                <sly data-sly-include="customheaderlibs.html"></sly>
     <sly data-sly-test.appResourcesPath=${page.appResourcesPath} data-sly-call="${headResources.favicons @ path = appResourcesPath}"></sly>
     <sly data-sly-list="${page.htmlPageItems}"><script data-sly-test="${item.location.name == 'header'}"
             data-sly-element="${item.element.name @ context='unsafe'}" data-sly-attribute="${item.attributes}"></script>
