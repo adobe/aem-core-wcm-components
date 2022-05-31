@@ -45,4 +45,9 @@
     <sly data-sly-list="${page.htmlPageItems}"><script data-sly-test="${item.location.name == 'header'}"
             data-sly-element="${item.element.name @ context='unsafe'}" data-sly-attribute="${item.attributes}"></script>
     </sly>
+    <sly data-sly-test="${properties.pageLevelJsLibraries}">
+         <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">  
+         	<sly data-sly-call="${clientlib.js @ categories=properties.pageLevelJsLibraries, loading='async'}"/>
+         </sly>                          
+    </sly>
 </template>
