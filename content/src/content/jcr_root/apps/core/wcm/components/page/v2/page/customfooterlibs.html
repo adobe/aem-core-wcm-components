@@ -16,9 +16,10 @@
 
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Create overlay of this file to include custom client libs in the page footer
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/--> 
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+  
 <sly data-sly-test="${properties.pageLevelLibraries}">
- <sly data-sly-use.clientlib="/apps/granite/sightly/templates/clientlib.html">
+ <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">
   <meta data-sly-call="${clientlib.js @ categories=properties.pageLevelLibraries, loading='async'}"  data-sly-unwrap />
  </sly>
 </sly>
