@@ -184,6 +184,11 @@ public interface Image extends Component {
     String PN_DESIGN_DYNAMIC_MEDIA_ENABLED = "enableDmFeatures";
 
     /**
+     * Name of the configuration policy property that controls whether assets will be delivered through Dynamic Media.
+     */
+    String PN_DESIGN_ASSET_DELIVERY_ENABLED = "enableAssetDelivery";
+
+    /**
      * Name of the configuration policy property that will be used for resizing the base images, the ones from {@code src} attribute.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.23.0

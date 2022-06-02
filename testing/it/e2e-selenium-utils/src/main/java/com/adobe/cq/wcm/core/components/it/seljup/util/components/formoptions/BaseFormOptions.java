@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.formoptions;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -104,5 +105,18 @@ public class BaseFormOptions extends BaseComponent {
 
     public boolean isMultiSelectDropDownDisabled(String value) {
         return $("option[value='" + value + "'][disabled]").isDisplayed();
+    }
+
+    public boolean elementHasExpectedAriaDescribedByAttribute(SelenideElement element) {
+        if ($(help).isDisplayed()) {
+            String helpMessageId = $(help).getAttribute("id");
+            String ariaDescribedByAttribute = element.getAttribute("aria-describedby");
+            return ariaDescribedByAttribute != null && ariaDescribedByAttribute.equals(helpMessageId);
+        }
+        return false;
+    }
+
+    public boolean elementHasNoAriaDescribedByAttribute(SelenideElement element) {
+        return element.getAttribute("aria-describedby") == null;
     }
 }

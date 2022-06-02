@@ -208,4 +208,40 @@ public class FormTextIT extends AuthorBaseUITest {
     public void testSetConstraintMessage() throws TimeoutException, InterruptedException {
         formTextTests.testSetConstraintMessage();
     }
+
+    /**
+     * Test : set the help message and verify the textarea element to have the aria-describedby attribute equal with the help message id
+     */
+    @Test
+    @DisplayName("Test : set the help message and verify the textarea element to have the aria-describedby attribute equal with the help message id")
+    public void testTextareaAccessibilityWhenHelpMessageIsSet() throws TimeoutException, InterruptedException {
+        formTextTests.testTextareaAccessibilityWhenHelpMessageIsSet();
+    }
+
+    /**
+     * Test: without setting a help message, verify the textarea element to have no aria-describedby attribute
+     */
+    @Test
+    @DisplayName("Test : without setting a help message, verify the textarea element to have no aria-describedby attribute")
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea() throws InterruptedException, TimeoutException {
+        formTextTests.testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea();
+    }
+
+    /**
+     * Test : set the help message and verify the input element to have the aria-describedby attribute equal with the help message id
+     */
+    @Test
+    @DisplayName("Test : set the help message and verify the input element to have the aria-describedby attribute equal with the help message id")
+    public void testInputAccessibilityWhenHelpMessageIsSet() throws TimeoutException, InterruptedException {
+        formTextTests.testInputAccessibilityWhenHelpMessageIsSet();
+    }
+
+    /**
+     * Test: without setting a help message, verify the input element to have no aria-describedby attribute
+     */
+    @Test
+    @DisplayName("Test : without setting a help message, verify the input element to have no aria-describedby attribute")
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput() throws InterruptedException, TimeoutException {
+        formTextTests.testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput();
+    }
 }

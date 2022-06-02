@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.util.List;
 
+import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -615,4 +616,36 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
     }
 
+
+    @Test
+    void testSrcSetWithAssetDeliveryEnabledWithoutSmartSizes() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(null , image.getSrcset());
+    }
+
+    @Test
+    void testSrcSetWithAssetDeliveryEnabledWithSmartSizes() {
+        registerAssetDelivery();
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true,
+            "allowedRenditionWidths", new int[]{600, 800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        String expectedSrcSet = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82&preferwebp=true 600w," +
+                                MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true 800w";
+        assertEquals(expectedSrcSet , image.getSrcset());
+    }
+
+    @Test
+    void testAssetDeliveryServiceWithoutFileReference() {
+        String escapedResourcePath = IMAGE27_PATH.replace("jcr:content", "_jcr_content");
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE27_PATH);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000" + ".png", image.getSrc());
+    }
 }
