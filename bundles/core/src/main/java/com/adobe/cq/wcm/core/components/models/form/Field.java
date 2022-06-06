@@ -29,6 +29,13 @@ import com.adobe.cq.export.json.ComponentExporter;
 public interface Field extends ComponentExporter {
 
     /**
+     * Name of the property which holds the name of the field.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.form 14.5.0
+     */
+    String PN_NAME = "name";
+
+    /**
      * Returns an unique identifier for this field.
      *
      * @return an unique identifier for the field
