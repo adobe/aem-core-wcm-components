@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds a link and sets link properties.
+ * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
 public interface LinkBuilder {
 
@@ -57,5 +58,6 @@ public interface LinkBuilder {
      *
      * @return {@link Link}
      */
+    @NotNull
     Link build();
 }
