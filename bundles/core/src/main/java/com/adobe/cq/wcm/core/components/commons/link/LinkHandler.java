@@ -22,6 +22,7 @@ import com.day.cq.wcm.api.Page;
 
 /**
  * Computes a link based on input configuration.
+ * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
 public interface LinkHandler {
 
