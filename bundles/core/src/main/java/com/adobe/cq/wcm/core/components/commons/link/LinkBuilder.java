@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.link;
 
-import java.util.Map;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +33,7 @@ public interface LinkBuilder {
     LinkBuilder setLinkURLPropertyName(@Nullable String name);
 
     /**
-     * Sets the link target.
+     * Sets the HTML link target.
      *
      * @param target The link target
      * @return {@link LinkBuilder}
@@ -44,13 +42,14 @@ public interface LinkBuilder {
     LinkBuilder setLinkTarget(@Nullable String target);
 
     /**
-     * Sets the link attributes.
+     * Sets the HTML link attribute.
      *
-     * @param attributes The link attributes
+     * @param name The attribute name
+     * @param value The attribute value
      * @return {@link LinkBuilder}
      */
     @NotNull
-    LinkBuilder setLinkAttributes(@NotNull Map<String, String> attributes);
+    LinkBuilder setLinkAttribute(@NotNull String name, String value);
 
     /**
      * Returns the resolved link.
