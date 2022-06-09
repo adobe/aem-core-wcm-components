@@ -58,12 +58,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
+    private static final String URI_WIDTH_PLACEHOLDER_ENCODED = "%7B.width%7D";
+    private static final String URI_WIDTH_PLACEHOLDER = "{.width}";
 
     private boolean imageLinkHidden = false;
 
     private String srcSet = StringUtils.EMPTY;
-    private Map<String, String> srcSetWithMimeType = Collections.EMPTY_MAP;
 
     @PostConstruct
     protected void initModel() {
@@ -108,22 +108,22 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             }
         }
 
+        // in case of dm image and auto smartcrop the srcset needs to generated client side
+        if (dmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)) {
+            return null;
+        }
+
         int[] widthsArray = getWidths();
         String srcUritemplate = getSrcUriTemplate();
         String[] srcsetArray = new String[widthsArray.length];
         if (widthsArray.length > 0 && srcUritemplate != null) {
-            String srcUriTemplateDecoded = "";
-            try {
-                srcUriTemplateDecoded = URLDecoder.decode(srcUritemplate, StandardCharsets.UTF_8.name());
-            } catch (UnsupportedEncodingException e) {
-                LOGGER.error("Character Decoding failed for " + resource.getPath());
-            }
-            if (srcUriTemplateDecoded.contains("{.width}")) {
+            srcUritemplate = StringUtils.replace(srcUriTemplate, URI_WIDTH_PLACEHOLDER_ENCODED, URI_WIDTH_PLACEHOLDER);
+            if (srcUritemplate.contains(URI_WIDTH_PLACEHOLDER)) {
                 for (int i = 0; i < widthsArray.length; i++) {
-                    if (srcUriTemplateDecoded.contains("={.width}")) {
-                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                    if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
+                        srcsetArray[i] = srcUritemplate.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                     } else {
-                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                        srcsetArray[i] = srcUritemplate.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                     }
                 }
                 srcSet = StringUtils.join(srcsetArray, ',');

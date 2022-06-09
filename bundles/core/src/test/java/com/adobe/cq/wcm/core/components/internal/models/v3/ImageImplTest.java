@@ -612,7 +612,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         context.contentPolicyMapping(com.adobe.cq.wcm.core.components.internal.models.v3.ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
         Image image = getImageUnderTest(IMAGE42_PATH);
         assertTrue(image.isDmImage());
-        assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=off", image.getSrc());
+        assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=on,{dpr}", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
     }
 

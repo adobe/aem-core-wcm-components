@@ -86,7 +86,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     /**
      * The smartcrop "auto" constant.
      */
-    private static final String SMART_CROP_AUTO = "SmartCrop:Auto";
+    protected static final String SMART_CROP_AUTO = "SmartCrop:Auto";
 
     /**
      * The path of the delegated content policy.
@@ -277,7 +277,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
                 String dprParameter = "";
                 // If DM is enabled, use smart imaging for smartcrop renditions
-                if (getClass().equals(com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl.class) && isDmFeaturesEnabled && !StringUtils.isBlank(smartCropRendition)) {
+                if (isDmFeaturesEnabled && !StringUtils.isBlank(smartCropRendition)) {
                     dprParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=on,{dpr}";
                 } else {
                     //add "dpr=off" parameter to image source url
