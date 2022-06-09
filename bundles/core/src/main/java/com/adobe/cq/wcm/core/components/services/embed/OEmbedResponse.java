@@ -124,7 +124,9 @@ public interface OEmbedResponse {
      * The oEmbed type.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
+
     @NotNull
     String getType();
 
@@ -132,6 +134,7 @@ public interface OEmbedResponse {
      * The oEmbed version number.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @NotNull
     String getVersion();
@@ -140,6 +143,7 @@ public interface OEmbedResponse {
      * A text title, describing the resource.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getTitle();
@@ -148,6 +152,7 @@ public interface OEmbedResponse {
      * The name of the author/owner of the resource.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getAuthorName();
@@ -156,6 +161,7 @@ public interface OEmbedResponse {
      * A URL for the author/owner of the resource.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getAuthorUrl();
@@ -164,6 +170,7 @@ public interface OEmbedResponse {
      * The name of the resource provider.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getProviderName();
@@ -172,6 +179,7 @@ public interface OEmbedResponse {
      * The url of the resource provider.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getProviderUrl();
@@ -180,6 +188,7 @@ public interface OEmbedResponse {
      * The suggested cache lifetime for this resource, in seconds.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.Long} object
      */
     @Nullable
     Long getCacheAge();
@@ -188,6 +197,7 @@ public interface OEmbedResponse {
      * A URL to a thumbnail image representing the resource.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getThumbnailUrl();
@@ -196,6 +206,7 @@ public interface OEmbedResponse {
      * The width of the optional thumbnail.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getThumbnailWidth();
@@ -204,6 +215,7 @@ public interface OEmbedResponse {
      * The height of the optional thumbnail.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getThumbnailHeight();
@@ -212,6 +224,7 @@ public interface OEmbedResponse {
      * The width in pixels required to display the HTML.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getWidth();
@@ -220,6 +233,7 @@ public interface OEmbedResponse {
      * The height in pixels required to display the HTML.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getHeight();
@@ -228,6 +242,7 @@ public interface OEmbedResponse {
      * The HTML required to display the resource.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getHtml();
@@ -236,6 +251,7 @@ public interface OEmbedResponse {
      * The source URL of the image.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
+     * @return a {@link java.lang.String} object
      */
     @Nullable
     String getUrl();
