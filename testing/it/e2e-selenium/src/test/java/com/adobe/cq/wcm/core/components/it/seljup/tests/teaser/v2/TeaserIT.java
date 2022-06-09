@@ -34,6 +34,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static com.codeborne.selenide.Selenide.$;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group3")
@@ -420,14 +421,18 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
     public void testNoImageTeaser() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         Commons.openEditDialog(editorPage,cmpPath);
-        com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.TeaserEditDialog editDialog = teaser.getEditDialog();
+        TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openTextTab();
         editDialog.clickTitleFromPage();
         editDialog.setTitle(title);
         editDialog.clickDescriptionFromPage();
         editDialog.setDescription(description);
+        editDialog.openLinkAndActionsTab();
         Commons.saveConfigureDialog();
-
+        assertEquals(editDialog.getAssetWithoutDescriptionErrorMessage(), "Error: Please provide an asset which has a description that can be used as alt text.");
+        editDialog.checkImageFromPageImage();
+        editDialog.checkAltTextFromAssetDescription();
+        Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(!teaser.isImagePresent(testPage), "Image should not be present");
         assertTrue(teaser.isTitlePresent(title),"Title link should be present");

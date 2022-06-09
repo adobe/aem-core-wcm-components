@@ -205,4 +205,14 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testSetLinkWithTarget();
     }
 
+    /**
+     * Test: set asset from DAM without description
+     */
+    @Test
+    @Override
+    @DisplayName("Test: set asset from DAM without description")
+    public void testSetAssetWithoutDescription() throws TimeoutException, InterruptedException {
+        imageTests.testSetAssetWithoutDescriptionV3();
+    }
+
 }

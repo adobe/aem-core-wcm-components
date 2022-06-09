@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-(function($) {
+(function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-image__editor";
@@ -47,6 +47,9 @@
     var altTextFromDAM;
     var altCheckboxSelector = "coral-checkbox[name='./altValueFromDAM']";
     var altInputSelector = "input[name='./alt']";
+    var altInputAlertIconSelector = "input[name='./alt'] + coral-icon[icon='alert']";
+    var assetTabSelector = "coral-tab[data-foundation-tracking-event*='asset']";
+    var assetTabAlertIconSelector = "coral-tab[data-foundation-tracking-event*='asset'] coral-icon[icon='alert']";
     var pageAltCheckboxSelector = "coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
     var pageAltInputSelector = "input[name='./cq:featuredimage/alt']";
     var pageImageThumbnailSelector = ".cq-page-image-thumbnail";
@@ -149,11 +152,25 @@
             candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
+
+        improveAltTextValidation();
     });
 
     $(window).on("focus", function() {
         if (fileReference) {
             retrieveDAMInfo(fileReference);
+        }
+    });
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: altInputSelector,
+        validate: function() {
+            var seededValue = $(altInputSelector).attr("data-seeded-value");
+            var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
+            if (isAltCheckboxChecked && !seededValue) {
+                return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
+            }
         }
     });
 
@@ -476,4 +493,69 @@
         }
     }
 
-})(jQuery);
+    /**
+     * Improve error validation for alternative text inherited from asset's description
+     */
+    function improveAltTextValidation() {
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === "attributes") {
+                    var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+                    var alertIcon = $(altInputAlertIconSelector);
+                    var assetTab = $(assetTabSelector);
+                    var assetTabAlertIcon = $(assetTabAlertIconSelector);
+                    if (mutation.attributeName === "data-seeded-value") {
+                        if (isAltCheckboxChecked) {
+                            if ($(altInputSelector).val()) {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).removeClass("is-invalid");
+                                    alertIcon.hide();
+                                    assetTab.removeClass("is-invalid");
+                                    assetTabAlertIcon.hide();
+                                }
+                            } else {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).addClass("is-invalid");
+                                    alertIcon.show();
+                                    assetTab.addClass("is-invalid");
+                                    assetTabAlertIcon.show();
+                                }
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "disabled") {
+                        if ($(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).removeClass("is-invalid");
+                                alertIcon.hide();
+                                assetTab.removeClass("is-invalid");
+                                assetTabAlertIcon.hide();
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "invalid") {
+                        if (!$(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).addClass("is-invalid");
+                                alertIcon.show();
+                                assetTab.addClass("is-invalid");
+                                assetTabAlertIcon.show();
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        var altInput = document.querySelector(altInputSelector);
+        if (altInput) {
+            observer.observe(altInput, {
+                attributeFilter: ["data-seeded-value", "disabled", "invalid"]
+            });
+        }
+    }
+
+})(jQuery, Granite);
