@@ -107,7 +107,8 @@ public class AssetDeliveryHelperTest {
         imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, new int[]{200, 300}, JPEG_QUALITY);
-        String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION + "?" + "preferwebp=true";
+        String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." +
+            JPEG_EXTENSION + "?" + "quality=" + JPEG_QUALITY + "&" + "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 

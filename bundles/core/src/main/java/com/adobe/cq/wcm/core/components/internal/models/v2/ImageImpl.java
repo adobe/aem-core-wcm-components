@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -82,6 +83,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * The width variable to use when building {@link #srcUriTemplate}.
      */
     private static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+
+    /**
+     * The width variable to use when building {@link #srcUriTemplate} for CDN route.
+     */
+    private static final String SRC_URI_TEMPLATE_WIDTH_VAR_THRU_CDN = "{width=width}";
 
     /**
      * The smartcrop "auto" constant.
@@ -217,17 +223,21 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
             if(dmImageUrl == null){
-                String staticSelectors = selector;
-                if (smartSizes.length > 0) {
-                    // only include the quality selector in the URL, if there are sizes configured
-                    staticSelectors += DOT + jpegQuality;
-                }
-                srcUriTemplate = baseResourcePath + DOT + staticSelectors +
+                if(useAssetDelivery) {
+                    srcUriTemplate = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, resource, imageName,
+                        extension, smartSizes, jpegQuality, SRC_URI_TEMPLATE_WIDTH_VAR_THRU_CDN);
+                } else {
+                    String staticSelectors = selector;
+                    if (smartSizes.length > 0) {
+                        // only include the quality selector in the URL, if there are sizes configured
+                        staticSelectors += DOT + jpegQuality;
+                    }
+                    srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                         SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                         (inTemplate ? templateRelativePath : "") +
-                        (lastModifiedDate > 0 ?("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
+                        (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                         (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
-
+                }
 
                 if (StringUtils.isNotBlank(policyDelegatePath)) {
                     srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;

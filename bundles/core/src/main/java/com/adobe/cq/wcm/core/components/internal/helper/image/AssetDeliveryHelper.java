@@ -19,6 +19,7 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.spi.AssetDelivery;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
+import com.day.text.Text;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -26,9 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.sling.api.resource.ValueMap;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,8 +72,33 @@ public class AssetDeliveryHelper {
         return null;
     }
 
-    public static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
-                                 @NotNull String extension, @NotNull int[] smartSizes, int jpegQuality) {
+    public static String getSrcUriTemplate(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource,
+                                           @NotNull String imageName, @NotNull String extension,
+                                           @NotNull int[] smartSizes, int jpegQuality, String widthPlaceholder) {
+
+        String templateUrl = getSrc(assetDelivery, imageComponentResource, imageName, extension,
+            smartSizes, jpegQuality, false);
+        if(!StringUtils.isEmpty(templateUrl)) {
+            if(templateUrl.indexOf("?") < 0) {
+                templateUrl += "?" + widthPlaceholder;
+            } else {
+                templateUrl += "&" + widthPlaceholder;
+            }
+        }
+        return templateUrl;
+    }
+
+    public static String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource,
+                                @NotNull String imageName, @NotNull String extension,
+                                @NotNull int[] smartSizes, int jpegQuality) {
+
+        return getSrc(assetDelivery, imageComponentResource, imageName, extension,
+            smartSizes, jpegQuality, smartSizes.length == 1);
+    }
+
+    private static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource,
+                                  @NotNull String imageName, @NotNull String extension,
+                                  @NotNull int[] smartSizes, int jpegQuality, boolean addWidth) {
 
         Map<String, Object> params = new HashMap<>();
 
@@ -97,10 +120,11 @@ public class AssetDeliveryHelper {
         params.put(FORMAT_PARAMETER, extension);
         params.put(PREFER_WEBP_PARAMETER, "true");
 
-        if (smartSizes.length == 1) {
+        if (smartSizes.length > 0) {
             addQualityParameter(params, jpegQuality);
+        }
+        if (addWidth) {
             addWidthParameter(params, smartSizes[0]);
-
         }
 
         addCropParameter(params, componentProperties);

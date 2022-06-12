@@ -22,6 +22,7 @@
     var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     var LAZY_THRESHOLD_DEFAULT = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+    var SRC_URI_TEMPLATE_WIDTH_VAR_THRU_CDN = "{width=width}";
     var SRC_URI_TEMPLATE_DPR_VAR = "{dpr}";
 
     var selectors = {
@@ -232,6 +233,8 @@
                 replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths, true) : "";
             }
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
+            url = url.replace(SRC_URI_TEMPLATE_WIDTH_VAR_THRU_CDN,
+                replacement !== "" ? ("width=" + replacement.substring(1)) : "");
             url = url.replace(SRC_URI_TEMPLATE_DPR_VAR, devicePixelRatio);
 
             var imgSrcAttribute = that._elements.image.getAttribute("src");
