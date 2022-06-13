@@ -461,7 +461,7 @@ public class TeaserIT extends AuthorBaseUITest {
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openTextTab();
         assertTrue(editDialog.isTitleTypeSelectDropdownDisplayed());
-        assertEquals(editDialog.getTitleTypeSelectDropdownDefaultSelectedText(), "H4");
+        assertEquals(editDialog.getTitleTypeSelectDropdownDefaultSelectedText(), "h4");
     }
 
     /**
@@ -489,7 +489,7 @@ public class TeaserIT extends AuthorBaseUITest {
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openTextTab();
         assertTrue(editDialog.isTitleTypeSelectDropdownDisplayed());
-        assertEquals(editDialog.getTitleTypeSelectDropdownDefaultSelectedText(), "H3");
+        assertEquals(editDialog.getTitleTypeSelectDropdownDefaultSelectedText(), "h3");
     }
     // ----------------------------------------------------------
     // private stuff
