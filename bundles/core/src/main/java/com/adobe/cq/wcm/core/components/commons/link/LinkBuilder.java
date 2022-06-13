@@ -41,7 +41,7 @@ public interface LinkBuilder {
      * @return {@link LinkBuilder}
      */
     @NotNull
-    LinkBuilder setLinkTarget(@Nullable String target);
+    LinkBuilder setLinkTarget(@NotNull String target);
 
     /**
      * Sets the HTML link attribute.
