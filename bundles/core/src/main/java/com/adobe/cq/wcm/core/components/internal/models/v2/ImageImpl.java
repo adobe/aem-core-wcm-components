@@ -149,6 +149,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         boolean isDmFeaturesEnabled = currentStyle.get(PN_DESIGN_DYNAMIC_MEDIA_ENABLED, false);
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
         boolean uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
+        // if content policy delegate path is provided pass it to the image Uri
+        String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
         String dmImageUrl = null;
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
@@ -181,6 +183,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         dmAssetName = UrlEscapers.urlFragmentEscaper().escape(dmAssetName);
                         //image is DM
                         dmImage = true;
+                        useAssetDelivery = false;
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         //sets to '/is/image/ or '/is/content' based on dam:scene7Type property
@@ -200,6 +203,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
                     }
+                    useAssetDelivery = useAssetDelivery && StringUtils.isEmpty(policyDelegatePath);
+
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
                             request.getResource().getPath());
@@ -223,8 +228,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         (lastModifiedDate > 0 ?("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                         (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
 
-                // if content policy delegate path is provided pass it to the image Uri
-                String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
+
                 if (StringUtils.isNotBlank(policyDelegatePath)) {
                     srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
                     src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;

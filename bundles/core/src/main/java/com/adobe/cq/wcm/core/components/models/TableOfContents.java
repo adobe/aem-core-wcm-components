@@ -117,10 +117,10 @@ public interface TableOfContents extends Component {
         /**
          * Given an {@link String} <code>value</code>, this method returns the enum's value that corresponds to the
          * provided string representation.
-         * If no representation is found, {@link null} will be returned.
+         * If no representation is found, null will be returned.
          *
          * @param value the string representation for which an enum value should be returned
-         * @return the corresponding enum value, if one was found, or {@link null}
+         * @return the corresponding enum value, if one was found, or null
          *
          * @since com.adobe.cq.wcm.core.components.models.tableofcontents 1.0
          */

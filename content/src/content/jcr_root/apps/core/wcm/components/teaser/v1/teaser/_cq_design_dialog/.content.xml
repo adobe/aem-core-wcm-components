@@ -35,32 +35,32 @@
                                     <h1
                                         jcr:primaryType="nt:unstructured"
                                         selected="{Boolean}true"
-                                        text="H1"
+                                        text="h1"
                                         value="h1"/>
                                     <h2
                                         jcr:primaryType="nt:unstructured"
                                         selected="{Boolean}true"
-                                        text="H2"
+                                        text="h2"
                                         value="h2"/>
                                     <h3
                                         jcr:primaryType="nt:unstructured"
                                         selected="{Boolean}true"
-                                        text="H3"
+                                        text="h3"
                                         value="h3"/>
                                     <h4
                                         jcr:primaryType="nt:unstructured"
                                         selected="{Boolean}true"
-                                        text="H4"
+                                        text="h4"
                                         value="h4"/>
                                     <h5
                                         jcr:primaryType="nt:unstructured"
                                         selected="{Boolean}true"
-                                        text="H5"
+                                        text="h5"
                                         value="h5"/>
                                     <h6
                                         jcr:primaryType="nt:unstructured"
                                         selected="{Boolean}true"
-                                        text="H6"
+                                        text="h6"
                                         value="h6"/>
                                 </items>
                             </allowedHeadingElements>

@@ -19,26 +19,29 @@
      data-cmp-constraint-message="${text.constraintMessage}"
      data-cmp-required-message="${text.requiredMessage}">
     <label for="${text.id}" data-sly-test="${text.title && !text.hideTitle}">${text.title}</label>
-    <p data-sly-test="${!text.placeholder && text.helpMessage}" class="cmp-form-text__help-block">${text.helpMessage}</p>
+    <p id="${text.id}-helpMessage" data-sly-test="${!text.placeholder && text.helpMessage}"
+       class="cmp-form-text__help-block">${text.helpMessage}</p>
     <textarea data-sly-test.useTextarea="${text.type == 'textarea'}"
-        class="cmp-form-text__textarea"
-        data-cmp-hook-form-text="input"
-        aria-label="${text.hideTitle && text.title}"
-        id="${text.id}"
-        placeholder="${text.placeholder}"
-        name="${text.name}"
-        readonly="${text.readOnly}"
-        required="${text.required}"
-        rows="${text.rows}">${text.value}</textarea>
+              class="cmp-form-text__textarea"
+              data-cmp-hook-form-text="input"
+              aria-label="${text.hideTitle && text.title}"
+              id="${text.id}"
+              placeholder="${text.placeholder}"
+              name="${text.name}"
+              readonly="${text.readOnly}"
+              required="${text.required}"
+              rows="${text.rows}"
+              data-sly-attribute.aria-describedby="${text.helpMessage ? [text.id, 'helpMessage'] : '' @ join = '-'}">${text.value}</textarea>
     <input data-sly-test="${!useTextarea}"
-        class="cmp-form-text__text"
-        data-cmp-hook-form-text="input"
-        aria-label="${text.hideTitle && text.title}"
-        type="${text.type}"
-        id="${text.id}"
-        placeholder="${text.placeholder}"
-        name="${text.name}"
-        value="${text.value}"
-        readonly="${text.readOnly}"
-        required="${text.required}"/>
+           class="cmp-form-text__text"
+           data-cmp-hook-form-text="input"
+           aria-label="${text.hideTitle && text.title}"
+           type="${text.type}"
+           id="${text.id}"
+           placeholder="${text.placeholder}"
+           name="${text.name}"
+           value="${text.value}"
+           readonly="${text.readOnly}"
+           required="${text.required}"
+           data-sly-attribute.aria-describedby="${text.helpMessage ? [text.id, 'helpMessage'] : '' @ join = '-'}"/>
 </div>

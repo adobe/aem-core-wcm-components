@@ -64,61 +64,6 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
     }
 
     /**
-     * Test: Check the existence of all available title types.
-     *
-     * @throws TimeoutException
-     * @throws InterruptedException
-     */
-    @Test
-    @Override
-    @DisplayName("Test: Check the existence of all available title types.")
-    public void testCheckExistenceOfTitleTypes() throws TimeoutException, InterruptedException, ClientException {
-        createComponentPolicy(titleRT.substring(titleRT.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
-            add(new BasicNameValuePair("type", "h1"));
-            add(new BasicNameValuePair("allowedTypes", "h1"));
-            add(new BasicNameValuePair("allowedTypes", "h2"));
-            add(new BasicNameValuePair("allowedTypes", "h3"));
-            add(new BasicNameValuePair("allowedTypes", "h4"));
-            add(new BasicNameValuePair("allowedTypes", "h5"));
-            add(new BasicNameValuePair("allowedTypes", "h6"));
-            add(new BasicNameValuePair("allowedTypes@TypeHint", "String[]"));
-        }});
-
-        // open the dialog
-        Commons.openEditDialog(editorPage, cmpPath);
-        // check if all default title sizes are there
-        assertTrue(title.getEditDialog().isAllDefaultTitleTypesPresent(), "All default title sizes should be present in edit dialog ");
-    }
-
-    /**
-     * Test: Check if setting the title type works.
-     *
-     * @throws TimeoutException
-     * @throws InterruptedException
-     */
-    @Test
-    @Override
-    @DisplayName("Test: Check if setting the title type works.")
-    public void testSetTitleType() throws TimeoutException, InterruptedException, ClientException {
-        createComponentPolicy(titleRT.substring(titleRT.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
-            add(new BasicNameValuePair("type", "h5"));
-            add(new BasicNameValuePair("allowedTypes", "h3"));
-            add(new BasicNameValuePair("allowedTypes", "h4"));
-            add(new BasicNameValuePair("allowedTypes", "h6"));
-            add(new BasicNameValuePair("allowedTypes@TypeHint", "String[]"));
-        }});
-
-        // open the dialog
-        Commons.openEditDialog(editorPage, cmpPath);
-        // set title type
-        title.getEditDialog().selectTitleType("6");
-        Commons.saveConfigureDialog();
-
-        Commons.switchContext("ContentFrame");
-        assertTrue(title.isTitleWithTypePresent("6"), "Title with type h6 should be present");
-    }
-
-    /**
      * Test: Check the existence of all available title types defined in a policy.
      *
      * @throws ClientException
@@ -202,7 +147,7 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
 
         Commons.openEditDialog(editorPage, cmpPath);
         TitleEditDialog editDialog = title.getEditDialog();
-        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "H4");
+        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "h4");
     }
 
     /**
@@ -227,6 +172,6 @@ public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.ti
 
         Commons.openEditDialog(editorPage, cmpPath);
         TitleEditDialog editDialog = title.getEditDialog();
-        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "H3");
+        assertEquals(editDialog.getTitleTypeDropdownDefaultSelectedText(), "h3");
     }
 }

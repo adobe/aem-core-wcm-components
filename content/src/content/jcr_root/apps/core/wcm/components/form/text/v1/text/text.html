@@ -16,16 +16,18 @@
 <div data-sly-use.text="com.adobe.cq.wcm.core.components.models.form.Text"
      class="form-group">
     <label for="${text.id}" data-sly-test="${text.title && !text.hideTitle}">${text.title}</label>
-    <p data-sly-test="${!text.placeholder && text.helpMessage}" class="help-block">${text.helpMessage}</p>
+    <p id="${text.id}-helpMessage" data-sly-test="${!text.placeholder && text.helpMessage}" class="help-block">
+        ${text.helpMessage}</p>
     <textarea data-sly-test.useTextarea="${text.type == 'textarea'}"
-          aria-label="${text.hideTitle && text.title}"
-          id="${text.id}"
-          placeholder="${text.placeholder}"
-          name="${text.name}"
-          readonly="${text.readOnly}"
-          required="${text.required}"
-          data-cmp-required="${text.requiredMessage}"
-          rows="${text.rows}">${text.value}</textarea>
+              aria-label="${text.hideTitle && text.title}"
+              id="${text.id}"
+              placeholder="${text.placeholder}"
+              name="${text.name}"
+              readonly="${text.readOnly}"
+              required="${text.required}"
+              data-cmp-required="${text.requiredMessage}"
+              rows="${text.rows}"
+              data-sly-attribute.aria-describedby="${text.helpMessage ? [text.id, 'helpMessage'] : '' @ join = '-'}">${text.value}</textarea>
     <input data-sly-test="${!useTextarea}"
            aria-label="${text.hideTitle && text.title}"
            type="${text.type}"
@@ -36,5 +38,6 @@
            readonly="${text.readOnly}"
            required="${text.required}"
            data-cmp-required="${text.requiredMessage}"
-           data-cmp-constraint="${text.constraintMessage}"/>
+           data-cmp-constraint="${text.constraintMessage}"
+           data-sly-attribute.aria-describedby="${text.helpMessage ? [text.id, 'helpMessage'] : '' @ join = '-'}"/>
 </div>

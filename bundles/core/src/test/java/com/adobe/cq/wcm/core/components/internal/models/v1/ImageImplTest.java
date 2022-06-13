@@ -20,6 +20,7 @@ import java.io.StringReader;
 import javax.json.Json;
 import javax.json.JsonReader;
 
+import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -232,6 +233,46 @@ public class ImageImplTest extends AbstractImageTest {
         assertEquals(Json.createReader(new StringReader(expected)).read(),
             Json.createReader(new StringReader(image.getData().getJson())).read());
     }
+
+    @Test
+    void testenableAssetDeliveryWithoutService() throws Exception {
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
+    }
+
+    @Test
+    void testEnableAssetDeliveryWithServiceRegistered() throws Exception {
+        registerAssetDelivery();
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?preferwebp=true", image.getSrc());
+    }
+
+    @Test
+    void testAssetDeliveryServiceWithoutFileReference() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE2_PATH);
+        assertEquals(null, image.getSrc());
+    }
+
+    @Test
+    void testAssetDeliveryServiceWithInlineFileResource() {
+        String escapedResourcePath = IMAGE5_PATH.replace("jcr:content", "_jcr_content");
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE5_PATH);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".gif/1489998822138/" + ASSET_NAME + ".gif", image.getSrc());
+    }
+
+
 
     protected void compareJSON(String expectedJson, String json) {
         JsonReader expected = Json.createReader(new StringReader(expectedJson));
