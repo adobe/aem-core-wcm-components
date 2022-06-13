@@ -17,10 +17,12 @@ package com.adobe.cq.wcm.core.components.commons.link;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Builds a link and sets link properties.
  */
+@ConsumerType
 public interface LinkBuilder {
 
     /**
@@ -30,7 +32,7 @@ public interface LinkBuilder {
      * @return {@link LinkBuilder}
      */
     @NotNull
-    LinkBuilder setLinkURLPropertyName(@Nullable String name);
+    LinkBuilder setLinkUrlPropertyName(@NotNull String name);
 
     /**
      * Sets the HTML link target.
@@ -49,7 +51,7 @@ public interface LinkBuilder {
      * @return {@link LinkBuilder}
      */
     @NotNull
-    LinkBuilder setLinkAttribute(@NotNull String name, String value);
+    LinkBuilder setLinkAttribute(@NotNull String name, @Nullable String value);
 
     /**
      * Returns the resolved link.

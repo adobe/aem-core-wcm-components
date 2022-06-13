@@ -17,17 +17,21 @@ package com.adobe.cq.wcm.core.components.commons.link;
 
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.osgi.annotation.versioning.ConsumerType;
 
+import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.Page;
 
 /**
- * Computes a link based on input configuration.
+ * This interface offers a flexible way, based on the builder pattern, to compute links.
+ *
  * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
  */
+@ConsumerType
 public interface LinkHandler {
 
     /**
-     * Returns a link builder based on the given resource.
+     * Returns a link builder where the link is defined by the resource properties.
      *
      * @param resource Resource to read the link properties from.
      * @return {@link LinkBuilder}
@@ -36,7 +40,7 @@ public interface LinkHandler {
     LinkBuilder get(@NotNull Resource resource);
 
     /**
-     * Returns a link builder pointing to the given target page.
+     * Returns a link builder where the link points to a page.
      *
      * @param page Target page of the link.
      * @return {@link LinkBuilder}
@@ -45,12 +49,21 @@ public interface LinkHandler {
     LinkBuilder get(@NotNull Page page);
 
     /**
-     * Returns a link builder pointing to the URL.
+     * Returns a link builder where the link points to an asset.
      *
-     * @param URL URL string of the link.
+     * @param asset Target asset of the link.
      * @return {@link LinkBuilder}
      */
     @NotNull
-    LinkBuilder get(@NotNull String URL);
+    LinkBuilder get(@NotNull Asset asset);
+
+    /**
+     * Returns a link builder where the link pointa to an URL.
+     *
+     * @param url URL string of the link.
+     * @return {@link LinkBuilder}
+     */
+    @NotNull
+    LinkBuilder get(@NotNull String url);
 
 }
