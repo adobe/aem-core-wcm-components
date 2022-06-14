@@ -187,15 +187,21 @@
                                 var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
                                 // next frame to ensure we remove the default event handler
                                 Coral.commons.nextFrame(function() {
-                                    selectList.off("click");
-                                    selectList.on("click" + NS, "coral-list-item", function(event) {
+
+                                    var eventComponentSelected = function(event) {
                                         var resourceType = "";
                                         var componentTitle = "";
                                         var templatePath = "";
-
+                                        var components = "";
                                         insertComponentDialog.hide();
 
-                                        var components = ns.components.find(event.target.closest("coral-list-item").value);
+                                        // cloud
+                                        if (selectList.toString() === "Coral.List") {
+                                            components = ns.components.find(event.target.closest("coral-list-item").value);
+                                        } else { // on-prem
+                                            components = ns.components.find(event.detail.selection.value);
+                                        }
+
                                         if (components.length > 0) {
                                             resourceType = components[0].getResourceType();
                                             componentTitle = components[0].getTitle();
@@ -229,11 +235,25 @@
                                                 that._elements.self.trigger("change");
                                             });
                                         }
-                                    });
+                                    };
+
+                                    // cloud
+                                    if (selectList.toString() === "Coral.List") {
+                                        selectList.off("click");
+                                        selectList.on("click" + NS, "coral-list-item", eventComponentSelected);
+                                    } else { // on-prem
+                                        selectList.off("coral-selectlist:change");
+                                        selectList.on("coral-selectlist:change" + NS, eventComponentSelected);
+                                    }
                                 });
                                 // unbind events on dialog close
                                 channel.one("coral-overlay:beforeclose", function() {
-                                    selectList.off("click" + NS);
+                                    // cloud
+                                    if (selectList.toString() === "Coral.List") {
+                                        selectList.off("click" + NS);
+                                    } else { // on-prem
+                                        selectList.off("coral-selectlist:change");
+                                    }
                                 });
                             }
                         });
