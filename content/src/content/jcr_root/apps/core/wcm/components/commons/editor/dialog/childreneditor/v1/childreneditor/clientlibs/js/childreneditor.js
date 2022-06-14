@@ -188,14 +188,14 @@
                                 // next frame to ensure we remove the default event handler
                                 Coral.commons.nextFrame(function() {
                                     selectList.off("click");
-                                    selectList.on('click' + NS, 'coral-list-item', function(event) {
+                                    selectList.on("click" + NS, "coral-list-item", function(event) {
                                         var resourceType = "";
                                         var componentTitle = "";
                                         var templatePath = "";
 
                                         insertComponentDialog.hide();
 
-                                        var components = ns.components.find(event.target.closest('coral-list-item').value);
+                                        var components = ns.components.find(event.target.closest("coral-list-item").value);
                                         if (components.length > 0) {
                                             resourceType = components[0].getResourceType();
                                             componentTitle = components[0].getTitle();
