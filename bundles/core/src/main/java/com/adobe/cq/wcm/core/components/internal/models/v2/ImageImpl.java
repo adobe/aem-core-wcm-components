@@ -87,7 +87,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     /**
      * The width variable to use when building {@link #srcUriTemplate} for CDN route.
      */
-    private static final String SRC_URI_TEMPLATE_WIDTH_VAR_THRU_CDN = "{width=width}";
+    private static final String SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "{width=width}";
 
     /**
      * The smartcrop "auto" constant.
@@ -225,7 +225,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if(dmImageUrl == null){
                 if(useAssetDelivery) {
                     srcUriTemplate = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, resource, imageName,
-                        extension, smartSizes, jpegQuality, SRC_URI_TEMPLATE_WIDTH_VAR_THRU_CDN);
+                        extension, smartSizes, jpegQuality, SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY);
                 } else {
                     String staticSelectors = selector;
                     if (smartSizes.length > 0) {
