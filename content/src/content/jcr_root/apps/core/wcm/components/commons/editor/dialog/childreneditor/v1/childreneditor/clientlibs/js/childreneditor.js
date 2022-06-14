@@ -28,7 +28,7 @@
         add: "[data-cmp-hook-childreneditor='add']",
         insertComponentDialog: {
             self: "coral-dialog.InsertComponentDialog",
-            selectList: "coral-selectlist"
+            selectList: ".InsertComponentDialog-list"
         },
         item: {
             icon: "[data-cmp-hook-childreneditor='itemIcon']",
@@ -185,18 +185,17 @@
 
                                 var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
                                 var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
-
                                 // next frame to ensure we remove the default event handler
                                 Coral.commons.nextFrame(function() {
-                                    selectList.off("coral-selectlist:change");
-                                    selectList.on("coral-selectlist:change" + NS, function(event) {
+                                    selectList.off("click");
+                                    selectList.on('click' + NS, 'coral-list-item', function(event) {
                                         var resourceType = "";
                                         var componentTitle = "";
                                         var templatePath = "";
 
                                         insertComponentDialog.hide();
 
-                                        var components = ns.components.find(event.detail.selection.value);
+                                        var components = ns.components.find(event.target.closest('coral-list-item').value);
                                         if (components.length > 0) {
                                             resourceType = components[0].getResourceType();
                                             componentTitle = components[0].getTitle();
@@ -234,7 +233,7 @@
                                 });
                                 // unbind events on dialog close
                                 channel.one("coral-overlay:beforeclose", function() {
-                                    selectList.off("coral-selectlist:change" + NS);
+                                    selectList.off("click" + NS);
                                 });
                             }
                         });
