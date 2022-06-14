@@ -26,6 +26,15 @@ import com.day.cq.wcm.api.Page;
  * This interface offers a flexible way, based on the builder pattern, to compute links.
  *
  * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
+ *
+ * It can be used as follows:
+ * <pre>
+ *     Link link = linkHandler.get(page).build();
+ *     Link link = linkHandler.get(page)
+ *          .setLinkTarget(...)
+ *          .setLinkAttribute(...)
+ *          .build();
+ * </pre>
  */
 @ConsumerType
 public interface LinkHandler {
@@ -58,7 +67,7 @@ public interface LinkHandler {
     LinkBuilder get(@NotNull Asset asset);
 
     /**
-     * Returns a link builder where the link pointa to an URL.
+     * Returns a link builder where the link points to an URL.
      *
      * @param url URL string of the link.
      * @return {@link LinkBuilder}
