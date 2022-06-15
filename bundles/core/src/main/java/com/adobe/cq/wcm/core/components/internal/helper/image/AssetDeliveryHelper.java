@@ -19,7 +19,6 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.spi.AssetDelivery;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
-import com.day.text.Text;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
