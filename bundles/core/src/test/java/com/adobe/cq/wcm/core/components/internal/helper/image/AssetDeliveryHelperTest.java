@@ -44,6 +44,7 @@ public class AssetDeliveryHelperTest {
     private static String TEST_IMAGE_COMPONENT_PATH = "/content/test/image/resource";
     private static String TEST_SEO_NAME = "test-seo";
     private static String JPEG_EXTENSION = "jpg";
+    private static String SRC_URI_TEMPLATE_WIDTH_VAR = "{width=width}";
     private static Integer JPEG_QUALITY = 80;
 
     @Test
@@ -202,6 +203,39 @@ public class AssetDeliveryHelperTest {
             "&" + "r=" + 90 +
             "&" + "flip=HORIZONTAL_AND_VERTICAL" +
             "&" + "preferwebp=true";
+        assertEquals(expectedSrcUrl, src);
+    }
+
+    @Test
+    public void testSrcUriTemplateWithWidths() {
+        AssetDelivery assetDelivery = new MockAssetDelivery();
+        context.create().resource(TEST_ASSET_RESOURCE_PATH);
+        Map<String, Object> imageResourceProperties = new HashMap<>();
+        imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
+        Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
+        String src = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, imageComponentResource, TEST_SEO_NAME,
+            JPEG_EXTENSION, new int[] { 200, 400, 600 }, JPEG_QUALITY, SRC_URI_TEMPLATE_WIDTH_VAR);
+        String expectedSrcUrl = MockAssetDelivery.BASE_URL
+            + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION
+            + "?" + "quality=" + JPEG_QUALITY
+            + "&" + "preferwebp=true"
+            + "&" + SRC_URI_TEMPLATE_WIDTH_VAR;
+        assertEquals(expectedSrcUrl, src);
+    }
+
+    @Test
+    public void testSrcUriTemplateWithNoWidth() {
+        AssetDelivery assetDelivery = new MockAssetDelivery();
+        context.create().resource(TEST_ASSET_RESOURCE_PATH);
+        Map<String, Object> imageResourceProperties = new HashMap<>();
+        imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
+        Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
+        String src = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, imageComponentResource, TEST_SEO_NAME,
+            JPEG_EXTENSION, new int[] {}, JPEG_QUALITY, SRC_URI_TEMPLATE_WIDTH_VAR);
+        String expectedSrcUrl = MockAssetDelivery.BASE_URL
+            + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION
+            + "?" + "preferwebp=true"
+            + "&" + SRC_URI_TEMPLATE_WIDTH_VAR;
         assertEquals(expectedSrcUrl, src);
     }
 
