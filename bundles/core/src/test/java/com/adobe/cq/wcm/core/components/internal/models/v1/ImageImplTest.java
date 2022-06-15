@@ -20,7 +20,6 @@ import java.io.StringReader;
 import javax.json.Json;
 import javax.json.JsonReader;
 
-import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -272,7 +272,39 @@ public class ImageImplTest extends AbstractImageTest {
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".gif/1489998822138/" + ASSET_NAME + ".gif", image.getSrc());
     }
 
+    @Test
+    void testAssetDeliveryEnabledWithoutSmartSizes() {
+        registerAssetDelivery();
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true";
+        assertEquals(expectedSrc, image.getSrc());
+        String expectedJson = "{" +
+                "\"smartImages\":[]," +
+                "\"smartSizes\":[]," +
+                "\"lazyEnabled\":true" +
+                "}";
+        assertEquals(expectedJson, image.getJson());
+    }
 
+    @Test
+    void testAssetDeliveryEnabledWithSmartSizes() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+                "enableAssetDelivery", true,
+                "allowedRenditionWidths", new int[]{600, 800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true";
+        assertEquals(expectedSrc, image.getSrc());
+        String expectedJson = "{" +
+                "\"smartImages\":[" +
+                    "\"" + MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82&preferwebp=true\"," +
+                    "\"" + MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true\"" +
+                "]," +
+                "\"smartSizes\":[600,800]," +
+                "\"lazyEnabled\":true" +
+                "}";
+        assertEquals(expectedJson, image.getJson());
+    }
 
     protected void compareJSON(String expectedJson, String json) {
         JsonReader expected = Json.createReader(new StringReader(expectedJson));

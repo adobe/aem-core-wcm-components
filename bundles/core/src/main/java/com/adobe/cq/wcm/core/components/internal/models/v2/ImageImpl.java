@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -82,12 +83,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     /**
      * The width variable to use when building {@link #srcUriTemplate}.
      */
-    private static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+    static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
 
     /**
      * The width variable to use when building {@link #srcUriTemplate} for CDN route.
      */
-    private static final String SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "{width=width}";
+    static final String SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "{width=width}";
 
     /**
      * The smartcrop "auto" constant.
