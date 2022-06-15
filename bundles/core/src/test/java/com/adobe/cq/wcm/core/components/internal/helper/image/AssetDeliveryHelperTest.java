@@ -240,6 +240,28 @@ public class AssetDeliveryHelperTest {
     }
 
     @Test
+    public void testSrcUriTemplateWithOnlyWidthTemplateParam() {
+        AssetDelivery assetDelivery = (resource, parameterMap) -> {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(MockAssetDelivery.BASE_URL);
+            stringBuilder.append(parameterMap.remove(MockAssetDelivery.PATH_PARAMETER));
+            stringBuilder.append("." + parameterMap.remove(MockAssetDelivery.SEO_PARAMETER));
+            stringBuilder.append("." + parameterMap.remove(MockAssetDelivery.FORMAT_PARAMETER));
+            return stringBuilder.toString();
+        };
+        context.create().resource(TEST_ASSET_RESOURCE_PATH);
+        Map<String, Object> imageResourceProperties = new HashMap<>();
+        imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH);
+        Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
+        String src = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, imageComponentResource, TEST_SEO_NAME,
+            JPEG_EXTENSION, new int[] {}, JPEG_QUALITY, SRC_URI_TEMPLATE_WIDTH_VAR);
+        String expectedSrcUrl = MockAssetDelivery.BASE_URL
+            + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION
+            + "?" + SRC_URI_TEMPLATE_WIDTH_VAR;
+        assertEquals(expectedSrcUrl, src);
+    }
+
+    @Test
     public void testSrcSetWithoutMultipleWidths() throws Exception {
         AssetDelivery assetDelivery = new MockAssetDelivery();
         context.create().resource(TEST_ASSET_RESOURCE_PATH);

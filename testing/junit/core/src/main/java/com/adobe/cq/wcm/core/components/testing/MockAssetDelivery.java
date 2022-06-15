@@ -27,9 +27,9 @@ import java.util.Map;
 
 public class MockAssetDelivery implements AssetDelivery {
 
-    private static String FORMAT_PARAMETER = "format";
-    private static String PATH_PARAMETER = "path";
-    private static String SEO_PARAMETER = "seoname";
+    public static String FORMAT_PARAMETER = "format";
+    public static String PATH_PARAMETER = "path";
+    public static String SEO_PARAMETER = "seoname";
     private static List<String> params = new ArrayList<String>() {
                                             {
                                                 add("width");
