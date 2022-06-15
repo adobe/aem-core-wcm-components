@@ -240,7 +240,7 @@ public class AssetDeliveryHelperTest {
     }
 
     @Test
-    public void testSrcUriTemplateWithOnlyWidthTemplateParam() {
+    public void testSrcUriTemplateWithWidthTemplateParam() {
         AssetDelivery assetDelivery = new MockAssetDelivery();
         context.create().resource(TEST_ASSET_RESOURCE_PATH);
         Map<String, Object> imageResourceProperties = new HashMap<>();
