@@ -22,7 +22,7 @@
     var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     var LAZY_THRESHOLD_DEFAULT = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
-    var SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "{width=width}";
+    var SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "width={width}";
     var SRC_URI_TEMPLATE_DPR_VAR = "{dpr}";
 
     var selectors = {

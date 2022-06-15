@@ -48,6 +48,7 @@ public class AssetDeliveryHelper {
     private static String HORIZONTAL_FLIP = "HORIZONTAL";
     private static String VERTICAL_FLIP = "VERTICAL";
     private static String HORIZONTAL_AND_VERTICAL_FLIP = "HORIZONTAL_AND_VERTICAL";
+    private static int[] PSEUDO_WIDTH_PARAM = new int[] { Integer.MIN_VALUE };
 
 
     public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
@@ -76,13 +77,9 @@ public class AssetDeliveryHelper {
                                            @NotNull int[] smartSizes, int jpegQuality, String widthPlaceholder) {
 
         String templateUrl = getSrc(assetDelivery, imageComponentResource, imageName, extension,
-            smartSizes, jpegQuality, false);
+            PSEUDO_WIDTH_PARAM, true, jpegQuality, smartSizes.length > 0);
         if(!StringUtils.isEmpty(templateUrl)) {
-            if(templateUrl.indexOf("?") < 0) {
-                templateUrl += "?" + widthPlaceholder;
-            } else {
-                templateUrl += "&" + widthPlaceholder;
-            }
+            templateUrl = templateUrl.replaceAll(String.valueOf(PSEUDO_WIDTH_PARAM[0]), widthPlaceholder);
         }
         return templateUrl;
     }
@@ -92,12 +89,12 @@ public class AssetDeliveryHelper {
                                 @NotNull int[] smartSizes, int jpegQuality) {
 
         return getSrc(assetDelivery, imageComponentResource, imageName, extension,
-            smartSizes, jpegQuality, smartSizes.length == 1);
+            smartSizes, smartSizes.length == 1, jpegQuality, smartSizes.length > 0);
     }
 
     private static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource,
                                   @NotNull String imageName, @NotNull String extension,
-                                  @NotNull int[] smartSizes, int jpegQuality, boolean addWidth) {
+                                  @NotNull int[] smartSizes, boolean addWidth, int jpegQuality, boolean addQuality) {
 
         Map<String, Object> params = new HashMap<>();
 
@@ -119,7 +116,7 @@ public class AssetDeliveryHelper {
         params.put(FORMAT_PARAMETER, extension);
         params.put(PREFER_WEBP_PARAMETER, "true");
 
-        if (smartSizes.length > 0) {
+        if (addQuality) {
             addQualityParameter(params, jpegQuality);
         }
         if (addWidth) {
