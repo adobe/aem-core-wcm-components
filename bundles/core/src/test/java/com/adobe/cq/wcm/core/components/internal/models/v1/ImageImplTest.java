@@ -275,8 +275,9 @@ public class ImageImplTest extends AbstractImageTest {
     @Test
     void testAssetDeliveryEnabledWithoutSmartSizes() {
         registerAssetDelivery();
+        context.contentPolicyMapping(resourceType, "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
-        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true";
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?preferwebp=true";
         assertEquals(expectedSrc, image.getSrc());
         String expectedJson = "{" +
                 "\"smartImages\":[]," +

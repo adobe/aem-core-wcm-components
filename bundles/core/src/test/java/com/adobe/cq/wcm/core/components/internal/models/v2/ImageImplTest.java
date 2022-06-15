@@ -582,12 +582,13 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     @Test
     void testAssetDeliveryEnabledWithoutSmartSizes() {
         registerAssetDelivery();
+        context.contentPolicyMapping(resourceType, "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
         assertArrayEquals(new int[]{}, image.getWidths());
-        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true";
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?preferwebp=true";
         assertEquals(expectedSrc, image.getSrc());
         String expectedSrcUriTemplate = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  +
-                ".png?quality=82&preferwebp=true&" + ImageImpl.SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY;
+                ".png?preferwebp=true&" + ImageImpl.SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY;
         assertEquals(expectedSrcUriTemplate , image.getSrcUriTemplate());
     }
 
