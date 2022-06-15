@@ -226,7 +226,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 if(useAssetDelivery) {
                     srcUriTemplate = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, resource, imageName,
                         extension, smartSizes, jpegQuality, SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY);
-                } else {
+                }
+
+                if (StringUtils.isEmpty(srcUriTemplate)) {
                     String staticSelectors = selector;
                     if (smartSizes.length > 0) {
                         // only include the quality selector in the URL, if there are sizes configured
