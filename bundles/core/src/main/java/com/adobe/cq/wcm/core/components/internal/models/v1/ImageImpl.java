@@ -249,11 +249,19 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 smartImages = new String[supportedRenditionWidths.size()];
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
-                    smartImages[index] = baseResourcePath + DOT +
+                    String smartImage = "";
+                    if (useAssetDelivery) {
+                        smartImage = AssetDeliveryHelper.getSrc(assetDelivery, resource, imageName, extension,
+                            new int[] {width}, jpegQuality);
+                    }
+                    if (StringUtils.isEmpty(smartImage)) {
+                        smartImage = baseResourcePath + DOT +
                             selector + DOT + jpegQuality + DOT + width + DOT + extension +
                             (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                             (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                             (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+                    }
+                    smartImages[index] = smartImage;
                     smartSizes[index] = width;
                     index++;
                 }
