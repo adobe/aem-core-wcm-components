@@ -30,6 +30,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import com.day.cq.wcm.api.WCMMode;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -188,6 +189,9 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt());
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
+        assertEquals("/core/content/test/_jcr_content/root/image0." + selector +
+                "." + JPEG_QUALITY + ImageImpl.SRC_URI_TEMPLATE_WIDTH_VAR +
+                ".png/1490005239000/adobe-systems-logo-and-wordmark.png", image.getSrcUriTemplate());
         String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +
                 ".600.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + "." + JPEG_QUALITY +
                 ".700.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0" + "." + selector + "." + JPEG_QUALITY +
@@ -573,5 +577,48 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         assertTrue(image.isDmImage());
         assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=on,{dpr}", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
+    }
+
+    @Test
+    void testAssetDeliveryEnabledWithoutSmartSizes() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType, "enableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertArrayEquals(new int[]{}, image.getWidths());
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true";
+        assertEquals(expectedSrc, image.getSrc());
+        String expectedSrcUriTemplate = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  +
+                ".png?width=" + ImageImpl.SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY + "&quality=82&preferwebp=true";
+        assertEquals(expectedSrcUriTemplate , image.getSrcUriTemplate());
+    }
+
+    @Test
+    void testAssetDeliveryEnabledWithOneSmartSize() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+                "enableAssetDelivery", true,
+                "allowedRenditionWidths", new int[]{800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertArrayEquals(new int[]{800}, image.getWidths());
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true";
+        assertEquals(expectedSrc, image.getSrc());
+        String expectedSrcUriTemplate = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  +
+                ".png?width=" + ImageImpl.SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY + "&quality=82&preferwebp=true";
+        assertEquals(expectedSrcUriTemplate , image.getSrcUriTemplate());
+    }
+
+    @Test
+    void testAssetDeliveryEnabledWithSmartSizes() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+                "enableAssetDelivery", true,
+                "allowedRenditionWidths", new int[]{600, 800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertArrayEquals(new int[]{600, 800}, image.getWidths());
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true";
+        assertEquals(expectedSrc, image.getSrc());
+        String expectedSrcUriTemplate = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  +
+                ".png?width=" + ImageImpl.SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY + "&quality=82&preferwebp=true";
+        assertEquals(expectedSrcUriTemplate , image.getSrcUriTemplate());
     }
 }
