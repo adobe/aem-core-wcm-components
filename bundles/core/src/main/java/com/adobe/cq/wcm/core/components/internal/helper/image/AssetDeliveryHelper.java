@@ -48,7 +48,7 @@ public class AssetDeliveryHelper {
     private static String HORIZONTAL_FLIP = "HORIZONTAL";
     private static String VERTICAL_FLIP = "VERTICAL";
     private static String HORIZONTAL_AND_VERTICAL_FLIP = "HORIZONTAL_AND_VERTICAL";
-    private static int[] PSEUDO_WIDTH_PARAM = new int[] { Integer.MIN_VALUE };
+    private static int[] PSEUDO_WIDTH_PARAM = new int[] { Integer.MAX_VALUE };
 
 
     public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
