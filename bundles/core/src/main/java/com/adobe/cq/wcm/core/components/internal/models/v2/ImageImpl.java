@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -88,7 +89,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     /**
      * The width variable to use when building {@link #srcUriTemplate} for CDN route.
      */
-    static final String SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "width={width}";
+    static final String SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "{width}";
 
     /**
      * The smartcrop "auto" constant.
@@ -223,11 +224,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
-            if(dmImageUrl == null){
-                if(useAssetDelivery) {
-                    srcUriTemplate = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, resource, imageName,
-                        extension, smartSizes, jpegQuality, SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY.substring(
-                            SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY.indexOf('{')));
+            if (dmImageUrl == null){
+                if (useAssetDelivery) {
+                    srcUriTemplate = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, resource, imageName, extension,
+                            ArrayUtils.isNotEmpty(smartSizes) ? jpegQuality : null,
+                            SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY);
                 }
 
                 if (StringUtils.isEmpty(srcUriTemplate)) {

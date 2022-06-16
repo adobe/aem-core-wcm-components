@@ -15,21 +15,23 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.helper.image;
 
-import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.spi.AssetDelivery;
-import com.day.cq.commons.DownloadResource;
-import com.day.cq.commons.ImageResource;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.resource.Resource;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.sling.api.resource.ValueMap;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.spi.AssetDelivery;
+import com.day.cq.commons.DownloadResource;
+import com.day.cq.commons.ImageResource;
 
 public class AssetDeliveryHelper {
 
@@ -48,7 +50,7 @@ public class AssetDeliveryHelper {
     private static String HORIZONTAL_FLIP = "HORIZONTAL";
     private static String VERTICAL_FLIP = "VERTICAL";
     private static String HORIZONTAL_AND_VERTICAL_FLIP = "HORIZONTAL_AND_VERTICAL";
-    private static int[] PSEUDO_WIDTH_PARAM = new int[] { Integer.MAX_VALUE };
+    private static int PSEUDO_WIDTH_PARAM = Integer.MAX_VALUE;
 
 
     public static String getSrcSet(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource, @NotNull String imageName,
@@ -59,7 +61,7 @@ public class AssetDeliveryHelper {
         }
         List<String> srcsetList = new ArrayList<String>();
         for (int i = 0; i < smartSizes.length; i++) {
-            String src =  getSrc(assetDelivery, imageComponentResource,  imageName, extension, new int[]{smartSizes[i]}, jpegQuality);
+            String src =  getSrc(assetDelivery, imageComponentResource,  imageName, extension, smartSizes[i], jpegQuality);
             if (!StringUtils.isEmpty(src)) {
                 srcsetList.add(src + " " + smartSizes[i] + "w");
             }
@@ -74,27 +76,18 @@ public class AssetDeliveryHelper {
 
     public static String getSrcUriTemplate(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource,
                                            @NotNull String imageName, @NotNull String extension,
-                                           @NotNull int[] smartSizes, int jpegQuality, String widthPlaceholder) {
+                                           @Nullable Integer jpegQuality, @NotNull String widthPlaceholder) {
 
-        String templateUrl = getSrc(assetDelivery, imageComponentResource, imageName, extension,
-            PSEUDO_WIDTH_PARAM, true, jpegQuality, smartSizes.length > 0);
+        String templateUrl = getSrc(assetDelivery, imageComponentResource, imageName, extension, PSEUDO_WIDTH_PARAM, jpegQuality);
         if(!StringUtils.isEmpty(templateUrl)) {
-            templateUrl = templateUrl.replaceAll(String.valueOf(PSEUDO_WIDTH_PARAM[0]), widthPlaceholder);
+            templateUrl = templateUrl.replaceAll(String.valueOf(PSEUDO_WIDTH_PARAM), widthPlaceholder);
         }
         return templateUrl;
     }
 
-    public static String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource,
-                                @NotNull String imageName, @NotNull String extension,
-                                @NotNull int[] smartSizes, int jpegQuality) {
-
-        return getSrc(assetDelivery, imageComponentResource, imageName, extension,
-            smartSizes, smartSizes.length == 1, jpegQuality, smartSizes.length > 0);
-    }
-
-    private static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource,
+    public static  String getSrc(@NotNull AssetDelivery assetDelivery, @NotNull Resource imageComponentResource,
                                   @NotNull String imageName, @NotNull String extension,
-                                  @NotNull int[] smartSizes, boolean addWidth, int jpegQuality, boolean addQuality) {
+                                  @Nullable Integer width, @Nullable Integer jpegQuality) {
 
         Map<String, Object> params = new HashMap<>();
 
@@ -116,11 +109,11 @@ public class AssetDeliveryHelper {
         params.put(FORMAT_PARAMETER, extension);
         params.put(PREFER_WEBP_PARAMETER, "true");
 
-        if (addQuality) {
+        if (jpegQuality != null) {
             addQualityParameter(params, jpegQuality);
         }
-        if (addWidth) {
-            addWidthParameter(params, smartSizes[0]);
+        if (width != null) {
+            addWidthParameter(params, width);
         }
 
         addCropParameter(params, componentProperties);
