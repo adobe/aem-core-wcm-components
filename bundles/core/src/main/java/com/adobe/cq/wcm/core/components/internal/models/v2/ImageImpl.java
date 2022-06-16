@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -227,8 +226,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if (dmImageUrl == null){
                 if (useAssetDelivery) {
                     srcUriTemplate = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, resource, imageName, extension,
-                            ArrayUtils.isNotEmpty(smartSizes) ? jpegQuality : null,
-                            SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY);
+                            jpegQuality, SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY);
                 }
 
                 if (StringUtils.isEmpty(srcUriTemplate)) {

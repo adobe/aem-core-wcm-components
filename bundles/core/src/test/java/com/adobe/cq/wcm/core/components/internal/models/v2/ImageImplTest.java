@@ -585,10 +585,25 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         context.contentPolicyMapping(resourceType, "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
         assertArrayEquals(new int[]{}, image.getWidths());
-        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?preferwebp=true";
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true";
         assertEquals(expectedSrc, image.getSrc());
         String expectedSrcUriTemplate = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  +
-                ".png?width=" + ImageImpl.SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY + "&preferwebp=true";
+                ".png?width=" + ImageImpl.SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY + "&quality=82&preferwebp=true";
+        assertEquals(expectedSrcUriTemplate , image.getSrcUriTemplate());
+    }
+
+    @Test
+    void testAssetDeliveryEnabledWithOneSmartSize() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+                "enableAssetDelivery", true,
+                "allowedRenditionWidths", new int[]{800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertArrayEquals(new int[]{800}, image.getWidths());
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true";
+        assertEquals(expectedSrc, image.getSrc());
+        String expectedSrcUriTemplate = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  +
+                ".png?width=" + ImageImpl.SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY + "&quality=82&preferwebp=true";
         assertEquals(expectedSrcUriTemplate , image.getSrcUriTemplate());
     }
 

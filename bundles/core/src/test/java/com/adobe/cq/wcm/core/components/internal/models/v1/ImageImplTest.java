@@ -250,7 +250,7 @@ public class ImageImplTest extends AbstractImageTest {
         context.contentPolicyMapping(resourceType,
             "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
-        assertEquals(MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?preferwebp=true", image.getSrc());
+        assertEquals(MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true", image.getSrc());
     }
 
     @Test
@@ -277,11 +277,30 @@ public class ImageImplTest extends AbstractImageTest {
         registerAssetDelivery();
         context.contentPolicyMapping(resourceType, "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE0_PATH);
-        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?preferwebp=true";
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true";
         assertEquals(expectedSrc, image.getSrc());
         String expectedJson = "{" +
                 "\"smartImages\":[]," +
                 "\"smartSizes\":[]," +
+                "\"lazyEnabled\":true" +
+                "}";
+        assertEquals(expectedJson, image.getJson());
+    }
+
+    @Test
+    void testAssetDeliveryEnabledWithOneSmartSize() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+                "enableAssetDelivery", true,
+                "allowedRenditionWidths", new int[]{800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true";
+        assertEquals(expectedSrc, image.getSrc());
+        String expectedJson = "{" +
+                "\"smartImages\":[" +
+                "\"" + MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true\"" +
+                "]," +
+                "\"smartSizes\":[800]," +
                 "\"lazyEnabled\":true" +
                 "}";
         assertEquals(expectedJson, image.getJson());
