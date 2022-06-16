@@ -132,7 +132,7 @@ public class TitleIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check the existence of all available title types.")
-    public void testCheckExistenceOfTitleTypes() throws TimeoutException, InterruptedException, ClientException {
+    public void testCheckExistenceOfTitleTypes() throws TimeoutException, InterruptedException {
         // open the dialog
         Commons.openEditDialog(editorPage, cmpPath);
         // check if all default title sizes are there
@@ -147,7 +147,7 @@ public class TitleIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Check if setting the title type works.")
-    public void testSetTitleType() throws TimeoutException, InterruptedException, ClientException {
+    public void testSetTitleType() throws TimeoutException, InterruptedException {
         // open the dialog
         Commons.openEditDialog(editorPage, cmpPath);
         // set title type
