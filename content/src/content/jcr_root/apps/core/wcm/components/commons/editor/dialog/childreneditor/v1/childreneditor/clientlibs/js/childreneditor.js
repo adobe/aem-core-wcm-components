@@ -185,22 +185,29 @@
 
                                 var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
                                 var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
+                                var onCloud = selectList.toString() === "Coral.List";
+
+                                function getSelectListChangeEvent(onCloud) {
+                                    return (onCloud ? "click" : "coral-selectlist:change");
+                                }
+
+                                function getSelectListItems(event,onCloud){
+                                    return (onCloud ? ns.components.find(event.target.closest("coral-list-item").value):
+                                        ns.components.find(event.detail.selection.value));
+                                }
+
                                 // next frame to ensure we remove the default event handler
                                 Coral.commons.nextFrame(function() {
 
-                                    var eventComponentSelected = function(event) {
+                                    selectList.off(getSelectListChangeEvent(onCloud));
+                                    selectList.on(getSelectListChangeEvent(onCloud) + NS, onCloud ? "coral-list-item" : null, function(event) {
                                         var resourceType = "";
                                         var componentTitle = "";
                                         var templatePath = "";
                                         var components = "";
                                         insertComponentDialog.hide();
 
-                                        // cloud
-                                        if (selectList.toString() === "Coral.List") {
-                                            components = ns.components.find(event.target.closest("coral-list-item").value);
-                                        } else { // on-prem
-                                            components = ns.components.find(event.detail.selection.value);
-                                        }
+                                        components = getSelectListItems(event,onCloud);
 
                                         if (components.length > 0) {
                                             resourceType = components[0].getResourceType();
@@ -210,7 +217,6 @@
                                             var item = that._elements.self.items.add(new Coral.Multifield.Item());
 
                                             // next frame to ensure the item template is rendered in the DOM
-
                                             Coral.commons.nextFrame(function() {
                                                 var name = NN_PREFIX + Date.now();
                                                 item.dataset["name"] = name;
@@ -235,25 +241,11 @@
                                                 that._elements.self.trigger("change");
                                             });
                                         }
-                                    };
-
-                                    // cloud
-                                    if (selectList.toString() === "Coral.List") {
-                                        selectList.off("click");
-                                        selectList.on("click" + NS, "coral-list-item", eventComponentSelected);
-                                    } else { // on-prem
-                                        selectList.off("coral-selectlist:change");
-                                        selectList.on("coral-selectlist:change" + NS, eventComponentSelected);
-                                    }
+                                    });
                                 });
                                 // unbind events on dialog close
                                 channel.one("coral-overlay:beforeclose", function() {
-                                    // cloud
-                                    if (selectList.toString() === "Coral.List") {
-                                        selectList.off("click" + NS);
-                                    } else { // on-prem
-                                        selectList.off("coral-selectlist:change");
-                                    }
+                                    selectList.off(getSelectListChangeEvent(onCloud) + NS);
                                 });
                             }
                         });
