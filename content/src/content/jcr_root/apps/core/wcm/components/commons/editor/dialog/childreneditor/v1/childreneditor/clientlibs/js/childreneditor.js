@@ -171,6 +171,15 @@
             _bindEvents: function() {
                 var that = this;
 
+                function getSelectListChangeEvent(onCloud) {
+                    return (onCloud ? "click" : "coral-selectlist:change");
+                }
+
+                function getSelectListItems(event, onCloud) {
+                    return (onCloud ? ns.components.find(event.target.closest("coral-list-item").value)
+                        : ns.components.find(event.detail.selection.value));
+                }
+
                 if (ns) {
                     Coral.commons.ready(that._elements.add, function() {
                         that._elements.add.on("click", function() {
@@ -187,15 +196,6 @@
                                 var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
                                 var onCloud = selectList.toString() === "Coral.List";
 
-                                function getSelectListChangeEvent(onCloud) {
-                                    return (onCloud ? "click" : "coral-selectlist:change");
-                                }
-
-                                function getSelectListItems(event,onCloud){
-                                    return (onCloud ? ns.components.find(event.target.closest("coral-list-item").value):
-                                        ns.components.find(event.detail.selection.value));
-                                }
-
                                 // next frame to ensure we remove the default event handler
                                 Coral.commons.nextFrame(function() {
 
@@ -207,7 +207,7 @@
                                         var components = "";
                                         insertComponentDialog.hide();
 
-                                        components = getSelectListItems(event,onCloud);
+                                        components = getSelectListItems(event, onCloud);
 
                                         if (components.length > 0) {
                                             resourceType = components[0].getResourceType();
