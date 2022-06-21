@@ -175,6 +175,10 @@
                     return (onCloud ? "click" : "coral-selectlist:change");
                 }
 
+                function getSelectListSelector(onCloud) {
+                    return (onCloud ? "coral-list-item" : null);
+                }
+
                 function getSelectListItems(event, onCloud) {
                     return (onCloud ? ns.components.find(event.target.closest("coral-list-item").value)
                         : ns.components.find(event.detail.selection.value));
@@ -200,7 +204,7 @@
                                 Coral.commons.nextFrame(function() {
 
                                     selectList.off(getSelectListChangeEvent(onCloud));
-                                    selectList.on(getSelectListChangeEvent(onCloud) + NS, onCloud ? "coral-list-item" : null, function(event) {
+                                    selectList.on(getSelectListChangeEvent(onCloud) + NS, getSelectListSelector(onCloud), function(event) {
                                         var resourceType = "";
                                         var componentTitle = "";
                                         var templatePath = "";
