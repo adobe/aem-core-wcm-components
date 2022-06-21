@@ -498,7 +498,29 @@
                                         cq:panelTitle="Item 2.2"
                                         jcr:primaryType="nt:unstructured"
                                         jcr:title="Item 2.2"
-                                        sling:resourceType="wcm/foundation/components/responsivegrid"/>
+                                        sling:resourceType="wcm/foundation/components/responsivegrid">
+                                        <image
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core-components-examples/components/image"
+                                            fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg">
+                                            <cq:responsive jcr:primaryType="nt:unstructured">
+                                                <default
+                                                    jcr:primaryType="nt:unstructured"
+                                                    width="6"/>
+                                            </cq:responsive>
+                                        </image>
+                                        <text
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core-components-examples/components/text"
+                                            text="&lt;p>Hac habitasse platea dictumst quisque sagittis purus. At risus viverra adipiscing at in tellus integer. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Leo vel orci porta non pulvinar neque laoreet suspendisse. Volutpat diam ut venenatis tellus in metus vulputate eu.&lt;/p>"
+                                            textIsRich="true">
+                                            <cq:responsive jcr:primaryType="nt:unstructured">
+                                                <default
+                                                    jcr:primaryType="nt:unstructured"
+                                                    width="6"/>
+                                            </cq:responsive>
+                                        </text>
+                                    </item_857227661>
                                     <item_810812133
                                         cq:panelTitle="Item 2.3"
                                         jcr:primaryType="nt:unstructured"
@@ -529,7 +551,30 @@
                                         cq:panelTitle="Item 3.3"
                                         jcr:primaryType="nt:unstructured"
                                         jcr:title="Item 3.3"
-                                        sling:resourceType="wcm/foundation/components/responsivegrid"/>
+                                        sling:resourceType="wcm/foundation/components/responsivegrid">
+                                        <image
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core-components-examples/components/image"
+                                            fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg">
+                                            <cq:responsive jcr:primaryType="nt:unstructured">
+                                                <default
+                                                    jcr:primaryType="nt:unstructured"
+                                                    width="6"/>
+                                            </cq:responsive>
+                                        </image>
+                                        <text
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core-components-examples/components/text"
+                                            id="123"
+                                            text="&lt;p>Libero id faucibus nisl tincidunt eget nullam non nisi. Hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris. Velit aliquet sagittis id consectetur purus ut. Orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt.&lt;/p>"
+                                            textIsRich="true">
+                                            <cq:responsive jcr:primaryType="nt:unstructured">
+                                                <default
+                                                    jcr:primaryType="nt:unstructured"
+                                                    width="6"/>
+                                            </cq:responsive>
+                                        </text>
+                                    </item_331258757>
                                 </accordion>
                             </item_326905762>
                         </accordion>
@@ -554,6 +599,53 @@
                             reference="../../component"/>
                     </info>
                 </demo_275095838>
+                <title_290386009
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Deep Linking"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337506002
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Linking to an accordion item expands the item and scrolls to it.&lt;/p>"
+                    textIsRich="true"/>
+                <button_1
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to an accordion item ID (same browser tab)."
+                    linkTarget="_self"
+                    linkURL="#accordion-ac9e5b384e-item-b58fbe1fec"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_2
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to a nested accordion item ID (same browser tab)."
+                    linkTarget="_self"
+                    linkURL="#accordion-41be8deb7c-item-db0bb32273"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_3
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to an ID within an accordion item (same browser tab)."
+                    linkTarget="_self"
+                    linkURL="#123"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_1b
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to an accordion item ID (new browser tab)."
+                    linkTarget="_blank"
+                    linkURL="#accordion-ac9e5b384e-item-b58fbe1fec"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_2b
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to a nested accordion item ID (new browser tab)."
+                    linkTarget="_blank"
+                    linkURL="#accordion-41be8deb7c-item-db0bb32273"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_3b
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to an ID within an accordion item (new browser tab)."
+                    linkTarget="_blank"
+                    linkURL="#123"
+                    sling:resourceType="core-components-examples/components/button"/>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">

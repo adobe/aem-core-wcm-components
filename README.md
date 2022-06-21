@@ -23,7 +23,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 
 ## Features
 
-* **Production-Ready:** 28 robust components that are well tested, widely used, and that perform well.
+* **Production-Ready:** 29 robust components that are well tested, widely used, and that perform well.
 * **Cloud-Ready:** Whether on [AEM as a Cloud Service](https://docs.adobe.com/content/help/en/experience-manager-cloud-service/landing/home.html), on [Adobe Managed Services](https://github.com/adobe/aem-project-archetype/tree/master/src/main/archetype/dispatcher.ams), or on-premise, they just work.
 * **Versatile:** The components represent generic concepts with which the authors can assemble nearly any layout.
 * **Configurable:** Template-level [content policies](https://docs.adobe.com/content/help/en/experience-manager-65/developing/platform/templates/page-templates-editable.html#content-policies) define which features the page authors are allowed to use or not.
@@ -44,6 +44,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 3. [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v2/languagenavigation)
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v3/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
+6. [Table of Contents](content/src/content/jcr_root/apps/core/wcm/components/tableofcontents/v1/tableofcontents)
 
 ### Page Authoring Components
 
@@ -90,9 +91,9 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 ### System Requirements
 
-Core Components | AEM as a Cloud Service | AEM 6.5 | Java SE | Maven
-----------------|------------------------|---------|---------|---------
-[2.18.8](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.18.8) | Continual | 6.5.10.0+ (*) | 8, 11 | 3.3.9+
+Core Components | AEM as a Cloud Service | AEM 6.5       | Java SE | Maven
+----------------|------------------------|---------------|---------|---------
+[2.20.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.20.2) | Continual | 6.5.13.0+ (*) | 8, 11 | 3.3.9+
 
 (*) - Since version 2.11.0 `org.apache.sling.models.impl` version 1.4.12 or higher is required (due to [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
 

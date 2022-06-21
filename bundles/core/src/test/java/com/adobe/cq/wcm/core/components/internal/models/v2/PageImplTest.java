@@ -297,6 +297,19 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     }
 
     @Test
+    public void testNoCanonicalLinkForNoIndexPage() {
+        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
+            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
+            String[] robotsTags = new String[]{"noindex", "nofollow"};
+            when(seoTags.getRobotsTags()).thenReturn(Arrays.asList(robotsTags));
+            return seoTags;
+        });
+        Page page = getPageUnderTest(PAGE);
+        String canonicalLink = page.getCanonicalLink();
+        assertNull(canonicalLink);
+    }
+
+    @Test
     public void testCanonicalLinkWhenSeoApiUnavailable() {
         context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
             SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());

@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v1;
 
 import java.util.concurrent.TimeoutException;
 
+import com.codeborne.selenide.SelenideElement;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -36,6 +37,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_FORMOPTIONS_V1;
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
@@ -364,5 +366,75 @@ public class FormOptionsIT extends AuthorBaseUITest {
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formOptions.isMultiSelectDropDownDisabled(value),"Checkbox should be disabled");
+    }
+
+    /**
+     * Test: Set the help message and verify the option element of the drop-down to have the aria-describedby attribute equal with the help message id
+     */
+    @Test
+    @DisplayName("Test: Set the help message and verify the option element of the drop-down to have the aria-describedby attribute equal with the help message id")
+    public void testAccessibilityWhenHelpMessageIsSetOnDropDownType() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setOptionType("drop-down");
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        editDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement dropDownOptionElement = $("option");
+        assertTrue(formOptions.elementHasExpectedAriaDescribedByAttribute(dropDownOptionElement));
+    }
+
+    /**
+     * Test: Without setting a help message, verify the option element of the drop-down to have no aria-describedby attribute
+     */
+    @Test
+    @DisplayName("Test: Without setting a help message, verify the option element of the drop-down to have no aria-describedby attribute")
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnDropDownType() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setOptionType("drop-down");
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement dropDownOptionElement = $("option");
+        assertTrue(formOptions.elementHasNoAriaDescribedByAttribute(dropDownOptionElement));
+    }
+
+    /**
+     * Test: Set the help message and verify the checkbox input to have the aria-describedby attribute equal with the help message id
+     */
+    @Test
+    @DisplayName("Test: Set the help message and verify the checkbox input to have the aria-describedby attribute equal with the help message id")
+    public void testAccessibilityWhenHelpMessageIsSetOnCheckboxType() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setOptionType("checkbox");
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        editDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement checkboxElement = $("input[type='checkbox']");
+        assertTrue(formOptions.elementHasExpectedAriaDescribedByAttribute(checkboxElement));
+    }
+
+    /**
+     * Test: Without setting a help message, verify the checkbox input to have no aria-describedby attribute
+     */
+    @Test
+    @DisplayName("Test: Without setting a help message, verify the checkbox input to have no aria-describedby attribute")
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnCheckboxType() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, optionPath);
+        FormOptionsEditDialog editDialog = formOptions.geteditDialog();
+        editDialog.setOptionType("checkbox");
+        editDialog.setMandatoryFields(elemName, title);
+        editDialog.addOption(value, text);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement checkboxElement = $("input[type='checkbox']");
+        assertTrue(formOptions.elementHasNoAriaDescribedByAttribute(checkboxElement));
     }
 }

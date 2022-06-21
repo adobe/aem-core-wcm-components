@@ -1,0 +1,57 @@
+{
+    "jcr:primaryType": "cq:Page",
+    "jcr:createdBy"  : "admin",
+    "jcr:created"    : "Sun Feb 14 2022 15:56:31 GMT+0100",
+    "jcr:content"    : {
+        "jcr:primaryType"   : "cq:PageContent",
+        "jcr:createdBy"     : "admin",
+        "jcr:created"       : "Sun Feb 14 2022 15:56:31 GMT+0100",
+        "cq:lastModified"   : "Sun Feb 14 2022 16:14:51 GMT+0100",
+        "sling:resourceType": "core/wcm/components/page/v1/page",
+        "cq:lastModifiedBy" : "admin",
+        "par": {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType": "wcm/foundation/components/parsys",
+            "tableofcontents-default": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Fri Feb 04 2022 03:37:57 GMT+0530",
+                "jcr:lastModified": "Fri Feb 04 2022 03:38:14 GMT+0530",
+                "sling:resourceType": "core/wcm/components/tableofcontents/v1/tableofcontents"
+            },
+            "tableofcontents-default-with-policy": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Fri Feb 04 2022 03:37:57 GMT+0530",
+                "jcr:lastModified": "Fri Feb 04 2022 03:38:14 GMT+0530",
+                "sling:resourceType": "core/wcm/components/tableofcontents/v1/tableofcontents"
+            },
+            "tableofcontents-configured": {
+                "jcr:primaryType": "nt:unstructured",
+                "startLevel": "h2",
+                "jcr:createdBy": "admin",
+                "stopLevel": "h5",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Fri Feb 04 2022 03:37:57 GMT+0530",
+                "id": "toc-sample-id",
+                "jcr:lastModified": "Fri Feb 04 2022 03:38:14 GMT+0530",
+                "sling:resourceType": "core/wcm/components/tableofcontents/v1/tableofcontents",
+                "listType": "numbered"
+            },
+            "tableofcontents-configured-with-policy": {
+                "jcr:primaryType": "nt:unstructured",
+                "startLevel": "h2",
+                "jcr:createdBy": "admin",
+                "stopLevel": "h5",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Fri Feb 04 2022 03:37:57 GMT+0530",
+                "id": "toc-sample-id-2",
+                "jcr:lastModified": "Fri Feb 04 2022 03:38:14 GMT+0530",
+                "sling:resourceType": "core/wcm/components/tableofcontents/v1/tableofcontents",
+                "listType": "numbered"
+            }
+        }
+    }
+}

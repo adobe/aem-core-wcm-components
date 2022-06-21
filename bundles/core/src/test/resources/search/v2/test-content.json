@@ -1,0 +1,197 @@
+{
+    "de": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title"      : "Suche"
+        },
+        "search"         : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "Suche"
+            },
+            "page"           : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "Page",
+                    "jcr:description": "Yoda ist zurück!",
+                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200",
+                    "search"         : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:createdBy"     : "admin",
+                        "placeholder"       : "Suche starten",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:created"       : "Thu Aug 03 2017 20:50:40 GMT+0200",
+                        "jcr:lastModified"  : "Thu Aug 03 2017 22:42:00 GMT+0200",
+                        "sling:resourceType": "core/wcm/components/search/v2/search"
+                    }
+                }
+            },
+            "page2"           : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "Page2",
+                    "jcr:description": "Yoda ist nicht zurück!",
+                    "cq:lastModified": "Thu Aug 03 2020 22:42:00 GMT+0200"
+                }
+            }
+        }
+    },
+    "en": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title"      : "Search"
+        },
+        "search"         : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "Search"
+            },
+            "page"           : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "Page",
+                    "jcr:description": "Yoda is back!",
+                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200",
+                    "search"         : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:createdBy"     : "admin",
+                        "placeholder"       : "Start Search",
+                        "searchRoot"        : "/content/de/search",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:created"       : "Thu Aug 03 2017 20:50:40 GMT+0200",
+                        "jcr:lastModified"  : "Thu Aug 03 2017 22:42:00 GMT+0200",
+                        "sling:resourceType": "core/wcm/components/search/v2/search"
+                    }
+                }
+            },
+            "page2"           : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "Page2",
+                    "jcr:description": "Yoda isn't back!",
+                    "cq:lastModified": "Thu Aug 03 2020 22:42:00 GMT+0200"
+                }
+            },
+            "page-template"  : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "Page3",
+                    "cq:template"    : "/conf/test/settings/wcm/templates/search-template",
+                    "jcr:description": "Yoda is back!",
+                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200"
+                }
+            },
+            "xf-page"         : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "XF Page",
+                    "root"           : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "xf-component"   : {
+                            "jcr:primaryType"      : "nt:unstructured",
+                            "sling:resourceType"   : "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/search/search-xf/master"
+                        }
+                    }
+                },
+                "searched-tree"  : {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title"      : "Searched Tree"
+                    },
+                    "found-01"       : {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content"    : {
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title"      : "Found 01"
+                        }
+                    },
+                    "found-02"       : {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content"    : {
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title"      : "Found 02"
+                        }
+                    }
+                },
+                "skipped-tree"   : {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title"      : "Skipped Tree"
+                    },
+                    "not-found-03"   : {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content"    : {
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title"      : "Not Found 03"
+                        }
+                    },
+                    "not-found-04"   : {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content"    : {
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title"      : "Not Found 04"
+                        }
+                    }
+                }
+            },
+            "xf-page-template": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "XF Page Template",
+                    "cq:template"    : "/conf/test/settings/wcm/templates/xf-search-template"
+                }
+            },
+            "redirect-page" : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType"  : "cq:PageContent",
+                    "jcr:title"        : "Redirect Page",
+                    "cq:redirectTarget": "/content/en/search"
+                }
+            }
+        }
+    },
+    "experience-fragments": {
+        "jcr:primaryType": "sling:Folder",
+        "search"         : {
+            "jcr:primaryType": "sling:Folder",
+            "search-xf": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content": {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Search XF",
+                    "sling:resourceType": "cq/experience-fragments/components/experiencefragment"
+                },
+                "master": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content": {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title": "Search XF Master",
+                        "cq:xfVariantType": "web",
+                        "cq:xfMasterVariation": "true",
+                        "search"         : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "placeholder"       : "Start Search",
+                            "searchRoot"        : "/content/en/search/xf-page/searched-tree",
+                            "sling:resourceType": "core/wcm/components/search/v2/search"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

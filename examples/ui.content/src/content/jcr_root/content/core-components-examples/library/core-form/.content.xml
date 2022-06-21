@@ -7,8 +7,8 @@
         jcr:title="Core Form"
         sling:resourceType="core-components-examples/components/page"
         cq:redirectTarget="/content/core-components-examples/library"/>
-    <form-text/>
-    <form-options/>
-    <form-hidden/>
     <form-button/>
+    <form-hidden/>
+    <form-options/>
+    <form-text/>
 </jcr:root>

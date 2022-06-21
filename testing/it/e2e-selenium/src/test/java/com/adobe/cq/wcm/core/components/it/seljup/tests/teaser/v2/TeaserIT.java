@@ -34,6 +34,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static com.codeborne.selenide.Selenide.$;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group3")
@@ -324,15 +325,19 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
         editDialog.checkInheritAltFromPage();
-        editDialog.setAltText(alt);
+        editDialog.setAltText("");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        editDialog.scrollToIsDecorativeCheckbox();
         editDialog.checkIsDecorative();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        assertTrue(editDialog.isDecorativeChecked());
         Commons.saveConfigureDialog();
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        assertTrue(teaser.isImagePresentWithAltText(testPage, ""),"image should be rendered without alt text");
-        assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted), "image should be rendered with file name: " + climbingAssetFormatted);
+        assertTrue(teaser.isImagePresentWithEmptyAltAttribute(testPage), "image should be rendered with alt attribute empty");
     }
 
     @Test
@@ -416,14 +421,18 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
     public void testNoImageTeaser() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         Commons.openEditDialog(editorPage,cmpPath);
-        com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.TeaserEditDialog editDialog = teaser.getEditDialog();
+        TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openTextTab();
         editDialog.clickTitleFromPage();
         editDialog.setTitle(title);
         editDialog.clickDescriptionFromPage();
         editDialog.setDescription(description);
+        editDialog.openLinkAndActionsTab();
         Commons.saveConfigureDialog();
-
+        assertEquals(editDialog.getAssetWithoutDescriptionErrorMessage(), "Error: Please provide an asset which has a description that can be used as alt text.");
+        editDialog.checkImageFromPageImage();
+        editDialog.checkAltTextFromAssetDescription();
+        Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(!teaser.isImagePresent(testPage), "Image should not be present");
         assertTrue(teaser.isTitlePresent(title),"Title link should be present");
@@ -537,7 +546,4 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editorPage.open();
     }
-
-
-
 }

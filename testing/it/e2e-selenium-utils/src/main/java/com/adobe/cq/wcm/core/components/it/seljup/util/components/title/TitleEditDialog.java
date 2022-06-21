@@ -41,6 +41,7 @@ public class TitleEditDialog extends Dialog {
     private static String titleType = "[name='./type']";
     private static String linkUrl = "[name='./linkURL']";
     private static String linkTarget = "coral-checkbox[name='./linkTarget']";
+    private static String titleTypeDropdownDefaultSelected = titleType + " coral-select-item[selected]";
 
     private void openTitleTypeList() throws InterruptedException{
         $( titleType + " > button").click();
@@ -132,6 +133,10 @@ public class TitleEditDialog extends Dialog {
     public void clickLinkTarget() {
         CoralCheckbox checkbox = new CoralCheckbox(linkTarget);
         checkbox.click();
+    }
+
+    public String getTitleTypeDropdownDefaultSelectedText() {
+        return $(titleTypeDropdownDefaultSelected).innerText();
     }
 
 }
