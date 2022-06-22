@@ -28,10 +28,8 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
-import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
-import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
-import com.adobe.cq.wcm.spi.AssetDelivery;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
@@ -55,12 +53,15 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
+import com.adobe.cq.wcm.spi.AssetDelivery;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -249,11 +250,18 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 smartImages = new String[supportedRenditionWidths.size()];
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
-                    smartImages[index] = baseResourcePath + DOT +
+                    String smartImage = "";
+                    if (useAssetDelivery) {
+                        smartImage = AssetDeliveryHelper.getSrc(assetDelivery, resource, imageName, extension, width, jpegQuality);
+                    }
+                    if (StringUtils.isEmpty(smartImage)) {
+                        smartImage = baseResourcePath + DOT +
                             selector + DOT + jpegQuality + DOT + width + DOT + extension +
                             (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                             (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                             (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+                    }
+                    smartImages[index] = smartImage;
                     smartSizes[index] = width;
                     index++;
                 }
@@ -263,8 +271,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             }
 
             if (useAssetDelivery) {
-                src = AssetDeliveryHelper.getSrc(assetDelivery, resource, imageName, extension, smartSizes,
-                    jpegQuality);
+                src = AssetDeliveryHelper.getSrc(assetDelivery, resource, imageName, extension,
+                        ArrayUtils.isNotEmpty(smartSizes) && smartSizes.length == 1 ? smartSizes[0] : null,
+                        jpegQuality);
             }
 
             if (StringUtils.isEmpty(src)) {
