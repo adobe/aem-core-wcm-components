@@ -119,4 +119,7 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
     public void invalidateOutputCache() throws RepositoryException {
 
     }
+
+    @Override
+    public void ensureCached() throws IOException, RepositoryException {}
 }

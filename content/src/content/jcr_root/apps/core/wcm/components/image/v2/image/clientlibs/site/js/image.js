@@ -22,6 +22,8 @@
     var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     var LAZY_THRESHOLD_DEFAULT = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+    var SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "width={width}";
+    var SRC_URI_TEMPLATE_DPR_VAR = "{dpr}";
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
@@ -145,7 +147,6 @@
                 }
             }
         }
-
         return options;
     }
 
@@ -154,17 +155,26 @@
 
         var smartCrops = {};
 
+        var useAssetDelivery = false;
+        var srcUriTemplateWidthVar = SRC_URI_TEMPLATE_WIDTH_VAR;
+
         function init(config) {
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
+
+            // check if asset delivery is used
+            if (config.options.src && config.options.src.indexOf(SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY) >= 0) {
+                useAssetDelivery = true;
+                srcUriTemplateWidthVar = SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY;
+            }
 
             setupProperties(config.options);
             cacheElements(config.element);
             // check image is DM asset; if true try to make req=set
             if (config.options.src && Object.prototype.hasOwnProperty.call(config.options, "dmimage") && (config.options["smartcroprendition"] === "SmartCrop:Auto")) {
                 var request = new XMLHttpRequest();
-                var url = decodeURIComponent(config.options.src).split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
-
+                var urlTemplatePart = decodeURIComponent(config.options.src).split(srcUriTemplateWidthVar)[0];
+                var url = urlTemplatePart + (urlTemplatePart.indexOf("?") < 0 ? "?" : "") + "req=set,json";
 
                 request.open("GET", url, false);
                 request.onload = function() {
@@ -225,19 +235,24 @@
             var hasWidths = (that._properties.widths && that._properties.widths.length > 0) || Object.keys(smartCrops).length > 0;
             var replacement;
             if (Object.keys(smartCrops).length > 0) {
-                var optimalWidth = getOptimalWidth(Object.keys(smartCrops));
+                var optimalWidth = getOptimalWidth(Object.keys(smartCrops), false);
                 replacement = smartCrops[optimalWidth];
             } else {
-                replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths) : "";
+                replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths, true) : "";
             }
-            var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
+            if (useAssetDelivery) {
+                replacement = replacement !== "" ? ("width=" + replacement.substring(1)) : "";
+            }
+            var url = that._properties.src.replace(srcUriTemplateWidthVar, replacement);
+            url = url.replace(SRC_URI_TEMPLATE_DPR_VAR, devicePixelRatio);
+
             var imgSrcAttribute = that._elements.image.getAttribute("src");
 
             if (url !== imgSrcAttribute) {
                 if (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL) {
                     that._elements.image.setAttribute("src", url);
                 } else {
-                    var urlTemplateParts = that._properties.src.split(SRC_URI_TEMPLATE_WIDTH_VAR);
+                    var urlTemplateParts = that._properties.src.split(srcUriTemplateWidthVar);
                     // check if image src was dynamically swapped meanwhile (e.g. by Target)
                     var isImageRefSame = imgSrcAttribute.startsWith(urlTemplateParts[0]);
                     if (isImageRefSame && urlTemplateParts.length > 1) {
@@ -256,14 +271,16 @@
             }
         }
 
-        function getOptimalWidth(widths) {
+        function getOptimalWidth(widths, useDevicePixelRatio) {
             var container = that._elements.self;
             var containerWidth = container.clientWidth;
             while (containerWidth === 0 && container.parentNode) {
                 container = container.parentNode;
                 containerWidth = container.clientWidth;
             }
-            var optimalWidth = containerWidth * devicePixelRatio;
+
+            var dpr = useDevicePixelRatio ? devicePixelRatio : 1;
+            var optimalWidth = containerWidth * dpr;
             var len = widths.length;
             var key = 0;
 

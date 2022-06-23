@@ -26,6 +26,7 @@ public class TeaserEditDialog {
     private static String imageInSidePanel = "coral-card.cq-draggable[data-path='%s']";
     private static String assetUpload = ".cmp-teaser__editor coral-fileupload[name='./file']";
     private static String linkUrl = "[name='./linkURL']";
+    private static String actions = ".cmp-teaser__editor-multifield_actions";
     private static String titleFromPage = ".cmp-teaser__editor input[name='./titleFromPage']";
     private static String preTitle = ".cmp-teaser__editor input[name='./pretitle']";
     private static String title = ".cmp-teaser__editor input[name='./jcr:title']";
@@ -35,6 +36,18 @@ public class TeaserEditDialog {
     private static String actionLinkURL = "[data-cmp-teaser-v1-dialog-edit-hook='actionLink']";
     private static String actionText = "[data-cmp-teaser-v1-dialog-edit-hook='actionTitle']";
     private static String imageFromPageImage = "[name='./imageFromPageImage']";
+    private static String titleTypeSelectDropdown = "coral-select[name='./titleType']";
+    private static String titleTypeSelectDropdownDefaultSelected = "coral-select[name='./titleType'] coral-select-item[selected]";
+    private static String assetWithoutDescriptionErrorMessage = "coral-tooltip[variant='error'] coral-tooltip-content";
+    private static String altTextFromAssetDescription = ".cmp-teaser__editor input[name='./altValueFromDAM']";
+
+    protected String getActionLinkURLSelector() {
+        return actionLinkURL;
+    }
+
+    protected String getActionTextSelector() {
+        return actionText;
+    }
 
     public void uploadImageFromSidePanel(String imagePath) {
         $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(assetUpload);
@@ -59,14 +72,17 @@ public class TeaserEditDialog {
     }
 
     public void setPreTitle(String value) {
+        $(preTitle).clear();
         $(preTitle).sendKeys(value);
     }
 
     public void setTitle(String value) {
+        $(title).clear();
         $(title).sendKeys(value);
     }
 
     public void setDescription(String value) {
+        $(description).clear();
         $(description).sendKeys(value);
     }
 
@@ -88,6 +104,10 @@ public class TeaserEditDialog {
         return $(titleFromPage).isDisplayed();
     }
 
+    public boolean isActionsPresent() {
+        return $(actions).isDisplayed();
+    }
+
     public boolean isActionEnabledCheckDisabled() {
         return $(actionsEnabled).getAttribute("disabled").equals("true");
     }
@@ -102,21 +122,20 @@ public class TeaserEditDialog {
         checkbox.click();
     }
 
+    public void addActionLink() {
+        $("[coral-multifield-add]").click();
+    }
+
     public void setActionLinkUrl(String url) {
-        $$(actionLinkURL).last().find("input").sendKeys(url);
+        $$(getActionLinkURLSelector()).last().find("input").sendKeys(url);
         // External Urls will not be present in suggestion
         if(url.startsWith("/content")) {
             $("button[is='coral-buttonlist-item'][value='" + url + "']").click();
         }
     }
 
-    public void addActionLinkUrl(String url) {
-        $("[coral-multifield-add]").click();
-        setActionLinkUrl(url);
-    }
-
     public void setActionText(String value) {
-        $$(actionText).last().sendKeys(value);
+        $$(getActionTextSelector()).last().sendKeys(value);
     }
 
     public String getTitleValue() {
@@ -132,6 +151,23 @@ public class TeaserEditDialog {
             CoralCheckbox checkbox = new CoralCheckbox(imageFromPageImage);
             checkbox.click();
         }
+    }
+
+    public Boolean isTitleTypeSelectDropdownDisplayed() {
+        return $(titleTypeSelectDropdown).isDisplayed();
+    }
+
+    public String getTitleTypeSelectDropdownDefaultSelectedText() {
+        return $(titleTypeSelectDropdownDefaultSelected).innerText();
+    }
+
+    public String getAssetWithoutDescriptionErrorMessage() {
+        return $(assetWithoutDescriptionErrorMessage).innerText();
+    }
+
+    public void checkAltTextFromAssetDescription() {
+        CoralCheckbox checkbox = new CoralCheckbox(altTextFromAssetDescription);
+        checkbox.click();
     }
 
 }

@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext;
 
+import com.codeborne.selenide.SelenideElement;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
@@ -113,5 +115,18 @@ public class BaseFormText {
 
     public boolean isHelpRenderedAsTooltip(String elemName, String helpMessage) {
         return $("input[type='text'][name='" + elemName + "'][placeholder='" + helpMessage + "']").isDisplayed();
+    }
+
+    public boolean elementHasExpectedAriaDescribedByAttribute(SelenideElement element, String message) {
+        if ($x(String.format(helpMessage, message)).isDisplayed()) {
+            String helpMessageId = $x(String.format(helpMessage, message)).getAttribute("id");
+            String ariaDescribedByAttribute = element.getAttribute("aria-describedby");
+            return ariaDescribedByAttribute != null && ariaDescribedByAttribute.equals(helpMessageId);
+        }
+        return false;
+    }
+
+    public boolean elementHasNoAriaDescribedByAttribute(SelenideElement element) {
+        return element.getAttribute("aria-describedby") == null;
     }
 }

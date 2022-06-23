@@ -18,12 +18,12 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.title.v3;
 
 import java.util.concurrent.TimeoutException;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TitleIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.title.v2.TitleIT {
 
     public void setupResources() {
-        clientlibs = "core.wcm.components.title.v2";
-        titleRT = Commons.rtTitle_v3;
+        clientlibs = Commons.CLIENTLIBS_TITLE_V3;
+        titleRT = Commons.RT_TITLE_V3;
     }
 
     /**

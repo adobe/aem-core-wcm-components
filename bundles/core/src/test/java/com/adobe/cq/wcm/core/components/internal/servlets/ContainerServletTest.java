@@ -30,8 +30,10 @@ import org.apache.sling.api.resource.Resource;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,7 +67,7 @@ public class ContainerServletTest {
     // servlet under test
     private final ContainerServlet servlet = new ContainerServlet();
 
-    public final AemContext context = CoreComponentTestContext.newAemContext();
+    public final AemContext context = new AemContextBuilder().resourceResolverType(ResourceResolverType.JCR_OAK).build();
 
     @BeforeEach
     public void setUp() throws WCMException, NoSuchFieldException {

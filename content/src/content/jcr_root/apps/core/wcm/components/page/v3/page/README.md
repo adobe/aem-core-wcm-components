@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Page (v3) Work in progress, do not use in production
+Page (v3)
 ====
 Extensible page component written in HTL.
 
@@ -72,8 +72,9 @@ The following configuration properties are used:
 1. `./clientlibs` - allows definition of a list of client libraries to be loaded by the pages associated with this policy configuration
 2. `./clientlibsJsHead` - allows definition of client libraries for which JavaScript is specifically intended to be loaded
 in the document head (JavaScript only) of pages associated with this policy configuration
-3. `./appResourcesClientlib` - allows definition of the client library that is used to serve web resources such as favicons
-4. `./renderAlternateLanguageLinks` - toggles on/off the rendering of links to alternate language versions of the page in its head
+3. `./clientlibsAsync` - allows custom Javascript libraries to be loaded asynchronously
+4. `./appResourcesClientlib` - allows definition of the client library that is used to serve web resources such as favicons
+5. `./renderAlternateLanguageLinks` - toggles on/off the rendering of links to alternate language versions of the page in its head
 
 ## Edit Dialog Properties
 The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:

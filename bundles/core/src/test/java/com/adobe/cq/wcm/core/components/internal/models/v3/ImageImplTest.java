@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.util.List;
 
+import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -64,6 +65,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private static final String IMAGE56_PATH = PAGE + "/jcr:content/root/image56";
     private static final String IMAGE57_PATH = PAGE + "/jcr:content/root/image57";
     private static final String IMAGE58_PATH = PAGE + "/jcr:content/root/image58";
+    private static final String IMAGE42_PATH = PAGE + "/jcr:content/root/image42";
 
     private static String PAGE0 = TEST_ROOT + "/test_page0";
     private static String PAGE1 = TEST_ROOT + "/test_page1";
@@ -605,4 +607,45 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_INHERITED_PATH2));
     }
 
+    @Test
+    void testDMWithEncoding() {
+        context.contentPolicyMapping(com.adobe.cq.wcm.core.components.internal.models.v3.ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE42_PATH);
+        assertTrue(image.isDmImage());
+        assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=off", image.getSrc());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
+    }
+
+
+    @Test
+    void testSrcSetWithAssetDeliveryEnabledWithoutSmartSizes() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(null , image.getSrcset());
+    }
+
+    @Test
+    void testSrcSetWithAssetDeliveryEnabledWithSmartSizes() {
+        registerAssetDelivery();
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true,
+            "allowedRenditionWidths", new int[]{600, 800});
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        String expectedSrcSet = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82&preferwebp=true 600w," +
+                                MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true 800w";
+        assertEquals(expectedSrcSet , image.getSrcset());
+    }
+
+    @Test
+    void testAssetDeliveryServiceWithoutFileReference() {
+        String escapedResourcePath = IMAGE27_PATH.replace("jcr:content", "_jcr_content");
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+            "enableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE27_PATH);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000" + ".png", image.getSrc());
+    }
 }

@@ -98,6 +98,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public static final String PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS = "renderAlternateLanguageLinks";
 
     /**
+     * Attribute value for robots noindex
+     */
+    public static final String ROBOTS_TAG_NOINDEX = "noindex";
+
+    /**
      * Flag indicating if cloud configuration support is enabled.
      */
     private Boolean hasCloudconfigSupport;
@@ -138,6 +143,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = PN_REDIRECT_TARGET)
     @Nullable
     private String redirectTargetValue;
+
+    /**
+     * The canonical url overwrite if set, null otherwise
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = "cq:canonicalUrl")
+    @Nullable
+    private String customCanonicalUrl;
 
     @Self
     private LinkHandler linkHandler;
@@ -335,9 +347,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             } catch (NoClassDefFoundError ex) {
                 canonicalUrl = null;
             }
-            this.canonicalUrl = canonicalUrl != null
-                ? canonicalUrl
-                : linkHandler.getLink(currentPage).map(Link::getExternalizedURL).orElse(null);
+            if (!getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
+                this.canonicalUrl = canonicalUrl != null
+                    ? canonicalUrl
+                    : linkHandler.getLink(currentPage).map(Link::getExternalizedURL).orElse(null);
+            }
         }
         return canonicalUrl;
     }
@@ -347,7 +361,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public Map<Locale, String> getAlternateLanguageLinks() {
         if (alternateLanguageLinks == null) {
             try {
-                if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, Boolean.FALSE)) {
+                // if enabled, alternate language links should only be included on pages that are canonical (don't have a custom canonical
+                // url set) and are not marked with noindex.
+                String currentPath = currentPage.getPath();
+                boolean isCanonical = StringUtils.isEmpty(customCanonicalUrl) || StringUtils.equals(customCanonicalUrl, currentPath);
+                if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, Boolean.FALSE)
+                    && isCanonical && !getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
                     SeoTags seoTags = resource.adaptTo(SeoTags.class);
                     alternateLanguageLinks = seoTags != null && seoTags.getAlternateLanguages().size() > 0
                         ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())

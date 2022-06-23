@@ -95,6 +95,14 @@
                                     </items>
                                 </field>
                             </clientlibsJsHead>
+                            <async
+                                jcr:primaryType="nt:unstructured"
+                                text="Load JavaScript Libraries asynchronously"
+                                fieldDescription="If enabled, the custom JavaScript Libraries will be loaded asynchronously"
+                                value="{Boolean}true"
+                                uncheckedValue="false"
+                                name="./clientlibsAsync"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"/>
                             <appResourcesClientlib
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"

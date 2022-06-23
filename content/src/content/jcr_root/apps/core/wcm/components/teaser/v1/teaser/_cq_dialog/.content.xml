@@ -35,17 +35,13 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
                                                 allowUpload="{Boolean}false"
-                                                autoStart="{Boolean}false"
                                                 class="cq-droptarget"
                                                 fieldLabel="Image Asset"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./fileReference"
                                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
-                                                multiple="{Boolean}false"
                                                 name="./file"
-                                                title="Upload Image Asset"
-                                                uploadUrl="${suffix.path}"
-                                                useHTML5="{Boolean}true"/>
+                                                title="Upload Image Asset"/>
                                         </items>
                                     </column>
                                 </items>
@@ -90,39 +86,14 @@
                                                         granite:hide="${!cqDesign.showTitleType}"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                                        fieldLabel="Title Type"
+                                                        fieldDescription="The heading HTML element used for the teaser's title type."
+                                                        fieldLabel="Heading Element"
                                                         name="./titleType"
-                                                        granite:class="foundation-toggleable">
-                                                        <items jcr:primaryType="nt:unstructured">
-                                                            <def
-                                                                jcr:primaryType="nt:unstructured"
-                                                                text="(default)"
-                                                                value=""/>
-                                                            <h1
-                                                                jcr:primaryType="nt:unstructured"
-                                                                text="H1"
-                                                                value="h1"/>
-                                                            <h2
-                                                                jcr:primaryType="nt:unstructured"
-                                                                text="H2"
-                                                                value="h2"/>
-                                                            <h3
-                                                                jcr:primaryType="nt:unstructured"
-                                                                text="H3"
-                                                                value="h3"/>
-                                                            <h4
-                                                                jcr:primaryType="nt:unstructured"
-                                                                text="H4"
-                                                                value="h4"/>
-                                                            <h5
-                                                                jcr:primaryType="nt:unstructured"
-                                                                text="H5"
-                                                                value="h5"/>
-                                                            <h6
-                                                                jcr:primaryType="nt:unstructured"
-                                                                text="H6"
-                                                                value="h6"/>
-                                                        </items>
+                                                        ordered="{Boolean}true"
+                                                        wrapperClass="foundation-toggleable">
+                                                        <datasource
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="core/wcm/components/title/v1/datasource/allowedtypes"/>
                                                     </titleType>
                                                     <titleFromLinkedPage
                                                         jcr:primaryType="nt:unstructured"
@@ -390,6 +361,10 @@
                             </columns>
                         </items>
                     </actions>
+                    <cq:styles
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_edit/styletab"/>
                 </items>
             </tabs>
         </items>

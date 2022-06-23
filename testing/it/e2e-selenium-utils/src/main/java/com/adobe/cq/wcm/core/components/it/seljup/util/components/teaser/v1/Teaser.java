@@ -19,7 +19,6 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1;
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.codeborne.selenide.ElementsCollection;
 
-
 import static com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage.imageWithFileName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -30,7 +29,9 @@ public class Teaser extends BaseComponent {
     private static String teaserImageLink = ".cmp-image__link";
     private static String TeaserPreTitle = ".cmp-teaser__pretitle";
     private static String teaserTitle = ".cmp-teaser__title";
+    protected static String teaserLink = ".cmp-teaser__link";
     protected static String teaserTitleLink = ".cmp-teaser__title-link";
+    protected static String teaserContent = ".cmp-teaser__content";
     private static String teaserDescription = ".cmp-teaser__description";
     protected static String teaserActionLink = "a.cmp-teaser__action-link";
     private static String imageTag = teaserImage + " img[src*='%s/_jcr_content/root/responsivegrid/teaser']";
@@ -56,6 +57,10 @@ public class Teaser extends BaseComponent {
         return $(String.format(teaserWithAltText, pagePath, altText)).isDisplayed();
     }
 
+    public boolean isImagePresentWithEmptyAltAttribute(String pagePath) {
+        return isImagePresent(pagePath) && $(String.format(imageTag, pagePath)).getAttribute("alt").isEmpty();
+    }
+
     public boolean isImageLinkPresent() {
         return $(teaserImageLink).isDisplayed();
     }
@@ -65,7 +70,7 @@ public class Teaser extends BaseComponent {
     }
 
     public boolean isTitleLinkPresent(String path, String title) {
-        if($("a" + teaserTitleLink + "[href$='" + path + ".html']" ).isDisplayed()) {
+        if ($("a" + teaserTitleLink + "[href$='" + path + ".html']").isDisplayed()) {
             return $("a" + teaserTitleLink + "[href$='" + path + ".html']").getText().trim().equals(title);
         }
         return false;
@@ -97,8 +102,8 @@ public class Teaser extends BaseComponent {
 
     public boolean isActionLinkPresent(String url) {
         ElementsCollection items = $$(teaserActionLink);
-        for(int i = 0; i < items.size(); i++) {
-            if(items.get(i).getText().contains(url)) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getText().contains(url)) {
                 return true;
             }
         }

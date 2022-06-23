@@ -16,18 +16,20 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v1;
 
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.v1.FormText;
-import com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.FormTextTests;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.v1.FormText;
+import com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.FormTextTests;
+import org.apache.sling.testing.clients.ClientException;
+
 import java.util.concurrent.TimeoutException;
+
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_FORMTEXT_V1;
 
 @Tag("group1")
 public class FormTextIT extends AuthorBaseUITest {
@@ -37,12 +39,12 @@ public class FormTextIT extends AuthorBaseUITest {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         formTextTests = new FormTextTests();
-        formTextTests.setup(adminClient, Commons.rtFormText_v1, rootPage, defaultPageTemplate, new FormText());
+        formTextTests.setup(authorClient, RT_FORMTEXT_V1, rootPage, defaultPageTemplate, new FormText());
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        formTextTests.cleanup(adminClient);
+        formTextTests.cleanup(authorClient);
     }
 
     /**
@@ -205,5 +207,41 @@ public class FormTextIT extends AuthorBaseUITest {
     @DisplayName("Test : test constraint message")
     public void testSetConstraintMessage() throws TimeoutException, InterruptedException {
         formTextTests.testSetConstraintMessage();
+    }
+
+    /**
+     * Test : set the help message and verify the textarea element to have the aria-describedby attribute equal with the help message id
+     */
+    @Test
+    @DisplayName("Test : set the help message and verify the textarea element to have the aria-describedby attribute equal with the help message id")
+    public void testTextareaAccessibilityWhenHelpMessageIsSet() throws TimeoutException, InterruptedException {
+        formTextTests.testTextareaAccessibilityWhenHelpMessageIsSet();
+    }
+
+    /**
+     * Test: without setting a help message, verify the textarea element to have no aria-describedby attribute
+     */
+    @Test
+    @DisplayName("Test : without setting a help message, verify the textarea element to have no aria-describedby attribute")
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea() throws InterruptedException, TimeoutException {
+        formTextTests.testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea();
+    }
+
+    /**
+     * Test : set the help message and verify the input element to have the aria-describedby attribute equal with the help message id
+     */
+    @Test
+    @DisplayName("Test : set the help message and verify the input element to have the aria-describedby attribute equal with the help message id")
+    public void testInputAccessibilityWhenHelpMessageIsSet() throws TimeoutException, InterruptedException {
+        formTextTests.testInputAccessibilityWhenHelpMessageIsSet();
+    }
+
+    /**
+     * Test: without setting a help message, verify the input element to have no aria-describedby attribute
+     */
+    @Test
+    @DisplayName("Test : without setting a help message, verify the input element to have no aria-describedby attribute")
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput() throws InterruptedException, TimeoutException {
+        formTextTests.testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput();
     }
 }

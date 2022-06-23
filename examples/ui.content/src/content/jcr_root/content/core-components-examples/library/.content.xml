@@ -648,12 +648,6 @@
                 </container_1589240806>
                 <container_1589240807/> <!-- Commerce components on main library page -->
                 <container_1589240808/> <!-- Forms and Communications Portal components on main library page -->
-                <text_557507476
-                    cq:styleIds="[1550360114923]"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>No components found.&lt;/p>"
-                    textIsRich="true"/>
             </responsivegrid>
         </root>
         <image/>

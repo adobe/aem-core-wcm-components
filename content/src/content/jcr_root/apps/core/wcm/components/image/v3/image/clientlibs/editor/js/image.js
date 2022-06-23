@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-(function($) {
+(function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-image__editor";
@@ -47,6 +47,9 @@
     var altTextFromDAM;
     var altCheckboxSelector = "coral-checkbox[name='./altValueFromDAM']";
     var altInputSelector = "input[name='./alt']";
+    var altInputAlertIconSelector = "input[name='./alt'] + coral-icon[icon='alert']";
+    var assetTabSelector = "coral-tab[data-foundation-tracking-event*='asset']";
+    var assetTabAlertIconSelector = "coral-tab[data-foundation-tracking-event*='asset'] coral-icon[icon='alert']";
     var pageAltCheckboxSelector = "coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
     var pageAltInputSelector = "input[name='./cq:featuredimage/alt']";
     var pageImageThumbnailSelector = ".cq-page-image-thumbnail";
@@ -76,7 +79,6 @@
             $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
-            $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
@@ -142,7 +144,7 @@
             }
             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
             togglePageImageInherited(imageFromPageImage, isDecorative);
-
+            updateImageThumbnail();
         }
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
@@ -150,11 +152,25 @@
             candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
+
+        improveAltTextValidation();
     });
 
     $(window).on("focus", function() {
         if (fileReference) {
             retrieveDAMInfo(fileReference);
+        }
+    });
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: altInputSelector,
+        validate: function() {
+            var seededValue = $(altInputSelector).attr("data-seeded-value");
+            var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
+            if (isAltCheckboxChecked && !seededValue) {
+                return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
+            }
         }
     });
 
@@ -180,11 +196,6 @@
         updateImageThumbnail();
     });
 
-    // Update the image thumbnail when the checkbox to enable the call to action is toggled
-    $(document).on("change", dialogContentSelector + " coral-checkbox[name='./actionsEnabled']", function(e) {
-        updateImageThumbnail();
-    });
-
     $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
         switch (e.target.value) {
             case "imagePreset":
@@ -207,9 +218,9 @@
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
         $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
-        if ($linkURLField && $linkURLField.adaptTo("foundation-field") && !$linkURLField.adaptTo("foundation-field").isDisabled()) {
+        if ($linkURLField && $linkURLField.adaptTo("foundation-field") && $linkURLField.adaptTo("foundation-field").getValue()) {
             linkValue = $linkURLField.adaptTo("foundation-field").getValue();
-        } else if ($firstCtaLinkField && $firstCtaLinkField.adaptTo("foundation-field") && !$firstCtaLinkField.adaptTo("foundation-field").isDisabled()) {
+        } else if ($firstCtaLinkField && $firstCtaLinkField.adaptTo("foundation-field") && $firstCtaLinkField.adaptTo("foundation-field").getValue()) {
             linkValue = $firstCtaLinkField.adaptTo("foundation-field").getValue();
         }
         if (linkValue === undefined || linkValue === "") {
@@ -228,7 +239,7 @@
                 // update the thumbnail image
                 $pageImageThumbnail.replaceWith(data);
                 $pageImageThumbnail = $(dialogContentSelector).find(pageImageThumbnailSelector);
-                if (imageFromPageImage.checked) {
+                if (imageFromPageImage && imageFromPageImage.checked) {
                     $pageImageThumbnail.show();
                 } else {
                     $pageImageThumbnail.hide();
@@ -236,8 +247,10 @@
 
                 // update the alt field
                 altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
-                altFromPageTuple.seedTextValue(altTextFromPage);
-                altFromPageTuple.update();
+                if (imageFromPageImage.checked) {
+                    altFromPageTuple.seedTextValue(altTextFromPage);
+                    altFromPageTuple.update();
+                }
             }
         });
     }
@@ -292,11 +305,12 @@
             } else {
                 $linkURLGroup.show();
             }
-            if ($linkURLField.length) {
-                $linkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
+            var $imageLinkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
+            if ($imageLinkURLField.length) {
+                $imageLinkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
             }
             if ($altTextField.length) {
-                $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked);
+                $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked && $("coral-fileupload.is-filled:not(:hidden)").length !== 0);
             }
         }
         toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox);
@@ -479,4 +493,69 @@
         }
     }
 
-})(jQuery);
+    /**
+     * Improve error validation for alternative text inherited from asset's description
+     */
+    function improveAltTextValidation() {
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === "attributes") {
+                    var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+                    var alertIcon = $(altInputAlertIconSelector);
+                    var assetTab = $(assetTabSelector);
+                    var assetTabAlertIcon = $(assetTabAlertIconSelector);
+                    if (mutation.attributeName === "data-seeded-value") {
+                        if (isAltCheckboxChecked) {
+                            if ($(altInputSelector).val()) {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).removeClass("is-invalid");
+                                    alertIcon.hide();
+                                    assetTab.removeClass("is-invalid");
+                                    assetTabAlertIcon.hide();
+                                }
+                            } else {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).addClass("is-invalid");
+                                    alertIcon.show();
+                                    assetTab.addClass("is-invalid");
+                                    assetTabAlertIcon.show();
+                                }
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "disabled") {
+                        if ($(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).removeClass("is-invalid");
+                                alertIcon.hide();
+                                assetTab.removeClass("is-invalid");
+                                assetTabAlertIcon.hide();
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "invalid") {
+                        if (!$(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).addClass("is-invalid");
+                                alertIcon.show();
+                                assetTab.addClass("is-invalid");
+                                assetTabAlertIcon.show();
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        var altInput = document.querySelector(altInputSelector);
+        if (altInput) {
+            observer.observe(altInput, {
+                attributeFilter: ["data-seeded-value", "disabled", "invalid"]
+            });
+        }
+    }
+
+})(jQuery, Granite);

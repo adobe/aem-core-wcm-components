@@ -1,0 +1,8 @@
+{
+  "id":"search-0dc87a6d22",
+  "resultsSize": 10,
+  "searchTermMinimumLength": 3,
+  "relativePath":"/jcr:content/search",
+  "searchRootPagePath" : "/content/en/search",
+  ":type": "core/wcm/components/search/v2/search"
+}

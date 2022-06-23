@@ -29,9 +29,23 @@ public class Teaser extends com.adobe.cq.wcm.core.components.it.seljup.util.comp
         return new TeaserEditDialog();
     }
 
+    public boolean isTeaserLinkPresent(String path, String title) {
+        if($("a" + teaserLink + "[href$='" + path + ".html']" ).isDisplayed()) {
+            return $("a" + teaserLink + "[href$='" + path + ".html'] " + teaserContent + "  h2").getText().trim().equals(title);
+        }
+        return false;
+    }
+
+    public boolean isTeaserLinkPresentWithTarget(String path, String title, String target) {
+        if($("a" + teaserLink + "[href$='" + path + ".html']" ).isDisplayed()) {
+            return $("a" + teaserLink + "[href$='" + path + ".html'][target='" + target + "']  " + teaserContent + "  h2").getText().trim().equals(title);
+        }
+        return false;
+    }
+
     public boolean isTitleLinkPresentWithTarget(String path, String title, String target) {
         if($("a" + teaserTitleLink + "[href$='" + path + ".html']" ).isDisplayed()) {
-            return $("a" + teaserTitleLink + "[href$='" + path + ".html'][target='" + target + "']").getText().trim().equals(title);
+            return $("a" + teaserTitleLink + "[href$='" + path + ".html'][target='" + target + "'] h2").getText().trim().equals(title);
         }
         return false;
     }

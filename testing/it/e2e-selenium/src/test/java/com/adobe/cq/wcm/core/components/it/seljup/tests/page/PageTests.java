@@ -44,6 +44,7 @@ import org.codehaus.jackson.JsonNode;
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PageTests {
@@ -315,8 +316,9 @@ public class PageTests {
         // tests for the SEO options
         page.setRobotsTags("index", "follow");
         page.setGenerateSitemap(true);
+        page.setCanonicalUrl(testPage);
 
-        // save the configuration and open again the page property
+        // save the configuration and open again the page properties
         propertiesPage.saveAndClose();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         propertiesPage.open();
@@ -325,15 +327,22 @@ public class PageTests {
         // check the SEO Configuration
         assertArrayEquals(new String[] {"index", "follow"}, page.getRobotsTags());
         assertTrue(page.getGenerateSitemap());
+        assertEquals(testPage, page.getCanonicalUrl());
+
         // validate the actual persisted values
         JsonNode content = adminClient.doGetJson(testPage + "/_jcr_content", 1, HttpStatus.SC_OK);
         JsonNode robotsTags = content.get("cq:robotsTags");
+        assertNotNull(robotsTags);
         assertTrue(robotsTags.isArray());
         assertEquals(2, robotsTags.size());
         assertEquals("index", robotsTags.get(0).getTextValue());
         assertEquals("follow", robotsTags.get(1).getTextValue());
         JsonNode sitemapRoot = content.get("sling:sitemapRoot");
+        assertNotNull(sitemapRoot);
         assertEquals("true", sitemapRoot.getTextValue());
+        JsonNode canonicalUrl = content.get("cq:canonicalUrl");
+        assertNotNull(canonicalUrl);
+        assertEquals(testPage, canonicalUrl.getTextValue());
     }
 
     public void testThumbnailPageProperties() {
@@ -457,7 +466,7 @@ public class PageTests {
 
         final ElementsCollection currentPermissionsList = permissions.permissionsList();
         // Check no permission set
-        currentPermissionsList.shouldHaveSize(0);
+        currentPermissionsList.shouldHave(CollectionCondition.size(0));
 
         // Add permission
         final PermissionsTab.AddPermissionsDialog addPermissionsDialog = permissions.addPermission();
@@ -471,7 +480,7 @@ public class PageTests {
         addPermissionsDialog.clickPrimary();
 
         // Check the permission set
-        currentPermissionsList.shouldHaveSize(1);
+        currentPermissionsList.shouldHave(CollectionCondition.size(1));
         currentPermissionsList.shouldHave(CollectionCondition.texts(userName));
         assertTrue(permissions.isReadPermissionGranted(userName), "Read permission has been given, should be checked");
         assertTrue(permissions.isDeletePermissionGranted(userName), "Delete permission has been given, should be checked");
@@ -488,7 +497,7 @@ public class PageTests {
 
         // Delete the permission
         permissions.deleteUserPermission(userName);
-        currentPermissionsList.shouldHaveSize(0);
+        currentPermissionsList.shouldHave(CollectionCondition.size(0));
     }
 
     public void testEditUserGroupPermissionsPageProperties() {
@@ -500,7 +509,7 @@ public class PageTests {
 
         // Check current CUG list is empty
         final ElementsCollection currentCUGList = permissions.cugList();
-        currentCUGList.shouldHaveSize(0);
+        currentCUGList.shouldHave(CollectionCondition.size(0));
 
         // Add CUG permission
         final PermissionsTab.EditCUGDialog editCUG = permissions.editCUG();
@@ -511,7 +520,7 @@ public class PageTests {
         editCUG.clickPrimary();
 
         // Check the added CUG permission
-        currentCUGList.shouldHaveSize(1);
+        currentCUGList.shouldHave(CollectionCondition.size(1));
         currentCUGList.shouldHave(CollectionCondition.texts("CoreComponent Test"));
     }
 

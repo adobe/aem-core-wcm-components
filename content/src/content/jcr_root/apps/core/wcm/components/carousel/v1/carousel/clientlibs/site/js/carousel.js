@@ -16,6 +16,11 @@
 (function() {
     "use strict";
 
+    var containerUtils = window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils ? window.CQ.CoreComponents.container.utils : undefined;
+    if (!containerUtils) {
+        // eslint-disable-next-line no-console
+        console.warn("Tabs: container utilities at window.CQ.CoreComponents.container.utils are not available. This can lead to missing features. Ensure the core.wcm.components.commons.site.container client library is included on the page.");
+    }
     var dataLayerEnabled;
     var dataLayer;
 
@@ -108,6 +113,8 @@
          * @param {CarouselConfig} config The Carousel configuration
          */
         function init(config) {
+            that._config = config;
+
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
 
@@ -122,6 +129,7 @@
                 bindEvents();
                 resetAutoplayInterval();
                 refreshPlayPauseActions();
+                scrollToDeepLinkIdInCarousel();
             }
 
             // TODO: This section is only relevant in edit mode and should move to the editor clientLib
@@ -142,6 +150,31 @@
                         }
                     }
                 });
+            }
+        }
+
+        /**
+         * Displays the slide containing the element that corresponds to the deep link in the URI fragment
+         * and scrolls the browser to this element.
+         */
+        function scrollToDeepLinkIdInCarousel() {
+            if (containerUtils) {
+                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item", "item");
+                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                    var deepLinkItem = that._elements["item"][deepLinkItemIdx];
+                    if (deepLinkItem && that._elements["item"][that._active].id !== deepLinkItem.id) {
+                        navigateAndFocusIndicator(deepLinkItemIdx, true);
+                        // pause the carousel auto-rotation
+                        pause();
+                    }
+                    var hashId = window.location.hash.substring(1);
+                    if (hashId) {
+                        var hashItem = document.querySelector("[id='" + hashId + "']");
+                        if (hashItem) {
+                            hashItem.scrollIntoView();
+                        }
+                    }
+                }
             }
         }
 
@@ -212,6 +245,7 @@
          * @private
          */
         function bindEvents() {
+            window.addEventListener("hashchange", scrollToDeepLinkIdInCarousel, false);
             if (that._elements["previous"]) {
                 that._elements["previous"].addEventListener("click", function() {
                     var index = getPreviousIndex();
@@ -248,6 +282,8 @@
                     (function(index) {
                         indicators[i].addEventListener("click", function(event) {
                             navigateAndFocusIndicator(index);
+                            // pause the carousel auto-rotation
+                            pause();
                         });
                     })(i);
                 }
@@ -492,14 +528,19 @@
          *
          * @private
          * @param {Number} index The index of the item to navigate to
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function navigate(index) {
+        function navigate(index, keepHash) {
             if (index < 0 || index > (that._elements["item"].length - 1)) {
                 return;
             }
 
             that._active = index;
             refreshActive();
+
+            if (!keepHash && containerUtils) {
+                containerUtils.updateUrlHash(that, "item", index);
+            }
 
             if (dataLayerEnabled) {
                 var carouselId = that._elements.self.id;
@@ -527,9 +568,10 @@
          *
          * @private
          * @param {Number} index The index of the item to navigate to
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function navigateAndFocusIndicator(index) {
-            navigate(index);
+        function navigateAndFocusIndicator(index, keepHash) {
+            navigate(index, keepHash);
             focusWithoutScroll(that._elements["indicator"][index]);
 
             if (dataLayerEnabled) {
@@ -559,9 +601,9 @@
                 var indicators = that._elements["indicators"];
                 if (indicators !== document.activeElement && indicators.contains(document.activeElement)) {
                     // if an indicator has focus, ensure we switch focus following navigation
-                    navigateAndFocusIndicator(getNextIndex());
+                    navigateAndFocusIndicator(getNextIndex(), true);
                 } else {
-                    navigate(getNextIndex());
+                    navigate(getNextIndex(), true);
                 }
             }, that._properties.delay);
         }
@@ -691,6 +733,9 @@
         onDocumentReady();
     } else {
         document.addEventListener("DOMContentLoaded", onDocumentReady);
+    }
+    if (containerUtils) {
+        window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }
 
 }());

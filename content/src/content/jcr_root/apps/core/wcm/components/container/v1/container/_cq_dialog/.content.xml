@@ -106,17 +106,13 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
                                                 allowUpload="{Boolean}false"
-                                                autoStart="{Boolean}false"
                                                 class="cq-droptarget"
                                                 fieldLabel="Background Image"
+                                                fieldDescription="Background image for the container. For accessibility purposes use images that provide adequate contrast with the text"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./backgroundImageReference"
                                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff]"
-                                                multiple="{Boolean}false"
-                                                name="./file"
-                                                title="Upload Image Asset"
-                                                uploadUrl="${suffix.path}"
-                                                useHTML5="{Boolean}true"/>
+                                                name="./file"/>
                                             <id
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -143,6 +139,10 @@
                             </columns>
                         </items>
                     </properties>
+                    <cq:styles
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_edit/styletab"/>
                 </items>
             </tabs>
         </items>

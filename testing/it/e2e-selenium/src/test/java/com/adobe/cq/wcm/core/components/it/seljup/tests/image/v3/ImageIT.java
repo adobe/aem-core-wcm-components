@@ -16,25 +16,26 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v3;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v2.Image;
-import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v2.Image;
 
 @Tag("group2")
 public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.image.v2.ImageIT {
 
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
-        clientlibs = "core.wcm.components.image.v3";
+        clientlibs = Commons.CLIENTLIBS_IMAGE_V3;
         imageTests = new ImageTests();
-        imageTests.setup(adminClient, contextPath, label, Commons.rtImage_v3, rootPage, defaultPageTemplate, clientlibs, new Image());
+        imageTests.setup(adminClient, contextPath, label, Commons.RT_IMAGE_V3, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
     /**
@@ -202,6 +203,16 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @DisplayName("Test: set link with target on image")
     public void testSetLinkWithTarget() throws TimeoutException, InterruptedException, ClientException {
         imageTests.testSetLinkWithTarget();
+    }
+
+    /**
+     * Test: set asset from DAM without description
+     */
+    @Test
+    @Override
+    @DisplayName("Test: set asset from DAM without description")
+    public void testSetAssetWithoutDescription() throws TimeoutException, InterruptedException {
+        imageTests.testSetAssetWithoutDescriptionV3();
     }
 
 }

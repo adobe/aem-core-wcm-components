@@ -18,5 +18,5 @@
     jcr:description="Image Component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="Image"
-    sling:resourceSuperType="core/wcm/extensions/amp/components/image/v1/image"
+    sling:resourceSuperType="core/wcm/extensions/amp/components/image/v2/image"
     componentGroup="Core Components Examples"/>

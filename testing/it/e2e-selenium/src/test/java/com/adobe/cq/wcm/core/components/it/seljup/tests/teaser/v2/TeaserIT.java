@@ -16,42 +16,36 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v2;
 
-import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.TeaserEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.Teaser;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Driver;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.Teaser;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.TeaserEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
-import static com.codeborne.selenide.Selenide.$;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
+import static com.codeborne.selenide.Selenide.$;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group3")
 public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v1.TeaserIT {
 
     protected Teaser teaser;
 
-    protected void setup() throws ClientException {
-        super.setup(Commons.rtImage_v3);
-    }
-
     protected void setupResources() {
         super.setupResources();
-        teaserRT = Commons.rtTeaser_v2;
-        clientlibs = "core.wcm.components.teaser.v1";
+        teaserRT = Commons.RT_TEASER_V2;
+        clientlibs = Commons.CLIENTLIBS_TEASER_V2;
         teaser = new Teaser();
     }
 
@@ -59,7 +53,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
      * Before Test Case
      **/
     @BeforeEach
-    public void setupBeforeEach() throws ClientException {
+    public void setupBeforeEach() throws ClientException, InterruptedException {
         setupResources();
         setup();
     }
@@ -72,22 +66,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
      */
     @Test
     @DisplayName("Test: Links to elements for Teaser")
-    public void testLinksToElementsTeaser() throws TimeoutException, InterruptedException, ClientException {
-        String policySuffix = "/teaser/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // add a policy for teaser component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/teaser",data, policyAssignmentPath, 200, 201);
+    public void testLinksToElementsTeaser() throws TimeoutException, InterruptedException {
 
         Commons.openSidePanel();
         assetFinder.setFiltersPath(testAssetsPath);
@@ -125,15 +104,19 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.clickLinkTarget();
         editDialog.openTextTab();
         editDialog.setPreTitle(preTitle);
+        assertTrue(editDialog.isTitleFromPagePresent());
+        editDialog.clickTitleFromPage();
         editDialog.setTitle(title);
+        assertTrue(editDialog.isDescriptionFromPagePresent());
+        editDialog.clickDescriptionFromPage();
         editDialog.setDescription(description);
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
         assertTrue(teaser.isPreTitlePresent(preTitle), "PreTitle should be present");
-        assertTrue(teaser.isTitleLinkPresent(testPage, title),"Title link should be present");
-        assertTrue(teaser.isTitleLinkPresentWithTarget(testPage, title, "_blank"),"Title link should be present");
+
+        assertTrue(teaser.isTeaserLinkPresentWithTarget(testPage, title, "_blank"),"Teaser link should be present with target");
         assertTrue(teaser.isDescriptionPresent(description),"Description should be present");
         assertTrue(!teaser.isImageLinkPresent(),"The image should not be linked");
     }
@@ -144,7 +127,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
      * @throws InterruptedException
      */
     @Test
-    @DisplayName("Test: Teaser with link and image and not title and description")
+    @DisplayName("Test: Teaser with link and image and inherited title and description")
     public void testWithLinkAndImageTeaser() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         assetFinder.setFiltersPath(testAssetsPath);
@@ -159,9 +142,9 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
-        assertTrue(teaser.isImageLinkPresent(), "The image should be linked");
-        assertTrue(!teaser.isTitlePresent(), "Teaser title should not be present");
-        assertTrue(!teaser.isDescriptionPresent(), "Teaser description should not be present");
+        assertTrue(!teaser.isImageLinkPresent(), "The image should not be linked");
+        assertTrue(teaser.isTitlePresent(), "Teaser title should be present");
+        assertTrue(teaser.isDescriptionPresent(), "Teaser description should be present");
     }
 
     /**
@@ -181,10 +164,11 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
-        editDialog.clickActionEnabled();
+        editDialog.addActionLink();
         editDialog.setActionLinkUrl(actionExternalLink);
         editDialog.setActionText(actionExternalText);
-        editDialog.addActionLinkUrl(secondTestPage);
+        editDialog.addActionLink();
+        editDialog.setActionLinkUrl(secondTestPage);
         editDialog.clickLActionLinkTarget();
         editDialog.setActionText(actionText2);
         Commons.saveConfigureDialog();
@@ -194,7 +178,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
         assertTrue(!teaser.isImageLinkPresent(), "Image should not be linked");
         assertTrue(!teaser.isTitleLinkPresent(), "Title link should not be present");
-        assertTrue(!teaser.isDescriptionPresent(), "Teaser description should not be present");
+        assertTrue(teaser.isDescriptionPresent(), "Teaser description should be present");
         assertTrue(teaser.isActionLinkPresent(actionExternalText), actionExternalLink + " action link should be present");
         assertTrue(teaser.isActionLinkPresentWithTarget(actionText2, "_blank"), actionText2 + " action link should be present");
     }
@@ -217,14 +201,11 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openLinksTab();
         editDialog.setLinkURL(testPage);
-        editDialog.openTextTab();
-        editDialog.clickTitleFromPage();
-        editDialog.clickDescriptionFromPage();
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresent(testPage), "Image should be present");
-        assertTrue(teaser.isTitleLinkPresent(testPage, pageTitle),"Page title should be present as title link ");
+        assertTrue(teaser.isTeaserLinkPresent(testPage, pageTitle),"Teaser link should be present");
         assertTrue(teaser.isDescriptionPresent(pageDescription),"Description from page should be present");
     }
 
@@ -245,12 +226,11 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
         editDialog.openTextTab();
-        editDialog.clickTitleFromPage();
-        editDialog.clickDescriptionFromPage();
         editDialog.openLinksTab();
-        editDialog.clickActionEnabled();
+        editDialog.addActionLink();
         editDialog.setActionLinkUrl(testPage);
-        editDialog.addActionLinkUrl(secondTestPage);
+        editDialog.addActionLink();
+        editDialog.setActionLinkUrl(secondTestPage);
         Commons.saveConfigureDialog();
 
         Commons.switchContext("ContentFrame");
@@ -292,6 +272,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         editDialog.openTextTab();
 
         // 3.
+        editDialog.clickTitleFromPage();
         editDialog.setTitle(title);
 
         // 4.
@@ -321,23 +302,11 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
             "Title should be enabled and should be set to " + title);
     }
 
-    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from current page")
     public void testInheritImageFromCurrentPage() throws ClientException, InterruptedException {
-        testInheritImageFromCurrentPage(false);
-    }
-
-    @Tag("IgnoreOnSDK")
-    @Test
-    @DisplayName("Test (6.5): Inherit image from current page")
-    public void testInheritImageFromCurrentPage65() throws ClientException, InterruptedException {
-        testInheritImageFromCurrentPage(true);
-    }
-
-    private void testInheritImageFromCurrentPage(boolean aem65) throws ClientException, InterruptedException {
         // set the page image for the current page
-        setPageImage(aem65, testPage, climbingAsset);
+        setPageImage(testPage, climbingAsset);
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
@@ -345,58 +314,39 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
     }
 
-    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from current page and no alt text")
     public void testInheritImageFromCurrentPage_isDecorative() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromCurrentPage_isDecorative(false);
-    }
-
-    @Tag("IgnoreOnSDK")
-    @Test
-    @DisplayName("Test (6.5): Inherit image from current page and no alt text")
-    public void testInheritImageFromCurrentPage_isDecorative65() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromCurrentPage_isDecorative(true);
-    }
-
-    private void testInheritImageFromCurrentPage_isDecorative(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the current page
-        setPageImage(aem65, testPage, climbingAsset);
+        setPageImage(testPage, climbingAsset);
 
         // set image to decorative
         Commons.openEditDialog(editorPage,cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openAssetsTab();
         editDialog.checkInheritAltFromPage();
-        editDialog.setAltText(alt);
+        editDialog.setAltText("");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        editDialog.scrollToIsDecorativeCheckbox();
         editDialog.checkIsDecorative();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        assertTrue(editDialog.isDecorativeChecked());
         Commons.saveConfigureDialog();
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(teaser.isImagePresentWithAltText(testPage, ""),"image should be rendered without alt text");
-        assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted),"image should be rendered with file name: " + climbingAssetFormatted);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS * 5);
+        assertTrue(teaser.isImagePresentWithFileName(climbingAssetFormatted), "image should be rendered with file name: " + climbingAssetFormatted);
+        assertTrue(teaser.isImagePresentWithEmptyAltAttribute(testPage), "image should be rendered with alt attribute empty");
     }
 
-    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from linked page")
     public void testInheritImageFromLinkedPage() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromLinkedPage(false);
-    }
-
-    @Tag("IgnoreOnSDK")
-    @Test
-    @DisplayName("Test (6.5): Inherit image from linked page")
-    public void testInheritImageFromLinkedPage65() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromLinkedPage(true);
-    }
-
-    private void testInheritImageFromLinkedPage(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the linked page
-        setPageImage(aem65, secondTestPage, surfingAsset);
+        setPageImage(secondTestPage, surfingAsset);
         // set the page image for the current page
-        setPageImage(aem65, testPage, climbingAsset);
+        setPageImage(testPage, climbingAsset);
 
         // set the link URL
         Commons.openEditDialog(editorPage,cmpPath);
@@ -411,25 +361,13 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(surfingAssetFormatted),"image should be rendered with file name: " + surfingAssetFormatted);
     }
 
-    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from linked page with alt defined in the dialog")
     public void testInheritImageFromLinkedPage_altNotInherited() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromLinkedPage_altNotInherited(false);
-    }
-
-    @Tag("IgnoreOnSDK")
-    @Test
-    @DisplayName("Test (6.5): Inherit image from linked page with alt defined in the dialog")
-    public void testInheritImageFromLinkedPage_altNotInherited65() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromLinkedPage_altNotInherited(true);
-    }
-
-    private void testInheritImageFromLinkedPage_altNotInherited(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the linked page
-        setPageImage(aem65, secondTestPage, surfingAsset);
+        setPageImage(secondTestPage, surfingAsset);
         // set the page image for the current page
-        setPageImage(aem65, testPage, climbingAsset);
+        setPageImage(testPage, climbingAsset);
 
         // set the link URL
         Commons.openEditDialog(editorPage,cmpPath);
@@ -450,31 +388,19 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(surfingAssetFormatted),"image should be rendered with file name: " + surfingAssetFormatted);
     }
 
-    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: Inherit image from action page")
     public void testInheritImageFromAction() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromAction(false);
-    }
-
-    @Tag("IgnoreOnSDK")
-    @Test
-    @DisplayName("Test (6.5): Inherit image from action page")
-    public void testInheritImageFromAction65() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromAction(true);
-    }
-
-    private void testInheritImageFromAction(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the action page
-        setPageImage(aem65, thirdTestPage, skiingAsset);
+        setPageImage(thirdTestPage, skiingAsset);
         // set the page image for the current page
-        setPageImage(aem65, testPage, climbingAsset);
+        setPageImage(testPage, climbingAsset);
 
         // set the action URL
         Commons.openEditDialog(editorPage,cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openLinksTab();
-        editDialog.clickActionEnabled();
+        editDialog.addActionLink();
         editDialog.setActionLinkUrl(thirdTestPage);
         Commons.saveConfigureDialog();
 
@@ -484,31 +410,93 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(skiingAssetFormatted),"image should be rendered with file name: " + skiingAssetFormatted);
     }
 
-    @Tag("IgnoreOn65")
+    /**
+     * Test: Teaser with title, description and without image and link
+     *
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Test: Teaser with title, description and without image and link")
+    public void testNoImageTeaser() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        Commons.openEditDialog(editorPage,cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openTextTab();
+        editDialog.clickTitleFromPage();
+        editDialog.setTitle(title);
+        editDialog.clickDescriptionFromPage();
+        editDialog.setDescription(description);
+        editDialog.openLinkAndActionsTab();
+        Commons.saveConfigureDialog();
+        assertEquals(editDialog.getAssetWithoutDescriptionErrorMessage(), "Error: Please provide an asset which has a description that can be used as alt text.");
+        editDialog.checkImageFromPageImage();
+        editDialog.checkAltTextFromAssetDescription();
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(!teaser.isImagePresent(testPage), "Image should not be present");
+        assertTrue(teaser.isTitlePresent(title),"Title link should be present");
+        assertTrue(teaser.isDescriptionPresent(description),"Description should be present");
+    }
+
+    /**
+     * Hide elements for Teaser
+     *
+     * @throws TimeoutException
+     * @throws InterruptedException
+     * @throws ClientException
+     */
+    @Test
+    @DisplayName("Test: Hide elements for Teaser")
+    @Override
+    public void testHideElementsTeaser() throws TimeoutException, InterruptedException, ClientException {
+        createComponentPolicy("/teaser-v2", new HashMap<String, String>() {{
+            put("titleHidden", "true");
+            put("descriptionHidden", "true");
+        }});
+
+        Commons.openEditDialog(editorPage, cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openTextTab();
+        assertTrue(!editDialog.isDescriptionFromPagePresent(), "Description from Page checkbox should not be present");
+        assertTrue(!editDialog.isTitleFromPagePresent(), "Title from Page checkbox should not be present");
+    }
+
+    /**
+     * Disable Actions for Teaser
+     *
+     * @throws ClientException
+     * @throws TimeoutException
+     * @throws InterruptedException
+     */
+    @Test
+    @DisplayName("Disable Actions for Teaser")
+    public void testDisableActionsTeaser() throws ClientException, TimeoutException, InterruptedException {
+        createComponentPolicy("/teaser-v2", new HashMap<String, String>() {{
+            put("actionsDisabled", "true");
+        }});
+
+        Commons.openSidePanel();
+        Commons.openEditDialog(editorPage, cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+
+        editDialog.openLinksTab();
+        assertTrue(!editDialog.isActionsPresent(), "Actions should not be present");
+    }
+
     @Test
     @DisplayName("Test: Inherit image from action page with alt defined in the dialog")
     public void testInheritImageFromAction_altNotInherited() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromAction_altNotInherited(false);
-    }
-
-    @Tag("IgnoreOnSDK")
-    @Test
-    @DisplayName("Test (6.5): Inherit image from action page with alt defined in the dialog")
-    public void testInheritImageFromAction_altNotInherited65() throws ClientException, InterruptedException, TimeoutException {
-        testInheritImageFromAction_altNotInherited(true);
-    }
-
-    private void testInheritImageFromAction_altNotInherited(boolean aem65) throws ClientException, InterruptedException, TimeoutException {
         // set the page image for the action page
-        setPageImage(aem65, thirdTestPage, skiingAsset);
+        setPageImage(thirdTestPage, skiingAsset);
         // set the page image for the current page
-        setPageImage(aem65, testPage, climbingAsset);
+        setPageImage(testPage, climbingAsset);
 
         // set the action URL
         Commons.openEditDialog(editorPage,cmpPath);
         TeaserEditDialog editDialog = teaser.getEditDialog();
         editDialog.openLinksTab();
-        editDialog.clickActionEnabled();
+        editDialog.addActionLink();
         editDialog.setActionLinkUrl(thirdTestPage);
 
         // define alt on the resource
@@ -531,21 +519,22 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
     /**
      * Sets the featured image for a page.
      */
-    private void setPageImage(boolean aem65, String page, String asset) throws ClientException, InterruptedException {
-        String assetSelector;
-        if (aem65) {
-            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-columnview-item-thumbnail";
-        } else {
-            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox";
-        }
+    private void setPageImage(String page, String asset) throws ClientException, InterruptedException {
         // set page resource type to page v3
-        adminClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
+        authorClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
         PropertiesPage pageProperties = new PropertiesPage(page);
         pageProperties.open();
         $("coral-tab[data-foundation-tracking-event*='images']").click();
         $(".cq-FileUpload-picker").click();
         $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
-        $(assetSelector).click();
+
+        try {
+            $("*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox").click();
+        } catch (Throwable t) {
+            // Fallback for AEM 6.5
+            $("*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-columnview-item-thumbnail").click();
+        }
+
         clickableClick($(".granite-pickerdialog-submit"));
 
         // inherit alt text from DAM
@@ -557,7 +546,4 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editorPage.open();
     }
-
-
-
 }

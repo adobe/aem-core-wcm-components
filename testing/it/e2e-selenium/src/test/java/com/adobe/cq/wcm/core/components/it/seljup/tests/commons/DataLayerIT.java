@@ -16,12 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.commons;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.wcm.core.components.it.seljup.AdminBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.codeborne.selenide.WebDriverRunner;
+import java.util.Map;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -32,12 +28,19 @@ import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
-import java.util.Map;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.codeborne.selenide.WebDriverRunner;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @Tag("group2")
-public class DataLayerIT extends AdminBaseUITest {
+public class DataLayerIT extends AuthorBaseUITest {
 
     protected String testPage;
     protected EditorPage editorPage;
@@ -50,7 +53,7 @@ public class DataLayerIT extends AdminBaseUITest {
     }
 
     @Test
-    public void testDataLayerInitialized() throws InterruptedException {
+    public void testDataLayerInitialized() {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         final WebDriver webDriver = WebDriverRunner.getWebDriver();

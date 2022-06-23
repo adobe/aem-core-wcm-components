@@ -28,8 +28,8 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
-import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
@@ -42,6 +42,8 @@ import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Source;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
@@ -51,12 +53,15 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
+import com.adobe.cq.wcm.spi.AssetDelivery;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -97,6 +102,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     @Source("osgi-services")
     protected MimeTypeService mimeTypeService;
 
+    @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
+    protected AssetDelivery assetDelivery;
+
     @Self
     protected LinkHandler linkHandler;
 
@@ -125,7 +133,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected String imageName;
     protected Resource fileResource;
     protected Optional<Link> link;
-
+    protected boolean useAssetDelivery = false;
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
     }
@@ -160,6 +168,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
+        useAssetDelivery = currentStyle.get(PN_DESIGN_ASSET_DELIVERY_ENABLED, false) && assetDelivery != null;
+
         Asset asset = null;
 
         if (StringUtils.isNotEmpty(fileReference)) {
@@ -172,12 +182,15 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     imageName = getImageNameFromDam(fileReference);
                     hasContent = true;
                 } else {
+                    useAssetDelivery = false;
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
                 }
             } else {
+                useAssetDelivery = false;
                 LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
             }
         } else {
+            useAssetDelivery = false;
             if (fileResource != null) {
                 mimeType = PropertiesUtil.toString(fileResource.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), null);
                 if (StringUtils.isEmpty(mimeType)) {
@@ -237,11 +250,18 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 smartImages = new String[supportedRenditionWidths.size()];
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
-                    smartImages[index] = baseResourcePath + DOT +
+                    String smartImage = "";
+                    if (useAssetDelivery) {
+                        smartImage = AssetDeliveryHelper.getSrc(assetDelivery, resource, imageName, extension, width, jpegQuality);
+                    }
+                    if (StringUtils.isEmpty(smartImage)) {
+                        smartImage = baseResourcePath + DOT +
                             selector + DOT + jpegQuality + DOT + width + DOT + extension +
                             (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                             (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                             (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+                    }
+                    smartImages[index] = smartImage;
                     smartSizes[index] = width;
                     index++;
                 }
@@ -249,15 +269,25 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 smartImages = new String[0];
                 smartSizes = new int[0];
             }
-            src = baseResourcePath + DOT + selector + DOT;
-            if (smartSizes.length == 1) {
-                src += jpegQuality + DOT + smartSizes[0] + DOT + extension;
-            } else {
-                src += extension;
+
+            if (useAssetDelivery) {
+                src = AssetDeliveryHelper.getSrc(assetDelivery, resource, imageName, extension,
+                        ArrayUtils.isNotEmpty(smartSizes) && smartSizes.length == 1 ? smartSizes[0] : null,
+                        jpegQuality);
             }
-            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "")) : "") +
+
+            if (StringUtils.isEmpty(src)) {
+                src = baseResourcePath + DOT + selector + DOT;
+                if (smartSizes.length == 1) {
+                    src += jpegQuality + DOT + smartSizes[0] + DOT + extension;
+                } else {
+                    src += extension;
+                }
+                src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                     (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+            }
+
             if (!isDecorative) {
                 link = linkHandler.getLink(resource);
             } else {

@@ -34,6 +34,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegati
 import com.adobe.granite.ui.components.ExpressionCustomizer;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
 import com.adobe.granite.ui.components.rendercondition.SimpleRenderCondition;
+import com.day.cq.i18n.I18n;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.components.ComponentManager;
 
@@ -48,6 +49,8 @@ import com.day.cq.wcm.api.components.ComponentManager;
 public class ImageDelegateRenderCondition extends SlingSafeMethodsServlet {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/renderconditions/imagedelegate";
+    private static final String IMAGE_DELEGATE_DESCRIPTION = "imageDelegateDescription";
+    private static final String IMAGE_DELEGATE_DESCRIPTION_TEXT = "Image rendering is delegated to the {0} component.";
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
@@ -67,8 +70,11 @@ public class ImageDelegateRenderCondition extends SlingSafeMethodsServlet {
                         hasImageDelegation = true;
                         com.day.cq.wcm.api.components.Component delegate = componentManager.getComponent(imageDelegate);
                         if (delegate != null && delegate.isAccessible()) {
+                            I18n i18n = new I18n(request);
                             ExpressionCustomizer customizer = ExpressionCustomizer.from(request);
                             customizer.setVariable(AbstractImageDelegatingModel.IMAGE_DELEGATE, delegate);
+                            customizer.setVariable(IMAGE_DELEGATE_DESCRIPTION, i18n.getVar(IMAGE_DELEGATE_DESCRIPTION_TEXT, null,
+                                    i18n.getVar(delegate.getTitle())));
                         }
                     }
                 }

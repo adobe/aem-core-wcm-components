@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Objects;
 
+import com.adobe.cq.wcm.core.components.models.Component;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImplTest {
 
     private static final String TEST_BASE = "/teaser/v2";
+    private static final String TEASER_25 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-25";
 
     @BeforeEach
     protected void setUp() {
@@ -57,6 +60,15 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     }
 
     @Test
+    protected void testTeaserWithTitleAndDescriptionFromCurrentPage() {
+        Teaser teaser = getTeaserUnderTest(TEASER_25);
+        assertEquals("Teasers Test", teaser.getTitle());
+        // < and > are expected escaped, because the page properties provide only a plain text field for the page description
+        assertEquals("Teasers description from &lt;page properties&gt;", teaser.getDescription());
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser25"));
+    }
+
+    @Test
     @Override
     protected void testFullyConfiguredTeaser() {
         Teaser teaser = getTeaserUnderTest(TEASER_1);
@@ -70,18 +82,6 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertValidLink(teaser.getLink(), LINK);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser1"));
-    }
-
-    @Test
-    @Override
-    protected void testTeaserWithoutLink() {
-        Teaser teaser = getTeaserUnderTest(TEASER_4);
-        // TODO: make the following assert pass
-        /*
-        assertThat(testLogger.getLoggingEvents(),
-                hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
-         */
-        assertNull(teaser.getLink(), "The link should be null");
     }
 
     @Test
@@ -113,11 +113,20 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser20"));
     }
 
+    /**
+     * Asserts that the ID property on the image resource is set to the Teaser ID + `-image`.
+     */
+    @Test
+    protected void testTeaserImageID() {
+        Teaser teaser = getTeaserUnderTest(TEASER_21);
+        assertEquals(teaser.getId() + "-image", teaser.getImageResource().getValueMap().get(Component.PN_ID, String.class));
+    }
+
     @Test
     protected void testImageFromPage_withoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_21);
         Link link = teaser.getLink();
-        assertNull(link, "link should be null");
+        assertNull(link);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser21"));
     }
 
@@ -169,4 +178,10 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser24"));
     }
 
+    @Test
+    @Override
+    protected void testTeaserWithExternalLinkFromAction() {
+        Teaser teaser = getTeaserUnderTest(TEASER_7);
+        assertEquals("http://www.adobe.com", teaser.getActions().get(0).getURL());
+    }
 }
