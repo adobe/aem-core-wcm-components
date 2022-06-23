@@ -24,7 +24,6 @@
     helpPath="https://www.adobe.com/go/aem_cmp_title_v2">
     <content
         jcr:primaryType="nt:unstructured"
-        granite:class="cmp-title__design-editor"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
             <tabs
@@ -42,60 +41,70 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <items jcr:primaryType="nt:unstructured">
-                                    <allowedHeadingElements
+                                    <inputgroup
                                         jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                        fieldDescription="The heading HTML elements that are allowed to be selected by an author for the title type."
-                                        fieldLabel="Allowed Heading Elements"
-                                        multiple="{Boolean}true"
-                                        name="./allowedTypes"
-                                        ordered="{Boolean}true"
-                                        required="{Boolean}true">
+                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                        text="Allowed Types / Sizes for Authors"/>
+                                    <field
+                                        cq:showOnCreate="{Boolean}true"
+                                        granite:class="core-title-sizes-allowed"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                                        fieldDescription="The HTML element to use for the download title. If no type is configured, the default (H3) will be used.">
                                         <items jcr:primaryType="nt:unstructured">
                                             <h1
                                                 jcr:primaryType="nt:unstructured"
-                                                selected="{Boolean}true"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="true"
+                                                name="./allowedTypes"
                                                 text="H1"
                                                 value="h1"/>
                                             <h2
                                                 jcr:primaryType="nt:unstructured"
-                                                selected="{Boolean}true"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="true"
+                                                name="./allowedTypes"
                                                 text="H2"
                                                 value="h2"/>
                                             <h3
                                                 jcr:primaryType="nt:unstructured"
-                                                selected="{Boolean}true"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="true"
+                                                name="./allowedTypes"
                                                 text="H3"
                                                 value="h3"/>
                                             <h4
                                                 jcr:primaryType="nt:unstructured"
-                                                selected="{Boolean}true"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="true"
+                                                name="./allowedTypes"
                                                 text="H4"
                                                 value="h4"/>
                                             <h5
                                                 jcr:primaryType="nt:unstructured"
-                                                selected="{Boolean}true"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="true"
+                                                name="./allowedTypes"
                                                 text="H5"
                                                 value="h5"/>
                                             <h6
                                                 jcr:primaryType="nt:unstructured"
-                                                selected="{Boolean}true"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="true"
+                                                name="./allowedTypes"
                                                 text="H6"
                                                 value="h6"/>
                                         </items>
-                                    </allowedHeadingElements>
+                                    </field>
                                     <type
+                                        granite:class="core-title-size-default"
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                        fieldDescription="The default heading HTML element used for the title type."
-                                        fieldLabel="Default Heading Element of the Title"
-                                        name="./type"
-                                        ordered="{Boolean}true"
-                                        wrapperClass="foundation-toggleable">
+                                        fieldLabel="Default Type / Size"
+                                        name="./type">
                                         <items jcr:primaryType="nt:unstructured">
                                             <h1
                                                 jcr:primaryType="nt:unstructured"
-                                                selected="{Boolean}true"
                                                 text="H1"
                                                 value="h1"/>
                                             <h2

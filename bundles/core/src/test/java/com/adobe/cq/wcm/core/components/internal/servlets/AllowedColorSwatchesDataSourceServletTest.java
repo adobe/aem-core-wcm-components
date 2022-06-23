@@ -17,8 +17,13 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import com.google.common.collect.ImmutableMap;
+
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
@@ -29,6 +34,8 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
 public class AllowedColorSwatchesDataSourceServletTest {
@@ -50,10 +57,33 @@ public class AllowedColorSwatchesDataSourceServletTest {
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         Assertions.assertNotNull(dataSource);
-        dataSource.iterator().forEachRemaining(resource -> {
+        Iterable<Resource> iterable = dataSource::iterator;
+        List<Resource> dataSourceList = StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+        assertEquals(3, dataSourceList.size());
+        for (Resource resource: dataSourceList) {
             ValueMap props = resource.getValueMap();
             String allowedColorSwatch = props.get(AllowedColorSwatchesDataSourceServlet.PN_COLOR_VALUE, String.class);
             Assertions.assertTrue(Arrays.asList(expected).contains(allowedColorSwatch), "Allowed color swatches values are not as expected");
-        });
+        }
+    }
+
+    @Test
+    public void testDataSourceWithSuffix() throws Exception {
+        AllowedColorSwatchesDataSourceServlet dataSourceServlet = new AllowedColorSwatchesDataSourceServlet();
+        String[] expected = new String[] {COLOR_VALUE_1, COLOR_VALUE_2, COLOR_VALUE_3};
+        context.build().resource("/content", ImmutableMap.of("sling:resourceType", "/restype")).commit();
+        context.contentPolicyMapping("/restype", ImmutableMap.of(AllowedColorSwatchesDataSourceServlet.PN_ALLOWED_COLOR_SWATCHES, expected));
+        context.requestPathInfo().setSuffix("/content");
+        dataSourceServlet.doGet(context.request(), context.response());
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        Assertions.assertNotNull(dataSource);
+        Iterable<Resource> iterable = dataSource::iterator;
+        List<Resource> dataSourceList = StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+        assertEquals(3, dataSourceList.size());
+        for (Resource resource: dataSourceList) {
+            ValueMap props = resource.getValueMap();
+            String allowedColorSwatch = props.get(AllowedColorSwatchesDataSourceServlet.PN_COLOR_VALUE, String.class);
+            Assertions.assertTrue(Arrays.asList(expected).contains(allowedColorSwatch), "Allowed color swatches values are not as expected");
+        };
     }
 }

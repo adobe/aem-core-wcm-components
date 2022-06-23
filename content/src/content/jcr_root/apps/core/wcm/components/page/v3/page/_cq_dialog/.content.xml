@@ -120,7 +120,11 @@
                                                 fileNameParameter="./cq:featuredimage/fileName"
                                                 fileReferenceParameter="./cq:featuredimage/fileReference"
                                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
-                                                name="./cq:featuredimage/file"/>
+                                                name="./cq:featuredimage/file">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="/cq:featuredimage"/>
+                                            </file>
                                             <type
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
@@ -137,7 +141,11 @@
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                         fieldDescription="Textual alternative of the meaning or function of the image, for visually impaired readers."
                                                         fieldLabel="Alternative Text"
-                                                        name="./cq:featuredimage/alt"/>
+                                                        name="./cq:featuredimage/alt">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cq-msm-lockable="/cq:featuredimage"/>
+                                                    </alt>
                                                     <altValueFromDAM
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -146,7 +154,11 @@
                                                         name="./cq:featuredimage/altValueFromDAM"
                                                         text="Inherit - Value taken from the DAM asset"
                                                         uncheckedValue="false"
-                                                        value="{Boolean}true"/>
+                                                        value="{Boolean}true">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cq-msm-lockable="/cq:featuredimage"/>
+                                                    </altValueFromDAM>
                                                 </items>
                                             </alternativeGroup>
                                         </items>

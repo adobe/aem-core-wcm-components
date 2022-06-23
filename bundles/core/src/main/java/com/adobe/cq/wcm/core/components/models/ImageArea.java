@@ -62,6 +62,7 @@ public interface ImageArea {
      *
      * @see Link of the image area.
      * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     * @return a {@link com.adobe.cq.wcm.core.components.commons.link.Link} object
      */
     default Link getLink() {
         return null;

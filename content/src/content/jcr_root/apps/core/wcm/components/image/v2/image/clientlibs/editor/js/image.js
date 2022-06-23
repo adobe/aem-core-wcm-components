@@ -31,10 +31,13 @@
     var areDMFeaturesEnabled;
     var fileReference;
     var altInputSelector = 'input[name="./alt"]';
+    var altInputAlertIconSelector = "input[name='./alt'] + coral-icon[icon='alert']";
     var altCheckboxSelector = 'coral-checkbox[name="./altValueFromDAM"]';
     var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
     var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
     var smartCropRenditionDropDownSelector = ".cmp-image__editor-dynamicmedia-smartcroprendition";
+    var metaDataTabSelector = "coral-tab[data-foundation-tracking-event*='metadata']";
+    var metaDataTabAlertIconSelector = "coral-tab[data-foundation-tracking-event*='metadata'] coral-icon[icon='alert']";
     var imagePropertiesRequest;
     var imagePath;
     var smartCropRenditionFromJcr;
@@ -116,6 +119,8 @@
             candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
+
+        improveAltTextValidation();
     });
 
     $(window).on("focus", function() {
@@ -357,6 +362,71 @@
     function resetSelectField(field) {
         if (field[0]) {
             field[0].clear();
+        }
+    }
+
+    /**
+     * Improve error validation for alternative text inherited from asset's description
+     */
+    function improveAltTextValidation() {
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === "attributes") {
+                    var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+                    var alertIcon = $(altInputAlertIconSelector);
+                    var metaDataTab = $(metaDataTabSelector);
+                    var metaDataTabAlertIcon = $(metaDataTabAlertIconSelector);
+                    if (mutation.attributeName === "data-seeded-value") {
+                        if (isAltCheckboxChecked) {
+                            if ($(altInputSelector).val()) {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).removeClass("is-invalid");
+                                    alertIcon.hide();
+                                    metaDataTab.removeClass("is-invalid");
+                                    metaDataTabAlertIcon.hide();
+                                }
+                            } else {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).addClass("is-invalid");
+                                    alertIcon.show();
+                                    metaDataTab.addClass("is-invalid");
+                                    metaDataTabAlertIcon.show();
+                                }
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "disabled") {
+                        if ($(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).removeClass("is-invalid");
+                                alertIcon.hide();
+                                metaDataTab.removeClass("is-invalid");
+                                metaDataTabAlertIcon.hide();
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "invalid") {
+                        if (!$(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).addClass("is-invalid");
+                                alertIcon.show();
+                                metaDataTab.addClass("is-invalid");
+                                metaDataTabAlertIcon.show();
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        var altInput = document.querySelector(altInputSelector);
+        if (altInput) {
+            observer.observe(altInput, {
+                attributeFilter: ["data-seeded-value", "disabled", "invalid"]
+            });
         }
     }
 
