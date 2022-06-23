@@ -50,10 +50,9 @@ import com.adobe.aem.wcm.seo.SeoTags;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -343,7 +342,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             if (!getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
                 this.canonicalUrl = canonicalUrl != null
                     ? canonicalUrl
-                    : linkHandler.getLink(currentPage).map(Link::getExternalizedURL).orElse(null);
+                    : linkHandler.get(currentPage).build().getExternalizedURL();
             }
         }
         return canonicalUrl;

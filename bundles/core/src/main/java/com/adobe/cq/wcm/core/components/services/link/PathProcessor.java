@@ -25,7 +25,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A service that can process a given path. This service is used by the
- * {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler} to build the final
+ * {@link com.adobe.cq.wcm.core.components.commons.link.LinkHandler} to build the final
  * {@link com.adobe.cq.wcm.core.components.commons.link.Link}. The path processor chain of the Link Handler can be extended by a custom
  * path processor which has to get a higher service ranking than the
  * {@link com.adobe.cq.wcm.core.components.internal.link.DefaultPathProcessor}.
@@ -40,7 +40,7 @@ public interface PathProcessor {
      * @param path the path which should be processed
      * @param request the current request
      * @return {@code true} if the processor should handle the given path, otherwise {@code false} and the next path processor is applied by
-     * the {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler} if present
+     * the {@link com.adobe.cq.wcm.core.components.commons.link.LinkHandler} if present
      */
     boolean accepts(@NotNull String path, @NotNull SlingHttpServletRequest request);
 
@@ -70,7 +70,7 @@ public interface PathProcessor {
 
 
     /**
-     * Processes the HTML attributes for the {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler}
+     * Processes the HTML attributes for the {@link com.adobe.cq.wcm.core.components.commons.link.LinkHandler}
      * @param path the path of the linked resource
      * @param htmlAttributes the origin HTML attributes of the link
      * @return a map of the processed HTML attributes for the link

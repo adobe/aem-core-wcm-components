@@ -16,13 +16,12 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
-import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -43,7 +42,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * The link for this list item.
      */
-    protected Optional<Link<Page>> link;
+    protected Link link;
 
     /**
      * Construct a list item for a given page.
@@ -59,9 +58,9 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
                             final Component component) {
         super(parentId, page.getContentResource(), component);
         this.parentId = parentId;
-        this.link = linkHandler.getLink(page);
-        if (this.link.isPresent()) {
-            this.page = link.get().getReference();
+        this.link = linkHandler.get(page).build();
+        if (this.link.isValid()) {
+            this.page = (Page) link.getReference();
         } else {
             this.page = page;
         }
@@ -71,12 +70,12 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     @JsonIgnore
     @Nullable
     public Link<Page> getLink() {
-        return link.orElse(null);
+        return link;
     }
 
     @Override
     public String getURL() {
-        return link.map(Link::getURL).orElse(null);
+        return link.getURL();
     }
 
     @Override
@@ -138,7 +137,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     protected PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
             .withTitle(this::getTitle)
-            .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
+            .withLinkUrl(() -> link.getMappedURL())
             .build();
     }
 }

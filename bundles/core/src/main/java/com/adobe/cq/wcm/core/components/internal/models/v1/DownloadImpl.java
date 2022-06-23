@@ -22,6 +22,7 @@ import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -43,8 +44,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;
@@ -92,7 +92,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
     @SlingObject
     private ResourceResolver resourceResolver;
 
-    private String url;
+    private Link link;
 
     private boolean titleFromAsset = false;
 
@@ -171,11 +171,8 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
                     if (calendar != null) {
                         lastModified = calendar.getTimeInMillis();
                     }
-                    if (StringUtils.isNotEmpty(format)) {
-                        extension = mimeTypeService.getExtension(format);
-                    }
 
-                    url = linkHandler.getLink(getDownloadUrl(file) + "/" + filename, null).map(Link::getURL).orElse(null);
+                    link = linkHandler.get(getDownloadUrl(file) + "/" + filename).build();
                     size = FileUtils.byteCountToDisplaySize(getFileSize(fileContent));
                 }
             }
@@ -208,7 +205,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
                         extension = FilenameUtils.getExtension(filename);
                     }
 
-                    url = linkHandler.getLink(getDownloadUrl(downloadResource), null).map(Link::getURL).orElse(null);
+                    link = linkHandler.get(getDownloadUrl(downloadResource)).build();
 
                     if (titleFromAsset) {
                         title = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);
@@ -242,7 +239,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
 
     @Override
     public String getUrl() {
-        return url;
+        return (link != null) ? link.getURL() : null;
     }
 
     @Override

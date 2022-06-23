@@ -17,8 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -91,13 +89,13 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Override
     protected void initLink() {
         // use the target page as the link if it exists
-        link = linkHandler.getLink(resource, Link.PN_LINK_URL);
+        link = linkHandler.get(resource).setLinkUrlPropertyName(Link.PN_LINK_URL).build();
     }
 
     @Override
     @Nullable
     public Link getLink() {
-        return link.orElse(null);
+        return link.isValid() ? link : null;
     }
 
     @Override

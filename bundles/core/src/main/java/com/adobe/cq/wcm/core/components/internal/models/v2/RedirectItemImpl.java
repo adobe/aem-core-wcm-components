@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RedirectItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl {
@@ -33,7 +33,7 @@ public class RedirectItemImpl extends com.adobe.cq.wcm.core.components.internal.
     @Override
     @Nullable
     public Link getLink() {
-        return link.orElse(null);
+        return link;
     }
 
     @Override

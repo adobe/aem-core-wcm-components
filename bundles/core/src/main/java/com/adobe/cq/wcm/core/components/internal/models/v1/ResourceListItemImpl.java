@@ -16,14 +16,13 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
-import java.util.Optional;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
@@ -34,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
-    protected Optional<Link> link;
+    protected Link link;
     /**
      * The title.
      */
@@ -70,7 +69,7 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
         lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
         path = resource.getPath();
         name = resource.getName();
-        link = linkHandler.getLink(resource);
+        link = linkHandler.get(resource).build();
     }
 
 
@@ -78,13 +77,13 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
     @NotNull
     @JsonIgnore
     public Link getLink() {
-        return link.orElse(null);
+        return link;
     }
 
     @Override
     @JsonIgnore
     public String getURL() {
-        return link.map(Link::getURL).orElse(null);
+        return link.getURL();
     }
 
     @Override

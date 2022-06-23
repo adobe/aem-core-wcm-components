@@ -16,8 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Optional;
-
 import javax.annotation.PostConstruct;
 
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
@@ -37,7 +35,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Heading;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkHandler ;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -85,7 +83,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
 
     @Self
     private LinkHandler linkHandler;
-    protected Optional<Link> link;
+    protected Link link;
 
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Heading} object for the type of this title.
@@ -105,7 +103,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
             }
         }
 
-        link = linkHandler.getLink(resource);
+        link = linkHandler.get(resource).build();
 
         if(currentStyle != null) {
             linkDisabled = currentStyle.get(Title.PN_TITLE_LINK_DISABLED, linkDisabled);
@@ -128,12 +126,12 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     @Override
     @Deprecated
     public String getLinkURL() {
-        return link.map(Link::getURL).orElse(null);
+        return link.getURL();
     }
 
     @Override
     public Link getLink() {
-        return link.orElse(null);
+        return link.isValid() ? link : null;
     }
 
     @Override
@@ -152,7 +150,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getText)
-            .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
+            .withLinkUrl(() -> link.getMappedURL())
             .build();
     }
 }

@@ -15,14 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Optional;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -35,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Button;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -76,11 +73,11 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @Self
     protected LinkHandler linkHandler;
-    protected Optional<Link> link;
+    protected Link link;
 
     @PostConstruct
     private void initModel() {
-        link = linkHandler.getLink(resource, "link");
+        link = linkHandler.get(resource).setLinkUrlPropertyName("link").build();
     }
 
     @Override
@@ -90,7 +87,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @Override
     public String getLink() {
-        return link.map(Link::getURL).orElse(null);
+        return link.getURL();
     }
 
     @Override
@@ -116,7 +113,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getText)
-            .withLinkUrl(() ->link.map(Link::getMappedURL).orElse(null))
+            .withLinkUrl(() ->link.getMappedURL())
             .build();
     }
 }

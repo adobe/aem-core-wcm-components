@@ -77,7 +77,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     @Nullable
     public Link getImageLink() {
-        return imageLinkHidden ? null : link.orElse(null);
+        return (imageLinkHidden || (link != null && !link.isValid())) ? null : link;
     }
 
     @Override

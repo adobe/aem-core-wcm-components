@@ -25,6 +25,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -38,7 +40,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.adobe.cq.wcm.core.components.models.Teaser;
@@ -359,17 +362,17 @@ public class Utils {
 
             if (StringUtils.isNotEmpty(linkURL)) {
                 // the inherited resource is the featured image of the linked page
-                Optional<Link> link = linkHandler.getLink(resource);
+                Optional<Link> link = Optional.of(linkHandler.get(resource).build());
                 inheritedResource = link
                         .map(link1 -> (Page) link1.getReference())
                         .map(ComponentUtils::getFeaturedImage)
                         .orElse(null);
             } else if (actionsEnabled && firstAction != null) {
                 // the inherited resource is the featured image of the first action's page (the resource is assumed to be a teaser)
-                inheritedResource = Optional.of(linkHandler.getLink(firstAction, Teaser.PN_ACTION_LINK))
+                inheritedResource = Optional.of(linkHandler.get(firstAction).setLinkUrlPropertyName(Teaser.PN_ACTION_LINK).build())
                         .map(link1 -> {
-                            if (link1.isPresent()) {
-                                Page linkedPage = (Page) link1.get().getReference();
+                            if (Optional.of(link1).isPresent()) {
+                                Page linkedPage = (Page) link1.getReference();
                                 return Optional.ofNullable(linkedPage)
                                         .map(ComponentUtils::getFeaturedImage)
                                         .orElse(null);
@@ -422,6 +425,35 @@ public class Utils {
 
         }
         return resource;
+    }
+
+    /**
+     * Attempts to resolve the redirect chain starting from the given page, avoiding loops.
+     *
+     * @param page The starting {@link Page}
+     * @return A pair of {@link Page} and {@link String} the redirect chain resolves to. The page can be the original page, if no redirect
+     * target is defined or even {@code null} if the redirect chain does not resolve to a valid page, in this case one should use the right
+     * part of the pair (the {@link String} redirect target).
+     */
+    @NotNull
+    public static Pair<Page, String> resolveRedirects(@Nullable final Page page) {
+        Page result = page;
+        String redirectTarget = null;
+        if (page != null && page.getPageManager() != null) {
+            Set<String> redirectCandidates = new LinkedHashSet<>();
+            redirectCandidates.add(page.getPath());
+            while (result != null && StringUtils
+                    .isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
+                result = page.getPageManager().getPage(redirectTarget);
+                if (result != null) {
+                    if (!redirectCandidates.add(result.getPath())) {
+                        LOGGER.warn("Detected redirect loop for the following pages: {}.", redirectCandidates);
+                        break;
+                    }
+                }
+            }
+        }
+        return new ImmutablePair<>(result, redirectTarget);
     }
 
 }
