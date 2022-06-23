@@ -990,6 +990,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
 
     @Test
     void testStaticDesignWidthAndQuality() {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img.2000", "png");
         Resource mockResource = mock(Resource.class);
         ResourceResolver mockResourceResolver = mock(ResourceResolver.class);
         when(mockResource.getResourceResolver()).thenReturn(mockResourceResolver);
@@ -999,14 +1001,14 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         when(mockDesigner.getStyle(mockResource)).thenReturn(mockStyle);
         String[] configuredWidths = { "400", "600", "800"};
         when(mockStyle.get(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0])).thenReturn(configuredWidths);
-        List<Integer> allowedWidths = servlet.getAllowedRenditionWidths(mockResource);
+        List<Integer> allowedWidths = servlet.getAllowedRenditionWidths(mockResource, requestResponsePair.getLeft());
         Assertions.assertEquals(
                 Arrays.stream(configuredWidths).map(Integer::valueOf).sorted().collect(Collectors.toList()),
                 allowedWidths);
 
         int configuredQuality = 75;
         when(mockStyle.get(Image.PN_DESIGN_JPEG_QUALITY, AdaptiveImageServlet.DEFAULT_JPEG_QUALITY)).thenReturn(configuredQuality);
-        Integer allowedQuality = servlet.getAllowedJpegQuality(mockResource);
+        Integer allowedQuality = servlet.getAllowedJpegQuality(mockResource, requestResponsePair.getLeft());
         Assertions.assertEquals(configuredQuality, allowedQuality.intValue());
     }
 
