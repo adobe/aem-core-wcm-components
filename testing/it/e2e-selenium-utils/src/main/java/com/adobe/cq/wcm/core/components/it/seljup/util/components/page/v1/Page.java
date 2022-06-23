@@ -53,6 +53,7 @@ public class Page {
     private static String advanceConfig = "[name='./cq:conf']";
     private static String robotsTags = "name='./cq:robotsTags'";
     private static String generateSitemap = "[name='./sling:sitemapRoot']";
+    private static String canonicalUrl = "[name='./cq:canonicalUrl']";
 
     public void setOnTime() throws InterruptedException {
         CalendarPicker calendarPicker = new CalendarPicker(onTime);
@@ -205,5 +206,13 @@ public class Page {
     public boolean getGenerateSitemap() {
         CoralCheckbox coralCheckbox = new CoralCheckbox(generateSitemap);
         return coralCheckbox.isChecked();
+    }
+
+    public void setCanonicalUrl(String page) {
+        Commons.selectInAutocomplete(canonicalUrl, page);
+    }
+
+    public String getCanonicalUrl() {
+        return $("input" + canonicalUrl).getValue();
     }
 }
