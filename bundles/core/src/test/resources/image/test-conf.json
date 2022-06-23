@@ -139,6 +139,14 @@
                                         "alt"               : "Adobe Logo",
                                         "jcr:title"         : "Adobe Logo",
                                         "linkURL"           : "/content/test"
+                                    },
+                                    "image_template_no_date"             : {
+                                        "jcr:primaryType"   : "nt:unstructured",
+                                        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_no_date.png",
+                                        "sling:resourceType": "core/wcm/components/image",
+                                        "alt"               : "Adobe Logo",
+                                        "jcr:title"         : "Adobe Logo",
+                                        "linkURL"           : "/content/test"
                                     }
                                 }
                             }

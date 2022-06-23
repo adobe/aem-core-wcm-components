@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:rep="internal"
+    cq:lastModified="{Date}2017-05-23T23:27:45.908+02:00"
+    cq:lastModifiedBy="admin"
+    jcr:lastModified="{Date}2017-05-23T23:27:45.908+02:00"
+    jcr:lastModifiedBy="admin"
+    jcr:mixinTypes="[rep:AccessControllable]"
+    jcr:primaryType="rep:User"
+    jcr:uuid="4c0e5d2e-6706-3118-b0f1-023f463879a8"
+    rep:authorizableId="corecomp"
+    rep:password="\{SHA-256}e115760037a082d9-1000-7a8b85e864befca3fbb3be3e99b4417ae13ee466e62ffe4b5372933bf5a3e9de"
+    rep:principalName="corecomp">
+    <profile
+        jcr:mixinTypes="[granite:Ranking,mix:title]"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="cq/security/components/profile"
+        familyName="Test"
+        givenName="CoreComponent"/>
+</jcr:root>

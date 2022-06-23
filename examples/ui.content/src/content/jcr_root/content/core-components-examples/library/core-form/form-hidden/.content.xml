@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Form Hidden"
+        jcr:description="Hidden Form Component "
+        sling:resourceType="core-components-examples/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid
+                cq:styleIds="[1545309110033]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <text
+                    cq:styleIds="[1644862132301]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;h1>Form Hidden&lt;sub>v2&lt;/sub>&lt;/h1>"
+                    textIsRich="true"/>
+                <text_1408574198
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Form allows a user to create a form out of different form compontents to collect information and send it to a chosen adress.&amp;nbsp;&lt;/p>"
+                    textIsRich="true"/>
+                <teaser
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Technical Documentation"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/tree/master/content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <teaser_556024830
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Using Core Components"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                    linkURL="https://docs.adobe.com/content/help/en/experience-manager-core-components/using/components/forms/form-hidden.html"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <title_865328580
+                    cq:styleIds="[1544759664489]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Examples"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h2"/>
+                <title
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Form Hidden field"
+                    sling:resourceType="core-components-examples/components/title"/>
+                <text_1910564414
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Core Form Container with a Hidden form fiel as child element.&amp;nbsp;&lt;/p>"
+                    textIsRich="true"/>
+                <demo
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                            <hidden
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/form/hidden"
+                                id="asset-url"
+                                name="Asset-URL"
+                                value="asset-url"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo>
+            </responsivegrid>
+        </root>
+    </jcr:content>
+</jcr:root>

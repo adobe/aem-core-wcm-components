@@ -34,10 +34,12 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
+import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import io.wcm.testing.mock.aem.MockLanguageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -49,13 +51,13 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(AemContextExtension.class)
-class NavigationImplTest {
+public class NavigationImplTest {
 
     private static final String TEST_BASE = "/navigation";
 
-    private final AemContext context = CoreComponentTestContext.newAemContext();
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private static final String CONTEXT_PATH = "/core";
+    protected static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT = "/content/navigation";
     private static final String NAV_COMPONENT_1 = TEST_ROOT + "/jcr:content/root/navigation-component-1";
     private static final String NAV_COMPONENT_2 = TEST_ROOT + "/navigation-2/jcr:content/root/navigation-component-2";
@@ -81,12 +83,23 @@ class NavigationImplTest {
     private static final String NAV_COMPONENT_16 = TEST_ROOT + "/jcr:content/root/navigation-component-16";
     private static final String NAV_COMPONENT_17 = TEST_ROOT + "/jcr:content/root/navigation-component-17";
     private static final String NAV_COMPONENT_18 = "/content/navigation-redirect-chain/jcr:content/root/navigation-component-18";
+    private static final String NAV_COMPONENT_19 = TEST_ROOT + "/jcr:content/root/navigation-component-19";
 
+
+    protected String testBase;
+    protected String resourceType;
 
     @BeforeEach
-    void setUp() throws WCMException {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
-        context.load().json("/navigation/test-conf.json", "/conf");
+    protected void setUp() throws WCMException {
+        testBase = TEST_BASE;
+        resourceType = NavigationImpl.RESOURCE_TYPE;
+        internalSetup();
+    }
+
+    protected void internalSetup() throws WCMException {
+        context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
+        context.load().json(testBase + "/test-conf.json", "/conf");
+        context.registerService(LanguageManager.class, new MockLanguageManager());
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
         when(relationshipManager.getLiveRelationships(any(Resource.class), isNull(), isNull())).then(
                 invocation -> {
@@ -136,7 +149,7 @@ class NavigationImplTest {
     }
 
     @Test
-    void testFullNavigationTree() {
+    protected void testFullNavigationTree() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_1);
         Object[][] expectedPages = {
                 {"/content/navigation", 0, true, "/content/navigation.html"},
@@ -153,14 +166,14 @@ class NavigationImplTest {
                 {"/content/navigation/navigation-2", 1, false, "/content/navigation/navigation-2.html"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation1"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation1"));
     }
 
     @Test
-    void testNavigationNoRoot() {
+    protected void testNavigationNoRoot() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_2);
         assertEquals(0, navigation.getItems().size(), "Didn't expect any navigation items.");
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation4"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation4"));
     }
 
     /**
@@ -168,7 +181,7 @@ class NavigationImplTest {
      * jcr:content node, but does have legitimate sub-pages.
      */
     @Test
-    public void testNavigationRootMissingJCRContent() {
+    protected void testNavigationRootMissingJCRContent() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_11);
         Object[][] expectedPages = {
             {"/content/navigation-missing-jcr-content/navigation-1", 0, false, "/content/navigation-missing-jcr-content/navigation-1.html"},
@@ -178,7 +191,7 @@ class NavigationImplTest {
     }
 
     @Test
-    void testNavigationWithRootInDifferentTree() {
+    protected void testNavigationWithRootInDifferentTree() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_3);
         Object[][] expectedPages = {
                 {"/content/navigation/navigation-1/navigation-1-1", 0, false, "/content/navigation/navigation-1/navigation-1-1.html"},
@@ -192,11 +205,11 @@ class NavigationImplTest {
                         "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation5"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation5"));
     }
 
     @Test
-    void testPartialNavigationTreeNotOnlyCurrentPage() {
+    protected void testPartialNavigationTreeNotOnlyCurrentPage() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_4);
         Object[][] expectedPages = {
                 {"/content/navigation/navigation-1", 0, true, "/navigation-1-vanity"},
@@ -204,12 +217,12 @@ class NavigationImplTest {
                 {"/content/navigation/navigation-2", 0, false, "/content/navigation/navigation-2.html"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation7"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation7"));
     }
 
     @Test
-    void testPartialNavigationTreeContentPolicyNotOnlyCurrentPage() {
-        context.contentPolicyMapping(NavigationImpl.RESOURCE_TYPE,
+    protected void testPartialNavigationTreeContentPolicyNotOnlyCurrentPage() {
+        context.contentPolicyMapping(resourceType,
                 "navigationRoot", "/content/navigation",
                 "collectAllPages", false,
                 "structureDepth", 2);
@@ -220,11 +233,11 @@ class NavigationImplTest {
                 {"/content/navigation/navigation-2", 0, false, "/content/navigation/navigation-2.html"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation8"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation8"));
     }
 
     @Test
-    void testCollectionOnTemplate() {
+    protected void testCollectionOnTemplate() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_IN_TEMPLATE);
         Object[][] expectedPages = {
                 {"/content/navigation/navigation-1", 0, false, "/navigation-1-vanity"},
@@ -243,7 +256,7 @@ class NavigationImplTest {
     }
 
     @Test
-    void testNavigationWithLanguageMaster() {
+    protected void testNavigationWithLanguageMaster() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_6);
         Object[][] expectedPages = {
                 {"/content/navigation-3-region/us/en", 0, true, "/content/navigation-3-region/us/en.html"},
@@ -254,7 +267,7 @@ class NavigationImplTest {
     }
 
     @Test
-    void testNavigationWithLanguageMasterLeafsMissing() {
+    protected void testNavigationWithLanguageMasterLeafsMissing() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_7);
         Object[][] expectedPages = {
                 {"/content/navigation-3-region/us/en/1", 0, false, "/content/navigation-3-region/us/en/1.html"},
@@ -266,7 +279,7 @@ class NavigationImplTest {
     }
 
     @Test
-    void testNavigationWithLiveCopyTree() {
+    protected void testNavigationWithLiveCopyTree() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_8);
         Object[][] expectedPages = {
                 {"/content/navigation-livecopy", 0, true, "/content/navigation-livecopy.html"},
@@ -296,7 +309,7 @@ class NavigationImplTest {
     }
 
     @Test
-    void activeRedirectTest() {
+    protected void activeRedirectTest() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_9);
         Object[][] expectedPages = {
                 {"/content/navigation", 0, true, "/content/navigation.html"},
@@ -311,10 +324,12 @@ class NavigationImplTest {
                         "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
                 {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
                         "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
-                {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+                {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"},
+                {"/content/navigation-redirect/navigation-3", 1, false, "https://www.adobe.com"},
+                {"/content/navigation-redirect/navigation-4", 1, false, "https://www.adobe.com"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation9"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation9"));
     }
 
     /**
@@ -331,7 +346,7 @@ class NavigationImplTest {
             {"/content/navigation-redirect-chain", 1, true, "/content/navigation-redirect-chain.html"},
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation18"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation18"));
     }
     /**
      * Test to verify #945: if shadowing is disabled Redirecting pages should be displayed instead of redirect targets
@@ -352,10 +367,12 @@ class NavigationImplTest {
                 "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1.html"},
             {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
                 "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
-            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"},
+            {"/content/navigation-redirect/navigation-3", 1, false, "/content/navigation-redirect/navigation-3.html"},
+            {"/content/navigation-redirect/navigation-4", 1, false, "/content/navigation-redirect/navigation-4.html"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation16"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation16"));
     }
 
     /**
@@ -377,17 +394,19 @@ class NavigationImplTest {
                 "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
             {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
                 "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
-            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"},
+            {"/content/navigation-redirect/navigation-3", 1, false, "https://www.adobe.com"},
+            {"/content/navigation-redirect/navigation-4", 1, false, "https://www.adobe.com"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation17"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation17"));
     }
 
     /**
      * Test to verify #189 : Null Pointer Exception in NavigationImpl when Redirect Target is not found
      */
     @Test
-    void invalidRedirectTest() {
+    protected void invalidRedirectTest() {
         // get the navigation component
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_10);
         // get the elements, an NPE will cause the test to fail
@@ -395,7 +414,7 @@ class NavigationImplTest {
     }
 
     @Test
-    public void testStructureStartZero() {
+    protected void testStructureStartZero() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_12);
         Object[][] expectedPages = {
             {"/content/navigation", 0, true, "/content/navigation.html"},
@@ -412,11 +431,11 @@ class NavigationImplTest {
             {"/content/navigation/navigation-2", 1, false, "/content/navigation/navigation-2.html"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation12"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation12"));
     }
 
     @Test
-    public void testStructureStartOne() {
+    protected void testStructureStartOne() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_13);
         Object[][] expectedPages = {
             {"/content/navigation/navigation-1", 0, false, "/navigation-1-vanity"},
@@ -432,11 +451,11 @@ class NavigationImplTest {
             {"/content/navigation/navigation-2", 0, false, "/content/navigation/navigation-2.html"}
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation13"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation13"));
     }
 
     @Test
-    public void testStructureStartTwo() {
+    protected void testStructureStartTwo() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_14);
         Object[][] expectedPages = {
             {"/content/navigation/navigation-1/navigation-1-1", 0, false, "/content/navigation/navigation-1/navigation-1-1.html"},
@@ -450,23 +469,35 @@ class NavigationImplTest {
                 "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
-        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation14"));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation14"));
     }
 
-    private Navigation getNavigationUnderTest(String resourcePath) {
+    @Test
+    protected void testVanityPaths() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_19);
+        Object[][] expectedPages = {
+                {"/content/navigation-vanity-paths", 0, false, "/nav0.html"},
+                {"/content/navigation-vanity-paths/navigation-1", 1, false, "/nav1.html"},
+                {"/content/navigation-vanity-paths/navigation-2", 1, false, "/nav2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(testBase, "navigation19"));
+    }
+
+    protected Navigation getNavigationUnderTest(String resourcePath) {
         Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath("/core");
         Component component = mock(Component.class);
-        when(component.getResourceType()).thenReturn(NavigationImpl.RESOURCE_TYPE);
+        when(component.getResourceType()).thenReturn(resourceType);
         SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Navigation.class);
     }
 
-    private List<NavigationItem> getNavigationItems(Navigation navigation) {
+    protected List<NavigationItem> getNavigationItems(Navigation navigation) {
         List<NavigationItem> items = new LinkedList<>();
         for (NavigationItem item : navigation.getItems()) {
             collect(items, item);
@@ -474,22 +505,40 @@ class NavigationImplTest {
         return items;
     }
 
-    private void collect(List<NavigationItem> items, NavigationItem navigationItem) {
+    protected void collect(List<NavigationItem> items, NavigationItem navigationItem) {
         items.add(navigationItem);
         for (NavigationItem item : navigationItem.getChildren()) {
             collect(items, item);
         }
     }
 
-    private void verifyNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
+    protected void verifyNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
         assertEquals(expectedPages.length, items.size(), "The navigation tree contains a different number of pages than expected.");
         int index = 0;
         for (NavigationItem item : items) {
             assertEquals(expectedPages[index][0], item.getPath(), "The navigation tree doesn't seem to have the correct order.");
             assertEquals(expectedPages[index][1], item.getLevel(), "The navigation item's level is not what was expected: " + item.getPath());
             assertEquals(expectedPages[index][2], item.isActive(), "The navigation item's active state is not what was expected: " + item.getPath());
-            assertEquals(CONTEXT_PATH + expectedPages[index][3], item.getURL(), "The navigation item's URL is not what was expected: " + item.getPath());
+            String expectedURL = expectedPages[index][3].toString();
+            if (!expectedURL.startsWith("http")) {
+                expectedURL = CONTEXT_PATH + expectedURL;
+            }
+            assertEquals(expectedURL, item.getURL(), "The navigation item's URL is not what was expected: " + item.getPath());
+            verifyNavigationItem(expectedPages[index], item);
             index++;
         }
     }
+
+    @SuppressWarnings("deprecation")
+    protected void verifyNavigationItem(Object[] expectedPage, NavigationItem item) {
+        assertEquals(expectedPage[0], item.getPath(), "The navigation tree doesn't seem to have the correct order.");
+        assertEquals(expectedPage[1], item.getLevel(), "The navigation item's level is not what was expected: " + item.getPath());
+        assertEquals(expectedPage[2], item.isActive(), "The navigation item's active state is not what was expected: " + item.getPath());
+        String expectedURL = expectedPage[3].toString();
+        if (!expectedURL.startsWith("http")) {
+            expectedURL = CONTEXT_PATH + expectedURL;
+        }
+        assertEquals(expectedURL, item.getURL(), "The navigation item's URL is not what was expected: " + item.getPath());
+    }
+
 }

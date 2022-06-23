@@ -40,6 +40,7 @@ import com.adobe.granite.ui.components.ds.SimpleDataSource;
     service = { Servlet.class },
     property = {
         "sling.servlet.resourceTypes=" + EmbedDesignTabsDataSourceServlet.RESOURCE_TYPE_V1,
+        "sling.servlet.resourceTypes=" + EmbedDesignTabsDataSourceServlet.RESOURCE_TYPE_V2,
         "sling.servlet.methods=GET",
         "sling.servlet.extensions=html"
     }
@@ -47,6 +48,7 @@ import com.adobe.granite.ui.components.ds.SimpleDataSource;
 public class EmbedDesignTabsDataSourceServlet extends SlingSafeMethodsServlet {
 
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/embed/v1/datasources/embeddesigntabs";
+    public static final String RESOURCE_TYPE_V2 = "core/wcm/components/embed/v2/datasources/embeddesigntabs";
 
     private static final long serialVersionUID = 7672484310019288602L;
     private static final String NN_DESIGN_DIALOG = "cq:design_dialog";

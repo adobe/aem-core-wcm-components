@@ -16,25 +16,21 @@
 package com.adobe.cq.wcm.core.components.internal.services;
 
 import java.util.List;
-import java.util.TreeSet;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.caconfig.management.ConfigurationManager;
 import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
-import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
 import com.day.cq.wcm.api.reference.Reference;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(AemContextExtension.class)
 class CaConfigReferenceProviderTest {
@@ -53,36 +49,52 @@ class CaConfigReferenceProviderTest {
     void setUp() {
         context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
         context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
-        MockContextAwareConfig.registerAnnotationClasses(context, HtmlPageItemsConfig.class);
-        ConfigurationManager mockConfigurationManager = Mockito.mock(ConfigurationManager.class);
-        Mockito.when(mockConfigurationManager.getConfigurationNames()).thenReturn(new TreeSet<String>() {{
-            add(HtmlPageItemsConfig.class.getName());
-            add(DataLayerConfig.class.getName());
-            add(PdfViewerCaConfig.class.getName());
-        }});
-        context.registerService(ConfigurationManager.class, mockConfigurationManager);
+        MockContextAwareConfig.registerAnnotationClasses(context, HtmlPageItemsConfig.class, DataLayerConfig.class);
         caConfigReferenceProvider = context.registerInjectActivateService(new CaConfigReferenceProvider());
     }
 
     @Test
     void testFindReferences() {
         Resource resource = context.resourceResolver().getResource(TEST_CA_COMPONENT);
+        assertNotNull(resource);
         List<Reference> references = caConfigReferenceProvider.findReferences(resource);
-        assertEquals(1, references.size());
-        Reference reference = references.get(0);
+        assertEquals(2, references.size());
+        Reference reference = getReference(references, HtmlPageItemsConfig.class);
+        assertNotNull(reference);
         Resource expectedReferenceRes = context.resourceResolver().getResource(SLING_CONFIGS_ROOT + "/" + HtmlPageItemsConfig.class.getName());
         assertEquals("caconfig", reference.getType());
-        assertEquals(HtmlPageItemsConfig.class.getName(), reference.getName());
         if (expectedReferenceRes != null) {
             assertEquals(expectedReferenceRes.getPath(), reference.getResource().getPath());
         }
         assertEquals(1602683813696L, reference.getLastModified());
+        reference = getReference(references, DataLayerConfig.class);
+        assertNotNull(reference);
+        assertEquals(1623074213696L, reference.getLastModified());
+    }
+
+    private Reference getReference(List<Reference> references, Class<?> clazz) {
+        for (Reference refItem: references) {
+            if (refItem.getName().equals(clazz.getName())) {
+                return refItem;
+            }
+        }
+        return null;
     }
 
     @Test
     void testNoReferences() {
         Resource resource = context.resourceResolver().getResource(TEST_NO_CA_COMPONENT);
+        assertNotNull(resource);
         List<Reference> references = caConfigReferenceProvider.findReferences(resource);
         assertEquals(0, references.size());
+    }
+
+    @Test
+    void testDisabled() {
+        Resource resource = context.resourceResolver().getResource(TEST_CA_COMPONENT);
+        CaConfigReferenceProvider referenceProvider = context.registerInjectActivateService(new CaConfigReferenceProvider(), "enabled", false);
+        List<Reference> references = referenceProvider.findReferences(resource);
+        assertTrue(references.isEmpty());
+
     }
 }

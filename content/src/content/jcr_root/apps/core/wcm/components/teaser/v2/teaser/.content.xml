@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    cq:icon="card"
+    jcr:description="Teaser block allowing a combination of an image, title, rich text description and actions/links"
+    jcr:primaryType="cq:Component"
+    jcr:title="Teaser (v2)"
+    sling:resourceSuperType="core/wcm/components/image"
+    imageDelegate="core/wcm/components/image/v3/image"
+    componentGroup=".core-wcm"/>

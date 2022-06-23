@@ -20,6 +20,7 @@
     var NN_PREFIX = "item_";
     var PN_PANEL_TITLE = "cq:panelTitle";
     var PN_RESOURCE_TYPE = "sling:resourceType";
+    var PN_COPY_FROM = "./@CopyFrom";
     var POST_SUFFIX = ".container.html";
 
     var selectors = {
@@ -27,12 +28,13 @@
         add: "[data-cmp-hook-childreneditor='add']",
         insertComponentDialog: {
             self: "coral-dialog.InsertComponentDialog",
-            selectList: "coral-selectlist"
+            selectList: ".InsertComponentDialog-list"
         },
         item: {
             icon: "[data-cmp-hook-childreneditor='itemIcon']",
             input: "[data-cmp-hook-childreneditor='itemTitle']",
-            hiddenInput: "[data-cmp-hook-childreneditor='itemResourceType']"
+            hiddenItemResourceType: "[data-cmp-hook-childreneditor='itemResourceType']",
+            hiddenItemTemplatePath: "[data-cmp-hook-childreneditor='itemTemplatePath']"
         }
     };
 
@@ -69,7 +71,7 @@
                             var component = item.querySelector(selectors.item.icon + " [title]").getAttribute("title");
                             var title = item.querySelector(selectors.item.input);
                             var name = (title && title.name) ? title.name.match(".?/?(.+)/.*")[1] : "";
-                            var description = component + ((title && title.value) ? ": " + title.value : "");
+                            var description = Granite.I18n.get(component) + ((title && title.value) ? ": " + Granite.I18n.get(title.value) : "");
                             items.push({
                                 name: name,
                                 description: description
@@ -169,6 +171,19 @@
             _bindEvents: function() {
                 var that = this;
 
+                function getSelectListChangeEvent(onCloud) {
+                    return (onCloud ? "click" : "coral-selectlist:change");
+                }
+
+                function getSelectListSelector(onCloud) {
+                    return (onCloud ? "coral-list-item" : null);
+                }
+
+                function getSelectListItems(event, onCloud) {
+                    return (onCloud ? ns.components.find(event.target.closest("coral-list-item").value)
+                        : ns.components.find(event.detail.selection.value));
+                }
+
                 if (ns) {
                     Coral.commons.ready(that._elements.add, function() {
                         that._elements.add.on("click", function() {
@@ -183,20 +198,25 @@
 
                                 var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
                                 var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
+                                var onCloud = selectList.toString() === "Coral.List";
 
                                 // next frame to ensure we remove the default event handler
                                 Coral.commons.nextFrame(function() {
-                                    selectList.off("coral-selectlist:change");
-                                    selectList.on("coral-selectlist:change" + NS, function(event) {
+
+                                    selectList.off(getSelectListChangeEvent(onCloud));
+                                    selectList.on(getSelectListChangeEvent(onCloud) + NS, getSelectListSelector(onCloud), function(event) {
                                         var resourceType = "";
                                         var componentTitle = "";
-
+                                        var templatePath = "";
+                                        var components = "";
                                         insertComponentDialog.hide();
 
-                                        var components = ns.components.find(event.detail.selection.value);
+                                        components = getSelectListItems(event, onCloud);
+
                                         if (components.length > 0) {
                                             resourceType = components[0].getResourceType();
                                             componentTitle = components[0].getTitle();
+                                            templatePath = components[0].getTemplatePath();
 
                                             var item = that._elements.self.items.add(new Coral.Multifield.Item());
 
@@ -209,9 +229,14 @@
                                                 input.name = "./" + name + "/" + PN_PANEL_TITLE;
                                                 input.placeholder = Granite.I18n.get(componentTitle);
 
-                                                var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
-                                                hiddenInput.value = resourceType;
-                                                hiddenInput.name = "./" + name + "/" + PN_RESOURCE_TYPE;
+                                                var hiddenItemResourceType = item.querySelectorAll(selectors.item.hiddenItemResourceType)[0];
+                                                hiddenItemResourceType.value = resourceType;
+                                                hiddenItemResourceType.name = "./" + name + "/" + PN_RESOURCE_TYPE;
+                                                if (templatePath) {
+                                                    var hiddenItemTemplatePath = item.querySelectorAll(selectors.item.hiddenItemTemplatePath)[0];
+                                                    hiddenItemTemplatePath.value = templatePath;
+                                                    hiddenItemTemplatePath.name = "./" + name + "/" + PN_COPY_FROM;
+                                                }
 
                                                 var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
                                                 var icon = that._renderIcon(components[0]);
@@ -222,10 +247,9 @@
                                         }
                                     });
                                 });
-
                                 // unbind events on dialog close
-                                channel.one("dialog-closed", function() {
-                                    selectList.off("coral-selectlist:change" + NS);
+                                channel.one("coral-overlay:beforeclose", function() {
+                                    selectList.off(getSelectListChangeEvent(onCloud) + NS);
                                 });
                             }
                         });

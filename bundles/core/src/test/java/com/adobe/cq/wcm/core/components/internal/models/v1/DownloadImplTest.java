@@ -69,6 +69,7 @@ class DownloadImplTest {
     private static final String DOWNLOAD_WITH_DAM_PROPERTIES = "download-with-dam-properties";
     private static final String DOWNLOAD_FULLY_CONFIGURED_FILE = "download-fully-configured-file";
     private static final String DOWNLOAD_WITH_TITLE_TYPE = "download-with-title-type";
+    private static final String DOWNLOAD_WITHOUT_ACTION_TEXT = "download-without-action-text";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -84,7 +85,7 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_1);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
+        assertEquals(CONTEXT_PATH + PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
@@ -101,7 +102,7 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_4);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_WITHOUT_SIZE_PROP_PATH + "." + DownloadServlet.SELECTOR + ".pdf", download.getUrl());
+        assertEquals(CONTEXT_PATH + PDF_ASSET_WITHOUT_SIZE_PROP_PATH + "." + DownloadServlet.SELECTOR + ".pdf", download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
@@ -114,7 +115,7 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_3);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
-        assertEquals(PDF_FILE_DOWNLOAD_PATH, download.getUrl());
+        assertEquals(CONTEXT_PATH + PDF_FILE_DOWNLOAD_PATH, download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FORMAT_STRING, download.getFormat());
@@ -127,7 +128,7 @@ class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_2);
         assertEquals(DAM_TITLE, download.getTitle());
         assertEquals(DAM_DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
+        assertEquals(CONTEXT_PATH + PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
@@ -166,6 +167,17 @@ class DownloadImplTest {
     }
 
     @Test
+    void testDownloadWithHiddenTitleLink() {
+        Resource mockResource = mock(Resource.class);
+        MockValueMap mockValueMap = new MockValueMap(mockResource);
+        mockValueMap.put(Download.PN_HIDE_TITLE_LINK, true);
+        Style mockStyle = new MockStyle(mockResource, mockValueMap);
+
+        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertTrue(download.hideTitleLink(), "Expected title link to be hidden");
+    }
+
+    @Test
     void testDownloadWithCustomActionText() {
         Download download = getDownloadUnderTest(DOWNLOAD_1,
                 Download.PN_ACTION_TEXT, STYLE_ACTION_TEST);
@@ -177,7 +189,7 @@ class DownloadImplTest {
     void testDownloadWithoutActionText() {
         Download downloadWithoutActionText = getDownloadUnderTest(DOWNLOAD_2);
         assertNull(downloadWithoutActionText.getActionText(), "Expected action text is not correct");
-        Utils.testJSONExport(downloadWithoutActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITH_DAM_PROPERTIES));
+        Utils.testJSONExport(downloadWithoutActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITHOUT_ACTION_TEXT));
     }
 
     private Download getDownloadUnderTest(String resourcePath, Object ... properties) {

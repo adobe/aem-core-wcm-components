@@ -25,9 +25,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -47,7 +49,9 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -92,23 +96,24 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     private SlingModelFilter slingModelFilter;
 
     @Self
-    private SlingHttpServletRequest request;
+    protected LinkHandler linkHandler;
 
     protected String[] keywords = new String[0];
     protected String designPath;
     protected String staticDesignPath;
     protected String title;
+    protected String description;
     protected String brandSlug;
-    
+
     protected String[] clientLibCategories = new String[0];
     protected Calendar lastModifiedDate;
     protected String templateName;
 
     protected static final String DEFAULT_TEMPLATE_EDITOR_CLIENTLIB = "wcm.foundation.components.parsys.allowedcomponents";
     protected static final String PN_CLIENTLIBS = "clientlibs";
-    
+
     protected static final String PN_BRANDSLUG = "brandSlug";
-    
+
     private Map<String, ComponentExporter> childModels = null;
     private String resourceType;
     private Set<String> resourceTypes;
@@ -119,6 +124,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @PostConstruct
     protected void initModel() {
         title = currentPage.getTitle();
+        description = currentPage.getDescription();
         if (StringUtils.isBlank(title)) {
             title = currentPage.getName();
         }
@@ -195,6 +201,11 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @Override
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     @Override
@@ -328,7 +339,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
             .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
             .withDescription(() -> this.pageProperties.get(NameConstants.PN_DESCRIPTION, String.class))
             .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
-            .withUrl(() -> Utils.getURL(request, currentPage))
+            .withUrl(() -> linkHandler.getLink(currentPage).map(Link::getURL).orElse(null))
             .withLanguage(this::getLanguage)
             .build();
     }

@@ -18,8 +18,9 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
@@ -30,16 +31,14 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     protected List<NavigationItem> children = Collections.emptyList();
     protected int level;
     protected boolean active;
+    private boolean current;
 
-    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children,
+    public NavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level,
+                              List<NavigationItem> children,
                               String parentId, Component component) {
-        this(page, active, request, level, children, parentId, PROP_DISABLE_SHADOWING_DEFAULT, component);
-    }
-
-    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children,
-                              String parentId, boolean isShadowingDisabled, Component component) {
-        super(request, page, parentId, isShadowingDisabled, component);
+        super(linkHandler, page, parentId, component);
         this.active = active;
+        this.current = current;
         this.level = level;
         this.children = children;
     }
@@ -54,6 +53,11 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public boolean isCurrent() {
+        return current;
     }
 
     @Override

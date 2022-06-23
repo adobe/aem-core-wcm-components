@@ -15,6 +15,7 @@
                             "children": [],
                             "level": 2,
                             "active": true,
+                            "current": true,
                             "url": "/core/content/navigation-redirect-chain.html",
                             "title": "Navigation",
                             "dataLayer": {
@@ -29,6 +30,7 @@
                     ],
                     "level": 1,
                     "active": true,
+                    "current": true,
                     "url": "/core/content/navigation-redirect-chain.html",
                     "title": "Navigation",
                     "dataLayer": {
@@ -46,6 +48,7 @@
                     "children": [],
                     "level": 1,
                     "active": true,
+                    "current": true,
                     "url": "/core/content/navigation-redirect-chain.html",
                     "title": "Navigation",
                     "dataLayer": {
@@ -63,6 +66,7 @@
                     "children": [],
                     "level": 1,
                     "active": true,
+                    "current": true,
                     "url": "/core/content/navigation-redirect-chain.html",
                     "title": "Navigation",
                     "dataLayer": {
@@ -77,6 +81,7 @@
             ],
             "level": 0,
             "active": true,
+            "current": true,
             "url": "/core/content/navigation-redirect-chain.html",
             "title": "Navigation",
             "dataLayer": {

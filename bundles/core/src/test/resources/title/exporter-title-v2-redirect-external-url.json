@@ -1,0 +1,21 @@
+{
+    "id": "title-a13a8ea101",
+    "linkDisabled": false,
+    "linkURL": "https://www.adobe.com",
+    "dataLayer": {
+        "title-a13a8ea101": {
+            "repo:modifyDate": "2016-01-13T15:14:51Z",
+            "xdm:linkURL": "https://www.adobe.com",
+            "@type": "core/wcm/components/title/v2/title"
+        }
+    },
+    "link": {
+        "url": "https://www.adobe.com",
+        "valid": true,
+        "attributes": {
+            "aria-label": "Adobe",
+            "title": "Adobe title"
+        }
+    },
+    ":type": "core/wcm/components/title/v2/title"
+}

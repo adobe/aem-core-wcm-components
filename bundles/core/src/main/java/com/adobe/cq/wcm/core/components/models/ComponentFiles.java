@@ -67,6 +67,6 @@ public interface ComponentFiles {
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default List<String> getPaths() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }

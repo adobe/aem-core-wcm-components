@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,93 +27,128 @@ import com.adobe.cq.wcm.core.components.models.Title;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(AemContextExtension.class)
-class TitleImplTest {
+public class TitleImplTest {
 
     private static final String TEST_BASE = "/title";
-    private static final String TEST_PAGE = "/content/title";
-    private static final String TITLE_RESOURCE_JCR_TITLE = TEST_PAGE + "/jcr:content/par/title-jcr-title";
-    private static final String TITLE_RESOURCE_JCR_TITLE_TYPE = TEST_PAGE + "/jcr:content/par/title-jcr-title-type";
-    private static final String TITLE_NOPROPS = TEST_PAGE + "/jcr:content/par/title-noprops";
-    private static final String TITLE_WRONGTYPE = TEST_PAGE + "/jcr:content/par/title-wrongtype";
-    private static final String TITLE_RESOURCE_JCR_TITLE_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-v2";
-    private static final String TITLE_RESOURCE_JCR_TITLE_LINK_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-link-v2";
+    protected static final String TEST_PAGE = "/content/title";
+    protected static final String TITLE_RESOURCE_JCR_TITLE = TEST_PAGE + "/jcr:content/par/title-jcr-title";
+    protected static final String TITLE_RESOURCE_JCR_TITLE_TYPE = TEST_PAGE + "/jcr:content/par/title-jcr-title-type";
+    protected static final String TITLE_NOPROPS = TEST_PAGE + "/jcr:content/par/title-noprops";
+    protected static final String TITLE_WRONGTYPE = TEST_PAGE + "/jcr:content/par/title-wrongtype";
+    protected static final String TITLE_RESOURCE_JCR_TITLE_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-v2";
+    protected static final String TITLE_RESOURCE_JCR_TITLE_LINK_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-link-v2";
+    protected static final String TITLE_RESOURCE_TITLE_V2_REDIRECT_CHAIN = TEST_PAGE + "/jcr:content/par/title-v2-redirect-chain";
+    protected static final String TITLE_RESOURCE_TITLE_V2_REDIRECT_EXTERNAL_URL = TEST_PAGE + "/jcr:content/par/title-v2-redirect-external-url";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
+    protected String testBase;
+    protected String resourceType;
+
     @BeforeEach
-    void setUp() {
-        context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
+    protected void setUp() {
+        testBase = TEST_BASE;
+        resourceType = TitleImpl.RESOURCE_TYPE_V1;
+        internalSetup();
+    }
+
+    protected void internalSetup() {
+        context.load().json(testBase + "/test-content.json", TEST_PAGE);
     }
 
     @Test
-    void testExportedType() {
+    protected void testExportedType() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE);
-        assertEquals(TitleImpl.RESOURCE_TYPE_V1, title.getExportedType());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
+        assertEquals(resourceType, title.getExportedType());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE));
     }
 
     @Test
-    void testGetTitleFromResource() {
+    protected void testGetTitleFromResource() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE);
         assertNull(title.getType());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE));
     }
 
     @Test
-    void testGetTitleFromResourceWithElementInfo() {
+    protected void testGetTitleFromResourceWithElementInfo() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_TYPE);
         assertEquals("Hello World", title.getText());
         assertEquals("h2", title.getType());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_TYPE));
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_TYPE));
     }
 
     @Test
-    void testGetTitleResourcePageStyleType() {
+    protected void testGetTitleResourcePageStyleType() {
         Title title = getTitleUnderTest(TITLE_NOPROPS,
                 Title.PN_DESIGN_DEFAULT_TYPE, "h2");
         assertEquals("h2", title.getType());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_NOPROPS));
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_NOPROPS));
     }
 
     @Test
-    void testGetTitleFromCurrentPageWithWrongElementInfo() {
+    protected void testGetTitleFromCurrentPageWithWrongElementInfo() {
         Title title = getTitleUnderTest(TITLE_WRONGTYPE);
         assertNull(title.getType());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_WRONGTYPE));
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_WRONGTYPE));
     }
 
     @Test
-    void testV2JSONExport() {
+    @SuppressWarnings("deprecation")
+    protected void testV2JSONExport() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_V2);
         assertNull(title.getLinkURL());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_V2));
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_V2));
     }
 
     @Test
-    void testGetLink() {
+    @SuppressWarnings("deprecation")
+    protected void testGetLinkUrl() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
         assertEquals("https://www.adobe.com", title.getLinkURL());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
     }
 
     @Test
-    void testTitleWithLinksDisabled() {
-        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2,
-                Title.PN_TITLE_LINK_DISABLED, true);
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, "title-linkdisabled"));
+    protected void testGetLink() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
+        assertValidLink(title.getLink(), "https://www.adobe.com", "World", "World title");
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
     }
 
-    private Title getTitleUnderTest(String resourcePath, Object ... properties) {
+    @Test
+    protected void testGetLinkFromRedirectChain() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_TITLE_V2_REDIRECT_CHAIN);
+        assertValidLink(title.getLink(), "/content/title/redirect/redirect-page-3.html", "Should Redirect to Page 3 (accessibility label)", "Should Redirect to Page 3 (title)");
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_TITLE_V2_REDIRECT_CHAIN));
+    }
+
+    @Test
+    protected void testGetLinkFromRedirectToExternalURL() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_TITLE_V2_REDIRECT_EXTERNAL_URL);
+        assertValidLink(title.getLink(), "https://www.adobe.com", "Adobe", "Adobe title");
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, TITLE_RESOURCE_TITLE_V2_REDIRECT_EXTERNAL_URL));
+    }
+
+    @Test
+    protected void testTitleWithLinksDisabled() {
+        Utils.enableDataLayer(context, true);
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2,
+                Title.PN_TITLE_LINK_DISABLED, true);
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(testBase, "title-linkdisabled"));
+    }
+
+    protected Title getTitleUnderTest(String resourcePath, Object ... properties) {
         Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);
         }
-        MockSlingHttpServletRequest request = context.request();
-        return request.adaptTo(Title.class);
+        return context.request().adaptTo(Title.class);
     }
 }

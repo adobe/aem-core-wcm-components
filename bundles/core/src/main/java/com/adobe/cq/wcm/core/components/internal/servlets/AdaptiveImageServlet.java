@@ -16,11 +16,14 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +56,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
-import com.adobe.cq.wcm.core.components.internal.resource.ImageResourceWrapper;
+import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
@@ -68,14 +72,19 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentManager;
+import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
+import com.day.cq.wcm.commons.WCMUtils;
 import com.day.cq.wcm.foundation.WCMRenditionPicker;
 import com.day.image.Layer;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
 
 /**
  * Servlet for adaptive images, can render images with different widths based on policies and requested width.
@@ -103,7 +112,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
     private int maxInputWidth;
-    
+
     private AdaptiveImageServletMetrics metrics;
 
     @SuppressFBWarnings(justification = "This field needs to be transient")
@@ -112,7 +121,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
-    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics, 
+    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics,
             int defaultResizeWidth, int maxInputWidth) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
@@ -182,10 +191,17 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 component = componentCandidate;
             }
 
+            LinkHandler linkHandler = request.adaptTo(LinkHandler.class);
+            Style currentStyle = WCMUtils.getStyle(request);
+            Page currentPage = Optional.ofNullable(resourceResolver.adaptTo(PageManager.class))
+                    .map(pageManager -> pageManager.getContainingPage(request.getResource()))
+                    .orElse(null);
+            Resource wrappedImageResourceWithInheritance = getWrappedImageResourceWithInheritance(component, linkHandler, currentStyle, currentPage);
+            ImageComponent imageComponent = new ImageComponent(wrappedImageResourceWithInheritance);
 
-            ImageComponent imageComponent = new ImageComponent(component);
-            if (imageComponent.source == Source.NONEXISTING) {
-                LOGGER.error("The image from {} does not have a valid file reference.", component.getPath());
+            if (imageComponent.source == Source.NOCONTENT || imageComponent.source == Source.NONEXISTING) {
+                LOGGER.error("Either the image from {} does not have a valid file reference" +
+                        " or the containing page does not have a valid featured image", component.getPath());
                 metrics.markImageErrors();
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
@@ -247,7 +263,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 metrics.markImageStreamed();
             }
         } catch (IllegalArgumentException e) {
-            LOGGER.error("Invalid image request", e.getMessage());
+            LOGGER.error("Invalid image request", e);
             metrics.markImageErrors();
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } finally {
@@ -277,13 +293,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return null;
     }
 
-    private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality,
-                                         Asset asset, String
-                                                 imageType, String imageName) throws IOException {
+    @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "Scanning generated code of try-with-resources")
+    protected void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality,
+                                         Asset asset, String imageType, String imageName) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
         if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
             LOGGER.debug("GIF or SVG asset detected; will render the original rendition.");
-            stream(response, asset.getOriginal().getStream(), imageType, imageName);
+            metrics.markOriginalRenditionUsed();
+            try (InputStream is = asset.getOriginal().getStream()) {
+                if (is != null) {
+                    stream(response, is, imageType, imageName);
+                }
+            }
             return;
         }
         int rotationAngle = getRotation(componentProperties);
@@ -315,45 +336,53 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     }
                 }
                 layer = getLayer(getOriginal(asset));
-                if (Math.abs(scaling - 1.0D) != 0) {
-                    Rectangle scaledRectangle = new Rectangle(
-                            (int) (rectangle.x * scaling),
-                            (int) (rectangle.y * scaling),
-                            (int) (rectangle.getWidth() * scaling),
-                            (int) (rectangle.getHeight() * scaling)
-                    );
-                    layer.crop(scaledRectangle);
-                } else {
-                    layer.crop(rectangle);
+                if (layer != null) {
+                    if (Math.abs(scaling - 1.0D) != 0) {
+                        Rectangle scaledRectangle = new Rectangle(
+                                (int) (rectangle.x * scaling),
+                                (int) (rectangle.y * scaling),
+                                (int) (rectangle.getWidth() * scaling),
+                                (int) (rectangle.getHeight() * scaling)
+                        );
+                        layer.crop(scaledRectangle);
+                    } else {
+                        layer.crop(rectangle);
+                    }
+                    appliedTransformation = true;
                 }
-                appliedTransformation = true;
             }
             if (rotationAngle != 0) {
                 if (layer == null) {
-                    layer = getLayer(getBestRendition(asset, resizeWidth));
+                    layer = getLayer(getBestRendition(asset, resizeWidth, imageType));
                 }
-                layer.rotate(rotationAngle);
-                LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
-                appliedTransformation = true;
+                if (layer != null) {
+                    layer.rotate(rotationAngle);
+                    LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
+                    appliedTransformation = true;
+                }
             }
             if (flipHorizontally) {
                 if (layer == null) {
-                    layer = getLayer(getBestRendition(asset, resizeWidth));
+                    layer = getLayer(getBestRendition(asset, resizeWidth, imageType));
                 }
-                layer.flipHorizontally();
-                LOGGER.debug("Flipped image horizontally.");
-                appliedTransformation = true;
+                if (layer != null) {
+                    layer.flipHorizontally();
+                    LOGGER.debug("Flipped image horizontally.");
+                    appliedTransformation = true;
+                }
             }
             if (flipVertically) {
                 if (layer == null) {
-                    layer = getLayer(getBestRendition(asset, resizeWidth));
+                    layer = getLayer(getBestRendition(asset, resizeWidth, imageType));
                 }
-                layer.flipVertically();
-                LOGGER.debug("Flipped image vertically.");
-                appliedTransformation = true;
+                if (layer != null) {
+                    layer.flipVertically();
+                    LOGGER.debug("Flipped image vertically.");
+                    appliedTransformation = true;
+                }
             }
             if (!appliedTransformation) {
-                EnhancedRendition rendition = getBestRendition(asset, resizeWidth);
+                EnhancedRendition rendition = getBestRendition(asset, resizeWidth, imageType);
                 Dimension dimension = rendition.getDimension();
                 if (dimension != null) {
                     // keeping aspect ratio
@@ -364,41 +393,43 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
                         layer = getLayer(rendition);
-                        if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
-                                ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension))) {
-                            LOGGER.debug("Adding default (white) background to a transparent PNG: {}/{}", asset.getPath(),
-                                    rendition.getName());
-                            layer.setBackground(Color.white);
+                        if (layer != null) {
+                            if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
+                                    ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension))) {
+                                LOGGER.debug("Adding default (white) background to a transparent PNG: {}/{}", asset.getPath(),
+                                        rendition.getName());
+                                layer.setBackground(Color.white);
+                            }
+                            layer.resize(resizeWidth, resizeHeight);
+                            response.setContentType(imageType);
+                            LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
+                            layer.write(imageType, quality, response.getOutputStream());
+                        } else {
+                            streamOrConvert(response, rendition, imageType, imageName, resizeWidth, quality);
                         }
-                        layer.resize(resizeWidth, resizeHeight);
-                        response.setContentType(imageType);
-                        LOGGER.debug("Resizing asset {}/{} to requested width of {}px; rendering.",asset.getPath(), rendition.getName(), resizeWidth);
-                        layer.write(imageType, quality, response.getOutputStream());
                     } else {
-                        LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
-                            asset.getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
-                        stream(response, rendition.getStream(), imageType, imageName);
+                        streamOrConvert(response, rendition, imageType, imageName, resizeWidth, quality);
                     }
                 } else {
-                    LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
-                            asset.getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
-                    stream(response, rendition.getStream(), imageType, imageName);
+                    streamOrConvert(response, rendition, imageType, imageName, resizeWidth, quality);
                 }
             } else {
                 resizeAndStreamLayer(response, layer, imageType, resizeWidth, quality);
             }
         } else {
             LOGGER.debug("No need to perform any processing on asset {}; rendering.", asset.getPath());
-            stream(response, getOriginal(asset).getStream(), imageType, imageName);
+            try (InputStream is = getOriginal(asset).getStream()) {
+                if (is != null) {
+                    stream(response, is, imageType, imageName);
+                }
+            }
         }
     }
 
     private void transformAndStreamFile(SlingHttpServletResponse response, ValueMap componentProperties, int
             resizeWidth, double quality, Resource imageFile, String imageType, String imageName) throws
             IOException {
-        InputStream is = null;
-        try {
-            is = imageFile.adaptTo(InputStream.class);
+        try (InputStream is = imageFile.adaptTo(InputStream.class)) {
             if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
                     || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
                 LOGGER.debug("GIF or SVG file detected; will render the original file.");
@@ -428,14 +459,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     if (flipVertically) {
                         layer.flipVertically();
                     }
+                    if (layer.getBackground().getTransparency() != Transparency.OPAQUE &&
+                            ("jpg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
+                                    || "jpeg".equalsIgnoreCase(mimeTypeService.getExtension(imageType)))) {
+                        LOGGER.debug("Adding default (white) background to a transparent JPG: {}", imageFile.getPath());
+                        layer.setBackground(Color.white);
+                    }
                     resizeAndStreamLayer(response, layer, imageType, resizeWidth, quality);
                 } else {
                     LOGGER.debug("No need to perform any processing on file {}; rendering.", imageFile.getPath());
                     stream(response, is, imageType, imageName);
                 }
             }
-        } finally {
-            IOUtils.closeQuietly(is);
         }
     }
 
@@ -449,7 +484,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param resizeWidth the resize width
      * @throws IOException if the streaming of the {@link Layer} into the response's output stream cannot be performed
      */
-    private void resizeAndStreamLayer(SlingHttpServletResponse response, Layer layer, String imageType, int resizeWidth, double quality)
+    protected void resizeAndStreamLayer(SlingHttpServletResponse response, Layer layer, String imageType, int resizeWidth, double quality)
             throws IOException {
         int width = layer.getWidth();
         int height = layer.getHeight();
@@ -472,12 +507,21 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      *
      * @param rendition - the rendition
      * @return a layer for the rendition
-     * @throws IOException if a {@link Layer} cannot be created for the given rendition
+     *
+     * @return {@code null} if the rendition is not supported
      */
-    @NotNull
-    private Layer getLayer(@NotNull EnhancedRendition rendition) throws IOException {
+    @Nullable
+    private Layer getLayer(@NotNull EnhancedRendition rendition) {
         AssetHandler assetHandler = assetStore.getAssetHandler(rendition.getMimeType());
-        return new Layer(assetHandler.getImage(rendition));
+        try {
+            BufferedImage image = assetHandler.getImage(rendition.getRendition());
+            if (image != null) {
+                return new Layer(image);
+            }
+        } catch (IOException ioex) {
+            LOGGER.debug("Unable to handle rendition " + rendition.getPath(), ioex);
+        }
+        return null;
     }
 
     /**
@@ -492,39 +536,77 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     /**
-     * Given an {@link Asset} and a specified width, this method will return the best rendition
-     * for that width (smallest rendition larger than the specified width) or the original.
+     * Given an {@link Asset}, a specified width and desired mime type, this method will return the best rendition
+     * for that width (smallest rendition larger than the specified width or largest rendition of the specified mime type)
+     * or the original.
      *
      * @param asset the asset for which to retrieve the best rendition
      * @param width the width
+     * @param mimeType the desired mime type for the rendition
      * @return a rendition that is suitable for that width
      * @throws IOException when the best suited rendition is too large for processing
      */
     @NotNull
-    private EnhancedRendition getBestRendition(@NotNull Asset asset, int width) throws IOException {
-        // Sort renditions by file size
-        SortedSet<Rendition> renditions = new TreeSet<>((o1, o2) -> Long.valueOf(o1.getSize() - o2.getSize()).intValue());
-        renditions.addAll(asset.getRenditions());
-        EnhancedRendition bestRendition = null;
-        // Find first rendition that has a width larger or equal than wanted
-        for (Rendition rendition : renditions) {
+    protected EnhancedRendition getBestRendition(@NotNull Asset asset, int width, @NotNull String mimeType) throws IOException {
+        // Sort renditions by file dimension
+        SortedSet<EnhancedRendition> matchingRenditions = new TreeSet<>(Comparator.comparingInt(o -> o.getDimension() == null ? 0 : o.getDimension().width));
+        SortedSet<EnhancedRendition> nonMatchingRenditions = new TreeSet<>(Comparator.comparingInt(o -> o.getDimension() == null ? 0 : o.getDimension().width));
+
+        for (Rendition rendition : asset.getRenditions()) {
             EnhancedRendition enhancedRendition = new EnhancedRendition(rendition);
-            Dimension dimension = enhancedRendition.getDimension();
+            if (mimeType.equals(rendition.getMimeType())) {
+                matchingRenditions.add(enhancedRendition);
+            } else {
+                nonMatchingRenditions.add(enhancedRendition);
+            }
+
+        }
+        EnhancedRendition bestRendition;
+        if (!matchingRenditions.isEmpty()) {
+            // Find first rendition in mime-type matching set that has a width larger or equal than wanted
+            bestRendition = findBestRendition(matchingRenditions, width);
+
+            if (bestRendition == null) {
+                // If no rendition is found for the desired width, use either the original rendition or the largest rendition
+                if (mimeType.equals(asset.getMimeType())) {
+                    bestRendition = getOriginal(asset);
+                } else {
+                    bestRendition = matchingRenditions.last();
+                }
+            }
+        } else {
+            // Also try to find a suitable rendition that does not match the mime-type
+            bestRendition = findBestRendition(nonMatchingRenditions, width);
+
+            // If no rendition was found, attempt to use original
+            if (bestRendition == null) {
+                return getOriginal(asset);
+            }
+        }
+        return filter(bestRendition);
+    }
+
+    /**
+     * Tries to find first suitable renditions in a sorted set that has a width higher or equal than desired width
+     *
+     * @param renditions Sorted set of renditions
+     * @param width The desired minimum width
+     * @return The first rendition with a width higher or equal than the desired width, {@code null} if none found
+     */
+    @Nullable
+    private EnhancedRendition findBestRendition(SortedSet<EnhancedRendition> renditions, int width) {
+        for (EnhancedRendition rendition : renditions) {
+            Dimension dimension = rendition.getDimension();
             if (dimension != null) {
                 if (dimension.getWidth() >= width) {
-                    bestRendition = enhancedRendition;
-                    if (StringUtils.equals(bestRendition.getPath(), asset.getOriginal().getPath())) {
+                    if (StringUtils.equals(rendition.getPath(), rendition.getAsset().getOriginal().getPath())) {
                         metrics.markOriginalRenditionUsed();
                     }
-                    break;
+                    return rendition;
                 }
             }
         }
-        // If no rendition was found, attempt to use original
-        if (bestRendition == null) {
-            return getOriginal(asset);
-        }
-        return filter(bestRendition);
+        return null;
     }
 
     /**
@@ -560,16 +642,64 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         throw new IOException(String.format("Cannot process rendition %s due to size %s", rendition.getName(), rendition.getDimension()));
     }
 
+    /**
+     * Try to stream the rendition if it matches the mime-type or convert it. If conversion fails, stream the rendition as is.
+     *
+     * @param response the {@link HttpServletResponse} to write the rendition to
+     * @param rendition the rendition to stream
+     * @param imageType the image mime type
+     * @param imageName the image name
+     * @param resizeWidth the width to resize the rendition to
+     * @param quality the quality to use when converting the rendition
+     * @throws IOException
+     */
+    @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "Scanning generated code of try-with-resources")
+    private void streamOrConvert(@NotNull SlingHttpServletResponse response, @NotNull EnhancedRendition rendition, @NotNull String imageType,
+                                 String imageName, int resizeWidth, double quality) throws IOException {
+        Dimension dimension = rendition.getDimension();
+        if (rendition.getMimeType().equals(imageType)) {
+            LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
+                    rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
+            try (InputStream is = rendition.getStream()) {
+                if (is != null) {
+                    stream(response, is, imageType, imageName);
+                }
+            }
+        } else {
+            Layer layer = getLayer(rendition);
+            if (layer == null) {
+                LOGGER.warn("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
+                                "but the rendition is not of the requested type {}, cannot convert so serving as is",
+                        rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
+                try (InputStream is = rendition.getStream()) {
+                    if (is != null) {
+                        stream(response, is, rendition.getMimeType(), imageName);
+                    }
+                }
+            } else {
+                LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
+                                "but the rendition is not of the requested type {}, need to convert",
+                        rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
+                resizeAndStreamLayer(response, layer, imageType, 0, quality);
+            }
+        }
+    }
+
+    /**
+     * Stream an image from the given input stream.
+     *
+     * @param response the {@link HttpServletResponse} to write the image to
+     * @param inputStream the input stream to read the image from
+     * @param contentType the mime type of the image
+     * @param imageName the name of the image
+     * @throws IOException
+     */
     private void stream(@NotNull SlingHttpServletResponse response, @NotNull InputStream inputStream, @NotNull String contentType,
                         String imageName)
             throws IOException {
         response.setContentType(contentType);
         response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
-        try {
-            IOUtils.copy(inputStream, response.getOutputStream());
-        } finally {
-            IOUtils.closeQuietly(inputStream);
-        }
+        IOUtils.copy(inputStream, response.getOutputStream());
     }
 
     /**
@@ -702,7 +832,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the content policy bound to the given component.
      *
      * @param imageResource the resource identifying the accessed image component
-     * @return the content policy. May be {@code nulll} in case no content policy can be found.
+     * @return the content policy. May be {@code null} in case no content policy can be found.
      */
     private ContentPolicy getContentPolicy(@NotNull Resource imageResource) {
         ResourceResolver resourceResolver = imageResource.getResourceResolver();
@@ -715,7 +845,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     String delegatingResourceType =
                             component.getProperties().get(AbstractImageDelegatingModel.IMAGE_DELEGATE, String.class);
                     if (StringUtils.isNotEmpty(delegatingResourceType)) {
-                        imageResource = new ImageResourceWrapper(imageResource, delegatingResourceType);
+                        imageResource = new CoreResourceWrapper(imageResource, delegatingResourceType);
                     }
                 }
             }
@@ -724,6 +854,17 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             LOGGER.warn("Could not get policy manager from resource resolver!");
         }
         return null;
+    }
+
+    /**
+     * Returns the designer bound to the given component.
+     *
+     * @param imageResource the resource identifying the accessed image component
+     * @return the designer. May be {@code null} in case no designer can be found.
+     */
+    private Designer getDesigner(@NotNull Resource imageResource) {
+        ResourceResolver resourceResolver = imageResource.getResourceResolver();
+        return resourceResolver.adaptTo(Designer.class);
     }
 
     /**
@@ -755,7 +896,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      */
     private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component) throws IllegalArgumentException {
         Map<String, Integer> selectorParameterMap = new HashMap<>();
-        int width = this.defaultResizeWidth;
+        int width = this.getResizeWidth(component) > 0 ? this.getResizeWidth(component) : this.defaultResizeWidth;
         if (selectorList.size() > 1) {
             String widthString = (selectorList.size() > 2 ? selectorList.get(2) : selectorList.get(1));
             try {
@@ -803,24 +944,35 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param imageResource the resource identifying the accessed image component
      * @return the list of the allowed widths; the list will be <i>empty</i> if the component doesn't have a content policy
      */
-    private List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource) {
+    List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource) {
         List<Integer> list = new ArrayList<>();
         ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        ValueMap properties = null;
+
         if (contentPolicy != null) {
-            String[] allowedRenditionWidths = contentPolicy.getProperties()
-                    .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
+            properties = contentPolicy.getProperties();
+        } else {
+            Designer designer = getDesigner(imageResource);
+            if (designer != null) {
+                properties = designer.getStyle(imageResource);
+            }
+        }
+
+        if (properties != null) {
+            String[] allowedRenditionWidths = properties
+                .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
             for (String width : allowedRenditionWidths) {
                 try {
                     list.add(Integer.parseInt(width));
                 } catch (NumberFormatException e) {
-                    LOGGER.warn("One of the configured widths ({}) from the {} content policy is not a valid Integer.", width,
-                            contentPolicy.getPath());
+                    LOGGER.warn("One of the configured widths ({}) is not a valid Integer.", width);
                     return list;
                 }
             }
         }
         if (list.isEmpty()) {
-            list.add(this.defaultResizeWidth);
+            int width = this.getResizeWidth(imageResource) > 0 ? this.getResizeWidth(imageResource) : this.defaultResizeWidth;
+            list.add(width);
         }
         return list;
     }
@@ -831,14 +983,36 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param imageResource the resource identifying the accessed image component
      * @return the JPEG quality in the range 0..100 or {@link #DEFAULT_JPEG_QUALITY} if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
      */
-    private Integer getAllowedJpegQuality(@NotNull Resource imageResource) {
+    Integer getAllowedJpegQuality(@NotNull Resource imageResource) {
         Integer allowedJpegQuality = DEFAULT_JPEG_QUALITY;
         ContentPolicy contentPolicy = getContentPolicy(imageResource);
         if (contentPolicy != null) {
             allowedJpegQuality = contentPolicy.getProperties()
                     .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_JPEG_QUALITY, DEFAULT_JPEG_QUALITY);
+        } else {
+            Designer designer = getDesigner(imageResource);
+            if (designer != null){
+                allowedJpegQuality = designer.getStyle(imageResource)
+                    .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_JPEG_QUALITY, DEFAULT_JPEG_QUALITY);
+            }
         }
         return allowedJpegQuality;
+    }
+
+    /**
+     * Returns the allowed resize width from this component's content policy.
+     *
+     * @param imageResource the resource identifying the accessed image component
+     * @return the resize width or 0 if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
+     */
+    private int getResizeWidth(@NotNull Resource imageResource){
+        int allowedResizeWidth = 0;
+        ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        if (contentPolicy != null) {
+            allowedResizeWidth = contentPolicy.getProperties()
+                .get(Image.PN_DESIGN_RESIZE_WIDTH, 0);
+        }
+        return  allowedResizeWidth;
     }
 
     private long getRequestLastModifiedSuffix(@Nullable String suffix) {
@@ -862,6 +1036,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private enum Source {
         ASSET,
         FILE,
+        NOCONTENT,
         NONEXISTING
     }
 
@@ -871,11 +1046,15 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
         ImageComponent(@NotNull Resource component) {
             String fileReference = component.getValueMap().get(DownloadResource.PN_REFERENCE, String.class);
-            if (StringUtils.isNotEmpty(fileReference)) {
+            Resource childFileNode = component.getChild(DownloadResource.NN_FILE);
+            if (StringUtils.isEmpty(fileReference) && childFileNode == null) {
+                source = Source.NOCONTENT;
+            } else if (StringUtils.isNotEmpty(fileReference)) {
                 imageResource = component.getResourceResolver().getResource(fileReference);
-                source = Source.ASSET;
+                if (imageResource != null) {
+                    source = Source.ASSET;
+                }
             } else {
-                Resource childFileNode = component.getChild(DownloadResource.NN_FILE);
                 if (childFileNode != null) {
                     if (JcrConstants.NT_FILE.equals(childFileNode.getResourceType())) {
                         Resource jcrContent = childFileNode.getChild(JcrConstants.JCR_CONTENT);

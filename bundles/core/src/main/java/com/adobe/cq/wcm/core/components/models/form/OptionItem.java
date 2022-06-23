@@ -32,7 +32,7 @@ public interface OptionItem {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default boolean isSelected() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -42,7 +42,7 @@ public interface OptionItem {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default boolean isDisabled() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -52,7 +52,7 @@ public interface OptionItem {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getValue() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -62,6 +62,6 @@ public interface OptionItem {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getText() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }

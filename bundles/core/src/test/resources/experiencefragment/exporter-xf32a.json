@@ -1,0 +1,8 @@
+{
+    "id":"experiencefragment-a2a8f5b82b",
+    "configured": false,
+    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+    "classNames": "aem-xf empty",
+    ":itemsOrder": [],
+    ":items": {}
+}

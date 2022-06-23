@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Download"
+    sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <allowUpload
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                checked="{Boolean}false"
+                                deleteHint="{Boolean}false"
+                                fieldDescription="Allow direct asset upload from a local file system."
+                                name="./allowUpload"
+                                text="Allow upload from file system"
+                                uncheckedValue="{Boolean}false"
+                                value="{Boolean}true"/>
+                            <type
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                fieldDescription="The HTML element to use for the download title. If no type is configured, the default (H3) will be used."
+                                fieldLabel="Title Type"
+                                name="./titleType">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <def
+                                        jcr:primaryType="nt:unstructured"
+                                        text="(default)"
+                                        value=""/>
+                                    <h1
+                                        jcr:primaryType="nt:unstructured"
+                                        text="H1"
+                                        value="h1"/>
+                                    <h2
+                                        jcr:primaryType="nt:unstructured"
+                                        text="H2"
+                                        value="h2"/>
+                                    <h3
+                                        jcr:primaryType="nt:unstructured"
+                                        text="H3"
+                                        value="h3"/>
+                                    <h4
+                                        jcr:primaryType="nt:unstructured"
+                                        text="H4"
+                                        value="h4"/>
+                                    <h5
+                                        jcr:primaryType="nt:unstructured"
+                                        text="H5"
+                                        value="h5"/>
+                                    <h6
+                                        jcr:primaryType="nt:unstructured"
+                                        text="H6"
+                                        value="h6"/>
+                                </items>
+                            </type>
+                            <displaySize
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="When checked, the file size will be displayed."
+                                name="./displaySize"
+                                checked="{Boolean}true"
+                                text="Display File Size"
+                                uncheckedValue="false"
+                                value="{Boolean}true"/>
+                            <displayFormat
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="When checked, the file format will be displayed."
+                                name="./displayFormat"
+                                checked="{Boolean}true"
+                                text="Display File Format"
+                                uncheckedValue="false"
+                                value="{Boolean}true"/>
+                            <displayFilename
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="When checked, the filename will be displayed."
+                                name="./displayFilename"
+                                checked="{Boolean}true"
+                                text="Display Filename"
+                                uncheckedValue="false"
+                                value="{Boolean}true"/>
+                        </items>
+                    </properties>
+                    <styletab
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

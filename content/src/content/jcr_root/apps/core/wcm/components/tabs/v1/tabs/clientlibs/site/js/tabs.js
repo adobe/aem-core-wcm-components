@@ -19,6 +19,11 @@
 (function() {
     "use strict";
 
+    var containerUtils = window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils ? window.CQ.CoreComponents.container.utils : undefined;
+    if (!containerUtils) {
+        // eslint-disable-next-line no-console
+        console.warn("Tabs: container utilities at window.CQ.CoreComponents.container.utils are not available. This can lead to missing features. Ensure the core.wcm.components.commons.site.container client library is included on the page.");
+    }
     var dataLayerEnabled;
     var dataLayer;
 
@@ -82,15 +87,7 @@
             if (that._elements.tabpanel) {
                 refreshActive();
                 bindEvents();
-            }
-
-            // Show the tab based on deep-link-id if it matches with any existing tab item id
-            var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tabpanel");
-            if (deepLinkItemIdx) {
-                var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
-                if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
-                    navigateAndFocusTab(deepLinkItemIdx);
-                }
+                scrollToDeepLinkIdInTabs();
             }
 
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
@@ -108,6 +105,29 @@
                         }
                     }
                 });
+            }
+        }
+
+        /**
+         * Displays the panel containing the element that corresponds to the deep link in the URI fragment
+         * and scrolls the browser to this element.
+         */
+        function scrollToDeepLinkIdInTabs() {
+            if (containerUtils) {
+                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "tab", "tabpanel");
+                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                    var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
+                    if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
+                        navigateAndFocusTab(deepLinkItemIdx, true);
+                    }
+                    var hashId = window.location.hash.substring(1);
+                    if (hashId) {
+                        var hashItem = document.querySelector("[id='" + hashId + "']");
+                        if (hashItem) {
+                            hashItem.scrollIntoView();
+                        }
+                    }
+                }
             }
         }
 
@@ -164,6 +184,7 @@
          * @private
          */
         function bindEvents() {
+            window.addEventListener("hashchange", scrollToDeepLinkIdInTabs, false);
             var tabs = that._elements["tab"];
             if (tabs) {
                 for (var i = 0; i < tabs.length; i++) {
@@ -279,9 +300,13 @@
          *
          * @private
          * @param {Number} index The index of the item to navigate to
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function navigateAndFocusTab(index) {
+        function navigateAndFocusTab(index, keepHash) {
             var exActive = that._active;
+            if (!keepHash && containerUtils) {
+                containerUtils.updateUrlHash(that, "tab", index);
+            }
             navigate(index);
             focusWithoutScroll(that._elements["tab"][index]);
 
@@ -332,7 +357,7 @@
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
                 var value = data[key];
 
                 if (key.indexOf(NS) === 0) {
@@ -357,11 +382,14 @@
      * @returns {String} dataLayerId or undefined
      */
     function getDataLayerId(item) {
-        if (item && item.dataset.cmpDataLayer) {
-            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
-        } else {
-            return item.id;
+        if (item) {
+            if (item.dataset.cmpDataLayer) {
+                return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+            } else {
+                return item.id;
+            }
         }
+        return null;
     }
 
     /**
@@ -408,6 +436,10 @@
         onDocumentReady();
     } else {
         document.addEventListener("DOMContentLoaded", onDocumentReady);
+    }
+
+    if (containerUtils) {
+        window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }
 
 }());

@@ -25,6 +25,7 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
@@ -38,11 +39,13 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.LocalizationUtils;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 
@@ -70,6 +73,12 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      */
     @Self
     private SlingHttpServletRequest request;
+
+    /**
+     * The link handler.
+     */
+    @Self
+    private LinkHandler linkHandler;
 
     /**
      * The current page.
@@ -118,13 +127,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     private Page navigationRootPage;
 
     /**
-     * Flag indicating if showing is disabled.
-     * If shadowing is enabled, then the navigation will traverse redirects - where possible - to present information
-     * relevant to the target page that the user would navigate to if selected.
-     */
-    private boolean isShadowingDisabled;
-
-    /**
      * Placeholder for the list of results.
      */
     private List<NavigationItem> items;
@@ -151,8 +153,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
                 structureStart = 0;
             }
         }
-        isShadowingDisabled = properties.get(PageListItemImpl.PN_DISABLE_SHADOWING,
-            currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
     /**
@@ -184,6 +184,11 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
                 .collect(Collectors.toList());
         }
         return Collections.unmodifiableList(items);
+    }
+
+    protected NavigationItem newNavigationItem(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level,
+                                               List<NavigationItem> children, String parentId, Component component) {
+        return new NavigationItemImpl(page, active, current, linkHandler, level, children, parentId, component);
     }
 
     @Override
@@ -240,10 +245,11 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @param children The child navigation items.
      * @return The newly created navigation item.
      */
-    private NavigationItemImpl createNavigationItem(@NotNull final Page page, @NotNull final List<NavigationItem> children) {
+    private NavigationItem createNavigationItem(@NotNull final Page page, @NotNull final List<NavigationItem> children) {
         int level = page.getDepth() - (this.getNavigationRoot().getDepth() + structureStart);
-        boolean selected = checkSelected(page);
-        return new NavigationItemImpl(page, selected, request, level, children, getId(), isShadowingDisabled, component);
+        boolean current = checkCurrent(page);
+        boolean selected = checkSelected(page, current);
+        return newNavigationItem(page, selected, current, linkHandler, level, children, getId(), component);
     }
 
     /**
@@ -258,10 +264,14 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @param page The page to check.
      * @return True if the page is selected, false if not.
      */
-    private boolean checkSelected(@NotNull final Page page) {
+    private boolean checkSelected(@NotNull final Page page, boolean current) {
+        return current
+            || this.currentPage.getPath().startsWith(page.getPath() + "/");
+    }
+
+    private boolean checkCurrent(@NotNull final Page page) {
         return this.currentPage.equals(page)
-            || this.currentPage.getPath().startsWith(page.getPath() + "/")
-            || currentPageIsRedirectTarget(page);
+                || currentPageIsRedirectTarget(page);
     }
 
     /**
@@ -271,9 +281,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @return True if the specified page redirects to the current page.
      */
     private boolean currentPageIsRedirectTarget(@NotNull final Page page) {
-        return NavigationItemImpl.getRedirectTarget(page)
-            .filter(target -> target.equals(currentPage))
-            .isPresent();
+        return currentPage.equals(linkHandler.resolveRedirects(page).getLeft());
     }
 
 }

@@ -405,6 +405,14 @@
                     "fileReference"     : "/content/dam/core/images/transparent_hd.png",
                     "alt"               : "Transparent Image",
                     "jcr:title"         : "Transparent Image"
+                },
+                "image30"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "fileReference"     : "/content/dam/core/images/nonexisting.png",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo"
                 }
             },
             "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"

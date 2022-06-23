@@ -1,0 +1,40 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div data-sly-use.thumbnail="com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited.PageImageThumbnail">
+    <coral-fileupload class="cq-page-image-thumbnail coral-Form-field cq-FileUpload _coral-FileUpload${thumbnail.src && ' is-filled'}"
+                      data-thumbnail-current-page-path="${thumbnail.currentPagePath}"
+                      data-thumbnail-component-path="${thumbnail.componentPath}"
+                      data-thumbnail-config-path="${thumbnail.configPath}">
+        <div class="cq-FileUpload-thumbnail">
+            <div class="cq-FileUpload-thumbnail-img">
+                <img class="cq-page-image-thumbnail__image"
+                     data-sly-test.hasSrc="${thumbnail.src}"
+                     src="${thumbnail.src}"
+                     alt="${thumbnail.alt}">
+                <coral-icon icon="image"
+                            data-sly-test="${!hasSrc}"
+                            class="_coral-Icon _coral-Icon--sizeS" role="img" size="S">
+                    <svg focusable="false" aria-hidden="true" class="_coral-Icon--svg _coral-Icon">
+                        <use xlink:href="#spectrum-icon-18-Image"></use>
+                    </svg>
+                </coral-icon>
+            </div>
+            <button data-sly-test="${hasSrc}" type="button" class="_coral-Button _coral-Button--primary _coral-Button--quiet" disabled><coral-button-label class="_coral-Button-label">Edit</coral-button-label></button>
+            <button data-sly-test="${hasSrc}" type="button" class="_coral-Button _coral-Button--primary _coral-Button--quiet" disabled><coral-button-label class="_coral-Button-label">Clear</coral-button-label></button>
+            <button data-sly-test="${hasSrc}" type="button" class="_coral-Button _coral-Button--primary _coral-Button--quiet" disabled><coral-button-label class="_coral-Button-label">Pick</coral-button-label></button>
+        </div>
+    </coral-fileupload>
+</div>

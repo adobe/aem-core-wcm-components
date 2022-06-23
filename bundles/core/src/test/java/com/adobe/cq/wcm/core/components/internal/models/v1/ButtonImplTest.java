@@ -30,50 +30,64 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
-class ButtonImplTest {
+public class ButtonImplTest {
 
     private static final String TEST_BASE = "/button";
-    private static final String TEST_ROOT_PAGE = "/content";
-    private static final String TEST_ROOT_PAGE_GRID = "/button/jcr:content/root/responsivegrid";
-    private static final String BUTTON_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/button-1";
+    protected static final String TEST_ROOT_PAGE = "/content";
+    protected static final String TEST_ROOT_PAGE_GRID = "/button/jcr:content/root/responsivegrid";
+    protected static final String BUTTON_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/button-1";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
+    protected String testBase;
+    protected String resourceType;
+
     @BeforeEach
-    void setUp() {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
+    protected void setUp() {
+        testBase = TEST_BASE;
+        resourceType = ButtonImpl.RESOURCE_TYPE;
+        internalSetup();
+    }
+
+    protected void internalSetup() {
+        context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
     }
 
     @Test
-    void testExportedType() {
+    protected void testExportedType() {
         Button button = getButtonUnderTest();
-        assertEquals(ButtonImpl.RESOURCE_TYPE, button.getExportedType());
+        assertEquals(resourceType, button.getExportedType());
     }
 
     @Test
-    void testGetText() {
+    protected void testGetText() {
         Button button = getButtonUnderTest();
         assertEquals("Adobe", button.getText());
-        Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, "button1"));
+        Utils.testJSONExport(button, Utils.getTestExporterJSONPath(testBase, "button1"));
     }
 
     @Test
-    void testGetLink() {
+    @SuppressWarnings("deprecation")
+    protected void testGetLink() {
         Button button = getButtonUnderTest();
         assertEquals("https://www.adobe.com", button.getLink());
-        Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, "button1"));
+        Utils.testJSONExport(button, Utils.getTestExporterJSONPath(testBase, "button1"));
     }
 
     @Test
-    void testGetIcon() {
+    protected void testGetIcon() {
         Button button = getButtonUnderTest();
         assertEquals("adobe", button.getIcon());
-        Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, "button1"));
+        Utils.testJSONExport(button, Utils.getTestExporterJSONPath(testBase, "button1"));
     }
 
-    private Button getButtonUnderTest(Object... properties) {
+    protected Button getButtonUnderTest(Object... properties) {
+        return getButtonUnderTest(ButtonImplTest.BUTTON_1, properties);
+    }
+
+    protected Button getButtonUnderTest(String path, Object... properties) {
         Utils.enableDataLayer(context, true);
-        Resource resource = context.currentResource(ButtonImplTest.BUTTON_1);
+        Resource resource = context.currentResource(path);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);
         }

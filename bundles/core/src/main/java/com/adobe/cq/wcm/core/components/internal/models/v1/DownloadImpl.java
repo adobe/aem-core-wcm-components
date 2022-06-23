@@ -22,6 +22,7 @@ import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +43,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;
@@ -56,17 +59,21 @@ import org.slf4j.LoggerFactory;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Download.class, ComponentExporter.class},
-       resourceType = DownloadImpl.RESOURCE_TYPE)
+       resourceType = {DownloadImpl.RESOURCE_TYPE_V1, DownloadImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class DownloadImpl implements Download {
+public class DownloadImpl extends AbstractComponentImpl implements Download {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DownloadImpl.class);
 
-    public final static String RESOURCE_TYPE = "core/wcm/components/download/v1/download";
+    public final static String RESOURCE_TYPE_V1 = "core/wcm/components/download/v1/download";
+    public final static String RESOURCE_TYPE_V2 = "core/wcm/components/download/v2/download";
 
     @Self
     private SlingHttpServletRequest request;
+
+    @Self
+    private LinkHandler linkHandler;
 
     @ScriptVariable
     private Resource resource;
@@ -98,6 +105,8 @@ public class DownloadImpl implements Download {
     private boolean displayFormat;
 
     private boolean displayFilename;
+
+    private boolean hideTitleLink = false;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_TITLE)
     @Nullable
@@ -134,6 +143,7 @@ public class DownloadImpl implements Download {
             displaySize = currentStyle.get(PN_DISPLAY_SIZE, true);
             displayFormat = currentStyle.get(PN_DISPLAY_FORMAT, true);
             displayFilename = currentStyle.get(PN_DISPLAY_FILENAME, true);
+            hideTitleLink = currentStyle.get(PN_HIDE_TITLE_LINK, false);
         }
         if (StringUtils.isNotBlank(fileReference)) {
             initAssetDownload(fileReference);
@@ -165,7 +175,7 @@ public class DownloadImpl implements Download {
                         extension = mimeTypeService.getExtension(format);
                     }
 
-                    url = getDownloadUrl(file) + "/" + filename;
+                    url = linkHandler.getLink(getDownloadUrl(file) + "/" + filename, null).map(Link::getURL).orElse(null);
                     size = FileUtils.byteCountToDisplaySize(getFileSize(fileContent));
                 }
             }
@@ -198,7 +208,7 @@ public class DownloadImpl implements Download {
                         extension = FilenameUtils.getExtension(filename);
                     }
 
-                    url = getDownloadUrl(downloadResource);
+                    url = linkHandler.getLink(getDownloadUrl(downloadResource), null).map(Link::getURL).orElse(null);
 
                     if (titleFromAsset) {
                         title = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);
@@ -283,6 +293,11 @@ public class DownloadImpl implements Download {
     @Override
     public boolean displayFilename() {
         return displayFilename;
+    }
+
+    @Override
+    public boolean hideTitleLink() {
+        return hideTitleLink;
     }
 
     @Override

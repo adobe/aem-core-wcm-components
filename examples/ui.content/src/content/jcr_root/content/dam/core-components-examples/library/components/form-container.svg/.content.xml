@@ -5,8 +5,6 @@
     jcr:uuid="bdd165ab-1152-42ac-93d5-97e41b891195">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2020-01-16T18:09:51.376+01:00"
-        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:extracted="{Date}2020-01-16T18:09:37.526+01:00"
@@ -15,8 +13,6 @@
             dc:format="image/svg+xml"
             dc:modified="{Date}2020-01-16T18:09:51.376+01:00"
             dc:title="Core Form Container"
-            jcr:lastModified="{Date}2020-01-16T18:09:51.376+01:00"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>

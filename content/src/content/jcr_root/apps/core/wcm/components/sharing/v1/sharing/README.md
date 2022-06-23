@@ -13,8 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Social Media Sharing (v1)
+Social Media Sharing (v1) - DEPRECATED since Core Components 2.18.0.
 ====
+
 Social media sharing component, written in HTL.
 
 ## Features

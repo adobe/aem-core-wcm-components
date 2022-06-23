@@ -32,6 +32,9 @@
     var ALLOWED_SIZES_SELECTOR      = ".core-title-sizes-allowed coral-checkbox";
     var DATA_ATTR_VALIDATION_STATE  = "checkboxes.validation.state";
     var SIZES_SELECTOR              = "coral-select.core-title-sizes";
+    var LINK_URL_SELECTOR           = ".cmp-title-link-url";
+    var LINK_LABEL_SELECTOR         = ".cmp-title-link-label";
+    var LINK_TITLE_SELECTOR         = ".cmp-title-link-title";
 
     // Update the select field that defines the default value
     function updateDefaultSizeSelect(checkboxToggled) {
@@ -39,7 +42,6 @@
         var select = $(DEFAULT_SIZE_SELECTOR).get(0);
         var $checkboxes = $(ALLOWED_SIZES_SELECTOR);
         var checkedTotal = 0;
-        var firstCheckedValue = "";
         var selectValue = "";
 
         if (select === null || select === undefined) {
@@ -60,18 +62,9 @@
             }
         });
 
-        // get the value of the first checked box
-        $checkboxes.each(function(i, checkbox) {
-            if (checkbox.checked) {
-                firstCheckedValue = checkbox.value;
-                return false;
-            }
-        });
-
         // set the default value of the size dropdown
         if (checkboxToggled) {
-            // the default value is the first checked box
-            selectValue = firstCheckedValue;
+            selectValue = getAppropriateCheckedBoxValue($checkboxes, select.value);
         } else {
             // the default value is read from the repository
             selectValue = select.value;
@@ -87,6 +80,37 @@
                 $(select).parent().show();
             }
         });
+    }
+
+    // get the appropriate checked box value by checking if the current value of the default type is a valid option in the list of allowed types/sizes
+    function getAppropriateCheckedBoxValue(checkboxes, currentDefaultTypeValue) {
+        var isCurrentDefaultTypeValueValidOption = false;
+        checkboxes.each(function(i, checkbox) {
+            if (checkbox.checked && checkbox.value === currentDefaultTypeValue) {
+                isCurrentDefaultTypeValueValidOption = true;
+                return false;
+            }
+        });
+        // if the current value of the default type is a valid option, it will return it
+        if (isCurrentDefaultTypeValueValidOption) {
+            return currentDefaultTypeValue;
+        } else {
+            // if the current value of the default type is a not valid option, it will return the value of the first checked box
+            var firstCheckedValue = "";
+            checkboxes.each(function(i, checkbox) {
+                if (checkbox.checked) {
+                    firstCheckedValue = checkbox.value;
+                    return false;
+                }
+            });
+            return firstCheckedValue;
+        }
+    }
+
+    // toggles the disable attribute of the Link Label and Link Title Attribute inputs, based on the Link Url existence
+    function toggleDisableAttributeOnLinkLabelAndTitleInputs() {
+        $(LINK_LABEL_SELECTOR).prop("disabled", !$(LINK_URL_SELECTOR).val());
+        $(LINK_TITLE_SELECTOR).prop("disabled", !$(LINK_URL_SELECTOR).val());
     }
 
     // temporary workaround until CQ-4206495 and CUI-1818 are fixed:
@@ -139,6 +163,18 @@
                 $(defaultSelect).parent().remove();
             }
         });
+        Coral.commons.ready($(LINK_URL_SELECTOR, LINK_LABEL_SELECTOR, LINK_TITLE_SELECTOR), function(component) {
+            toggleDisableAttributeOnLinkLabelAndTitleInputs();
+        });
+    });
+
+    $(document).on("input", LINK_URL_SELECTOR, function(input) {
+        $(LINK_URL_SELECTOR).val(input.target.value);
+        toggleDisableAttributeOnLinkLabelAndTitleInputs();
+    });
+
+    $(document).on("change", LINK_URL_SELECTOR, function(input) {
+        toggleDisableAttributeOnLinkLabelAndTitleInputs();
     });
 
     // Display an error if all checkboxes are empty

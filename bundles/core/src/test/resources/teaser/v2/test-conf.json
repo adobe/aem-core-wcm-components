@@ -1,0 +1,71 @@
+{
+  "jcr:primaryType": "sling:Folder",
+  "coretest"       : {
+    "jcr:primaryType": "sling:OrderedFolder",
+    "jcr:title"      : "Core",
+    "settings"       : {
+      "jcr:primaryType": "sling:Folder",
+      "wcm"            : {
+        "jcr:primaryType": "cq:Page",
+        "templates"      : {
+          "jcr:primaryType": "cq:Page",
+          "testtemplate"   : {
+            "jcr:primaryType": "cq:Template",
+            "structure"      : {
+              "jcr:primaryType": "cq:Page",
+              "jcr:createdBy"  : "admin",
+              "jcr:created"    : "Fri Dec 15 2017 18:48:22 GMT+0100",
+              "jcr:content"    : {
+                "jcr:primaryType"   : "cq:PageContent",
+                "jcr:createdBy"     : "admin",
+                "cq:template"       : "/conf/coretest/settings/wcm/templates/testtemplate",
+                "sling:resourceType": "core/wcm/components/page",
+                "root"              : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                  "template_teaser1"             : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "jcr:createdBy": "admin",
+                    "imageFromPageImage": "true",
+                    "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
+                  },
+                  "template_teaser2"             : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "jcr:createdBy": "admin",
+                    "titleFromPage": false,
+                    "descriptionFromPage": false,
+                    "imageFromPageImage": "true",
+                    "linkURL": "/content/page1",
+                    "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
+                  },
+                  "template_teaser3"             : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "jcr:createdBy": "admin",
+                    "actionsEnabled"      : true,
+                    "titleFromPage": false,
+                    "descriptionFromPage": false,
+                    "imageFromPageImage": true,
+                    "actions" : {
+                      "jcr:primaryType" : "nt:unstructured",
+                      "item0" : {
+                        "jcr:primaryType" : "nt:unstructured",
+                        "link": "/content/page1",
+                        "text": "Adobe"
+                      },
+                      "item1" : {
+                        "jcr:primaryType" : "nt:unstructured",
+                        "link": "/content/page2",
+                        "text": "Adobe"
+                      }
+                    },
+                    "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

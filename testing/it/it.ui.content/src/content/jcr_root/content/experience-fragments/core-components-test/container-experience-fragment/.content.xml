@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2022-03-31T14:52:16.527+02:00"
+        cq:lastModifiedBy="admin"
+        cq:tags="[]"
+        cq:template="/libs/cq/experience-fragments/components/experiencefragment/template"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Container Experience Fragment"
+        sling:resourceType="cq/experience-fragments/components/experiencefragment"/>
+    <master/>
+</jcr:root>

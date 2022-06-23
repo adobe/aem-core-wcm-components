@@ -15,6 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
@@ -22,17 +29,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Component;
+import com.adobe.cq.wcm.style.ComponentStyleInfo;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
+
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
 public class ComponentImplTest {
@@ -61,13 +68,45 @@ public class ComponentImplTest {
         Component component = getReferencedComponentUnderTest(XF_COMPONENT_1, TEST_PAGE_EN, XF_COMPONENT_10);
         Assertions.assertEquals("experiencefragment-789e0d5de3", component.getId(), "ID mismatch");
     }
-
+    
+    
+    @Test
+    public void testStyleSystemClasses()
+    {
+    	final String WE_RETAIL_TITLE = TEST_PAGE_EN+"/jcr:content/root/title_core";
+    	
+    	ComponentStyleInfo componentStyleInfoMock = mock(ComponentStyleInfo.class);
+    	Resource resource = spy(context.resourceResolver().getResource(WE_RETAIL_TITLE));
+    	Mockito.doReturn(componentStyleInfoMock).when(resource).adaptTo(ComponentStyleInfo.class);
+    	
+        MockSlingHttpServletRequest request = context.request();
+        request.setResource(resource);
+    	
+    	Mockito.doReturn("class1 class2").when(componentStyleInfoMock).getAppliedCssClasses();
+    	Component component = request.adaptTo(Component.class);
+    	String styleClasses = component.getAppliedCssClasses();
+    	assertNotNull(styleClasses);
+    	assertEquals("class1 class2",styleClasses);
+    	
+    	Mockito.doReturn(" ").when(componentStyleInfoMock).getAppliedCssClasses();
+    	component = request.adaptTo(Component.class);
+    	styleClasses = component.getAppliedCssClasses();
+    	assertNull(styleClasses);
+    	
+    	Mockito.doReturn(null).when(componentStyleInfoMock).getAppliedCssClasses();
+    	component = request.adaptTo(Component.class);
+    	styleClasses = component.getAppliedCssClasses();
+    	assertNull(styleClasses);
+    }
+    
     private Component getComponentUnderTest(String resourcePath, Object ... properties) {
-        Resource resource = context.currentResource(resourcePath);
+        Resource resource = spy(context.resourceResolver().getResource(resourcePath));
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);
         }
+        
         MockSlingHttpServletRequest request = context.request();
+        request.setResource(resource);
         return request.adaptTo(Component.class);
     }
 
@@ -88,5 +127,5 @@ public class ComponentImplTest {
         MockSlingHttpServletRequest request = context.request();
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Component.class);
-    }
+    }       
 }

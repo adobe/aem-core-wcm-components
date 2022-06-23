@@ -1,0 +1,65 @@
+{
+  "id": "teaser-a5953f71e6",
+  "title": "Teasers Test",
+  "actionsEnabled": true,
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actions": [
+    {
+      "id": "teaser-a5953f71e6-cta-5175dd1bb6",
+      "link": {
+        "valid": true,
+        "url": "/core/content/page2.html"
+      },
+      "title": "Adobe",
+      ":type": "nt:unstructured",
+      "dataLayer": {
+        "teaser-a5953f71e6-cta-5175dd1bb6": {
+          "@type": "cq:Component/cta",
+          "dc:title": "Adobe",
+          "xdm:linkURL": "/core/content/page2.html"
+        }
+      }
+    },
+    {
+      "id": "teaser-a5953f71e6-cta-36320eea12",
+      "link": {
+        "valid": true,
+        "url": "/core/content/non_existing1"
+      },
+      "title": "Adobe",
+      ":type": "nt:unstructured",
+      "dataLayer": {
+        "teaser-a5953f71e6-cta-36320eea12": {
+          "@type": "cq:Component/cta",
+          "dc:title": "Adobe",
+          "xdm:linkURL": "/core/content/non_existing1"
+        }
+      }
+    },
+    {
+      "id": "teaser-a5953f71e6-cta-64ac4fbcc2",
+      "link": {
+        "valid": true,
+        "url": "/core/content/non_existing2"
+      },
+      "title": "Adobe",
+      ":type": "nt:unstructured",
+      "dataLayer": {
+        "teaser-a5953f71e6-cta-64ac4fbcc2": {
+          "@type": "cq:Component/cta",
+          "dc:title": "Adobe",
+          "xdm:linkURL": "/core/content/non_existing2"
+        }
+      }
+    }
+  ],
+  ":type": "core/wcm/components/teaser/v2/teaser",
+  "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-23.coreimg.png/1490005239000/asset2.png",
+  "dataLayer": {
+    "teaser-a5953f71e6": {
+      "@type": "core/wcm/components/teaser/v2/teaser",
+      "dc:title": "Teasers Test"
+    }
+  }
+}

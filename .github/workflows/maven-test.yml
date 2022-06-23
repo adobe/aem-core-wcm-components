@@ -1,5 +1,5 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Copyright 2020 Adobe Systems Incorporated
+# Copyright 2021 Adobe Systems Incorporated
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,15 +16,8 @@
 
 name: Test
 
-on:
-  push:
-  pull_request:
-    branches:
-      # Branches from forks have the form 'user:branch-name' so we only run
-      # this job on pull_request events for branches that look like fork
-      # branches. Without this we would end up running this job twice for non
-      # forked PRs, once for the push and then once for opening the PR.
-      - '**:**'
+on: [push, pull_request]
+
 
 jobs:
   build:
@@ -34,6 +27,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         java: [8, 11]
+        profile: [ '', '-Pcloud,adobe-public']
 
     steps:
       # Check out Git repository
@@ -57,7 +51,7 @@ jobs:
 
       # Build & Test
       - name: Build & Test with Maven
-        run: mvn -B -U clean verify
+        run: mvn -B -U clean install ${{ matrix.profile }} -s ./.github/workflows/settings.xml
 
       # Run code coverage check
       - name: Run core coverage check

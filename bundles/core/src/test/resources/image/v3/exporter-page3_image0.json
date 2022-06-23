@@ -1,0 +1,12 @@
+{
+  "id": "image-96253254e2",
+  "alt": "featured image alt",
+  "src": "/core/content/test_page3/_jcr_content/root/page3_image0.coreimg.png",
+  "lazyEnabled": true,
+  "dataLayer": {
+    "image-96253254e2": {
+      "@type": "core/wcm/components/image/v3/image"
+    }
+  },
+  ":type": "core/wcm/components/image/v3/image"
+}

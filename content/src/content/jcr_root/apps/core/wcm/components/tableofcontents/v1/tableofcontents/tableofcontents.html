@@ -1,0 +1,28 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2022 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div data-sly-use.toc="com.adobe.cq.wcm.core.components.models.TableOfContents"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
+     class = "cmp-toc__placeholder"
+     id = "${component.id}"
+     data-cmp-toc-list-type = "${toc.listType && toc.listType.value}"
+     data-cmp-toc-start-level = "${toc.startLevel && toc.startLevel.value}"
+     data-cmp-toc-stop-level = "${toc.stopLevel && toc.stopLevel.value}"
+     data-cmp-toc-include-classes = "${toc.includeClasses}"
+     data-cmp-toc-ignore-classes = "${toc.ignoreClasses}">
+</div>
+<sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"
+     data-sly-test="${wcmmode.edit || wcmmode.preview}"
+     data-sly-call="${template.placeholder @ isEmpty = true, classAppend = 'cmp-toc__template-placeholder'}"/>

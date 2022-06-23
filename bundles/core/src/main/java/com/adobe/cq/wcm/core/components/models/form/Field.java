@@ -29,13 +29,20 @@ import com.adobe.cq.export.json.ComponentExporter;
 public interface Field extends ComponentExporter {
 
     /**
+     * Name of the property which holds the name of the field.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.form 14.5.0
+     */
+    String PN_NAME = "name";
+
+    /**
      * Returns an unique identifier for this field.
      *
      * @return an unique identifier for the field
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getId() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -48,7 +55,7 @@ public interface Field extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getName() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -61,7 +68,7 @@ public interface Field extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getValue() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -74,7 +81,7 @@ public interface Field extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getTitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -87,7 +94,7 @@ public interface Field extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getHelpMessage() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -97,6 +104,6 @@ public interface Field extends ComponentExporter {
     @NotNull
     @Override
     default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 }

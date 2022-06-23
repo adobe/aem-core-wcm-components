@@ -1,0 +1,226 @@
+{
+  "id": "navigation-c07c8768dd",
+  "items": [
+    {
+      "id": "navigation-c07c8768dd-item-2edead38ee",
+      "path": "/content/navigation-redirect",
+      "children": [
+        {
+          "id": "navigation-c07c8768dd-item-b318e48feb",
+          "path": "/content/navigation-redirect/navigation-1",
+          "children": [
+            {
+              "id": "navigation-c07c8768dd-item-ac16cd4d84",
+              "path": "/content/navigation-redirect/navigation-1/navigation-1-1",
+              "children": [
+                {
+                  "id": "navigation-c07c8768dd-item-b11a580818",
+                  "path": "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-1",
+                  "children": [],
+                  "level": 3,
+                  "active": false,
+                  "current": false,
+                  "link": {
+                    "url": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-1.html",
+                    "valid": true
+                  },
+                  "title": "Navigation 1.1.1",
+                  "dataLayer": {
+                    "navigation-c07c8768dd-item-b11a580818": {
+                      "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-1.html",
+                      "@type": "core/wcm/components/navigation/v2/navigation/item",
+                      "dc:title": "Navigation 1.1.1"
+                    }
+                  },
+                  ":type": "cq:PageContent"
+                },
+                {
+                  "id": "navigation-c07c8768dd-item-954ef7fd94",
+                  "path": "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2",
+                  "children": [
+                    {
+                      "id": "navigation-c07c8768dd-item-aeb4fe9af3",
+                      "path": "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1",
+                      "children": [],
+                      "level": 4,
+                      "active": false,
+                      "current": false,
+                      "link": {
+                        "url": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1.html",
+                        "valid": true
+                      },
+                      "title": "Navigation 1.1.2.1",
+                      "dataLayer": {
+                        "navigation-c07c8768dd-item-aeb4fe9af3": {
+                          "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1.html",
+                          "@type": "core/wcm/components/navigation/v2/navigation/item",
+                          "dc:title": "Navigation 1.1.2.1"
+                        }
+                      },
+                      ":type": "cq:PageContent"
+                    },
+                    {
+                      "id": "navigation-c07c8768dd-item-2be095a6e4",
+                      "path": "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
+                      "children": [],
+                      "level": 4,
+                      "active": false,
+                      "current": false,
+                      "link": {
+                        "url": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
+                        "valid": true
+                      },
+                      "title": "Navigation 1.1.2.3",
+                      "dataLayer": {
+                        "navigation-c07c8768dd-item-2be095a6e4": {
+                          "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
+                          "@type": "core/wcm/components/navigation/v2/navigation/item",
+                          "dc:title": "Navigation 1.1.2.3"
+                        }
+                      },
+                      ":type": "cq:PageContent"
+                    }
+                  ],
+                  "level": 3,
+                  "active": false,
+                  "current": false,
+                  "link": {
+                    "url": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2.html",
+                    "valid": true
+                  },
+                  "title": "Navigation 1.1.2",
+                  "dataLayer": {
+                    "navigation-c07c8768dd-item-954ef7fd94": {
+                      "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2.html",
+                      "@type": "core/wcm/components/navigation/v2/navigation/item",
+                      "dc:title": "Navigation 1.1.2"
+                    }
+                  },
+                  ":type": "cq:PageContent"
+                }
+              ],
+              "level": 2,
+              "active": false,
+              "current": false,
+              "link": {
+                "url": "/core/content/navigation-redirect/navigation-1/navigation-1-1.html",
+                "valid": true
+              },
+              "title": "Navigation 1.1",
+              "dataLayer": {
+                "navigation-c07c8768dd-item-ac16cd4d84": {
+                  "xdm:linkURL": "/core/content/navigation-redirect/navigation-1/navigation-1-1.html",
+                  "@type": "core/wcm/components/navigation/v2/navigation/item",
+                  "dc:title": "Navigation 1.1"
+                }
+              },
+              ":type": "cq:PageContent"
+            }
+          ],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "link": {
+            "url": "/core/navigation-1-vanity",
+            "valid": true
+          },
+          "title": "Navigation 1",
+          "dataLayer": {
+            "navigation-c07c8768dd-item-b318e48feb": {
+              "xdm:linkURL": "/core/navigation-1-vanity",
+              "@type": "core/wcm/components/navigation/v2/navigation/item",
+              "dc:title": "Navigation 1"
+            }
+          },
+          ":type": "cq:PageContent"
+        },
+        {
+          "id": "navigation-c07c8768dd-item-531a950bc2",
+          "path": "/content/navigation-redirect/navigation-2",
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "link": {
+            "url": "/core/content/navigation-redirect/navigation-2.html",
+            "valid": true
+          },
+          "title": "Navigation 2",
+          "dataLayer": {
+            "navigation-c07c8768dd-item-531a950bc2": {
+              "xdm:linkURL": "/core/content/navigation-redirect/navigation-2.html",
+              "@type": "core/wcm/components/navigation/v2/navigation/item",
+              "dc:title": "Navigation 2"
+            }
+          },
+          ":type": "cq:PageContent"
+        },
+        {
+          "id": "navigation-c07c8768dd-item-a5f41f35db",
+          "path": "/content/navigation-redirect/navigation-3",
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "Navigation 3",
+          "link": {
+            "url": "/core/content/navigation-redirect/navigation-3.html",
+            "valid": true
+          },
+          "dataLayer": {
+            "navigation-c07c8768dd-item-a5f41f35db": {
+              "@type": "core/wcm/components/navigation/v2/navigation/item",
+              "dc:title": "Navigation 3",
+              "xdm:linkURL": "/core/content/navigation-redirect/navigation-3.html"
+            }
+          },
+          ":type":"cq:PageContent"
+        },
+        {
+          ":type": "cq:PageContent",
+          "active": false,
+          "children": [
+          ],
+          "current": false,
+          "dataLayer": {
+            "navigation-c07c8768dd-item-c8f482c5ae": {
+              "@type": "core/wcm/components/navigation/v2/navigation/item",
+              "dc:title": "Navigation 4",
+              "xdm:linkURL": "/core/content/navigation-redirect/navigation-4.html"
+            }
+          },
+          "id": "navigation-c07c8768dd-item-c8f482c5ae",
+          "level": 1,
+          "link": {
+            "url": "/core/content/navigation-redirect/navigation-4.html",
+            "valid": true
+          },
+          "path": "/content/navigation-redirect/navigation-4",
+          "title": "Navigation 4"
+        }
+      ],
+      "level": 0,
+      "active": true,
+      "current": true,
+      "link": {
+        "url": "/core/content/navigation-redirect.html",
+        "valid": true
+      },
+      "title": "Navigation",
+      "dataLayer": {
+        "navigation-c07c8768dd-item-2edead38ee": {
+          "xdm:linkURL": "/core/content/navigation-redirect.html",
+          "@type": "core/wcm/components/navigation/v2/navigation/item",
+          "dc:title": "Navigation"
+        }
+      },
+      ":type": "cq:PageContent"
+    }
+  ],
+  "dataLayer": {
+    "navigation-c07c8768dd": {
+      "@type": "core/wcm/components/navigation/v2/navigation"
+    }
+  },
+  ":type": "core/wcm/components/navigation/v2/navigation"
+}

@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:tags="[core-components-examples:component-type/container]"
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:description="Cycle through content panels"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Carousel"
+        sling:resourceType="core-components-examples/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <text_1740702241
+                    cq:styleIds="[1644862132301]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;h1>Carousel&lt;sub>v1&lt;/sub>&lt;/h1>"
+                    textIsRich="true"/>
+                <text
+                    cq:styleIds="[1544762734201]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Carousel allows a user to cycle through content panels. Slides of varying component type can be created.&lt;/p>"
+                    textIsRich="true"/>
+                <teaser
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Technical Documentation"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_tech_carousel_v1"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <teaser_556024830
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Using Core Components"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_carousel_v1"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <title_865328580
+                    cq:styleIds="[1544759664489]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Examples"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h2"/>
+                <title_290384408
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Image Slides"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337506761
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Carousel with three image components as child items.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_181646866
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <carousel
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/carousel"
+                            autopauseDisabled="false"
+                            autoplay="false"
+                            delay="5000">
+                            <image
+                                cq:panelTitle="Title"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                altValueFromDAM="true"
+                                displayPopupTitle="true"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+                                isDecorative="false"
+                                titleValueFromDAM="false"/>
+                            <image_1622336496
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
+                            <image_1533234440
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
+                        </carousel>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_181646866>
+                <title_290384409
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Teaser Slides"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337506762
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Carousel with three teaser components as child items.&lt;/p>"
+                    textIsRich="true"/>
+                <demo
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <carousel_8337507762
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/carousel"
+                            autopauseDisabled="false"
+                            autoplay="false"
+                            delay="5000">
+                            <teaser_720124833
+                                cq:panelTitle="Teaser Title"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="First Teaser Title"
+                                sling:resourceType="core-components-examples/components/teaser"
+                                actionsEnabled="false"
+                                descriptionFromPage="false"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+                                linkURL="/content/core-components-examples/library/core-content/carousel"
+                                textIsRich="true"
+                                titleFromPage="false"/>
+                            <teaser_841933659
+                                cq:panelTitle="Teaser Title"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Second Teaser Title"
+                                sling:resourceType="core-components-examples/components/teaser"
+                                actionsEnabled="false"
+                                descriptionFromPage="false"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
+                                linkURL="/content/core-components-examples/library/core-content/carousel"
+                                textIsRich="true"
+                                titleFromPage="false"/>
+                            <teaser
+                                cq:panelTitle="Teaser Title"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Third Teaser Title"
+                                sling:resourceType="core-components-examples/components/teaser"
+                                actionsEnabled="false"
+                                descriptionFromPage="false"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"
+                                linkURL="/content/core-components-examples/library/core-content/carousel"
+                                textIsRich="true"
+                                titleFromPage="false"/>
+                        </carousel_8337507762>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo>
+                <title_290385103
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Automatic Transitioning"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337506823
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Automatic transitioning of slides can be enabled. The delay before transitioning to the next slide is also configurable. Pause and play buttons are displayed which allow stopping / continuing slide rotation.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_2135749087
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <carousel_7304850024
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/carousel"
+                            autopauseDisabled="false"
+                            autoplay="true"
+                            delay="5000">
+                            <image_2104870554
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
+                            <image_1072016967
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
+                            <image
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
+                            <item_331258757
+                                cq:panelTitle="Item 3.3"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 3.3"
+                                sling:resourceType="wcm/foundation/components/responsivegrid">
+                                <image
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core-components-examples/components/image"
+                                    fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg">
+                                    <cq:responsive jcr:primaryType="nt:unstructured">
+                                        <default
+                                            jcr:primaryType="nt:unstructured"
+                                            width="6"/>
+                                    </cq:responsive>
+                                </image>
+                                <text
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core-components-examples/components/text"
+                                    id="123"
+                                    text="&lt;p>Libero id faucibus nisl tincidunt eget nullam non nisi. Hac habitasse platea dictumst vestibulum. Viverra orci sagittis eu volutpat odio facilisis mauris. Velit aliquet sagittis id consectetur purus ut. Orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt.&lt;/p>"
+                                    textIsRich="true">
+                                    <cq:responsive jcr:primaryType="nt:unstructured">
+                                        <default
+                                            jcr:primaryType="nt:unstructured"
+                                            width="6"/>
+                                    </cq:responsive>
+                                </text>
+                            </item_331258757>
+                        </carousel_7304850024>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_2135749087>
+                <title_290385100
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Auto-pause on Hover Disabled"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337506877
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>The default behavior is to pause when hovering the carousel, and automatic transitioning is enabled. This can be disabled, which may be useful for certain use cases, such as a full screen carousel.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_293658729
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <carousel_1655133361
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/carousel"
+                            autopauseDisabled="true"
+                            autoplay="true"
+                            delay="5000">
+                            <image_436039984
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
+                            <image_1321018784
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
+                            <image
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
+                        </carousel_1655133361>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_293658729>
+                <title_290386009
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Deep Linking"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1337506002
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Linking to a carousel item displays the item and scrolls to it.&lt;/p>"
+                    textIsRich="true"/>
+                <button_1
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to a carousel item ID (same browser tab)."
+                    linkTarget="_self"
+                    linkURL="#carousel-bfe4fa6647-item-47f1a7ca67-tabpanel"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_3
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to an ID within a carousel item (same browser tab)."
+                    linkTarget="_self"
+                    linkURL="#123"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_1b
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to a carousel item ID (new browser tab)."
+                    linkTarget="_blank"
+                    linkURL="#carousel-bfe4fa6647-item-47f1a7ca67-tabpanel"
+                    sling:resourceType="core-components-examples/components/button"/>
+                <button_3b
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Link to an ID within a carousel item (new browser tab)."
+                    linkTarget="_blank"
+                    linkURL="#123"
+                    sling:resourceType="core-components-examples/components/button"/>
+            </responsivegrid>
+        </root>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
+    </jcr:content>
+</jcr:root>

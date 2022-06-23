@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -40,6 +41,8 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
@@ -54,11 +57,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public abstract class AbstractContainerImpl extends AbstractComponentImpl implements Container {
 
-    /**
-     * The current request.
-     */
     @Self
-    protected SlingHttpServletRequest request;
+    protected LinkHandler linkHandler;
 
     /**
      * The current style for this component.
@@ -173,7 +173,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     private Optional<String> getBackgroundImage() {
         return Optional.ofNullable(this.currentStyle)
             .filter(style -> style.get(PN_BACKGROUND_IMAGE_ENABLED, Boolean.FALSE))
-            .flatMap(style -> Optional.ofNullable(this.resource.getValueMap().get(PN_BACKGROUND_IMAGE_REFERENCE, String.class)))
+            .flatMap(style -> linkHandler.getLink(resource, PN_BACKGROUND_IMAGE_REFERENCE).map(Link::getURL))
             .filter(StringUtils::isNotEmpty);
     }
 

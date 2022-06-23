@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Image"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    helpPath="https://www.adobe.com/go/aem_cmp_image_v3">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        granite:class="cmp-image__editor">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Main"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <content
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container"
+                                margin="{Boolean}false">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <enableDmFeatures
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, Dynamic Media features are enabled."
+                                        name="./enableDmFeatures"
+                                        text="Enable DM features"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true">
+                                        <granite:rendercondition jcr:primaryType="nt:unstructured"
+                                                      sling:resourceType="granite/ui/components/coral/foundation/renderconditions/feature"
+                                                      feature="com.adobe.dam.asset.scene7.feature.flag"/>
+                                    </enableDmFeatures>
+                                    <enableAssetDelivery
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, Web Optimized Image Delivery is enabled."
+                                        name="./enableAssetDelivery"
+                                        text="Enable Web Optimized Images"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true">
+                                        <granite:rendercondition
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryEnabled"/>
+                                    </enableAssetDelivery>
+                                    <disableLazyLoading
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, it will preload all images, without using lazy loading."
+                                        name="./disableLazyLoading"
+                                        text="Disable lazy loading"
+                                        checked="{Boolean}false"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
+                                    <decorative
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Check if the image should be ignored by assistive technology and therefore does not require an alternative text. This applies to decorative images only."
+                                        name="./isDecorative"
+                                        text="Image is decorative"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
+                                    <altValueFromDAM
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
+                                        name="./altValueFromDAM"
+                                        text="Get alternative text from DAM"
+                                        checked="{Boolean}true"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
+                                    <titleValueFromDAM
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, populate the image's caption with the value of the dc:title metadata in DAM."
+                                        name="./titleValueFromDAM"
+                                        text="Get caption from DAM"
+                                        checked="{Boolean}true"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
+                                    <displayCaptionPopup
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, the caption won't be displayed below the image, but as a pop-up displayed by some browsers when hovering over the image."
+                                        name="./displayPopupTitle"
+                                        checked="{Boolean}true"
+                                        text="Display caption as pop-up"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
+                                    <resizeWidth
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                        fieldDescription="Define a resize width (in pixels). Its value will be used for resizing the width of the base images that are DAM assets. The aspect ratio of the images will be preserved. If the value is bigger than the natural width of an image, it will have no effect. Note that this setting has no effect on SVG images."
+                                        fieldLabel="Resize Width"
+                                        name="./resizeWidth"
+                                        typeHint="Long"
+                                        required="{Boolean}false"
+                                        defaultValue="{Long}1280"
+                                        min="{Long}1"
+                                        max="{Long}3840"/>
+                                    <widths
+                                        granite:class="core-image-widths"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                        fieldDescription="Define a list of alternative image widths (in pixels). The most appropriate image will be loaded by the component. Note that this setting has no effect on SVG images."
+                                        fieldLabel="Widths">
+                                        <field
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                            defaultValue="{Long}1280"
+                                            min="{Long}0"
+                                            name="./allowedRenditionWidths"
+                                            required="{Boolean}true"/>
+                                    </widths>
+                                    <jpegQuality
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                        fieldDescription="The quality factor (in percentage from 0 and 100) for transformed (e.g. scaled or cropped) JPEG images."
+                                        fieldLabel="JPEG Quality"
+                                        name="./jpegQuality"
+                                        typeHint="Long"
+                                        required="{Boolean}false"
+                                        min="{Long}0"
+                                        max="{Long}100"
+                                        defaultValue="{Long}82" />
+                                </items>
+                            </content>
+                        </items>
+                    </properties>
+                    <styletab
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

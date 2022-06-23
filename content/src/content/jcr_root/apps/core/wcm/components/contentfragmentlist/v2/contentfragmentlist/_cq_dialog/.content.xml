@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Content Fragment List"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.contentfragmentlist.v1.editor]"
+    helpPath="https://www.adobe.com/go/aem_cmp_cflist_v2"
+    trackingFeature="core-components:contentfragmentlist:v2">
+    <content
+        granite:class="cmp-contentfragmentlist__editor"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <granite:data
+            jcr:primaryType="nt:unstructured"
+            component-path="${requestPathInfo.suffix}"/>
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <modelPath
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        emptyText="Select"
+                                        fieldDescription="Content Fragment Model from which to build the list."
+                                        fieldLabel="Model"
+                                        name="./modelPath">
+                                        <datasource
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core/wcm/components/contentfragmentlist/v2/datasource/models"/>
+                                    </modelPath>
+                                    <parentPath
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                        fieldDescription="Path under which the Content Fragments are located."
+                                        fieldLabel="Parent Path"
+                                        nodeTypes="nt:folder, sling:Folder, sling:OrderedFolder"
+                                        name="./parentPath"
+                                        rootPath="/content/dam"/>
+                                    <tags
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="cq/gui/components/coral/common/form/tagfield"
+                                        fieldDescription="Tags for filtering the list."
+                                        fieldLabel="Tags"
+                                        multiple="{Boolean}true"
+                                        name="./tagNames"/>
+                                    <orderBy
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        fieldDescription="Select an element or property to order the list by."
+                                        fieldLabel="Order By"
+                                        name="./orderBy">
+                                        <datasource
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core/wcm/components/contentfragmentlist/v2/datasource/orderby"
+                                            componentPath="${requestPathInfo.suffix}"
+                                            modelPath="${param.modelPath}"
+                                            textOnly="{Boolean}true"/>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            cmp-field-path="${requestPathInfo.resourcePath}"/>
+                                    </orderBy>
+                                    <sortOrder
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        fieldDescription="Sort order ascending or descending."
+                                        fieldLabel="Sort Order"
+                                        name="./sortOrder"
+                                        type="editable">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <asc
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Ascending"
+                                                value="asc"/>
+                                            <desc
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Descending"
+                                                value="desc"/>
+                                        </items>
+                                    </sortOrder>
+                                    <maxItems
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                        fieldDescription="Maximum number of items displayed in the list. Empty for all items."
+                                        fieldLabel="Max Items"
+                                        min="{Long}0"
+                                        name="./maxItems"/>
+                                    <id
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                        fieldDescription="HTML ID attribute to apply to the component."
+                                        fieldLabel="ID"
+                                        name="./id"/>
+                                </items>
+                            </column>
+                        </items>
+                    </properties>
+                    <elements
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Elements"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <elementNames
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                        fieldDescription="Specify which elements to display or leave empty to display all elements."
+                                        fieldLabel="Elements">
+                                        <field
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                            emptyText="Select"
+                                            fieldLabel="Element"
+                                            name="./elementNames">
+                                            <datasource
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/components/contentfragmentlist/v2/datasource/elements"
+                                                componentPath="${requestPathInfo.suffix}"
+                                                modelPath="${param.modelPath}"/>
+                                        </field>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            cmp-field-path="${requestPathInfo.resourcePath}"/>
+                                    </elementNames>
+                                </items>
+                            </column>
+                        </items>
+                    </elements>
+                    <styletab
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/include"
+                            path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_edit/styletab"/>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>
