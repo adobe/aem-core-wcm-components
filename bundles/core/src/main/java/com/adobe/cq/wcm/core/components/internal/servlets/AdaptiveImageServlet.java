@@ -247,7 +247,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
 
-                Map<String, Integer> transformationMap = getTransformationMap(selectorList, component);
+                Map<String, Integer> transformationMap = getTransformationMap(selectorList, component, request);
                 Integer jpegQualityInPercentage = transformationMap.get(SELECTOR_QUALITY_KEY);
                 double quality = jpegQualityInPercentage / 100.0d;
                 int resizeWidth = transformationMap.get(SELECTOR_WIDTH_KEY);
@@ -832,9 +832,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the content policy bound to the given component.
      *
      * @param imageResource the resource identifying the accessed image component
+     * @param request the request object
      * @return the content policy. May be {@code null} in case no content policy can be found.
      */
-    private ContentPolicy getContentPolicy(@NotNull Resource imageResource) {
+    private ContentPolicy getContentPolicy(@NotNull Resource imageResource, @NotNull SlingHttpServletRequest request) {
         ResourceResolver resourceResolver = imageResource.getResourceResolver();
         ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
@@ -849,7 +850,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     }
                 }
             }
-            return policyManager.getPolicy(imageResource);
+            return policyManager.getPolicy(imageResource, request);
         } else {
             LOGGER.warn("Could not get policy manager from resource resolver!");
         }
@@ -892,11 +893,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Creates an image transformation map from the given selector items.
      *
      * @param selectorList to get the parameter from
+     * @param request the request object
      * @return {@link Map} with quality and width transformation parameter
      */
-    private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component) throws IllegalArgumentException {
+    private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component, @NotNull SlingHttpServletRequest request) throws IllegalArgumentException {
         Map<String, Integer> selectorParameterMap = new HashMap<>();
-        int width = this.getResizeWidth(component) > 0 ? this.getResizeWidth(component) : this.defaultResizeWidth;
+        int width = this.getResizeWidth(component, request) > 0 ? this.getResizeWidth(component, request) : this.defaultResizeWidth;
         if (selectorList.size() > 1) {
             String widthString = (selectorList.size() > 2 ? selectorList.get(2) : selectorList.get(1));
             try {
@@ -904,7 +906,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (width <= 0) {
                     throw new IllegalArgumentException();
                 }
-                List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(component);
+                List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(component, request);
                 if (!allowedRenditionWidths.contains(width)) {
                     throw new IllegalArgumentException("The requested width is not allowed in the content policy or no default");
                 }
@@ -922,7 +924,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (qualityPercentage <= 0 || qualityPercentage > 100) {
                     throw new IllegalArgumentException();
                 }
-                Integer allowedJpegQuality = getAllowedJpegQuality(component);
+                Integer allowedJpegQuality = getAllowedJpegQuality(component, request);
                 if (qualityPercentage != allowedJpegQuality) {
                     throw new IllegalArgumentException("The requested quality is not allowed in the content policy or no default");
                 }
@@ -942,11 +944,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * ignored.
      *
      * @param imageResource the resource identifying the accessed image component
+     * @param request the request object
      * @return the list of the allowed widths; the list will be <i>empty</i> if the component doesn't have a content policy
      */
-    List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource) {
+    List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource, @NotNull SlingHttpServletRequest request) {
         List<Integer> list = new ArrayList<>();
-        ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        ContentPolicy contentPolicy = getContentPolicy(imageResource, request);
         ValueMap properties = null;
 
         if (contentPolicy != null) {
@@ -971,7 +974,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         }
         if (list.isEmpty()) {
-            int width = this.getResizeWidth(imageResource) > 0 ? this.getResizeWidth(imageResource) : this.defaultResizeWidth;
+            int width = this.getResizeWidth(imageResource, request) > 0 ? this.getResizeWidth(imageResource, request) : this.defaultResizeWidth;
             list.add(width);
         }
         return list;
@@ -981,11 +984,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the allowed JPEG quality from this component's content policy.
      *
      * @param imageResource the resource identifying the accessed image component
+     * @param request the request object
      * @return the JPEG quality in the range 0..100 or {@link #DEFAULT_JPEG_QUALITY} if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
      */
-    Integer getAllowedJpegQuality(@NotNull Resource imageResource) {
+    Integer getAllowedJpegQuality(@NotNull Resource imageResource, @NotNull SlingHttpServletRequest request) {
         Integer allowedJpegQuality = DEFAULT_JPEG_QUALITY;
-        ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        ContentPolicy contentPolicy = getContentPolicy(imageResource, request);
         if (contentPolicy != null) {
             allowedJpegQuality = contentPolicy.getProperties()
                     .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_JPEG_QUALITY, DEFAULT_JPEG_QUALITY);
@@ -1003,11 +1007,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the allowed resize width from this component's content policy.
      *
      * @param imageResource the resource identifying the accessed image component
+     * @param request the request object
      * @return the resize width or 0 if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
      */
-    private int getResizeWidth(@NotNull Resource imageResource){
+    private int getResizeWidth(@NotNull Resource imageResource, @NotNull SlingHttpServletRequest request){
         int allowedResizeWidth = 0;
-        ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        ContentPolicy contentPolicy = getContentPolicy(imageResource, request);
         if (contentPolicy != null) {
             allowedResizeWidth = contentPolicy.getProperties()
                 .get(Image.PN_DESIGN_RESIZE_WIDTH, 0);
