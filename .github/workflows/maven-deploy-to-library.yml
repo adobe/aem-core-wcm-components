@@ -12,7 +12,7 @@ env:
 # Only run on a push to this branch
 on:
   push:
-     branches: [ development ]
+     branches: [ main ]
   workflow_dispatch:
   
  

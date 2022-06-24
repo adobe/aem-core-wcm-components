@@ -23,11 +23,13 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.FormT
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.BaseFormText;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.SelenideElement;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
 import java.util.concurrent.TimeoutException;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FormTextTests {
@@ -276,5 +278,55 @@ public class FormTextTests {
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formText.isInputConstraintMessageSet(elemName, requiredMessage), "Constraint message should be set");
+    }
+
+    public void testTextareaAccessibilityWhenHelpMessageIsSet() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("textarea");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        configDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement textareaElement = $("textarea");
+        assertTrue(formText.elementHasExpectedAriaDescribedByAttribute(textareaElement, helpMessage));
+    }
+
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("textarea");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement textareaElement = $("textarea");
+        assertTrue(formText.elementHasNoAriaDescribedByAttribute(textareaElement));
+    }
+
+    public void testInputAccessibilityWhenHelpMessageIsSet() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("text");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        configDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement inputElement = $("input[type='text']");
+        assertTrue(formText.elementHasExpectedAriaDescribedByAttribute(inputElement, helpMessage));
+    }
+
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("text");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement inputElement = $("input[type='text']");
+        assertTrue(formText.elementHasNoAriaDescribedByAttribute(inputElement));
     }
 }

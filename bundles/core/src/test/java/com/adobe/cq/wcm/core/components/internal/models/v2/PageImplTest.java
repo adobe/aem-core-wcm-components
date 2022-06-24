@@ -29,7 +29,10 @@ import java.util.Set;
 import java.util.function.Function;
 
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
+
+import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.testing.mock.caconfig.MockContextAwareConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -369,6 +372,39 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
             when(seoTags.getAlternateLanguages()).thenReturn(Collections.emptyMap());
             return seoTags;
         });
+        assertTrue(page.getAlternateLanguageLinks().isEmpty());
+    }
+
+    @Test
+    public void testNoAlternateLanguageLinksOnNoneCanonicalPages() {
+        ValueMap pageProperties = context.resourceResolver().getResource(PAGE + "/jcr:content").adaptTo(ModifiableValueMap.class);
+        pageProperties.put("cq:canonicalUrl", "https://foo.bar");
+        Page page = getPageUnderTest(PAGE, PageImpl.PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, true);
+
+        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
+            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
+            when(seoTags.getAlternateLanguages()).thenReturn(ImmutableMap.of(
+                Locale.ENGLISH, "/this/should/never/be/there"
+            ));
+            return seoTags;
+        });
+
+        assertTrue(page.getAlternateLanguageLinks().isEmpty());
+    }
+
+    @Test
+    public void testNoAlternateLanguageLinksOnNoindex() {
+        Page page = getPageUnderTest(PAGE, PageImpl.PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, true);
+
+        context.registerAdapter(Resource.class, SeoTags.class, (Function<Resource, SeoTags>) resource -> {
+            SeoTags seoTags = mock(SeoTags.class, "seoTags of " + resource.getPath());
+            lenient().when(seoTags.getAlternateLanguages()).thenReturn(ImmutableMap.of(
+                Locale.ENGLISH, "/this/should/never/be/there"
+            ));
+            when(seoTags.getRobotsTags()).thenReturn(Collections.singletonList("noindex"));
+            return seoTags;
+        });
+
         assertTrue(page.getAlternateLanguageLinks().isEmpty());
     }
 }

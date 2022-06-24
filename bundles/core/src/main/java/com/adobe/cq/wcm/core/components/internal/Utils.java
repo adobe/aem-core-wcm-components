@@ -42,18 +42,21 @@ import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.adobe.cq.wcm.core.components.models.Teaser;
+import com.adobe.cq.wcm.core.components.models.form.Field;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.foundation.AllowedComponentList;
 import com.google.common.collect.ImmutableSet;
 
-import static com.adobe.cq.wcm.core.components.models.Image.*;
+import static com.adobe.cq.wcm.core.components.models.Image.PN_ALT_VALUE_FROM_DAM;
+import static com.adobe.cq.wcm.core.components.models.Image.PN_ALT_VALUE_FROM_PAGE_IMAGE;
+import static com.adobe.cq.wcm.core.components.models.Image.PN_IMAGE_FROM_PAGE_IMAGE;
+import static com.adobe.cq.wcm.core.components.models.Image.PN_TITLE_VALUE_FROM_DAM;
 
 public class Utils {
 
@@ -259,17 +262,42 @@ public class Utils {
      * @return JSON object of the request parameters
      */
     public static JSONObject getJsonOfRequestParameters(SlingHttpServletRequest request) throws JSONException {
+        Set<String> formFieldNames = getFormFieldNames(request);
         org.json.JSONObject jsonObj = new org.json.JSONObject();
         Map<String, String[]> params = request.getParameterMap();
 
         for (Map.Entry<String, String[]> entry : params.entrySet()) {
-            if (!INTERNAL_PARAMETER.contains(entry.getKey())) {
+            if (!INTERNAL_PARAMETER.contains(entry.getKey()) && formFieldNames.contains(entry.getKey())) {
                 String[] v = entry.getValue();
                 Object o = (v.length == 1) ? v[0] : v;
                 jsonObj.put(entry.getKey(), o);
             }
         }
         return jsonObj;
+    }
+
+    /**
+     * Returns a set of form field names for the form specified in the request.
+     *
+     * @param request - the current {@link SlingHttpServletRequest}
+     * @return Set of form field names
+     */
+    public static Set<String> getFormFieldNames(SlingHttpServletRequest request) {
+        Set<String> formFieldNames = new LinkedHashSet<>();
+        collectFieldNames(request.getResource(), formFieldNames);
+        return formFieldNames;
+    }
+
+    public static void collectFieldNames(Resource resource, Set<String> fieldNames) {
+        if (resource != null) {
+            for (Resource child : resource.getChildren()) {
+                String name = child.getValueMap().get(Field.PN_NAME, String.class);
+                if (StringUtils.isNotEmpty(name)) {
+                    fieldNames.add(name);
+                }
+                collectFieldNames(child, fieldNames);
+            }
+        }
     }
 
     /**
