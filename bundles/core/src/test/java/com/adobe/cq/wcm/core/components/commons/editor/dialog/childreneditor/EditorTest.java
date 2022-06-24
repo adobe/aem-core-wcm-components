@@ -15,11 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
+import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.day.cq.wcm.msm.api.LiveRelationship;
+import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.day.cq.wcm.msm.api.LiveStatus;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.i18n.ResourceBundleProvider;
@@ -31,13 +35,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
-import com.adobe.cq.sightly.WCMBindings;
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import io.wcm.testing.mock.aem.junit5.AemContext;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
 class EditorTest {
@@ -56,13 +61,25 @@ class EditorTest {
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
         context.registerService(ResourceBundleProvider.class, resourceBundleProvider);
-        Mockito.when(resourceBundleProvider.getResourceBundle(null)).thenReturn(RESOURCE_BUNDLE);
-        Mockito.when(resourceBundleProvider.getResourceBundle(null, null)).thenReturn(RESOURCE_BUNDLE);
+        when(resourceBundleProvider.getResourceBundle(null)).thenReturn(RESOURCE_BUNDLE);
+        when(resourceBundleProvider.getResourceBundle(null, null)).thenReturn(RESOURCE_BUNDLE);
+
+        // The OOTB behaviour for Live Relationships is not available in AEM Context, so we'll have to mock it
+        // In this case, we'll check if we add our components with a live relationship and not cancelled, that
+        // it is recognised as being an item that is still in sync
+        LiveRelationshipManager mgr = Mockito.mock(LiveRelationshipManager.class);
+        context.registerAdapter(ResourceResolver.class, LiveRelationshipManager.class, mgr);
+        when(mgr.hasLiveRelationship(any(Resource.class))).thenReturn(true);
+        LiveStatus status = Mockito.mock(LiveStatus.class);
+        when(status.isCancelled()).thenReturn(false);
+        LiveRelationship rel = Mockito.mock(LiveRelationship.class);
+        when(rel.getStatus()).thenReturn(status);
+        when(mgr.getLiveRelationship(any(Resource.class), anyBoolean())).thenReturn(rel);
     }
 
     /**
@@ -88,6 +105,7 @@ class EditorTest {
             assertEquals(expectedItems[index][3], item.getIconName(), "Item icon name does not match the expected.");
             assertEquals(expectedItems[index][4], item.getIconPath(), "Item icon path does not match the expected.");
             assertEquals(expectedItems[index][5], item.getIconAbbreviation(), "Item icon abbreviation does not match the expected.");
+            assertTrue(item.isLiveCopy);
             index++;
         }
     }
