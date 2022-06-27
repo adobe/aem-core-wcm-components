@@ -34,5 +34,7 @@
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="core/wcm/components/title/v3/title"/>
         </root>
+        <cq:metadata
+            jcr:primaryType="nt:unstructured" />
     </jcr:content>
 </jcr:root>

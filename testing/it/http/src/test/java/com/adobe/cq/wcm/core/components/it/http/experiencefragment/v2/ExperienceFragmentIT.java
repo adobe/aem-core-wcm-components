@@ -65,4 +65,14 @@ public class ExperienceFragmentIT {
         GraniteAssert.assertJsonEquals(expectedJson, json, ImmutableList.of("lastModifiedDate", "repo:modifyDate", "xdm:language",
                 "language", "components", "repo:path"));
     }
+
+    @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
+    public void testDuplicateKeyIssueJson() throws ClientException, IOException {
+        String expectedJson = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("simple-page.model.json"),
+                StandardCharsets.UTF_8);
+        String json = adminAuthor.doGet("/content/core-components/simple-page.model.json", 200).getContent();
+        GraniteAssert.assertJsonEquals(expectedJson, json, ImmutableList.of("lastModifiedDate", "repo:modifyDate", "xdm:language", "xdm:text",
+                "language", "components", "text", "repo:path"));
+    }
 }
