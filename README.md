@@ -95,8 +95,6 @@ Core Components | AEM as a Cloud Service | AEM 6.5       | Java SE | Maven
 ----------------|------------------------|---------------|---------|---------
 [2.20.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.20.2) | Continual | 6.5.13.0+ (*) | 8, 11 | 3.3.9+
 
-(*) - Since version 2.11.0 `org.apache.sling.models.impl` version 1.4.12 or higher is required (due to [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
-
 For the requirements from previous Core Component releases, see [Historical System Requirements](VERSIONS.md).
 
 The Core Components require the use of [editable templates](https://docs.adobe.com/content/help/en/experience-manager-learn/sites/page-authoring/template-editor-feature-video-use.html) and do not support Classic UI nor static templates. If needed, check out the [AEM Modernization Tools](https://opensource.adobe.com/aem-modernize-tools/pages/tools.html).
