@@ -20,38 +20,38 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Builds a link and sets link properties.
+ * Builds a link and uses the specified link properties.
  */
 @ConsumerType
 public interface LinkBuilder {
 
     /**
-     * Sets the property name to read the link URL from.
+     * Uses the specified property name to read the link URL from.
      *
      * @param name The property name
      * @return {@link LinkBuilder}
      */
     @NotNull
-    LinkBuilder setLinkUrlPropertyName(@NotNull String name);
+    LinkBuilder withLinkUrlPropertyName(@NotNull String name);
 
     /**
-     * Sets the HTML link target.
+     * Uses the specified HTML link target.
      *
      * @param target The link target
      * @return {@link LinkBuilder}
      */
     @NotNull
-    LinkBuilder setLinkTarget(@NotNull String target);
+    LinkBuilder withLinkTarget(@NotNull String target);
 
     /**
-     * Sets the HTML link attribute.
+     * Uses the specified HTML link attribute.
      *
      * @param name The attribute name
      * @param value The attribute value
      * @return {@link LinkBuilder}
      */
     @NotNull
-    LinkBuilder setLinkAttribute(@NotNull String name, @Nullable String value);
+    LinkBuilder withLinkAttribute(@NotNull String name, @Nullable String value);
 
     /**
      * Returns the resolved link.
