@@ -29,15 +29,15 @@ import com.day.cq.wcm.api.Page;
  *
  * It can be used as follows:
  * <pre>
- *     Link link = linkHandler.get(page).build();
- *     Link link = linkHandler.get(page)
+ *     Link link = linkManager.get(page).build();
+ *     Link link = linkManager.get(page)
  *          .setLinkTarget(...)
  *          .setLinkAttribute(...)
  *          .build();
  * </pre>
  */
 @ConsumerType
-public interface LinkHandler {
+public interface LinkManager {
 
     /**
      * Returns a link builder where the link is defined by the resource properties.
