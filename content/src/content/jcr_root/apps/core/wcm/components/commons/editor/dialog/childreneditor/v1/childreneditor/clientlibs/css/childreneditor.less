@@ -18,9 +18,15 @@
 @cmp-childreneditor-item-icon-height: 38px;
 @cmp-childreneditor-item-icon-margin-right: 8px;
 @cmp-childreneditor-item-title-buffer: 10px;
+@cmp-childreneditor-info-icon-width: 18px;
 
 .cmp-childreneditor {
     width: 100%;
+
+    .coral-Form-fieldinfo {
+        line-height: @cmp-childreneditor-item-icon-height;
+        vertical-align: bottom;
+    }
 }
 
 .cmp-childreneditor__item-icon {
@@ -42,5 +48,5 @@
 }
 
 .cmp-childreneditor__item-title {
-    width: ~"calc(100% - (@{cmp-childreneditor-item-icon-width} + @{cmp-childreneditor-item-icon-margin-right} + @{cmp-childreneditor-item-title-buffer}))";
+    width: ~"calc(100% - (@{cmp-childreneditor-item-icon-width} + @{cmp-childreneditor-item-icon-margin-right} + @{cmp-childreneditor-item-title-buffer} + @{cmp-childreneditor-info-icon-width}))";
 }
