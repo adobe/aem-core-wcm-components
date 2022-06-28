@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigation;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -68,7 +68,7 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
     private Style currentStyle;
 
     @Self
-    private LinkHandler linkHandler;
+    private LinkManager linkManager;
 
     @Nullable
     private String accessibilityLabel;
@@ -135,17 +135,17 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
                     page = localizedPage;
                 }
                 boolean current = currentPage.getPath().equals(page.getPath());
-                pages.add(newLanguageNavigationItem(page, active, current, linkHandler, level, children, title, getId(), component));
+                pages.add(newLanguageNavigationItem(page, active, current, linkManager, level, children, title, getId(), component));
             }
         }
 
         return pages;
     }
 
-    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler,
+    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, boolean current, @NotNull LinkManager linkManager,
                                                                int level, List<NavigationItem> children, String title, String parentId,
                                                                Component component) {
-        return new LanguageNavigationItemImpl(page, active, current, linkHandler, level, children, title, parentId, component);
+        return new LanguageNavigationItemImpl(page, active, current, linkManager, level, children, title, parentId, component);
     }
 
     private Page getLocalizedPage(Page page, Page languageRoot) {

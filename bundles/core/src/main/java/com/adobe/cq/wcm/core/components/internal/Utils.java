@@ -40,7 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
@@ -331,17 +331,17 @@ public class Utils {
      * the linked page or the page containing the resource.
      *
      * @param resource The image resource
-     * @param linkHandler The link handler
+     * @param linkManager The link handler
      * @param currentStyle The style of the image resource
      * @param currentPage The page containing the image resource
      * @return The wrapped image resource augmented with inherited properties and child resource if inheritance is enabled, the plain image resource otherwise.
      */
-    public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkHandler linkHandler, Style currentStyle, Page currentPage) {
+    public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkManager linkManager, Style currentStyle, Page currentPage) {
         if (resource == null) {
             LOGGER.error("The resource is not defined");
             return null;
         }
-        if (linkHandler == null) {
+        if (linkManager == null) {
             LOGGER.error("The link handler is not defined");
             return null;
         }
@@ -362,14 +362,14 @@ public class Utils {
 
             if (StringUtils.isNotEmpty(linkURL)) {
                 // the inherited resource is the featured image of the linked page
-                Optional<Link> link = Optional.of(linkHandler.get(resource).build());
+                Optional<Link> link = Optional.of(linkManager.get(resource).build());
                 inheritedResource = link
                         .map(link1 -> (Page) link1.getReference())
                         .map(ComponentUtils::getFeaturedImage)
                         .orElse(null);
             } else if (actionsEnabled && firstAction != null) {
                 // the inherited resource is the featured image of the first action's page (the resource is assumed to be a teaser)
-                inheritedResource = Optional.of(linkHandler.get(firstAction).setLinkUrlPropertyName(Teaser.PN_ACTION_LINK).build())
+                inheritedResource = Optional.of(linkManager.get(firstAction).withLinkUrlPropertyName(Teaser.PN_ACTION_LINK).build())
                         .map(link1 -> {
                             if (Optional.of(link1).isPresent()) {
                                 Page linkedPage = (Page) link1.getReference();

@@ -40,7 +40,7 @@ import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSI
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
 import static com.adobe.cq.wcm.core.components.internal.Utils.resolveRedirects;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl.VALID_LINK_TARGETS;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkManagerImpl.VALID_LINK_TARGETS;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_ARIA_LABEL;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TARGET;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE;
@@ -66,15 +66,15 @@ public class LinkBuilderImpl implements LinkBuilder {
 
             String linkTarget = props.get(PN_LINK_TARGET, String.class);
             if (StringUtils.isNotEmpty(linkTarget)) {
-                setLinkTarget(linkTarget);
+                withLinkTarget(linkTarget);
             }
             String linkAccessibilityLabel = props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class);
             if (StringUtils.isNotEmpty(linkAccessibilityLabel)) {
-                setLinkAttribute(PN_LINK_ACCESSIBILITY_LABEL, linkAccessibilityLabel);
+                withLinkAttribute(PN_LINK_ACCESSIBILITY_LABEL, linkAccessibilityLabel);
             }
             String linkTitleAttribute = props.get(PN_LINK_TITLE_ATTRIBUTE, String.class);
             if (StringUtils.isNotEmpty(linkTitleAttribute)) {
-                setLinkAttribute(PN_LINK_TITLE_ATTRIBUTE, linkTitleAttribute);
+                withLinkAttribute(PN_LINK_TITLE_ATTRIBUTE, linkTitleAttribute);
             }
         }
         request = req;
@@ -107,7 +107,7 @@ public class LinkBuilderImpl implements LinkBuilder {
     }
 
     @Override
-    public @NotNull LinkBuilder setLinkUrlPropertyName(@NotNull String name) {
+    public @NotNull LinkBuilder withLinkUrlPropertyName(@NotNull String name) {
         if (resource != null) {
             ValueMap props = resource.getValueMap();
             linkUrl = props.get(name, String.class);
@@ -116,13 +116,13 @@ public class LinkBuilderImpl implements LinkBuilder {
     }
 
     @Override
-    public @NotNull LinkBuilder setLinkTarget(@NotNull String target) {
+    public @NotNull LinkBuilder withLinkTarget(@NotNull String target) {
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        return setLinkAttribute(PN_LINK_TARGET, resolvedLinkTarget);
+        return withLinkAttribute(PN_LINK_TARGET, resolvedLinkTarget);
     }
 
     @Override
-    public @NotNull LinkBuilder setLinkAttribute(@NotNull String name, @Nullable String value) {
+    public @NotNull LinkBuilder withLinkAttribute(@NotNull String name, @Nullable String value) {
         String validatedLinkAttributeValue = validateLinkAttributeValue(value);
         linkAttributes.put(name, validatedLinkAttributeValue);
         return this;

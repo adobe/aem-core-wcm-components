@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
@@ -35,9 +35,9 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     protected boolean active;
     private boolean current;
 
-    public NavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children,
+    public NavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkManager linkManager, int level, List<NavigationItem> children,
                               String parentId, Component component) {
-        super(linkHandler, page, parentId, component);
+        super(linkManager, page, parentId, component);
         this.active = active;
         this.current = current;
         this.level = level;

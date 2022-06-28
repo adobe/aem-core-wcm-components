@@ -44,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;
@@ -73,7 +73,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
     private SlingHttpServletRequest request;
 
     @Self
-    private LinkHandler linkHandler;
+    private LinkManager linkManager;
 
     @ScriptVariable
     private Resource resource;
@@ -172,7 +172,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
                         lastModified = calendar.getTimeInMillis();
                     }
 
-                    link = linkHandler.get(getDownloadUrl(file) + "/" + filename).build();
+                    link = linkManager.get(getDownloadUrl(file) + "/" + filename).build();
                     size = FileUtils.byteCountToDisplaySize(getFileSize(fileContent));
                 }
             }
@@ -205,7 +205,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
                         extension = FilenameUtils.getExtension(filename);
                     }
 
-                    link = linkHandler.get(getDownloadUrl(downloadResource)).build();
+                    link = linkManager.get(getDownloadUrl(downloadResource)).build();
 
                     if (titleFromAsset) {
                         title = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);
