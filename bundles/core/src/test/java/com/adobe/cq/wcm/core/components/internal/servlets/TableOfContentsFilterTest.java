@@ -150,6 +150,22 @@ public class TableOfContentsFilterTest {
         );
     }
 
+    /**
+     * Checks no NPE is thrown if response content type is null
+     * @throws Exception
+     */
+    @Test
+    void testNoNpeIfContentTypeIsNull() throws Exception {
+        MockSlingHttpServletRequest request = context.request();
+        HttpServletResponseWrapper response = Mockito.mock(HttpServletResponseWrapper.class);
+        Mockito.when(response.getContentType())
+            .thenReturn(null);
+        Mockito.when(response.getWriter())
+            .thenReturn(new PrintWriter(new StringWriter()));
+        FilterChain filterChain = (servletRequest, servletResponse) -> {};
+        tableOfContentsFilter.doFilter(request, response, filterChain);
+    }
+
     private void checkFilterResponse(String htmlContentPagePath, String expectedHtmlContentPagePath, boolean setTocFlag,
                                      String errorMessage)
         throws Exception {

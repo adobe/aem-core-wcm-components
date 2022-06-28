@@ -86,7 +86,7 @@ public class TableOfContentsFilter implements Filter {
         chain.doFilter(request, responseWrapper);
         String originalContent = responseWrapper.toString();
         Boolean containsTableOfContents = (Boolean) request.getAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG);
-        if (responseWrapper.getContentType().contains("text/html") &&
+        if (responseWrapper.getContentType() != null && responseWrapper.getContentType().contains("text/html") &&
             (containsTableOfContents != null && containsTableOfContents)) {
 
             Document document = Jsoup.parse(originalContent);

@@ -128,6 +128,25 @@ public class SeoIT {
 
     @Test
     @Category({IgnoreOn64.class, IgnoreOn65.class})
+    public void testCanonicalLinkNotRenderedToPageNoIndex() throws ClientException {
+        String content = publish.doGet("/content/core-components/seo-site/gb/en/noindex-child.html", 200).getContent();
+        MatcherAssert.assertThat(content, CoreMatchers.not(CoreMatchers.containsString("<link rel=\"canonical\"")));
+    }
+
+    @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
+    public void testCustomCanonicalLinkNotRenderedToPage() throws ClientException {
+        try {
+            publish.setPageProperty("/content/core-components/seo-site/gb/en/child.html", "cq:canonicalUrl", "https://example.com", 200);
+            String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
+            MatcherAssert.assertThat(content, CoreMatchers.containsString("<link rel=\"canonical\" href=\"https://example.com\"/>"));
+        } finally {
+            publish.setPageProperty("/content/core-components/seo-site/gb/en/child.html", "cq:canonicalUrl", "", 200);
+        }
+    }
+
+    @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
     public void testLanguageAlternatesRenderedToPage() throws ClientException {
         String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
         MatcherAssert.assertThat(content, CoreMatchers.not(CoreMatchers.containsString(
@@ -136,6 +155,18 @@ public class SeoIT {
             "<link rel=\"alternate\" hreflang=\"en-GB\" href=\"http://integrationtest.local:" + publisherPort + cp + "gb/en/child.html\"/>"));
         MatcherAssert.assertThat(content, CoreMatchers.containsString(
             "<link rel=\"alternate\" hreflang=\"en-US\" href=\"http://integrationtest.local:" + publisherPort + cp + "us/en/child.html\"/>"));
+    }
+
+    @Test
+    @Category({IgnoreOn64.class, IgnoreOn65.class})
+    public void testLanguageAlternatesNotRenderedToPageNotCanonical() throws ClientException {
+        try {
+            publish.setPageProperty("/content/core-components/seo-site/gb/en/child.html", "cq:canonicalUrl", "https://example.com", 200);
+            String content = publish.doGet("/content/core-components/seo-site/gb/en/child.html", 200).getContent();
+            MatcherAssert.assertThat(content, CoreMatchers.not(CoreMatchers.containsString("<link rel=\"alternate\"")));
+        } finally {
+            publish.setPageProperty("/content/core-components/seo-site/gb/en/child.html", "cq:canonicalUrl", "", 200);
+        }
     }
 
     @Test
