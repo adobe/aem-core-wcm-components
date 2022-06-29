@@ -19,7 +19,7 @@
     function onDocumentReady() {
         var linkAccessibilityClass = "cmp-link__screen-reader-only";
         var linkAccessibilitySelector = "." + linkAccessibilityClass;
-        var linkAccessibilityHtml = "<span class='" + linkAccessibilityClass + "'>(" + Granite.I18n.get("opens in a new tab") + ")</span>";
+        var linkAccessibilityHtml = "<span class='" + linkAccessibilityClass + "'>opens in a new tab</span>";
         document.querySelectorAll("a[target='_blank']").forEach(function(link) {
             if (!link.querySelector(linkAccessibilitySelector)) {
                 link.insertAdjacentHTML("beforeend",  linkAccessibilityHtml);
