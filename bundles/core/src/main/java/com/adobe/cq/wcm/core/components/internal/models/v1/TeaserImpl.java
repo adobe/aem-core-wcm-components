@@ -47,6 +47,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Heading;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
@@ -339,7 +340,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getLinkURL() {
-        return link.getURL();
+        return (link != null) ? link.getURL() : null;
     }
 
     /**
@@ -436,7 +437,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getTitle)
-            .withLinkUrl(() -> Optional.of(link).map(Link::getMappedURL).orElse(getLinkURL()))
+            .withLinkUrl(() -> Utils.getOptionalLink(link).map(Link::getMappedURL).orElse(getLinkURL()))
             .withDescription(this::getDescription)
             .build();
     }

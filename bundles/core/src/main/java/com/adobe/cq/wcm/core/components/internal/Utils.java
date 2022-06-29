@@ -331,7 +331,7 @@ public class Utils {
      * the linked page or the page containing the resource.
      *
      * @param resource The image resource
-     * @param linkManager The link handler
+     * @param linkManager The link manager
      * @param currentStyle The style of the image resource
      * @param currentPage The page containing the image resource
      * @return The wrapped image resource augmented with inherited properties and child resource if inheritance is enabled, the plain image resource otherwise.
@@ -342,7 +342,7 @@ public class Utils {
             return null;
         }
         if (linkManager == null) {
-            LOGGER.error("The link handler is not defined");
+            LOGGER.error("The link manager is not defined");
             return null;
         }
 
@@ -362,16 +362,16 @@ public class Utils {
 
             if (StringUtils.isNotEmpty(linkURL)) {
                 // the inherited resource is the featured image of the linked page
-                Optional<Link> link = Optional.of(linkManager.get(resource).build());
+                Optional<Link> link = getOptionalLink(linkManager.get(resource).build());
                 inheritedResource = link
                         .map(link1 -> (Page) link1.getReference())
                         .map(ComponentUtils::getFeaturedImage)
                         .orElse(null);
             } else if (actionsEnabled && firstAction != null) {
                 // the inherited resource is the featured image of the first action's page (the resource is assumed to be a teaser)
-                inheritedResource = Optional.of(linkManager.get(firstAction).withLinkUrlPropertyName(Teaser.PN_ACTION_LINK).build())
+                inheritedResource = getOptionalLink(linkManager.get(firstAction).withLinkUrlPropertyName(Teaser.PN_ACTION_LINK).build())
                         .map(link1 -> {
-                            if (Optional.of(link1).isPresent()) {
+                            if (getOptionalLink(link1).isPresent()) {
                                 Page linkedPage = (Page) link1.getReference();
                                 return Optional.ofNullable(linkedPage)
                                         .map(ComponentUtils::getFeaturedImage)
@@ -454,6 +454,23 @@ public class Utils {
             }
         }
         return new ImmutablePair<>(result, redirectTarget);
+    }
+
+    /**
+     * Converts a link object into an Optional<Link> object.
+     * This method is used to keep the logic based on the former internal link handler backwards compatible.
+     *
+     * @param link The {@link Link}
+     * @return the Optional<Link> object
+     */
+    public static Optional<Link> getOptionalLink(Link link) {
+        if (link == null) {
+            return Optional.empty();
+        }
+        if (!link.isValid()) {
+            return Optional.empty();
+        }
+        return Optional.of(link);
     }
 
 }

@@ -28,7 +28,7 @@ import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 /**
  * A service that can process a given path. This service is used by the
  * {@link LinkManager} to build the final
- * {@link com.adobe.cq.wcm.core.components.commons.link.Link}. The path processor chain of the Link Handler can be extended by a custom
+ * {@link com.adobe.cq.wcm.core.components.commons.link.Link}. The path processor chain of the link manager can be extended by a custom
  * path processor which has to get a higher service ranking than the
  * {@link com.adobe.cq.wcm.core.components.internal.link.DefaultPathProcessor}.
  *

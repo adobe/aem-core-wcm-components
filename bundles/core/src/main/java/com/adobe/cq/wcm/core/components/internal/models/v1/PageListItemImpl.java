@@ -47,7 +47,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * Construct a list item for a given page.
      *
-     * @param linkManager The link handler.
+     * @param linkManager The link manager.
      * @param page The current page.
      * @param parentId The ID of the list containing this item.
      * @param component The component containing this list item.

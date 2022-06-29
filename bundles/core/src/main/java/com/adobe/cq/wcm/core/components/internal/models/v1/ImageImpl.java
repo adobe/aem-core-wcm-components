@@ -53,6 +53,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
@@ -434,7 +435,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected ImageData getComponentData(String fileReference) {
         return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
                 .withTitle(this::getTitle)
-                .withLinkUrl(() -> Optional.ofNullable(link).map(Link::getMappedURL).orElse(null))
+                .withLinkUrl(() -> Utils.getOptionalLink(link).map(Link::getMappedURL).orElse(null))
                 .withAssetData(() ->
                         Optional.ofNullable(fileReference)
                                 .map(reference -> this.request.getResourceResolver().getResource(reference))
