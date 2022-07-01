@@ -26,6 +26,14 @@
                     "link"              : "https://www.adobe.com",
                     "linkTarget"        : "_blank",
                     "icon"              : "adobe"
+                  },
+                  "button-3"          : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "jcr:title"         : "Adobe",
+                  "sling:resourceType": "core/wcm/components/button/v2/button",
+                  "linkURL"           : "https://www.adobe.com/content/dam/test/docs/pdfs/test/360/360%20Test%20Test%20Test%20123.pdf.coredownload.inline.pdf",
+                  "linkTarget"        : "_blank",
+                  "icon"              : "adobe"
                   }
                 }
             }
