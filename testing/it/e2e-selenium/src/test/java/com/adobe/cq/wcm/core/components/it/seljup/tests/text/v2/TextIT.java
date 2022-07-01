@@ -18,9 +18,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.text.v2;
 
 import java.util.concurrent.TimeoutException;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
-import org.codehaus.jackson.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;

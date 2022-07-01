@@ -21,19 +21,26 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor.Editor;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
+import com.day.cq.wcm.api.WCMMode;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.apache.sling.engine.SlingRequestProcessor;
 import org.apache.sling.jcr.resource.api.JcrResourceConstants;
+import org.apache.sling.servlethelpers.internalrequests.SlingInternalRequest;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -52,13 +59,14 @@ import com.day.crx.JcrConstants;
  * Servlet that deletes/reorders the child nodes of a Accordion/Carousel/Tabs container.
  */
 @Component(
-        service = Servlet.class,
-        property = {
-                "sling.servlet.methods=" + HttpConstants.METHOD_POST,
-                "sling.servlet.resourceTypes=" + PanelContainerImpl.RESOURCE_TYPE,
-                "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
-                "sling.servlet.extensions=" + ContainerServlet.EXTENSION
-        }
+    service = Servlet.class,
+    property = {
+        "sling.servlet.methods=" + HttpConstants.METHOD_POST,
+        "sling.servlet.methods=" + HttpConstants.METHOD_GET,
+        "sling.servlet.resourceTypes=" + PanelContainerImpl.RESOURCE_TYPE,
+        "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
+        "sling.servlet.extensions=" + ContainerServlet.EXTENSION
+    }
 )
 public class ContainerServlet extends SlingAllMethodsServlet {
 
@@ -67,47 +75,13 @@ public class ContainerServlet extends SlingAllMethodsServlet {
     protected static final String SELECTOR = "container";
     protected static final String EXTENSION = "html";
 
-    private static final String PARAM_DELETED_CHILDREN = "delete";
     private static final String PARAM_ORDERED_CHILDREN = "order";
-    private static final String RT_GHOST = "wcm/msm/components/ghost";
-
-    @Reference
-    private transient LiveRelationshipManager liveRelationshipManager;
 
     @Override
     protected void doPost(@NotNull SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response) throws IOException {
 
         ResourceResolver resolver = request.getResourceResolver();
         Resource container = request.getResource();
-
-        // Delete the child items
-        try {
-            String[] deletedChildrenNames = request.getParameterValues(PARAM_DELETED_CHILDREN);
-            if (deletedChildrenNames != null && deletedChildrenNames.length > 0) {
-                for (String childName : deletedChildrenNames) {
-                    Resource child = container.getChild(childName);
-                    if (child != null) {
-                        // For deleted items that have a live relationship, ensure a ghost is created
-                        LiveRelationship liveRelationship = liveRelationshipManager.getLiveRelationship(child, false);
-                        if (liveRelationship != null && liveRelationship.getStatus().isSourceExisting()) {
-                            liveRelationshipManager.cancelRelationship(resolver, liveRelationship, true, false);
-                            Resource parent = child.getParent();
-                            String name = child.getName();
-                            resolver.delete(child);
-                            if (parent != null) {
-                                createGhost(parent, name, resolver);
-                            }
-                        } else {
-                            resolver.delete(child);
-                        }
-                    }
-                }
-            }
-            resolver.commit();
-        } catch (PersistenceException | RepositoryException | WCMException e) {
-            LOGGER.error("Could not delete items of the container at {}", container.getPath(), e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
 
         // Order the child items
         try {
@@ -144,11 +118,16 @@ public class ContainerServlet extends SlingAllMethodsServlet {
 
     }
 
-    private void createGhost(@NotNull Resource parent, String name, ResourceResolver resolver)
-            throws PersistenceException, RepositoryException, WCMException {
-        Map<String, Object> properties = new HashMap<>();
-        properties.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
-        properties.put(JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY, RT_GHOST);
-        resolver.create(parent, name, properties);
+    @Override
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws ServletException, IOException {
+        Resource container = request.getResource();
+        RequestDispatcherOptions options = new RequestDispatcherOptions();
+        options.setForceResourceType(Editor.RESOURCE_TYPE);
+        request.setAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME, WCMMode.DISABLED);
+        options.setReplaceSuffix(container.getPath());
+        RequestDispatcher dispatcher = request.getRequestDispatcher(container, options);
+        if (dispatcher != null) {
+            dispatcher.include(request, response);
+        }
     }
 }

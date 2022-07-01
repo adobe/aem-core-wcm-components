@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
@@ -904,7 +905,8 @@ public class Commons {
         if (!StringUtils.startsWith(component, "/")) {
             component = "/apps/" + component;
         }
-        return $("coral-selectlist-item[value='" + component + "']").isDisplayed();
+        InsertComponentDialog insertComponentDialog = new InsertComponentDialog();
+        return insertComponentDialog.getItemByValue(component).isDisplayed();
     }
 
     public static void makeInlineEditorEditable() {
