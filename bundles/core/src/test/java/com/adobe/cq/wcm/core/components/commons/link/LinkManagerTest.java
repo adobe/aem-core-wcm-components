@@ -38,13 +38,13 @@ import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl.PN_DISABLE_SHADOWING;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkManagerImpl.PN_DISABLE_SHADOWING;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
-public class LinkHandlerTest {
+public class LinkManagerTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -156,7 +156,7 @@ public class LinkHandlerTest {
 
     @Test
     void testEmptyLink() {
-        Link link = getUnderTest().get("").setLinkTarget("").build();
+        Link link = getUnderTest().get("").withLinkTarget("").build();
         assertNull(link.getURL());
         assertNull(link.getMappedURL());
         assertNull(link.getExternalizedURL());
@@ -165,7 +165,7 @@ public class LinkHandlerTest {
 
     @Test
     void testLinkURLPageLinkWithTarget() {
-        Link link = getUnderTest().get(page.getPath()).setLinkTarget("_blank").build();
+        Link link = getUnderTest().get(page.getPath()).withLinkTarget("_blank").build();
 
         assertValidLink(link, page.getPath() + ".html", "_blank");
         assertEquals(page, link.getReference());
@@ -311,8 +311,8 @@ public class LinkHandlerTest {
         assertEquals(targetPage2, link.getReference());
     }
 
-    private LinkHandler getUnderTest() {
-        return context.request().adaptTo(LinkHandler.class);
+    private LinkManager getUnderTest() {
+        return context.request().adaptTo(LinkManager.class);
     }
 
 }

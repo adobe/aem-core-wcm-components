@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -47,18 +47,18 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * Construct a list item for a given page.
      *
-     * @param linkHandler The link handler.
+     * @param linkManager The link manager.
      * @param page The current page.
      * @param parentId The ID of the list containing this item.
      * @param component The component containing this list item.
      */
-    public PageListItemImpl(@NotNull final LinkHandler linkHandler,
+    public PageListItemImpl(@NotNull final LinkManager linkManager,
                             @NotNull final Page page,
                             final String parentId,
                             final Component component) {
         super(parentId, page.getContentResource(), component);
         this.parentId = parentId;
-        this.link = linkHandler.get(page).build();
+        this.link = linkManager.get(page).build();
         if (this.link.isValid()) {
             this.page = (Page) link.getReference();
         } else {

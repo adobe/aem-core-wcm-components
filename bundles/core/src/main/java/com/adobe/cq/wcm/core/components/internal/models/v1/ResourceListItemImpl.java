@@ -22,7 +22,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
@@ -60,7 +60,7 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
      * @param resource The resource.
      * @param parentId The ID of the containing component.
      */
-    public ResourceListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Resource resource,
+    public ResourceListItemImpl(@NotNull LinkManager linkManager, @NotNull Resource resource,
                                 String parentId, Component component) {
         super(parentId, resource, component);
         ValueMap valueMap = resource.getValueMap();
@@ -69,7 +69,7 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
         lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
         path = resource.getPath();
         name = resource.getName();
-        link = linkHandler.get(resource).build();
+        link = linkManager.get(resource).build();
     }
 
 

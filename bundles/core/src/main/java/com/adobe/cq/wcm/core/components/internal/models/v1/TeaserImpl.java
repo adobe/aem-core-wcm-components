@@ -46,7 +46,8 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Heading;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
@@ -203,7 +204,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private ModelFactory modelFactory;
 
     @Self
-    protected LinkHandler linkHandler;
+    protected LinkManager linkManager;
 
     /**
      * Initialize the model.
@@ -252,18 +253,18 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     protected void initLink() {
         // use the target page as the link if it exists
         link = this.getTargetPage()
-                .map(page -> linkHandler.get(page.getPath()).setLinkTarget(linkTarget).build())
+                .map(page -> linkManager.get(page.getPath()).withLinkTarget(linkTarget).build())
                 .orElseGet(() -> {
                     // target page doesn't exist
                     if (this.isActionsEnabled()) {
                         return this.getActions()
                                 .stream()
                                 .findFirst()
-                                .map(action -> linkHandler.get(action.getURL()).build())
+                                .map(action -> linkManager.get(action.getURL()).build())
                                 .orElse(null);
                     } else {
                         // use the property value if actions are not enabled
-                        return linkHandler.get(resource).setLinkUrlPropertyName(Link.PN_LINK_URL).build();
+                        return linkManager.get(resource).withLinkUrlPropertyName(Link.PN_LINK_URL).build();
                     }
                 });
     }
@@ -339,7 +340,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getLinkURL() {
-        return link.getURL();
+        return (link != null) ? link.getURL() : null;
     }
 
     /**
@@ -436,7 +437,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getTitle)
-            .withLinkUrl(() -> Optional.of(link).map(Link::getMappedURL).orElse(getLinkURL()))
+            .withLinkUrl(() -> Utils.getOptionalLink(link).map(Link::getMappedURL).orElse(getLinkURL()))
             .withDescription(this::getDescription)
             .build();
     }
@@ -489,7 +490,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             ctaResource = actionRes;
             ValueMap ctaProperties = actionRes.getValueMap();
             ctaTitle = ctaProperties.get(PN_ACTION_TEXT, String.class);
-            ctaLink = linkHandler.get(actionRes).setLinkUrlPropertyName(PN_ACTION_LINK).build();
+            ctaLink = linkManager.get(actionRes).withLinkUrlPropertyName(PN_ACTION_LINK).build();
             if (component != null) {
                 this.dataLayerType = component.getResourceType() + "/" + CTA_ID_PREFIX;
             }

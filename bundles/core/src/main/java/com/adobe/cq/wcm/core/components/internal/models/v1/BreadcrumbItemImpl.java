@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
@@ -31,9 +31,9 @@ import static org.apache.sling.api.SlingConstants.PROPERTY_PATH;
 @JsonIgnoreProperties(value = {"page", "children", "level", "description", "lastModified",PROPERTY_PATH})
 public class BreadcrumbItemImpl extends NavigationItemImpl implements NavigationItem {
 
-    public BreadcrumbItemImpl(Page page, boolean active, @NotNull LinkHandler linkHandler, int level,
+    public BreadcrumbItemImpl(Page page, boolean active, @NotNull LinkManager linkManager, int level,
                               List<NavigationItem> children, String parentId, Component component) {
-        super(page, active, active, linkHandler, level, children, parentId, component);
+        super(page, active, active, linkManager, level, children, parentId, component);
     }
 
 }

@@ -52,7 +52,7 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -151,7 +151,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private String customCanonicalUrl;
 
     @Self
-    private LinkHandler linkHandler;
+    private LinkManager linkManager;
 
     /**
      * The proxy path of the first client library listed in the style under the
@@ -192,8 +192,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 .orElse(null);
     }
 
-    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
-        return new RedirectItemImpl(redirectTarget, request, linkHandler);
+    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
+        return new RedirectItemImpl(redirectTarget, request, linkManager);
     }
 
     private String getProxyPath(ClientLibrary lib) {
@@ -280,7 +280,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public NavigationItem getRedirectTarget() {
         if (redirectTarget == null && StringUtils.isNotEmpty(redirectTargetValue)) {
-            redirectTarget = newRedirectItem(redirectTargetValue, request, linkHandler);
+            redirectTarget = newRedirectItem(redirectTargetValue, request, linkManager);
         }
         return redirectTarget;
     }
@@ -349,7 +349,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             if (!getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
                 this.canonicalUrl = canonicalUrl != null
                     ? canonicalUrl
-                    : linkHandler.get(currentPage).build().getExternalizedURL();
+                    : linkManager.get(currentPage).build().getExternalizedURL();
             }
         }
         return canonicalUrl;

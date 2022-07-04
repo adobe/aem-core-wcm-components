@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Button;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -72,12 +72,12 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
     protected String accessibilityLabel;
 
     @Self
-    protected LinkHandler linkHandler;
+    protected LinkManager linkManager;
     protected Link link;
 
     @PostConstruct
     private void initModel() {
-        link = linkHandler.get(resource).setLinkUrlPropertyName("link").build();
+        link = linkManager.get(resource).withLinkUrlPropertyName("link").build();
     }
 
     @Override

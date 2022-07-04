@@ -31,7 +31,7 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.commons.link.LinkBuilder;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.Page;
@@ -39,8 +39,8 @@ import com.day.cq.wcm.api.designer.Style;
 import com.google.common.collect.ImmutableSet;
 
 @Model(adaptables = SlingHttpServletRequest.class,
-        adapters = LinkHandler.class)
-public class LinkHandlerImpl implements LinkHandler {
+        adapters = LinkManager.class)
+public class LinkManagerImpl implements LinkManager {
 
     /**
      * List of allowed/supported values for link target.

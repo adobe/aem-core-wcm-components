@@ -35,7 +35,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Heading;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler ;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -82,7 +82,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     private String type;
 
     @Self
-    private LinkHandler linkHandler;
+    private LinkManager linkManager;
     protected Link link;
 
     /**
@@ -103,7 +103,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
             }
         }
 
-        link = linkHandler.get(resource).build();
+        link = linkManager.get(resource).build();
 
         if(currentStyle != null) {
             linkDisabled = currentStyle.get(Title.PN_TITLE_LINK_DISABLED, linkDisabled);

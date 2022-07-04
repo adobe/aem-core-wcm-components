@@ -53,8 +53,9 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
@@ -106,7 +107,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected AssetDelivery assetDelivery;
 
     @Self
-    protected LinkHandler linkHandler;
+    protected LinkManager linkManager;
 
     protected ValueMap properties;
     protected String fileReference;
@@ -288,7 +289,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             }
 
             if (!isDecorative) {
-                link = linkHandler.get(resource).build();
+                link = linkManager.get(resource).build();
             } else {
                 alt = null;
             }
@@ -434,7 +435,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected ImageData getComponentData(String fileReference) {
         return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
                 .withTitle(this::getTitle)
-                .withLinkUrl(() -> Optional.ofNullable(link).map(Link::getMappedURL).orElse(null))
+                .withLinkUrl(() -> Utils.getOptionalLink(link).map(Link::getMappedURL).orElse(null))
                 .withAssetData(() ->
                         Optional.ofNullable(fileReference)
                                 .map(reference -> this.request.getResourceResolver().getResource(reference))

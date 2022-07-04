@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -48,8 +48,8 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     private boolean displayItemAsTeaser;
 
-    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, Component component) {
-        return new PageListItemImpl(linkHandler, page, parentId, component, showDescription, linkItems || displayItemAsTeaser);
+    protected ListItem newPageListItem(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component) {
+        return new PageListItemImpl(linkManager, page, parentId, component, showDescription, linkItems || displayItemAsTeaser);
     }
 
     /**

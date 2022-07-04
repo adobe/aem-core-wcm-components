@@ -36,11 +36,12 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
 import static com.adobe.cq.wcm.core.components.internal.Utils.resolveRedirects;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkHandlerImpl.VALID_LINK_TARGETS;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkManagerImpl.VALID_LINK_TARGETS;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_ARIA_LABEL;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TARGET;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE;
@@ -53,48 +54,30 @@ public class LinkBuilderImpl implements LinkBuilder {
     List<PathProcessor> pathProcessors;
     boolean shadowingDisabled;
 
-    Resource resource;
+    Resource linkConfiguration;
+    String linkUrlPropertyName = PN_LINK_URL;
+    Page targetPage;
+    Asset targetAsset;
     String linkUrl;
     Map<String, String> linkAttributes = new HashMap<>();
     Object reference;
 
-    public LinkBuilderImpl(Resource res, SlingHttpServletRequest req, List<PathProcessor> pathProcs, boolean shadowingDisabled) {
-        if (res != null) {
-            resource = res;
-            ValueMap props = resource.getValueMap();
-            linkUrl = props.get(Link.PN_LINK_URL, String.class);
-
-            String linkTarget = props.get(PN_LINK_TARGET, String.class);
-            if (StringUtils.isNotEmpty(linkTarget)) {
-                setLinkTarget(linkTarget);
-            }
-            String linkAccessibilityLabel = props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class);
-            if (StringUtils.isNotEmpty(linkAccessibilityLabel)) {
-                setLinkAttribute(PN_LINK_ACCESSIBILITY_LABEL, linkAccessibilityLabel);
-            }
-            String linkTitleAttribute = props.get(PN_LINK_TITLE_ATTRIBUTE, String.class);
-            if (StringUtils.isNotEmpty(linkTitleAttribute)) {
-                setLinkAttribute(PN_LINK_TITLE_ATTRIBUTE, linkTitleAttribute);
-            }
-        }
+    public LinkBuilderImpl(Resource resource, SlingHttpServletRequest req, List<PathProcessor> pathProcs, boolean shadowingDisabled) {
+        linkConfiguration = resource;
         request = req;
         pathProcessors = pathProcs;
         this.shadowingDisabled = shadowingDisabled;
     }
 
     public LinkBuilderImpl(Page page, SlingHttpServletRequest req, List<PathProcessor> pathProcs, boolean shadowingDisabled) {
-        if (page != null) {
-            linkUrl = page.getPath();
-        }
+        targetPage = page;
         request = req;
         pathProcessors = pathProcs;
         this.shadowingDisabled = shadowingDisabled;
     }
 
     public LinkBuilderImpl(Asset asset, SlingHttpServletRequest req, List<PathProcessor> pathProcs) {
-        if (asset != null) {
-            linkUrl = asset.getPath();
-        }
+        targetAsset = asset;
         request = req;
         pathProcessors = pathProcs;
     }
@@ -107,22 +90,20 @@ public class LinkBuilderImpl implements LinkBuilder {
     }
 
     @Override
-    public @NotNull LinkBuilder setLinkUrlPropertyName(@NotNull String name) {
-        if (resource != null) {
-            ValueMap props = resource.getValueMap();
-            linkUrl = props.get(name, String.class);
-        }
+    public @NotNull LinkBuilder withLinkUrlPropertyName(@NotNull String name) {
+        linkUrlPropertyName = name;
         return this;
     }
 
     @Override
-    public @NotNull LinkBuilder setLinkTarget(@NotNull String target) {
+    public @NotNull LinkBuilder withLinkTarget(@NotNull String target) {
         String resolvedLinkTarget = validateAndResolveLinkTarget(target);
-        return setLinkAttribute(PN_LINK_TARGET, resolvedLinkTarget);
+        linkAttributes.put(PN_LINK_TARGET, resolvedLinkTarget);
+        return this;
     }
 
     @Override
-    public @NotNull LinkBuilder setLinkAttribute(@NotNull String name, @Nullable String value) {
+    public @NotNull LinkBuilder withLinkAttribute(@NotNull String name, @Nullable String value) {
         String validatedLinkAttributeValue = validateLinkAttributeValue(value);
         linkAttributes.put(name, validatedLinkAttributeValue);
         return this;
@@ -130,6 +111,27 @@ public class LinkBuilderImpl implements LinkBuilder {
 
     @Override
     public @NotNull Link build() {
+        if (linkConfiguration != null) {
+            ValueMap props = linkConfiguration.getValueMap();
+            linkUrl = props.get(linkUrlPropertyName, String.class);
+            String linkTarget = props.get(PN_LINK_TARGET, String.class);
+            if (StringUtils.isNotEmpty(linkTarget)) {
+                withLinkTarget(linkTarget);
+            }
+            String linkAccessibilityLabel = props.get(PN_LINK_ACCESSIBILITY_LABEL, String.class);
+            if (StringUtils.isNotEmpty(linkAccessibilityLabel)) {
+                withLinkAttribute(PN_LINK_ACCESSIBILITY_LABEL, linkAccessibilityLabel);
+            }
+            String linkTitleAttribute = props.get(PN_LINK_TITLE_ATTRIBUTE, String.class);
+            if (StringUtils.isNotEmpty(linkTitleAttribute)) {
+                withLinkAttribute(PN_LINK_TITLE_ATTRIBUTE, linkTitleAttribute);
+            }
+        } else if (targetPage != null) {
+            linkUrl = targetPage.getPath();
+        } else if (targetAsset != null) {
+            linkUrl = targetAsset.getPath();
+        }
+
         Asset asset = getAsset(linkUrl);
         Page page = getPage(linkUrl).orElse(null);
         if (asset != null) {
