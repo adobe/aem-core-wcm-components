@@ -25,6 +25,7 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
@@ -39,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.LocalizationUtils;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.LanguageManager;
@@ -75,10 +76,10 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     private SlingHttpServletRequest request;
 
     /**
-     * The link handler.
+     * The link manager.
      */
     @Self
-    private LinkHandler linkHandler;
+    private LinkManager linkManager;
 
     /**
      * The current page.
@@ -186,9 +187,9 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         return Collections.unmodifiableList(items);
     }
 
-    protected NavigationItem newNavigationItem(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level,
+    protected NavigationItem newNavigationItem(Page page, boolean active, boolean current, @NotNull LinkManager linkManager, int level,
                                                List<NavigationItem> children, String parentId, Component component) {
-        return new NavigationItemImpl(page, active, current, linkHandler, level, children, parentId, component);
+        return new NavigationItemImpl(page, active, current, linkManager, level, children, parentId, component);
     }
 
     @Override
@@ -249,7 +250,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         int level = page.getDepth() - (this.getNavigationRoot().getDepth() + structureStart);
         boolean current = checkCurrent(page);
         boolean selected = checkSelected(page, current);
-        return newNavigationItem(page, selected, current, linkHandler, level, children, getId(), component);
+        return newNavigationItem(page, selected, current, linkManager, level, children, getId(), component);
     }
 
     /**
@@ -281,7 +282,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @return True if the specified page redirects to the current page.
      */
     private boolean currentPageIsRedirectTarget(@NotNull final Page page) {
-        return currentPage.equals(linkHandler.resolveRedirects(page).getLeft());
+        return currentPage.equals(Utils.resolveRedirects(page).getLeft());
     }
 
 }

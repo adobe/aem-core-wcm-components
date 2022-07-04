@@ -56,7 +56,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -191,12 +191,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 component = componentCandidate;
             }
 
-            LinkHandler linkHandler = request.adaptTo(LinkHandler.class);
+            LinkManager linkManager = request.adaptTo(LinkManager.class);
             Style currentStyle = WCMUtils.getStyle(request);
             Page currentPage = Optional.ofNullable(resourceResolver.adaptTo(PageManager.class))
                     .map(pageManager -> pageManager.getContainingPage(request.getResource()))
                     .orElse(null);
-            Resource wrappedImageResourceWithInheritance = getWrappedImageResourceWithInheritance(component, linkHandler, currentStyle, currentPage);
+            Resource wrappedImageResourceWithInheritance = getWrappedImageResourceWithInheritance(component, linkManager, currentStyle, currentPage);
             ImageComponent imageComponent = new ImageComponent(wrappedImageResourceWithInheritance);
 
             if (imageComponent.source == Source.NOCONTENT || imageComponent.source == Source.NONEXISTING) {

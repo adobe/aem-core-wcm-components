@@ -25,6 +25,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -38,7 +40,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
+import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.adobe.cq.wcm.core.components.models.Teaser;
@@ -328,18 +331,18 @@ public class Utils {
      * the linked page or the page containing the resource.
      *
      * @param resource The image resource
-     * @param linkHandler The link handler
+     * @param linkManager The link manager
      * @param currentStyle The style of the image resource
      * @param currentPage The page containing the image resource
      * @return The wrapped image resource augmented with inherited properties and child resource if inheritance is enabled, the plain image resource otherwise.
      */
-    public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkHandler linkHandler, Style currentStyle, Page currentPage) {
+    public static Resource getWrappedImageResourceWithInheritance(Resource resource, LinkManager linkManager, Style currentStyle, Page currentPage) {
         if (resource == null) {
             LOGGER.error("The resource is not defined");
             return null;
         }
-        if (linkHandler == null) {
-            LOGGER.error("The link handler is not defined");
+        if (linkManager == null) {
+            LOGGER.error("The link manager is not defined");
             return null;
         }
 
@@ -359,17 +362,17 @@ public class Utils {
 
             if (StringUtils.isNotEmpty(linkURL)) {
                 // the inherited resource is the featured image of the linked page
-                Optional<Link> link = linkHandler.getLink(resource);
+                Optional<Link> link = getOptionalLink(linkManager.get(resource).build());
                 inheritedResource = link
                         .map(link1 -> (Page) link1.getReference())
                         .map(ComponentUtils::getFeaturedImage)
                         .orElse(null);
             } else if (actionsEnabled && firstAction != null) {
                 // the inherited resource is the featured image of the first action's page (the resource is assumed to be a teaser)
-                inheritedResource = Optional.of(linkHandler.getLink(firstAction, Teaser.PN_ACTION_LINK))
+                inheritedResource = getOptionalLink(linkManager.get(firstAction).withLinkUrlPropertyName(Teaser.PN_ACTION_LINK).build())
                         .map(link1 -> {
-                            if (link1.isPresent()) {
-                                Page linkedPage = (Page) link1.get().getReference();
+                            if (getOptionalLink(link1).isPresent()) {
+                                Page linkedPage = (Page) link1.getReference();
                                 return Optional.ofNullable(linkedPage)
                                         .map(ComponentUtils::getFeaturedImage)
                                         .orElse(null);
@@ -422,6 +425,52 @@ public class Utils {
 
         }
         return resource;
+    }
+
+    /**
+     * Attempts to resolve the redirect chain starting from the given page, avoiding loops.
+     *
+     * @param page The starting {@link Page}
+     * @return A pair of {@link Page} and {@link String} the redirect chain resolves to. The page can be the original page, if no redirect
+     * target is defined or even {@code null} if the redirect chain does not resolve to a valid page, in this case one should use the right
+     * part of the pair (the {@link String} redirect target).
+     */
+    @NotNull
+    public static Pair<Page, String> resolveRedirects(@Nullable final Page page) {
+        Page result = page;
+        String redirectTarget = null;
+        if (page != null && page.getPageManager() != null) {
+            Set<String> redirectCandidates = new LinkedHashSet<>();
+            redirectCandidates.add(page.getPath());
+            while (result != null && StringUtils
+                    .isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
+                result = page.getPageManager().getPage(redirectTarget);
+                if (result != null) {
+                    if (!redirectCandidates.add(result.getPath())) {
+                        LOGGER.warn("Detected redirect loop for the following pages: {}.", redirectCandidates);
+                        break;
+                    }
+                }
+            }
+        }
+        return new ImmutablePair<>(result, redirectTarget);
+    }
+
+    /**
+     * Converts a link object into an Optional<Link> object.
+     * This method is used to keep the logic based on the former internal link handler backwards compatible.
+     *
+     * @param link The {@link Link}
+     * @return the Optional<Link> object
+     */
+    public static Optional<Link> getOptionalLink(Link link) {
+        if (link == null) {
+            return Optional.empty();
+        }
+        if (!link.isValid()) {
+            return Optional.empty();
+        }
+        return Optional.of(link);
     }
 
 }
