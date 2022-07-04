@@ -71,6 +71,48 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     protected String accessibilityLabel;
 
     /**
+     * The accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityPrevious;
+
+    /**
+     * The previous button accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityNext;
+
+    /**
+     * The next button accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityPlay;
+
+    /**
+     * The pause button accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityPause;
+
+    /**
+     * The play button accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityTablist;
+
+    /**
+     * Flag indicating if carousel item uses it's title for aria-label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected boolean accessibilityAutoItemTitles;
+
+    /**
      * Flag indicating if autoplay is enabled.
      */
     protected boolean autoplay;
@@ -132,6 +174,42 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     @Nullable
     public String getAccessibilityLabel() {
         return accessibilityLabel;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityPrevious() {
+        return accessibilityPrevious;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityNext() {
+        return accessibilityNext;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityPlay() {
+        return accessibilityPlay;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityPause() {
+        return accessibilityPause;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityTablist() {
+        return accessibilityTablist;
+    }
+
+    @Override
+    @Nullable
+    public boolean getAccessibilityAutoItemTitles() {
+        return accessibilityAutoItemTitles;
     }
 
     @Override

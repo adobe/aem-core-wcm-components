@@ -128,6 +128,7 @@
                                     "controlsPrepended": false,
                                     "delay": 7000,
                                     "autopauseDisabled": false,
+                                    "accessibilityAutoItemTitles": false,
                                     "dataLayer": {
                                         "carousel-21953a9100": {
                                             "@type": "core/wcm/components/carousel/v1/carousel",

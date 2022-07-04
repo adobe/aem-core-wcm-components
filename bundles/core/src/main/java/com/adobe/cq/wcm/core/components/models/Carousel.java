@@ -94,6 +94,66 @@ public interface Carousel extends Container {
     }
 
     /**
+     * Returns an accessibility label that describes the carousel.
+     *
+     * @return an accessibility label for the carousel
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityPrevious() {
+        return null;
+    }
+
+    /**
+     * Returns an accessibility label that describes the carousel.
+     *
+     * @return an accessibility label for the carousel
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityNext() {
+        return null;
+    }
+
+    /**
+     * Returns an accessibility label that describes the carousel.
+     *
+     * @return an accessibility label for the carousel
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityPlay() {
+        return null;
+    }
+
+    /**
+     * Returns an accessibility label that describes the carousel.
+     *
+     * @return an accessibility label for the carousel
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityPause() {
+        return null;
+    }
+
+    /**
+     * Returns an accessibility label that describes the carousel.
+     *
+     * @return an accessibility label for the carousel
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityTablist() {
+        return null;
+    }
+
+    /**
+     * Returns an accessibility label that describes the carousel.
+     *
+     * @return an accessibility label for the carousel
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default boolean getAccessibilityAutoItemTitles() {
+        return false;
+    }
+
+    /**
      * Checks if the control elements should be placed in front of the carousel items.
      *
      * @return {@code true} if the control elements should be placed in front of the items, {@code false} if they should be appended
