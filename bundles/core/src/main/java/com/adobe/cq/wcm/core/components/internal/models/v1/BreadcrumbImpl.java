@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Breadcrumb;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
@@ -66,7 +66,7 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
     private SlingHttpServletRequest request;
 
     @Self
-    protected LinkHandler linkHandler;
+    protected LinkManager linkManager;
 
     private boolean showHidden;
     private boolean hideCurrent;
@@ -105,7 +105,7 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = newBreadcrumbItem(page, isActivePage, linkHandler, currentLevel,
+                    NavigationItem navigationItem = newBreadcrumbItem(page, isActivePage, linkManager, currentLevel,
                             Collections.emptyList(), getId(), component);
                     items.add(navigationItem);
                 }
@@ -115,8 +115,8 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
         return items;
     }
 
-    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String parentId, Component component) {
-        return new BreadcrumbItemImpl(page, active, linkHandler, level, children, parentId, component);
+    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkManager linkManager, int level, List<NavigationItem> children, String parentId, Component component) {
+        return new BreadcrumbItemImpl(page, active, linkManager, level, children, parentId, component);
     }
 
     private boolean checkIfNotHidden(Page page) {

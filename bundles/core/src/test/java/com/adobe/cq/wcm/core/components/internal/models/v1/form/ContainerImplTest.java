@@ -33,7 +33,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.form.Container;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
@@ -88,7 +87,6 @@ public class ContainerImplTest {
                         .collect(Collectors.toList());
             }
         });
-        context.registerAdapter(MockSlingHttpServletRequest.class, LinkHandler.class, new LinkHandler());
         FormsHelperStubber.createStub();
     }
 

@@ -17,8 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -91,13 +89,13 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Override
     protected void initLink() {
         // use the target page as the link if it exists
-        link = linkHandler.getLink(resource, Link.PN_LINK_URL);
+        link = linkManager.get(resource).withLinkUrlPropertyName(Link.PN_LINK_URL).build();
     }
 
     @Override
     @Nullable
     public Link getLink() {
-        return link.orElse(null);
+        return link.isValid() ? link : null;
     }
 
     @Override
@@ -164,7 +162,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     protected boolean hasImage() {
         // As Teaser v2 supports inheritance from the featured image of the page, the current resource is wrapped and
         // augmented with the inherited properties and child resources of the featured image.
-        Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkHandler, currentStyle, currentPage);
+        Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkManager, currentStyle, currentPage);
         return Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
                 .map(request.getResourceResolver()::getResource)
                 .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null;

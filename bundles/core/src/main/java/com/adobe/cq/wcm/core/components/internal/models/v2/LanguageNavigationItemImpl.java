@@ -20,7 +20,7 @@ import java.util.Locale;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
@@ -33,9 +33,9 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
     protected String country;
     protected String language;
 
-    public LanguageNavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level,
+    public LanguageNavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkManager linkManager, int level,
                                       List<NavigationItem> children, String title, String parentId, Component component) {
-        super(page, active, current, linkHandler, level, children, parentId, component);
+        super(page, active, current, linkManager, level, children, parentId, component);
         this.title = title;
     }
 
