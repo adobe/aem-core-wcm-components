@@ -13,18 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function(Granite) {
+(function() {
     "use strict";
 
+    var linkAccessibilityClass = "cmp-link__screen-reader-only";
+    var selectors = {
+        linkAccessibility: "." + linkAccessibilityClass,
+        linkAccessibilityEnabled: "[data-cmp-link-accessibility-enabled]",
+        linkAccessibilityText: "[data-cmp-link-accessibility-text]"
+    };
+    
+    function getLinkAccessibilityText() {
+        var linkAccessibilityEnabled = document.querySelectorAll(selectors.linkAccessibilityEnabled);
+        if (!linkAccessibilityEnabled[0]) {
+            return;
+        }
+        var linkAccessibilityTextElements = document.querySelectorAll(selectors.linkAccessibilityText);
+        if (!linkAccessibilityTextElements[0]) {
+            return;
+        }
+        return linkAccessibilityTextElements[0].dataset.cmpLinkAccessibilityText;
+    }
+
     function onDocumentReady() {
-        var linkAccessibilityClass = "cmp-link__screen-reader-only";
-        var linkAccessibilitySelector = "." + linkAccessibilityClass;
-        var linkAccessibilityHtml = "<span class='" + linkAccessibilityClass + "'>(" + Granite.I18n.get("opens in a new tab") + ")</span>";
-        document.querySelectorAll("a[target='_blank']").forEach(function(link) {
-            if (!link.querySelector(linkAccessibilitySelector)) {
-                link.insertAdjacentHTML("beforeend",  linkAccessibilityHtml);
-            }
-        });
+        var linkAccessibilityText = getLinkAccessibilityText();
+        if (linkAccessibilityText) {
+            var linkAccessibilityHtml = "<span class='" + linkAccessibilityClass + "'>(" + linkAccessibilityText + ")</span>";
+            document.querySelectorAll("a[target='_blank']").forEach(function(link) {
+                if (!link.querySelector(selectors.linkAccessibility)) {
+                    link.insertAdjacentHTML("beforeend",  linkAccessibilityHtml);
+                }
+            });
+        }
     }
 
     if (document.readyState !== "loading") {
@@ -33,4 +53,4 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-}(Granite));
+}());
