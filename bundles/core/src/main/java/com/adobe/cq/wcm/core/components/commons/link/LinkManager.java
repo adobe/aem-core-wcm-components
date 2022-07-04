@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.link;
 
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -26,18 +27,19 @@ import com.day.cq.wcm.api.Page;
  * This interface offers a flexible way, based on the builder pattern, to compute links.
  *
  * This is a Sling model that can be injected into other models using the <code>@Self</code> annotation.
+ * It can be adapted from a {@link SlingHttpServletRequest}.
  *
  * It can be used as follows:
  * <pre>
- *     Link link = linkHandler.get(page).build();
- *     Link link = linkHandler.get(page)
- *          .setLinkTarget(...)
- *          .setLinkAttribute(...)
+ *     Link link = linkManager.get(page).build();
+ *     Link link = linkManager.get(page)
+ *          .withLinkTarget(...)
+ *          .withLinkAttribute(...)
  *          .build();
  * </pre>
  */
 @ConsumerType
-public interface LinkHandler {
+public interface LinkManager {
 
     /**
      * Returns a link builder where the link is defined by the resource properties.
