@@ -15,6 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -211,10 +214,16 @@ public class LinkHandler {
     private Optional<Link<Page>> buildLink(String path, SlingHttpServletRequest request, Page page,
                                            Map<String, String> htmlAttributes) {
         if (StringUtils.isNotEmpty(path)) {
+            try {
+                path = URLDecoder.decode(path, StandardCharsets.UTF_8.name());
+            } catch (UnsupportedEncodingException e) {
+                LOGGER.warn(e.getMessage());
+            }
+            String decodedPath = path;
             return pathProcessors.stream()
-                    .filter(pathProcessor -> pathProcessor.accepts(path, request))
-                    .findFirst().map(pathProcessor -> new LinkImpl<>(pathProcessor.sanitize(path, request), pathProcessor.map(path,
-                            request), pathProcessor.externalize(path, request), page, pathProcessor.processHtmlAttributes(path, htmlAttributes)));
+                    .filter(pathProcessor -> pathProcessor.accepts(decodedPath, request))
+                    .findFirst().map(pathProcessor -> new LinkImpl<>(pathProcessor.sanitize(decodedPath, request), pathProcessor.map(decodedPath,
+                            request), pathProcessor.externalize(decodedPath, request), page, pathProcessor.processHtmlAttributes(decodedPath, htmlAttributes)));
         } else {
             return Optional.of(new LinkImpl<>(path, path, path, page, htmlAttributes));
         }
