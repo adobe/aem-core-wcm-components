@@ -15,6 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -28,6 +31,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.commons.link.LinkBuilder;
@@ -47,6 +52,8 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TARGE
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE;
 
 public class LinkBuilderImpl implements LinkBuilder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LinkBuilderImpl.class);
 
     public static final String HTML_EXTENSION = ".html";
 
@@ -148,15 +155,21 @@ public class LinkBuilderImpl implements LinkBuilder {
 
     private @NotNull Link buildLink(String path, SlingHttpServletRequest request, Map<String, String> htmlAttributes) {
         if (StringUtils.isNotEmpty(path)) {
+            try {
+                path = URLDecoder.decode(path, StandardCharsets.UTF_8.name());
+            } catch (UnsupportedEncodingException e) {
+                LOGGER.warn(e.getMessage());
+            }
+            String decodedPath = path;
             return pathProcessors.stream()
-                    .filter(pathProcessor -> pathProcessor.accepts(path, request))
+                    .filter(pathProcessor -> pathProcessor.accepts(decodedPath, request))
                     .findFirst()
                     .map(pathProcessor -> new LinkImpl(
-                            pathProcessor.sanitize(path, request),
-                            pathProcessor.map(path, request),
-                            pathProcessor.externalize(path, request),
+                            pathProcessor.sanitize(decodedPath, request),
+                            pathProcessor.map(decodedPath, request),
+                            pathProcessor.externalize(decodedPath, request),
                             this.reference,
-                            pathProcessor.processHtmlAttributes(path, htmlAttributes)))
+                            pathProcessor.processHtmlAttributes(decodedPath, htmlAttributes)))
                     .orElse(new LinkImpl(path, path, path, this.reference, htmlAttributes));
         } else {
             return new LinkImpl(path, path, path, this.reference, htmlAttributes);
