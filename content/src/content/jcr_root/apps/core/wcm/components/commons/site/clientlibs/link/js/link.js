@@ -22,7 +22,7 @@
         linkAccessibilityEnabled: "[data-cmp-link-accessibility-enabled]",
         linkAccessibilityText: "[data-cmp-link-accessibility-text]"
     };
-    
+
     function getLinkAccessibilityText() {
         var linkAccessibilityEnabled = document.querySelectorAll(selectors.linkAccessibilityEnabled);
         if (!linkAccessibilityEnabled[0]) {
