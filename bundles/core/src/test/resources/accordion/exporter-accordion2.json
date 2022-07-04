@@ -133,6 +133,7 @@
                                     "autoplay": true,
                                     "controlsPrepended": false,
                                     "delay": 7000,
+                                    "accessibilityAutoItemTitles": false,
                                     "autopauseDisabled": false,
                                     "dataLayer": {
                                         "carousel-8c88179066": {

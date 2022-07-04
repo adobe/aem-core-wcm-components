@@ -136,6 +136,50 @@
                                                 fieldLabel="Label"
                                                 name="./accessibilityLabel"
                                                 value=""/>
+                                            <accessibilityPrevious
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's previous button label."
+                                                fieldLabel="Previous"
+                                                name="./accessibilityPrevious"
+                                                value=""/>
+                                            <accessibilityNext
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's next button label."
+                                                fieldLabel="Next"
+                                                name="./accessibilityNext"
+                                                value=""/>
+                                            <accessibilityPlay
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's play button label."
+                                                fieldLabel="Play"
+                                                name="./accessibilityPlay"
+                                                value=""/>
+                                            <accessibilityPause
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's pause button label."
+                                                fieldLabel="Pause"
+                                                name="./accessibilityPause"
+                                                value=""/>
+                                            <accessibilityTablist
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's list of items label."
+                                                fieldLabel="Tablist"
+                                                name="./accessibilityTablist"
+                                                value=""/>
+                                            <accessibilityAutoItemTitles
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="false"
+                                                fieldDescription="If checked, automatically sets carousel items title to its aria-label description."
+                                                name="./accessibilityAutoItemTitles"
+                                                text="Sets carousel item's aria label to its title"
+                                                uncheckedValue="false"
+                                                value="true"/>
                                         </items>
                                     </column>
                                 </items>
