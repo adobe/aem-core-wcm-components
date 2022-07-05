@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Optional;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -24,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -33,12 +31,12 @@ public class RedirectItemImpl implements NavigationItem {
 
     private final String redirectTarget;
     private final Page page;
-    protected final Optional<Link<Page>> link;
+    protected final Link link;
 
-    public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
+    public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
         this.redirectTarget = redirectTarget;
         this.page = getRedirectPage(request);
-        this.link = linkHandler.getLink(this.page);
+        this.link = linkManager.get(this.page).build();
     }
 
     private Page getRedirectPage(@NotNull SlingHttpServletRequest request) {
@@ -62,6 +60,6 @@ public class RedirectItemImpl implements NavigationItem {
     @Override
     @Nullable
     public String getURL() {
-        return link.map(Link::getURL).orElse(null);
+        return link.getURL();
     }
 }

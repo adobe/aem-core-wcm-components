@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe
+ ~ Copyright 2022 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,18 +13,27 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components;
+package com.adobe.cq.wcm.core.components.commons.link;
+
+import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
-import com.adobe.cq.wcm.core.components.testing.AbstractModelTest;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.spy;
 
-public class ModelsCommonsTest extends AbstractModelTest {
+public class LinkTest {
 
     @Test
-    public void testDefaultBehaviour() throws Exception {
-        testDefaultBehaviour(new String[] {
-                "com.adobe.cq.wcm.core.components.models"
-       });
+    void testLinkDefaultMethods() {
+        Link link = spy(Link.class);
+        assertFalse(link.isValid());
+        assertNull(link.getURL());
+        assertNull(link.getMappedURL());
+        assertNull(link.getExternalizedURL());
+        assertEquals(Collections.emptyMap(), link.getHtmlAttributes());
+        assertNull(link.getReference());
     }
+
 }
