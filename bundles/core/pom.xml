@@ -57,7 +57,6 @@
                 <configuration>
                     <exportScr>true</exportScr>
                     <instructions>
-                        <Embed-Dependency>jsoup</Embed-Dependency>
                         <_plugin>
                             <!-- Enable registration of Sling Models classes via bnd plugin -->
                             org.apache.sling.bnd.models.ModelsScannerPlugin,
@@ -72,7 +71,6 @@
                             com.adobe.cq.commerce.*;resolution:=optional,
                             com.adobe.aem.wcm.seo.*;resolution:=optional,
                             javax.annotation;version=0.0.0,
-                            javax.annotation.meta;resolution:=optional,
                             com.day.cq.dam.api;version="[1.24,2.0)",
                             com.day.cq.dam.api.handler;version="[2,3)",
                             *
@@ -95,16 +93,6 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.rat</groupId>
-                <artifactId>apache-rat-plugin</artifactId>
-                <configuration>
-                    <excludes combine.children="append">
-                        <!-- Ignore html files -->
-                        <exclude>**/test/resources/tableofcontents/*.html</exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -394,16 +382,6 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.commons.johnzon</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.servlets.annotations</artifactId>
-            <version>1.2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.14.3</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
