@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.services;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,15 +40,19 @@ public class LatestVersionImplementationPicker implements ImplementationPicker {
     public Class<?> pick(Class<?> adapterType, Class<?>[] implementationsTypes, Object adaptable) {
         // make sure picker is only responsible for core component models
         if (adapterType.getPackage().getName().equals(CORE_COMPONENTS_MODELS)) {
-            return Arrays.stream(implementationsTypes).min((Class<?> o1, Class<?> o2) -> {
-                Matcher m1 = INTERNAL_MODEL_PATTERN.matcher(o1.getName());
-                Matcher m2 = INTERNAL_MODEL_PATTERN.matcher(o2.getName());
-                if (m1.matches() && m2.matches()) {
-                    return Integer.parseInt(m2.group(1)) - Integer.parseInt(m1.group(1));
-                } else {
-                    return (m1.matches() ? 1 : (m2.matches() ? -1 : 0));
-                }
-            }).orElse(implementationsTypes[0]);
+            return Arrays.stream(implementationsTypes)
+                // filter adobe internal models which are not part of the core components project
+                .filter(aClass -> !aClass.getName().startsWith("com.adobe.cq") ||
+                    aClass.getName().startsWith("com.adobe.cq.wcm.core.components.internal.models"))
+                .min((Class<?> o1, Class<?> o2) -> {
+                    Matcher m1 = INTERNAL_MODEL_PATTERN.matcher(o1.getName());
+                    Matcher m2 = INTERNAL_MODEL_PATTERN.matcher(o2.getName());
+                    if (m1.matches() && m2.matches()) {
+                        return Integer.parseInt(m2.group(1)) - Integer.parseInt(m1.group(1));
+                    } else {
+                        return (m1.matches() ? 1 : (m2.matches() ? -1 : 0));
+                    }
+                }).orElse(implementationsTypes[0]);
         }
         return null;
     }
