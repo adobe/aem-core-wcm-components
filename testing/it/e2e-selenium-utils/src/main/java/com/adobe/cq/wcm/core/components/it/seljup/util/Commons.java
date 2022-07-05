@@ -166,6 +166,7 @@ public class Commons {
     public static String RT_FORMHIDDEN_V2 = "core-component/components/formhidden-v2";
     // download component
     public static final String RT_DOWNLOAD_V1 = "core-component/components/download-v1";
+    public static final String RT_DOWNLOAD_V2 = "core-component/components/download-v2";
 
     /**
      * Creates form entity builder
