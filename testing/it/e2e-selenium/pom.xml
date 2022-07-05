@@ -261,12 +261,12 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>aem-cloud-testing-clients</artifactId>
-            <version>0.7.0</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>aem-selenium-it-base</artifactId>
-            <version>0.2.18</version>
+            <version>0.2.32</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

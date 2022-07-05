@@ -21,12 +21,13 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.sling.testing.clients.ClientException;
-import org.codehaus.jackson.JsonNode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,7 +71,7 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
 
     @BeforeEach
     public void loginBeforeEach(@Author final CQClient adminAuthor, final TestContentBuilder testContentBuilder, final URI baseURI)
-        throws ClientException, InterruptedException, IOException {
+        throws ClientException, InterruptedException, IOException, TimeoutException {
         testContentBuilder.withUser(randomPassword, getUserGroupMembership());
         testContentBuilder.build();
 
@@ -119,7 +120,7 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
     public void addPathtoComponentPolicy(String componenPathtoUpdate, String pathToAdd) throws ClientException {
         String resourcePath = StringUtils.replaceOnce(componenPathtoUpdate, "structure", "policies");
         JsonNode existingPolicyNodePath = authorClient.doGetJson(resourcePath, 1, 200);
-        String existingPolicy = configPath + "/settings/wcm/policies/" + existingPolicyNodePath.get("cq:policy").getValueAsText();
+        String existingPolicy = configPath + "/settings/wcm/policies/" + existingPolicyNodePath.get("cq:policy").asText();
         JsonNode policyNode = authorClient.doGetJson(existingPolicy, 1, 200);
         JSONObject policyNodeJson = new JSONObject(policyNode.toString());
         JSONArray jsonArray = policyNodeJson.getJSONArray("components");
