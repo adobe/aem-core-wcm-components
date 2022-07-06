@@ -108,7 +108,7 @@ public class TableOfContentsFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
 
-        if(!enabled) {
+        if (!enabled) {
             LOGGER.debug("{} not enabled, bypassing it", TableOfContentsFilter.class.getName());
             chain.doFilter(request, response);
             return;
