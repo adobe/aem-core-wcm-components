@@ -26,7 +26,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.osgi.framework.Constants;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +57,9 @@ import java.util.Set;
  * store the response content.
  * Gets the response content from this wrapper, modifies it and copies it into the original response object.
  */
+@Designate(
+    ocd = TableOfContentsFilter.Config.class
+)
 @Component(
     service = Filter.class,
     property = {Constants.SERVICE_RANKING + "Integer=999"}
@@ -68,19 +75,44 @@ public class TableOfContentsFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TableOfContentsFilter.class);
 
+    private boolean enabled;
+
+    @ObjectClassDefinition(
+        name = "Core Components TableOfContentsFilter Config",
+        description = "Configuration for enabling TableOfContentsFilter"
+    )
+    public @interface Config {
+        @AttributeDefinition(
+            name = "Enabled",
+            description = "Whether TableOfContentsFilter component will be activated or not"
+        )
+        boolean enabled() default false;
+    }
+
+    @Activate
+    protected void activate(Config config) {
+        enabled = config.enabled();
+    }
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        LOGGER.debug("Initialising {}", TableOfContentsFilter.class.getName());
     }
 
     @Override
     public void destroy() {
-
+        LOGGER.debug("Destroying {}", TableOfContentsFilter.class.getName());
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
+
+        if(!enabled) {
+            LOGGER.debug("{} not enabled, bypassing it", TableOfContentsFilter.class.getName());
+            chain.doFilter(request, response);
+            return;
+        }
 
         CharResponseWrapper responseWrapper = new CharResponseWrapper((HttpServletResponseWrapper) response);
         chain.doFilter(request, responseWrapper);
@@ -120,6 +152,8 @@ public class TableOfContentsFilter implements Filter {
 
             response.getWriter().write(alteredContent);
         } else {
+            LOGGER.debug("{} component not present on page, so not parsing the page output",
+                TableOfContents.class.getName());
             response.getWriter().write(originalContent);
         }
     }
