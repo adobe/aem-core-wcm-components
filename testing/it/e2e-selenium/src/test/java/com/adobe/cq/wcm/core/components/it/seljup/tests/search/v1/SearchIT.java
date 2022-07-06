@@ -18,13 +18,13 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.search.v1;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
 import org.apache.sling.testing.clients.util.JsonUtils;
 import org.apache.sling.testing.clients.util.URLParameterBuilder;
 import org.apache.sling.testing.clients.util.poller.Polling;
-import org.codehaus.jackson.JsonNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -84,7 +84,7 @@ public class SearchIT extends AuthorBaseUITest {
 
         boolean match = false;
         for (final JsonNode hit : hitsNode) {
-            if(hit.get("path").getTextValue().trim().equals(expected)){
+            if(hit.get("path").asText().trim().equals(expected)){
                 match = true;
                 break;
             }

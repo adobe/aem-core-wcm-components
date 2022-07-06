@@ -65,6 +65,7 @@
         <mockitio.version>2.24.5</mockitio.version>
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
+        <jackson.version>2.11.3</jackson.version>
     </properties>
 
     <!-- ======================================================================= -->
@@ -671,19 +672,19 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-                <version>2.9.5</version>
+                <version>${jackson.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.9.5</version>
+                <version>${jackson.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>2.9.5</version>
+                <version>${jackson.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
