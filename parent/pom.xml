@@ -139,7 +139,7 @@
                     <version>1.12.2</version>
                     <configuration>
                         <message>@releng [maven-scm] : Updating NPM versions</message>
-                        <includes>**/content/package.json,**/ui-js/package.json,**/content/package-lock.json,**/ui-js/package-lock.json</includes>
+                        <includes>**/content/package.json,**/it.ui.apps/package.json,**/content/package-lock.json,**/it.ui.apps/package-lock.json</includes>
                     </configuration>
                 </plugin>
                 <plugin>
