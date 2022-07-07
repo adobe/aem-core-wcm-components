@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
@@ -165,6 +166,7 @@ public class Commons {
     public static String RT_FORMHIDDEN_V2 = "core-component/components/formhidden-v2";
     // download component
     public static final String RT_DOWNLOAD_V1 = "core-component/components/download-v1";
+    public static final String RT_DOWNLOAD_V2 = "core-component/components/download-v2";
 
     /**
      * Creates form entity builder
@@ -904,7 +906,8 @@ public class Commons {
         if (!StringUtils.startsWith(component, "/")) {
             component = "/apps/" + component;
         }
-        return $("coral-selectlist-item[value='" + component + "']").isDisplayed();
+        InsertComponentDialog insertComponentDialog = new InsertComponentDialog();
+        return insertComponentDialog.getItemByValue(component).isDisplayed();
     }
 
     public static void makeInlineEditorEditable() {

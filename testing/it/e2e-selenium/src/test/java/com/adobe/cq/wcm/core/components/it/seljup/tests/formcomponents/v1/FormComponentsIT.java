@@ -19,6 +19,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v1;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -36,7 +37,6 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 
-import org.codehaus.jackson.JsonNode;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -156,7 +156,7 @@ public class FormComponentsIT extends AuthorBaseUITest {
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
 
         JsonNode json_allForm = authorClient.doGetJson(contentJsonUrl_allForm, 3, HttpStatus.SC_OK);
-        Iterator<JsonNode> itr = json_allForm.getElements();
+        Iterator<JsonNode> itr = json_allForm.elements();
         Boolean present = false;
         while(itr.hasNext()) {
             JsonNode node = itr.next();

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="fb2b66a9-7a9d-4daf-90b5-c3ace90d4146">
+    <jcr:content
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2022-06-29T14:02:03.523+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:CharCount="{Long}15"
+            dam:CodePage="{Long}10000"
+            dam:CreateDateTime="{Date}2022-06-29T13:36:00.000+02:00"
+            dam:EndTime="{Date}1601-01-01T01:01:00.000+01:00"
+            dam:extracted="{Date}2022-06-29T14:02:03.435+02:00"
+            dam:LastAuthor="Admin"
+            dam:LastSaveDateTime="{Date}2022-06-29T13:37:00.000+02:00"
+            dam:LineCount="{Long}1"
+            dam:LinksDirty="False"
+            dam:PageCount="{Long}1"
+            dam:ParCount="{Long}1"
+            dam:RevNumber="{Long}1"
+            dam:Scale="False"
+            dam:Security="{Long}0"
+            dam:sha1="8587f16ef0715cb2ffe56bf7d3639bc0d0e0886a"
+            dam:size="{Long}22528"
+            dam:Template="Normal.dotm"
+            dam:WordCount="{Long}2"
+            dc:creator="Admin"
+            dc:format="application/msword"
+            dc:title="Test Doc"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"
+            xmp:CreatorTool="Microsoft Office Word">
+            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
+        </metadata>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Breadcrumb;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
@@ -38,8 +38,8 @@ public class BreadcrumbImpl extends com.adobe.cq.wcm.core.components.internal.mo
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/breadcrumb/v3/breadcrumb";
 
-    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String parentId, Component component) {
-        return new BreadcrumbItemImpl(page, active, linkHandler, level, children, parentId, component);
+    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkManager linkManager, int level, List<NavigationItem> children, String parentId, Component component) {
+        return new BreadcrumbItemImpl(page, active, linkManager, level, children, parentId, component);
     }
 
 }
