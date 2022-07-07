@@ -15,9 +15,24 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.TableOfContentsImpl;
-import com.adobe.cq.wcm.core.components.models.TableOfContents;
-import com.day.cq.wcm.api.WCMMode;
+import java.io.CharArrayWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.servlets.annotations.SlingServletFilter;
 import org.apache.sling.servlets.annotations.SlingServletFilterScope;
@@ -35,22 +50,9 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.CharArrayWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
+import com.adobe.cq.wcm.core.components.internal.models.v1.TableOfContentsImpl;
+import com.adobe.cq.wcm.core.components.models.TableOfContents;
+import com.day.cq.wcm.api.WCMMode;
 
 /**
  * Intercepts all the HTTP requests made to /editor.html or a html page inside /content/.
@@ -116,7 +118,7 @@ public class TableOfContentsFilter implements Filter {
             return;
         }
 
-        CharResponseWrapper responseWrapper = new CharResponseWrapper((HttpServletResponseWrapper) response);
+        CharResponseWrapper responseWrapper = new CharResponseWrapper((HttpServletResponse) response);
         chain.doFilter(request, responseWrapper);
         String originalContent = responseWrapper.toString();
         Boolean containsTableOfContents = (Boolean) request.getAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG);

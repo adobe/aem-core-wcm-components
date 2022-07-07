@@ -15,12 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.annotation.Annotation;
 import java.nio.charset.StandardCharsets;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.commons.io.IOUtils;
@@ -51,18 +52,19 @@ public class TableOfContentsFilterTest {
     @BeforeEach
     void setUp() throws Exception {
         tableOfContentsFilter = new TableOfContentsFilter();
-        tableOfContentsFilter.activate(new TableOfContentsFilter.Config() {
+        TableOfContentsFilter.Config mockConfig = Mockito.mock(TableOfContentsFilter.Config.class);
+        Mockito.when(mockConfig.enabled()).thenReturn(true);
+        tableOfContentsFilter.activate(mockConfig);
+    }
 
-            @Override
-            public Class<? extends Annotation> annotationType() {
-                return getClass();
-            }
-
-            @Override
-            public boolean enabled() {
-                return true;
-            }
-        });
+    @Test
+    void testConfigNotEnabled() throws ServletException, IOException {
+        TableOfContentsFilter.Config mockConfig = Mockito.mock(TableOfContentsFilter.Config.class);
+        Mockito.when(mockConfig.enabled()).thenReturn(false);
+        tableOfContentsFilter.activate(mockConfig);
+        FilterChain filterChain = Mockito.mock(FilterChain.class);
+        tableOfContentsFilter.doFilter(context.request(), context.response(), filterChain);
+        Mockito.verify(filterChain, Mockito.times(1)).doFilter(context.request(), context.response());
     }
 
     /**
