@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.20.5-SNAPSHOT</version>
+    <version>2.20.7-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
@@ -140,7 +140,7 @@
                     <version>1.12.2</version>
                     <configuration>
                         <message>@releng [maven-scm] : Updating NPM versions</message>
-                        <includes>**/content/package.json,**/ui-js/package.json,**/content/package-lock.json,**/ui-js/package-lock.json</includes>
+                        <includes>**/content/package.json,**/it.ui.apps/package.json,**/content/package-lock.json,**/it.ui.apps/package-lock.json</includes>
                     </configuration>
                 </plugin>
                 <plugin>
