@@ -15,11 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.models.v1.TableOfContentsImpl;
-import com.day.cq.wcm.api.WCMMode;
-import io.wcm.testing.mock.aem.junit5.AemContext;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.annotation.Annotation;
+import java.nio.charset.StandardCharsets;
+
+import javax.servlet.FilterChain;
+import javax.servlet.http.HttpServletResponseWrapper;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.loader.ContentLoader;
@@ -28,11 +31,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.models.v1.TableOfContentsImpl;
+import com.day.cq.wcm.api.WCMMode;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -48,6 +51,18 @@ public class TableOfContentsFilterTest {
     @BeforeEach
     void setUp() throws Exception {
         tableOfContentsFilter = new TableOfContentsFilter();
+        tableOfContentsFilter.activate(new TableOfContentsFilter.Config() {
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return getClass();
+            }
+
+            @Override
+            public boolean enabled() {
+                return true;
+            }
+        });
     }
 
     /**
