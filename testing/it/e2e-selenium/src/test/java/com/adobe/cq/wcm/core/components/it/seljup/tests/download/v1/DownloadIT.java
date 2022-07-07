@@ -48,7 +48,7 @@ public class DownloadIT extends AuthorBaseUITest {
 
     private static String assetFilter = "[name='assetfilter_image_path']";
     private static String componentName = "download";
-    private static String testAssetsPath = "/content/dam/core-components";
+    protected static String testAssetsPath = "/content/dam/core-components";
     private static String testAssetName = "core-comp-test-image.jpg";
     private static String testAssetPath = testAssetsPath + "/" + testAssetName;
 
