@@ -28,6 +28,7 @@ import org.jsoup.select.Elements;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
@@ -61,6 +62,7 @@ import java.util.Set;
     ocd = TableOfContentsFilter.Config.class
 )
 @Component(
+    configurationPolicy = ConfigurationPolicy.REQUIRE,
     service = Filter.class,
     property = {Constants.SERVICE_RANKING + "Integer=999"}
 )
