@@ -35,8 +35,8 @@
     "dataLayer": {
         "breadcrumb-be02fd85b6": {
             "repo:modifyDate": "2016-01-11T15:21:45Z",
-            "@type": "core/wcm/components/breadcrumb/v1/breadcrumb"
+            "@type": "core/wcm/components/breadcrumb"
         }
     },
-    ":type": "core/wcm/components/breadcrumb/v1/breadcrumb"
+    ":type": "core/wcm/components/breadcrumb"
 }
