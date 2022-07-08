@@ -1,0 +1,42 @@
+{
+    "button": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Button Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                  "button-1"          : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:title"         : "Adobe",
+                    "sling:resourceType": "core/wcm/components/button/v2/button",
+                    "linkURL"           : "https://www.adobe.com",
+                    "linkTarget"        : "_blank",
+                    "icon"              : "adobe"
+                  },
+                  "button-2"          : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:title"         : "Adobe",
+                    "sling:resourceType": "core/wcm/components/button/v2/button",
+                    "link"              : "https://www.adobe.com",
+                    "linkTarget"        : "_blank",
+                    "icon"              : "adobe"
+                  },
+                  "button-3"          : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "jcr:title"         : "Adobe",
+                  "sling:resourceType": "core/wcm/components/button/v2/button",
+                  "linkURL"           : "https://www.adobe.com/content/dam/test/docs/pdfs/test/360/360%20Test%20Test%20Test%20123.pdf.coredownload.inline.pdf",
+                  "linkTarget"        : "_blank",
+                  "icon"              : "adobe"
+                  }
+                }
+            }
+        }
+    }
+}

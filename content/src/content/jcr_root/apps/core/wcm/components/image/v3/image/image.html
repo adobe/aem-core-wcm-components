@@ -1,0 +1,39 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
+     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     data-sly-test="${image.src}"
+     data-cmp-dmimage="${image.dmImage}"
+     data-asset-id="${image.uuid}"
+     id="${image.id}"
+     data-cmp-data-layer="${image.data.json}"
+     class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
+     itemscope itemtype="http://schema.org/ImageObject">
+    <a data-sly-unwrap="${!image.imageLink.valid}"
+       class="cmp-image__link"
+       data-sly-attribute="${image.imageLink.htmlAttributes}"
+       data-cmp-clickable="${image.data ? true : false}">
+        <img srcset="${image.srcset}" src="${image.src}"
+             loading="${image.lazyEnabled ? 'lazy' : ''}"
+             class="cmp-image__image"
+             itemprop="contentUrl"
+             width="${image.width}" height="${image.height}"
+             alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+    </a>
+    <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>
+    <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
+</div>
+<sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>

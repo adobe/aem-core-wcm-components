@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:redirectTarget="/content/core-components-examples/library/core-structure/breadcrumb/hidden/level-1/level-2/breadcrumb"
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Breadcrumb"
+        sling:resourceType="core-components-examples/components/page">
+        <image
+            jcr:primaryType="nt:unstructured"
+            fileReference="/content/dam/core-components-examples/library/components/breadcrumb.svg">
+            <file/>
+        </image>
+    </jcr:content>
+    <hidden/>
+</jcr:root>

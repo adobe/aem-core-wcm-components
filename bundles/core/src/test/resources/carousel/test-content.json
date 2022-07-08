@@ -40,6 +40,13 @@
                             "jcr:title"         : "Teaser 3",
                             "jcr:description"   : "Teaser 3 description",
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                        },
+                        "item_4": {
+                            "cq:panelTitle"     : "Carousel Panel 4",
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Teaser 4",
+                            "jcr:description"   : "Teaser 4 description",
+                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         }
                     }
                 }

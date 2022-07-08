@@ -1,0 +1,86 @@
+{
+  "page": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType"   : "cq:PageContent",
+      "jcr:title"         : "Carousel Test",
+      "sling:resourceType": "core/wcm/components/page/v3/page",
+      "jcr:description"   : "Carousel description",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "false",
+        "alt"               : "featured image alt",
+        "file"              : {
+          "jcr:primaryType": "nt:file",
+          "jcr:createdBy"  : "admin",
+          "jcr:content"    : {
+            "jcr:primaryType"   : "nt:resource",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:mimeType"      : "image/png",
+            ":jcr:data"         : 10453365,
+            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+          }
+        },
+        "sling:resourceType": "core/wcm/components/image/v3/image"
+      },
+      "root"              : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "responsivegrid"    : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "sling:resourceType": "wcm/foundation/components/responsivegrid",
+          "image"          : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:title"         : "Carousel 1",
+            "sling:resourceType": "core/wcm/components/image/v3/image"
+          },
+          "teaser_empty"          : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:title"         : "teaser empty",
+            "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
+          },
+          "teaser_with_link"          : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:title"         : "teaser with link",
+            "linkURL"           : "/content/page1",
+            "imageFromPageImage": "true",
+            "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
+          },
+          "teaser_with_cta"          : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:title"         : "teaser with cta",
+            "sling:resourceType": "core/wcm/components/teaser/v2/teaser"
+          }
+        }
+      }
+    }
+  },
+  "page1": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType"   : "cq:PageContent",
+      "jcr:title"         : "Carousel Test",
+      "sling:resourceType": "core/wcm/components/page/v3/page",
+      "jcr:description"   : "Carousel description",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "false",
+        "alt"               : "featured image alt for page 1",
+        "file"              : {
+          "jcr:primaryType": "nt:file",
+          "jcr:createdBy"  : "admin",
+          "jcr:content"    : {
+            "jcr:primaryType"   : "nt:resource",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:mimeType"      : "image/png",
+            ":jcr:data"         : 10453365,
+            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+          }
+        },
+        "sling:resourceType": "core/wcm/components/image/v3/image"
+      }
+    }
+  }
+}

@@ -3,8 +3,6 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[/etc/mobile/groups/responsive]"
-        cq:lastModified="{Date}2019-01-14T12:37:39.517+01:00"
-        cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:primaryType="cq:PageContent"
         sling:resourceType="core-components-examples/components/page">
@@ -13,17 +11,9 @@
             sling:resourceType="wcm/foundation/components/responsivegrid">
             <responsivegrid_1409995310
                 cq:styleIds="[1545309104202]"
-                jcr:created="{Date}2018-12-20T12:31:00.550Z"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2018-12-20T12:31:00.550Z"
-                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <image_1442382866
-                    jcr:created="{Date}2019-01-08T17:48:01.449+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-09T17:58:39.148+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/image"
                     altValueFromDAM="true"
@@ -34,19 +24,11 @@
                     titleValueFromDAM="true"/>
             </responsivegrid_1409995310>
             <sidebar
-                jcr:created="{Date}2018-12-20T12:31:05.318Z"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2018-12-20T12:31:05.318Z"
-                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="core-components-examples/components/sidebar"
                 id="mainNavigation">
                 <cq:responsive jcr:primaryType="nt:unstructured"/>
                 <image_1442382866_cop
-                    jcr:created="{Date}2019-01-08T17:48:01.449+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-09T17:58:39.148+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/image"
                     altValueFromDAM="true"
@@ -56,63 +38,40 @@
                     linkURL="/content/core-components-examples/library"
                     titleValueFromDAM="true"/>
                 <accordion
-                    jcr:created="{Date}2020-01-14T17:57:59.520+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2020-01-14T17:59:24.157+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/accordion"
-                    expandedItems="[item_1579021121673,item_1579021131667,item_1579021109267,item_1579021109268,item_1579021109269]"
+                    expandedItems="[item_1579021121673,item_1579021131667,item_1579021109267,item_1579021109268,item_1579021109269,item_1579021109270]"
                     singleExpansion="false">
                     <item_1579021121673
-                        cq:panelTitle="Templating"
-                        jcr:lastModified="{Date}2020-01-14T18:00:08.828+01:00"
-                        jcr:lastModifiedBy="admin"
+                        cq:panelTitle="Core Structure"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/navigation"
                         collectAllPages="false"
-                        navigationRoot="/content/core-components-examples/library/templating"
+                        navigationRoot="/content/core-components-examples/library/core-structure"
                         structureDepth="1"
                         structureStart="1"/>
                     <item_1579021131667
-                        cq:panelTitle="Page Authoring"
-                        jcr:lastModified="{Date}2020-01-14T18:00:26.432+01:00"
-                        jcr:lastModifiedBy="admin"
+                        cq:panelTitle="Core Content"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/navigation"
                         collectAllPages="false"
-                        navigationRoot="/content/core-components-examples/library/page-authoring"
-                        structureDepth="1"
-                        structureStart="1"/>
-                    <item_1579021109267
-                        cq:panelTitle="Container"
-                        jcr:lastModified="{Date}2020-01-14T18:00:53.492+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/navigation"
-                        collectAllPages="false"
-                        navigationRoot="/content/core-components-examples/library/container"
+                        navigationRoot="/content/core-components-examples/library/core-content"
                         structureDepth="1"
                         structureStart="1"/>
                     <item_1579021109268
-                        cq:panelTitle="Form"
-                        jcr:lastModified="{Date}2020-01-14T18:00:53.492+01:00"
-                        jcr:lastModifiedBy="admin"
+                        cq:panelTitle="Core Form"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/navigation"
                         collectAllPages="false"
-                        navigationRoot="/content/core-components-examples/library/form"
+                        navigationRoot="/content/core-components-examples/library/core-form"
                         structureDepth="1"
                         structureStart="1"/>
                     <item_1579021109269/> <!-- Commerce menu items -->
+                    <item_1579021109270/> <!-- Forms And Communications Portal menu items -->
                 </accordion>
             </sidebar>
             <responsivegrid
                 cq:styleIds="[1545309110033]"
-                jcr:created="{Date}2018-12-20T12:31:03.201Z"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2018-12-20T12:31:03.201Z"
-                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid"
                 editable="{Boolean}true">
@@ -120,26 +79,14 @@
             </responsivegrid>
             <responsivegrid_2176569853
                 cq:styleIds="[1551382932159]"
-                jcr:created="{Date}2018-12-20T12:31:03.201Z"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2018-12-20T12:31:03.201Z"
-                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <cq:responsive jcr:primaryType="nt:unstructured"/>
                 <separator
                     cq:styleIds="[1550355113852]"
-                    jcr:created="{Date}2019-02-16T22:26:21.309+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-16T22:26:21.309+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/separator"/>
                 <footer
-                    jcr:created="{Date}2019-02-28T21:40:52.076+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-28T21:41:47.838+01:00"
-                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/version/footer"/>
             </responsivegrid_2176569853>

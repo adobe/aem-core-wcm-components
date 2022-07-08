@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor;
 
+import com.day.cq.wcm.api.WCMException;
+import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -24,6 +26,8 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -33,6 +37,7 @@ import java.util.Optional;
  * @since com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor 1.0.0
  */
 public class Item {
+    public static final Logger LOG = LoggerFactory.getLogger(Item.class);
 
     protected String name;
     protected String value;
@@ -40,6 +45,7 @@ public class Item {
     protected String iconName;
     protected String iconPath;
     protected String iconAbbreviation;
+    protected boolean isLiveCopy;
 
     /**
      * Name of the resource property that defines a panel title
@@ -80,6 +86,14 @@ public class Item {
             ValueMap vm = resource.getValueMap();
             value = Optional.ofNullable(vm.get(PN_PANEL_TITLE, String.class))
                 .orElseGet(() -> vm.get(JcrConstants.JCR_TITLE, String.class));
+            LiveRelationshipManager mgr = request.getResourceResolver().adaptTo(LiveRelationshipManager.class);
+            if (mgr != null) {
+                try {
+                    isLiveCopy = mgr.hasLiveRelationship(resource) && !mgr.getLiveRelationship(resource, true).getStatus().isCancelled();
+                } catch (WCMException e) {
+                    LOG.error("Something went wrong while checking live copy status for resource {}", resource.getPath(), e);
+                }
+            }
         }
         ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
         if (componentManager != null) {
@@ -188,4 +202,12 @@ public class Item {
         return iconAbbreviation;
     }
 
+    /**
+     * Checks if the panel is the target of a livecopy.
+     *
+     * @return {@code true} if the panel is target of a livecopy
+     */
+    public boolean isLiveCopy() {
+        return isLiveCopy;
+    }
 }

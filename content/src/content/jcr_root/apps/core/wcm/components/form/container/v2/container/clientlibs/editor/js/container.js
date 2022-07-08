@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/* global
- Granite, Coral
- */
 (function(document, $, Coral) {
     "use strict";
 
     var ACTION_TYPE_SETTINGS_SELECTOR = "#cmp-action-type-settings";
     var ACTION_TYPE_ELEMENT_SELECTOR  = ".cmp-action-type-selection";
     var WORKFLOW_SELECT_ELEMENT_SELECTOR = ".cmp-workflow-container coral-select";
+    var EMAIL_ADDRESS_SENDER_SELECTOR = "input[name='./from']";
+    var EMAIL_ADDRESS_RECEIVER_SELECTOR = "coral-multifield-item-content input[name='./mailto']";
+    var EMAIL_ADDRESS_CC_SELECTOR = "coral-multifield-item-content input[name='./cc']";
 
     $(document).on("foundation-contentloaded", function(e) {
         if ($(e.target).find(ACTION_TYPE_ELEMENT_SELECTOR).length > 0) {
@@ -144,6 +144,40 @@
                 api.checkValidity();
             }
             api.updateUI();
+        }
+    }
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: EMAIL_ADDRESS_SENDER_SELECTOR,
+        validate: function(element) {
+            return validateEmail(element);
+        }
+    });
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: EMAIL_ADDRESS_RECEIVER_SELECTOR,
+        validate: function(element) {
+            return validateEmail(element, true);
+        }
+    });
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: EMAIL_ADDRESS_CC_SELECTOR,
+        validate: function(element) {
+            return validateEmail(element, true);
+        }
+    });
+
+    function validateEmail(element, addEmptyFieldValidation) {
+        var emptyFieldErrorMessage = Granite.I18n.get("Error: Please fill out this field.");
+        var invalidEmailErrorMessage = Granite.I18n.get("Error: Invalid Email Address.");
+        var validEmailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+        var input =  element.value;
+        if (input && !input.match(validEmailRegex)) {
+            return invalidEmailErrorMessage;
+        }
+        if (addEmptyFieldValidation && !input) {
+            return emptyFieldErrorMessage;
         }
     }
 

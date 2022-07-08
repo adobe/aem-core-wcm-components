@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
@@ -33,10 +33,10 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     protected boolean active;
     private boolean current;
 
-    public NavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level,
+    public NavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkManager linkManager, int level,
                               List<NavigationItem> children,
-                              String parentId, boolean isShadowingDisabled, Component component) {
-        super(linkHandler, page, parentId, isShadowingDisabled, component);
+                              String parentId, Component component) {
+        super(linkManager, page, parentId, component);
         this.active = active;
         this.current = current;
         this.level = level;

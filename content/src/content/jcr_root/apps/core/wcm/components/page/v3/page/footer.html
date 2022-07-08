@@ -1,0 +1,30 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<template data-sly-template.footer="${ @ page, pwa }">
+    <sly data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html"
+         data-sly-test.clientlibCategoriesJsBody="${page.clientLibCategoriesJsBody}"
+         data-sly-call="${clientlib.js @ categories=clientlibCategoriesJsBody, async=page.isClientlibsAsync}"></sly>
+    <sly data-sly-include="customfooterlibs.html"></sly>
+    <sly data-sly-resource="${'cloudservices' @ resourceType='cq/cloudserviceconfigs/components/servicecomponents'}"></sly>
+    <sly data-sly-test="${page.hasCloudconfigSupport}" data-sly-resource="${'cloudconfig-footer' @ resourceType='cq/cloudconfig/components/scripttags/footer'}"></sly>
+    <sly data-sly-list="${page.htmlPageItems}"><script data-sly-test="${item.location.name == 'footer'}"
+            data-sly-element="${item.element.name @ context='unsafe'}" data-sly-attribute="${item.attributes}"></script>
+    </sly>
+    <sly data-sly-test="${pwa.enabled}">
+        <div class="cmp-page__toastmessagehide"></div>
+        <sly data-sly-call="${clientlib.js @ categories='core.wcm.components.page.v2.pwa', async=true}"></sly>
+    </sly>
+</template>

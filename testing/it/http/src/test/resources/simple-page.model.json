@@ -1,0 +1,684 @@
+{
+    "id": "page-8ad4928026",
+    "designPath": "/libs/settings/wcm/designs/default",
+    "title": "Simple Page",
+    "brandSlug": "Core Components",
+    "lastModifiedDate": 1620818157599,
+    "templateName": "simple-template",
+    "htmlPageItems":
+    [],
+    "cssClassNames": "page basicpage",
+    "language": "en-DE",
+    ":items":
+    {
+        "root":
+        {
+            "columnClassNames":
+            {
+                "container": "aem-GridColumn aem-GridColumn--default--12",
+                "experiencefragment": "aem-GridColumn aem-GridColumn--default--12",
+                "experiencefragment_308709143": "aem-GridColumn aem-GridColumn--default--12"
+            },
+            "gridClassNames": "aem-Grid aem-Grid--12 aem-Grid--default--12",
+            "columnCount": 12,
+            "allowedComponents":
+            {
+                "components":
+                [
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/accordion/v1/accordion",
+                        "title": "Accordion (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/button/v1/button",
+                        "title": "Button (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/button/v2/button",
+                        "title": "Button (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/carousel/v1/carousel",
+                        "title": "Carousel (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/form/container/v2/container",
+                        "title": "Core Form Container (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/container/v1/container",
+                        "title": "Container (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/contentfragment/v1/contentfragment",
+                        "title": "Content Fragment (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "title": "Content Fragment List (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/contentfragmentlist/v2/contentfragmentlist",
+                        "title": "Content Fragment List (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/download/v2/download",
+                        "title": "Download (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/download/v1/download",
+                        "title": "Download (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/embed/v2/embed",
+                        "title": "Embed (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/embed/v1/embed",
+                        "title": "Embed (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/experiencefragment/v1/experiencefragment",
+                        "title": "Experience Fragment (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/experiencefragment/v2/experiencefragment",
+                        "title": "Experience Fragment (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/image/v2/image",
+                        "title": "Image (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/image/v3/image",
+                        "title": "Image (v3)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/list/v2/list",
+                        "title": "List (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/list/v3/list",
+                        "title": "List (v3)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/pdfviewer/v1/pdfviewer",
+                        "title": "PDF Viewer (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/progressbar/v1/progressbar",
+                        "title": "Progress Bar (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/separator/v1/separator",
+                        "title": "Separator (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/sharing/v1/sharing",
+                        "title": "Social Media Sharing (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/tabs/v1/tabs",
+                        "title": "Tabs (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/teaser/v2/teaser",
+                        "title": "Teaser (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/teaser/v1/teaser",
+                        "title": "Teaser (v1)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/text/v2/text",
+                        "title": "Text (v2)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/title/v3/title",
+                        "title": "Title (v3)"
+                    },
+                    {
+                        "path": "/content/core-components/simple-page/jcr:content/root/core/wcm/components/title/v2/title",
+                        "title": "Title (v2)"
+                    }
+                ],
+                "applicable": false
+            },
+            ":items":
+            {
+                "experiencefragment":
+                {
+                    "id": "experiencefragment-fb513e515e",
+                    "localizedFragmentVariationPath": "/content/experience-fragments/core-components-test/header/master/jcr:content",
+                    "configured": true,
+                    "dataLayer":
+                    {
+                        "experiencefragment-fb513e515e":
+                        {
+                            "@type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "repo:modifyDate": "2020-11-27T15:56:19Z"
+                        }
+                    },
+                    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                    ":items":
+                    {
+                        "root":
+                        {
+                            "columnClassNames":
+                            {
+                                "title": "aem-GridColumn aem-GridColumn--default--12"
+                            },
+                            "gridClassNames": "aem-Grid aem-Grid--12 aem-Grid--default--12",
+                            "columnCount": 12,
+                            "allowedComponents":
+                            {
+                                "components":
+                                [],
+                                "applicable": false
+                            },
+                            ":items":
+                            {
+                                "title":
+                                {
+                                    "id": "title-fa7d3ba5c5",
+                                    "linkDisabled": false,
+                                    "text": "Simple Page",
+                                    ":type": "core/wcm/components/title/v3/title",
+                                    "dataLayer":
+                                    {
+                                        "title-fa7d3ba5c5":
+                                        {
+                                            "@type": "core/wcm/components/title/v3/title",
+                                            "dc:title": "Simple Page"
+                                        }
+                                    }
+                                }
+                            },
+                            ":itemsOrder":
+                            [
+                                "title"
+                            ],
+                            ":type": "core/wcm/components/container/v1/container"
+                        },
+                        "cq:metadata":
+                        {
+                            ":type": ""
+                        }
+                    },
+                    ":itemsOrder":
+                    [
+                        "root",
+                        "cq:metadata"
+                    ],
+                    "classNames": "aem-xf"
+                },
+                "container":
+                {
+                    "columnClassNames":
+                    {
+                        "container": "aem-GridColumn aem-GridColumn--default--12",
+                        "image": "aem-GridColumn aem-GridColumn--default--12",
+                        "title": "aem-GridColumn aem-GridColumn--default--12"
+                    },
+                    "gridClassNames": "aem-Grid aem-Grid--12 aem-Grid--default--12",
+                    "columnCount": 12,
+                    "allowedComponents":
+                    {
+                        "components":
+                        [
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/accordion/v1/accordion",
+                                "title": "Accordion (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/button/v1/button",
+                                "title": "Button (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/button/v2/button",
+                                "title": "Button (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/carousel/v1/carousel",
+                                "title": "Carousel (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/form/container/v2/container",
+                                "title": "Core Form Container (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/container/v1/container",
+                                "title": "Container (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/contentfragment/v1/contentfragment",
+                                "title": "Content Fragment (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                                "title": "Content Fragment List (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/contentfragmentlist/v2/contentfragmentlist",
+                                "title": "Content Fragment List (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/download/v2/download",
+                                "title": "Download (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/download/v1/download",
+                                "title": "Download (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/embed/v2/embed",
+                                "title": "Embed (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/embed/v1/embed",
+                                "title": "Embed (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/experiencefragment/v1/experiencefragment",
+                                "title": "Experience Fragment (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/experiencefragment/v2/experiencefragment",
+                                "title": "Experience Fragment (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/image/v2/image",
+                                "title": "Image (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/image/v3/image",
+                                "title": "Image (v3)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/list/v2/list",
+                                "title": "List (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/list/v3/list",
+                                "title": "List (v3)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/pdfviewer/v1/pdfviewer",
+                                "title": "PDF Viewer (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/progressbar/v1/progressbar",
+                                "title": "Progress Bar (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/separator/v1/separator",
+                                "title": "Separator (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/sharing/v1/sharing",
+                                "title": "Social Media Sharing (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/tabs/v1/tabs",
+                                "title": "Tabs (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/teaser/v2/teaser",
+                                "title": "Teaser (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/teaser/v1/teaser",
+                                "title": "Teaser (v1)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/text/v2/text",
+                                "title": "Text (v2)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/title/v3/title",
+                                "title": "Title (v3)"
+                            },
+                            {
+                                "path": "/content/core-components/simple-page/jcr:content/root/container/core/wcm/components/title/v2/title",
+                                "title": "Title (v2)"
+                            }
+                        ],
+                        "applicable": false
+                    },
+                    ":items":
+                    {
+                        "container":
+                        {
+                            "columnClassNames":
+                            {
+                                "container": "aem-GridColumn aem-GridColumn--default--5 aem-GridColumn--offset--default--0 aem-GridColumn--default--none",
+                                "title_1947496270": "aem-GridColumn aem-GridColumn--default--12",
+                                "container_1128719348": "aem-GridColumn aem-GridColumn--default--7 aem-GridColumn--offset--default--0 aem-GridColumn--default--none"
+                            },
+                            "gridClassNames": "aem-Grid aem-Grid--12 aem-Grid--default--12",
+                            "columnCount": 12,
+                            "allowedComponents":
+                            {
+                                "components":
+                                [],
+                                "applicable": false
+                            },
+                            ":items":
+                            {
+                                "title_1947496270":
+                                {
+                                    "id": "title-e25a533a17",
+                                    "linkDisabled": false,
+                                    "type": "h2",
+                                    "text": "Two columns",
+                                    ":type": "core/wcm/components/title/v3/title",
+                                    "dataLayer":
+                                    {
+                                        "title-e25a533a17":
+                                        {
+                                            "@type": "core/wcm/components/title/v3/title",
+                                            "repo:modifyDate": "2020-11-27T17:47:51Z",
+                                            "dc:title": "Two columns"
+                                        }
+                                    }
+                                },
+                                "container":
+                                {
+                                    "columnClassNames":
+                                    {
+                                        "list": "aem-GridColumn aem-GridColumn--default--5"
+                                    },
+                                    "gridClassNames": "aem-Grid aem-Grid--5 aem-Grid--default--5",
+                                    "columnCount": 12,
+                                    "allowedComponents":
+                                    {
+                                        "components":
+                                        [],
+                                        "applicable": false
+                                    },
+                                    ":items":
+                                    {
+                                        "list":
+                                        {
+                                            "id": "list-39b0ceef99",
+                                            "dateFormatString": "yyyy-MM-dd",
+                                            "items":
+                                            [
+                                                {
+                                                    "id": "list-39b0ceef99-item-87d5c55929",
+                                                    "path": "/content/core-components/responsive-page",
+                                                    "url": "/content/core-components/responsive-page.html",
+                                                    "title": "Responsive Page",
+                                                    "lastModified": 1606499325649,
+                                                    ":type": "core/wcm/components/page/v2/page",
+                                                    "dataLayer":
+                                                    {
+                                                        "list-39b0ceef99-item-87d5c55929":
+                                                        {
+                                                            "@type": "core/wcm/components/list/v2/list/item",
+                                                            "repo:modifyDate": "2022-06-24T08:48:11Z",
+                                                            "dc:title": "Responsive Page",
+                                                            "xdm:linkURL": "/content/core-components/responsive-page.html"
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "id": "list-39b0ceef99-item-8ad4928026",
+                                                    "path": "/content/core-components/simple-page",
+                                                    "url": "/content/core-components/simple-page.html",
+                                                    "title": "Simple Page",
+                                                    "lastModified": 1620818157599,
+                                                    ":type": "core/wcm/components/page/v2/page",
+                                                    "dataLayer":
+                                                    {
+                                                        "list-39b0ceef99-item-8ad4928026":
+                                                        {
+                                                            "@type": "core/wcm/components/list/v2/list/item",
+                                                            "repo:modifyDate": "2022-06-24T08:48:11Z",
+                                                            "dc:title": "Simple Page",
+                                                            "xdm:linkURL": "/content/core-components/simple-page.html"
+                                                        }
+                                                    }
+                                                }
+                                            ],
+                                            "showDescription": false,
+                                            "showModificationDate": false,
+                                            "linkItems": true,
+                                            ":type": "core/wcm/components/list/v2/list",
+                                            "dataLayer":
+                                            {
+                                                "list-39b0ceef99":
+                                                {
+                                                    "@type": "core/wcm/components/list/v2/list",
+                                                    "repo:modifyDate": "2020-11-27T17:48:21Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    ":itemsOrder":
+                                    [
+                                        "list"
+                                    ],
+                                    ":type": "core/wcm/components/container/v1/container"
+                                },
+                                "container_1128719348":
+                                {
+                                    "columnClassNames":
+                                    {
+                                        "image": "aem-GridColumn aem-GridColumn--default--7"
+                                    },
+                                    "gridClassNames": "aem-Grid aem-Grid--7 aem-Grid--default--7",
+                                    "columnCount": 12,
+                                    "allowedComponents":
+                                    {
+                                        "components":
+                                        [],
+                                        "applicable": false
+                                    },
+                                    ":items":
+                                    {
+                                        "image":
+                                        {
+                                            "id": "image-a7b0abf572",
+                                            "alt": "House on a beach with blue sky",
+                                            "title": "Beach house",
+                                            "src": "/content/core-components/simple-page/_jcr_content/root/container/container/container_1128719348/image.coreimg.jpeg/1656060496335/core-comp-test-image.jpeg",
+                                            "srcUriTemplate": "/content/core-components/simple-page/_jcr_content/root/container/container/container_1128719348/image.coreimg.80{.width}.jpeg/1656060496335/core-comp-test-image.jpeg",
+                                            "lazyThreshold": 0,
+                                            "dmImage": false,
+                                            "widths":
+                                            [
+                                                500,
+                                                1000,
+                                                1500
+                                            ],
+                                            "lazyEnabled": false,
+                                            ":type": "core/wcm/components/image/v2/image",
+                                            "dataLayer":
+                                            {
+                                                "image-a7b0abf572":
+                                                {
+                                                    "@type": "core/wcm/components/image/v2/image",
+                                                    "repo:modifyDate": "2020-11-27T17:46:56Z",
+                                                    "dc:title": "Beach house",
+                                                    "image":
+                                                    {
+                                                        "repo:id": "c03630c1-0a08-4191-abec-775a5cff53e6",
+                                                        "repo:modifyDate": "2022-06-24T08:48:16Z",
+                                                        "@type": "image/jpeg",
+                                                        "repo:path": "/content/dam/core-components/core-comp-test-image.jpg"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    ":itemsOrder":
+                                    [
+                                        "image"
+                                    ],
+                                    ":type": "core/wcm/components/container/v1/container"
+                                }
+                            },
+                            ":itemsOrder":
+                            [
+                                "title_1947496270",
+                                "container",
+                                "container_1128719348"
+                            ],
+                            ":type": "core/wcm/components/container/v1/container"
+                        },
+                        "title":
+                        {
+                            "id": "linked-title",
+                            "linkDisabled": false,
+                            "type": "h2",
+                            "link":
+                            {
+                                "valid": true,
+                                "url": "/content/core-components/simple-page/simple-subpage.html"
+                            },
+                            "linkURL": "/content/core-components/simple-page/simple-subpage.html",
+                            "text": "Linked Title",
+                            ":type": "core/wcm/components/title/v2/title",
+                            "dataLayer":
+                            {
+                                "linked-title":
+                                {
+                                    "@type": "core/wcm/components/title/v2/title",
+                                    "dc:title": "Linked Title",
+                                    "xdm:linkURL": "/content/core-components/simple-page/simple-subpage.html"
+                                }
+                            }
+                        },
+                        "image":
+                        {
+                            "id": "image-34b8eac1c3",
+                            "src": "/content/core-components/simple-page/_jcr_content/root/container/image.coreimg.png/1656060496858/adobe-systems-logo-and-wordmark.png",
+                            "srcUriTemplate": "/content/core-components/simple-page/_jcr_content/root/container/image.coreimg.80{.width}.png/1656060496858/adobe-systems-logo-and-wordmark.png",
+                            "lazyThreshold": 0,
+                            "dmImage": false,
+                            "widths":
+                            [
+                                500,
+                                1000,
+                                1500
+                            ],
+                            "lazyEnabled": false,
+                            ":type": "core/wcm/components/image/v2/image",
+                            "dataLayer":
+                            {
+                                "image-34b8eac1c3":
+                                {
+                                    "@type": "core/wcm/components/image/v2/image",
+                                    "repo:modifyDate": "2020-11-27T17:42:37Z",
+                                    "image":
+                                    {
+                                        "repo:id": "d16f0a8a-c694-45a6-9346-bb5b030d4809",
+                                        "repo:modifyDate": "2022-06-24T08:48:16Z",
+                                        "@type": "image/png",
+                                        "repo:path": "/content/dam/core-components/Adobe_Systems_logo_and_wordmark.png"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    ":itemsOrder":
+                    [
+                        "container",
+                        "title",
+                        "image"
+                    ],
+                    ":type": "core/wcm/components/container/v1/container"
+                },
+                "experiencefragment_308709143":
+                {
+                    "id": "experiencefragment-8721dd5494",
+                    "localizedFragmentVariationPath": "/content/experience-fragments/core-components-test/footer/master/jcr:content",
+                    "configured": true,
+                    "dataLayer":
+                    {
+                        "experiencefragment-8721dd5494":
+                        {
+                            "@type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "repo:modifyDate": "2020-11-27T15:56:43Z"
+                        }
+                    },
+                    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                    ":items":
+                    {
+                        "root":
+                        {
+                            "columnClassNames":
+                            {
+                                "text": "aem-GridColumn aem-GridColumn--default--12"
+                            },
+                            "gridClassNames": "aem-Grid aem-Grid--12 aem-Grid--default--12",
+                            "columnCount": 12,
+                            "allowedComponents":
+                            {
+                                "components":
+                                [],
+                                "applicable": false
+                            },
+                            ":items":
+                            {
+                                "text":
+                                {
+                                    "id": "text-664ef651b3",
+                                    "text": "<p>Copyright © 2020 All Rights Reserved</p>\r\n",
+                                    "richText": true,
+                                    ":type": "core/wcm/components/text/v2/text",
+                                    "dataLayer":
+                                    {
+                                        "text-664ef651b3":
+                                        {
+                                            "@type": "core/wcm/components/text/v2/text",
+                                            "repo:modifyDate": "2020-11-27T15:45:54Z",
+                                            "xdm:text": "<p>Copyright © 2020 All Rights Reserved</p>\r\n"
+                                        }
+                                    }
+                                }
+                            },
+                            ":itemsOrder":
+                            [
+                                "text"
+                            ],
+                            ":type": "core/wcm/components/container/v1/container"
+                        }
+                    },
+                    ":itemsOrder":
+                    [
+                        "root"
+                    ],
+                    "classNames": "aem-xf"
+                }
+            },
+            ":itemsOrder":
+            [
+                "experiencefragment",
+                "container",
+                "experiencefragment_308709143"
+            ],
+            ":type": "core/wcm/components/container/v1/container"
+        }
+    },
+    ":itemsOrder":
+    [
+        "root"
+    ],
+    ":type": "core/wcm/components/page/v2/page",
+    "dataLayer":
+    {
+        "page-8ad4928026":
+        {
+            "@type": "core/wcm/components/page/v2/page",
+            "repo:modifyDate": "2022-06-24T08:48:11Z",
+            "dc:title": "Simple Page",
+            "xdm:template": "/conf/core-components/settings/wcm/templates/simple-template",
+            "xdm:language": "en-DE",
+            "xdm:tags":
+            [],
+            "repo:path": "/content/core-components/simple-page.html"
+        }
+    }
+}

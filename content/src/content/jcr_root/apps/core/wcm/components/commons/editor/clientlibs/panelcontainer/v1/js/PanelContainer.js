@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* global CQ */
-(function($, ns, channel, window, undefined) {
+(function($, ns, channel) {
     "use strict";
 
     var GET_DATA_SUFFIX = ".model.json";
@@ -191,4 +191,4 @@
          */
     });
 
-}(jQuery, Granite.author, jQuery(document), this));
+}(jQuery, Granite.author, jQuery(document)));

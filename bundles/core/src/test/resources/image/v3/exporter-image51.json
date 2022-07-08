@@ -1,0 +1,19 @@
+{
+  "id": "image-986a2158f5",
+  "alt": "Adobe Systems Logo and Wordmark in PNG format",
+  "src": "/core/content/test/_jcr_content/root/image51.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+  "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+  "lazyEnabled": true,
+  "dataLayer": {
+    "image-986a2158f5": {
+      "@type": "core/wcm/components/image/v3/image",
+      "image": {
+        "repo:id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+        "repo:modifyDate": "2017-03-20T10:20:39Z",
+        "@type": "image/png",
+        "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+      }
+    }
+  },
+  ":type": "core/wcm/components/image/v3/image"
+}

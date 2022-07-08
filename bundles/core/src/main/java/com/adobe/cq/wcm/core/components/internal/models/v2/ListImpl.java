@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -42,7 +42,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v2/list";
 
     @Self
-    private LinkHandler linkHandler;
+    private LinkManager linkManager;
 
     /**
      * Result list.
@@ -54,16 +54,16 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @JsonProperty("items")
     public Collection<ListItem> getListItems() {
         if (this.listItems == null) {
-            this.listItems = super.getPages().stream()
+            this.listItems = super.getItems().stream()
                 .filter(Objects::nonNull)
-                .map(page -> newPageListItem(linkHandler, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT, component))
+                .map(page -> newPageListItem(linkManager, page, getId(), component))
                 .collect(Collectors.toList());
         }
         return this.listItems;
     }
 
-    protected ListItem newPageListItem(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, boolean isShadowingDisabled, Component component) {
-        return new PageListItemImpl(linkHandler, page, parentId, isShadowingDisabled, component);
+    protected ListItem newPageListItem(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component) {
+        return new PageListItemImpl(linkManager, page, parentId, component);
     }
 
 }

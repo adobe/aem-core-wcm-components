@@ -48,9 +48,8 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.form.Container;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
@@ -103,9 +102,9 @@ public class ContainerImpl implements Container {
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String redirect;
-    
+
     @Self
-    private LinkHandler linkHandler;
+    private LinkManager linkManager;
 
     private String name;
     private String action;
@@ -129,9 +128,10 @@ public class ContainerImpl implements Container {
     private void initModel() {
         FormStructureHelper formStructureHelper = formStructureHelperFactory.getFormStructureHelper(resource);
         request.setAttribute(FormsHelper.REQ_ATTR_FORM_STRUCTURE_HELPER, formStructureHelper);
-        this.action = linkHandler.getLink(currentPage).map(Link::getURL).orElse(null);
+        this.action = linkManager.get(currentPage).build().getURL();
+        String formId = FormsHelper.getFormId(request);
         if (StringUtils.isBlank(id)) {
-            id = FormsHelper.getFormId(request);
+            id = formId;
         }
         request.setAttribute(FormsHelper.REQ_ATTR_FORMID, getId());
         this.name = id;

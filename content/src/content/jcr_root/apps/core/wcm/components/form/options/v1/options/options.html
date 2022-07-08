@@ -19,11 +19,13 @@
     <fieldset class="form-group ${options.type.value}"
               data-sly-test="${options.type.value == 'checkbox' || options.type.value == 'radio'}">
         <legend>${options.title}</legend>
-        <p class="help-block" data-sly-test="${options.helpMessage}">${options.helpMessage}</p>
+        <p id="${options.id}-helpMessage" class="help-block" data-sly-test="${options.helpMessage}">
+            ${options.helpMessage}</p>
         <div class="${options.type.value}-item" data-sly-repeat.optionItem="${options.items}">
             <label>
                 <input type="${options.type.value}" name="${options.name}" value="${optionItem.value}"
-                      checked="${optionItem.selected}" disabled="${optionItem.disabled}"/>
+                       checked="${optionItem.selected}" disabled="${optionItem.disabled}"
+                       data-sly-attribute.aria-describedby="${options.helpMessage ? [options.id, 'helpMessage'] : '' @ join = '-'}"/>
                 <span>${optionItem.text}</span>
             </label>
         </div>
@@ -31,11 +33,16 @@
     <div class="form-group ${options.type.value}"
          data-sly-test="${options.type.value == 'drop-down' || options.type.value == 'multi-drop-down'}">
         <label for="${options.id}">${options.title}</label>
-            <p class="help-block" data-sly-test="${options.helpMessage}">${options.helpMessage}</p>
-            <select name="${options.name}" id="${options.id}" class="form-control" data-sly-list.optionItem="${options.items}"
-                  data-sly-attribute.multiple="${options.type.value == 'multi-drop-down'}">
-                <option value="${optionItem.value}" selected="${optionItem.selected}" disabled="${optionItem.disabled}">${optionItem.text}</option>
-            </select>
+        <p id="${options.id}-helpMessage" class="help-block" data-sly-test="${options.helpMessage}">
+            ${options.helpMessage}</p>
+        <select name="${options.name}" id="${options.id}" class="form-control"
+                data-sly-list.optionItem="${options.items}"
+                data-sly-attribute.multiple="${options.type.value == 'multi-drop-down'}">
+            <option value="${optionItem.value}" selected="${optionItem.selected}" disabled="${optionItem.disabled}"
+                    data-sly-attribute.aria-describedby="${options.helpMessage ? [options.id, 'helpMessage'] : '' @ join = '-'}">
+                ${optionItem.text}
+            </option>
+        </select>
     </div>
 </sly>
 <sly data-sly-call="${template.placeholder @ isEmpty=!isNotEmpty}"></sly>

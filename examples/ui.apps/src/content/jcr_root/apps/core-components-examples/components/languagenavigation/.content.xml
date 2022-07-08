@@ -19,5 +19,5 @@
     jcr:description="Global language structure navigation"
     jcr:primaryType="cq:Component"
     jcr:title="Language Navigation "
-    sling:resourceSuperType="core/wcm/components/languagenavigation/v1/languagenavigation"
+    sling:resourceSuperType="core/wcm/components/languagenavigation/v2/languagenavigation"
     componentGroup="Core Components Examples"/>

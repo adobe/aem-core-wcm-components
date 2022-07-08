@@ -45,7 +45,7 @@ class DownloadImplTest {
     private static final String PDF_ASSET_WITHOUT_SIZE_PROP_PATH = "/content/dam/core/documents_without_size/" + PDF_BINARY_NAME;
     private static final String PDF_FILE_PATH = "/content/downloads/jcr:content/root/responsivegrid/download-3/file";
     private static final String PDF_ASSET_DOWNLOAD_PATH = PDF_ASSET_PATH + "." + DownloadServlet.SELECTOR + ".pdf";
-    private static final String PDF_FILE_DOWNLOAD_PATH = PDF_FILE_PATH.replace("jcr:content", "_jcr_content") + "." + DownloadServlet.SELECTOR + ".inline.pdf/" + PDF_BINARY_NAME;
+    private static final String PDF_FILE_DOWNLOAD_PATH = PDF_FILE_PATH + "." + DownloadServlet.SELECTOR + ".inline.pdf/" + PDF_BINARY_NAME;
     private static final String TEST_CONTENT_DAM_JSON = "/test-content-dam.json";
     private static final String TEST_CONTENT_DAM_WITHOUT_SIZE_PROP_JSON = "/test-content-dam-without-size-prop.json";
     private static final String CONTEXT_PATH = "/core";
@@ -69,6 +69,7 @@ class DownloadImplTest {
     private static final String DOWNLOAD_WITH_DAM_PROPERTIES = "download-with-dam-properties";
     private static final String DOWNLOAD_FULLY_CONFIGURED_FILE = "download-fully-configured-file";
     private static final String DOWNLOAD_WITH_TITLE_TYPE = "download-with-title-type";
+    private static final String DOWNLOAD_WITHOUT_ACTION_TEXT = "download-without-action-text";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -188,7 +189,7 @@ class DownloadImplTest {
     void testDownloadWithoutActionText() {
         Download downloadWithoutActionText = getDownloadUnderTest(DOWNLOAD_2);
         assertNull(downloadWithoutActionText.getActionText(), "Expected action text is not correct");
-        Utils.testJSONExport(downloadWithoutActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITH_DAM_PROPERTIES));
+        Utils.testJSONExport(downloadWithoutActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITHOUT_ACTION_TEXT));
     }
 
     private Download getDownloadUnderTest(String resourcePath, Object ... properties) {

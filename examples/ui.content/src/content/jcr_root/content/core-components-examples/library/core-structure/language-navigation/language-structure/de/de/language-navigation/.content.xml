@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:tags="[core-components-examples:component-type/templating]"
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Sprachnavigation"
+        sling:resourceType="core-components-examples/components/page"
+        sling:alias="sprachnavigation">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <text_1740702241
+                    cq:styleIds="[1644862132301]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;h1>Sprachnavigation&lt;sub>v2&lt;/sub>&lt;/h1>"
+                    textIsRich="true"/>
+                <text
+                    cq:styleIds="[1544762734201]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Die Sprachnavigations-Komponente bietet eine Sprach- und Ländernavigation für eine Website, so dass Besucher in einem anderen Gebietsschema zur gleichen Seite navigieren können.&lt;/p>"
+                    textIsRich="true"/>
+                <teaser
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Technische Dokumentation"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_languagenavigation_v2"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <teaser_556024830
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Benutzung der Komponente"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_languagenavigation_v2"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <title_865328580
+                    cq:styleIds="[1544759664489]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Beispiele"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h2"/>
+                <title_3
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Mehrere Ebenen"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_3
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Die Eigenschaft &lt;i>Language Structure Depth&lt;/i> ermöglicht es, die Navigation für Inhalte zu konstruieren, die nicht nur in verschiedene Sprachen übersetzt sind, sondern auch auf regionale Märkte zugeschnitten sind. Damit lässt sich z. B. eine Länder-/Sprachstruktur aufbauen. Es können auch mehr als 2 Ebenen verschachtelt werden, aber die Seitenstruktur muss der gleichen Hierarchie folgen.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_3
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <languageNavigation
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/languagenavigation"
+                            navigationRoot="/content/core-components-examples/library/core-structure/language-navigation/language-structure"
+                            structureDepth="2"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Eigenschaften"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="HTML"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_3>
+            </responsivegrid>
+        </root>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
+    </jcr:content>
+</jcr:root>

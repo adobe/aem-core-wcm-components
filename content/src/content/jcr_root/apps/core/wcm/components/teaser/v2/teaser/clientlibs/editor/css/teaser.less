@@ -1,0 +1,40 @@
+/*
+ *  Copyright 2018 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+@cmp-teaser__editor-actions-spacing: 10px;
+
+.cq-Dialog:not([fullscreen]) .cmp-teaser__editor .cq-RichText-editable {
+    height: initial;
+}
+
+.cmp-teaser__editor-action {
+    display: flex;
+}
+
+.cmp-teaser__editor-action .cmp-teaser__editor-actionField-linkUrl.coral-Form-field {
+    margin-left: 0;
+    width: 60%;
+}
+
+.cmp-teaser__editor-action .cmp-teaser__editor-actionField-linkTarget.coral-Form-field, .cmp-teaser__editor-action .cmp-teaser__editor-actionField-linkText.coral-Form-field {
+    width: 20%;
+    margin-left: @cmp-teaser__editor-actions-spacing;
+}
+
+/* stylelint-disable-next-line selector-max-type */
+.cmp-teaser__editor-action coral-tooltip {
+    min-width: 100px;
+}

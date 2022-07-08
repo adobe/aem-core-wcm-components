@@ -1,0 +1,18 @@
+{
+  "title": "Teaser",
+  "description": "Description",
+  "actionsEnabled": false,
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actions": [],
+  "id": "teaser-6a61ad8d2f",
+  "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-7.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+  "dataLayer": {
+    "teaser-6a61ad8d2f": {
+      "dc:description": "Description",
+      "@type": "core/wcm/components/teaser/v2/teaser",
+      "dc:title": "Teaser"
+    }
+  },
+  ":type": "core/wcm/components/teaser/v2/teaser"
+}

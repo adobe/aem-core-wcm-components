@@ -1,0 +1,12 @@
+{
+  "id": "image-fdd83505b7",
+  "alt": "image52a alt",
+  "src": "/core/content/test/_jcr_content/root/image56.coreimg.gif",
+  "lazyEnabled": true,
+  ":type": "core/wcm/components/image/v3/image",
+  "dataLayer": {
+    "image-fdd83505b7": {
+      "@type": "core/wcm/components/image/v3/image"
+    }
+  }
+}

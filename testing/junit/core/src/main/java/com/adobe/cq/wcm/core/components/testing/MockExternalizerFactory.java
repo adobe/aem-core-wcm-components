@@ -21,8 +21,7 @@ import com.day.cq.commons.Externalizer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MockExternalizerFactory {
 
@@ -30,7 +29,7 @@ public class MockExternalizerFactory {
 
     public static Externalizer getExternalizerService() {
         Externalizer externalizer = mock(Externalizer.class);
-        when(externalizer.publishLink(any(ResourceResolver.class), anyString())).then(
+        lenient().when(externalizer.publishLink(any(ResourceResolver.class), anyString())).then(
                 invocationOnMock -> ROOT + invocationOnMock.getArgument(1));
         return externalizer;
     }

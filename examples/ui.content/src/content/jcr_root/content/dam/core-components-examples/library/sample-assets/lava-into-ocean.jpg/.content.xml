@@ -8,8 +8,6 @@
         cq:name="lava-into-ocean.jpg"
         cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-02-20T15:21:37.829+01:00"
-        jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
         jcr:title="Lava flowing into the ocean">
         <metadata
@@ -30,8 +28,6 @@
             dc:format="image/jpeg"
             dc:modified="{Date}2019-02-19T22:05:12.160+01:00"
             dc:title="Lava flowing into the ocean"
-            jcr:lastModified="{Date}2019-02-20T15:21:37.301+01:00"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
             jcr:title="Lava flowing into the ocean"

@@ -21,14 +21,14 @@
     var PN_PANEL_TITLE = "cq:panelTitle";
     var PN_RESOURCE_TYPE = "sling:resourceType";
     var PN_COPY_FROM = "./@CopyFrom";
-    var POST_SUFFIX = ".container.html";
+    var SUFFIX = ".container.html";
 
     var selectors = {
         self: "[data-cmp-is='childrenEditor']",
         add: "[data-cmp-hook-childreneditor='add']",
         insertComponentDialog: {
             self: "coral-dialog.InsertComponentDialog",
-            selectList: "coral-selectlist"
+            selectList: ".InsertComponentDialog-list"
         },
         item: {
             icon: "[data-cmp-hook-childreneditor='itemIcon']",
@@ -56,7 +56,6 @@
         this._elements = {};
         this._path = "";
         this._orderedChildren = [];
-        this._deletedChildren = [];
         this._init();
 
         var that = this;
@@ -71,7 +70,7 @@
                             var component = item.querySelector(selectors.item.icon + " [title]").getAttribute("title");
                             var title = item.querySelector(selectors.item.input);
                             var name = (title && title.name) ? title.name.match(".?/?(.+)/.*")[1] : "";
-                            var description = component + ((title && title.value) ? ": " + title.value : "");
+                            var description = Granite.I18n.get(component) + ((title && title.value) ? ": " + Granite.I18n.get(title.value) : "");
                             items.push({
                                 name: name,
                                 description: description
@@ -96,7 +95,7 @@
              * @returns {Promise} The promise for completion handling
              */
             update: function() {
-                var url = this._path + POST_SUFFIX;
+                var url = this._path + SUFFIX;
 
                 this._processChildren();
 
@@ -105,7 +104,6 @@
                     url: url,
                     async: false,
                     data: {
-                        "delete": this._deletedChildren,
                         "order": this._orderedChildren
                     }
                 });
@@ -171,6 +169,19 @@
             _bindEvents: function() {
                 var that = this;
 
+                function getSelectListChangeEvent(onCloud) {
+                    return (onCloud ? "click" : "coral-selectlist:change");
+                }
+
+                function getSelectListSelector(onCloud) {
+                    return (onCloud ? "coral-list-item" : null);
+                }
+
+                function getSelectListItems(event, onCloud) {
+                    return (onCloud ? ns.components.find(event.target.closest("coral-list-item").value)
+                        : ns.components.find(event.detail.selection.value));
+                }
+
                 if (ns) {
                     Coral.commons.ready(that._elements.add, function() {
                         that._elements.add.on("click", function() {
@@ -185,18 +196,21 @@
 
                                 var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
                                 var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
+                                var onCloud = selectList.toString() === "Coral.List";
 
                                 // next frame to ensure we remove the default event handler
                                 Coral.commons.nextFrame(function() {
-                                    selectList.off("coral-selectlist:change");
-                                    selectList.on("coral-selectlist:change" + NS, function(event) {
+
+                                    selectList.off(getSelectListChangeEvent(onCloud));
+                                    selectList.on(getSelectListChangeEvent(onCloud) + NS, getSelectListSelector(onCloud), function(event) {
                                         var resourceType = "";
                                         var componentTitle = "";
                                         var templatePath = "";
-
+                                        var components = "";
                                         insertComponentDialog.hide();
 
-                                        var components = ns.components.find(event.detail.selection.value);
+                                        components = getSelectListItems(event, onCloud);
+
                                         if (components.length > 0) {
                                             resourceType = components[0].getResourceType();
                                             componentTitle = components[0].getTitle();
@@ -205,7 +219,6 @@
                                             var item = that._elements.self.items.add(new Coral.Multifield.Item());
 
                                             // next frame to ensure the item template is rendered in the DOM
-
                                             Coral.commons.nextFrame(function() {
                                                 var name = NN_PREFIX + Date.now();
                                                 item.dataset["name"] = name;
@@ -234,7 +247,7 @@
                                 });
                                 // unbind events on dialog close
                                 channel.one("coral-overlay:beforeclose", function() {
-                                    selectList.off("coral-selectlist:change" + NS);
+                                    selectList.off(getSelectListChangeEvent(onCloud) + NS);
                                 });
                             }
                         });
@@ -244,18 +257,50 @@
                     that._elements.add.parentNode.removeChild(that._elements.add);
                 }
 
-                Coral.commons.ready(that._elements.self, function() {
+                Coral.commons.ready(that._elements.self, function(item) {
+                    // As a reordering of the multifield also triggers the coral-collection:remove event we have to add
+                    // a check for moved items so the prompt get only shown on a real remove action.
+                    var movedItem;
+
+                    that._elements.self.on("coral-multifield:itemorder", function(event) {
+                        movedItem = event.detail.item.dataset["name"];
+                    });
+
                     that._elements.self.on("coral-collection:remove", function(event) {
                         var name = event.detail.item.dataset["name"];
-                        that._deletedChildren.push(name);
+                        if (movedItem !== name) {
+                            ns.ui.helpers.prompt({
+                                title: Granite.I18n.get("Delete"),
+                                message: Granite.I18n.get("You are going to delete the selected component(s)."),
+                                type: ns.ui.helpers.PROMPT_TYPES.WARNING,
+                                actions: [
+                                    {
+                                        id: "CANCEL",
+                                        text: Granite.I18n.get("Cancel", "Label for Cancel button")
+                                    },
+                                    {
+                                        id: "DELETE",
+                                        text: Granite.I18n.get("Delete", "Label for Confirm button"),
+                                        warning: true
+                                    }
+                                ],
+                                callback: function(actionId) {
+                                    if (actionId === "CANCEL") {
+                                        that._update(that._path + SUFFIX);
+                                    } else {
+                                        that._sendDeleteParagraph(that._path + "/" + name)
+                                            .then(function(data) {
+                                                that._update(that._path + SUFFIX);
+                                            });
+                                    }
+                                }
+                            });
+                        }
                     });
 
                     that._elements.self.on("coral-collection:add", function(event) {
-                        var name = event.detail.item.dataset["name"];
-                        var index = that._deletedChildren.indexOf(name);
-
-                        if (index > -1) {
-                            that._deletedChildren.splice(index, 1);
+                        if (movedItem !== event.detail.item.dataset["name"]) {
+                            movedItem = undefined;
                         }
                     });
                 });
@@ -274,6 +319,32 @@
                     var name = items[i].dataset["name"];
                     this._orderedChildren.push(name);
                 }
+            },
+
+            _sendDeleteParagraph: function(path) {
+                return (new ns.persistence.PostRequest()
+                    .prepareDeleteParagraph({
+                        path: path
+                    })
+                    .send()
+                );
+            },
+
+            _update: function(url) {
+                var that = this;
+                return $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: "html",
+                    async: false,
+                    success: function(data) {
+                        var tmp = document.createElement("div");
+                        tmp.innerHTML = data;
+                        var multifield = tmp.firstElementChild;
+                        that._elements.self.replaceWith(multifield);
+                        channel.trigger("foundation-contentloaded");
+                    }
+                });
             }
         };
     })();
@@ -283,9 +354,12 @@
      */
     channel.on("foundation-contentloaded", function(event) {
         $(event.target).find(selectors.self).each(function() {
-            new ChildrenEditor({
-                el: this
-            });
+            // prevent multiple initialization
+            if ($(this).data("childrenEditor") === undefined) {
+                new ChildrenEditor({
+                    el: this
+                });
+            }
         });
     });
 

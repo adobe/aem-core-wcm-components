@@ -1,0 +1,21 @@
+{
+    "id": "title-29085b813e",
+    "linkDisabled": false,
+    "linkURL": "/content/title/redirect/redirect-page-3.html",
+    "dataLayer": {
+        "title-29085b813e": {
+            "repo:modifyDate": "2016-01-13T15:14:51Z",
+            "xdm:linkURL": "/content/title/redirect/redirect-page-3.html",
+            "@type": "core/wcm/components/title/v2/title"
+        }
+    },
+    "link": {
+        "url": "/content/title/redirect/redirect-page-3.html",
+        "valid": true,
+        "attributes": {
+            "aria-label": "Should Redirect to Page 3 (accessibility label)",
+            "title": "Should Redirect to Page 3 (title)"
+        }
+    },
+    ":type": "core/wcm/components/title/v2/title"
+}

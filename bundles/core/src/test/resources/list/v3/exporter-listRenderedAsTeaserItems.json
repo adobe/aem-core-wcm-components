@@ -1,0 +1,70 @@
+{
+    "id": "list-6ce5379d59",
+    "dateFormatString": "yyyy-MM-dd",
+    "items": [
+        {
+            "id": "list-6ce5379d59-item-70236eb2fc",
+            "path": "/content/list/pages/page_1/page_1_1",
+            "link": {
+                "valid": true,
+                "url": "/content/list/pages/page_1/page_1_1.html"
+            },
+            "description": "Description for Page 1.1",
+            "title": "Page 1.1",
+            "dataLayer": {
+                "list-6ce5379d59-item-70236eb2fc": {
+                    "@type": "cq:Component/item",
+                    "dc:title": "Page 1.1",
+                    "xdm:linkURL": "/content/list/pages/page_1/page_1_1.html"
+                }
+            },
+            ":type": "cq:PageContent"
+        },
+        {
+            "id": "list-6ce5379d59-item-8f6d327bc3",
+            "path": "/content/list/pages/page_1/page_1_2",
+            "link": {
+                "valid": true,
+                "url": "/content/list/pages/page_1/page_1_2.html"
+            },
+            "description": "Description for Page 1.2",
+            "title": "Page 1.2",
+            "dataLayer": {
+                "list-6ce5379d59-item-8f6d327bc3": {
+                    "@type": "cq:Component/item",
+                    "dc:title": "Page 1.2",
+                    "xdm:linkURL": "/content/list/pages/page_1/page_1_2.html"
+                }
+            },
+            ":type": "cq:PageContent"
+        },
+        {
+            "id": "list-6ce5379d59-item-d9d9688a00",
+            "path": "/content/list/pages/page_1/page_1_3",
+            "link": {
+                "valid": true,
+                "url": "/content/list/pages/page_1/page_1_3.html"
+            },
+            "description": "Description for Page 1.3",
+            "title": "Page 1.3",
+            "dataLayer": {
+                "list-6ce5379d59-item-d9d9688a00": {
+                    "@type": "cq:Component/item",
+                    "dc:title": "Page 1.3",
+                    "xdm:linkURL": "/content/list/pages/page_1/page_1_3.html"
+                }
+            },
+            ":type": "cq:PageContent"
+        }
+    ],
+    "showDescription": true,
+    "showModificationDate": false,
+    "linkItems": true,
+    "displayItemAsTeaser": true,
+    "dataLayer": {
+        "list-6ce5379d59": {
+            "@type": "core/wcm/components/list/v3/list"
+        }
+    },
+    ":type": "core/wcm/components/list/v3/list"
+}

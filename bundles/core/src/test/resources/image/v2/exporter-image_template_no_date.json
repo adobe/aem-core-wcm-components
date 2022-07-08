@@ -1,0 +1,33 @@
+{
+    "id"            : "image-a2c6a064d4",
+    "alt"           : "Adobe Systems Logo and Wordmark in PNG format",
+    "title"         : "Adobe Systems Logo and Wordmark",
+    "link"          : "/core/content/test-image.html",
+    "src"           : "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.png/structure/jcr%3acontent/root/image_template_no_date.png",
+    "srcUriTemplate": "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82{.width}.png/structure/jcr:content/root/image_template_no_date.png",
+    "lazyThreshold" : 0,
+    "dmImage"       : false,
+    "uuid"          : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+    "widths"        : [
+        600,
+        700,
+        800,
+        2000,
+        2500
+    ],
+    "lazyEnabled"   : false,
+    ":type"         : "core/wcm/components/image/v2/image",
+    "dataLayer"     : {
+        "image-a2c6a064d4": {
+            "@type"      : "core/wcm/components/image/v2/image",
+            "dc:title"   : "Adobe Systems Logo and Wordmark",
+            "xdm:linkURL": "/core/content/test-image.html",
+            "image"      : {
+                "repo:id"        : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+                "repo:modifyDate": "1970-01-01T00:00:00Z",
+                "@type"          : "image/png",
+                "repo:path"      : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_no_date.png"
+            }
+        }
+    }
+}

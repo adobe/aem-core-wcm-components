@@ -1,27 +1,27 @@
 {
-    "localizedFragmentVariationPath": "/content/experience-fragments/mysite/en/header/master/jcr:content",
-    "configured": true,
-    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
-    ":itemsOrder": [
-        "text",
-        "image"
-    ],
-    ":items": {
-        "image": {
-            "id": "image-80fd4f0593",
-            "areas": [],
-            "lazyThreshold": 0,
-            "dmImage": false,
-            "widths": [],
-            "lazyEnabled": true,
-            ":type": "my/test/image"
-        },
-        "text": {
-            "id": "text-3cb839855c",
-            "text": "Hi there",
-            "richText": false,
-            ":type": "my/test/text"
-        }
+  "id": "experiencefragment-8c91b15598",
+  "localizedFragmentVariationPath": "/content/experience-fragments/mysite/en/header/master/jcr:content",
+  "configured": true,
+  ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+  ":itemsOrder": [
+    "text",
+    "image"
+  ],
+  ":items": {
+    "image": {
+      "id": "image-80fd4f0593",
+      "lazyThreshold": 0,
+      "dmImage": false,
+      "widths": [],
+      "lazyEnabled": true,
+      ":type": "my/test/image"
     },
-    "classNames": "aem-xf"
+    "text": {
+      "id": "text-3cb839855c",
+      "text": "Hi there",
+      "richText": false,
+      ":type": "my/test/text"
+    }
+  },
+  "classNames": "aem-xf"
 }

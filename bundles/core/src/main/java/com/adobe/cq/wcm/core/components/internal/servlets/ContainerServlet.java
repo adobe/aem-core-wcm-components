@@ -15,28 +15,29 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import java.io.IOException;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
-
+import com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor.Editor;
+import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
+import com.day.cq.wcm.api.WCMMode;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.AccordionImpl;
-import com.adobe.cq.wcm.core.components.internal.models.v1.CarouselImpl;
-import com.adobe.cq.wcm.core.components.internal.models.v1.TabsImpl;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Servlet that deletes/reorders the child nodes of a Accordion/Carousel/Tabs container.
@@ -45,9 +46,8 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.TabsImpl;
     service = Servlet.class,
     property = {
         "sling.servlet.methods=" + HttpConstants.METHOD_POST,
-        "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE,
-        "sling.servlet.resourceTypes=" + TabsImpl.RESOURCE_TYPE,
-        "sling.servlet.resourceTypes=" + AccordionImpl.RESOURCE_TYPE,
+        "sling.servlet.methods=" + HttpConstants.METHOD_GET,
+        "sling.servlet.resourceTypes=" + PanelContainerImpl.RESOURCE_TYPE,
         "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
         "sling.servlet.extensions=" + ContainerServlet.EXTENSION
     }
@@ -59,33 +59,13 @@ public class ContainerServlet extends SlingAllMethodsServlet {
     protected static final String SELECTOR = "container";
     protected static final String EXTENSION = "html";
 
-    private static final String PARAM_DELETED_CHILDREN = "delete";
     private static final String PARAM_ORDERED_CHILDREN = "order";
 
     @Override
-    protected void doPost(SlingHttpServletRequest request,
-                          final SlingHttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(@NotNull SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response) throws IOException {
 
         ResourceResolver resolver = request.getResourceResolver();
         Resource container = request.getResource();
-
-        // Delete the child items
-        try {
-            String[] deletedChildrenNames = request.getParameterValues(PARAM_DELETED_CHILDREN);
-            if (deletedChildrenNames != null && deletedChildrenNames.length > 0) {
-                for (String childName: deletedChildrenNames) {
-                    Resource child = container.getChild(childName);
-                    if (child != null) {
-                        resolver.delete(child);
-                    }
-                }
-            }
-            resolver.commit();
-        } catch (PersistenceException e) {
-            LOGGER.error("Could not delete items of the container at {}", container.getPath(), e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
 
         // Order the child items
         try {
@@ -107,7 +87,7 @@ public class ContainerServlet extends SlingAllMethodsServlet {
                         if (i == orderedChildrenNames.length - 1) {
                             containerNode.orderBefore(orderedChildrenNames[i], null);
                         } else {
-                            containerNode.orderBefore(orderedChildrenNames[i], orderedChildrenNames[i+1]);
+                            containerNode.orderBefore(orderedChildrenNames[i], orderedChildrenNames[i + 1]);
                         }
                     }
 
@@ -122,4 +102,16 @@ public class ContainerServlet extends SlingAllMethodsServlet {
 
     }
 
+    @Override
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws ServletException, IOException {
+        Resource container = request.getResource();
+        RequestDispatcherOptions options = new RequestDispatcherOptions();
+        options.setForceResourceType(Editor.RESOURCE_TYPE);
+        request.setAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME, WCMMode.DISABLED);
+        options.setReplaceSuffix(container.getPath());
+        RequestDispatcher dispatcher = request.getRequestDispatcher(container, options);
+        if (dispatcher != null) {
+            dispatcher.include(request, response);
+        }
+    }
 }

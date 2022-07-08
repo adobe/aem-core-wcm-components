@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Embed"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.embed.v1.editor]"
+    helpPath="https://www.adobe.com/go/aem_cmp_embed_v2"
+    trackingFeature="core-components:embed:v2">
+    <content
+        granite:class="cmp-embed__editor"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <type
+                                                granite:class="cmp-embed-dialog-edit__type"
+                                                granite:hide="${(cqDesign.urlDisabled &amp;&amp; cqDesign.embeddablesDisabled &amp;&amp; cqDesign.htmlDisabled)}"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
+                                                deleteHint="{Boolean}true"
+                                                fieldLabel="Type"
+                                                name="./type"
+                                                vertical="{Boolean}false">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-embed-dialog-edit-hook="typeField"
+                                                    cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-type\]"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <url
+                                                        granite:hide="${cqDesign.urlDisabled}"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        checked="{Boolean}true"
+                                                        text="URL"
+                                                        value="url"/>
+                                                    <embeddable
+                                                        granite:hide="${cqDesign.embeddablesDisabled}"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Embeddable"
+                                                        value="embeddable"/>
+                                                    <html
+                                                        granite:hide="${cqDesign.htmlDisabled}"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="HTML"
+                                                        value="html"/>
+                                                </items>
+                                            </type>
+                                            <url
+                                                granite:class="foundation-toggleable"
+                                                granite:hide="${cqDesign.urlDisabled}"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <field
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        emptyText="Paste a URL to embeddable content"
+                                                        fieldDescription="The URL of the content to embed. The URL will be checked against supported processors for a match."
+                                                        fieldLabel="URL"
+                                                        name="./url"
+                                                        required="{Boolean}true">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cmp-embed-dialog-edit-hook="urlField"/>
+                                                    </field>
+                                                    <status
+                                                        granite:class="coral-Form-fieldlabel foundation-toggleable"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                                        text="">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cmp-embed-dialog-edit-hook="urlStatus"/>
+                                                    </status>
+                                                </items>
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-embed-dialog-edit-type="true"
+                                                    cmp-embed-dialog-edit-showhidetargetvalue="url"/>
+                                            </url>
+                                            <embeddable
+                                                granite:class="foundation-toggleable"
+                                                granite:hide="${cqDesign.embeddablesDisabled}"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <field
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                        deleteHint="{Boolean}true"
+                                                        fieldDescription="Select an embeddable to include on the page. Options for the embeddable are shown once selected."
+                                                        fieldLabel="Embeddable"
+                                                        name="./embeddableResourceType">
+                                                        <datasource
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="core/wcm/components/embed/v2/datasources/allowedembeddables"/>
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cmp-embed-dialog-edit-hook="embeddableField"
+                                                            cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-embeddableoptions\]"/>
+                                                    </field>
+                                                    <options
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                                        <datasource
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="core/wcm/components/embed/v2/datasources/embeddableoptions"/>
+                                                    </options>
+                                                </items>
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-embed-dialog-edit-type="true"
+                                                    cmp-embed-dialog-edit-showhidetargetvalue="embeddable"/>
+                                            </embeddable>
+                                            <html
+                                                granite:hide="${cqDesign.htmlDisabled}"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                emptyText="Paste embed code"
+                                                fieldDescription="The code of the content to embed. The embed code is filtered to remove unsafe tags, such as the script tag."
+                                                fieldLabel="HTML"
+                                                name="./html"
+                                                required="{Boolean}true"
+                                                wrapperClass="foundation-toggleable">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-embed-dialog-edit-type="true"
+                                                    cmp-embed-dialog-edit-showhidetargetvalue="html"/>
+                                            </html>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </properties>
+                    <styletab
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/include"
+                            path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_edit/styletab"/>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

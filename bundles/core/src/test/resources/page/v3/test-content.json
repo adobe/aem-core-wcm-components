@@ -1,0 +1,68 @@
+{
+  "templated-page": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:createdBy"  : "admin",
+    "jcr:created"    : "Wed Jan 20 2016 10:29:36 GMT+0100",
+    "jcr:content"    : {
+      "jcr:primaryType"   : "cq:PageContent",
+      "jcr:createdBy"     : "admin",
+      "jcr:title"         : "Templated Page",
+      "jcr:description"   : "Description",
+      "cq:template"       : "/conf/coretest/settings/wcm/templates/product-page",
+      "jcr:created"       : "Wed Jan 20 2016 10:29:36 GMT+0100",
+      "jcr:language"      : "en_GB",
+      "cq:lastModified"   : "Wed Jan 20 2016 10:33:36 GMT+0100",
+      "cq:deviceGroups"   : [
+        "mobile/groups/responsive"
+      ],
+      "cq:tags"           : [
+        "one",
+        "two",
+        "three"
+      ],
+      "cq:robotsTags"     : [
+        "index",
+        "nofollow"
+      ],
+      "cq:templateType"   : "/libs/settings/wcm/template-types/html5page",
+      "sling:configRef"   : "/conf/page",
+      "sling:resourceType": "core/wcm/components/page/v3/page",
+      "cq:lastModifiedBy" : "admin",
+      "brandSlug"         : "Brand Slug",
+      "brandSlug_override": "true",
+      "root"              : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "jcr:lastModifiedBy": "admin",
+        "jcr:lastModified"  : "2016-01-19T17:00:19.841+01:00",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "text"              : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModifiedBy": "admin",
+          "jcr:created"       : "Mon Jan 18 2016 16:59:33 GMT+0100",
+          "text"              : "<p>This is a test</p>",
+          "jcr:lastModified"  : "Mon Jan 18 2016 16:59:43 GMT+0100",
+          "sling:resourceType": "core/wcm/components/text/v2/text",
+          "textIsRich"        : "true"
+        }
+      }
+    }
+  },
+  "redirect-page": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:createdBy"  : "admin",
+    "jcr:created"    : "Wed Jan 20 2016 10:29:36 GMT+0100",
+    "jcr:content"    : {
+      "jcr:primaryType"   : "cq:PageContent",
+      "jcr:createdBy"     : "admin",
+      "jcr:title"         : "Redirect Page",
+      "jcr:description"   : "Description",
+      "cq:template"       : "/conf/coretest/settings/wcm/templates/product-page",
+      "sling:resourceType": "core/wcm/components/page/v3/page",
+      "jcr:created"       : "Wed Jan 20 2016 10:29:36 GMT+0100",
+      "jcr:language"      : "en_GB",
+      "cq:lastModified"   : "Wed Jan 20 2016 10:33:36 GMT+0100",
+      "cq:redirectTarget" : "/content/page/templated-page"
+    }
+  }
+}

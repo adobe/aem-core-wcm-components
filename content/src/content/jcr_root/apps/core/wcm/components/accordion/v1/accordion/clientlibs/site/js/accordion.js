@@ -16,6 +16,11 @@
 (function() {
     "use strict";
 
+    var containerUtils = window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils ? window.CQ.CoreComponents.container.utils : undefined;
+    if (!containerUtils) {
+        // eslint-disable-next-line no-console
+        console.warn("Accordion: container utilities at window.CQ.CoreComponents.container.utils are not available. This can lead to missing features. Ensure the core.wcm.components.commons.site.container client library is included on the page.");
+    }
     var dataLayerEnabled;
     var dataLayer;
     var delay = 100;
@@ -115,60 +120,74 @@
                 that._elements["button"] = Array.isArray(that._elements["button"]) ? that._elements["button"] : [that._elements["button"]];
                 that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
 
-                // Expand the item based on deep-link-id if it matches with any existing accordion item id
-                var deepLinkItem = window.CQ.CoreComponents.container.utils.getDeepLinkItem(that, "item");
-                if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
-                    setItemExpanded(deepLinkItem, true);
-                }
-
                 if (that._properties.singleExpansion) {
-                    // No deep linking
-                    if (!deepLinkItem) {
-                        var expandedItems = getExpandedItems();
-                        // no expanded item annotated, force the first item to display.
-                        if (expandedItems.length === 0) {
-                            toggle(0);
-                        }
-                        // multiple expanded items annotated, display the last item open.
-                        if (expandedItems.length > 1) {
-                            toggle(expandedItems.length - 1);
-                        }
-                    } else {
-                        // Deep link case
-                        // Collapse the items other than which is deep linked
-                        for (var j = 0; j < that._elements["item"].length; j++) {
-                            if (that._elements["item"][j].id !== deepLinkItem.id &&
-                                that._elements["item"][j].hasAttribute(dataAttributes.item.expanded)) {
-                                setItemExpanded(that._elements["item"][j], false);
-                            }
-                        }
+                    var expandedItems = getExpandedItems();
+                    // no expanded item annotated, force the first item to display.
+                    if (expandedItems.length === 0) {
+                        toggle(0);
+                    }
+                    // multiple expanded items annotated, display the last item open.
+                    if (expandedItems.length > 1) {
+                        toggle(expandedItems.length - 1);
                     }
                 }
 
                 refreshItems();
                 bindEvents();
+                scrollToDeepLinkIdInAccordion();
+            }
+            if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
+                /*
+                 * Editor message handling:
+                 * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
+                 * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
+                 * - if so, route the "navigate" operation to enact a navigation of the Accordion based on index data
+                 */
+                window.CQ.CoreComponents.MESSAGE_CHANNEL = window.CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
+                window.CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                    if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
+                        if (message.data.operation === "navigate") {
+                            // switch to single expansion mode when navigating in edit mode.
+                            var singleExpansion = that._properties.singleExpansion;
+                            that._properties.singleExpansion = true;
+                            toggle(message.data.index);
 
-                if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
-                    /*
-                     * Editor message handling:
-                     * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
-                     * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
-                     * - if so, route the "navigate" operation to enact a navigation of the Accordion based on index data
-                     */
-                    window.CQ.CoreComponents.MESSAGE_CHANNEL = window.CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
-                    window.CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
-                        if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
-                            if (message.data.operation === "navigate") {
-                                // switch to single expansion mode when navigating in edit mode.
-                                var singleExpansion = that._properties.singleExpansion;
-                                that._properties.singleExpansion = true;
-                                toggle(message.data.index);
+                            // revert to the configured state.
+                            that._properties.singleExpansion = singleExpansion;
+                        }
+                    }
+                });
+            }
+        }
 
-                                // revert to the configured state.
-                                that._properties.singleExpansion = singleExpansion;
+        /**
+         * Displays the panel containing the element that corresponds to the deep link in the URI fragment
+         * and scrolls the browser to this element.
+         */
+        function scrollToDeepLinkIdInAccordion() {
+            if (containerUtils) {
+                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item", "item");
+                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                    var deepLinkItem = that._elements["item"][deepLinkItemIdx];
+                    if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
+                        // if single expansion: close all accordion items
+                        if (that._properties.singleExpansion) {
+                            for (var j = 0; j < that._elements["item"].length; j++) {
+                                if (that._elements["item"][j].hasAttribute(dataAttributes.item.expanded)) {
+                                    setItemExpanded(that._elements["item"][j], false, true);
+                                }
                             }
                         }
-                    });
+                        // expand the accordion item containing the deep link
+                        setItemExpanded(deepLinkItem, true, true);
+                    }
+                    var hashId = window.location.hash.substring(1);
+                    if (hashId) {
+                        var hashItem = document.querySelector("[id='" + hashId + "']");
+                        if (hashItem) {
+                            hashItem.scrollIntoView();
+                        }
+                    }
                 }
             }
         }
@@ -213,7 +232,7 @@
             that._properties = {};
 
             for (var key in properties) {
-                if (properties.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(properties, key)) {
                     var property = properties[key];
                     var value = null;
 
@@ -242,6 +261,7 @@
          * @private
          */
         function bindEvents() {
+            window.addEventListener("hashchange", scrollToDeepLinkIdInAccordion, false);
             var buttons = that._elements["button"];
             if (buttons) {
                 for (var i = 0; i < buttons.length; i++) {
@@ -321,10 +341,8 @@
                             }
                         }
                     }
-                    setItemExpanded(item, true);
-                } else {
-                    setItemExpanded(item, !getItemExpanded(item));
                 }
+                setItemExpanded(item, !getItemExpanded(item));
 
                 if (dataLayerEnabled) {
                     var accordionId = that._elements.self.id;
@@ -351,10 +369,15 @@
          * @private
          * @param {HTMLElement} item The item to mark as expanded, or not expanded
          * @param {Boolean} expanded true to mark the item expanded, false otherwise
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function setItemExpanded(item, expanded) {
+        function setItemExpanded(item, expanded, keepHash) {
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
+                var index = that._elements["item"].indexOf(item);
+                if (!keepHash && containerUtils) {
+                    containerUtils.updateUrlHash(that, "item", index);
+                }
                 if (dataLayerEnabled) {
                     dataLayer.push({
                         event: "cmp:show",
@@ -366,6 +389,9 @@
 
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
+                if (!keepHash && containerUtils) {
+                    containerUtils.removeUrlHash();
+                }
                 if (dataLayerEnabled) {
                     dataLayer.push({
                         event: "cmp:hide",
@@ -456,11 +482,6 @@
                 panel.classList.add(cssClasses.panel.expanded);
                 panel.classList.remove(cssClasses.panel.hidden);
                 panel.setAttribute("aria-hidden", false);
-
-                if (that._properties.singleExpansion) {
-                    button.classList.add(cssClasses.button.disabled);
-                    button.setAttribute("aria-disabled", true);
-                }
             }
         }
 
@@ -476,9 +497,7 @@
             if (index > -1) {
                 var button = that._elements["button"][index];
                 var panel = that._elements["panel"][index];
-                button.classList.remove(cssClasses.button.disabled);
                 button.classList.remove(cssClasses.button.expanded);
-                button.removeAttribute("aria-disabled");
                 // used to fix some known screen readers issues in reading the correct state of the 'aria-expanded' attribute
                 // e.g. https://bugs.webkit.org/show_bug.cgi?id=210934
                 setTimeout(function() {
@@ -517,7 +536,7 @@
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
                 var value = data[key];
 
                 if (key.indexOf(NS) === 0) {
@@ -542,11 +561,14 @@
      * @returns {String} dataLayerId or undefined
      */
     function getDataLayerId(item) {
-        if (item && item.dataset.cmpDataLayer) {
-            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
-        } else {
-            return item.id;
+        if (item) {
+            if (item.dataset.cmpDataLayer) {
+                return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+            } else {
+                return item.id;
+            }
         }
+        return null;
     }
 
     /**
@@ -595,5 +617,8 @@
         document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
-    window.addEventListener("hashchange", window.CQ.CoreComponents.container.utils.locationHashChanged, false);
+    if (containerUtils) {
+        window.addEventListener("load", containerUtils.scrollToAnchor, false);
+    }
+
 }());

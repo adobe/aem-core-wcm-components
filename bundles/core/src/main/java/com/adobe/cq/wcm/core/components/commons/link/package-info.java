@@ -16,7 +16,7 @@
 /**
  * Link handling.
  */
-@Version("1.0.0")
+@Version("1.2.0")
 package com.adobe.cq.wcm.core.components.commons.link;
 
 import org.osgi.annotation.versioning.Version;

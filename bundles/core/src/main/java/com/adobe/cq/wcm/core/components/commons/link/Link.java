@@ -15,13 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.link;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
-
-import com.day.cq.wcm.api.Page;
 
 /**
  * Describes a link target.
@@ -44,32 +43,63 @@ public interface Link<T> {
 
     /**
      * Property name for storing link accessibility label.
+     * @deprecated
+     * This property was used with Title v2, but is not used with Title v3 nor with any other components.
      */
+    @Deprecated
     String PN_LINK_ACCESSIBILITY_LABEL = "linkAccessibilityLabel";
 
     /**
      * Property name for storing link title attribute.
+     * @deprecated
+     * This property was used with Title v2, but is not used with Title v3 nor with any other components.
      */
+    @Deprecated
     String PN_LINK_TITLE_ATTRIBUTE = "linkTitleAttribute";
 
     /**
-     * Check if the link defined for the component is valid.
+     * Checks if the link defined for the component is valid.
      *
      * @return {@code true} if component has a valid link defined
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
-    boolean isValid();
+    default boolean isValid() {
+        return false;
+    }
 
     /**
-     * The link URL, supports context path and vanity paths.
+     * The link URL, supports context path and escaping.
      *
      * @return Link URL or {@code null} if link is invalid
      */
     @Nullable
-    String getURL();
+    default String getURL() {
+        return null;
+    }
 
     /**
-     * Map with Attributes for HTML Anchor tag for this link.
+     * The mapped URL, which supports mapping and vanity path.
+     * This usually is resource resolver mapping.
+     *
+     * @return Mapped link URL or {@code null} if link is invalid or no processing can be done
+     */
+    @Nullable
+    default String getMappedURL() {
+        return null;
+    }
+
+    /**
+     * The externalized URL which also contains the scheme and host information.
+     * This is usually created with a {@link com.day.cq.commons.Externalizer} service
+     * @return Full link URL or {@code null} if link is invalid or can't be externalized.
+     */
+    @Nullable
+    default String getExternalizedURL() {
+        return null;
+    }
+
+    /**
+     * Returns a Map with attributes for HTML anchor tag for this link.
      * This usually also contains the Link URL as <code>href</code> attribute,
      * but may contain additional attributes like <code>target</code> and others.
      *
@@ -77,7 +107,9 @@ public interface Link<T> {
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @NotNull
-    Map<String, String> getHtmlAttributes();
+    default Map<String, String> getHtmlAttributes() {
+        return Collections.emptyMap();
+    }
 
     /**
      * Returns the referenced WCM/DAM object.
@@ -86,6 +118,7 @@ public interface Link<T> {
      * @since com.adobe.cq.wcm.core.components.commons.link 1.0.0
      */
     @Nullable
-    T getReference();
-
+    default T getReference() {
+        return null;
+    }
 }

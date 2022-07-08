@@ -26,6 +26,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.PWA;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -64,6 +66,16 @@ public class PWAImplTest {
         when(resource.getResourceResolver()).thenReturn(spyResolver);
         Resource mockPWAResource = mock(Resource.class);
         when(spyResolver.getResource(SITES_PAGE_PATH + "/" + JcrConstants.JCR_CONTENT)).thenReturn(mockPWAResource);
+
+        PageManager mockPageManager = mock(PageManager.class);
+        Page mockPage = mock(Page.class);
+        when(spyResolver.adaptTo(PageManager.class)).thenReturn(mockPageManager);
+        when(mockPageManager.getContainingPage(resource)).thenReturn(mockPage);
+        when(mockPage.getContentResource()).thenReturn(mockPWAResource);
+        when(mockPage.getPath()).thenReturn(SITES_PAGE_PATH);
+
+        Page mockParentPage = mock(Page.class);
+        when(mockPage.getParent()).thenReturn(mockParentPage);
 
         mvp.put(PN_PWA_ENABLED, true);
         mvp.put(PN_PWA_START_URL, SITES_PAGE_PATH + ".html");

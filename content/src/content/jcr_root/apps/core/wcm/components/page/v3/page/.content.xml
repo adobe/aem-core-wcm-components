@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    cq:icon="page"
+    jcr:primaryType="cq:Component"
+    jcr:title="Page (v3)"
+    sling:resourceSuperType="wcm/foundation/components/basicpage/v1/basicpage"
+    componentGroup=".core-wcm"
+    designDialogPath="core/wcm/components/page/v3/page/cq:design_dialog"/>
