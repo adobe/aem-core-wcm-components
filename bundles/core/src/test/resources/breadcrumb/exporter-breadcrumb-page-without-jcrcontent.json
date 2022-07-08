@@ -32,10 +32,10 @@
       ":type": "coretest/components/structure/page"
     }
   ],
-  ":type": "core/wcm/components/breadcrumb",
+  ":type": "core/wcm/components/breadcrumb/v1/breadcrumb",
   "dataLayer": {
     "breadcrumb-2f933fab4b": {
-      "@type": "core/wcm/components/breadcrumb",
+      "@type": "core/wcm/components/breadcrumb/v1/breadcrumb",
       "repo:modifyDate": "2016-01-11T15:21:45Z"
     }
   }
