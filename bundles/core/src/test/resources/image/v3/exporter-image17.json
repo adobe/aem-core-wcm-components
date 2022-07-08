@@ -1,0 +1,10 @@
+{
+  "lazyEnabled" : false,
+  "title" : "Adobe Logo",
+  "alt" : "Adobe Logo",
+  "imageLink": {
+    "url": "https://www.adobe.com",
+    "valid": true
+  },
+  ":type" : "core/wcm/components/image/v3/image"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "image-66bf44d2af",
+  "src": "/core/content/test/_jcr_content/root/image16.coreimg.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
+  "lazyEnabled": true,
+  "dataLayer": {
+    "image-66bf44d2af": {
+      "@type": "core/wcm/components/image/v3/image",
+      "image": {
+        "repo:modifyDate": "2017-07-17T13:59:49Z",
+        "@type": "image/tiff",
+        "repo:id": "ef64bc65-fb1b-4c31-9582-c177001eba0d",
+        "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.tiff",
+        "xdm:tags": ["test1"]
+      }
+    }
+  },
+  ":type": "core/wcm/components/image/v3/image"
+}

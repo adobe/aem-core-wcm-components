@@ -20,6 +20,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -41,15 +42,16 @@ import com.day.cq.wcm.api.designer.Style;
 @Model(
     adaptables = SlingHttpServletRequest.class,
     adapters = { Embed.class, ComponentExporter.class },
-    resourceType = EmbedImpl.RESOURCE_TYPE
+    resourceType = {EmbedImpl.RESOURCE_TYPE_V1, EmbedImpl.RESOURCE_TYPE_V2}
 )
 @Exporter(
     name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
     extensions = ExporterConstants.SLING_MODEL_EXTENSION
 )
-public class EmbedImpl implements Embed {
+public class EmbedImpl extends AbstractComponentImpl implements Embed {
 
-    protected static final String RESOURCE_TYPE = "core/wcm/components/embed/v1/embed";
+    protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/embed/v1/embed";
+    protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/embed/v2/embed";
 
     @ValueMapValue(name = PN_TYPE, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable

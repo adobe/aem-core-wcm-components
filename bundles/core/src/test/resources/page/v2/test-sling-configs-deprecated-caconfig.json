@@ -1,0 +1,39 @@
+{
+    "com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig": {
+        "jcr:primaryType": "nt:unstructured",
+        "prefixPath"     : "/_theme",
+        "theme.css"      : {
+            "jcr:primaryType": "nt:unstructured",
+            "element"        : "link",
+            "location"       : "header",
+            "attributes"     : {
+                "jcr:primaryType": "nt:unstructured",
+                "href"           : "/theme.css",
+                "rel"            : "preload",
+                "as"             : "style"
+            }
+        },
+        "theme.js"       : {
+            "jcr:primaryType": "nt:unstructured",
+            "element"        : "script",
+            "location"       : "footer",
+            "attributes"     : {
+                "jcr:primaryType": "nt:unstructured",
+                "async"      : "true",
+                "defer"      : "false",
+                "src"            : "/theme.js"
+            }
+        },
+        "meta"           : {
+            "jcr:primaryType": "nt:unstructured",
+          "element"        : "meta",
+          "attributes"     : {
+            "jcr:primaryType": "nt:unstructured",
+            "charset"        : "UTF-8"
+          }
+        },
+        "invalid"        : {
+            "jcr:primaryType": "nt:unstructured"
+        }
+    }
+}

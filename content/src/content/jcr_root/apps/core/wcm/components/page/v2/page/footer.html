@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.footer="${ @ page}">
+<template data-sly-template.footer="${ @ page, pwa }">
     <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
          data-sly-test.clientlibCategoriesJsBody="${page.clientLibCategoriesJsBody}"
          data-sly-call="${clientlib.js @ categories=clientlibCategoriesJsBody}"></sly>
@@ -23,5 +23,9 @@
     <sly data-sly-test="${page.data}" data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.datalayer.v1'}"></sly>
     <sly data-sly-list="${page.htmlPageItems}"><script data-sly-test="${item.location.name == 'footer'}"
             data-sly-element="${item.element.name @ context='unsafe'}" data-sly-attribute="${item.attributes}"></script>
+    </sly>
+    <sly data-sly-test="${pwa.enabled}">
+        <div class="cmp-page__toastmessagehide"></div>
+        <sly data-sly-call="${clientlib.js @ categories='core.wcm.components.page.v2.pwa'}"></sly>
     </sly>
 </template>

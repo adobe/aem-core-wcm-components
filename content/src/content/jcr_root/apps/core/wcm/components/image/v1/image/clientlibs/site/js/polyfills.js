@@ -76,7 +76,7 @@ if (!Object.assign) {
 (function(arr) {
     "use strict";
     arr.forEach(function(item) {
-        if (item.hasOwnProperty("remove")) {
+        if (Object.prototype.hasOwnProperty.call(item, "remove")) {
             return;
         }
         Object.defineProperty(item, "remove", {

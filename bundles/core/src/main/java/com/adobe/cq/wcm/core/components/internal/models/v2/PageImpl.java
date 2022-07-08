@@ -17,8 +17,10 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -30,6 +32,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.caconfig.ConfigurationBuilder;
+import org.apache.sling.caconfig.ConfigurationResolver;
 import org.apache.sling.caconfig.resource.ConfigurationResourceResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -42,14 +46,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Version;
 
+import com.adobe.aem.wcm.seo.SeoTags;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
+import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
@@ -85,6 +92,16 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public static final String PN_MAIN_CONTENT_SELECTOR_PROP = "mainContentSelector";
 
     /**
+     * Property name of the style property that enables/disables rendering of the alternate language links
+     */
+    public static final String PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS = "renderAlternateLanguageLinks";
+
+    /**
+     * Attribute value for robots noindex
+     */
+    public static final String ROBOTS_TAG_NOINDEX = "noindex";
+
+    /**
      * Flag indicating if cloud configuration support is enabled.
      */
     private Boolean hasCloudconfigSupport;
@@ -108,10 +125,10 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private ConfigurationResourceResolver configurationResourceResolver;
 
     /**
-     * The current request.
+     * The @{@link ConfigurationResolver} service.
      */
-    @Self
-    protected SlingHttpServletRequest request;
+    @OSGiService
+    private ConfigurationResolver configurationResolver;
 
     /**
      * The current component context.
@@ -125,6 +142,16 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = PN_REDIRECT_TARGET)
     @Nullable
     private String redirectTargetValue;
+
+    /**
+     * The canonical url overwrite if set, null otherwise
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = "cq:canonicalUrl")
+    @Nullable
+    private String customCanonicalUrl;
+
+    @Self
+    private LinkManager linkManager;
 
     /**
      * The proxy path of the first client library listed in the style under the
@@ -148,18 +175,25 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private String[] clientLibCategoriesJsHead;
 
     private List<HtmlPageItem> htmlPageItems;
+    private Map<Locale, String> alternateLanguageLinks;
+    private String canonicalUrl;
+    private List<String> robotsTags;
 
     @PostConstruct
     protected void initModel() {
         super.initModel();
         this.appResourcesPath = Optional.ofNullable(currentStyle)
-            .map(style -> style.get(PN_APP_RESOURCES_CLIENTLIB, String.class))
-            .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, false))
-            .map(Collection::stream)
-            .orElse(Stream.empty())
-            .findFirst()
-            .map(this::getProxyPath)
-            .orElse(null);
+                .map(style -> style.get(PN_APP_RESOURCES_CLIENTLIB, String.class))
+                .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, false))
+                .map(Collection::stream)
+                .orElse(Stream.empty())
+                .findFirst()
+                .map(this::getProxyPath)
+                .orElse(null);
+    }
+
+    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
+        return new RedirectItemImpl(redirectTarget, request, linkManager);
     }
 
     private String getProxyPath(ClientLibrary lib) {
@@ -246,7 +280,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public NavigationItem getRedirectTarget() {
         if (redirectTarget == null && StringUtils.isNotEmpty(redirectTargetValue)) {
-            redirectTarget = new RedirectItemImpl(redirectTargetValue, request);
+            redirectTarget = newRedirectItem(redirectTargetValue, request, linkManager);
         }
         return redirectTarget;
     }
@@ -276,17 +310,89 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public @NotNull List<HtmlPageItem> getHtmlPageItems() {
         if (htmlPageItems == null) {
             htmlPageItems = new LinkedList<>();
-            Resource configResource = configurationResourceResolver.getResource(resource, "sling:configs", HtmlPageItemsConfig.class.getName());
-            if (configResource != null) {
-                ValueMap properties = configResource.getValueMap();
-                for (Resource child : configResource.getChildren()) {
-                    HtmlPageItem item = new HtmlPageItemImpl(properties.get(HtmlPageItemsConfig.PN_PREFIX_PATH, StringUtils.EMPTY), child);
-                    if (item.getElement() != null) {
-                        htmlPageItems.add(item);
+            ConfigurationBuilder configurationBuilder = configurationResolver.get(resource);
+            HtmlPageItemsConfig config = configurationBuilder.as(HtmlPageItemsConfig.class);
+            for (HtmlPageItemConfig itemConfig : config.items()) {
+                HtmlPageItem item = new HtmlPageItemImpl(StringUtils.defaultString(config.prefixPath()), itemConfig);
+                if (item.getElement() != null) {
+                    htmlPageItems.add(item);
+                }
+            }
+            // Support the former node structure: see com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
+            if (htmlPageItems.isEmpty()) {
+                Resource configResource = configurationResourceResolver.getResource(resource, "sling:configs", HtmlPageItemsConfig.class.getName());
+                if (configResource != null) {
+                    ValueMap properties = configResource.getValueMap();
+                    for (Resource child : configResource.getChildren()) {
+                        HtmlPageItem item = new HtmlPageItemImpl(properties.get(HtmlPageItemsConfig.PN_PREFIX_PATH, StringUtils.EMPTY), child);
+                        if (item.getElement() != null) {
+                            htmlPageItems.add(item);
+                        }
                     }
                 }
             }
         }
         return htmlPageItems;
+    }
+
+    @Override
+    @Nullable
+    public String getCanonicalLink() {
+        if (this.canonicalUrl == null) {
+            String canonicalUrl;
+            try {
+                SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                canonicalUrl = seoTags != null ? seoTags.getCanonicalUrl() : null;
+            } catch (NoClassDefFoundError ex) {
+                canonicalUrl = null;
+            }
+            if (!getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
+                this.canonicalUrl = canonicalUrl != null
+                    ? canonicalUrl
+                    : linkManager.get(currentPage).build().getExternalizedURL();
+            }
+        }
+        return canonicalUrl;
+    }
+
+    @Override
+    @NotNull
+    public Map<Locale, String> getAlternateLanguageLinks() {
+        if (alternateLanguageLinks == null) {
+            try {
+                // if enabled, alternate language links should only be included on pages that are canonical (don't have a custom canonical
+                // url set) and are not marked with noindex.
+                String currentPath = currentPage.getPath();
+                boolean isCanonical = StringUtils.isEmpty(customCanonicalUrl) || StringUtils.equals(customCanonicalUrl, currentPath);
+                if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, Boolean.FALSE)
+                    && isCanonical && !getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
+                    SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                    alternateLanguageLinks = seoTags != null && seoTags.getAlternateLanguages().size() > 0
+                        ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())
+                        : Collections.emptyMap();
+                } else {
+                    alternateLanguageLinks = Collections.emptyMap();
+                }
+            } catch (NoClassDefFoundError ex) {
+                alternateLanguageLinks = Collections.emptyMap();
+            }
+        }
+        return alternateLanguageLinks;
+    }
+
+    @Override
+    @NotNull
+    public List<String> getRobotsTags() {
+        if (robotsTags == null) {
+            try {
+                SeoTags seoTags = resource.adaptTo(SeoTags.class);
+                robotsTags = seoTags != null && seoTags.getRobotsTags().size() > 0
+                    ? Collections.unmodifiableList(seoTags.getRobotsTags())
+                    : Collections.emptyList();
+            } catch (NoClassDefFoundError ex) {
+                robotsTags = Collections.emptyList();
+            }
+        }
+        return robotsTags;
     }
 }

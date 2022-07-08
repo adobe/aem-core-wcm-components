@@ -3,7 +3,12 @@
     "jcr:primaryType": "nt:unstructured",
     "actionType": "foundation/components/form/actions/rpc",
     "redirect" : "/content",
-    "errorMessage": "Ups"
+    "errorMessage": "Ups",
+    "text": {
+      "jcr:primaryType": "nt:unstructured",
+      "sling:resourceType": "core/wcm/components/form/text/v1/text",
+      "name": "text"
+    }
   },
   "containerWithMappedRedirect": {
     "jcr:primaryType": "nt:unstructured",

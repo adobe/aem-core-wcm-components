@@ -19,6 +19,7 @@
                   "children": [],
                   "level": 3,
                   "active": false,
+                  "current": false,
                   "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
                   "title": "Navigation 1.1.2",
                   "dataLayer": {
@@ -40,6 +41,7 @@
                       "children": [],
                       "level": 4,
                       "active": false,
+                      "current": false,
                       "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
                       "title": "Navigation 1.1.2.2.1",
                       "dataLayer": {
@@ -57,6 +59,7 @@
                       "children": [],
                       "level": 4,
                       "active": false,
+                      "current": false,
                       "url": "/core/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
                       "title": "Navigation 1.1.2.3",
                       "dataLayer": {
@@ -71,6 +74,7 @@
                   ],
                   "level": 3,
                   "active": false,
+                  "current": false,
                   "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
                   "title": "Navigation 1.1.1",
                   "dataLayer": {
@@ -85,6 +89,7 @@
               ],
               "level": 2,
               "active": false,
+              "current": false,
               "url": "/core/content/navigation-redirect/navigation-1/navigation-1-1.html",
               "title": "Navigation 1.1",
               "dataLayer": {
@@ -99,6 +104,7 @@
           ],
           "level": 1,
           "active": false,
+          "current": false,
           "url": "/core/navigation-1-vanity",
           "title": "Navigation 1",
           "dataLayer": {
@@ -116,6 +122,7 @@
           "children": [],
           "level": 1,
           "active": false,
+          "current": false,
           "url": "/core/content/navigation-redirect/navigation-2.html",
           "title": "Navigation 2",
           "dataLayer": {
@@ -126,10 +133,47 @@
             }
           },
           ":type": "cq:PageContent"
+        },
+        {
+          "id": "navigation-6dc2dc2172-item-a5f41f35db",
+          "path": "/content/navigation-redirect/navigation-3",
+          "children": [],
+          "level": 1,
+          "active": false,
+          "current": false,
+          "title": "Navigation 3",
+          "url": "https://www.adobe.com",
+          "dataLayer": {
+            "navigation-6dc2dc2172-item-a5f41f35db": {
+              "@type": "core/wcm/components/navigation/v1/navigation/item",
+              "dc:title": "Navigation 3",
+              "xdm:linkURL": "https://www.adobe.com"
+            }
+          },
+          ":type":"cq:PageContent"
+        },
+        {
+          "id"       : "navigation-6dc2dc2172-item-c8f482c5ae",
+          "path"     : "/content/navigation-redirect/navigation-4",
+          "children" : [],
+          "level"    : 1,
+          "active"   : false,
+          "current"  : false,
+          "title"    : "Navigation 4",
+          "url"      : "https://www.adobe.com",
+          ":type"    : "cq:PageContent",
+          "dataLayer": {
+            "navigation-6dc2dc2172-item-c8f482c5ae": {
+              "@type"      : "core/wcm/components/navigation/v1/navigation/item",
+              "dc:title"   : "Navigation 4",
+              "xdm:linkURL": "https://www.adobe.com"
+            }
+          }
         }
       ],
       "level": 0,
       "active": true,
+      "current": true,
       "url": "/core/content/navigation.html",
       "title": "Navigation",
       "dataLayer": {

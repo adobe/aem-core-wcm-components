@@ -1,0 +1,27 @@
+{
+  "id": "image-7053df592f",
+  "alt": "Adobe Systems Logo and Wordmark in PNG format",
+  "title": "Adobe Systems Logo and Wordmark",
+  "src": "/core/content/test/_jcr_content/root/image0.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+  "srcset":"/core/content/test/_jcr_content/root/image0.coreimg.82.600.png/1490005239000/adobe-systems-logo-and-wordmark.png 600w,/core/content/test/_jcr_content/root/image0.coreimg.82.700.png/1490005239000/adobe-systems-logo-and-wordmark.png 700w,/core/content/test/_jcr_content/root/image0.coreimg.82.800.png/1490005239000/adobe-systems-logo-and-wordmark.png 800w,/core/content/test/_jcr_content/root/image0.coreimg.82.2000.png/1490005239000/adobe-systems-logo-and-wordmark.png 2000w,/core/content/test/_jcr_content/root/image0.coreimg.82.2500.png/1490005239000/adobe-systems-logo-and-wordmark.png 2500w",
+  "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+  "lazyEnabled": true,
+  "imageLink": {
+    "url": "/core/content/test-image.html",
+    "valid": true
+  },
+  "dataLayer": {
+    "image-7053df592f": {
+      "xdm:linkURL": "/core/content/test-image.html",
+      "@type": "core/wcm/components/image/v3/image",
+      "dc:title": "Adobe Systems Logo and Wordmark",
+      "image": {
+        "repo:modifyDate": "2017-03-20T10:20:39Z",
+        "@type": "image/png",
+        "repo:id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+        "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+      }
+    }
+  },
+  ":type": "core/wcm/components/image/v3/image"
+}

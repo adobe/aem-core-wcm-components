@@ -22,6 +22,7 @@
             window.CQ.CoreComponents.panelcontainer.v1.registry.register({
                 name: "cmp-tabs",
                 selector: ".cmp-tabs",
+                wrapperSelector: '[data-panelcontainer="tabs"]',
                 itemSelector: "[data-cmp-hook-tabs='tabpanel']",
                 itemActiveSelector: ".cmp-tabs__tabpanel--active"
             });

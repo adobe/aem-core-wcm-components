@@ -32,7 +32,6 @@
 
     cursor: pointer;
     .appearance(none);
-    outline: none;
 
     &[disabled] {
         display: none;
@@ -45,6 +44,11 @@
         position: fixed;
         top: 0;
         transform: translateX(15rem);
+        height: 3rem;
+
+        @media @cmp-examples-screen-s-min {
+            left: 60px;
+        }
     }
 
     &--open {

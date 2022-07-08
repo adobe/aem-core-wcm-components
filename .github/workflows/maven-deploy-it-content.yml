@@ -1,0 +1,53 @@
+name: Deploy to Ref-Squad/it-testing branch
+env:
+    # Username/email used to commit to the Ref-Squad Program
+    # Ref-Squad Program Coordinates
+    TARGET_REPO: ${{ secrets.REFSQUAD_REPOSITORY }}
+    TARGET_BRANCH: ${{ secrets.REFSQUAD_BRANCH }}
+    USER_EMAIL: ${{ secrets.REFSQUAD_USER_EMAIL }}
+    USER_NAME: ${{ secrets.REFSQUAD_USER_NAME }}
+    USER_PWD: ${{ secrets.REFSQUAD_PASSWORD }}
+
+# Triggered Manually
+on:
+    workflow_dispatch:
+        inputs:
+            source_branch:
+                description: 'Branch to pick it.ui.apps and it.ui.content from'
+                required: false
+                default: 'main'
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            # Checkout this project into a sub folder
+            - uses: actions/checkout@v2
+              with:
+                  ref:  ${{ github.event.inputs.source_branch }}
+                  path: sub
+            # Cleanup sub project
+            - name: Clean project
+              run: |
+                  git -C sub log --format="%an : %s" -n 1 > commit.txt
+                  rm -rf sub/.git
+                  rm -rf sub/.github
+            # Set global git configuration
+            - name: Set git config
+              run: |
+                  git config --global credential.helper cache
+                  git config --global user.email ${USER_EMAIL}
+                  git config --global user.name ${USER_NAME}
+            # Checkout the main project
+            - name: Checkout main project
+              run:
+                  git clone -b ${TARGET_BRANCH} https://${USER_EMAIL}:${USER_PWD}@${TARGET_REPO} main
+            # Move sub project
+            - name: Move project to main
+              run: |
+                  rm -rf main/*
+                  mv sub/* main
+            - name: Commit Changes
+              run: |
+                  git -C main add .
+                  git -C main commit -F ../commit.txt
+                  git -C main push

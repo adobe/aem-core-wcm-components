@@ -58,18 +58,7 @@
             var element;
 
             if (container) {
-                if ($(editable.dom[0]).is(container.selector)) {
-                    element = editable.dom[0];
-                } else {
-                    var children = editable.dom[0].children;
-                    for (var i = 0; i < children.length; i++) {
-                        var child = children[i];
-                        if ($(child).is(container.selector)) {
-                            element = child;
-                            break;
-                        }
-                    }
-                }
+                element = editable.dom.filter(container.selector)[0] || editable.dom.find(container.selector)[0];
             }
 
             return element;
@@ -106,14 +95,16 @@
         if (editable && editable.dom) {
             for (var i = 0; i < panelContainerTypes.length; i++) {
                 var container = panelContainerTypes[i];
-                var match = $(editable.dom[0]).is(container.selector);
+                var selector = container.wrapperSelector || container.selector;
+
+                var match = $(editable.dom[0]).is(selector);
 
                 // look for a match at the editable DOM wrapper, if none is found, try its children.
                 if (!match) {
                     var children = editable.dom[0].children;
                     for (var j = 0; j < children.length; j++) {
                         var child = children[j];
-                        match = $(child).is(container.selector);
+                        match = $(child).is(selector);
                         if (match) {
                             break;
                         }

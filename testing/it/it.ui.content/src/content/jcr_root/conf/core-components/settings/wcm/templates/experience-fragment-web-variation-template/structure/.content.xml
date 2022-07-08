@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:deviceGroups="[mobile/groups/responsive]"
+        cq:lastModified="{Date}2022-03-31T15:10:23.621+02:00"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/core-components/settings/wcm/templates/experience-fragment-web-variation-template"
+        jcr:primaryType="cq:PageContent"
+        sling:resourceType="core/wcm/components/page/v3/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="core/wcm/components/container/v1/container"
+            layout="responsiveGrid">
+            <container
+                cq:lastModified="{Date}2022-03-31T14:44:50.754+02:00"
+                cq:styleIds="[1648730666615]"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2022-03-31T15:02:56.204+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/container/v1/container"
+                layout="responsiveGrid">
+                <title_v3
+                    jcr:created="{Date}2022-03-31T15:10:23.618+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2022-03-31T15:10:23.618+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-component/components/title-v3"/>
+            </container>
+        </root>
+        <cq:responsive jcr:primaryType="nt:unstructured">
+            <breakpoints jcr:primaryType="nt:unstructured">
+                <phone
+                    jcr:primaryType="nt:unstructured"
+                    title="Smaller Screen"
+                    width="{Long}768"/>
+                <tablet
+                    jcr:primaryType="nt:unstructured"
+                    title="Tablet"
+                    width="{Long}1200"/>
+            </breakpoints>
+        </cq:responsive>
+    </jcr:content>
+</jcr:root>

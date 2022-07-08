@@ -1,0 +1,97 @@
+{
+    "id": "carousel-c39ba25916",
+    "autoplay": true,
+    "delay": 7000,
+    "autopauseDisabled": true,
+    "controlsPrepended": true,
+    "accessibilityAutoItemTitles": false,
+    "dataLayer": {
+        "carousel-c39ba25916": {
+            "@type": "core/wcm/components/carousel/v1/carousel",
+            "shownItems": [
+                "carousel-c39ba25916-item-6204f971ea"
+            ]
+        }
+    },
+    ":itemsOrder": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+    ],
+    ":items": {
+        "item_1": {
+            "title": "Teaser 1",
+            "description": "Teaser 1 description",
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            "id": "teaser-6204f971ea",
+            "dataLayer": {
+                "teaser-6204f971ea": {
+                    "dc:description": "Teaser 1 description",
+                    "@type": "core/wcm/components/teaser/v1/teaser",
+                    "dc:title": "Teaser 1"
+                }
+            },
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "cq:panelTitle": "Teaser 1"
+        },
+        "item_2": {
+            "title": "Teaser 2",
+            "description": "Teaser 2 description",
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            "id": "teaser-7d7da28085",
+            "dataLayer": {
+                "teaser-7d7da28085": {
+                    "dc:description": "Teaser 2 description",
+                    "@type": "core/wcm/components/teaser/v1/teaser",
+                    "dc:title": "Teaser 2"
+                }
+            },
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "cq:panelTitle": "Teaser 2"
+        },
+        "item_3": {
+            "title": "Teaser 3",
+            "description": "Teaser 3 description",
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            "id": "teaser-aeaad4f462",
+            "dataLayer": {
+                "teaser-aeaad4f462": {
+                    "dc:description": "Teaser 3 description",
+                    "@type": "core/wcm/components/teaser/v1/teaser",
+                    "dc:title": "Teaser 3"
+                }
+            },
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "cq:panelTitle": "Carousel Panel 3"
+        },
+        "item_4": {
+            "title": "Teaser 4",
+            "description": "Teaser 4 description",
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            "id": "teaser-573fc19e9b",
+            "dataLayer": {
+                "teaser-573fc19e9b": {
+                    "dc:description": "Teaser 4 description",
+                    "@type": "core/wcm/components/teaser/v1/teaser",
+                    "dc:title": "Teaser 4"
+                }
+            },
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "cq:panelTitle": "Carousel Panel 4"
+        }
+    },
+    ":type": "core/wcm/components/carousel/v1/carousel"
+}

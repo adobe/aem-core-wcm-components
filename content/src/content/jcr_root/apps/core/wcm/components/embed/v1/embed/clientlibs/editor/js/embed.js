@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/* global Granite, Coral */
 (function(document, $, Coral) {
     "use strict";
 
@@ -221,14 +220,13 @@
             // for all optional tabs
             var allowedEmbeddablesDropdown = designDialogContent.querySelector(selectors.allowedEmbeddables);
             Coral.commons.ready(allowedEmbeddablesDropdown, function() {
-                var panelSelectors = getShowHideTarget(allowedEmbeddablesDropdown);
                 // register an event handler
                 allowedEmbeddablesDropdown.on("change", function() {
-                    toggleShowHideTabs(panelSelectors, allowedEmbeddablesDropdown.value);
+                    toggleShowHideTabs(allowedEmbeddablesDropdown.values);
                 });
                 // set initial state inside requestAnimationFrame as only there the relevant attribute "aria-labelledby" is set
                 window.requestAnimationFrame((function() {
-                    toggleShowHideTabs(panelSelectors, allowedEmbeddablesDropdown.value);
+                    toggleShowHideTabs(allowedEmbeddablesDropdown.values);
                 }));
             });
         }
@@ -238,17 +236,14 @@
      * Toggles the disabled state and visibility of tabs linked to panels matching the target.
      * Tabs that match the provided value are enabled / shown, otherwise they are disabled / hidden.
      *
-     * @param {String} panelSelectors Comma separated list of panel selectors for which the tabs should be toggled
-     * @param {String} value The value of the target to enable and show
+     * @param {String[]} values The values of the target to enable and show
      */
-    function toggleShowHideTabs(panelSelectors, value) {
-        var panelElements = document.querySelectorAll(panelSelectors);
-
+    function toggleShowHideTabs(values) {
+        var panelElements = document.querySelectorAll("[data-cmp-embed-dialog-edit-embeddableoptions]");
         for (var i = 0; i < panelElements.length; i++) {
-            var panelElement = panelElements[i];
-            var showHideTargetValue = getShowHideTargetValue(panelElement);
-            var tabElement = getTabElementForPanel(panelElement);
-            if (showHideTargetValue === value) {
+            var showHideTargetValue = getShowHideTargetValue(panelElements[i]);
+            var tabElement = getTabElementForPanel(panelElements[i]);
+            if (values.includes(showHideTargetValue)) {
                 toggleTarget($(tabElement), true);
             } else {
                 toggleTarget($(tabElement), false);
@@ -264,10 +259,14 @@
      */
     function getTabElementForPanel(panelElement) {
         // go to one level below panelstack
-        var panel = panelElement.parentElement.parentElement;
-        // get tab id controlling this panel
-        var tabId = panel.getAttribute("aria-labelledby");
-        return document.getElementById(tabId);
+        var panel = panelElement.closest("coral-panel");
+        if (panel !== null) {
+            // get tab id controlling this panel
+            var tabId = panel.getAttribute("aria-labelledby");
+            return document.getElementById(tabId);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -306,7 +305,7 @@
             } else {
                 $element.show();
             }
-            if (field) {
+            if (field && typeof field.setDisabled === "function") {
                 field.setDisabled(false);
             }
         } else {
@@ -315,7 +314,7 @@
             } else {
                 $element.hide();
             }
-            if (field) {
+            if (field && typeof field.setDisabled === "function") {
                 field.setDisabled(true);
                 setFieldValid($element);
             }
@@ -334,10 +333,12 @@
         $childFoundationFields.each(function(index, element) {
             var field = $(element).adaptTo("foundation-field");
             if (field) {
-                if (show) {
+                if (show && typeof field.setDisabled === "function") {
                     field.setDisabled(false);
                 } else {
-                    field.setDisabled(true);
+                    if (typeof field.setDisabled === "function") {
+                        field.setDisabled(true);
+                    }
                     setFieldValid($(element));
                 }
             }
@@ -397,7 +398,9 @@
         var field = $element.adaptTo("foundation-field");
         var validation = $element.adaptTo("foundation-validation");
         if (field && validation) {
-            field.setInvalid(false);
+            if (typeof field.setInvalid === "function") {
+                field.setInvalid(false);
+            }
             validation.checkValidity();
             validation.updateUI();
         }

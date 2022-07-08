@@ -13,7 +13,6 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* global jQuery, Coral */
 (function($, Coral) {
     "use strict";
 
@@ -249,7 +248,9 @@
 
         for (var i = 0; i < selects.length; i++) {
             var overlay = selects[i].querySelector("coral-overlay");
-            overlay.collision = Coral.Overlay.collision.NONE;
+            if (overlay) {
+                overlay.collision = Coral.Overlay.collision.NONE;
+            }
         }
 
         // adds a sufficient padding to the bottom of the wrapper such that selects

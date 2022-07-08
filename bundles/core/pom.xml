@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.13.5-SNAPSHOT</version>
+        <version>2.20.7-SNAPSHOT</version>
         <relativePath>../../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.core</artifactId>
-    <version>2.13.5-SNAPSHOT</version>
+    <version>2.20.7-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>Adobe Experience Manager Core WCM Components Core Bundle</name>
@@ -57,6 +57,7 @@
                 <configuration>
                     <exportScr>true</exportScr>
                     <instructions>
+                        <Embed-Dependency>jsoup</Embed-Dependency>
                         <_plugin>
                             <!-- Enable registration of Sling Models classes via bnd plugin -->
                             org.apache.sling.bnd.models.ModelsScannerPlugin,
@@ -69,7 +70,11 @@
                         <_metatypeannotations>*</_metatypeannotations>
                         <Import-Package>
                             com.adobe.cq.commerce.*;resolution:=optional,
+                            com.adobe.aem.wcm.seo.*;resolution:=optional,
                             javax.annotation;version=0.0.0,
+                            javax.annotation.meta;resolution:=optional,
+                            com.day.cq.dam.api;version="[1.24,2.0)",
+                            com.day.cq.dam.api.handler;version="[2,3)",
                             *
                         </Import-Package>
                     </instructions>
@@ -90,6 +95,16 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <configuration>
+                    <excludes combine.children="append">
+                        <!-- Ignore html files -->
+                        <exclude>**/test/resources/tableofcontents/*.html</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -235,7 +250,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <slingUrl>http://${aem.host}:${aem.port}/system/console</slingUrl>
+                            <slingUrl>http://${aem.host}:${aem.port}${aem.contextPath}/system/console</slingUrl>
                             <failOnError>true</failOnError>
                         </configuration>
                     </plugin>
@@ -364,6 +379,11 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-jcr-commons</artifactId>
         </dependency>
@@ -374,6 +394,16 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.commons.johnzon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.servlets.annotations</artifactId>
+            <version>1.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.14.3</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -407,6 +437,12 @@
             <artifactId>httpclient-osgi</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.adobe.cq.wcm</groupId>
+            <artifactId>com.adobe.aem.wcm.seo</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Testing dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -417,7 +453,7 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.api</artifactId>
-            <version>2.20.0</version>
+            <version>2.22.0</version>
             <scope>test</scope>
         </dependency>
         <!-- for testing we need the new ResourceTypeBasedResourcePicker -->
@@ -425,6 +461,16 @@
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.models.impl</artifactId>
             <version>1.4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.testing.caconfig-mock-plugin</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.testing.sling-mock-oak</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -489,10 +535,6 @@
             <artifactId>javassist</artifactId>
         </dependency>
         <dependency>
-            <groupId>uk.org.lidalia</groupId>
-            <artifactId>slf4j-test</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-commons</artifactId>
             <version>1.5.2</version>
@@ -536,9 +578,21 @@
         </dependency>
 
         <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-jpeg</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-tiff</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
-            <classifier>apis</classifier>
         </dependency>
     </dependencies>
 

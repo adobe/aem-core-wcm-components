@@ -64,7 +64,7 @@ Calling `adobeDataLayer.getState()` in the browser console will return e.g.:
       "xdm:tags": [],
       "xdm:language": "en-GB",
       "xdm:template": "/conf/core-components-examples/settings/wcm/templates/content-page",
-      "repo:path": "/content/core-components-examples/library/page-authoring/title.html",
+      "repo:path": "/content/core-components-examples/library/core-content/title.html",
       "dc:title": "Title",
       "@type": "core-components-examples/components/page",
       "repo:modifyDate": "2020-05-28T08:46:44Z",
@@ -124,7 +124,7 @@ Breadcrumb | x
 Button | x
 Carousel | x
 Container | 
-Content Fragment | 
+Content Fragment | x
 Content Fragment List | 
 Download | 
 Embed | 
@@ -180,6 +180,31 @@ id: {
     xdm:linkURL
     parentId
     shownItems          // array of the displayed item IDs
+}
+```
+
+#### Content Fragment
+
+Schema used for the Content Fragment:
+
+```
+id: {
+    @type
+    repo:modifyDate
+    dc:title
+    dc:description
+    xdm:text
+    xdm:linkURL
+    parentId
+    elements            // array of the Content Fragment elements
+}
+```
+
+Schema used for the Content Fragment element:
+```
+{
+    xdm:title           // title
+    xdm:text            // text
 }
 ```
 

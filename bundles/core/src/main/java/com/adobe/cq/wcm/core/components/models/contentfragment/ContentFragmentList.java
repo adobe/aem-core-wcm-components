@@ -17,11 +17,12 @@ package com.adobe.cq.wcm.core.components.models.contentfragment;
 
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.Component;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -30,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
  */
 @ConsumerType
-public interface ContentFragmentList extends ComponentExporter {
+public interface ContentFragmentList  extends Component {
 
     /**
      * Name of the property (in JSON export) that provides the content fragment items.
@@ -97,7 +98,7 @@ public interface ContentFragmentList extends ComponentExporter {
     @NotNull
     @JsonProperty(JSON_PN_ITEMS)
     default Collection<DAMContentFragment> getListItems() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyList();
     }
 
     /**
@@ -108,6 +109,6 @@ public interface ContentFragmentList extends ComponentExporter {
     @NotNull
     @Override
     default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 }

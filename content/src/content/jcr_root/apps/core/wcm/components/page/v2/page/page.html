@@ -15,10 +15,11 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <!DOCTYPE HTML>
 <html data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page" lang="${page.language}"
+      data-sly-use.pwa="com.adobe.cq.wcm.core.components.models.PWA"
       data-sly-use.head="head.html"
       data-sly-use.footer="footer.html"
       data-sly-use.redirect="redirect.html">
-    <head data-sly-call="${head.head @ page = page}"></head>
+    <head data-sly-call="${head.head @ page = page, pwa = pwa}"></head>
     <body class="${page.cssClassNames}"
           id="${page.id}"
           data-cmp-data-layer-enabled="${page.data ? true : false}">
@@ -38,7 +39,7 @@
             <sly data-sly-include="body.skiptomaincontent.html"></sly>
             <sly data-sly-include="body.socialmedia_begin.html"></sly>
             <sly data-sly-include="body.html"></sly>
-            <sly data-sly-call="${footer.footer @ page = page}"></sly>
+            <sly data-sly-call="${footer.footer @ page = page, pwa = pwa}"></sly>
             <sly data-sly-include="body.socialmedia_end.html"></sly>
         </sly>
     </body>

@@ -52,7 +52,7 @@ public class PageImplTest {
     protected static final String DESIGN_PATH = "/etc/designs/mysite";
     protected static final String CSS_CLASS_NAMES_KEY = "cssClassNames";
 
-    private static final String DESING_CACHE_KEY = "io.wcm.testing.mock.aem.context.MockAemSlingBindings_design_/content/page/templated" +
+    private static final String DESIGN_CACHE_KEY = "io.wcm.testing.mock.aem.context.MockAemSlingBindings_design_/content/page/templated" +
             "-page";
     private static final String TEST_BASE = "/page";
     private static final String FN_FAVICON_ICO = "favicon.ico";
@@ -71,12 +71,15 @@ public class PageImplTest {
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
+    protected String testBase;
+
     @BeforeEach
     protected void setUp() {
-        internalSetup(TEST_BASE);
+        testBase = TEST_BASE;
+        internalSetup();
     }
 
-    protected void internalSetup(String testBase) {
+    protected void internalSetup() {
         this.context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         this.context.load().json(testBase + "/test-conf.json", "/conf/coretest/settings");
         this.context.load().json(testBase + "/default-tags.json", "/content/cq:tags/default");
@@ -89,7 +92,7 @@ public class PageImplTest {
     }
 
     @Test
-    void testPage() throws ParseException {
+    protected void testPage() throws ParseException {
         context.load().binaryFile(TEST_BASE + "/static.css", DESIGN_PATH + "/static.css");
 
         Page page = getPageUnderTest(PAGE,
@@ -101,6 +104,7 @@ public class PageImplTest {
         assertEquals(page.getLastModifiedDate().getTime(), calendar.getTime());
         assertEquals("en-GB", page.getLanguage());
         assertEquals("Templated Page", page.getTitle());
+        assertEquals("Description", page.getDescription());
         assertEquals("Brand Slug", page.getBrandSlug());
         assertEquals(DESIGN_PATH, page.getDesignPath());
         assertEquals(DESIGN_PATH + "/static.css", page.getStaticDesignPath());
@@ -111,12 +115,12 @@ public class PageImplTest {
         assertTrue(keywords.contains("one") && keywords.contains("two") && keywords.contains("three"));
         assertEquals("coretest.product-page", page.getClientLibCategories()[0]);
         assertEquals("product-page", page.getTemplateName());
-        Utils.testJSONExport(page, Utils.getTestExporterJSONPath(TEST_BASE, PAGE));
+        Utils.testJSONExport(page, Utils.getTestExporterJSONPath(testBase, PAGE));
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    void testFavicons() {
+    protected void testFavicons() {
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH);
         Map<String, String> favicons = page.getFavicons();
         assertEquals(DESIGN_PATH + "/" + FN_FAVICON_ICO, favicons.get(PN_FAVICON_ICO));
@@ -128,7 +132,7 @@ public class PageImplTest {
     }
 
     @Test
-    void testDefaultDesign() {
+    protected void testDefaultDesign() {
         Page page = getPageUnderTest(PAGE);
         assertNull(page.getDesignPath());
         assertNull(page.getStaticDesignPath());
@@ -148,7 +152,7 @@ public class PageImplTest {
                     Design design = designer.getDesign(pagePath);
                     Design spyDesign = Mockito.spy(design);
                     Mockito.doReturn(propertyMap.get(DESIGN_PATH_KEY)).when(spyDesign).getPath();
-                    request.setAttribute(DESING_CACHE_KEY, spyDesign);
+                    request.setAttribute(DESIGN_CACHE_KEY, spyDesign);
                 }
             }
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="sling:Folder">
+    <link
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Link Editor"
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        margin="{Boolean}true">
+        <items jcr:primaryType="nt:unstructured">
+            <url
+                granite:class="cmp-link-url"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="cq/gui/components/coral/common/form/pagefield"
+                fieldDescription="Link to a content page, external URL or page anchor."
+                fieldLabel="Link"
+                name="./linkURL"
+                nodeTypes="dam:Asset, nt:file, cq:Page"
+                rootPath="/content">
+            </url>
+            <target
+                granite:class="cmp-link-target"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                fieldDescription="If checked the link will be opened in a new browser tab."
+                name="./linkTarget"
+                text="Open link in new tab"
+                uncheckedValue="_self"
+                value="_blank">
+            </target>
+        </items>
+    </link>
+</jcr:root>

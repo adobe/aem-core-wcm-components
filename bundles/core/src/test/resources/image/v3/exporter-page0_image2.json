@@ -1,0 +1,24 @@
+{
+  "id": "image-c5d5f132b2",
+  "alt": "asset1.png description",
+  "src": "/core/content/test_page0/_jcr_content/root/page0_image2.coreimg.gif/1490005239000/asset1.gif",
+  "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+  "imageLink": {
+    "valid": true,
+    "url": "/core/content/test_page4.html"
+  },
+  "lazyEnabled": true,
+  "dataLayer": {
+    "image-c5d5f132b2": {
+      "@type": "core/wcm/components/image/v3/image",
+      "xdm:linkURL": "/core/content/test_page4.html",
+      "image": {
+        "repo:id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+        "repo:modifyDate": "2017-03-20T10:20:39Z",
+        "@type": "image/gif",
+        "repo:path": "/content/dam/core/images/asset1.png"
+      }
+    }
+  },
+  ":type": "core/wcm/components/image/v3/image"
+}

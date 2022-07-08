@@ -17,10 +17,6 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.adobe.cq.export.json.ComponentExporter;
-
 /**
  * Defines the {@code LanguageNavigation} Sling Model used for the {@code /apps/core/wcm/components/languagenavigation} component.
  *
@@ -51,16 +47,17 @@ public interface LanguageNavigation extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default List<NavigationItem> getItems() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * Retrieves an accessibility label that describes the language navigation.
+     *
+     * @return an accessibility label for the language navigation
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
+    default String getAccessibilityLabel() {
+        return null;
     }
+
 }

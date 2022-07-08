@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <title>TOC Duplicate IDs Test</title> 
+ </head> 
+ <body> <!-- TOCs --> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#bla">Bla</a>
+     <ul>
+      <li><a href="#bla-1">Bla</a>
+       <ul>
+        <li><a href="#bla-2">Bla</a>
+         <ul>
+          <li><a href="#bla-3">Bla</a></li>
+         </ul></li>
+       </ul></li>
+     </ul></li>
+   </ul>
+  </div> <!-- Page Content --> 
+  <div> 
+   <h1 id="bla">Bla</h1> 
+   <h2 id="bla-1">Bla</h2> 
+   <h3 id="bla-2">Bla</h3> 
+   <h4 id="bla-3">Bla</h4>  
+  </div>
+ </body>
+</html>

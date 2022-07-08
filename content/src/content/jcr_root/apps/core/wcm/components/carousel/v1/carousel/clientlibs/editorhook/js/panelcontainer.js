@@ -22,6 +22,7 @@
             window.CQ.CoreComponents.panelcontainer.v1.registry.register({
                 name: "cmp-carousel",
                 selector: ".cmp-carousel",
+                wrapperSelector: '[data-panelcontainer="carousel"]',
                 itemSelector: "[data-cmp-hook-carousel='item']",
                 itemActiveSelector: ".cmp-carousel__item--active"
             });

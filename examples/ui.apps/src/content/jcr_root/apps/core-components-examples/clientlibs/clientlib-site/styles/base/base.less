@@ -52,8 +52,12 @@ a {
     &:focus {
         text-decoration: underline;
     }
+}
 
-    &:focus {
-        outline: none;
-    }
+.cmp-link__screen-reader-only {
+    position: absolute;
+    width: 1px;
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+    white-space: nowrap;
 }

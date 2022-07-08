@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2021-05-12T13:15:57.599+02:00"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/core-components/settings/wcm/templates/simple-template"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Simple Page"
+        sling:resourceType="core/wcm/components/page/v2/page"
+        brandSlug="Core Components"
+        brandSlug_override="true"
+        pwaBackgroundColor="#B10DC9"
+        pwaCachestrategy="staleWhileRevalidate"
+        pwaCachingpaths="[http://fonts.gstatic.com]"
+        pwaDisplay="standalone"
+        pwaEnabled="{Boolean}true"
+        pwaIconPath="/content/dam/foo/pwa-logo.png"
+        pwaOfflineClientlibs="[core.wcm.components.page.v2.pwa]"
+        pwaOrientation="any"
+        pwaPrecache="[/content/dam/foo/pwa-logo.png,/content/foo/us/en.html,/content/foo/us/en/manifest.webmanifest]"
+        pwaStartURL="/content/foo/us/en.html"
+        pwaThemeColor="#FF851B">
+        <root
+            jcr:lastModified="{Date}2020-11-27T17:51:51.431+02:00"
+            jcr:lastModifiedBy="admin"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="core/wcm/components/container/v1/container"
+            layout="simple">
+            <container
+                jcr:created="{Date}2020-11-27T17:53:54.583+02:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2020-11-27T17:54:02.429+02:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/container/v1/container">
+                <container
+                    jcr:created="{Date}2020-11-27T19:46:08.038+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2020-11-27T19:46:12.668+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/container/v1/container"
+                    layout="responsiveGrid">
+                    <title_1947496270
+                        jcr:created="{Date}2020-11-27T19:47:20.929+02:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2020-11-27T19:47:51.572+02:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Two columns"
+                        sling:resourceType="core/wcm/components/title/v3/title"
+                        type="h2"/>
+                    <container
+                        jcr:created="{Date}2020-11-27T19:46:18.716+02:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2020-11-27T19:46:18.716+02:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/container/v1/container">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                offset="0"
+                                width="5"/>
+                        </cq:responsive>
+                        <list
+                            jcr:created="{Date}2020-11-27T19:46:40.900+02:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2020-11-27T19:48:21.555+02:00"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/list/v2/list"
+                            childDepth="1"
+                            linkItems="true"
+                            listFrom="static"
+                            pages="[/content/core-components/responsive-page,/content/core-components/simple-page]"
+                            showDescription="false"
+                            showModificationDate="false"
+                            sortOrder="asc"
+                            tagsMatch="any"/>
+                    </container>
+                    <container_1128719348
+                        jcr:created="{Date}2020-11-27T19:46:29.387+02:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2020-11-27T19:46:29.387+02:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/container/v1/container">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                offset="0"
+                                width="7"/>
+                        </cq:responsive>
+                        <image
+                            jcr:created="{Date}2020-11-27T19:46:45.330+02:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2020-11-27T19:46:56.758+02:00"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/image/v2/image"
+                            fileReference="/content/dam/core-components/core-comp-test-image.jpg"/>
+                    </container_1128719348>
+                </container>
+                <title
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Linked Title"
+                    sling:resourceType="core/wcm/components/title/v2/title"
+                    id="linked-title"
+                    linkURL="/content/core-components/simple-page/simple-subpage"
+                    type="h2"/>
+                <image
+                    jcr:created="{Date}2020-11-27T19:42:34.014+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2020-11-27T19:42:37.640+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/image/v2/image"
+                    fileReference="/content/dam/core-components/Adobe_Systems_logo_and_wordmark.png"/>
+            </container>
+        </root>
+    </jcr:content>
+    <simple-subpage/>
+    <simple-page-v3/>
+    <test-page-xf-component/>
+</jcr:root>

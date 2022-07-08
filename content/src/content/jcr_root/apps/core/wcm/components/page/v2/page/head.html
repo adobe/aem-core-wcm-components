@@ -13,15 +13,25 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.head="${ @ page }"
+<template data-sly-template.head="${ @ page, pwa }"
           data-sly-use.headlibRenderer="headlibs.html"
           data-sly-use.headResources="head.resources.html">
     <meta charset="UTF-8">
     <title>${page.title}${page.brandSlug ? ' | ' : ''}${page.brandSlug}</title>
     <meta data-sly-test.keywords="${page.keywords}" name="keywords" content="${keywords}"/>
-    <meta data-sly-test.description="${properties['jcr:description']}" name="description" content="${description}"/>
+    <meta data-sly-test.description="${page.description || properties['jcr:description']}" name="description" content="${description}"/>
     <meta data-sly-test.templateName="${page.templateName}" name="template" content="${templateName}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta data-sly-test="${page.robotsTags}" name="robots" content="${page.robotsTags @ join=', '}">
+
+    <sly data-sly-test="${pwa.enabled}">
+        <link rel="manifest" href="${pwa.manifestPath}" crossorigin="use-credentials"/>
+        <meta name="theme-color" content="${pwa.themeColor}"/>
+        <link rel="apple-touch-icon" href="${pwa.iconPath}"/>
+        <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+             data-sly-call="${clientlib.css @ categories='core.wcm.components.page.v2.pwa'}"></sly>
+        <meta name="cq:sw_path" content="${pwa.serviceWorkerPath @ context ='text'}"/>
+    </sly>
     <sly data-sly-include="head.links.html"></sly>
     <sly data-sly-include="head.socialmedia.html"></sly>
     <sly data-sly-include="customheaderlibs.html"></sly>

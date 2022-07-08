@@ -1,0 +1,302 @@
+{
+    "list": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "List Page",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "illegalListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "nonExisting"
+                },
+                "staticListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "pages": [
+                        "/content/list/pages/page_1",
+                        "/content/list/pages/page_2"
+                    ]
+                },
+                "staticMaxItemsListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "maxItems": "1",
+                    "pages": [
+                        "/content/list/pages/page_1",
+                        "/content/list/pages/page_2"
+                    ]
+                },
+                "staticOrderByTitleListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "orderBy": "title",
+                    "pages": [
+                        "/content/list/pages/page_2",
+                        "/content/list/pages/page_1"
+                    ]
+                },
+                "staticOrderByTitleListTypeWithNoTitle": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "orderBy": "title",
+                    "pages": [
+                        "/content/list/pages/page_3",
+                        "/content/list/pages/page_4"
+                    ]
+                },
+                "staticOrderByTitleListTypeWithNoTitleForOneItem": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "orderBy": "title",
+                    "pages": [
+                        "/content/list/pages/page_1",
+                        "/content/list/pages/page_4",
+                        "/content/list/pages/page_2"
+                    ]
+                },
+                "staticOrderByTitleListTypeWithAccent": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "orderBy": "title",
+                    "pages": [
+                        "/content/list/pages/page_2",
+                        "/content/list/pages/page_1",
+                        "/content/list/pages/page_5"
+                    ]
+                },
+                "staticOrderByModificationDateListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "orderBy": "modified",
+                    "pages": [
+                        "/content/list/pages/page_1",
+                        "/content/list/pages/page_2"
+                    ]
+                },
+                "staticOrderByModificationDateListTypeWithNoModificationDate": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "orderBy": "modified",
+                    "pages": [
+                        "/content/list/pages/page_1/page_1_1",
+                        "/content/list/pages/page_1/page_1_2"
+                    ]
+                },
+                "staticOrderByModificationDateListTypeWithNoModificationDateForOneItem": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "orderBy": "modified",
+                    "pages": [
+                        "/content/list/pages/page_1",
+                        "/content/list/pages/page_1/page_1_2",
+                        "/content/list/pages/page_2"
+                    ]
+                },
+                "staticOrderByModificationDateDescListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "orderBy": "modified",
+                    "sortOrder": "desc",
+                    "pages": [
+                        "/content/list/pages/page_1",
+                        "/content/list/pages/page_2"
+                    ]
+                },
+                "staticOrderByTitleDescListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "sortOrder": "desc",
+                    "orderBy": "title",
+                    "pages": [
+                        "/content/list/pages/page_2",
+                        "/content/list/pages/page_1"
+                    ]
+                },
+                "childrenListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "children",
+                    "parentPage": "/content/list/pages/page_1"
+                },
+                "childrenListTypeWithDepth": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "children",
+                    "parentPage": "/content/list/pages/page_1",
+                    "childDepth": "2"
+                },
+                "tagsListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "tags",
+                    "tagsSearchRoot": "/content/list/pages/page_1",
+                    "tags": [
+                        "list:test_category/test_tag"
+                    ]
+                },
+                "searchListType": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "listFrom": "search",
+                    "query": "Page 1.2"
+                },
+                "listRenderedAsTeaserItems": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "displayItemAsTeaser": "true",
+                    "listFrom": "children",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "parentPage": "/content/list/pages/page_1"
+                }
+            }
+        },
+        "pages": {
+            "page_1": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content": {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Page 1",
+                    "cq:lastModified": "2016-09-23T16:12:45.000-07:00"
+                },
+                "page_1_1": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content": {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title": "Page 1.1",
+                        "jcr:description": "Description for Page 1.1",
+                        "cq:featuredimage"    : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+                        }
+                    }
+                },
+                "page_1_2": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content": {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title": "Page 1.2",
+                        "jcr:description": "Description for Page 1.2",
+                        "cq:featuredimage"    : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+                        }
+                    },
+                    "page_1_2_1": {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content": {
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title": "Page 1.2.1"
+                        },
+                        "page_1_2_1_1": {
+                            "jcr:primaryType": "cq:Page",
+                            "jcr:content": {
+                                "jcr:primaryType": "cq:PageContent",
+                                "jcr:title": "Page 1.2.1.1"
+                            }
+                        }
+                    }
+                },
+                "page_1_3": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content": {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title": "Page 1.3",
+                        "jcr:description": "Description for Page 1.3",
+                        "cq:tags": [
+                            "list:test_category/test_tag"
+                        ]
+                    }
+                }
+            },
+            "page_2": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content": {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Page 2",
+                    "cq:lastModified": "2016-09-21T16:12:45.000-07:00"
+                }
+            },
+            "page_3": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content": {
+                    "jcr:primaryType": "cq:PageContent"
+                }
+            },
+            "page_4": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content": {
+                    "jcr:primaryType": "cq:PageContent"
+                }
+            },
+            "page_5": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content": {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Páge 1",
+                    "cq:lastModified": "2016-09-21T16:12:45.000-07:00"
+                }
+            }
+        }
+    }
+}

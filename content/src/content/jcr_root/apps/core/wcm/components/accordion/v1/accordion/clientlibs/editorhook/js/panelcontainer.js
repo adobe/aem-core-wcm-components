@@ -22,6 +22,7 @@
             window.CQ.CoreComponents.panelcontainer.v1.registry.register({
                 name: "cmp-accordion",
                 selector: ".cmp-accordion",
+                wrapperSelector: '[data-panelcontainer="accordion"]',
                 itemSelector: "[data-cmp-hook-accordion='panel']",
                 itemActiveSelector: "[data-cmp-hook-accordion='item'][data-cmp-expanded] [data-cmp-hook-accordion='panel']"
             });

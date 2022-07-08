@@ -17,8 +17,6 @@ package com.adobe.cq.wcm.core.components.models;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.adobe.cq.export.json.ComponentExporter;
-
 /**
  * Defines the {@code Search} Sling Model used for the {@code /apps/core/wcm/components/search} component.
  *
@@ -55,7 +53,7 @@ public interface Search extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default int getResultsSize() {
-        throw new UnsupportedOperationException();
+        return 0;
     }
 
     /**
@@ -65,7 +63,7 @@ public interface Search extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default int getSearchTermMinimumLength() {
-        throw new UnsupportedOperationException();
+        return 0;
     }
 
     /**
@@ -76,7 +74,7 @@ public interface Search extends Component {
      */
     @NotNull
     default String getRelativePath() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 
     /**
@@ -87,16 +85,7 @@ public interface Search extends Component {
      */
     @NotNull
     default String getSearchRootPagePath() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 }

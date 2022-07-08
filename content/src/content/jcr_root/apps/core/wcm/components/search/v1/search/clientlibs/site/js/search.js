@@ -81,7 +81,7 @@
         var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
                 var value = data[key];
 
                 if (key.indexOf(NS) === 0) {
@@ -209,7 +209,8 @@
         switch (event.keyCode) {
             case keyCodes.TAB:
                 if (self._resultsOpen()) {
-                    event.preventDefault();
+                    toggleShow(self._elements.results, false);
+                    self._elements.input.setAttribute("aria-expanded", "false");
                 }
                 break;
             case keyCodes.ENTER:
@@ -249,6 +250,7 @@
         this._elements.input.value = "";
         toggleShow(this._elements.clear, false);
         toggleShow(this._elements.results, false);
+        this._elements.input.setAttribute("aria-expanded", "false");
     };
 
     Search.prototype._onDocumentClick = function(event) {
@@ -257,6 +259,7 @@
 
         if (!(inputContainsTarget || resultsContainTarget)) {
             toggleShow(this._elements.results, false);
+            this._elements.input.setAttribute("aria-expanded", "false");
         }
     };
 
@@ -307,9 +310,12 @@
                 // highlight the next result
                 if (index < 0) {
                     results[0].classList.add(focusedCssClass);
+                    results[0].setAttribute("aria-selected", "true");
                 } else if (index + 1 < results.length) {
                     results[index].classList.remove(focusedCssClass);
+                    results[index].setAttribute("aria-selected", "false");
                     results[index + 1].classList.add(focusedCssClass);
+                    results[index + 1].setAttribute("aria-selected", "true");
                 }
 
                 // if the last visible result is partially hidden, scroll up until it's completely visible
@@ -327,7 +333,9 @@
                 // highlight the previous result
                 if (index >= 1) {
                     results[index].classList.remove(focusedCssClass);
+                    results[index].setAttribute("aria-selected", "false");
                     results[index - 1].classList.add(focusedCssClass);
+                    results[index - 1].setAttribute("aria-selected", "true");
                 }
 
                 // if the first visible result is partially hidden, scroll down until it's completely visible
@@ -362,6 +370,7 @@
                         self._generateItems(data, self._elements.results);
                         self._markResults();
                         toggleShow(self._elements.results, true);
+                        self._elements.input.setAttribute("aria-expanded", "true");
                     } else {
                         self._hasMoreResults = false;
                     }
@@ -387,6 +396,7 @@
         this._resultsOffset = 0;
         this._hasMoreResults = true;
         this._elements.results.innerHTML = "";
+        this._elements.input.setAttribute("aria-expanded", "false");
     };
 
     Search.prototype._cacheElements = function(wrapper) {
@@ -407,7 +417,7 @@
         this._properties = {};
 
         for (var key in properties) {
-            if (properties.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(properties, key)) {
                 var property = properties[key];
                 if (options && options[key] != null) {
                     if (property && typeof property.transform === "function") {

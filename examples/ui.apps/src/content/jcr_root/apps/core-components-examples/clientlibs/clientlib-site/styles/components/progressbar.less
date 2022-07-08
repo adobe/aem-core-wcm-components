@@ -23,7 +23,6 @@
     font-size: @cmp-examples-font-size-m;
     justify-content: center;
     overflow: hidden;
-    color: @cmp-examples-color-white;
     text-align: center;
     white-space: nowrap;
     background-color: @cmp-examples-color-gray-300;
@@ -31,6 +30,7 @@
 
     .cmp-progressbar__label--completed {
         float: left;
+        color: @cmp-examples-color-gray-300;
         padding-left: 5*@px;
         font-weight: bold;
         &:after {
@@ -40,6 +40,7 @@
 
     .cmp-progressbar__label--remaining {
         float: right;
+        color: rgb(46,108,163);
         padding-right: 5*@px;
         &:after {
             content: '%';
@@ -50,6 +51,6 @@
         display: block;
         height: 100%;
         font-size: 0;
-        background-color: @cmp-examples-color-blue-500;
+        background-color: rgb(46,108,163);
     }
 }

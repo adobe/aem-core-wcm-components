@@ -53,7 +53,7 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
                                                 fieldDescription="Path of Document."
                                                 fieldLabel="Document Path"
-                                                nodeTypes="dam:Asset, nt:file, nt:resource"
+                                                nodeTypes="dam:Asset, nt:file"
                                                 name="./documentPath"
                                                 required="{Boolean}true"
                                                 rootPath="/content/dam"/>
@@ -214,6 +214,10 @@
                             </columns>
                         </items>
                     </customize>
+                    <cq:styles
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_edit/styletab"/>
                 </items>
             </tabs>
         </items>

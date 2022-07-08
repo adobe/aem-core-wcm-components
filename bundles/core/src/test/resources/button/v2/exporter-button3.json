@@ -1,0 +1,24 @@
+{
+    "id": "button-5d8a0e1742",
+    "text": "Adobe",
+    "icon": "adobe",
+    "buttonLink":
+    {
+        "valid": true,
+        "attributes":
+        {
+            "target": "_blank"
+        },
+        "url": "https://www.adobe.com/content/dam/test/docs/pdfs/test/360/360%20Test%20Test%20Test%20123.pdf.coredownload.inline.pdf"
+    },
+    ":type": "core/wcm/components/button/v2/button",
+    "dataLayer":
+    {
+        "button-5d8a0e1742":
+        {
+            "@type": "core/wcm/components/button/v2/button",
+            "dc:title": "Adobe",
+            "xdm:linkURL": "https://www.adobe.com/content/dam/test/docs/pdfs/test/360/360%20Test%20Test%20Test%20123.pdf.coredownload.inline.pdf"
+        }
+    }
+}

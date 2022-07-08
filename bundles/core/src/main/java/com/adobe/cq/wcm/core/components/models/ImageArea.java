@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.models;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+
 /**
  * Interface for an image map area, used by the {@link Image} model.
  *
@@ -32,7 +34,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getShape() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -42,7 +44,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getCoordinates() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -52,7 +54,18 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getRelativeCoordinates() {
-        throw new UnsupportedOperationException();
+        return null;
+    }
+
+    /**
+     * Returns the link of the image area.
+     *
+     * @see Link of the image area.
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     * @return a {@link com.adobe.cq.wcm.core.components.commons.link.Link} object
+     */
+    default Link getLink() {
+        return null;
     }
 
     /**
@@ -62,7 +75,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getHref() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -72,7 +85,7 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getTarget() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -82,6 +95,6 @@ public interface ImageArea {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getAlt() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }

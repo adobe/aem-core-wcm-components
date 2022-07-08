@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.13.5-SNAPSHOT</version>
+    <version>2.20.7-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
@@ -57,14 +57,15 @@
         <vault.password>admin</vault.password>
         <slf4j.version>1.7.6</slf4j.version>
         <aem.java.version>8</aem.java.version>
-        <jacoco.version>0.8.3</jacoco.version>
-        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
-        <node.version>v10.13.0</node.version>
-        <npm.version>6.4.1</npm.version>
+        <jacoco.version>0.8.7</jacoco.version>
+        <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
+        <node.version>v16.13.1</node.version>
+        <npm.version>8.3.0</npm.version>
         <java.version>11</java.version>
         <mockitio.version>2.24.5</mockitio.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${aem.java.version}</maven.compiler.source>
+        <maven.compiler.target>${aem.java.version}</maven.compiler.target>
+        <jackson.version>2.11.3</jackson.version>
     </properties>
 
     <!-- ======================================================================= -->
@@ -75,7 +76,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.1</version>
                 <configuration>
                     <stylesheet>java</stylesheet>
                     <encoding>${project.build.sourceEncoding}</encoding>
@@ -110,11 +111,11 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>2.5.2</version>
+                    <version>3.0.0-M1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.2</version>
+                    <version>3.0.0-M2</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
@@ -123,44 +124,39 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.2.0</version>
                     <configuration>
                         <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
-                    <version>2.7</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
-                    <configuration>
-                        <source>1.${aem.java.version}</source>
-                        <target>1.${aem.java.version}</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
+                    <version>3.9.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-plugin</artifactId>
-                    <version>1.11.2</version>
+                    <version>1.12.2</version>
                     <configuration>
                         <message>@releng [maven-scm] : Updating NPM versions</message>
-                        <includes>**/content/package.json,**/ui-js/package.json,**/content/package-lock.json,**/io-js/package-lock.json</includes>
+                        <includes>**/content/package.json,**/it.ui.apps/package.json,**/content/package-lock.json,**/it.ui.apps/package-lock.json</includes>
                     </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.5.1</version>
+                    <version>3.0.0-M5</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.release</groupId>
                             <artifactId>maven-release-oddeven-policy</artifactId>
-                            <version>2.5.1</version>
+                            <version>3.0.0-M5</version>
                         </dependency>
                         <dependency>
                             <groupId>org.apache.maven.scm</groupId>
                             <artifactId>maven-scm-provider-gitexe</artifactId>
-                            <version>1.9.1</version>
+                            <version>1.12.2</version>
                         </dependency>
                     </dependencies>
                     <configuration>
@@ -179,7 +175,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.2</version>
+                    <version>3.0.0-M5</version>
                     <configuration>
                         <argLine>-Xmx1024m</argLine>
                         <useSystemClassLoader>false</useSystemClassLoader>
@@ -188,12 +184,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>2.18.1</version>
+                    <version>3.0.0-M5</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.sling</groupId>
-                    <artifactId>maven-sling-plugin</artifactId>
-                    <version>2.1.0</version>
+                    <artifactId>sling-maven-plugin</artifactId>
+                    <version>2.4.2</version>
                     <executions>
                         <execution>
                             <id>install-bundle</id>
@@ -210,7 +206,7 @@
                 <plugin>
                     <groupId>org.apache.jackrabbit</groupId>
                     <artifactId>filevault-package-maven-plugin</artifactId>
-                    <version>1.1.6</version>
+                    <version>1.2.2</version>
                     <configuration>
                         <failOnMissingEmbed>true</failOnMissingEmbed>
                         <showImportPackageReport>false</showImportPackageReport>
@@ -265,7 +261,7 @@
                         <dependency>
                             <groupId>biz.netcentric.filevault.validator</groupId>
                             <artifactId>aem-classification-validator</artifactId>
-                            <version>1.0.0</version>
+                            <version>1.0.1</version>
                         </dependency>
                         <!-- the dependency containing the actual classification map -->
                         <dependency>
@@ -287,7 +283,7 @@
                         <dependency>
                             <groupId>biz.netcentric.filevault.validator</groupId>
                             <artifactId>aem-cloud-validator</artifactId>
-                            <version>1.0.0</version>
+                            <version>1.2.2</version>
                          </dependency>
                     </dependencies>
                 </plugin>
@@ -307,7 +303,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>5.1.4</version>
                     <configuration>
                         <instructions>
                             <Bundle-RequiredExecutionEnvironment>JavaSE-1.${aem.java.version}</Bundle-RequiredExecutionEnvironment>
@@ -325,7 +321,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.0.0-M3</version>
+                    <version>3.0.0</version>
                     <executions>
                         <execution>
                             <id>enforce-maven</id>
@@ -335,7 +331,7 @@
                             <configuration>
                                 <rules>
                                     <requireMavenVersion>
-                                        <version>[3.3.1,)</version>
+                                        <version>[3.3.9,)</version>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
                                         <message>Project must be compiled with Java ${aem.java.version} or higher</message>
@@ -349,12 +345,12 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>1.9.1</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.1</version>
                     <configuration>
                         <stylesheet>java</stylesheet>
                         <encoding>${project.build.sourceEncoding}</encoding>
@@ -377,12 +373,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.2.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.12</version>
+                    <version>0.13</version>
                     <configuration>
                         <excludes combine.children="append">
                             <!--  Used by maven-remote-resources-plugin -->
@@ -442,7 +438,7 @@
                 <plugin>
                     <groupId>org.apache.sling</groupId>
                     <artifactId>htl-maven-plugin</artifactId>
-                    <version>1.3.4-1.4.0</version>
+                    <version>2.0.4-1.4.0</version>
                     <configuration>
                         <failOnWarnings>true</failOnWarnings>
                     </configuration>
@@ -475,32 +471,6 @@
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${frontend-maven-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>xml-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>validate</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <validationSets>
-                            <validationSet>
-                                <dir>.</dir>
-                                <includes>
-                                    <include>**/*.xml</include>
-                                </includes>
-                                <excludes>
-                                    <exclude>**/node/**</exclude>
-                                    <exclude>**/node_modules/**</exclude>
-                                    <exclude>**/target/**</exclude>
-                                </excludes>
-                            </validationSet>
-                        </validationSets>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -591,7 +561,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -611,7 +581,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
+                        <version>1.6.8</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
@@ -635,7 +605,7 @@
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>osgi.annotation</artifactId>
-                <version>6.0.1</version>
+                <version>7.0.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -647,7 +617,7 @@
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>osgi.cmpn</artifactId>
-                <version>6.0.0</version>
+                <version>7.0.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -676,6 +646,12 @@
                 <version>1.0.0</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>org.apache.sling.sitemap</artifactId>
+                <version>1.0.2</version>
+                <scope>provided</scope>
+            </dependency>
 
             <!-- javax.inject 1 -->
             <dependency>
@@ -696,19 +672,19 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-                <version>2.9.5</version>
+                <version>${jackson.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.9.5</version>
+                <version>${jackson.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>2.9.5</version>
+                <version>${jackson.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -769,7 +745,7 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.5</version>
+                <version>2.7</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -794,6 +770,12 @@
                 <scope>provided</scope>
             </dependency>
 
+            <dependency>
+                <groupId>com.adobe.cq.wcm</groupId>
+                <artifactId>com.adobe.aem.wcm.seo</artifactId>
+                <version>1.0.4</version>
+            </dependency>
+
             <!--
                 AEM APIs; make sure to not move this bundle upper in the list so that newer APIs available in AEM but not in the Uber
                 Jar can be used as dependencies.
@@ -801,8 +783,7 @@
             <dependency>
                 <groupId>com.adobe.aem</groupId>
                 <artifactId>uber-jar</artifactId>
-                <version>6.4.0</version>
-                <classifier>apis</classifier>
+                <version>6.5.13</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -822,7 +803,7 @@
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-simple</artifactId>
+                <artifactId>slf4j-nop</artifactId>
                 <version>${slf4j.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -869,16 +850,28 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>uk.org.lidalia</groupId>
-                <artifactId>slf4j-test</artifactId>
-                <version>1.2.0</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
                 <version>3.1.0</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>org.apache.sling.testing.caconfig-mock-plugin</artifactId>
+                <version>1.3.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>org.apache.sling.testing.sling-mock-oak</artifactId>
+                <version>2.1.6</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.sling</groupId>
+                        <artifactId>org.apache.sling.testing.sling-mock.core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>io.wcm</groupId>
@@ -895,7 +888,7 @@
             <dependency>
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.servlet-helpers</artifactId>
-                <version>1.1.8</version>
+                <version>1.4.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

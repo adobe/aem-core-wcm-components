@@ -19,5 +19,5 @@
     jcr:primaryType="cq:Component"
     jcr:title="Page (AMP v1)"
     componentGroup=".core-wcm-ext-amp"
-    sling:resourceSuperType="core/wcm/components/page/v2/page"
-    designDialogPath="core/wcm/components/page/v2/page/cq:design_dialog"/>
+    sling:resourceSuperType="core/wcm/components/page/v3/page"
+    designDialogPath="core/wcm/components/page/v3/page/cq:design_dialog"/>

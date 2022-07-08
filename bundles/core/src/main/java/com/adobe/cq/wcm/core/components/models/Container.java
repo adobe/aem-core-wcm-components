@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +77,7 @@ public interface Container extends Component, ContainerExporter {
      */
     @NotNull
     default List<ListItem> getItems() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyList();
     }
 
     /**
@@ -87,7 +88,7 @@ public interface Container extends Component, ContainerExporter {
      */
     @Nullable
     default String getBackgroundStyle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -97,7 +98,7 @@ public interface Container extends Component, ContainerExporter {
     @NotNull
     @Override
     default Map<String, ? extends ComponentExporter> getExportedItems() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
     /**
@@ -107,6 +108,6 @@ public interface Container extends Component, ContainerExporter {
     @NotNull
     @Override
     default String[] getExportedItemsOrder() {
-        throw new UnsupportedOperationException();
+        return new String[]{};
     }
 }

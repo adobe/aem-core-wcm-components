@@ -1,0 +1,876 @@
+{
+  "jcr:primaryType": "sling:OrderedFolder",
+  "test"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType" : "cq:PageContent",
+      "sling:vanityPath": "/content/test-image.html",
+      "cq:featuredimage"    : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "jcr:createdBy"     : "admin",
+        "sling:resourceType": "core/wcm/components/image/v3/image",
+        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+      },
+      "root"            : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "image0"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "Adobe Logo",
+          "linkURL"           : "/content/test"
+        },
+        "image1"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677327"
+        },
+        "image2"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image3"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677328",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "Adobe Logo",
+          "linkURL"           : "https://www.adobe.com",
+          "fileName"          : "Adobe_Systems_logo_and_wordmark.png",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image4"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "2017-05-15T17:56:17.756+01:00",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677399",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "isDecorative"      : true,
+          "linkURL"           : "https://www.adobe.com",
+          "alt"               : "Adobe Logo"
+        },
+        "image5"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "Adobe Logo",
+          "linkURL"           : "https://www.adobe.com",
+          "fileName"          : "Adobe_Systems_logo_and_wordmark.gif",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/gif",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1089"
+            }
+          }
+        },
+        "image6"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "Adobe Logo",
+          "linkURL"           : "/content/test"
+        },
+        "image7"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677329",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "Adobe Logo",
+          "linkURL"           : "https://www.adobe.com",
+          "fileName"          : "Adobe_Systems_logo_and_wordmark.png",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image8"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677329"
+        },
+        "image9"            : {
+          "imageCrop"         : "186,950,1076,1280",
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+        },
+        "image10"           : {
+          "imageCrop"         : "290,1470,1680,1985",
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image11"           : {
+          "imageCrop"         : "0,0,1280,1280",
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+        },
+        "image12"           : {
+          "imageCrop"         : "0,0,2000,2000",
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image13"           : {
+          "imageCrop"         : "186,950,1076,1280",
+          "imageRotate"       : 90,
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+        },
+        "image14"           : {
+          "imageCrop"         : "290,1470,1680,1985",
+          "imageRotate"       : 90,
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image15"           : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "cq:lastModified"   : "2017-05-15T17:56:17.756+01:00",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677399",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "isDecorative"      : true,
+          "linkURL"           : "https://www.adobe.com",
+          "alt"               : "Adobe Logo"
+        },
+        "image16"           : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "cq:lastModified"   : "2017-05-15T17:56:17.756+01:00",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677399",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.tiff",
+          "isDecorative"      : true,
+          "linkURL"           : "https://www.adobe.com",
+          "alt"               : "Adobe Logo"
+        },
+        "image18"           : {
+          "imageCrop"         : "186,950,1076,1280",
+          "imageRotate"       : 90,
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+        },
+        "image20": {
+          "jcr:primaryType"    : "nt:unstructured",
+          "jcr:createdBy"      : "admin",
+          "cq:lastModified"    : "2017-05-15T17:56:17.756+01:00",
+          "sling:resourceType" : "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677399",
+          "fileReference"      : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "linkURL"            : "https://www.adobe.com",
+          "alt"                : "Adobe Logo",
+          "jcr:title"          : "Adobe Logo",
+          "altValueFromDAM"    : "true",
+          "titleValueFromDAM"  : "true"
+        },
+        "image21": {
+          "jcr:primaryType"    : "nt:unstructured",
+          "jcr:createdBy"      : "admin",
+          "cq:lastModified"    : "2017-05-15T17:56:17.756+01:00",
+          "sling:resourceType" : "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677399",
+          "fileReference"      : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.jpg",
+          "linkURL"            : "https://www.adobe.com",
+          "alt"                : "Adobe Logo",
+          "jcr:title"          : "Adobe Logo",
+          "altValueFromDAM"    : "true",
+          "titleValueFromDAM"  : "true"
+        },
+        "image22"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677328",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "Adobe Logo",
+          "linkURL"           : "https://www.adobe.com",
+          "fileName"          : "Adobe_Systems_logo_and_wordmark.svg",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/svg+xml",
+              ":jcr:data"         : 450,
+              "jcr:uuid"          : "efd67232-7672-49ad-b155-0063daee3d22"
+            }
+          }
+        },
+        "image24"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "2017-05-15T17:56:17.756+01:00",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677399",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "imageMap"          : "[circle(256,256,256)\"http://adobe.com\"|\"\"|\"\"|(0.2000,0.3001,0.2000)][rect(256,171,1023,682)\"http://adobe.com\"|\"\"|\"altText\"|(0.1992,0.2005,0.7992,0.7995)][poly(917,344,1280,852,532,852)\"http://adobe.com\"|\"_blank\"|\"\"|(0.7164,0.4033,1.0000,0.9988,0.4156,0.9988)]",
+          "titleValueFromDAM" : "true"
+        },
+        "image27"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1478854677328",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "Adobe Logo",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image31"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, uses nonDM image",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image32"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image33"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "dmpResetType"      : "imagePreset",
+          "imagePreset"       : "greyscale",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Image Preset",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image34"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "imageModifiers"    : "op_invert=1&op_blur=10",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Image Modifiers",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image35"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "dmpResetType"      : "imagePreset",
+          "imagePreset"       : "greyscale",
+          "imageModifiers"    : "op_invert=1&op_blur=10",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Image Preset and Image Modifiers",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image36"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "dmpResetType"      : "smartCrop",
+          "smartCropRendition": "Medium",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Smart Crop Rendition",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image37"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "dmpResetType"      : "smartCrop",
+          "smartCropRendition": "Medium",
+          "imageModifiers"    : "op_invert=1&op_blur=10",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Smart Crop Rendition and Image Modifiers",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image38"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "dmpResetType"      : "smartCrop",
+          "smartCropRendition": "SmartCrop:Auto",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Auto Smart Crop",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image39"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "dmpResetType"      : "smartCrop",
+          "smartCropRendition": "SmartCrop:Auto",
+          "imageModifiers"    : "op_invert=1&op_blur=10",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Auto Smart Crop and Image Modifiers",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image40"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v2/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.gif",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/content/",
+          "dmpResetType"      : "smartCrop",
+          "smartCropRendition": "SmartCrop:Auto",
+          "imageModifiers"    : "op_invert=1&op_blur=10",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Auto Smart Crop and Image Modifiers",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/gif",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image41"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v2/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, uses nonDM image",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/gif",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088",
+              "metadata"          : {
+                "dam:scene7Type"    : "AnimatedGif"
+              }
+            }
+          }
+        },
+        "image42"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe Systems logo and wordmark DM.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "dmpResetType"      : "smartCrop",
+          "smartCropRendition": "SmartCrop:Auto",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image, Auto Smart Crop",
+          "linkURL"           : "https://www.adobe.com",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/png",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+            }
+          }
+        },
+        "image50"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image51"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "true",
+          "altValueFromPageImage"   : "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image52"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "true",
+          "altValueFromPageImage"   : "false",
+          "alt"               : "image52 alt",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image53"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage"   : "true",
+          "altValueFromPageImage"   : "true",
+          "isDecorative"      : "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image54"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage"   : "true",
+          "altValueFromPageImage"   : "false",
+          "alt"               : "image54 alt",
+          "isDecorative"      : "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image55"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "false",
+          "altValueFromDAM"   : "true",
+          "alt"               : "image51a alt",
+          "fileReference"     : "/content/dam/core/images/transparent_hd.png",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image56"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "false",
+          "altValueFromDAM"   : "false",
+          "alt"               : "image52a alt",
+          "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:content"    : {
+              "jcr:primaryType"   : "nt:resource",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:mimeType"      : "image/gif",
+              ":jcr:data"         : 10453365,
+              "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088",
+              "metadata"          : {
+                "dam:scene7Type"    : "AnimatedGif"
+              }
+            }
+          },
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image57"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "false",
+          "altValueFromDAM"   : "true",
+          "alt"               : "image53a alt",
+          "fileReference"     : "/content/dam/core/images/transparent_hd.png",
+          "isDecorative"      : "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "image58"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "imageFromPageImage": "false",
+          "altValueFromDAM"   : "false",
+          "alt"               : "image53a alt",
+          "fileReference"     : "/content/dam/core/images/transparent_hd.png",
+          "isDecorative"      : "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "container"             : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "sling:resourceType": "wcm/foundation/components/responsivegrid",
+          "image"            : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:createdBy"     : "admin",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "sling:resourceType": "core/wcm/components/image/v2/image",
+            "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+            "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.png",
+            "alt"               : "Adobe Logo",
+            "jcr:title"         : "DM features on, DM image",
+            "linkURL"           : "https://www.adobe.com",
+            "file"              : {
+              "jcr:primaryType": "nt:file",
+              "jcr:createdBy"  : "admin",
+              "jcr:content"    : {
+                "jcr:primaryType"   : "nt:resource",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:mimeType"      : "image/png",
+                ":jcr:data"         : 10453365,
+                "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+              }
+            }
+          }
+        }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page0"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "page0_image0": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "page0_image1": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "imageFromPageImage": "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "page0_image2": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "alt": "alt from page0_image2",
+          "altValueFromPageImage": "true",
+          "imageFromPageImage": "true",
+          "linkURL": "/content/test_page4",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        },
+        "page0_image3": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "alt": "alt from page0_image2",
+          "altValueFromPageImage": "true",
+          "imageFromPageImage": "true",
+          "linkURL": "/wrong_page",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page1"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "true",
+        "alt"               : "featured image alt",
+        "fileReference": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+        "sling:resourceType": "core/wcm/components/image/v3/image"
+      },
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "page1_image0": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "imageFromPageImage": "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page2"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "false",
+        "alt"               : "featured image alt",
+        "fileReference": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+        "sling:resourceType": "core/wcm/components/image/v3/image"
+      },
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "page2_image0": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "imageFromPageImage": "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page3"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "false",
+        "alt"               : "featured image alt",
+        "file"              : {
+          "jcr:primaryType": "nt:file",
+          "jcr:createdBy"  : "admin",
+          "jcr:content"    : {
+            "jcr:primaryType"   : "nt:resource",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:mimeType"      : "image/png",
+            ":jcr:data"         : 10453365,
+            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+          }
+        },
+        "sling:resourceType": "core/wcm/components/image/v3/image"
+      },
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "page3_image0": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "imageFromPageImage": "true",
+          "sling:resourceType": "core/wcm/components/image/v3/image"
+        }
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  },
+  "test_page4"           : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content"    : {
+      "jcr:primaryType": "cq:PageContent",
+      "cq:featuredimage": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "altValueFromDAM"   : "true",
+        "alt"               : "featured image alt",
+        "fileReference": "/content/dam/core/images/asset1.png",
+        "sling:resourceType": "core/wcm/components/image/v3/image"
+      },
+      "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
+    }
+  }
+}

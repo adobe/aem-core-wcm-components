@@ -1,0 +1,20 @@
+{
+  "id": "image-fe2717021b",
+  "title": "transparent HD PNG",
+  "src": "/core/content/test/_jcr_content/root/image58.coreimg.png/1607501105000/transparent-hd.png",
+  "uuid": "f6460529-b7b1-4b3a-8980-b3b3f0ee109c",
+  "lazyEnabled": true,
+  "dataLayer": {
+    "image-fe2717021b": {
+      "@type": "core/wcm/components/image/v3/image",
+      "dc:title": "transparent HD PNG",
+      "image": {
+        "repo:id": "f6460529-b7b1-4b3a-8980-b3b3f0ee109c",
+        "repo:modifyDate": "2020-12-09T08:05:05Z",
+        "@type": "image/png",
+        "repo:path": "/content/dam/core/images/transparent_hd.png"
+      }
+    }
+  },
+  ":type": "core/wcm/components/image/v3/image"
+}

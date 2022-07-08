@@ -145,6 +145,12 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
     private Supplier<ContentFragmentData.ElementData[]> contentFragmentElementsSupplier;
 
     /**
+     * The embeddable value supplier;
+     */
+    @Nullable
+    private Supplier<Map<String, Object>> embeddableSupplier;
+
+    /**
      * Construct a wrapper for a {@link DataLayerSupplier}.
      *
      * @param dataLayerSupplier The data layer supply to wrap.
@@ -487,6 +493,26 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
 
     @Override
     @NotNull
+    public Optional<Supplier<Map<String, Object>>> getEmbeddableDetails() {
+        if (this.embeddableSupplier != null) {
+            return Optional.of(this.embeddableSupplier);
+        }
+        return this.wrappedSupplier.getEmbeddableDetails();
+    }
+
+    /**
+     * Sets the embeddable details value supplier.
+     *
+     * @param supplier The embeddable details value supplier.
+     * @return This.
+     */
+    public DataLayerSupplierImpl setEmbeddableDetails(@NotNull final Supplier<Map<String, Object>> supplier) {
+        this.embeddableSupplier = supplier;
+        return this;
+    }
+
+    @Override
+    @NotNull
     public Optional<Supplier<String>> getTemplatePath() {
         if (this.templatePathSupplier != null) {
             return Optional.of(this.templatePathSupplier);
@@ -495,7 +521,7 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
     }
 
     /**
-     * Set the template path field value supplier.
+     * Sets the template path field value supplier.
      *
      * @param supplier The template path field value supplier.
      * @return This.
