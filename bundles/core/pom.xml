@@ -598,6 +598,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.adobe.commerce.cif</groupId>
+            <artifactId>magento-graphql</artifactId>
+            <version>9.0.0-magento242ee</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
         </dependency>

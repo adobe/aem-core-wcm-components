@@ -30,7 +30,7 @@
             "jcr:lastModifiedBy": "admin",
             "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
             "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
-            "sling:resourceType": "core/wcm/components/breadcrumb"
+            "sling:resourceType": "core/wcm/components/breadcrumb/v1/breadcrumb"
           },
           "breadcrumb-v2"             : {
             "jcr:primaryType"   : "nt:unstructured",
@@ -46,7 +46,7 @@
             "jcr:lastModifiedBy": "admin",
             "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
             "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
-            "sling:resourceType": "core/wcm/components/breadcrumb",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v1/breadcrumb",
             "startLevel"        : "3",
             "showHidden"        : "true"
           },
@@ -56,7 +56,7 @@
             "jcr:lastModifiedBy": "admin",
             "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
             "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
-            "sling:resourceType": "core/wcm/components/breadcrumb",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v1/breadcrumb",
             "showHidden"        : "true"
           },
           "breadcrumb-hide-current": {
@@ -65,7 +65,7 @@
             "jcr:lastModifiedBy": "admin",
             "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
             "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
-            "sling:resourceType": "core/wcm/components/breadcrumb",
+            "sling:resourceType": "core/wcm/components/breadcrumb/v1/breadcrumb",
             "hideCurrent"       : "true"
           },
           "breadcrumb-style-based": {
@@ -74,7 +74,7 @@
             "jcr:lastModifiedBy": "admin",
             "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
             "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
-            "sling:resourceType": "core/wcm/components/breadcrumb"
+            "sling:resourceType": "core/wcm/components/breadcrumb/v1/breadcrumb"
           }
         }
       },
@@ -116,7 +116,7 @@
             "jcr:lastModifiedBy": "admin",
             "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
             "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
-            "sling:resourceType": "core/wcm/components/breadcrumb"
+            "sling:resourceType": "core/wcm/components/breadcrumb/v1/breadcrumb"
           }
         }
       },
