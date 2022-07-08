@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.models.v2.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
@@ -48,8 +48,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return false;
     }
 
-    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
-        return new RedirectItemImpl(redirectTarget, request, linkHandler);
+    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
+        return new RedirectItemImpl(redirectTarget, request, linkManager);
     }
 
 }

@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -59,14 +59,14 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     private Map<String, String> overriddenProperties = new HashMap<>();
     private List<String> hiddenProperties = new ArrayList<>();
 
-    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, Component component) {
-        super(linkHandler, page, parentId, component);
+    public PageListItemImpl(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component) {
+        super(linkManager, page, parentId, component);
         this.component = component;
     }
 
-    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page, String parentId, Component component,
+    public PageListItemImpl(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component,
                             boolean showDescription, boolean linkItems) {
-        super(linkHandler, page, parentId, component);
+        super(linkManager, page, parentId, component);
         this.component = component;
         this.showDescription = showDescription;
         this.linkItems = linkItems;
@@ -129,7 +129,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     protected PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
                 .withTitle(this::getTitle)
-                .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
+                .withLinkUrl(() -> link.getMappedURL())
                 .build();
     }
 }

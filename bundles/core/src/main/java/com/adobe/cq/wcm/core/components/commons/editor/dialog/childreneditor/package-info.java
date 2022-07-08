@@ -19,7 +19,7 @@
  * </p>
  *
  */
-@Version("1.0.0")
+@Version("1.1.0")
 package com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor;
 
 import org.osgi.annotation.versioning.Version;

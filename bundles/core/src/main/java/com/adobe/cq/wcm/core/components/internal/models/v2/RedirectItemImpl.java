@@ -20,20 +20,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RedirectItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl {
 
     public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request,
-                            @NotNull LinkHandler linkHandler) {
-        super(redirectTarget, request, linkHandler);
+                            @NotNull LinkManager linkManager) {
+        super(redirectTarget, request, linkManager);
     }
 
     @Override
     @Nullable
     public Link getLink() {
-        return link.orElse(null);
+        return link;
     }
 
     @Override

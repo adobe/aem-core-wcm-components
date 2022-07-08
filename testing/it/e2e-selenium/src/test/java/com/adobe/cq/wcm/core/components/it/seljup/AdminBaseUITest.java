@@ -27,6 +27,8 @@ import com.adobe.cq.testing.selenium.utils.DisableTour;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +52,7 @@ public abstract class AdminBaseUITest extends UIAbstractTest {
 
     @BeforeEach
     public void loginBeforeEach(@Author final CQClient adminAuthor, final TestContentBuilder testContentBuilder, final URI baseURI)
-        throws ClientException, InterruptedException, IOException {
+        throws ClientException, InterruptedException, IOException, TimeoutException {
         testContentBuilder.withUser(randomPassword, Arrays.asList(GROUPID_CONTENT_AUTHORS, "workflow-users"));
         testContentBuilder.build();
 

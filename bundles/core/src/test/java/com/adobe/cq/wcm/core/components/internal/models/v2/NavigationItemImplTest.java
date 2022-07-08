@@ -20,7 +20,9 @@ import java.util.Collections;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.Test;
 
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.commons.link.LinkBuilder;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 
@@ -35,9 +37,14 @@ public class NavigationItemImplTest {
     protected void test() {
         Page page = mock(Page.class);
         when(page.getProperties()).thenReturn(ValueMap.EMPTY);
-        LinkHandler linkHandler = mock(LinkHandler.class);
+        LinkManager linkManager = mock(LinkManager.class);
+        LinkBuilder linkBuilder = mock(LinkBuilder.class);
+        Link link = mock(Link.class);
+        when(link.isValid()).thenReturn(false);
+        when(linkBuilder.build()).thenReturn(link);
+        when(linkManager.get(page)).thenReturn(linkBuilder);
         Component component = mock(Component.class);
-        NavigationItemImpl navigationItem = new NavigationItemImpl(page, true, true, linkHandler, 0, Collections.emptyList(), "id", component);
+        NavigationItemImpl navigationItem = new NavigationItemImpl(page, true, true, linkManager, 0, Collections.emptyList(), "id", component);
         assertEquals(page, navigationItem.getPage());
         assertTrue(navigationItem.isActive());
         assertEquals(Collections.emptyList(), navigationItem.getChildren());
