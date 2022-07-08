@@ -24,14 +24,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonStructure;
 
-import com.adobe.cq.wcm.core.components.internal.jackson.ComponentDataModelSerializer;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
@@ -42,7 +40,10 @@ import org.slf4j.Logger;
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.jackson.DefaultMethodSkippingModuleProvider;
 import com.adobe.cq.wcm.core.components.internal.jackson.PageModuleProvider;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.jackson.ComponentDataModelSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
