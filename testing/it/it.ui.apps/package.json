@@ -1,6 +1,6 @@
 {
     "name": "com.adobe.cq.core.wcm.components.it.ui.apps",
-    "version": "2.20.5-SNAPSHOT",
+    "version": "2.20.7-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components IT Immutable Content",
     "license": "Apache-2.0",
     "private": false,

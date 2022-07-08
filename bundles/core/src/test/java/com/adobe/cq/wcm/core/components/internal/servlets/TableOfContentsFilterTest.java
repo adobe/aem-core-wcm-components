@@ -15,11 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.models.v1.TableOfContentsImpl;
-import com.day.cq.wcm.api.WCMMode;
-import io.wcm.testing.mock.aem.junit5.AemContext;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponseWrapper;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.loader.ContentLoader;
@@ -28,11 +32,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.models.v1.TableOfContentsImpl;
+import com.day.cq.wcm.api.WCMMode;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -48,6 +52,19 @@ public class TableOfContentsFilterTest {
     @BeforeEach
     void setUp() throws Exception {
         tableOfContentsFilter = new TableOfContentsFilter();
+        TableOfContentsFilter.Config mockConfig = Mockito.mock(TableOfContentsFilter.Config.class);
+        Mockito.when(mockConfig.enabled()).thenReturn(true);
+        tableOfContentsFilter.activate(mockConfig);
+    }
+
+    @Test
+    void testConfigNotEnabled() throws ServletException, IOException {
+        TableOfContentsFilter.Config mockConfig = Mockito.mock(TableOfContentsFilter.Config.class);
+        Mockito.when(mockConfig.enabled()).thenReturn(false);
+        tableOfContentsFilter.activate(mockConfig);
+        FilterChain filterChain = Mockito.mock(FilterChain.class);
+        tableOfContentsFilter.doFilter(context.request(), context.response(), filterChain);
+        Mockito.verify(filterChain, Mockito.times(1)).doFilter(context.request(), context.response());
     }
 
     /**
