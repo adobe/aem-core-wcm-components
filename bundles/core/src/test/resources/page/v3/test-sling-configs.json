@@ -69,5 +69,9 @@
         }
       }
     }
+  },
+  "com.adobe.cq.wcm.core.components.config.HeaderConfig" : {
+    "jcr:primaryType": "nt:unstructured",
+    "enableImageAutoSizes": true
   }
 }

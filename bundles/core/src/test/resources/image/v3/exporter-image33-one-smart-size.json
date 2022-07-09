@@ -5,6 +5,7 @@
   "src": "https://s7d9.scene7.com/is/image/dmtestcompany/Adobe_Systems_logo_and_wordmark_DM?qlt=82&wid=600&ts=1490005239000&$greyscale$&dpr=off",
   "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
   "lazyEnabled": true,
+  "autoSizesEnabled": false,
   "imageLink": {
     "url": "https://www.adobe.com",
     "valid": true

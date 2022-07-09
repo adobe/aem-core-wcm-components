@@ -1,5 +1,6 @@
 {
   "lazyEnabled" : false,
+  "autoSizesEnabled": false,
   "title" : "Adobe Logo",
   "alt" : "Adobe Logo",
   "imageLink": {

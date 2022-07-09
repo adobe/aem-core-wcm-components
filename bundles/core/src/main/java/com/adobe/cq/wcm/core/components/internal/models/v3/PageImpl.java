@@ -15,9 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import com.adobe.cq.wcm.core.components.config.HeaderConfig;
+import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.caconfig.ConfigurationBuilder;
+import org.apache.sling.caconfig.ConfigurationResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ContainerExporter;
@@ -31,6 +36,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl implements Page {
+
+    @OSGiService
+    private ConfigurationResolver configurationResolver;
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v3/page";
 
@@ -52,4 +60,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return new RedirectItemImpl(redirectTarget, request, linkManager);
     }
 
+
+    @Override
+    public boolean hasImageAutoSizeSupport() {
+        ConfigurationBuilder configurationBuilder = configurationResolver.get(resource);
+        HeaderConfig config = configurationBuilder.as(HeaderConfig.class);
+        return config.enableImageAutoSizes();
+    }
 }

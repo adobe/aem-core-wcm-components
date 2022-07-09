@@ -16,13 +16,19 @@
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
+
+import static com.adobe.cq.wcm.core.components.Utils.getTestExporterJSONPath;
+import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,6 +41,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.PageImplTest {
 
     private static final String TEST_BASE = "/page/v3";
+    private static final String SLING_CONFIGS_ROOT = "/conf/page/sling:configs";
 
     @BeforeEach
     @Override
@@ -87,6 +94,13 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
 
         boolean async = page.isClientlibsAsync();
         assertFalse(async);
+    }
+
+    @Test
+    void testImageAutoSizeSupport() {
+        context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
+        Page page = getPageUnderTest(PAGE);
+        assertTrue(page.hasImageAutoSizeSupport());
     }
 
 }

@@ -40,7 +40,8 @@
                                 staticDesignPath          = page.staticDesignPath,
                                 clientLibCategories       = page.clientLibCategories,
                                 clientLibCategoriesJsHead = page.clientLibCategoriesJsHead,
-                                hasCloudconfigSupport     = page.hasCloudconfigSupport}"></sly>
+                                hasCloudconfigSupport     = page.hasCloudconfigSupport,
+                                hasImageAutoSizeSupport   = page.hasImageAutoSizeSupport}"></sly>
     <sly data-sly-test.appResourcesPath=${page.appResourcesPath} data-sly-call="${headResources.favicons @ path = appResourcesPath}"></sly>
     <sly data-sly-list="${page.htmlPageItems}"><script data-sly-test="${item.location.name == 'header'}"
             data-sly-element="${item.element.name @ context='unsafe'}" data-sly-attribute="${item.attributes}"></script>

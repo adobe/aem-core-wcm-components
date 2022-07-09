@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
@@ -53,6 +54,20 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_DESIGN_ALLOWED_RENDITION_WIDTHS = "allowedRenditionWidths";
+
+    /**
+     * Name of the configuration policy property that will store the sizes attribute for a responsive image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.26.0
+     */
+    String PN_DESIGN_SIZES = "sizes";
+
+    /**
+     * Name of the configuration policy property that will enable auto sizing for a responsive image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.26.0
+     */
+    String PN_DESIGN_AUTO_SIZES = "autoSizes";
 
     /**
      * Name of the configuration policy property that will store the image quality for an image.
@@ -310,6 +325,28 @@ public interface Image extends Component {
     @NotNull
     default int[] getWidths() {
         return new int[]{};
+    }
+
+    /**
+     * Returns the media condition to indicate which image widths should be used, configured through the {@link #PN_DESIGN_SIZES}
+     * content policy.
+     *
+     * @return the sizes media condition
+     * @since com.adobe.cq.wcm.core.components.models 12.26.0
+     */
+    @Nullable
+    default String getSizes() {
+        return null;
+    }
+
+    /**
+     * Indicates if the sizes attribute should be calculated automatically client side
+     *
+     * @return true if the sizes attribute should be calculated automatically; false otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.26.0
+     */
+    default boolean isAutoSizesEnabled() {
+        return false;
     }
 
     /**
