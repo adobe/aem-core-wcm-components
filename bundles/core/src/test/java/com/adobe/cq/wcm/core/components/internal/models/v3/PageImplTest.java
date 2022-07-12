@@ -89,4 +89,10 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertFalse(async);
     }
 
+    @Test
+    protected void testIsDataLayerClientlibIncluded() {
+        Page page = getPageUnderTest(PAGE);
+        assertTrue(page.isDataLayerClientlibIncluded(), "The data layer clientlib should be included.");
+    }
+
 }

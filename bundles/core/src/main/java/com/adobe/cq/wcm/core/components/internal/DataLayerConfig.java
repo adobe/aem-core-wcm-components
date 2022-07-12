@@ -31,4 +31,12 @@ public @interface DataLayerConfig {
     @Property(label="Data Layer enabled")
     boolean enabled() default false;
 
+    /**
+     *
+     * @return {@code true} if the data layer client library is not included through the Core Page component,
+     * {@code false} otherwise. It defaults to {@code false} (client library included).
+     */
+    @Property(label="Data Layer client library not included")
+    boolean noClientlibIncluded() default false;
+
 }
