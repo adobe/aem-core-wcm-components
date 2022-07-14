@@ -23,6 +23,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
+
+import static com.adobe.cq.wcm.core.components.Utils.skipDataLayerInclude;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -90,8 +92,22 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     }
 
     @Test
-    protected void testIsDataLayerClientlibIncluded() {
+    protected void testIsDataLayerClientlibIncluded_caconfig_undefined() {
         Page page = getPageUnderTest(PAGE);
+        assertTrue(page.isDataLayerClientlibIncluded(), "The data layer clientlib should be included.");
+    }
+
+    @Test
+    protected void testIsDataLayerClientlibIncluded_caconfig_true() {
+        Page page = getPageUnderTest(PAGE);
+        skipDataLayerInclude(context,true);
+        assertFalse(page.isDataLayerClientlibIncluded(), "The data layer clientlib should not be included.");
+    }
+
+    @Test
+    protected void testIsDataLayerClientlibIncluded_caconfig_false() {
+        Page page = getPageUnderTest(PAGE);
+        skipDataLayerInclude(context,false);
         assertTrue(page.isDataLayerClientlibIncluded(), "The data layer clientlib should be included.");
     }
 

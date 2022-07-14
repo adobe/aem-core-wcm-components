@@ -57,7 +57,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public boolean isDataLayerClientlibIncluded() {
         return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
                 .map(builder -> builder.as(DataLayerConfig.class))
-                .map(config -> !config.noClientlibIncluded())
+                .map(config -> !config.skipClientlibInclude())
                 .orElse(true);
     }
 

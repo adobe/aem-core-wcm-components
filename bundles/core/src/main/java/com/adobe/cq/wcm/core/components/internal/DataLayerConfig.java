@@ -37,6 +37,6 @@ public @interface DataLayerConfig {
      * {@code false} otherwise. It defaults to {@code false} (client library included).
      */
     @Property(label="Data Layer client library not included")
-    boolean noClientlibIncluded() default false;
+    boolean skipClientlibInclude() default false;
 
 }
