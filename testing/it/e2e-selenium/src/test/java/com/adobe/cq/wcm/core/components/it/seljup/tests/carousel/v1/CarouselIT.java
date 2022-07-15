@@ -423,6 +423,11 @@ public class CarouselIT extends AuthorBaseUITest {
         assertTrue(Commons.isElementVisibleAndInViewport(itemButton2));
         assertTrue(Commons.isElementVisibleAndInViewport(itemContent2));
 
+        // clicking a link referencing the first carousel item displays it and scrolls to it
+        Selenide.$("#link-1a").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton1));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+
         // clicking a link referencing a text element within a carousel item expands the item
         // and scrolls to the ID
         Commons.scrollToTop();

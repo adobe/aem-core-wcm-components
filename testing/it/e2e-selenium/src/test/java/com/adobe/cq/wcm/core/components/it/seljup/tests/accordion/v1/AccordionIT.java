@@ -68,6 +68,8 @@ public class AccordionIT extends AuthorBaseUITest {
     private static final String deepLinkPagePath = "/content/core-components/deep-link/accordion/v1.html";
     private static final String itemTitleId1 = "accordion-24628d01df-item-5209084c68";
     private static final String itemContentId1 = "text-1";
+    private static final String itemTitleId1a = "accordion-24628d01df-item-5c22487585";
+    private static final String itemContentId1a = "text-1a";
     private static final String itemTitleId2 = "accordion-90566600bc-item-42c74c71b7";
     private static final String itemContentId2 = "text-2";
     private static final String itemTitleId3 = "accordion-83cc77b83d-item-fec7e9d490";
@@ -751,6 +753,8 @@ public class AccordionIT extends AuthorBaseUITest {
         page.open();
         SelenideElement itemTitle1 = Selenide.$("#" + itemTitleId1);
         SelenideElement itemContent1 = Selenide.$("#" + itemContentId1);
+        SelenideElement itemTitle1a = Selenide.$("#" + itemTitleId1a);
+        SelenideElement itemContent1a = Selenide.$("#" + itemContentId1a);
         SelenideElement itemTitle2 = Selenide.$("#" + itemTitleId2);
         SelenideElement itemContent2 = Selenide.$("#" + itemContentId2);
         SelenideElement itemTitle3 = Selenide.$("#" + itemTitleId3);
@@ -768,6 +772,11 @@ public class AccordionIT extends AuthorBaseUITest {
         Selenide.$("#link-1").click();
         assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
         assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+
+        // clicking a link referencing the first accordion item expands it and scrolls to it
+        Selenide.$("#link-1a").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1a));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1a));
 
         // clicking a link referencing a nested accordion item expands all intermediary items and scrolls to it
         Commons.scrollToTop();

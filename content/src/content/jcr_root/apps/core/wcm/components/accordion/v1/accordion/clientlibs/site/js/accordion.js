@@ -167,7 +167,7 @@
         function scrollToDeepLinkIdInAccordion() {
             if (containerUtils) {
                 var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item", "item");
-                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                if (deepLinkItemIdx > -1) {
                     var deepLinkItem = that._elements["item"][deepLinkItemIdx];
                     if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
                         // if single expansion: close all accordion items
