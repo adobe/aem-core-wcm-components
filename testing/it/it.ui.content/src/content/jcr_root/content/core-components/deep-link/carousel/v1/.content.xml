@@ -16,7 +16,7 @@
                 <text
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;a id=&quot;link-1&quot; href=&quot;#carousel-2a81de66e5-item-48148b56a1-tabpanel&quot;>link to carousel item 2&lt;/a>&lt;br>&#xa;&lt;a id=&quot;link-2&quot; href=&quot;#text-3&quot;>link to ID#text-3 in carousel item 3&lt;/a>"
+                    text="&lt;a id=&quot;link-1&quot; href=&quot;#carousel-2a81de66e5-item-48148b56a1-tabpanel&quot;>link to carousel item 2&lt;/a>&lt;br>&#xa;&lt;a id=&quot;link-1a&quot; href=&quot;#carousel-2a81de66e5-item-858ba740ca-tabpanel&quot;>link to carousel item 1&lt;/a>&lt;br>&#xa;&lt;a id=&quot;link-2&quot; href=&quot;#text-3&quot;>link to ID#text-3 in carousel item 3&lt;/a>"
                     textIsRich="true"/>
                 <text_1
                     jcr:primaryType="nt:unstructured"
