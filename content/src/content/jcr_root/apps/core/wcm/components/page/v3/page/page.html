@@ -22,6 +22,8 @@
     <head data-sly-call="${head.head @ page = page, pwa = pwa}"></head>
     <body class="${page.cssClassNames}"
           id="${page.id}"
+          data-cmp-link-accessibility-enabled
+          data-cmp-link-accessibility-text="${'opens in a new tab' @ i18n}"
           data-cmp-data-layer-enabled="${page.data ? true : false}">
         <script data-sly-test.dataLayerEnabled="${page.data}">
           window.adobeDataLayer = window.adobeDataLayer || [];
