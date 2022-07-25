@@ -43,6 +43,9 @@
             ${item @ context="html"}
             <div data-sly-resource="${'par{0}' @ format=itemList.count, resourceType=fragment.gridResourceType}"></div>
         </div>
+        <div data-sly-list="${fragment.remainingInBetweenContent}">
+            <div data-sly-resource="${'par{0}' @ format=item, resourceType=fragment.gridResourceType}"></div>
+        </div>
     </div>
 </template>
 

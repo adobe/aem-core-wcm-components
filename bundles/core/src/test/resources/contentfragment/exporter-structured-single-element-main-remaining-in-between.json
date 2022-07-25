@@ -1,12 +1,17 @@
 {
-    "id": "contentfragment-a68b9c84f9",
-    "remainingInBetweenContent":[],
+    "id": "contentfragment-d3375413df",
     "description": "This is a test content fragment.",
+    "remainingInBetweenContent":[3, 6, 8],
     "paragraphs": [
         "<p>Main content</p>"
     ],
     "title": "Test Content Fragment",
     "model": "global/models/test",
+    ":items": {},
+    ":itemsOrder": [],
+    "elementsOrder": [
+        "main"
+    ],
     ":type": "core/wcm/components/contentfragment/v1/contentfragment",
     "elements": {
         "main": {
@@ -14,21 +19,6 @@
             "title": "Main",
             "multiValue": false,
             ":type": "text/html"
-        },
-        "second": {
-            "value": [
-                "one",
-                "two",
-                "three"
-            ],
-            "title": "Second",
-            "multiValue": true
         }
-    },
-    ":items": {},
-    ":itemsOrder": [],
-    "elementsOrder": [
-        "main",
-        "second"
-    ]
+    }
 }

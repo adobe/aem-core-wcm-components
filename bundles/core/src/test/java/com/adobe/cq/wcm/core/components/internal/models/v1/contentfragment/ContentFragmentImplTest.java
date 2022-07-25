@@ -188,6 +188,14 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     }
 
     @Test
+    void structuredSingleElementMainRemainingInBetweenContent() {
+        when(fragmentRenderService.render(any(Resource.class))).thenReturn(MAIN_CONTENT);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT_MAIN_REMAINING_IN_BETWEEN_CONTENT);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, STRUCTURED_NAME, ASSOCIATED_CONTENT, MAIN);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_SINGLE_ELEMENT_MAIN_REMAINING_IN_BETWEEN_CONTENT));
+    }
+
+    @Test
     void getExportedType() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
         assertEquals(ContentFragmentImpl.RESOURCE_TYPE, fragment.getExportedType());

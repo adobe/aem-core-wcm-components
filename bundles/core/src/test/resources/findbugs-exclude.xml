@@ -29,7 +29,7 @@
     </Match>
     <Match>
         <Class name="com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.ContentFragmentImpl" />
-        <Method name="getParagraphs" />
+        <Method name="computeParagraphs" />
         <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
     </Match>
 </FindBugsFilter>
