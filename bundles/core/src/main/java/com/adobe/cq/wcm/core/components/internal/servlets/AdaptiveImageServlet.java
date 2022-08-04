@@ -23,10 +23,10 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Optional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -72,8 +72,8 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentManager;
-import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.designer.Designer;
+import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.commons.WCMUtils;
@@ -82,6 +82,7 @@ import com.day.image.Layer;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.common.net.HttpHeaders;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
@@ -698,7 +699,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         String imageName)
             throws IOException {
         response.setContentType(contentType);
-        response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
+        String extension = mimeTypeService.getExtension(contentType);
+        String disposition = "svg".equalsIgnoreCase(extension) ? "attachment" : "inline";
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, disposition + "; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
         IOUtils.copy(inputStream, response.getOutputStream());
     }
 

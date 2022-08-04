@@ -66,6 +66,7 @@ import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.image.Layer;
+import com.google.common.net.HttpHeaders;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.mockito.Mockito.any;
@@ -388,6 +389,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
+        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("attachment"));
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
@@ -413,6 +415,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
+        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("inline"));
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.gif");
@@ -426,6 +429,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
+        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("attachment"));
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
