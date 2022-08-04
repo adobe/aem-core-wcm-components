@@ -61,7 +61,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>aem-selenium-it-base</artifactId>
-            <version>0.2.32</version>
+            <version>${aem.selenium.base.it.version}</version>
         </dependency>
     </dependencies>
 </project>
