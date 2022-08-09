@@ -154,15 +154,30 @@ public class Utils {
     }
 
     /**
-     * Sets the data layer context aware configuration of the AEM test context to enabled/disabled
+     * Sets the data layer context aware configuration of the AEM test context to enable the data layer.
      *
      * @param context The AEM test context
      * @param enabled {@code true} to enable the data layer, {@code false} to disable it
      */
     public static void enableDataLayer(AemContext context, boolean enabled) {
+        configureDataLayer(context, enabled, false);
+    }
+
+    /**
+     * Sets the data layer context aware configuration of the AEM test context to not include the data layer clientlib.
+     *
+     * @param context The AEM test context
+     * @param skip {@code true} to not include the data layer clientlib, {@code false} to include it
+     */
+    public static void skipDataLayerInclude(AemContext context, boolean skip) {
+        configureDataLayer(context, true, skip);
+    }
+
+    private static void configureDataLayer(AemContext context, boolean enabled, boolean skip) {
         ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
         DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
         lenient().when(dataLayerConfig.enabled()).thenReturn(enabled);
+        lenient().when(dataLayerConfig.skipClientlibInclude()).thenReturn(skip);
         lenient().when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
         context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
     }

@@ -469,4 +469,12 @@ public interface Page extends ContainerExporter, Component {
      */
     default boolean isClientlibsAsync() {return false;}
 
+    /**
+     * Checks if the data layer client library should be included.
+     *
+     * {@code true} if the data layer client library should be included.
+     * @since om.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default boolean isDataLayerClientlibIncluded() {return true;}
+
 }

@@ -15,8 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import com.adobe.cq.wcm.core.components.config.HeaderConfig;
-import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
+import java.util.Optional;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.caconfig.ConfigurationResolver;
@@ -28,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
+import com.adobe.cq.wcm.core.components.config.HeaderConfig;
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.models.v2.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
@@ -37,15 +39,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl implements Page {
 
-    @OSGiService
-    private ConfigurationResolver configurationResolver;
-
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v3/page";
 
     /**
      * Style property name to load custom Javascript libraries asynchronously.
      */
     protected static final String PN_CLIENTLIBS_ASYNC = "clientlibsAsync";
+
+    @OSGiService
+    private ConfigurationResolver configurationResolver;
 
     @Override
     @JsonIgnore
@@ -56,15 +58,25 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return false;
     }
 
-    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
-        return new RedirectItemImpl(redirectTarget, request, linkManager);
+    @Override
+    @JsonIgnore
+    public boolean isDataLayerClientlibIncluded() {
+        return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
+                .map(builder -> builder.as(DataLayerConfig.class))
+                .map(config -> !config.skipClientlibInclude())
+                .orElse(true);
     }
 
-
     @Override
+    @JsonIgnore
     public boolean hasImageAutoSizeSupport() {
         ConfigurationBuilder configurationBuilder = configurationResolver.get(resource);
         HeaderConfig config = configurationBuilder.as(HeaderConfig.class);
         return config.enableImageAutoSizes();
     }
+
+    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
+        return new RedirectItemImpl(redirectTarget, request, linkManager);
+    }
+
 }
