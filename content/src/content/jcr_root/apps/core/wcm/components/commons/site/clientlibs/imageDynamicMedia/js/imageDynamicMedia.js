@@ -21,11 +21,20 @@
     window.CMP.image.dynamicMedia = (function() {
         var autoSmartCrops = {};
         var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+        var SRC_URI_TEMPLATE_DPR_VAR = "{dpr}";
+        var dpr = window.devicePixelRatio || 1;
+        var config = {
+            minWidth: 20
+        };
 
+        /**
+         * get auto smart crops from dm
+         * @param {String} src the src uri
+         * @returns {{}} the smart crop json object
+         */
         var getAutoSmartCrops = function(src) {
             var request = new XMLHttpRequest();
             var url = decodeURIComponent(src).split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
-
             request.open("GET", url, false);
             request.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
@@ -57,6 +66,11 @@
             return autoSmartCrops;
         };
 
+        /**
+         * Build and return the srcset value based on the available auto smart crops
+         * @param {String} src the src uri
+         * @returns {String} the srcset
+         */
         var getSrcSet = function(src) {
             var srcset;
             if (Object.keys(autoSmartCrops).length === 0) {
@@ -72,6 +86,12 @@
             return  srcset.join(",");
         };
 
+        /**
+         * Get the optimal width based on the available sizes
+         * @param {[Number]} sizes the available sizes
+         * @param {Number} width the element width
+         * @returns {String} the optimal width
+         */
         function getOptimalWidth(sizes, width) {
             var len = sizes.length;
             var key = 0;
@@ -83,6 +103,43 @@
             return sizes[key].toString();
         }
 
+        /**
+         * Get the width of an element or parent element if the width is smaller than the minimum width
+         * @param {HTMLElement} component the image component
+         * @param {HTMLElement | Node} parent the parent element
+         * @returns {Number} the width of the element
+         */
+        var getWidth = function(component, parent) {
+            var width = component.offsetWidth;
+            while (width < config.minWidth && parent && !component._autoWidth) {
+                width =  parent.offsetWidth;
+                parent = parent.parentNode;
+            }
+            return width;
+        };
+
+        /**
+         * Set the src and srcset attribute for a Dynamic Media Image which auto smart crops enabled.
+         * @param {HTMLElement} component the image component
+         * @param {HTMLElement} image the image element
+         */
+        var setDMAttributes = function(component, image) {
+            var src = component.getAttribute("data-cmp-src");
+            if (src) {
+                if (component.matches('[data-cmp-smartcroprendition="SmartCrop:Auto"]')) {
+                    src = src.replace(SRC_URI_TEMPLATE_DPR_VAR, dpr);
+                    image.setAttribute("srcset", CMP.image.dynamicMedia.getSrcSet(src));
+                }
+                image.setAttribute("src", CMP.image.dynamicMedia.getSrc(src, getWidth(component, component.parentNode)));
+            }
+        };
+
+        /**
+         * Get the src attribute based on the optimal width
+         * @param {String} src the src uri
+         * @param {Number} elemWidth the element width
+         * @returns {String} the final src attribute
+         */
         var getSrc = function(src, elemWidth) {
             if (Object.keys(autoSmartCrops).length === 0) {
                 getAutoSmartCrops(src);
@@ -94,7 +151,9 @@
         return {
             getAutoSmartCrops: getAutoSmartCrops,
             getSrcSet: getSrcSet,
-            getSrc: getSrc
+            getSrc: getSrc,
+            setDMAttributes: setDMAttributes,
+            getWidth: getWidth
         };
     }());
 }());
