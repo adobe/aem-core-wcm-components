@@ -44,6 +44,31 @@
                     var component = componentList[i];
                     initImage(component);
                 }
+
+                var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+                var body             = document.querySelector("body");
+                var observer         = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        // needed for IE
+                        var nodesArray = [].slice.call(mutation.addedNodes);
+                        if (nodesArray.length > 0) {
+                            nodesArray.forEach(function(addedNode) {
+                                if (addedNode.querySelectorAll) {
+                                    var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
+                                    elementsArray.forEach(function(element) {
+                                        initImage(element);
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+
+                observer.observe(body, {
+                    subtree: true,
+                    childList: true,
+                    characterData: true
+                });
             }
         };
     }());
