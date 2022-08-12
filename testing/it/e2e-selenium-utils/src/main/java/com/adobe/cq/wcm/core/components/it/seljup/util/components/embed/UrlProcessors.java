@@ -38,7 +38,7 @@ public class UrlProcessors {
 
         public boolean urlProcessorExits() {
             final WebDriver webDriver = WebDriverRunner.getWebDriver();
-            new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
+            new WebDriverWait(webDriver, 5 * RequestConstants.TIMEOUT_TIME_SEC)
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
             Helpers.waitForElementAnimationFinished($(selector));
             return $(selector).isDisplayed();
