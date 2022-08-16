@@ -75,7 +75,12 @@ class LinkBuilderImplTest {
     @CsvSource({
         "/content/path/to/page, /content/path/to/page.html, /content/path/to/page.html",
         "/content/path/to/page.html, /content/path/to/page.html,",
+        // with Adobe Campaign expressions
         "/content/path/to/page.html?recipient=<%= recipient.id %>, /content/path/to/page.html?recipient=<%= recipient.id %>,",
+        // with Adobe Campaign expressions and other encoded character sequences
+        "https://foo.bar/%E9%A1%B5.html?recipient=<%= recipient.id %>, https://foo.bar/页.html?recipient=<%= recipient.id %>, https://foo.bar/页.html?recipient=<%= recipient.id %>",
+        // malformed url
+        "/content/path/to/page.html?campaign=%%PLACEHOLDER%%, /content/path/to/page.html?campaign=%%PLACEHOLDER%%,",
     })
     void testLinkToPage(String given, String expected, String passedDownToPathProcessor) {
         context.create().page("/content/path/to/page");
@@ -94,5 +99,4 @@ class LinkBuilderImplTest {
         verify(pathProcessor).externalize(eq(passedDownToPathProcessor), any());
         verify(pathProcessor).sanitize(eq(passedDownToPathProcessor), any());
     }
-
 }

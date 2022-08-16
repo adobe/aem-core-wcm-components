@@ -168,8 +168,13 @@ public class LinkBuilderImpl implements LinkBuilder {
                 String maskedPath = mask(path, placeholders);
                 maskedPath = URLDecoder.decode(maskedPath, StandardCharsets.UTF_8.name());
                 path = unmask(maskedPath, placeholders);
-            } catch (UnsupportedEncodingException e) {
-                LOGGER.warn(e.getMessage());
+            } catch (Exception ex) {
+                String message = "Failed to decode url '{}': {}";
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.warn(message, path, ex.getMessage(), ex);
+                } else {
+                    LOGGER.warn(message, path, ex.getMessage());
+                }
             }
             String decodedPath = path;
             return pathProcessors.stream()
@@ -308,6 +313,9 @@ public class LinkBuilderImpl implements LinkBuilder {
     /**
      * Masks a given {@link String} by replacing all occurrences of {@link LinkBuilderImpl#PATTERNS} with a placeholder.
      * The generated placeholders are put into the given {@link Map} and can be used to unmask a {@link String} later on.
+     * <p>
+     * For example the given original {@link String} {@code /path/to/page.html?r=<%= recipient.id %>} will be transformed to
+     * {@code /path/to/page.html?r=_abcd_} and the placeholder with the expression will be put into the given {@link Map}.
      *
      * @param original     the original {@link String}
      * @param placeholders a {@link Map} the generated placeholders will be put in
@@ -330,6 +338,9 @@ public class LinkBuilderImpl implements LinkBuilder {
 
     /**
      * Unmasks the given {@link String} by replacing the given placeholders with their original value.
+     * <p>
+     * For example the given masked {@link String} {@code /path/to/page.html?r=_abcd_} will be transformed to
+     * {@code /path/to/page.html?r=<%= recipient.id %>} by replacing each of the given {@link Map}s keys with the corresponding value.
      *
      * @param masked       the masked {@link String}
      * @param placeholders the {@link Map} of placeholders to replace
@@ -344,7 +355,10 @@ public class LinkBuilderImpl implements LinkBuilder {
     }
 
     /**
-     * Generate a new random placeholder that is not conflicting with any character sequence in the the given {@link String}.
+     * Generate a new random placeholder that is not conflicting with any character sequence in the given {@link String}.
+     * <p>
+     * For example the given {@link String} {@code "foo"} a new random {@link String} will be returned that is not contained in the
+     * given {@link String}. In this example the following {@link String}s will never be returned "f", "fo", "foo", "o", "oo".
      *
      * @param str the given {@link String}
      * @return the placeholder name
