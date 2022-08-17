@@ -66,7 +66,6 @@ import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.image.Layer;
-import com.google.common.net.HttpHeaders;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.mockito.Mockito.any;
@@ -122,7 +121,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             Rendition rendition = invocation.getArgument(0);
             return ImageIO.read(rendition.getStream());
         });
-        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
+        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE, null);
         testLogger = Utils.mockLogger(AdaptiveImageServlet.class, "LOGGER");
     }
 
@@ -389,7 +388,6 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
-        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("attachment"));
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
@@ -415,7 +413,6 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
-        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("inline"));
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.gif");
@@ -429,7 +426,6 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
-        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("attachment"));
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
@@ -994,8 +990,6 @@ class AdaptiveImageServletTest extends AbstractImageTest {
 
     @Test
     void testStaticDesignWidthAndQuality() {
-        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
-                prepareRequestResponsePair(IMAGE0_PATH, "img.2000", "png");
         Resource mockResource = mock(Resource.class);
         ResourceResolver mockResourceResolver = mock(ResourceResolver.class);
         when(mockResource.getResourceResolver()).thenReturn(mockResourceResolver);
@@ -1005,14 +999,14 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         when(mockDesigner.getStyle(mockResource)).thenReturn(mockStyle);
         String[] configuredWidths = { "400", "600", "800"};
         when(mockStyle.get(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0])).thenReturn(configuredWidths);
-        List<Integer> allowedWidths = servlet.getAllowedRenditionWidths(mockResource, requestResponsePair.getLeft());
+        List<Integer> allowedWidths = servlet.getAllowedRenditionWidths(mockResource);
         Assertions.assertEquals(
                 Arrays.stream(configuredWidths).map(Integer::valueOf).sorted().collect(Collectors.toList()),
                 allowedWidths);
 
         int configuredQuality = 75;
         when(mockStyle.get(Image.PN_DESIGN_JPEG_QUALITY, AdaptiveImageServlet.DEFAULT_JPEG_QUALITY)).thenReturn(configuredQuality);
-        Integer allowedQuality = servlet.getAllowedJpegQuality(mockResource, requestResponsePair.getLeft());
+        Integer allowedQuality = servlet.getAllowedJpegQuality(mockResource);
         Assertions.assertEquals(configuredQuality, allowedQuality.intValue());
     }
 

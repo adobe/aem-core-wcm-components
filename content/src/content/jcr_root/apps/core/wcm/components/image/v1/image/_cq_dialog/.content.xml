@@ -26,6 +26,12 @@
                                 fieldLabel="Image asset"
                                 fileNameParameter="./fileName"
                                 fileReferenceParameter="./fileReference"
+                                urlReferenceParameter="./urlReference"
+                                remotePathParameter="./remotePath"
+                                imageTitleParameter="./imageTitle"
+                                imageDescriptionParameter="./imageDescription"
+                                imageMimeTypeParameter="./imageMimeType"
+                                isConnectedAsset="./isConnectedAsset"
                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
                                 name="./file"/>
                             <decorative

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import javax.servlet.Servlet;
 
+import com.adobe.granite.crypto.CryptoSupport;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.commons.mime.MimeTypeService;
 import org.apache.sling.commons.osgi.PropertiesUtil;
@@ -71,9 +72,12 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
 
     @Reference
     private ConfigurationAdmin configurationAdmin;
-    
+
     @Reference
     AdaptiveImageServletMetrics metrics;
+
+    @Reference
+    CryptoSupport cryptoSupport;
 
 
     /**
@@ -171,7 +175,7 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
                                         assetStore,
                                         metrics,
                                         oldAISDefaultResizeWidth > 0 ? oldAISDefaultResizeWidth : config.getDefaultResizeWidth(),
-                                        config.getMaxSize()),
+                                        config.getMaxSize(), cryptoSupport),
                                 properties
                         )
                 );

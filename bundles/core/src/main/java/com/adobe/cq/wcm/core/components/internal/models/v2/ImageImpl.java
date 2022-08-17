@@ -15,14 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 
+import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.NameConstants;
+import com.day.cq.wcm.api.Template;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -216,9 +217,26 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
                             request.getResource().getPath());
                 }
+            } else if (urlReference != null) {
+                // send title, description from AEM and parse uuid from url
+                String imageTitle = properties.get("imageTitle", String.class);
+                if (!isDecorative && altValueFromDAM) {
+                    String damDescription = properties.get("imageDescription", String.class);
+                    if(StringUtils.isEmpty(damDescription)) {
+                        damDescription = imageTitle;
+                    }
+                    if (StringUtils.isNotEmpty(damDescription)) {
+                        alt = damDescription;
+                    }
+                }
+                if (titleValueFromDAM) {
+                    title = imageTitle;
+                }
             } else {
                 LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
             }
+        } else if (urlReference != null) {
+            // send title, description from AEM and parse uuid from url
         }
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
