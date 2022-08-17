@@ -66,6 +66,7 @@
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
         <jackson.version>2.11.3</jackson.version>
+        <aem.selenium.base.it.version>0.2.34</aem.selenium.base.it.version>
     </properties>
 
     <!-- ======================================================================= -->
