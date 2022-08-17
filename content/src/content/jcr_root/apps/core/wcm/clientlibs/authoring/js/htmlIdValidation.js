@@ -14,26 +14,38 @@
  *  limitations under the License.
  **************************************************************************/
 (function($, window, document) {
-
+    "use strict";
     /* Adapting window object to foundation-registry */
     var registry = $(window).adaptTo("foundation-registry");
 
-    /*Validator for TextField - Validation for duplicate HTML ID authored through dialog */
+    /* Validator for TextField - Validation for duplicate HTML ID authored through dialog */
     registry.register("foundation.validation.validator", {
         selector: "[data-validation=html-unique-id-validator]",
         validate: function(el) {
-            var compPath = $(el.closest(".foundation-layout-form")).attr("action");
-            var jsonData = CQ.shared.HTTP.get(compPath+'.json');
-            var preConfiguredVal = CQ.shared.HTTP.eval(jsonData)['id'];
+            var compPath = $(el.closest("form")).attr("action");
+            var pagePath = compPath.split("/_jcr_content")[0];
+            var preConfiguredVal;
+            /* Get the pre configured value if any */
+            $.ajax({
+                type: "GET",
+                url: compPath + ".json",
+                dataType: "json",
+                async: false,
+                success: function(data) {
+                    if (data) {
+                        preConfiguredVal = data.id;
+                    }
+                }
+            });
             var element = $(el);
             var currentVal = element.val();
-            /* Handle re dialog submission */
-            if(currentVal === preConfiguredVal){
+            /* Handle dialog re-submission */
+            if (currentVal === preConfiguredVal) {
                 return;
             }
-            var url = window.location.pathname + "?wcmmode=disabled";
-            url = url.replace("/editor.html", "");
+            var url = pagePath + ".html?wcmmode=disabled";
             var idCount = 0;
+            /* Check if same ID already exist on the page */
             $.ajax({
                 type: "GET",
                 url: url,
@@ -43,7 +55,7 @@
                     var idList;
                     if (data) {
                         idList = $(data).find("[id='" + currentVal + "']");
-                        if(idList) {
+                        if (idList) {
                             idCount = idList.length;
                         }
                     }
@@ -54,5 +66,4 @@
             }
         }
     });
-})
-($, window, document);
+})($, window, document);
