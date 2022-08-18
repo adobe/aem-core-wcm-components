@@ -237,6 +237,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
                 if (StringUtils.isNotEmpty(redirectLocation)) {
                     response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+                    if (StringUtils.isNotEmpty(request.getQueryString())) {
+                        redirectLocation = redirectLocation + '?' + request.getQueryString();
+                    }
                     response.setHeader("Location", redirectLocation);
                     return;
                 } else {
