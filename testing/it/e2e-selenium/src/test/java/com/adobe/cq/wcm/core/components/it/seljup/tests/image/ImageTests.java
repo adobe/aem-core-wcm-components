@@ -206,7 +206,7 @@ public class ImageTests {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.openMetadataTab();
         Commons.saveConfigureDialog();
-        String assetWithoutDescriptionErrorMessageSelector = "coral-tooltip[variant='error'] coral-tooltip-content";
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel";
         assertEquals("Error: Please provide an asset which has a description that can be used as alt text.", $(assetWithoutDescriptionErrorMessageSelector).innerText());
     }
 
