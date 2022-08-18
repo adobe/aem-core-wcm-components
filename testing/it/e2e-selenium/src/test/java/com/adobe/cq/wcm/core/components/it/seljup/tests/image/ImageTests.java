@@ -214,7 +214,7 @@ public class ImageTests {
         Commons.openSidePanel();
         dragImageWithoutDescription();
         Commons.saveConfigureDialog();
-        String assetWithoutDescriptionErrorMessageSelector = "coral-tooltip[variant='error'] coral-tooltip-content";
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel";
         String errorIcon = "input[name='./alt'] + coral-icon[icon='alert']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", $(errorIcon));
