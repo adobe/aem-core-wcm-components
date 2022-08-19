@@ -16,7 +16,7 @@
 package com.adobe.cq.wcm.core.components.it.http;
 
 import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
+import com.adobe.cq.testing.junit.rules.CQAuthorClassRule;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class AdaptiveImageServletIT {
     @ClassRule
-    public static final CQAuthorPublishClassRule cqBaseClassRule = new CQAuthorPublishClassRule();
+    public static final CQAuthorClassRule cqBaseClassRule = new CQAuthorClassRule();
 
     static CQClient adminAuthor;
 

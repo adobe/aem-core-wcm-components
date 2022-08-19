@@ -20,6 +20,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.codeborne.selenide.DragAndDropOptions;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
@@ -48,7 +49,7 @@ public class ImageEditDialog extends Dialog {
     private static String linkTarget = "coral-checkbox[name='./linkTarget']";
 
     public void uploadImageFromSidePanel(String imagePath) {
-        $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(fileUpload);
+        $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(fileUpload, DragAndDropOptions.usingActions());
     }
 
     public void setAltText(String text) {
