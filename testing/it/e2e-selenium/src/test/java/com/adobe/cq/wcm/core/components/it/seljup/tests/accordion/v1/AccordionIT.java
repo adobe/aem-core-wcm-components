@@ -19,7 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.accordion.v1;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
@@ -144,7 +146,7 @@ public class AccordionIT extends AuthorBaseUITest {
      * @throws InterruptedException
      */
 
-    private ElementsCollection createItem() throws InterruptedException {
+    private List<String> createItem() throws InterruptedException {
         //1.
         AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
         editDialog.openItemsTab();
@@ -173,9 +175,12 @@ public class AccordionIT extends AuthorBaseUITest {
         assertTrue(items.get(0).getValue().equals("item0"), "First input item should be item0");
         assertTrue(items.get(1).getValue().equals("item1"), "Second input item should be item1");
         assertTrue(items.get(2).getValue().equals("item2"), "Third input item should be item2");
+
+        List<String> itemValues = items.stream().map(SelenideElement::getValue).map(String::toString).collect(Collectors.toList());
+
         Commons.saveConfigureDialog();
 
-        return items;
+        return itemValues;
     }
 
     /**
@@ -190,7 +195,7 @@ public class AccordionIT extends AuthorBaseUITest {
      * 3. verify the expanded items match those passed
      */
 
-    private void verifyExpandedItemsSelect(ElementsCollection items, AccordionEditDialog.EditDialogProperties properties) {
+    private void verifyExpandedItemsSelect(List<String> items, AccordionEditDialog.EditDialogProperties properties) {
         //1.
         properties.openProperties();
 
@@ -199,10 +204,10 @@ public class AccordionIT extends AuthorBaseUITest {
 
         //3.
         CoralSelectList selectedItems = properties.selectList();
-        assertTrue(selectedItems.items().size() == items.size(), "Number of items in property config should be equal to added items number");
+        assertEquals(items.size(), selectedItems.items().size(), "Number of items in property config should be equal to added items number");
 
-        for(int i = 0; i < items.size(); i++) {
-                assertTrue(properties.getSelectedItemValue(i).contains(items.get(i).getValue()),  "Selected item should be same as added item");
+        for (int i = 0; i < items.size(); i++) {
+            assertTrue(properties.getSelectedItemValue(i).contains(items.get(i)), "Selected item should be same as added item");
         }
     }
 
@@ -317,7 +322,7 @@ public class AccordionIT extends AuthorBaseUITest {
     @DisplayName("Test: Edit Dialog: Add items")
     public void testAddItem() throws  InterruptedException {
         //1.
-        ElementsCollection items = createItem();
+        List<String> items = createItem();
 
         //2.
         AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
@@ -359,12 +364,14 @@ public class AccordionIT extends AuthorBaseUITest {
         //4.
         accordion.openEditDialog(cmpPath);
         editDialog.openItemsTab();
-        ElementsCollection items = childrenEditor.getInputItems();
+        List<String> items = childrenEditor.getInputItems().stream()
+                .map(SelenideElement::getValue).map(String::toString)
+                .collect(Collectors.toList());
 
         //5.
-        assertTrue(items.size() == 2, "Number to items added should be 2");
-        assertTrue(items.get(0).getValue().equals("item1"), "First input item should be item1");
-        assertTrue(items.get(1).getValue().equals("item2"), "Second input item should be item2");
+        assertEquals(2, items.size(), "Number to items added should be 2");
+        assertEquals("item1", items.get(0), "First input item should be item1");
+        assertEquals("item2", items.get(1), "Second input item should be item2");
 
         //6.
         verifyExpandedItemsSelect(items, editDialog.getEditDialogProperties());
@@ -410,13 +417,15 @@ public class AccordionIT extends AuthorBaseUITest {
         editDialog.openItemsTab();
 
         //6.
-        ElementsCollection items = childrenEditor.getInputItems();
+        List<String> items = childrenEditor.getInputItems().stream()
+                .map(SelenideElement::getValue).map(String::toString)
+                .collect(Collectors.toList());
 
-        assertTrue(items.size() == 3, "Number to items added should be 3");
+        assertEquals(3, items.size(), "Number to items added should be 3");
         //In chrome browser re-order is not working as expected
-        assertTrue(items.get(0).getValue().equals("item2") || items.get(0).getValue().equals("item0"), "First input item should be item2 or item0");
-        assertTrue(items.get(1).getValue().equals("item0") || items.get(1).getValue().equals("item2"), "Second input item should be item0 or item2");
-        assertTrue(items.get(2).getValue().equals("item1"), "Second input item should be item1");
+        assertTrue(items.get(0).equals("item2") || items.get(0).equals("item0"), "First input item should be item2 or item0");
+        assertTrue(items.get(1).equals("item0") || items.get(1).equals("item2"), "Second input item should be item0 or item2");
+        assertEquals("item1", items.get(2), "Second input item should be item1");
 
         //7.
         verifyExpandedItemsSelect(items, editDialog.getEditDialogProperties());

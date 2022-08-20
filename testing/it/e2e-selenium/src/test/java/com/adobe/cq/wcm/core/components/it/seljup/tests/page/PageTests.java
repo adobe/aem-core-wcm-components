@@ -339,7 +339,7 @@ public class PageTests {
         assertEquals("follow", robotsTags.get(1).asText());
         JsonNode sitemapRoot = content.get("sling:sitemapRoot");
         assertNotNull(sitemapRoot);
-        assertEquals("true", sitemapRoot);
+        assertEquals("true", sitemapRoot.asText());
         JsonNode canonicalUrl = content.get("cq:canonicalUrl");
         assertNotNull(canonicalUrl);
         assertEquals(testPage, canonicalUrl.asText());

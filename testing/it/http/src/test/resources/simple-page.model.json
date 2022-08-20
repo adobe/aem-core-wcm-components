@@ -202,7 +202,7 @@
                         },
                         "cq:metadata":
                         {
-                            ":type": ""
+                            ":type": "nt:unstructured"
                         }
                     },
                     ":itemsOrder":
@@ -407,7 +407,7 @@
                                                 {
                                                     "id": "list-39b0ceef99-item-87d5c55929",
                                                     "path": "/content/core-components/responsive-page",
-                                                    "url": "/content/core-components/responsive-page.html",
+                                                    "url": "/cp/content/core-components/responsive-page.html",
                                                     "title": "Responsive Page",
                                                     "lastModified": 1606499325649,
                                                     ":type": "core/wcm/components/page/v2/page",
@@ -418,14 +418,14 @@
                                                             "@type": "core/wcm/components/list/v2/list/item",
                                                             "repo:modifyDate": "2022-06-24T08:48:11Z",
                                                             "dc:title": "Responsive Page",
-                                                            "xdm:linkURL": "/content/core-components/responsive-page.html"
+                                                            "xdm:linkURL": "/cp/content/core-components/responsive-page.html"
                                                         }
                                                     }
                                                 },
                                                 {
                                                     "id": "list-39b0ceef99-item-8ad4928026",
                                                     "path": "/content/core-components/simple-page",
-                                                    "url": "/content/core-components/simple-page.html",
+                                                    "url": "/cp/content/core-components/simple-page.html",
                                                     "title": "Simple Page",
                                                     "lastModified": 1620818157599,
                                                     ":type": "core/wcm/components/page/v2/page",
@@ -436,7 +436,7 @@
                                                             "@type": "core/wcm/components/list/v2/list/item",
                                                             "repo:modifyDate": "2022-06-24T08:48:11Z",
                                                             "dc:title": "Simple Page",
-                                                            "xdm:linkURL": "/content/core-components/simple-page.html"
+                                                            "xdm:linkURL": "/cp/content/core-components/simple-page.html"
                                                         }
                                                     }
                                                 }
@@ -482,8 +482,8 @@
                                             "id": "image-a7b0abf572",
                                             "alt": "House on a beach with blue sky",
                                             "title": "Beach house",
-                                            "src": "/content/core-components/simple-page/_jcr_content/root/container/container/container_1128719348/image.coreimg.jpeg/1656060496335/core-comp-test-image.jpeg",
-                                            "srcUriTemplate": "/content/core-components/simple-page/_jcr_content/root/container/container/container_1128719348/image.coreimg.80{.width}.jpeg/1656060496335/core-comp-test-image.jpeg",
+                                            "src": "/cp/content/core-components/simple-page/_jcr_content/root/container/container/container_1128719348/image.coreimg.jpeg/1656060496335/core-comp-test-image.jpeg",
+                                            "srcUriTemplate": "/cp/content/core-components/simple-page/_jcr_content/root/container/container/container_1128719348/image.coreimg.80{.width}.jpeg/1656060496335/core-comp-test-image.jpeg",
                                             "lazyThreshold": 0,
                                             "dmImage": false,
                                             "widths":
@@ -535,9 +535,9 @@
                             "link":
                             {
                                 "valid": true,
-                                "url": "/content/core-components/simple-page/simple-subpage.html"
+                                "url": "/cp/content/core-components/simple-page/simple-subpage.html"
                             },
-                            "linkURL": "/content/core-components/simple-page/simple-subpage.html",
+                            "linkURL": "/cp/content/core-components/simple-page/simple-subpage.html",
                             "text": "Linked Title",
                             ":type": "core/wcm/components/title/v2/title",
                             "dataLayer":
@@ -546,15 +546,15 @@
                                 {
                                     "@type": "core/wcm/components/title/v2/title",
                                     "dc:title": "Linked Title",
-                                    "xdm:linkURL": "/content/core-components/simple-page/simple-subpage.html"
+                                    "xdm:linkURL": "/cp/content/core-components/simple-page/simple-subpage.html"
                                 }
                             }
                         },
                         "image":
                         {
                             "id": "image-34b8eac1c3",
-                            "src": "/content/core-components/simple-page/_jcr_content/root/container/image.coreimg.png/1656060496858/adobe-systems-logo-and-wordmark.png",
-                            "srcUriTemplate": "/content/core-components/simple-page/_jcr_content/root/container/image.coreimg.80{.width}.png/1656060496858/adobe-systems-logo-and-wordmark.png",
+                            "src": "/cp/content/core-components/simple-page/_jcr_content/root/container/image.coreimg.png/1656060496858/adobe-systems-logo-and-wordmark.png",
+                            "srcUriTemplate": "/cp/content/core-components/simple-page/_jcr_content/root/container/image.coreimg.80{.width}.png/1656060496858/adobe-systems-logo-and-wordmark.png",
                             "lazyThreshold": 0,
                             "dmImage": false,
                             "widths":
