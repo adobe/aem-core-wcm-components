@@ -6,7 +6,6 @@
   "srcset":"/core/content/test/_jcr_content/root/image0.coreimg.82.600.png/1490005239000/adobe-systems-logo-and-wordmark.png 600w,/core/content/test/_jcr_content/root/image0.coreimg.82.700.png/1490005239000/adobe-systems-logo-and-wordmark.png 700w,/core/content/test/_jcr_content/root/image0.coreimg.82.800.png/1490005239000/adobe-systems-logo-and-wordmark.png 800w,/core/content/test/_jcr_content/root/image0.coreimg.82.2000.png/1490005239000/adobe-systems-logo-and-wordmark.png 2000w,/core/content/test/_jcr_content/root/image0.coreimg.82.2500.png/1490005239000/adobe-systems-logo-and-wordmark.png 2500w",
   "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
   "lazyEnabled": true,
-  "autoSizesEnabled": false,
   "imageLink": {
     "url": "/core/content/test-image.html",
     "valid": true

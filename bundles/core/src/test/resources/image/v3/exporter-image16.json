@@ -2,7 +2,6 @@
   "id": "image-66bf44d2af",
   "src": "/core/content/test/_jcr_content/root/image16.coreimg.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
   "lazyEnabled": true,
-  "autoSizesEnabled": false,
   "dataLayer": {
     "image-66bf44d2af": {
       "@type": "core/wcm/components/image/v3/image",

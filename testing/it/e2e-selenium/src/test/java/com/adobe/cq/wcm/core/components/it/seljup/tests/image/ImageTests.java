@@ -370,26 +370,6 @@ public class ImageTests {
         assertTrue(image.isImagePresentWithSizes(testPage, "(min-width: 36em) 33.3vw, 100vw"), "Image with native lazy loading enabled should be present");
     }
 
-    public void testAutoSizes() throws TimeoutException, InterruptedException, ClientException {
-        adminClient.setPageProperty(testPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
-        adminClient.createNode("/conf/" + label + "/sling:configs", "nt:unstructured");
-        adminClient.createNode("/conf/" + label + "/sling:configs/com.adobe.cq.wcm.core.components.config.HeaderConfig", "nt:unstructured");
-        adminClient.setPropertiesString("/conf/" + label + "/sling:configs/com.adobe.cq.wcm.core.components.config.HeaderConfig",
-                new ArrayList<NameValuePair>() {{
-                    add(new BasicNameValuePair("enableImageAutoSizes", "true"));
-                    add(new BasicNameValuePair("enableImageAutoSizes@TypeHint", "Boolean"));
-                }});
-        editorPage.refresh();
-        Commons.openSidePanel();
-        dragImage();
-        Commons.saveConfigureDialog();
-        Commons.closeSidePanel();
-        editorPage.enterPreviewMode();
-        Commons.switchContext("ContentFrame");
-        assertEquals(image.getParentWidth() + "px", image.getAttribute("sizes"), String.format("Image should have sizes attribute of %s",
-                image.getParentWidth() + "px"));
-    }
-
     public void testPageImageWithEmptyAltTextFromPageImage(boolean aem65) throws InterruptedException, ClientException {
         setPageImage(aem65);
         editorPage.open();

@@ -37,7 +37,6 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.PageImplTest {
 
     private static final String TEST_BASE = "/page/v3";
-    private static final String SLING_CONFIGS_ROOT = "/conf/page/sling:configs";
 
     @BeforeEach
     @Override
@@ -112,10 +111,4 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertTrue(page.isDataLayerClientlibIncluded(), "The data layer clientlib should be included.");
     }
 
-    @Test
-    void testImageAutoSizeSupport() {
-        context.load().json(TEST_BASE + "/test-sling-configs.json", SLING_CONFIGS_ROOT);
-        Page page = getPageUnderTest(PAGE);
-        assertTrue(page.hasImageAutoSizeSupport());
-    }
 }

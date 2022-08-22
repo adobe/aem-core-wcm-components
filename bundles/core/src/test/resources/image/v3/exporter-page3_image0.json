@@ -3,7 +3,6 @@
   "alt": "featured image alt",
   "src": "/core/content/test_page3/_jcr_content/root/page3_image0.coreimg.png",
   "lazyEnabled": true,
-  "autoSizesEnabled": false,
   "dataLayer": {
     "image-96253254e2": {
       "@type": "core/wcm/components/image/v3/image"

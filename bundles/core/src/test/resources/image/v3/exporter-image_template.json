@@ -6,7 +6,6 @@
     "srcset":"/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.600.png/structure/jcr:content/root/image_template/1490005239000/adobe-systems-logo-and-wordmark.png 600w,/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.700.png/structure/jcr:content/root/image_template/1490005239000/adobe-systems-logo-and-wordmark.png 700w,/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.800.png/structure/jcr:content/root/image_template/1490005239000/adobe-systems-logo-and-wordmark.png 800w,/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.2000.png/structure/jcr:content/root/image_template/1490005239000/adobe-systems-logo-and-wordmark.png 2000w,/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.82.2500.png/structure/jcr:content/root/image_template/1490005239000/adobe-systems-logo-and-wordmark.png 2500w",
     "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
     "lazyEnabled": true,
-  "autoSizesEnabled": false,
   "imageLink": {
     "url": "/core/content/test-image.html",
     "valid": true

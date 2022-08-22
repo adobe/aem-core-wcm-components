@@ -61,11 +61,6 @@ com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig
 ```
 These items will be loaded in the header or footer of the page, depending on the configured `location`. The attribute names should match supported HTML attributes for [link](https://www.w3schools.com/tags/tag_link.asp), [script](https://www.w3schools.com/tags/tag_script.asp) and [meta](https://www.w3schools.com/tags/tag_meta.asp).
 
-There is also a dedicated context-aware configuration `com.adobe.cq.wcm.core.components.config.HeaderConfig` for the header section of 
-the page which is currently only used to enable / disable the autoSizes feature of the Image V3 component. The required property is:
-
-1. `enableImageAutoSizes` - `true` to include the required `imageAutoSize` JS client library in the head section of the page.
-
 ## Use Object
 The Page component uses the following use objects:
 * `com.adobe.cq.wcm.core.components.models.Page`

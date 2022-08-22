@@ -19,16 +19,13 @@ import java.util.Optional;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.caconfig.ConfigurationBuilder;
-import org.apache.sling.caconfig.ConfigurationResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
-import com.adobe.cq.wcm.core.components.config.HeaderConfig;
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.models.v2.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -46,9 +43,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     protected static final String PN_CLIENTLIBS_ASYNC = "clientlibsAsync";
 
-    @OSGiService
-    private ConfigurationResolver configurationResolver;
-
     @Override
     @JsonIgnore
     public boolean isClientlibsAsync() {
@@ -65,14 +59,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 .map(builder -> builder.as(DataLayerConfig.class))
                 .map(config -> !config.skipClientlibInclude())
                 .orElse(true);
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean hasImageAutoSizeSupport() {
-        ConfigurationBuilder configurationBuilder = configurationResolver.get(resource);
-        HeaderConfig config = configurationBuilder.as(HeaderConfig.class);
-        return config.enableImageAutoSizes();
     }
 
     protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {

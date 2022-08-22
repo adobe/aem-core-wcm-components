@@ -4,7 +4,6 @@
   "src": "/core/content/test/_jcr_content/root/image58.coreimg.png/1607501105000/transparent-hd.png",
   "uuid": "f6460529-b7b1-4b3a-8980-b3b3f0ee109c",
   "lazyEnabled": true,
-  "autoSizesEnabled": false,
   "dataLayer": {
     "image-fe2717021b": {
       "@type": "core/wcm/components/image/v3/image",

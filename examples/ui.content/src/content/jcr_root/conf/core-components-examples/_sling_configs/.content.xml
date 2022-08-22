@@ -8,7 +8,4 @@
         jcr:primaryType="nt:unstructured"
         clientId="28b07c6be4d544f188dc2f36e33b196b"
         reportSuiteId=""/>
-    <com.adobe.cq.wcm.core.components.config.HeaderConfig
-        jcr:primaryType="nt:unstructured"
-        enableImageAutoSizes="{Boolean}true"/>
 </jcr:root>

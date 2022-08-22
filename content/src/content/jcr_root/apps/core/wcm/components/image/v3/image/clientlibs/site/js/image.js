@@ -21,7 +21,7 @@
     window.CMP.image = window.CMP.image || {};
     window.CMP.image.v3 = (function() {
         var selectors = {
-            self: ".cmp-image:not(.autosize)"
+            self: ".cmp-image"
         };
 
         /**
@@ -38,6 +38,7 @@
 
         return {
             init: function() {
+                console.log("init");
                 var componentList = document.querySelectorAll(selectors.self);
                 var listLength = componentList.length;
                 for (var i = 0; i < listLength; i++) {

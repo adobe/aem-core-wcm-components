@@ -349,16 +349,6 @@ public interface Page extends ContainerExporter, Component {
     }
 
     /**
-     * Checks if there's support for image autosizes so the script can be added to the page header
-     *
-     * @return {@code true} if there's support for image autosizes
-     * @since com.adobe.cq.wcm.core.components.models 12.27.0
-     */
-    default boolean hasImageAutoSizeSupport() {
-        return false;
-    }
-
-    /**
      * Returns a set of resource types for components included in the page.
      *
      * @return Resource types for components included in the page

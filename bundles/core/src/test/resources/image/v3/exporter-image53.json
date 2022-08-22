@@ -3,7 +3,6 @@
   "src": "/core/content/test/_jcr_content/root/image53.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
   "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
   "lazyEnabled": true,
-  "autoSizesEnabled": false,
   "dataLayer": {
     "image-3734fa7f32": {
       "@type": "core/wcm/components/image/v3/image",

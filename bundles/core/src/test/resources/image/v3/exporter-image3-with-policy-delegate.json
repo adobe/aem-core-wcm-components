@@ -5,7 +5,6 @@
   "src": "/core/content/test/_jcr_content/root/image3.coreimg.82.600.png?contentPolicyDelegatePath=/content/test/jcr:content/root/image0",
   "srcset":"/core/content/test/_jcr_content/root/image3.coreimg.82.600.png?contentPolicyDelegatePath=/content/test/jcr:content/root/image0 600w",
   "lazyEnabled": true,
-  "autoSizesEnabled": false,
   "imageLink": {
     "url": "https://www.adobe.com",
     "valid": true

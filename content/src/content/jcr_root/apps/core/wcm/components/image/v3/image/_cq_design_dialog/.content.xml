@@ -148,21 +148,17 @@
                                                     name="./allowedRenditionWidths"
                                                     required="{Boolean}true"/>
                                             </widths>
-                                            <autoSizes
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="false"
-                                                fieldDescription="Automatically setting the sizes attribute."
-                                                name="./autoSizes"
-                                                text="Auto Sizes"
-                                                uncheckedValue="false"
-                                                value="{Boolean}true" />
                                             <sizes
+                                                granite:class="core-image-widths"
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="Define a set of media conditions which indicates what image width should be use"
-                                                fieldLabel="Sizes"
-                                                name="./sizes"/>
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                fieldDescription="Define a list of media conditions which indicates what image width should be use"
+                                                fieldLabel="Sizes">
+                                                <field
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                    name="./sizes"/>
+                                            </sizes>
                                         </items>
                                     </responsiveGroup>
                                     <jpegQuality

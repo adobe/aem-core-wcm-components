@@ -19,11 +19,14 @@ import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -66,7 +69,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private String srcSet = StringUtils.EMPTY;
     private Map<String, String> srcSetWithMimeType = Collections.EMPTY_MAP;
     private String sizes;
-    private boolean autoSizesEnabled;
 
     @PostConstruct
     protected void initModel() {
@@ -74,8 +76,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
             imageLinkHidden = properties.get(PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
-            sizes = currentStyle.get(PN_DESIGN_SIZES, String.class);
-            autoSizesEnabled = checkAutoSizeEnabled();
+            sizes = String.join((", "), currentStyle.get(PN_DESIGN_SIZES, new String[0]));
             disableLazyLoading = properties.get(PN_DESIGN_LAZY_LOADING_ENABLED, currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false));
         }
     }
@@ -138,11 +139,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     public String getSizes() {
         return sizes;
-    }
-
-    @Override
-    public boolean isAutoSizesEnabled() {
-        return autoSizesEnabled;
     }
 
     @Nullable
@@ -235,12 +231,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             }
         }
         return new Dimension(0, 0);
-    }
-
-    private boolean checkAutoSizeEnabled() {
-        return currentStyle.get(PN_DESIGN_AUTO_SIZES, false) &&
-                (StringUtils.isNotEmpty(this.getSrcset()) ||
-                        (dmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)));
     }
 
 }

@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.headlibs="${@ page, designPath, staticDesignPath, clientLibCategories, clientLibCategoriesJsHead, hasCloudconfigSupport, hasImageAutoSizeSupport}"
+<template data-sly-template.headlibs="${@ page, designPath, staticDesignPath, clientLibCategories, clientLibCategoriesJsHead, hasCloudconfigSupport}"
           data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html">
     <sly data-sly-test="${!wcmmode.disabled}" data-sly-call="${clientlib.all @ categories = [
         'cq.pagetypes.html5page',
@@ -23,8 +23,6 @@
         ]}"></sly>
     <sly data-sly-include="/libs/cq/cloudserviceconfigs/components/servicelibs/servicelibs.jsp"></sly>
     <sly data-sly-test="${hasCloudconfigSupport}" data-sly-resource="${'cloudconfig-header' @ resourceType='cq/cloudconfig/components/scripttags/header'}"></sly>
-    <sly data-sly-test="${hasImageAutoSizeSupport}"
-         data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.site.image.auto-size'}"></sly>
     <sly data-sly-test="${clientLibCategoriesJsHead}" data-sly-call="${clientlib.js @ categories=clientLibCategoriesJsHead, async=page.isClientlibsAsync}"></sly>
     <sly data-sly-test="${clientLibCategories}" data-sly-call="${clientlib.css @ categories=clientLibCategories}"></sly>
     <link data-sly-test="${staticDesignPath}" href="${staticDesignPath}" rel="stylesheet" type="text/css" />

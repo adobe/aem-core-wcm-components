@@ -1,7 +1,6 @@
 {
   "id": "image-cf6a0cca35",
   "lazyEnabled": true,
-  "autoSizesEnabled": false,
   "dataLayer": {
     "image-cf6a0cca35": {
       "@type": "core/wcm/components/image/v3/image"

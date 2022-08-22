@@ -15,6 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     data-sly-use.noscriptTemplate="noscript.html"
      data-sly-test="${image.src}"
      data-cmp-dmimage="${image.dmImage}"
      data-cmp-smartcroprendition="${image.smartCropRendition}"
@@ -28,15 +29,16 @@
        class="cmp-image__link"
        data-sly-attribute="${image.imageLink.htmlAttributes}"
        data-cmp-clickable="${image.data ? true : false}">
-        <noscript data-sly-unwrap="${!image.autoSizesEnabled}">
-            <img srcset="${image.srcset}" src="${image.src}"
-                 loading="${image.lazyEnabled ? 'lazy' : ''}"
-                 class="cmp-image__image"
-                 itemprop="contentUrl"
-                 width="${image.width}" height="${image.height}"
-                 sizes="${!image.autoSizesEnabled ? image.sizes : ''}"
-                 alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
-        </noscript>
+        <img src="${image.src}"
+             srcset="${image.autoSizesEnabled ? 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' : image.srcset}"
+             loading="${image.lazyEnabled ? 'lazy' : ''}"
+             class="cmp-image__image"
+             itemprop="contentUrl"
+             data-sizes="${image.autoSizesEnabled ? 'auto' : ''}"
+             data-srcset="${image.srcset}"
+             width="${image.width}" height="${image.height}"
+             sizes="${!image.autoSizesEnabled ? image.sizes : ''}"
+             alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
     </a>
     <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>
     <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">

@@ -73,25 +73,10 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @DisplayName("Test: Set image sizes attribute")
     public void testSizesAttribute() throws TimeoutException, InterruptedException, ClientException {
         createComponentPolicy(Commons.RT_IMAGE_V3.substring(Commons.RT_IMAGE_V3.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
-            add(new BasicNameValuePair("autoSizes", "false"));
-            add(new BasicNameValuePair("autoSizes@TypeHint", "Boolean"));
-            add(new BasicNameValuePair("sizes", "(min-width: 36em) 33.3vw, 100vw"));
+            add(new BasicNameValuePair("sizes", "(min-width: 36em) 33.3vw"));
+            add(new BasicNameValuePair("sizes", "100vw"));
         }});
         imageTests.testSetSizes();
-    }
-
-    @Test
-    @DisplayName("Test: image auto sizes attribute")
-    public void testAutoSizesAttribute() throws TimeoutException, InterruptedException, ClientException {
-        createComponentPolicy(Commons.RT_IMAGE_V3.substring(Commons.RT_IMAGE_V3.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
-            add(new BasicNameValuePair("autoSizes", "true"));
-            add(new BasicNameValuePair("autoSizes@TypeHint", "Boolean"));
-            add(new BasicNameValuePair("allowedRenditionWidths", "500"));
-            add(new BasicNameValuePair("allowedRenditionWidths", "800"));
-            add(new BasicNameValuePair("allowedRenditionWidths", "1200"));
-            add(new BasicNameValuePair("allowedRenditionWidths@TypeHint", "String[]"));
-        }});
-        imageTests.testAutoSizes();
     }
 
     /**

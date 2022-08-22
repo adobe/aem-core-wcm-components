@@ -63,13 +63,6 @@ public interface Image extends Component {
     String PN_DESIGN_SIZES = "sizes";
 
     /**
-     * Name of the configuration policy property that will enable auto sizing for a responsive image.
-     *
-     * @since com.adobe.cq.wcm.core.components.models 12.26.0
-     */
-    String PN_DESIGN_AUTO_SIZES = "autoSizes";
-
-    /**
      * Name of the configuration policy property that will store the image quality for an image.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
@@ -337,16 +330,6 @@ public interface Image extends Component {
     @Nullable
     default String getSizes() {
         return null;
-    }
-
-    /**
-     * Indicates if the sizes attribute should be calculated automatically client side
-     *
-     * @return true if the sizes attribute should be calculated automatically; false otherwise
-     * @since com.adobe.cq.wcm.core.components.models 12.26.0
-     */
-    default boolean isAutoSizesEnabled() {
-        return false;
     }
 
     /**
