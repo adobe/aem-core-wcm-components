@@ -6,6 +6,7 @@
   "smartCropRendition": "Medium",
   "uuid": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
   "lazyEnabled": true,
+  "sizes": "",
   "imageLink": {
     "url": "https://www.adobe.com",
     "valid": true
