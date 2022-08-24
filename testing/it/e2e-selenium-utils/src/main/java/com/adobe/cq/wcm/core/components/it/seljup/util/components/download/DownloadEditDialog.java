@@ -18,6 +18,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.download;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.codeborne.selenide.DragAndDropOptions;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -32,6 +33,6 @@ public class DownloadEditDialog extends Dialog {
     }
 
     public void uploadAssetFromSidePanel(String assetPath) {
-        $(String.format(assetInSidePanel,assetPath)).dragAndDropTo(fileUpload);
+        $(String.format(assetInSidePanel,assetPath)).dragAndDropTo(fileUpload, DragAndDropOptions.usingActions());
     }
 }
