@@ -603,6 +603,21 @@ class AdaptiveImageServletTest extends AbstractImageTest {
     }
 
     @Test
+    void testImageWithMissingLastModifiedSuffixAndQueryString() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE19_PATH,
+            "coreimg.800", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("");
+        request.setQueryString("contentPolicyDelegatePath=%2Fcontent%2Ffoobar");
+        servlet.doGet(request, response);
+        Assertions.assertEquals(302, response.getStatus(), "Expected a 302 response code.");
+        Assertions.assertEquals(CONTEXT_PATH + "/content/test/jcr%3acontent/root/image19.coreimg.800.png/1490005239000.png?contentPolicyDelegatePath=%2Fcontent%2Ffoobar", response.getHeader("Location"),
+            "Expected redirect location with correct last modified suffix");
+    }
+
+    @Test
     void testFileReferencePriority() throws Exception {
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE20_PATH,
                 "img", "png");
