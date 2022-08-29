@@ -19,11 +19,14 @@ import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -58,11 +61,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v3/image";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
+    private static final String URI_WIDTH_PLACEHOLDER_ENCODED = "%7B.width%7D";
+    private static final String URI_WIDTH_PLACEHOLDER = "{.width}";
 
     private boolean imageLinkHidden = false;
 
     private String srcSet = StringUtils.EMPTY;
     private Map<String, String> srcSetWithMimeType = Collections.EMPTY_MAP;
+    private String sizes;
 
     @PostConstruct
     protected void initModel() {
@@ -70,6 +76,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
             imageLinkHidden = properties.get(PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
+            sizes = String.join((", "), currentStyle.get(PN_DESIGN_SIZES, new String[0]));
+            disableLazyLoading = properties.get(PN_DESIGN_LAZY_LOADING_ENABLED, currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false));
         }
     }
 
@@ -111,18 +119,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         String srcUritemplate = getSrcUriTemplate();
         String[] srcsetArray = new String[widthsArray.length];
         if (widthsArray.length > 0 && srcUritemplate != null) {
-            String srcUriTemplateDecoded = "";
-            try {
-                srcUriTemplateDecoded = URLDecoder.decode(srcUritemplate, StandardCharsets.UTF_8.name());
-            } catch (UnsupportedEncodingException e) {
-                LOGGER.error("Character Decoding failed for " + resource.getPath());
-            }
-            if (srcUriTemplateDecoded.contains("{.width}")) {
+            srcUritemplate = StringUtils.replace(srcUriTemplate, URI_WIDTH_PLACEHOLDER_ENCODED, URI_WIDTH_PLACEHOLDER);
+            if (srcUritemplate.contains(URI_WIDTH_PLACEHOLDER)) {
                 for (int i = 0; i < widthsArray.length; i++) {
-                    if (srcUriTemplateDecoded.contains("={.width}")) {
-                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                    if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
+                        srcsetArray[i] = srcUritemplate.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                     } else {
-                        srcsetArray[i] = srcUriTemplateDecoded.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                        srcsetArray[i] = srcUritemplate.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                     }
                 }
                 srcSet = StringUtils.join(srcsetArray, ',');
@@ -130,6 +133,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             }
         }
         return null;
+    }
+
+    @Override
+    @Nullable
+    public String getSizes() {
+        return sizes;
     }
 
     @Nullable
@@ -189,6 +198,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     protected void initResource() {
         resource = getWrappedImageResourceWithInheritance(resource, linkManager, currentStyle, currentPage);
+    }
+
+    @Override
+    public boolean isLazyEnabled() {
+        return !disableLazyLoading;
     }
 
     private Dimension getOriginalDimension() {

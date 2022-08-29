@@ -10,6 +10,7 @@
         "url"  : "/core/content/test-image.html"
     },
     "lazyEnabled"   : true,
+    "sizes": "",
     ":type"         : "core/wcm/components/image/v3/image",
     "dataLayer"     : {
         "image-a2c6a064d4": {
