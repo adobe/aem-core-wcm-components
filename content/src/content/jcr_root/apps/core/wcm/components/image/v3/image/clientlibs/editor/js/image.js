@@ -21,7 +21,6 @@
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var isDecorative;
     var altTuple;
-    var sizesTuple;
     var captionTuple;
     var $altGroup;
     var $altTextField;
@@ -66,90 +65,86 @@
         $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
-            if (dialogContent.querySelector("[data-cmp-image-v3-dialog-policy-hook]")) {
-                handlePolicyDialog(dialogContent);
+            isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
+
+            if ($(pageAltCheckboxSelector).length === 1) {
+                // when the tuple is used in the page dialog to define the featured image
+                altTuple = new CheckboxTextfieldTuple(dialogContent, pageAltCheckboxSelector, pageAltInputSelector);
             } else {
-                isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
-
-                if ($(pageAltCheckboxSelector).length === 1) {
-                    // when the tuple is used in the page dialog to define the featured image
-                    altTuple = new CheckboxTextfieldTuple(dialogContent, pageAltCheckboxSelector, pageAltInputSelector);
-                } else {
-                    // when the tuple is used in the image dialog
-                    altTuple = new CheckboxTextfieldTuple(dialogContent, altCheckboxSelector, altInputSelector);
-                }
-
-                $altGroup = $dialogContent.find(".cmp-image__editor-alt");
-                $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
-                $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
-                $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
-                captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
-                $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
-                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
-                $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
-                $dynamicMediaGroup.hide();
-                areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
-                if (areDMFeaturesEnabled) {
-                    smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
-                }
-
-                imageFromPageImage = dialogContent.querySelector("coral-checkbox[name='./imageFromPageImage']");
-
-                altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, "coral-checkbox[name='./altValueFromPageImage']", "input[name='./alt']");
-                $pageImageThumbnail = $dialogContent.find(pageImageThumbnailSelector);
-                altTextFromPage = $dialogContent.find(pageImageThumbnailImageSelector).attr("alt");
-
-                if ($cqFileUpload.length) {
-                    imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
-                    retrieveInstanceInfo(imagePath);
-                    $cqFileUpload.on("assetselected", function(e) {
-                        fileReference = e.path;
-                        retrieveDAMInfo(fileReference).then(
-                            function() {
-                                if (isDecorative) {
-                                    altTuple.hideCheckbox(isDecorative.checked);
-                                }
-                                captionTuple.hideCheckbox(false);
-                                altTuple.reinitCheckbox();
-                                captionTuple.reinitCheckbox();
-                                toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
-                                if (areDMFeaturesEnabled) {
-                                    selectPresetType($(presetTypeSelector), "imagePreset");
-                                    resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
-                                }
-                            }
-                        );
-                    });
-                    $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
-                        altTuple.reset();
-                        captionTuple.reset();
-                    });
-                    $cqFileUpload.on("coral-fileupload:fileadded", function() {
-                        if (isDecorative) {
-                            altTuple.hideTextfield(isDecorative.checked);
-                        }
-                        altTuple.hideCheckbox(true);
-                        captionTuple.hideTextfield(false);
-                        captionTuple.hideCheckbox(true);
-                        fileReference = undefined;
-                    });
-                }
-                if ($cqFileUploadEdit) {
-                    fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
-                    if (fileReference === "") {
-                        fileReference = undefined;
-                    }
-                    if (fileReference) {
-                        retrieveDAMInfo(fileReference);
-                    } else {
-                        altTuple.hideCheckbox(true);
-                        captionTuple.hideCheckbox(true);
-                    }
-                }
-                toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
-                togglePageImageInherited(imageFromPageImage, isDecorative);
-                updateImageThumbnail();
+                // when the tuple is used in the image dialog
+                altTuple = new CheckboxTextfieldTuple(dialogContent, altCheckboxSelector, altInputSelector);
             }
+
+            $altGroup = $dialogContent.find(".cmp-image__editor-alt");
+            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
+            $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
+            $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
+            captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
+            $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
+            $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
+            $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
+            $dynamicMediaGroup.hide();
+            areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
+            if (areDMFeaturesEnabled) {
+                smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
+            }
+
+            imageFromPageImage = dialogContent.querySelector("coral-checkbox[name='./imageFromPageImage']");
+
+            altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, "coral-checkbox[name='./altValueFromPageImage']", "input[name='./alt']");
+            $pageImageThumbnail = $dialogContent.find(pageImageThumbnailSelector);
+            altTextFromPage = $dialogContent.find(pageImageThumbnailImageSelector).attr("alt");
+
+            if ($cqFileUpload.length) {
+                imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
+                retrieveInstanceInfo(imagePath);
+                $cqFileUpload.on("assetselected", function(e) {
+                    fileReference = e.path;
+                    retrieveDAMInfo(fileReference).then(
+                        function() {
+                            if (isDecorative) {
+                                altTuple.hideCheckbox(isDecorative.checked);
+                            }
+                            captionTuple.hideCheckbox(false);
+                            altTuple.reinitCheckbox();
+                            captionTuple.reinitCheckbox();
+                            toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
+                            if (areDMFeaturesEnabled) {
+                                selectPresetType($(presetTypeSelector), "imagePreset");
+                                resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
+                            }
+                        }
+                    );
+                });
+                $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
+                    altTuple.reset();
+                    captionTuple.reset();
+                });
+                $cqFileUpload.on("coral-fileupload:fileadded", function() {
+                    if (isDecorative) {
+                        altTuple.hideTextfield(isDecorative.checked);
+                    }
+                    altTuple.hideCheckbox(true);
+                    captionTuple.hideTextfield(false);
+                    captionTuple.hideCheckbox(true);
+                    fileReference = undefined;
+                });
+            }
+            if ($cqFileUploadEdit) {
+                fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
+                if (fileReference === "") {
+                    fileReference = undefined;
+                }
+                if (fileReference) {
+                    retrieveDAMInfo(fileReference);
+                } else {
+                    altTuple.hideCheckbox(true);
+                    captionTuple.hideCheckbox(true);
+                }
+            }
+            toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
+            togglePageImageInherited(imageFromPageImage, isDecorative);
+            updateImageThumbnail();
         }
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
@@ -218,10 +213,6 @@
         }
     });
 
-    function handlePolicyDialog(dialogContent) {
-        sizesTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./autoSizes"]', 'input[name="./sizes"]');
-        sizesTuple.reinitCheckbox();
-    }
     function updateImageThumbnail() {
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
