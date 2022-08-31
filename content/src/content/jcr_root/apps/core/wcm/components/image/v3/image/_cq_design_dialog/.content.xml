@@ -20,6 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Image"
     sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.image.v3.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_image_v3">
     <content
         jcr:primaryType="nt:unstructured"
@@ -121,20 +122,45 @@
                                         defaultValue="{Long}1280"
                                         min="{Long}1"
                                         max="{Long}3840"/>
-                                    <widths
-                                        granite:class="core-image-widths"
+                                    <heading
+                                        granite:class="coral-Heading coral-Heading--4"
                                         jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                        fieldDescription="Define a list of alternative image widths (in pixels). The most appropriate image will be loaded by the component. Note that this setting has no effect on SVG images."
-                                        fieldLabel="Widths">
-                                        <field
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                            defaultValue="{Long}1280"
-                                            min="{Long}0"
-                                            name="./allowedRenditionWidths"
-                                            required="{Boolean}true"/>
-                                    </widths>
+                                        sling:resourceType="granite/ui/components/coral/foundation/heading"
+                                        level="{Long}4"
+                                        text="Responsive Image Settings"/>
+                                    <responsiveGroup
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/well"
+                                        granite:class="cmp-image__editor-sizes">
+                                        <items jcr:primaryType="nt:unstructured">
+
+                                            <widths
+                                                granite:class="core-image-widths"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                fieldDescription="Define a list of alternative image widths (in pixels). The most appropriate image will be loaded by the component. Note that this setting has no effect on SVG images."
+                                                fieldLabel="Widths">
+                                                <field
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                                    defaultValue="{Long}1280"
+                                                    min="{Long}0"
+                                                    name="./allowedRenditionWidths"
+                                                    required="{Boolean}true"/>
+                                            </widths>
+                                            <sizes
+                                                granite:class="core-image-widths"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                fieldDescription="Define a list of media conditions which indicates what image width should be use"
+                                                fieldLabel="Sizes">
+                                                <field
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                    name="./sizes"/>
+                                            </sizes>
+                                        </items>
+                                    </responsiveGroup>
                                     <jpegQuality
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
@@ -147,6 +173,9 @@
                                         max="{Long}100"
                                         defaultValue="{Long}82" />
                                 </items>
+                                <granite:data
+                                    jcr:primaryType="nt:unstructured"
+                                    cmp-image-v3-dialog-policy-hook="imageProperties"/>
                             </content>
                         </items>
                     </properties>
