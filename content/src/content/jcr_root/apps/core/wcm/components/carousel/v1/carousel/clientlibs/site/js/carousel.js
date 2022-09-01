@@ -160,7 +160,7 @@
         function scrollToDeepLinkIdInCarousel() {
             if (containerUtils) {
                 var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item", "item");
-                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                if (deepLinkItemIdx > -1) {
                     var deepLinkItem = that._elements["item"][deepLinkItemIdx];
                     if (deepLinkItem && that._elements["item"][that._active].id !== deepLinkItem.id) {
                         navigateAndFocusIndicator(deepLinkItemIdx, true);

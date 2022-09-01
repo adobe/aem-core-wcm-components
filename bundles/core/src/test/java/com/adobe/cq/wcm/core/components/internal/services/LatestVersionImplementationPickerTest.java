@@ -71,4 +71,16 @@ class LatestVersionImplementationPickerTest {
         Class<?>[] implementations = new Class<?>[] { String.class, Integer.class };
         assertNull(underTest.pick(Comparable.class, implementations, SAMPLE_ADAPTABLE));
     }
+
+    @Test
+    void testOtherAdobeModelsGetFiltered() {
+        Class<?>[] implementations = new Class<?>[] { com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl.class,
+            com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl.class,
+                LatestVersionImplementationPickerTest.DummyPageImpl.class };
+        assertEquals(com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl.class, underTest.pick(SAMPLE_ADAPTER, implementations, SAMPLE_ADAPTABLE));
+    }
+
+    private static class DummyPageImpl implements Page {
+
+    }
 }

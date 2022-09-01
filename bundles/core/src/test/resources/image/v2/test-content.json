@@ -609,6 +609,52 @@
             }
           }
         },
+        "image43"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+          "sling:resourceType": "core/wcm/components/image/v2/image",
+          "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.svg",
+          "alt"               : "Adobe Logo",
+          "jcr:title"         : "DM features on, DM image",
+          "linkURL"           : "https://www.adobe.com",
+          "fileName"          : "Adobe_Systems_logo_and_wordmark.svg",
+          "file"              : {
+              "jcr:primaryType": "nt:file",
+              "jcr:createdBy"  : "admin",
+              "jcr:content"    : {
+                  "jcr:primaryType"   : "nt:resource",
+                  "jcr:lastModifiedBy": "admin",
+                  "jcr:mimeType"      : "image/svg+xml",
+                  ":jcr:data"         : 450,
+                  "jcr:uuid"          : "efd67232-7672-49ad-b155-0063daee3d22"
+              }
+          }
+      },
+        "image44"            : {
+              "jcr:primaryType"   : "nt:unstructured",
+              "jcr:createdBy"     : "admin",
+              "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+              "sling:resourceType": "core/wcm/components/image/v2/image",
+              "cq:policy"         : "coretest/components/content/image/policy_1602844411172",
+              "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_DM.jpg",
+              "alt"               : "Adobe Logo",
+              "jcr:title"         : "DM features on, DM image",
+              "linkURL"           : "https://www.adobe.com",
+              "fileName"          : "Adobe_Systems_logo_and_wordmark.jpg",
+              "file"              : {
+                  "jcr:primaryType": "nt:file",
+                  "jcr:createdBy"  : "admin",
+                  "jcr:content"    : {
+                      "jcr:primaryType"   : "nt:resource",
+                      "jcr:lastModifiedBy": "admin",
+                      "jcr:mimeType"      : "image/svg+xml",
+                      ":jcr:data"         : 450,
+                      "jcr:uuid"          : "efd67232-7672-49ad-b155-0063daee3d22"
+                  }
+              }
+          },
         "container"             : {
           "jcr:primaryType"   : "nt:unstructured",
           "sling:resourceType": "wcm/foundation/components/responsivegrid",

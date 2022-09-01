@@ -115,7 +115,7 @@
         function scrollToDeepLinkIdInTabs() {
             if (containerUtils) {
                 var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "tab", "tabpanel");
-                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                if (deepLinkItemIdx > -1) {
                     var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
                     if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
                         navigateAndFocusTab(deepLinkItemIdx, true);

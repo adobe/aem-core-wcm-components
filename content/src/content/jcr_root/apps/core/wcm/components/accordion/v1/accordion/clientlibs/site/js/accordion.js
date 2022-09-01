@@ -122,10 +122,6 @@
 
                 if (that._properties.singleExpansion) {
                     var expandedItems = getExpandedItems();
-                    // no expanded item annotated, force the first item to display.
-                    if (expandedItems.length === 0) {
-                        toggle(0);
-                    }
                     // multiple expanded items annotated, display the last item open.
                     if (expandedItems.length > 1) {
                         toggle(expandedItems.length - 1);
@@ -167,7 +163,7 @@
         function scrollToDeepLinkIdInAccordion() {
             if (containerUtils) {
                 var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item", "item");
-                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                if (deepLinkItemIdx > -1) {
                     var deepLinkItem = that._elements["item"][deepLinkItemIdx];
                     if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
                         // if single expansion: close all accordion items

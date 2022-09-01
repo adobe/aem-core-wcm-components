@@ -8,6 +8,7 @@
     "url": "/core/content/test_page4.html"
   },
   "lazyEnabled": true,
+  "sizes": "",
   "dataLayer": {
     "image-cffba324b8": {
       "@type": "core/wcm/components/image/v3/image",
