@@ -367,7 +367,8 @@ public class ImageTests {
         Commons.closeSidePanel();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(image.isImagePresentWithSizes(testPage, "(min-width: 36em) 33.3vw, 100vw"), "Image with native lazy loading enabled should be present");
+        assertTrue(image.isImagePresentWithSizes(testPage, "(min-width: 36em) 33.3vw, 100vw"), "Image with sizes attribute should be " +
+                "present");
     }
 
     public void testPageImageWithEmptyAltTextFromPageImage(boolean aem65) throws InterruptedException, ClientException {

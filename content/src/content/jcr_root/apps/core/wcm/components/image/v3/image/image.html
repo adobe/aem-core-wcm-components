@@ -15,7 +15,6 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-     data-sly-use.noscriptTemplate="noscript.html"
      data-sly-test="${image.src}"
      data-cmp-dmimage="${image.dmImage}"
      data-cmp-smartcroprendition="${image.smartCropRendition}"
@@ -34,8 +33,6 @@
              loading="${image.lazyEnabled ? 'lazy' : ''}"
              class="cmp-image__image"
              itemprop="contentUrl"
-             data-sizes="${image.autoSizesEnabled ? 'auto' : ''}"
-             data-srcset="${image.srcset}"
              width="${image.width}" height="${image.height}"
              sizes="${image.sizes}"
              alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
