@@ -111,6 +111,15 @@
                                                 text="Don’t provide an alternative text"
                                                 uncheckedValue="false"
                                                 value="{Boolean}true"/>
+                                            <disableLazyLoading
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="${not empty cqDesign.disableLazyLoading ? cqDesign.disableLazyLoading : false}"
+                                                fieldDescription="When checked, it will preload all images, without using lazy loading."
+                                                name="./disableLazyLoading"
+                                                text="Disable lazy loading"
+                                                uncheckedValue="false"
+                                                value="{Boolean}true"/>
                                         </items>
                                     </column>
                                 </items>

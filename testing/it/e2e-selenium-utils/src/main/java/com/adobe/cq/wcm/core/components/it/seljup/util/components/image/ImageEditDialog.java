@@ -39,6 +39,7 @@ public class ImageEditDialog extends Dialog {
     private static String title = "input[name='./jcr:title']";
     private static String popUpTitle = "[name='./displayPopupTitle']";
     public static String decorative = "[name='./isDecorative']";
+    public static String disableLazyLoading = "[name='./disableLazyLoading']";
     public static String assetFilter = "[name='assetfilter_image_path']";
     private static SelenideElement assetTab = $(".cq-dialog coral-tab[data-foundation-tracking-event*='asset']");
     private static SelenideElement metadataTab = $("coral-tab[data-foundation-tracking-event*='metadata']");
@@ -81,6 +82,11 @@ public class ImageEditDialog extends Dialog {
 
     public void checkDecorative() {
         CoralCheckbox checkbox = new CoralCheckbox(decorative);
+        checkbox.click();
+    }
+
+    public void checkDisableLazyLoading() {
+        CoralCheckbox checkbox = new CoralCheckbox(disableLazyLoading);
         checkbox.click();
     }
 

@@ -122,10 +122,6 @@
 
                 if (that._properties.singleExpansion) {
                     var expandedItems = getExpandedItems();
-                    // no expanded item annotated, force the first item to display.
-                    if (expandedItems.length === 0) {
-                        toggle(0);
-                    }
                     // multiple expanded items annotated, display the last item open.
                     if (expandedItems.length > 1) {
                         toggle(expandedItems.length - 1);
