@@ -197,6 +197,16 @@
             });
 
             that._elements.image.addEventListener("cmp-image-redraw", that.update);
+
+            var interSectionObserver = new IntersectionObserver(function(entries, interSectionObserver) {
+                entries.forEach(function(entry) {
+                    if (entry.intersectionRatio > 0 ) {
+                        that.update();
+                    }
+                })
+            });
+            interSectionObserver.observe(that._elements.self);
+
             that.update();
         }
 
