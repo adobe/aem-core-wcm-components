@@ -9,5 +9,13 @@
             "@type": "core/wcm/components/title/v2/title"
         }
     },
+    "link": {
+        "url": "https://www.adobe.com",
+        "valid": true,
+        "attributes": {
+            "aria-label":"World",
+            "title":"World title"
+        }
+    },
     ":type": "core/wcm/components/title/v2/title"
 }

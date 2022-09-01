@@ -37,11 +37,16 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
  */
 public abstract class PanelContainerImpl extends AbstractContainerImpl implements Container {
 
+    /**
+     * The resource type.
+     */
+    public static final String RESOURCE_TYPE = "core/wcm/components/panelcontainer/v1/panelcontainer";
+
     @Override
     @NotNull
     protected List<PanelContainerItemImpl> readItems() {
         return getChildren().stream()
-            .map(res -> new PanelContainerItemImpl(res, getId(), component, getCurrentPage()))
+            .map(res -> new PanelContainerItemImpl(linkManager, res, getId(), component, getCurrentPage()))
             .collect(Collectors.toList());
     }
 

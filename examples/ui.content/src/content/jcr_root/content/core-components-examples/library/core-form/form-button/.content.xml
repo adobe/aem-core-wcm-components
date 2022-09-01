@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Form Button"
+        jcr:description="Display a form button"
+        sling:resourceType="core-components-examples/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid
+                cq:styleIds="[1545309110033]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <text
+                    cq:styleIds="[1644862132301]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;h1>Form Button&lt;sub>v2&lt;/sub>&lt;/h1>"
+                    textIsRich="true"/>
+                <text_1408574198
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Form Buttons allows a user to create a Button/ Submit Button to send collected Data to a chosen adress.&amp;nbsp;&lt;/p>"
+                    textIsRich="true"/>
+                <teaser
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Technical Documentation"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/tree/master/content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <teaser_556024830
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Using Core Components"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                    linkURL="https://docs.adobe.com/content/help/en/experience-manager-core-components/using/components/forms/form-button.html"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <title_865328580
+                    cq:styleIds="[1544759664489]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Examples"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h2"/>
+                <title_1975440126
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Form Button"
+                    sling:resourceType="core-components-examples/components/title"/>
+                <text_1068966881
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Core Form Container Form Options and a Form Button as child elements.&amp;nbsp;&lt;/p>"
+                    textIsRich="true"/>
+                <demo_881795653
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <container
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/form/container"
+                            action="/content/usergenerated/core-components-examples/library/form/cq-gen1576159867766/"
+                            actionType="foundation/components/form/actions/store">
+                            <cq:responsive jcr:primaryType="nt:unstructured"/>
+                            <options
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="How satisfied were you with our service?"
+                                sling:resourceType="core-components-examples/components/form/options"
+                                name="satisfaction"
+                                source="local"
+                                type="radio">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <item0
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="Super Satisfied"
+                                        value="ss"/>
+                                    <item1
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="Satisfied"
+                                        value="s"/>
+                                    <item2
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="Ok"
+                                        value="o"/>
+                                    <item3
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="Not Completely Satisfied"
+                                        value="ncs"/>
+                                    <item4
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="Not Satisfied"
+                                        value="ns"/>
+                                </items>
+                            </options>
+                            <button
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Send"
+                                sling:resourceType="core-components-examples/components/form/button"
+                                name="button"
+                                type="button"/>
+                        </container>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_881795653>
+                <title
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Form Submit Button"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h1"/>
+                <text_1910564414
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Core Form Container with two input fields who will be submited when you click on the Submit Button. Where it will be submitted is defined in the Form Container itself.&lt;/p>"
+                    textIsRich="true"/>
+                <demo
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <container
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/form/container"
+                            action="/content/usergenerated/core-components-examples/library/form/cq-gen1576157004947/"
+                            actionType="foundation/components/form/actions/store">
+                            <cq:responsive jcr:primaryType="nt:unstructured"/>
+                            <text
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Name"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                helpMessage="Please enter your name"
+                                name="firstName"
+                                rows="2"
+                                type="text"
+                                usePlaceholder="true"/>
+                            <text_141321348
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="E-Mail"
+                                sling:resourceType="core-components-examples/components/form/text"
+                                helpMessage="Please enter your E-Mail"
+                                name="email"
+                                required="true"
+                                rows="1"
+                                type="email"
+                                usePlaceholder="true"/>
+                            <button
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/form/button"
+                                name="submit-demo-form-1"
+                                type="submit"/>
+                        </container>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo>
+            </responsivegrid>
+        </root>
+    </jcr:content>
+</jcr:root>

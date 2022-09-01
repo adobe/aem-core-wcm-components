@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <title>TOC Include Ignore Behavior Test</title> 
+ </head> 
+ <body> <!-- TOCs --> 
+  <div class="cmp-toc__content" id="sample-toc-id">
+   <ol>
+    <li><a href="#page-title">Page title</a>
+     <ol>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#main-teaser">Main teaser</a>
+       <ol>
+        <li><a href="#main-teaser-subtitle">Main teaser subtitle</a></li>
+       </ol></li>
+      <li><a href="#sidebar-title">Sidebar title</a></li>
+      <li><a href="#sidebar-teaser">Sidebar teaser</a>
+       <ol>
+        <li><a href="#sidebar-teaser-subtitle">Sidebar teaser subtitle</a></li>
+       </ol></li>
+     </ol></li>
+   </ol>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#page-title">Page title</a>
+     <ul>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#main-teaser">Main teaser</a>
+       <ul>
+        <li><a href="#main-teaser-subtitle">Main teaser subtitle</a></li>
+       </ul></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#page-title">Page title</a>
+     <ul>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#sidebar-title">Sidebar title</a></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#page-title">Page title</a>
+     <ul>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#main-teaser">Main teaser</a></li>
+      <li><a href="#sidebar-title">Sidebar title</a></li>
+      <li><a href="#sidebar-teaser">Sidebar teaser</a></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#page-title">Page title</a>
+     <ul>
+      <li><a href="#main-title">Main title</a></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ul>
+    <li><a href="#page-title">Page title</a>
+     <ul>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#main-teaser">Main teaser</a></li>
+     </ul></li>
+   </ul>
+  </div> 
+  <div class="cmp-toc__content">
+   <ol>
+    <li><a href="#page-title">Page title</a>
+     <ol>
+      <li><a href="#main-title">Main title</a></li>
+      <li><a href="#main-teaser">Main teaser</a></li>
+      <li><a href="#sidebar-title">Sidebar title</a></li>
+     </ol></li>
+   </ol>
+  </div> <!-- Page Content --> 
+  <h1 class="cmp-title" id="page-title">Page title</h1> 
+  <div class="main"> 
+   <div class="cmp-title"> 
+    <h2 id="main-title">Main title</h2> 
+   </div> 
+   <div class="cmp-teaser"> 
+    <h2 class="cmp-teaser__title" id="main-teaser">Main teaser</h2> 
+    <h3 class="cmp-teaser__subtitle" id="main-teaser-subtitle">Main teaser subtitle</h3> 
+   </div> 
+  </div> 
+  <div class="sidebar"> 
+   <div class="cmp-title"> 
+    <h2 id="sidebar-title">Sidebar title</h2> 
+   </div> 
+   <div class="cmp-teaser"> 
+    <h2 class="cmp-teaser__title" id="sidebar-teaser">Sidebar teaser</h2> 
+    <h3 class="cmp-teaser__subtitle" id="sidebar-teaser-subtitle">Sidebar teaser subtitle</h3> 
+   </div> 
+  </div>  
+ </body>
+</html>

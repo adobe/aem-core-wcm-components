@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:template="/conf/core-components/settings/wcm/templates/simple-template"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Deep link test page with Accordion v1"
+        sling:resourceType="core/wcm/components/page/v3/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="core/wcm/components/container/v1/container"
+            layout="simple">
+            <container
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core/wcm/components/container/v1/container">
+                <text
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;a id=&quot;link-1&quot; href=&quot;#accordion-24628d01df-item-5209084c68&quot;>link to accordion 1) item 3&lt;/a>&lt;br>&#xa;&lt;a id=&quot;link-1a&quot; href=&quot;#accordion-24628d01df-item-5c22487585&quot;>link to accordion 1) item 1&lt;/a>&lt;br>&#xa;&lt;a id=&quot;link-2&quot; href=&quot;#accordion-90566600bc-item-42c74c71b7&quot;>link to nested accordion 2) item 2.2&lt;/a>&lt;br>&lt;a id=&quot;link-3&quot; href=&quot;#text-3&quot;>link to ID#text-3 in nested accordion 2) item 3.3&lt;/a>"
+                    textIsRich="true"/>
+                <text_1
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;p>1) Simple accordion with single expansion enabled&lt;/p>"
+                    textIsRich="true"/>
+                <accordion-single-expansion
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/accordion/v1/accordion"
+                    expandedItems="[item_1]"
+                    singleExpansion="{Boolean}true">
+                    <item_1
+                        cq:panelTitle="Item 1"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Item 1"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        id="text-1a"
+                        text="&lt;p>content 1&lt;/p>"
+                        textIsRich="true">
+                    </item_1>
+                    <item_2
+                        cq:panelTitle="Item 2"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Item 2"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;p>content 2&lt;/p>"
+                        textIsRich="true"/>
+                    <item_3
+                        cq:panelTitle="Item 3"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Item 3"
+                        sling:resourceType="core/wcm/components/container/v1/container">
+                        <text
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/text/v2/text"
+                            id="text-1"
+                            text="&lt;p>content 3&lt;/p>"
+                            textIsRich="true"/>
+                    </item_3>
+                </accordion-single-expansion>
+                <text_2
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;p>2) Accordion with nested accordions&lt;/p>"
+                    textIsRich="true"/>
+                <accordion-nested
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/accordion/v1/accordion">
+                    <item_1
+                        cq:panelTitle="Item 1"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Item 1"
+                        sling:resourceType="wcm/foundation/components/responsivegrid">
+                        <accordion
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/accordion/v1/accordion"
+                            headingElement="h4">
+                            <item_1
+                                cq:panelTitle="Item 1.1"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 1.1"
+                                sling:resourceType="core/wcm/components/text/v2/text"
+                                text="&lt;p>content 1.1&lt;/p>"
+                                textIsRich="true"/>
+                            <item_2
+                                cq:panelTitle="Item 1.2"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 1.2"
+                                sling:resourceType="core/wcm/components/text/v2/text"
+                                text="&lt;p>content 1.2&lt;/p>"
+                                textIsRich="true"/>
+                            <item_3
+                                cq:panelTitle="Item 1.3"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 1.3"
+                                sling:resourceType="core/wcm/components/text/v2/text"
+                                text="&lt;p>content 1.3&lt;/p>"
+                                textIsRich="true"/>
+                        </accordion>
+                    </item_1>
+                    <item_2
+                        cq:panelTitle="Item 2"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Item 2"
+                        sling:resourceType="wcm/foundation/components/responsivegrid">
+                        <accordion
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/accordion/v1/accordion"
+                            headingElement="h4">
+                            <item_1
+                                cq:panelTitle="Item 2.1"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 2.1"
+                                sling:resourceType="core/wcm/components/text/v2/text"
+                                text="&lt;p>content 2.1&lt;/p>"
+                                textIsRich="true"/>
+                            <item_2
+                                cq:panelTitle="Item 2.2"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 2.2"
+                                sling:resourceType="core/wcm/components/container/v1/container">
+                                <text
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core/wcm/components/text/v2/text"
+                                    id="text-2"
+                                    text="&lt;p>content 2.2&lt;/p>"
+                                    textIsRich="true"/>
+                            </item_2>
+                            <item_3
+                                cq:panelTitle="Item 2.3"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 2.3"
+                                sling:resourceType="core/wcm/components/text/v2/text"
+                                text="&lt;p>content 2.3&lt;/p>"
+                                textIsRich="true"/>
+                        </accordion>
+                    </item_2>
+                    <item_3
+                        cq:panelTitle="Item 3"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Item 3"
+                        sling:resourceType="wcm/foundation/components/responsivegrid">
+                        <accordion
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/accordion/v1/accordion"
+                            headingElement="h4">
+                            <item_1
+                                cq:panelTitle="Item 3.1"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 3.1"
+                                sling:resourceType="core/wcm/components/text/v2/text"
+                                text="&lt;p>content 3.1&lt;/p>"
+                                textIsRich="true"/>
+                            <item_2
+                                cq:panelTitle="Item 3.2"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 3.2"
+                                sling:resourceType="core/wcm/components/text/v2/text"
+                                text="&lt;p>content 3.2&lt;/p>"
+                                textIsRich="true"/>
+                            <item_3
+                                cq:panelTitle="Item 3.3"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Item 3.3"
+                                sling:resourceType="core/wcm/components/container/v1/container">
+                                <text
+                                    jcr:primaryType="nt:unstructured"
+                                    id="text-3"
+                                    sling:resourceType="core/wcm/components/text/v2/text"
+                                    text="&lt;p>content 3.3&lt;/p>"
+                                    textIsRich="true"/>
+                            </item_3>
+                        </accordion>
+                    </item_3>
+                </accordion-nested>
+                <spacing
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>&lt;br>"
+                    textIsRich="true"/>
+            </container>
+        </root>
+    </jcr:content>
+</jcr:root>

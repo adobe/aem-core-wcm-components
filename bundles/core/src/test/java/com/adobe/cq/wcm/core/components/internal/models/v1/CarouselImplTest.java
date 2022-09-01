@@ -74,7 +74,9 @@ class CarouselImplTest {
                 { "item_2", "Teaser 2", "cq:Component/item",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2" },
                 { "item_3", "Carousel Panel 3", "cq:Component/item",
-                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" }, };
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" },
+                { "item_4", "Carousel Panel 4", "cq:Component/item",
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_4" }, };
         verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }
@@ -85,6 +87,14 @@ class CarouselImplTest {
         assertTrue(carousel.getAutoplay());
         assertEquals(Long.valueOf(7000), carousel.getDelay());
         assertTrue(carousel.getAutopauseDisabled());
+    }
+
+    @Test
+    void testControlsPrepended() {
+        context.contentPolicyMapping(CarouselImpl.RESOURCE_TYPE, "controlsPrepended", true);
+        Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
+        assertTrue(carousel.isControlsPrepended());
+        Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1a"));
     }
 
     private Carousel getCarouselUnderTest(@NotNull final String resourcePath) {

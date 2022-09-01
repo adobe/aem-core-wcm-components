@@ -13,14 +13,14 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* global jQuery, Coral */
-(function($) {
+(function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-image__editor";
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var isDecorative;
     var altTuple;
+    var $altTextField;
     var captionTuple;
     var $altGroup;
     var $linkURLGroup;
@@ -30,9 +30,14 @@
     var $dynamicMediaGroup;
     var areDMFeaturesEnabled;
     var fileReference;
+    var altInputSelector = 'input[name="./alt"]';
+    var altInputAlertIconSelector = "input[name='./alt'] + coral-icon[icon='alert']";
+    var altCheckboxSelector = 'coral-checkbox[name="./altValueFromDAM"]';
     var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
     var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
     var smartCropRenditionDropDownSelector = ".cmp-image__editor-dynamicmedia-smartcroprendition";
+    var metaDataTabSelector = "coral-tab[data-foundation-tracking-event*='metadata']";
+    var metaDataTabAlertIconSelector = "coral-tab[data-foundation-tracking-event*='metadata'] coral-icon[icon='alert']";
     var imagePropertiesRequest;
     var imagePath;
     var smartCropRenditionFromJcr;
@@ -44,8 +49,9 @@
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
             isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
-            altTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
+            altTuple = new CheckboxTextfieldTuple(dialogContent, altCheckboxSelector, altInputSelector);
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
+            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
@@ -58,7 +64,7 @@
                 smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
             }
 
-            if ($cqFileUpload) {
+            if ($cqFileUpload.length && $cqFileUpload.data("cqFileuploadTemporaryfilepath")) {
                 imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
                 retrieveInstanceInfo(imagePath);
                 $cqFileUpload.on("assetselected", function(e) {
@@ -110,14 +116,28 @@
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
             submittable: ".cmp-image__editor-alt-text",
-            candidate: ".cmp-image__editor-alt-text:not(:hidden)",
+            candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
+
+        improveAltTextValidation();
     });
 
     $(window).on("focus", function() {
         if (fileReference) {
             retrieveDAMInfo(fileReference);
+        }
+    });
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: altInputSelector,
+        validate: function() {
+            var seededValue = $(altInputSelector).attr("data-seeded-value");
+            var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
+            if (isAltCheckboxChecked && !seededValue) {
+                return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
+            }
         }
     });
 
@@ -157,6 +177,9 @@
             }
             if ($linkURLField.length) {
                 $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
+            }
+            if ($altTextField.length) {
+                $altTextField.adaptTo("foundation-field").setRequired(!checkbox.checked);
             }
             altTuple.hideTextfield(checkbox.checked);
             if (fileReference) {
@@ -342,4 +365,69 @@
         }
     }
 
-})(jQuery);
+    /**
+     * Improve error validation for alternative text inherited from asset's description
+     */
+    function improveAltTextValidation() {
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === "attributes") {
+                    var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+                    var alertIcon = $(altInputAlertIconSelector);
+                    var metaDataTab = $(metaDataTabSelector);
+                    var metaDataTabAlertIcon = $(metaDataTabAlertIconSelector);
+                    if (mutation.attributeName === "data-seeded-value") {
+                        if (isAltCheckboxChecked) {
+                            if ($(altInputSelector).val()) {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).removeClass("is-invalid");
+                                    alertIcon.hide();
+                                    metaDataTab.removeClass("is-invalid");
+                                    metaDataTabAlertIcon.hide();
+                                }
+                            } else {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).addClass("is-invalid");
+                                    alertIcon.show();
+                                    metaDataTab.addClass("is-invalid");
+                                    metaDataTabAlertIcon.show();
+                                }
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "disabled") {
+                        if ($(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).removeClass("is-invalid");
+                                alertIcon.hide();
+                                metaDataTab.removeClass("is-invalid");
+                                metaDataTabAlertIcon.hide();
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "invalid") {
+                        if (!$(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).addClass("is-invalid");
+                                alertIcon.show();
+                                metaDataTab.addClass("is-invalid");
+                                metaDataTabAlertIcon.show();
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        var altInput = document.querySelector(altInputSelector);
+        if (altInput) {
+            observer.observe(altInput, {
+                attributeFilter: ["data-seeded-value", "disabled", "invalid"]
+            });
+        }
+    }
+
+})(jQuery, Granite);

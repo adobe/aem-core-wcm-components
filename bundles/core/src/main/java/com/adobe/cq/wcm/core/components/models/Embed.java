@@ -15,11 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
 /**
@@ -153,7 +151,7 @@ public interface Embed extends Component {
      */
     @Nullable
     default Type getType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -165,7 +163,7 @@ public interface Embed extends Component {
      */
     @Nullable
     default String getUrl() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -176,7 +174,7 @@ public interface Embed extends Component {
      */
     @Nullable
     default UrlProcessor.Result getResult() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -188,7 +186,7 @@ public interface Embed extends Component {
      */
     @Nullable
     default String getEmbeddableResourceType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -200,17 +198,7 @@ public interface Embed extends Component {
      */
     @Nullable
     default String getHtml() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.10.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 }

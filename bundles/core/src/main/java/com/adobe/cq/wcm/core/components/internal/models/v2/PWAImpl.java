@@ -48,26 +48,29 @@ public class PWAImpl implements PWA {
 
     @PostConstruct
     protected void initModel() {
-        ValueMap valueMap = resource.getValueMap();
-        Boolean isPWAEnabled = valueMap.get(PN_PWA_ENABLED, Boolean.class);
-        this.isEnabled = (isPWAEnabled != null) ? isPWAEnabled : false;
-        if (!this.isEnabled) {
+        PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
+        if (pageManager == null) {
             return;
         }
 
-        this.themeColor = colorToHex(valueMap.get(PN_PWA_THEME_COLOR, ""));
-        this.iconPath = valueMap.get(PN_PWA_ICON_PATH, "");
-
-        String startURL = valueMap.get(PN_PWA_START_URL, "");
-        this.manifestPath = replaceSuffix(startURL, MANIFEST_NAME);
-
-        PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
-        if (pageManager != null) {
-            Page page = pageManager.getContainingPage(resource);
-            if (page != null) {
-                String mappingName = page.getPath().replace(CONTENT_PATH, "").replace("/", ".");
-                this.serviceWorkerPath = "/" + mappingName + "sw.js";
+        Page page = pageManager.getContainingPage(resource);
+        while (page != null) {
+            Resource contentResource = page.getContentResource();
+            if (contentResource != null) {
+                ValueMap valueMap = contentResource.getValueMap();
+                Boolean isPWAEnabled = valueMap.get(PN_PWA_ENABLED, Boolean.class);
+                if (isPWAEnabled != null && isPWAEnabled) {
+                    this.isEnabled = true;
+                    this.themeColor = colorToHex(valueMap.get(PN_PWA_THEME_COLOR, ""));
+                    this.iconPath = valueMap.get(PN_PWA_ICON_PATH, "");
+                    String startURL = valueMap.get(PN_PWA_START_URL, "");
+                    this.manifestPath = replaceSuffix(startURL, MANIFEST_NAME);
+                    String mappingName = page.getPath().replace(CONTENT_PATH, "").replace("/", ".");
+                    this.serviceWorkerPath = "/" + mappingName + "sw.js";
+                    break;
+                }
             }
+            page = page.getParent();
         }
     }
 

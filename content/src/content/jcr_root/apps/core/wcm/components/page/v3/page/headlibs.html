@@ -1,0 +1,30 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<template data-sly-template.headlibs="${@ page, designPath, staticDesignPath, clientLibCategories, clientLibCategoriesJsHead, hasCloudconfigSupport}"
+          data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html">
+    <sly data-sly-test="${!wcmmode.disabled}" data-sly-call="${clientlib.all @ categories = [
+        'cq.pagetypes.html5page',
+        'cq.authoring.page',
+        'cq.wcm.foundation-main',
+        'cq.shared'
+        ]}"></sly>
+    <sly data-sly-include="/libs/cq/cloudserviceconfigs/components/servicelibs/servicelibs.jsp"></sly>
+    <sly data-sly-test="${hasCloudconfigSupport}" data-sly-resource="${'cloudconfig-header' @ resourceType='cq/cloudconfig/components/scripttags/header'}"></sly>
+    <sly data-sly-test="${clientLibCategoriesJsHead}" data-sly-call="${clientlib.js @ categories=clientLibCategoriesJsHead, async=page.isClientlibsAsync}"></sly>
+    <sly data-sly-test="${clientLibCategories}" data-sly-call="${clientlib.css @ categories=clientLibCategories}"></sly>
+    <link data-sly-test="${staticDesignPath}" href="${staticDesignPath}" rel="stylesheet" type="text/css" />
+    <sly data-sly-test="${page.data && page.dataLayerClientlibIncluded}" data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.datalayer.v1', async=true}"></sly>
+</template>

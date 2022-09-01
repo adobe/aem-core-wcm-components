@@ -18,9 +18,11 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -32,11 +34,33 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public interface Image extends Component {
 
     /**
+     * Name of the resource property that will indicate if the image is inherited from the featured image of the page.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.23.0
+     */
+    String PN_IMAGE_FROM_PAGE_IMAGE = "imageFromPageImage";
+
+    /**
+     * Name of the resource property that will indicate if the value of the {@code alt} attribute should be inherited
+     * from the featured image of the page.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.23.0
+     */
+    String PN_ALT_VALUE_FROM_PAGE_IMAGE = "altValueFromPageImage";
+
+    /**
      * Name of the configuration policy property that will store the allowed rendition widths for an image.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_DESIGN_ALLOWED_RENDITION_WIDTHS = "allowedRenditionWidths";
+
+    /**
+     * Name of the configuration policy property that will store the sizes attribute for a responsive image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.26.0
+     */
+    String PN_DESIGN_SIZES = "sizes";
 
     /**
      * Name of the configuration policy property that will store the image quality for an image.
@@ -138,24 +162,23 @@ public interface Image extends Component {
 
     /**
      * Name of the resource property that will indicate if the current image should has Image Modifiers settings.
-     *
      */
     String PN_IMAGE_MODIFIERS = "imageModifers";
 
     /**
-     *  Name of the resource property that will indicate imageServerUrl.
+     * Name of the resource property that will indicate imageServerUrl.
      */
     String PN_IMAGE_SERVER_URL = "imageServerUrl";
 
     /**
      * Name of the resource property that defines areas of an image map.
-     *
+     * <p>
      * The property stores map areas as follows:
      * [area1][area2][...]
-     *
+     * <p>
      * Area format:
      * [SHAPE(COORDINATES)"HREF"|"TARGET"|"ALT"|(RELATIVE_COORDINATES)]
-     *
+     * <p>
      * Example:
      * [rect(0,0,10,10)"http://www.adobe.com"|"_self"|"alt"|(0,0,0.8,0.8)][circle(10,10,10)"http://www.adobe.com"|"_self"|"alt"|(0.8,0.8,0.8)]
      *
@@ -169,13 +192,27 @@ public interface Image extends Component {
     String PN_DESIGN_DYNAMIC_MEDIA_ENABLED = "enableDmFeatures";
 
     /**
+     * Name of the configuration policy property that controls whether assets will be delivered through Dynamic Media.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.25.0
+     */
+    String PN_DESIGN_ASSET_DELIVERY_ENABLED = "enableAssetDelivery";
+
+    /**
+     * Name of the configuration policy property that will be used for resizing the base images, the ones from {@code src} attribute.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.23.0
+     */
+    String PN_DESIGN_RESIZE_WIDTH = "resizeWidth";
+
+    /**
      * Returns the value for the {@code src} attribute of the image.
      *
      * @return the image's URL
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getSrc() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -185,7 +222,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getAlt() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -195,7 +232,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getTitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -205,7 +242,17 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0;
      */
     default String getUuid() {
-        throw new UnsupportedOperationException();
+        return null;
+    }
+
+    /**
+     * Returns the image's link.
+     *
+     * @return the image's link.
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default Link getImageLink() {
+        return null;
     }
 
     /**
@@ -213,9 +260,11 @@ public interface Image extends Component {
      *
      * @return the image's link URL, if one was set, or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     * @deprecated Please use {@link #getImageLink()}
      */
+    @Deprecated
     default String getLink() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -226,7 +275,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default boolean displayPopupTitle() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -237,7 +286,7 @@ public interface Image extends Component {
      */
     @JsonIgnore
     default String getFileReference() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -256,7 +305,7 @@ public interface Image extends Component {
     @Deprecated
     @JsonIgnore
     default String getJson() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -268,7 +317,19 @@ public interface Image extends Component {
      */
     @NotNull
     default int[] getWidths() {
-        throw new UnsupportedOperationException();
+        return new int[]{};
+    }
+
+    /**
+     * Returns the media condition to indicate which image widths should be used, configured through the {@link #PN_DESIGN_SIZES}
+     * content policy.
+     *
+     * @return the sizes media condition
+     * @since com.adobe.cq.wcm.core.components.models 12.26.0
+     */
+    @Nullable
+    default String getSizes() {
+        return null;
     }
 
     /**
@@ -279,7 +340,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default String getSrcUriTemplate() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -289,7 +350,39 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default boolean isLazyEnabled() {
-        throw new UnsupportedOperationException();
+        return false;
+    }
+
+    /**
+     * Returns the value for the {@code srcset} html attribute of the image.
+     *
+     * @return the value of the {@code srcset} attribute, if one was set, or {@code null}.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    default String getSrcset() {
+        return null;
+    }
+
+    /**
+     * Returns the width of the base DAM asset image, the one from the {@code src} attribute.
+     * It will be used as value for the {@code width} attribute of the image, only if the image is a DAM asset and is not SVG.
+     *
+     * @return the width of the base DAM asset image, the one from the {@code src} attribute.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
+     */
+    default String getWidth() {
+        return null;
+    }
+
+    /**
+     * Returns the height of the base DAM asset image, the one from the {@code src} attribute.
+     * It will be used as value for the {@code height} attribute of the image, only if the image is a DAM asset and is not SVG.
+     *
+     * @return the height of the base DAM asset image, the one from the {@code src} attribute.
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0;
+     */
+    default String getHeight() {
+        return null;
     }
 
     /**
@@ -299,7 +392,7 @@ public interface Image extends Component {
      * @return The number of pixels.
      */
     default int getLazyThreshold() {
-        throw new UnsupportedOperationException();
+        return 0;
     }
 
     /**
@@ -309,17 +402,7 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default List<ImageArea> getAreas() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -329,14 +412,19 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.11.0
      */
     default boolean isDecorative() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     default String getSmartCropRendition() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     default boolean isDmImage() {
-        throw new UnsupportedOperationException();
+        return false;
     }
+
+    default ImageData getComponentData() {
+        return null;
+    }
+
 }

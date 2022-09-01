@@ -1,0 +1,81 @@
+{
+  "id": "page-bb590de134",
+  "designPath": "/etc/designs/mysite",
+  "title": "Templated Page",
+  "description": "Description",
+  "brandSlug": "Brand Slug",
+  "lastModifiedDate": 1453282416000,
+  "templateName": "product-page",
+  "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
+  "htmlPageItems": [
+    {
+      "element": "link",
+      "location": "header",
+      "attributes": {
+        "href": "/_theme/theme.css",
+        "rel": "preload",
+        "as": "style"
+      }
+    },
+    {
+      "element": "script",
+      "location": "footer",
+      "attributes": {
+        "async": true,
+        "defer": false,
+        "src": "/_theme/theme.js"
+      }
+    },
+    {
+      "element": "meta",
+      "location": "header",
+      "attributes": {
+        "charset": "UTF-8"
+      }
+    }
+  ],
+  "cssClassNames": "class1 class2",
+  "language": "en-GB",
+  ":itemsOrder": [
+    "root"
+  ],
+  ":items": {
+    "root": {
+      ":itemsOrder": [
+        "text"
+      ],
+      ":items": {
+        "text": {
+          "id": "text-41bcd02e64",
+          "text": "<p>This is a test</p>",
+          "richText": true,
+          ":type": "core/wcm/components/text/v2/text",
+          "dataLayer": {
+            "text-41bcd02e64": {
+              "@type": "core/wcm/components/text/v2/text",
+              "repo:modifyDate": "2016-01-18T15:59:43Z",
+              "xdm:text": "<p>This is a test</p>"
+            }
+          }
+        }
+      },
+      ":type": "wcm/foundation/components/responsivegrid"
+    }
+  },
+  ":type": "core/wcm/components/page/v3/page",
+  "dataLayer": {
+    "page-bb590de134": {
+      "@type": "core/wcm/components/page/v3/page",
+      "dc:title": "Templated Page",
+      "dc:description": "Description",
+      "xdm:template": "/conf/coretest/settings/wcm/templates/product-page",
+      "xdm:language": "en-GB",
+      "xdm:tags": [
+        "three",
+        "one",
+        "two"
+      ],
+      "repo:path": "/core/content/page/templated-page.html"
+    }
+  }
+}

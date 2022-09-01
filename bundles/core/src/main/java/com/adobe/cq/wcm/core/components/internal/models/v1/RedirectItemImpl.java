@@ -21,25 +21,25 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
 public class RedirectItemImpl implements NavigationItem {
 
-    private String redirectTarget;
-    private Page page;
-    private String url;
-    private SlingHttpServletRequest request;
+    private final String redirectTarget;
+    private final Page page;
+    protected final Link link;
 
-    public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request) {
+    public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
         this.redirectTarget = redirectTarget;
-        this.request = request;
-        this.page = getRedirectPage();
+        this.page = getRedirectPage(request);
+        this.link = linkManager.get(this.page).build();
     }
 
-    private Page getRedirectPage() {
+    private Page getRedirectPage(@NotNull SlingHttpServletRequest request) {
         Page page = null;
         ResourceResolver resourceResolver = request.getResourceResolver();
         Resource targetResource = resourceResolver.getResource(redirectTarget);
@@ -50,7 +50,6 @@ public class RedirectItemImpl implements NavigationItem {
         return page;
     }
 
-
     @Override
     @Nullable
     @Deprecated
@@ -59,15 +58,8 @@ public class RedirectItemImpl implements NavigationItem {
     }
 
     @Override
-    @NotNull
+    @Nullable
     public String getURL() {
-        if(url == null) {
-            if(page != null) {
-                url = Utils.getURL(request, page);
-            } else {
-                url = redirectTarget;
-            }
-        }
-        return url;
+        return link.getURL();
     }
 }

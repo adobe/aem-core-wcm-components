@@ -15,11 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
-
-import com.adobe.cq.export.json.ComponentExporter;
 
 @ConsumerType
 public interface ProgressBar extends Component {
@@ -39,7 +35,7 @@ public interface ProgressBar extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     default float getCompleted() {
-        throw new UnsupportedOperationException();
+        return 0;
     }
 
     /**
@@ -49,16 +45,7 @@ public interface ProgressBar extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     default float getRemaining() {
-        throw new UnsupportedOperationException();
+        return 100;
     }
 
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.12.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 }

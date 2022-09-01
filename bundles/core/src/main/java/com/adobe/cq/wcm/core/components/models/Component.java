@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.wcm.core.components.internal.jackson.ComponentDataModelSerializer;
+import com.adobe.cq.wcm.core.components.models.datalayer.jackson.ComponentDataModelSerializer;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -64,6 +64,19 @@ public interface Component extends ComponentExporter {
     default ComponentData getData() {
         return null;
     }
+    
+    /**
+     * Returns the style system information associated with the component
+     *
+     * @return CSS classes selected by the content author delimited using a SPACE character
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    @Nullable
+    @JsonProperty("appliedCssClassNames")
+    default String getAppliedCssClasses() {
+        return null;
+    }
 
     /**
      * @see ComponentExporter#getExportedType()
@@ -72,6 +85,7 @@ public interface Component extends ComponentExporter {
     @NotNull
     @Override
     default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return "";
     }
+
 }

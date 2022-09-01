@@ -35,6 +35,7 @@
                     <properties
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Properties"
+                        sling:orderBefore="allowedcomponents"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -87,24 +88,17 @@
                                     jcr:primaryType="nt:unstructured"
                                     cmp-carousel-v1-dialog-hook="autoplayGroup"/>
                             </autoplayGroup>
+                            <controlsPrepended
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="When checked, the control elements will be placed in front of the carousel items to improve accessibility."
+                                name="./controlsPrepended"
+                                checked="{Boolean}false"
+                                text="Prepend control elements"
+                                uncheckedValue="false"
+                                value="{Boolean}true"/>
                         </items>
                     </properties>
-                    <allowedcomponents
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Allowed Components"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <components
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="cq/gui/components/authoring/allowedcomponents"
-                                name="./components"/>
-                        </items>
-                    </allowedcomponents>
-                    <styletab
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/include"
-                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
                 </items>
             </tabs>
         </items>

@@ -1,0 +1,20 @@
+{
+    "id": "button-0b8ad69ce8",
+    "text": "Adobe",
+    "buttonLink": {
+      "attributes": {
+        "target": "_blank"
+      },
+      "valid": true,
+      "url": "https://www.adobe.com"
+    },
+    "icon": "adobe",
+    "dataLayer": {
+        "button-0b8ad69ce8": {
+          "@type": "core/wcm/components/button/v2/button",
+          "dc:title": "Adobe",
+          "xdm:linkURL": "https://www.adobe.com"
+        }
+    },
+    ":type": "core/wcm/components/button/v2/button"
+}

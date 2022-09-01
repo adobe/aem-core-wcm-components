@@ -5,7 +5,7 @@
         sling:resourceType="core-components-examples/components/demo/component"/>
     <info
         jcr:primaryType="nt:unstructured"
-        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+        sling:resourceType="core-components-examples/components/tabs">
         <properties
             cq:panelTitle="Properties"
             jcr:primaryType="nt:unstructured"

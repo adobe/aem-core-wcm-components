@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Page"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    helpPath="https://www.adobe.com/go/aem_cmp_page_v3">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items
+                            jcr:primaryType="nt:unstructured"
+                            sling:hideChildren="[heading,well]">
+                            <clientlibs
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                composite="{Boolean}false"
+                                fieldDescription="The client library categories to load. JavaScript is added at the body end, CSS in the page head."
+                                fieldLabel="Client Libraries">
+                                <field
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                                    name="./clientlibs">
+                                    <items jcr:primaryType="nt:unstructured">
+                                        <category
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
+                                            emptyText="Client library category"
+                                            multiple="{Boolean}false"
+                                            name="./clientlibs"
+                                            required="{Boolean}false">
+                                            <datasource
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"/>
+                                            <options
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/list"/>
+                                        </category>
+                                    </items>
+                                </field>
+                            </clientlibs>
+                            <clientlibsJsHead
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                composite="{Boolean}false"
+                                fieldDescription="JavaScript Client library categories to load in the page head. Categories also present in the Client Libraries field will have JavaScript loaded in the page head instead of at body end. No CSS will be loaded unless the category is also present in the Client Libraries field."
+                                fieldLabel="Client Libraries JavaScript Page Head">
+                                <field
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                                    name="./clientlibsJsHead">
+                                    <items jcr:primaryType="nt:unstructured">
+                                        <category
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
+                                            emptyText="Client library category"
+                                            multiple="{Boolean}false"
+                                            name="./clientlibsJsHead"
+                                            required="{Boolean}false">
+                                            <datasource
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"
+                                                type="js"/>
+                                            <options
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/list"/>
+                                        </category>
+                                    </items>
+                                </field>
+                            </clientlibsJsHead>
+                            <async
+                                jcr:primaryType="nt:unstructured"
+                                text="Load JavaScript Libraries asynchronously"
+                                fieldDescription="If enabled, the custom JavaScript Libraries will be loaded asynchronously"
+                                value="{Boolean}true"
+                                uncheckedValue="false"
+                                name="./clientlibsAsync"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"/>
+                            <appResourcesClientlib
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
+                                emptyText="org.example.myapp.resources"
+                                fieldDescription="The client library category that is used to serve web resources such as favicons."
+                                fieldLabel="Web Resources Client Library"
+                                mode="contains"
+                                multiple="{Boolean}false"
+                                name="./appResourcesClientlib"
+                                required="{Boolean}false">
+                                <datasource
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"/>
+                                <options
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/autocomplete/list"/>
+                            </appResourcesClientlib>
+                            <mainContentSelector
+                                jcr:primaryType="nt:unstructured"
+                                fieldLabel="Skip to main content element selector"
+                                fieldDescription="ID of the main section of the page. Used as accessibility feature to skip directly to the main content of the page."
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                name="./mainContentSelector"/>
+                        </items>
+                    </properties>
+                    <seo
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="SEO"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <renderAlternateLanguageLinks
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Render alternate language links"
+                                        fieldDescription="If enabled, links to alternate language versions of the page in the same site will be added to the page's head."
+                                        value="true"
+                                        name="./renderAlternateLanguageLinks"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"/>
+                                </items>
+                            </column>
+                        </items>
+                    </seo>
+                    <styletab
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        margin="{Boolean}true"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

@@ -71,6 +71,48 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     protected String accessibilityLabel;
 
     /**
+     * The accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityPrevious;
+
+    /**
+     * The previous button accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityNext;
+
+    /**
+     * The next button accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityPlay;
+
+    /**
+     * The pause button accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityPause;
+
+    /**
+     * The play button accessibility label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected String accessibilityTablist;
+
+    /**
+     * Flag indicating if carousel item uses it's title for aria-label.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    protected boolean accessibilityAutoItemTitles;
+
+    /**
      * Flag indicating if autoplay is enabled.
      */
     protected boolean autoplay;
@@ -84,6 +126,8 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
      * Flag indicating if auto-pause (on slide hover) is disabled.
      */
     protected boolean autopauseDisabled;
+
+    private boolean controlsPrepended = false;
 
     /**
      * Initialize the model.
@@ -106,6 +150,9 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
         autopauseDisabled = Optional.ofNullable(properties.get(PN_AUTOPAUSE_DISABLED, Boolean.class))
             .orElseGet(() -> optionalStyle.map(style -> style.get(PN_AUTOPAUSE_DISABLED, Boolean.class))
                 .orElse(false));
+
+        controlsPrepended = optionalStyle.map(style -> style.get(PN_CONTROLS_PREPENDED, Boolean.class))
+                .orElse(false);
     }
 
     @Override
@@ -127,6 +174,47 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     @Nullable
     public String getAccessibilityLabel() {
         return accessibilityLabel;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityPrevious() {
+        return accessibilityPrevious;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityNext() {
+        return accessibilityNext;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityPlay() {
+        return accessibilityPlay;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityPause() {
+        return accessibilityPause;
+    }
+
+    @Override
+    @Nullable
+    public String getAccessibilityTablist() {
+        return accessibilityTablist;
+    }
+
+    @Override
+    @Nullable
+    public boolean getAccessibilityAutoItemTitles() {
+        return accessibilityAutoItemTitles;
+    }
+
+    @Override
+    public boolean isControlsPrepended() {
+        return controlsPrepended;
     }
 
     /*

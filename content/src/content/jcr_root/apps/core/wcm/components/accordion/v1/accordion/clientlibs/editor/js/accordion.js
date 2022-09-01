@@ -13,7 +13,6 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* global jQuery, Coral */
 (function($, Coral) {
     "use strict";
 
@@ -98,8 +97,8 @@
         if (childrenEditor && singleExpansion && expandedItems && expandedSelect && expandedSelectSingle) {
             Coral.commons.ready(childrenEditor, function() {
                 var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
-                updateExpandedSelect(childrenEditor, expandedSelect, expandedItemValues);
-                updateExpandedSelect(childrenEditor, expandedSelectSingle, expandedItemValues);
+                updateExpandedSelect(childrenEditor, expandedSelect, expandedItemValues, false);
+                updateExpandedSelect(childrenEditor, expandedSelectSingle, expandedItemValues, true);
                 if (cmpChildrenEditor.items().length === 0) {
                     toggleExpandedSelects(expandedSelect, expandedSelectSingle, undefined, true);
                 } else {
@@ -107,8 +106,8 @@
                 }
 
                 childrenEditor.on("change", function() {
-                    updateExpandedSelect(childrenEditor, expandedSelect, expandedItemValues);
-                    updateExpandedSelect(childrenEditor, expandedSelectSingle, expandedItemValues);
+                    updateExpandedSelect(childrenEditor, expandedSelect, expandedItemValues, false);
+                    updateExpandedSelect(childrenEditor, expandedSelectSingle, expandedItemValues, true);
                     if (cmpChildrenEditor.items().length === 0) {
                         toggleExpandedSelects(expandedSelect, expandedSelectSingle, undefined, true);
                     } else {
@@ -175,8 +174,9 @@
      * @param {HTMLElement} childrenEditor Children editor multifield
      * @param {HTMLElement} expandedSelect Expanded accordion items select field
      * @param {String[]} expandedItemValues Expanded accordion item values
+     * @param {Boolean} singleExpansion true if single expansion is enabled, false otherwise
      */
-    function updateExpandedSelect(childrenEditor, expandedSelect, expandedItemValues) {
+    function updateExpandedSelect(childrenEditor, expandedSelect, expandedItemValues, singleExpansion) {
         var selectedValues = (expandedSelect.values.length) ? expandedSelect.values : expandedItemValues;
         expandedSelect.items.getAll().forEach(function(item) {
             if (item.value !== "") {
@@ -186,6 +186,15 @@
 
         var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
         if (cmpChildrenEditor) {
+            if (singleExpansion) {
+                expandedSelect.items.add({
+                    selected: (selectedValues.length === 0),
+                    content: {
+                        textContent: Granite.I18n.get("None")
+                    }
+                });
+                expandedSelect.items.first().set("value", null, true);
+            }
             cmpChildrenEditor.items().forEach(function(item) {
                 expandedSelect.items.add({
                     selected: (selectedValues.indexOf(item.name) > -1),
@@ -249,7 +258,9 @@
 
         for (var i = 0; i < selects.length; i++) {
             var overlay = selects[i].querySelector("coral-overlay");
-            overlay.collision = Coral.Overlay.collision.NONE;
+            if (overlay) {
+                overlay.collision = Coral.Overlay.collision.NONE;
+            }
         }
 
         // adds a sufficient padding to the bottom of the wrapper such that selects

@@ -21,6 +21,7 @@
      data-sly-test.hasContent="${languageNavigation.items.size > 0}"
 	 data-cmp-data-layer="${languageNavigation.data.json}"
      id="${component.id}"
-     class="cmp-languagenavigation">
+     class="cmp-languagenavigation"
+     aria-label="${languageNavigation.accessibilityLabel}">
 </nav>
 <sly data-sly-call="${commonsTemplates.placeholder @ isEmpty = !hasContent, classAppend='cmp-languagenavigation'}"></sly>

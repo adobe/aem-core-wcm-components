@@ -15,8 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -29,12 +31,12 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Button;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
 @Model(
@@ -50,8 +52,6 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/button/v1/button";
 
-    private String linkURL;
-
     @Self
     private SlingHttpServletRequest request;
 
@@ -65,15 +65,20 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    private String link;
-
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
     private String icon;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected String accessibilityLabel;
+
+    @Self
+    protected LinkManager linkManager;
+    protected Link link;
+
+    @PostConstruct
+    private void initModel() {
+        link = linkManager.get(resource).withLinkUrlPropertyName("link").build();
+    }
 
     @Override
     public String getText() {
@@ -82,15 +87,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
 
     @Override
     public String getLink() {
-        if (linkURL == null) {
-            Page targetPage = pageManager.getPage(link);
-            if (targetPage != null) {
-                linkURL = Utils.getURL(request, targetPage);
-            } else {
-                linkURL = link;
-            }
-        }
-        return linkURL;
+        return link.getURL();
     }
 
     @Override
@@ -116,7 +113,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
     protected ComponentData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asComponent()
             .withTitle(this::getText)
-            .withLinkUrl(this::getLink)
+            .withLinkUrl(() ->link.getMappedURL())
             .build();
     }
 }

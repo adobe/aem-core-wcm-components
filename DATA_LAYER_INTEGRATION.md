@@ -28,6 +28,16 @@ To enable the data layer for your site:
 1. Add the `enabled` boolean property and set it to `true`.
 1. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
 
+## Preventing the Data Layer client library from being included
+
+The data layer client library is included by default by the Page component. As there are other ways to include this library (e.g. through Adobe Launch), it might be needed to prevent its inclusion through the Page component.
+
+To prevent the data layer client library from being included by the Page component:
+1. Create the following structure below the `/conf` node:
+   `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
+1. Add the `skipClientlibInclude` boolean property and set it to `true`.
+1. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+
 ## Data Layer State Structure
 
 When the data layer is enabled, the javascript `adobeDataLayer` object is available on the page and is populated with the components and their properties that are used on the page.
@@ -64,7 +74,7 @@ Calling `adobeDataLayer.getState()` in the browser console will return e.g.:
       "xdm:tags": [],
       "xdm:language": "en-GB",
       "xdm:template": "/conf/core-components-examples/settings/wcm/templates/content-page",
-      "repo:path": "/content/core-components-examples/library/page-authoring/title.html",
+      "repo:path": "/content/core-components-examples/library/core-content/title.html",
       "dc:title": "Title",
       "@type": "core-components-examples/components/page",
       "repo:modifyDate": "2020-05-28T08:46:44Z",

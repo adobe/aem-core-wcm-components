@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
@@ -32,9 +33,11 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Breadcrumb;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class,
@@ -62,10 +65,12 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
     @Self
     private SlingHttpServletRequest request;
 
+    @Self
+    protected LinkManager linkManager;
+
     private boolean showHidden;
     private boolean hideCurrent;
     private int startLevel;
-    private boolean isShadowingDisabled;
     private List<NavigationItem> items;
 
     @PostConstruct
@@ -73,8 +78,6 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
         startLevel = properties.get(PN_START_LEVEL, currentStyle.get(PN_START_LEVEL, PROP_START_LEVEL_DEFAULT));
         showHidden = properties.get(PN_SHOW_HIDDEN, currentStyle.get(PN_SHOW_HIDDEN, PROP_SHOW_HIDDEN_DEFAULT));
         hideCurrent = properties.get(PN_HIDE_CURRENT, currentStyle.get(PN_HIDE_CURRENT, PROP_HIDE_CURRENT_DEFAULT));
-        isShadowingDisabled = properties.get(PageListItemImpl.PN_DISABLE_SHADOWING,
-            currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
     @Override
@@ -102,14 +105,18 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel,
-                            Collections.emptyList(), getId(), isShadowingDisabled, component);
+                    NavigationItem navigationItem = newBreadcrumbItem(page, isActivePage, linkManager, currentLevel,
+                            Collections.emptyList(), getId(), component);
                     items.add(navigationItem);
                 }
             }
             startLevel++;
         }
         return items;
+    }
+
+    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkManager linkManager, int level, List<NavigationItem> children, String parentId, Component component) {
+        return new BreadcrumbItemImpl(page, active, linkManager, level, children, parentId, component);
     }
 
     private boolean checkIfNotHidden(Page page) {

@@ -1,0 +1,51 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<sly data-sly-use.carousel="com.adobe.cq.wcm.core.components.models.Carousel"
+     data-sly-template.controls="${@ carousel}">
+    <div class="cmp-carousel__actions">
+        <button class="cmp-carousel__action cmp-carousel__action--previous"
+                type="button"
+                aria-label="${carousel.accessibilityPrevious || 'Previous' @ i18n}"
+                aria-label="${'Previous' @ i18n}"
+                data-cmp-hook-carousel="previous">
+            <span class="cmp-carousel__action-icon"></span>
+            <span class="cmp-carousel__action-text">${carousel.accessibilityPrevious || 'Previous' @ i18n}</span>
+        </button>
+        <button class="cmp-carousel__action cmp-carousel__action--next"
+                type="button"
+                aria-label="${carousel.accessibilityNext || 'Next' @ i18n}"
+                data-cmp-hook-carousel="next">
+            <span class="cmp-carousel__action-icon"></span>
+            <span class="cmp-carousel__action-text">${carousel.accessibilityNext || 'Next' @ i18n}</span>
+        </button>
+        <button data-sly-test="${carousel.autoplay}"
+                class="cmp-carousel__action cmp-carousel__action--pause"
+                type="button"
+                aria-label="${carousel.accessibilityPause || 'Pause' @ i18n}"
+                data-cmp-hook-carousel="pause">
+            <span class="cmp-carousel__action-icon"></span>
+            <span class="cmp-carousel__action-text">${carousel.accessibilityPause || 'Pause' @ i18n}</span>
+        </button>
+        <button data-sly-test="${carousel.autoplay}"
+                class="cmp-carousel__action cmp-carousel__action--play cmp-carousel__action--disabled"
+                type="button"
+                aria-label="${carousel.accessibilityPlay || 'Play' @ i18n}"
+                data-cmp-hook-carousel="play">
+            <span class="cmp-carousel__action-icon"></span>
+            <span class="cmp-carousel__action-text">${carousel.accessibilityPlay || 'Play' @ i18n}</span>
+        </button>
+    </div>
+</sly>

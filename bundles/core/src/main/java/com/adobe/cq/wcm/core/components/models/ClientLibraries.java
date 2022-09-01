@@ -106,7 +106,7 @@ public interface ClientLibraries {
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getJsInline() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -116,7 +116,7 @@ public interface ClientLibraries {
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getCssInline() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -126,7 +126,7 @@ public interface ClientLibraries {
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getJsIncludes() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -136,7 +136,7 @@ public interface ClientLibraries {
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getCssIncludes() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -146,7 +146,7 @@ public interface ClientLibraries {
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getJsAndCssIncludes() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 }

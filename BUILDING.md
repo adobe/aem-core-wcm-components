@@ -4,7 +4,7 @@
 
 To compile your own version of the Core Components, you can build and install everything on your running AEM instance by issuing the following command in the top level folder of the project:
 
-    mvn clean install -PautoInstallSinglePackage
+    mvn clean install -PautoInstallPackage
 
 You can also install individual packages/bundles by issuing the following command in the top-level folder of the project:
 
@@ -50,19 +50,14 @@ For the main content package there's an extra script:
 
 ## Branch conventions
 
-### `master` branch
+### `main` branch
 
-The `master` branch is the stable branch, where releases are cut from. Please send all pull requests
-to `development` branch!
-
-### `development` branch
-
-The `development` branch is the staging branch, where feature and bug-fixes are staged and tested before
-being cherry-picked to `master` in preparation of a release.
+The `main` branch is the trunk development branch, where regular releases are cut from. Please send all pull requests
+to `main` branch!
 
 ### Other branches
 
 We normally use branches such as:
     * `issue/<number>` for changes related to a specific issue
     * `feature/<name>` for changes related to a specific feature that is still being floated around and not ready for review
-    * `release/<version>` for changes that are scheduled for a specific future release, due to incompatibilities with `development` branch
+    * `release/<version>` for cutting a release

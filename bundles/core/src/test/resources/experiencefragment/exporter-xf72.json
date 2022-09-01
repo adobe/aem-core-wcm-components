@@ -1,0 +1,39 @@
+{
+  "id": "experiencefragment-f9eb80ed03",
+  "localizedFragmentVariationPath": "/content/experience-fragments/mysite/en/parent/master/jcr:content",
+  "configured": true,
+  "classNames": "aem-xf",
+  ":items": {
+    "experiencefragment": {
+      "id": "experiencefragment-f566bc1dfa",
+      "localizedFragmentVariationPath": "/content/experience-fragments/mysite/en/header/master/jcr:content",
+      "configured": true,
+      "classNames": "aem-xf",
+      ":items": {
+        "text": {
+          "id": "text-10d9f3aa70",
+          "text": "Hi there",
+          "richText": false,
+          ":type": "my/test/text"
+        },
+        "image": {
+          "id": "image-99b284be56",
+          "lazyThreshold": 0,
+          "dmImage": false,
+          "widths": [],
+          "lazyEnabled": true,
+          ":type": "my/test/image"
+        }
+      },
+      ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+      ":itemsOrder": [
+        "text",
+        "image"
+      ]
+    }
+  },
+  ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+  ":itemsOrder": [
+    "experiencefragment"
+  ]
+}

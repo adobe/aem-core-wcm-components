@@ -1,0 +1,7 @@
+{
+    "listType":"numbered",
+    "startLevel":"h2",
+    "stopLevel":"h5",
+    "id":"toc-sample-id",
+    ":type":"core/wcm/components/tableofcontents/v1/tableofcontents"
+}

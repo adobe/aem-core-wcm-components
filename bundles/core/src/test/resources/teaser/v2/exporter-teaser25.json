@@ -1,0 +1,18 @@
+{
+    ":type": "core/wcm/components/teaser/v2/teaser",
+    "actions": [],
+    "actionsEnabled": true,
+    "dataLayer": {
+        "teaser-c05d232b34": {
+            "@type": "core/wcm/components/teaser/v2/teaser",
+            "dc:description": "Teasers description from &lt;page properties&gt;",
+            "dc:title": "Teasers Test"
+        }
+    },
+    "description": "Teasers description from &lt;page properties&gt;",
+    "id": "teaser-c05d232b34",
+    "imageLinkHidden": false,
+    "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-25.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+    "title": "Teasers Test",
+    "titleLinkHidden": false
+}

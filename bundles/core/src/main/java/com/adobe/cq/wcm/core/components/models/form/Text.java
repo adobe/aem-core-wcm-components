@@ -32,7 +32,7 @@ public interface Text extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default boolean isRequired() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -43,7 +43,7 @@ public interface Text extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getRequiredMessage() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -53,7 +53,7 @@ public interface Text extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getPlaceholder() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -63,7 +63,7 @@ public interface Text extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default boolean isReadOnly() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -73,7 +73,7 @@ public interface Text extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getConstraintMessage() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -84,7 +84,7 @@ public interface Text extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -94,7 +94,7 @@ public interface Text extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default int getRows() {
-        throw new UnsupportedOperationException();
+        return 0;
     }
 
     /**
@@ -105,6 +105,6 @@ public interface Text extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default boolean hideTitle() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 }

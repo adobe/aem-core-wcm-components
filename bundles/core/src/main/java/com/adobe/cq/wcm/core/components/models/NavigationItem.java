@@ -39,18 +39,26 @@ public interface NavigationItem extends ListItem {
      */
     @Deprecated
     default Page getPage() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
      * Returns {@code true} if the page contained by this navigation item is active.
      *
-     * @return {@code true} if it is the current page, otherwise {@code false}
+     * @return {@code true} if it is the current page or one of its ancestors, otherwise {@code false}
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default boolean isActive() {
-        throw new UnsupportedOperationException();
+        return false;
     }
+
+    /**
+     * Returns {@code true} if the page contained by this navigation item is the current page.
+     *
+     * @return {@code true} if it is the current page, otherwise {@code false}
+     * @since com.adobe.cq.wcm.core.components.models 12.20.0
+     */
+    default boolean isCurrent() { return false; }
 
     /**
      * Returns the children of this {@code NavigationItem}, if any.
@@ -60,7 +68,7 @@ public interface NavigationItem extends ListItem {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default List<NavigationItem> getChildren() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -70,6 +78,6 @@ public interface NavigationItem extends ListItem {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default int getLevel() {
-        throw new UnsupportedOperationException();
+        return 0;
     }
 }

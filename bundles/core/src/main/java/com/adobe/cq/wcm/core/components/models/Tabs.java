@@ -32,7 +32,7 @@ public interface Tabs extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
     default String getActiveItem() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -42,6 +42,6 @@ public interface Tabs extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
     default String getAccessibilityLabel() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }

@@ -16,7 +16,9 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -141,13 +143,20 @@ public interface Page extends ContainerExporter, Component {
     String FN_TOUCH_ICON_152 = "touch-icon_152.png";
 
     /**
+     * Name of the node holding the properties of the featured image of the page.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.21.0
+     */
+    String NN_PAGE_FEATURED_IMAGE = "cq:featuredimage";
+
+    /**
      * Returns the language of this page, if one has been defined. Otherwise the default {@link java.util.Locale} will be used.
      *
      * @return the language code (IETF BCP 47) for this page
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getLanguage() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -157,7 +166,7 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default Calendar getLastModifiedDate() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -168,7 +177,7 @@ public interface Page extends ContainerExporter, Component {
      */
     @JsonIgnore
     default String[] getKeywords() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -178,7 +187,7 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getDesignPath() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -188,7 +197,7 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getStaticDesignPath() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -215,7 +224,7 @@ public interface Page extends ContainerExporter, Component {
     @Deprecated
     @JsonIgnore
     default Map<String, String> getFavicons() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -225,7 +234,17 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getTitle() {
-        throw new UnsupportedOperationException();
+        return null;
+    }
+
+    /**
+     * Returns the description of this page.
+     *
+     * @return the page's description
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.23.0
+     */
+    default String getDescription() {
+        return null;
     }
 
     /**
@@ -235,9 +254,9 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.18.0
      */
     default String getBrandSlug() {
-    	throw new UnsupportedOperationException();
+    	return null;
     }
-    
+
     /**
      * If this page is associated with a Template, then this method will return the Template's client library categories
      * to be included in the page as defined by the user in the policy.
@@ -248,7 +267,7 @@ public interface Page extends ContainerExporter, Component {
      */
     @JsonIgnore
     default String[] getClientLibCategories() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -261,7 +280,7 @@ public interface Page extends ContainerExporter, Component {
      */
     @JsonIgnore
     default String[] getClientLibCategoriesJsBody() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -274,7 +293,7 @@ public interface Page extends ContainerExporter, Component {
      */
     @JsonIgnore
     default String[] getClientLibCategoriesJsHead() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -284,7 +303,7 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getTemplateName() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -295,7 +314,7 @@ public interface Page extends ContainerExporter, Component {
      */
     @Nullable
     default String getAppResourcesPath() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -305,7 +324,7 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default String getCssClassNames() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -316,7 +335,7 @@ public interface Page extends ContainerExporter, Component {
      */
     @Nullable
     default NavigationItem getRedirectTarget() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -326,7 +345,7 @@ public interface Page extends ContainerExporter, Component {
      * @since com.adobe.cq.wcm.core.components.models 12.3.0
      */
     default boolean hasCloudconfigSupport() {
-        throw new UnsupportedOperationException();
+        return false;
     }
 
     /**
@@ -337,7 +356,7 @@ public interface Page extends ContainerExporter, Component {
      */
     @NotNull
     default Set<String> getComponentsResourceTypes() {
-        throw new UnsupportedOperationException();
+        return Collections.emptySet();
     }
 
     /**
@@ -347,7 +366,7 @@ public interface Page extends ContainerExporter, Component {
     @NotNull
     @Override
     default String[] getExportedItemsOrder() {
-        throw new UnsupportedOperationException();
+        return new String[]{};
     }
 
     /**
@@ -357,7 +376,7 @@ public interface Page extends ContainerExporter, Component {
     @NotNull
     @Override
     default Map<String, ? extends ComponentExporter> getExportedItems() {
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
     /**
@@ -367,7 +386,7 @@ public interface Page extends ContainerExporter, Component {
     @NotNull
     @Override
     default String getExportedType() {
-        throw new UnsupportedOperationException();
+        return "";
     }
 
     /**
@@ -391,4 +410,61 @@ public interface Page extends ContainerExporter, Component {
     default List<HtmlPageItem> getHtmlPageItems() {
         return null;
     }
+
+    /**
+     * Returns the canonical link of the page.
+     * <p>
+     * This should be an absolute url.
+     *
+     * @return the canonical url of the page
+     * @since om.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    @Nullable
+    @JsonIgnore
+    default String getCanonicalLink() { return null; }
+
+    /**
+     * Returns a {@link Map} of alternate languages of the page.
+     * <p>
+     * The {@link Map} maps each alternate language to an absolute url to the page in this language, if it exists.
+     *
+     * @return a {@link Map} of alternate languages and links to the page in this language
+     * @since om.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    @NotNull
+    @JsonIgnore
+    default Map<Locale, String> getAlternateLanguageLinks() {
+        return Collections.emptyMap();
+    }
+
+    /**
+     * Returns a list of robots meta tags configured for the page.
+     * <p>
+     * The list is cleared from duplicates and conflicting combinations.
+     *
+     * @return a list of robots meta tags
+     * @since om.adobe.cq.wcm.core.components.models 12.22.0
+     */
+    @NotNull
+    @JsonIgnore
+    default List<String> getRobotsTags() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * Checks if the Javascript libraries should be loaded asynchronously.
+     *
+     * @return {@code true} if the Javascript libraries should be loaded asynchronously
+     * @since om.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default boolean isClientlibsAsync() {return false;}
+
+    /**
+     * Checks if the data layer client library should be included.
+     *
+     * {@code true} if the data layer client library should be included.
+     * @since om.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default boolean isDataLayerClientlibIncluded() {return true;}
+
 }
