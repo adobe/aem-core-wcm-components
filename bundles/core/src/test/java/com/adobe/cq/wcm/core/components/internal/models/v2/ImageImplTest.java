@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.json.Json;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,6 +61,8 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     private static final String IMAGE39_PATH = PAGE + "/jcr:content/root/image39";
     private static final String IMAGE40_PATH = PAGE + "/jcr:content/root/image40";
     private static final String IMAGE42_PATH = PAGE + "/jcr:content/root/image42";
+    private static final String IMAGE43_PATH = PAGE + "/jcr:content/root/image43";
+    private static final String IMAGE44_PATH = PAGE + "/jcr:content/root/image44";
 
     @BeforeEach
     @Override
@@ -311,6 +314,21 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         assertEquals(0, image.getWidths().length);
     }
 
+    @Test
+    void testSVGImageSrcOnDM() {
+        context.contentPolicyMapping(resourceType, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE43_PATH);
+        assertTrue(image.isDmImage());
+        assertTrue(StringUtils.startsWith(image.getSrc(), "https://s7d9.scene7.com/is/content"));
+    }
+
+    @Test
+    void testImageSrcWithDMFileTypeImage() {
+        context.contentPolicyMapping(resourceType, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
+        Image image = getImageUnderTest(IMAGE44_PATH);
+        assertTrue(image.isDmImage());
+        assertTrue(StringUtils.startsWith(image.getSrc(), "https://s7d9.scene7.com/is/image"));
+    }
 
     @Test
     void testImageWithLazyThreshold() {

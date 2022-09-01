@@ -195,10 +195,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         //sets to '/is/image/ or '/is/content' based on dam:scene7Type property
                         String dmServerPath;
-                        if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
-                            dmServerPath = DM_CONTENT_SERVER_PATH;
-                        } else {
+                        // '/is/image' DM url is for optimized image delivery supporting run time transformations.
+                        //  Use '/is/image' url if dam:scene7Type is explicitly set to 'Image' or DM processor does not set dam:scene7Type
+                        if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.IMAGE.getValue())
+                            || asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(StringUtils.EMPTY)) {
                             dmServerPath = DM_IMAGE_SERVER_PATH;
+                        } else {
+                        // All other file types should be loaded as content via '/is/content'
+                            dmServerPath = DM_CONTENT_SERVER_PATH;
                         }
                         String dmServerUrl;
                         // for Author
