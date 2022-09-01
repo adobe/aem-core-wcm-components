@@ -200,10 +200,10 @@
 
             var interSectionObserver = new IntersectionObserver(function(entries, interSectionObserver) {
                 entries.forEach(function(entry) {
-                    if (entry.intersectionRatio > 0 ) {
+                    if (entry.intersectionRatio > 0) {
                         that.update();
                     }
-                })
+                });
             });
             interSectionObserver.observe(that._elements.self);
 
