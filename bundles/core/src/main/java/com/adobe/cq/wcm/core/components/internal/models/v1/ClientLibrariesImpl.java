@@ -119,6 +119,11 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Nullable
     private String media;
 
+    @Inject
+    @Named(OPTION_ONLOAD_CSS)
+    @Nullable
+    private String onloadCss;
+
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
 
@@ -217,6 +222,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
         jsAttributes.append(getHtmlAttr(OPTION_ONLOAD, onload));
         StringBuilder cssAttributes = new StringBuilder();
         cssAttributes.append(getHtmlAttr(OPTION_MEDIA, media));
+        cssAttributes.append(getHtmlAttr(OPTION_ONLOAD, onloadCss));
         String updatedHtml = StringUtils.replace(html,"<script ", "<script " + jsAttributes.toString());
         return StringUtils.replace(updatedHtml,"<link ", "<link " + cssAttributes.toString());
     }
