@@ -65,12 +65,37 @@ public class ModelElementsDataSourceServletTest {
     }
 
     @Test
-    public void verifyDataSourceWhenOrderByIsGiven() {
+    public void verifyDataSourceWhenOrderByIsGivenV1() {
         // GIVEN
         InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
         context.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
         Resource mockResource = Mockito.mock(Resource.class);
         when(mockResource.isResourceType(ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY_V1)).thenReturn(true);
+        context.request().setResource(mockResource);
+        context.request().setParameterMap(ImmutableMap.of(
+                PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
+
+        // WHEN
+        modelElementsDataSourceServlet.doGet(context.request(), context.response());
+
+        // THEN
+        SimpleDataSource simpleDataSource = (SimpleDataSource) context.request().getAttribute(DataSource.class.getName());
+        List<Resource> resourceList = IteratorUtils.toList(simpleDataSource.iterator());
+        assertThat(resourceList, not(empty()));
+        assertThat(resourceList, allOf(
+                hasItem(resourceWithPropertiesTextAndValue("Created", "jcr:created")),
+                hasItem(resourceWithPropertiesTextAndValue("Last Modified", "jcr:content/jcr:lastModified")),
+                hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "jcr:content/data/master/textField")),
+                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "jcr:content/data/master/multiTextField"))));
+    }
+
+    @Test
+    public void verifyDataSourceWhenOrderByIsGivenV2() {
+        // GIVEN
+        InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
+        context.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
+        Resource mockResource = Mockito.mock(Resource.class);
+        when(mockResource.isResourceType(ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY_V2)).thenReturn(true);
         context.request().setResource(mockResource);
         context.request().setParameterMap(ImmutableMap.of(
                 PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
