@@ -61,9 +61,6 @@
                         <filter>
                             <root>/apps/core/wcm/components</root>
                         </filter>
-						<filter>
-                            <root>/apps/core/wcm/clientlibs</root>
-                        </filter>
                     </filters>
                     <packageType>application</packageType>
                     <dependencies>
