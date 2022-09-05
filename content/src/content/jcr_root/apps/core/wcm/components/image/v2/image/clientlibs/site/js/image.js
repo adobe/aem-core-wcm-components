@@ -197,6 +197,16 @@
             });
 
             that._elements.image.addEventListener("cmp-image-redraw", that.update);
+
+            that._interSectionObserver = new IntersectionObserver(function(entries, interSectionObserver) {
+                entries.forEach(function(entry) {
+                    if (entry.intersectionRatio > 0) {
+                        that.update();
+                    }
+                });
+            });
+            that._interSectionObserver.observe(that._elements.self);
+
             that.update();
         }
 
@@ -238,6 +248,7 @@
             if (that._lazyLoaderShowing) {
                 that._elements.image.addEventListener("load", removeLazyLoader);
             }
+            that._interSectionObserver.unobserve(that._elements.self);
         }
 
         function getOptimalWidth(widths, useDevicePixelRatio) {
