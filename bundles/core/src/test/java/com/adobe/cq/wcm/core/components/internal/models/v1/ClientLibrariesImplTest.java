@@ -471,7 +471,6 @@ class ClientLibrariesImplTest {
         attributes.put("crossorigin", "anonymous");
         attributes.put("onload", "myFunction()");
         attributes.put("media", "print");
-        attributes.put("onloadCss", "myFunction()");
         ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
         StringBuilder includes = new StringBuilder();
         includes.append(jsIncludesWithAttributes.get(TEASER_CATEGORY));

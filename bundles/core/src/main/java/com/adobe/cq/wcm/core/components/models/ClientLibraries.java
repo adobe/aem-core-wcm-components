@@ -100,11 +100,6 @@ public interface ClientLibraries {
     String OPTION_MEDIA = "media";
 
     /**
-     * Name of the HTL option to inject the onload attribute into the stylesheet link tag.
-     */
-    String OPTION_ONLOAD_CSS = "onloadCss";
-
-    /**
      * Returns a concatenation of all the JS libraries defined for the requested resource.
      *
      * @return the inlined JS libraries
