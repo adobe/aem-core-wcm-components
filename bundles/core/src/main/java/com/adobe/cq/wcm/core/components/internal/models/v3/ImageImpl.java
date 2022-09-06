@@ -63,6 +63,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
     private static final String URI_WIDTH_PLACEHOLDER_ENCODED = "%7B.width%7D";
     private static final String URI_WIDTH_PLACEHOLDER = "{.width}";
+    private static final String EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
     private boolean imageLinkHidden = false;
 
@@ -121,14 +122,21 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (widthsArray.length > 0 && srcUritemplate != null) {
             srcUritemplate = StringUtils.replace(srcUriTemplate, URI_WIDTH_PLACEHOLDER_ENCODED, URI_WIDTH_PLACEHOLDER);
             if (srcUritemplate.contains(URI_WIDTH_PLACEHOLDER)) {
-                for (int i = 0; i < widthsArray.length; i++) {
-                    if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
-                        srcsetArray[i] = srcUritemplate.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
-                    } else {
-                        srcsetArray[i] = srcUritemplate.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                // in case of dm image and auto smartcrop the srcset needs to generated client side
+                if (dmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)) {
+                    srcSet = EMPTY_PIXEL;
+                } else {
+                    for (int i = 0; i < widthsArray.length; i++) {
+                        if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
+                            srcsetArray[i] =
+                                    srcUritemplate.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                        } else {
+                            srcsetArray[i] =
+                                    srcUritemplate.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                        }
                     }
+                    srcSet = StringUtils.join(srcsetArray, ',');
                 }
-                srcSet = StringUtils.join(srcsetArray, ',');
                 return srcSet;
             }
         }
