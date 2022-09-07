@@ -21,7 +21,7 @@
     window.CMP.image = window.CMP.image || {};
     window.CMP.image.v3 = (function() {
         var selectors = {
-            self: ".cmp-image"
+            self: "[data-cmp-hook-image='imageV3']"
         };
 
         /**
@@ -72,6 +72,10 @@
             }
         };
     }());
+    if (document.readyState !== "loading") {
+        window.CMP.image.v3.init();
+    } else {
+        document.addEventListener("DOMContentLoaded", window.CMP.image.v3.init);
+    }
 
-    document.addEventListener("DOMContentLoaded", window.CMP.image.v3.init);
 }(window.document));
