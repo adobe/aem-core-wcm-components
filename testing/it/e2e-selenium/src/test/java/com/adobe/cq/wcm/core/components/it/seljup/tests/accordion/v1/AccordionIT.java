@@ -309,6 +309,40 @@ public class AccordionIT extends AuthorBaseUITest {
     }
 
     /**
+     * Select the expanded accordion item when single expasion is checked
+     *
+     * @param idx id of the item to be expanded
+     *
+     * 1. open the edit dialog
+     * 2. open the properties tab
+     * 3. open the expandedselect list
+     * 4. select the idx item
+     * 5. save the edit dialog
+     *
+     * @throws InterruptedException
+     */
+    private CoralSelectList selectExpandedItemSingle(int idx) throws InterruptedException {
+        //1.
+        AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
+
+        //2.
+        AccordionEditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
+        properties.openProperties();
+
+        //3.
+        properties.openExpandedSelectSingle(" > button");
+
+        //4.
+        CoralSelectList selectedItems = properties.selectList();
+        selectedItems.selectByIndex(idx + 1);
+
+        //5.
+        Commons.saveConfigureDialog();
+
+        return selectedItems;
+    }
+
+    /**
      * Test: Edit Dialog: Add items
      *
      * 1. create new items with titles
@@ -494,7 +528,8 @@ public class AccordionIT extends AuthorBaseUITest {
      * 5. enable single item expansion
      * 6. verify that the expanded items select is disabled and expanded item select is enabled.
      * 7. save the edit dialog
-     * 8. verify that the first item is expanded
+     * 8. verify that the no item is expanded
+     * 9. select an expanded item and verify it is expanded
      *
      * @throws InterruptedException
      */
@@ -535,7 +570,11 @@ public class AccordionIT extends AuthorBaseUITest {
 
         //8.
         ArrayList<String> items = new ArrayList<>();
-        items.add("item0");
+        verifyExpandedItems(items);
+
+        //9.
+        selectExpandedItemSingle(1);
+        items = new ArrayList<String>() {{ add("item1"); }};
         verifyExpandedItems(items);
     }
 

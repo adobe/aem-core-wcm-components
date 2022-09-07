@@ -95,6 +95,14 @@ public class AccordionEditDialog extends Dialog  {
         }
 
         /**
+         * Open the expanded select list when single selection is checked
+         * @param suffix
+         */
+        public void openExpandedSelectSingle(String suffix) {
+            $(expandedSelectSingle + " " + suffix).click();
+        }
+
+        /**
          * Check if expanded select list is visible
          * @return true if expanded select list is visible otherwise false
          */
