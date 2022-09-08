@@ -29,6 +29,7 @@ import org.junit.rules.ErrorCollector;
 
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.junit.assertion.GraniteAssert;
+import com.adobe.cq.testing.junit.rules.CQAuthorClassRule;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
 import com.adobe.cq.wcm.core.components.it.http.IgnoreOn64;
@@ -38,22 +39,16 @@ import com.google.common.collect.ImmutableList;
 public class ExperienceFragmentIT {
 
     @ClassRule
-    public static final CQAuthorPublishClassRule cqBaseClassRule = new CQAuthorPublishClassRule();
-
-    @Rule
-    public CQRule cqBaseRule = new CQRule(cqBaseClassRule.authorRule, cqBaseClassRule.publishRule);
+    public static final CQAuthorClassRule cqAuthorClassRule = new CQAuthorClassRule();
 
     @Rule
     public ErrorCollector collector = new ErrorCollector();
 
     static CQClient adminAuthor;
 
-    static CQClient adminPublish;
-
     @BeforeClass
     public static void beforeClass() {
-        adminAuthor = cqBaseClassRule.authorRule.getAdminClient(CQClient.class);
-        adminPublish = cqBaseClassRule.publishRule.getAdminClient(CQClient.class);
+        adminAuthor = cqAuthorClassRule.authorRule.getAdminClient(CQClient.class);
     }
 
     @Test
@@ -73,6 +68,6 @@ public class ExperienceFragmentIT {
                 StandardCharsets.UTF_8);
         String json = adminAuthor.doGet("/content/core-components/simple-page.model.json", 200).getContent();
         GraniteAssert.assertJsonEquals(expectedJson, json, ImmutableList.of("lastModifiedDate", "repo:modifyDate", "xdm:language", "xdm:text",
-                "language", "components", "text", "repo:path"));
+                "language", "components", "text", "repo:path", "src", "srcUriTemplate", "xdm:linkURL", "url", "linkURL"));
     }
 }
