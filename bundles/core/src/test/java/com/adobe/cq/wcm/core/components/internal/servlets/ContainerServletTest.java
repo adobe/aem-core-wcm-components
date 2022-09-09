@@ -26,10 +26,13 @@ import java.util.stream.StreamSupport;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
+import com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor.Editor;
 import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.day.cq.wcm.msm.api.LiveStatus;
+
+import org.apache.sling.api.SlingConstants;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
 
@@ -42,6 +45,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestDispatcherFactory;
+import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -111,8 +115,9 @@ public class ContainerServletTest {
 
     @Test
     public void testGetMultiField() throws ServletException, IOException {
-        context.request().setMethod(HttpConstants.METHOD_GET);
-        context.request().setRequestDispatcherFactory(new MockRequestDispatcherFactory() {
+        MockSlingHttpServletRequest request = context.request();
+        request.setMethod(HttpConstants.METHOD_GET);
+        request.setRequestDispatcherFactory(new MockRequestDispatcherFactory() {
             @Override
             public RequestDispatcher getRequestDispatcher(String s, RequestDispatcherOptions requestDispatcherOptions) {
                 return requestDispatcher;
@@ -124,7 +129,9 @@ public class ContainerServletTest {
             }
         });
 
-        servlet.doGet(context.request(), context.response());
-        verify(requestDispatcher, times(1)).include(context.request(), context.response());
+        servlet.doGet(request, context.response());
+        request.setParameterMap(ImmutableMap.of(SlingConstants.PROPERTY_RESOURCE_TYPE, Editor.RESOURCE_TYPE));
+        servlet.doGet(request, context.response());
+        verify(requestDispatcher, times(2)).include(request, context.response());
     }
 }
