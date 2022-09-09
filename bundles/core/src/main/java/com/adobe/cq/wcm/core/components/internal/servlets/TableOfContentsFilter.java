@@ -23,8 +23,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
+import javax.annotation.Nullable;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -33,6 +35,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import com.drew.lang.annotations.NotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.servlets.annotations.SlingServletFilter;
 import org.apache.sling.servlets.annotations.SlingServletFilterScope;
@@ -94,12 +97,12 @@ public class TableOfContentsFilter implements Filter {
     }
 
     @Activate
-    protected void activate(Config config) {
+    protected void activate(@NotNull final Config config) {
         enabled = config.enabled();
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(final FilterConfig filterConfig) throws ServletException {
         LOGGER.debug("Initialising {}", TableOfContentsFilter.class.getName());
     }
 
@@ -109,7 +112,9 @@ public class TableOfContentsFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    public void doFilter(@NotNull final ServletRequest request,
+                         @NotNull final ServletResponse response,
+                         @NotNull final FilterChain chain)
         throws IOException, ServletException {
 
         if (!enabled) {
@@ -118,48 +123,53 @@ public class TableOfContentsFilter implements Filter {
             return;
         }
 
+        if (!Optional.ofNullable((Boolean) request.getAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG)).orElse(Boolean.FALSE)) {
+            LOGGER.debug("{} component not present on page, so not parsing the page output",
+                TableOfContents.class.getName());
+            chain.doFilter(request, response);
+            return;
+        }
+
+        if (!Optional.ofNullable(response.getContentType()).filter(ct -> ct.contains("text/html")).isPresent()) {
+            LOGGER.debug("Response content type not \"text/html\", bypassing filter");
+            chain.doFilter(request, response);
+            return;
+        }
+
         CharResponseWrapper responseWrapper = new CharResponseWrapper((HttpServletResponse) response);
         chain.doFilter(request, responseWrapper);
         String originalContent = responseWrapper.toString();
-        Boolean containsTableOfContents = (Boolean) request.getAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG);
-        if (responseWrapper.getContentType() != null && responseWrapper.getContentType().contains("text/html") &&
-            (containsTableOfContents != null && containsTableOfContents)) {
 
-            Document document = Jsoup.parse(originalContent);
+        Document document = Jsoup.parse(originalContent);
 
-            Elements tocPlaceholderElements = document.getElementsByClass(TableOfContents.TOC_PLACEHOLDER_CLASS);
-            Map<String, Integer> customIDs = new HashMap<String, Integer>();
-            for (Element tocPlaceholderElement : tocPlaceholderElements) {
-                Element tableOfContents = getTableOfContents(tocPlaceholderElement, customIDs);
-                String id = tocPlaceholderElement.id();
-                tocPlaceholderElement.empty();
-                tocPlaceholderElement.clearAttributes();
-                tocPlaceholderElement.addClass(TableOfContents.TOC_CONTENT_CLASS);
-                if(!id.isEmpty()) {
-                    tocPlaceholderElement.id(id);
-                }
-                if(tableOfContents != null) {
-                    tocPlaceholderElement.appendChild(tableOfContents);
-                    WCMMode wcmMode = WCMMode.fromRequest(request);
-                    if(wcmMode == WCMMode.EDIT || wcmMode == WCMMode.PREVIEW) {
-                        Elements tocTemplatePlaceholderElement = tocPlaceholderElement
-                            .parent()
-                            .select("." + TableOfContents.TOC_TEMPLATE_PLACEHOLDER_CLASS);
-                        tocTemplatePlaceholderElement.remove();
-                    }
+        Elements tocPlaceholderElements = document.getElementsByClass(TableOfContents.TOC_PLACEHOLDER_CLASS);
+        Map<String, Integer> customIDs = new HashMap<>();
+        for (Element tocPlaceholderElement : tocPlaceholderElements) {
+            Element tableOfContents = getTableOfContents(tocPlaceholderElement, customIDs);
+            String id = tocPlaceholderElement.id();
+            tocPlaceholderElement.empty();
+            tocPlaceholderElement.clearAttributes();
+            tocPlaceholderElement.addClass(TableOfContents.TOC_CONTENT_CLASS);
+            if(!id.isEmpty()) {
+                tocPlaceholderElement.id(id);
+            }
+            if(tableOfContents != null) {
+                tocPlaceholderElement.appendChild(tableOfContents);
+                WCMMode wcmMode = WCMMode.fromRequest(request);
+                if(wcmMode == WCMMode.EDIT || wcmMode == WCMMode.PREVIEW) {
+                    Elements tocTemplatePlaceholderElement = tocPlaceholderElement
+                        .parent()
+                        .select("." + TableOfContents.TOC_TEMPLATE_PLACEHOLDER_CLASS);
+                    tocTemplatePlaceholderElement.remove();
                 }
             }
-
-            CharArrayWriter charWriter = new CharArrayWriter();
-            charWriter.write(document.outerHtml());
-            String alteredContent = charWriter.toString();
-
-            response.getWriter().write(alteredContent);
-        } else {
-            LOGGER.debug("{} component not present on page, so not parsing the page output",
-                TableOfContents.class.getName());
-            response.getWriter().write(originalContent);
         }
+
+        CharArrayWriter charWriter = new CharArrayWriter();
+        charWriter.write(document.outerHtml());
+        String alteredContent = charWriter.toString();
+
+        response.getWriter().write(alteredContent);
     }
 
     /**
@@ -169,7 +179,8 @@ public class TableOfContentsFilter implements Filter {
      * @param customIDs - A map of custom generated IDs to their count in the dom
      * @return Independent TOC element, not attached to the DOM
      */
-    private Element getTableOfContents(Element tocPlaceholderElement, Map<String, Integer> customIDs) {
+    @Nullable
+    private Element getTableOfContents(@NotNull final Element tocPlaceholderElement, @NotNull final Map<String, Integer> customIDs) {
         TableOfContents.ListType listType = tocPlaceholderElement.hasAttr(TableOfContents.TOC_DATA_ATTR_LIST_TYPE)
             ? TableOfContents.ListType.fromString(
                 tocPlaceholderElement.attr(TableOfContents.TOC_DATA_ATTR_LIST_TYPE))
@@ -244,7 +255,7 @@ public class TableOfContentsFilter implements Filter {
      * @param stopLevel - heading stop level of the TOC
      * @return CSS selector string
      */
-    private String getCssSelectorString(String[] classNames, int startLevel, int stopLevel) {
+    private String getCssSelectorString(@NotNull final String[] classNames, final int startLevel, final int stopLevel) {
         List<String> selectors = new ArrayList<>();
         for(String className: classNames) {
             for(int level = startLevel; level <= stopLevel; level++) {
@@ -263,8 +274,10 @@ public class TableOfContentsFilter implements Filter {
      * @param customIDs - A map of custom generated IDs to their count in the dom
      * @return Current nested TOC element containing all heading elements with levels >= parent heading level
      */
-    private Element getNestedList(String listTag, ListIterator<Element> headingElementsIterator,
-                                  int parentHeadingLevel, Map<String, Integer> customIDs) {
+    private Element getNestedList(@NotNull final String listTag,
+                                  @NotNull final ListIterator<Element> headingElementsIterator,
+                                  final int parentHeadingLevel,
+                                  @NotNull final Map<String, Integer> customIDs) {
         if(!headingElementsIterator.hasNext()) {
             return null;
         }
@@ -302,7 +315,7 @@ public class TableOfContentsFilter implements Filter {
      * @param customIDs - A map of custom generated IDs to their count in the dom
      * @return Independent 'li' element, not attached to the DOM
      */
-    private Element getListItemElement(Element headingElement, Map<String, Integer> customIDs) {
+    private Element getListItemElement(@NotNull final Element headingElement, @NotNull final Map<String, Integer> customIDs) {
         String id = headingElement.attr("id");
         if("".contentEquals(id)) {
             id = headingElement.text()
@@ -328,7 +341,7 @@ public class TableOfContentsFilter implements Filter {
      * @param headingElement DOM heading element
      * @return Integer representing the heading level of the given heading element
      */
-    private int getHeadingLevel(Element headingElement) {
+    private int getHeadingLevel(@NotNull final Element headingElement) {
         return headingElement.tagName().charAt(1) - '0';
     }
 
@@ -337,7 +350,7 @@ public class TableOfContentsFilter implements Filter {
      * @param level Integer representing the heading level
      * @return Heading tag name
      */
-    private String getHeadingTagName(int level) {
+    private String getHeadingTagName(final int level) {
         return "h" + level;
     }
 }
