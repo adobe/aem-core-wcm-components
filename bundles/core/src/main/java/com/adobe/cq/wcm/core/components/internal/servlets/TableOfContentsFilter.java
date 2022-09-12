@@ -122,15 +122,15 @@ public class TableOfContentsFilter implements Filter {
         chain.doFilter(request, responseWrapper);
         String originalContent = responseWrapper.toString();
 
-        if (responseWrapper.getContentType() == null || !responseWrapper.getContentType().contains("text/html")) {
-            LOGGER.debug("Response content type not \"text/html\", bypassing filter");
+        Boolean containsTableOfContents = (Boolean) request.getAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG);
+        if (containsTableOfContents == null || !containsTableOfContents) {
+            LOGGER.debug("request attribute {} not present or set to false, bypassing the filter {}", TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG, TableOfContentsFilter.class.getName());
             response.getWriter().write(originalContent);
             return;
         }
 
-        Boolean containsTableOfContents = (Boolean) request.getAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG);
-        if (containsTableOfContents == null || !containsTableOfContents) {
-            LOGGER.debug("request attribute {} not present or set to false, bypassing the filter {}", TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG, TableOfContentsFilter.class.getName());
+        if (responseWrapper.getContentType() == null || !responseWrapper.getContentType().contains("text/html")) {
+            LOGGER.debug("Response content type not \"text/html\", bypassing filter");
             response.getWriter().write(originalContent);
             return;
         }
