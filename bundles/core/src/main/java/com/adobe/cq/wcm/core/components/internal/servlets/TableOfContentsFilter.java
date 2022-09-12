@@ -121,45 +121,49 @@ public class TableOfContentsFilter implements Filter {
         CharResponseWrapper responseWrapper = new CharResponseWrapper((HttpServletResponse) response);
         chain.doFilter(request, responseWrapper);
         String originalContent = responseWrapper.toString();
+
+        if (responseWrapper.getContentType() == null || !responseWrapper.getContentType().contains("text/html")) {
+            LOGGER.debug("Response content type not \"text/html\", bypassing filter");
+            response.getWriter().write(originalContent);
+            return;
+        }
+
         Boolean containsTableOfContents = (Boolean) request.getAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG);
-        if (responseWrapper.getContentType() != null && responseWrapper.getContentType().contains("text/html") &&
-            (containsTableOfContents != null && containsTableOfContents)) {
+        if (containsTableOfContents == null || !containsTableOfContents) {
+            LOGGER.debug("request attribute {} not present or set to false, bypassing the filter {}", TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG, TableOfContentsFilter.class.getName());
+            response.getWriter().write(originalContent);
+            return;
+        }
 
-            Document document = Jsoup.parse(originalContent);
-
-            Elements tocPlaceholderElements = document.getElementsByClass(TableOfContents.TOC_PLACEHOLDER_CLASS);
-            Map<String, Integer> customIDs = new HashMap<String, Integer>();
-            for (Element tocPlaceholderElement : tocPlaceholderElements) {
-                Element tableOfContents = getTableOfContents(tocPlaceholderElement, customIDs);
-                String id = tocPlaceholderElement.id();
-                tocPlaceholderElement.empty();
-                tocPlaceholderElement.clearAttributes();
-                tocPlaceholderElement.addClass(TableOfContents.TOC_CONTENT_CLASS);
-                if(!id.isEmpty()) {
-                    tocPlaceholderElement.id(id);
-                }
-                if(tableOfContents != null) {
-                    tocPlaceholderElement.appendChild(tableOfContents);
-                    WCMMode wcmMode = WCMMode.fromRequest(request);
-                    if(wcmMode == WCMMode.EDIT || wcmMode == WCMMode.PREVIEW) {
-                        Elements tocTemplatePlaceholderElement = tocPlaceholderElement
-                            .parent()
-                            .select("." + TableOfContents.TOC_TEMPLATE_PLACEHOLDER_CLASS);
-                        tocTemplatePlaceholderElement.remove();
-                    }
+        Document document = Jsoup.parse(originalContent);
+        Elements tocPlaceholderElements = document.getElementsByClass(TableOfContents.TOC_PLACEHOLDER_CLASS);
+        Map<String, Integer> customIDs = new HashMap<String, Integer>();
+        for (Element tocPlaceholderElement : tocPlaceholderElements) {
+            Element tableOfContents = getTableOfContents(tocPlaceholderElement, customIDs);
+            String id = tocPlaceholderElement.id();
+            tocPlaceholderElement.empty();
+            tocPlaceholderElement.clearAttributes();
+            tocPlaceholderElement.addClass(TableOfContents.TOC_CONTENT_CLASS);
+            if(!id.isEmpty()) {
+                tocPlaceholderElement.id(id);
+            }
+            if(tableOfContents != null) {
+                tocPlaceholderElement.appendChild(tableOfContents);
+                WCMMode wcmMode = WCMMode.fromRequest(request);
+                if(wcmMode == WCMMode.EDIT || wcmMode == WCMMode.PREVIEW) {
+                    Elements tocTemplatePlaceholderElement = tocPlaceholderElement
+                        .parent()
+                        .select("." + TableOfContents.TOC_TEMPLATE_PLACEHOLDER_CLASS);
+                    tocTemplatePlaceholderElement.remove();
                 }
             }
-
-            CharArrayWriter charWriter = new CharArrayWriter();
-            charWriter.write(document.outerHtml());
-            String alteredContent = charWriter.toString();
-
-            response.getWriter().write(alteredContent);
-        } else {
-            LOGGER.debug("{} component not present on page, so not parsing the page output",
-                TableOfContents.class.getName());
-            response.getWriter().write(originalContent);
         }
+
+        CharArrayWriter charWriter = new CharArrayWriter();
+        charWriter.write(document.outerHtml());
+        String alteredContent = charWriter.toString();
+
+        response.getWriter().write(alteredContent);
     }
 
     /**
