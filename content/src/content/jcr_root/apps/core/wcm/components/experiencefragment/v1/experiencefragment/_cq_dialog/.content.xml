@@ -64,6 +64,13 @@
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
                                                 name="./id"/>
+                                            <useFragmentAsRemoteOffer
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="When checked, the experience fragment can be used as a remote offer and the experience can be replaced with a different content from Adobe Target using the id provided above."
+                                                name="./enableRemoteOffer"
+                                                text="Enable Remote Offer with Adobe Target"
+                                                value="{Boolean}true"/>
                                         </items>
                                     </column>
                                 </items>
