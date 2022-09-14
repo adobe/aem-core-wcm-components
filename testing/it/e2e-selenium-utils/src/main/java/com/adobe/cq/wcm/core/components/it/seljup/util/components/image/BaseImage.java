@@ -22,6 +22,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WrapsDriver;
 
 
 import static com.codeborne.selenide.Selenide.$;
@@ -42,6 +43,8 @@ public class BaseImage extends BaseComponent {
     public static String mapElement = "[data-cmp-hook-image='map']";
     public static String areaElement = "[data-cmp-hook-image='area']";
     public static String imageWithAltTextAndTitle = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s'][title='%s']";
+    public static String imageWithSizes = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg" +
+            ".'][sizes='%s']";
     public static String imageWithAltText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s']";
     public static String imageWithFileName = ".cmp-image__image[src*='/%s']";
 
@@ -88,6 +91,10 @@ public class BaseImage extends BaseComponent {
         return $(String.format(imageWithAltTextAndTitle, pagePath, altText, title)).isDisplayed();
     }
 
+    public boolean isImagePresentWithSizes(String pagePath, String sizes) {
+        return $(String.format(imageWithSizes, pagePath, sizes)).isDisplayed();
+    }
+
     public boolean isImagePresentWithAltText(String pagePath, String altText) {
         return $(String.format(imageWithAltText, pagePath, altText)).isDisplayed();
     }
@@ -110,6 +117,25 @@ public class BaseImage extends BaseComponent {
 
     public void clickAreaElement() {
         $(areaElement).click();
+    }
+
+    public String getAttribute(String attribute) {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        WebElement element = webDriver.findElement(By.cssSelector(imageElement));
+        return element.getAttribute(attribute);
+    }
+
+    public int getParentWidth() {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        WebElement element = webDriver.findElement(By.cssSelector(imageElement));
+        WebDriver driver = ((WrapsDriver) element).getWrappedDriver();
+        WebElement parent = (WebElement) ((JavascriptExecutor) driver).executeScript(
+                "return arguments[0].parentNode;", element);
+        if (parent != null) {
+            return parent.getSize().width;
+        } else {
+            return 0;
+        }
     }
 
     public void resizeImageElementWidth(int size) throws InterruptedException {

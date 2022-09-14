@@ -42,7 +42,7 @@ It is also possible to define the allowed components for the Accordion.
 ### Edit Dialog Properties
 The following properties are written to JCR for this Accordion component and are expected to be available as `Resource` properties:
 
-1. `./singleExpansion` - `true` if one panel should be forced to be expanded at a time, `false` otherwise.
+1. `./singleExpansion` - `true` if only one panel should be allowed to be expanded at a time, `false` otherwise.
 2. `./expandedItems` - defines the names of the items that are expanded by default.
 3. `./headingElement` - defines the heading element to use for the accordion headers (`h2` - `h6`).
 4. `./id` - defines the component HTML ID attribute.
@@ -75,7 +75,7 @@ Apply a `data-cmp-is="accordion"` attribute to the wrapper block to enable initi
 
 The following attributes can be added to the same element to provide options:
 
-1. `data-cmp-single-expansion` - if the attribute is present, forces a single panel to be expanded at a time.
+1. `data-cmp-single-expansion` - if the attribute is present, allows only a single panel to be expanded at a time.
 
 The following attributes can be added to the accordion item (`data-cmp-hook-accordion="item"`):
 

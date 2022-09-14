@@ -66,6 +66,7 @@ import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.image.Layer;
+import com.google.common.net.HttpHeaders;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.mockito.Mockito.any;
@@ -388,6 +389,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
+        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("attachment"));
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
@@ -413,6 +415,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
+        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("inline"));
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.gif");
@@ -426,6 +429,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
+        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("attachment"));
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
@@ -595,6 +599,21 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         servlet.doGet(request, response);
         Assertions.assertEquals(302, response.getStatus(), "Expected a 302 response code.");
         Assertions.assertEquals(CONTEXT_PATH + "/content/test/jcr%3acontent/root/image19.coreimg.800.png/1490005239000.png", response.getHeader("Location"),
+            "Expected redirect location with correct last modified suffix");
+    }
+
+    @Test
+    void testImageWithMissingLastModifiedSuffixAndQueryString() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE19_PATH,
+            "coreimg.800", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("");
+        request.setQueryString("contentPolicyDelegatePath=%2Fcontent%2Ffoobar");
+        servlet.doGet(request, response);
+        Assertions.assertEquals(302, response.getStatus(), "Expected a 302 response code.");
+        Assertions.assertEquals(CONTEXT_PATH + "/content/test/jcr%3acontent/root/image19.coreimg.800.png/1490005239000.png?contentPolicyDelegatePath=%2Fcontent%2Ffoobar", response.getHeader("Location"),
             "Expected redirect location with correct last modified suffix");
     }
 
@@ -990,6 +1009,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
 
     @Test
     void testStaticDesignWidthAndQuality() {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img.2000", "png");
         Resource mockResource = mock(Resource.class);
         ResourceResolver mockResourceResolver = mock(ResourceResolver.class);
         when(mockResource.getResourceResolver()).thenReturn(mockResourceResolver);
@@ -999,14 +1020,14 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         when(mockDesigner.getStyle(mockResource)).thenReturn(mockStyle);
         String[] configuredWidths = { "400", "600", "800"};
         when(mockStyle.get(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0])).thenReturn(configuredWidths);
-        List<Integer> allowedWidths = servlet.getAllowedRenditionWidths(mockResource);
+        List<Integer> allowedWidths = servlet.getAllowedRenditionWidths(mockResource, requestResponsePair.getLeft());
         Assertions.assertEquals(
                 Arrays.stream(configuredWidths).map(Integer::valueOf).sorted().collect(Collectors.toList()),
                 allowedWidths);
 
         int configuredQuality = 75;
         when(mockStyle.get(Image.PN_DESIGN_JPEG_QUALITY, AdaptiveImageServlet.DEFAULT_JPEG_QUALITY)).thenReturn(configuredQuality);
-        Integer allowedQuality = servlet.getAllowedJpegQuality(mockResource);
+        Integer allowedQuality = servlet.getAllowedJpegQuality(mockResource, requestResponsePair.getLeft());
         Assertions.assertEquals(configuredQuality, allowedQuality.intValue());
     }
 

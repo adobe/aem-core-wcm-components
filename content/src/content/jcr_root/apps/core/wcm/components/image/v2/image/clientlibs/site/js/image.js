@@ -172,38 +172,7 @@
             cacheElements(config.element);
             // check image is DM asset; if true try to make req=set
             if (config.options.src && Object.prototype.hasOwnProperty.call(config.options, "dmimage") && (config.options["smartcroprendition"] === "SmartCrop:Auto")) {
-                var request = new XMLHttpRequest();
-                var urlTemplatePart = decodeURIComponent(config.options.src).split(srcUriTemplateWidthVar)[0];
-                var url = urlTemplatePart + (urlTemplatePart.indexOf("?") < 0 ? "?" : "") + "req=set,json";
-
-                request.open("GET", url, false);
-                request.onload = function() {
-                    if (request.status >= 200 && request.status < 400) {
-                        // success status
-                        var responseText = request.responseText;
-                        var rePayload = new RegExp(/^(?:\/\*jsonp\*\/)?\s*([^()]+)\(([\s\S]+),\s*"[0-9]*"\);?$/gmi);
-                        var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
-                        var resPayload = rePayload.exec(responseText);
-                        var payload;
-                        if (resPayload) {
-                            var payloadStr = resPayload[2];
-                            if (rePayloadJSON.test(payloadStr)) {
-                                payload = JSON.parse(payloadStr);
-                            }
-
-                        }
-                        // check "relation" - only in case of smartcrop preset
-                        if (payload && payload.set.relation && payload.set.relation.length > 0) {
-                            for (var i = 0; i < payload.set.relation.length; i++) {
-                                smartCrops[parseInt(payload.set.relation[i].userdata.SmartCropWidth)] =
-                                    ":" + payload.set.relation[i].userdata.SmartCropDef;
-                            }
-                        }
-                    } else {
-                        // error status
-                    }
-                };
-                request.send();
+                smartCrops = CMP.image.dynamicMedia.getAutoSmartCrops(config.options.src);
             }
 
             if (!that._elements.noscript) {
@@ -228,6 +197,16 @@
             });
 
             that._elements.image.addEventListener("cmp-image-redraw", that.update);
+
+            that._interSectionObserver = new IntersectionObserver(function(entries, interSectionObserver) {
+                entries.forEach(function(entry) {
+                    if (entry.intersectionRatio > 0) {
+                        that.update();
+                    }
+                });
+            });
+            that._interSectionObserver.observe(that._elements.self);
+
             that.update();
         }
 
@@ -269,6 +248,7 @@
             if (that._lazyLoaderShowing) {
                 that._elements.image.addEventListener("load", removeLazyLoader);
             }
+            that._interSectionObserver.unobserve(that._elements.self);
         }
 
         function getOptimalWidth(widths, useDevicePixelRatio) {

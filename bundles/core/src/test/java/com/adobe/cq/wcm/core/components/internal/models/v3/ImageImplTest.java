@@ -229,7 +229,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     @Override
     protected void testImageWithTwoOrMoreSmartSizes() {
         context.contentPolicyMapping(resourceType,
-            "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
+            "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500},
+                "sizes", new String[]{"(max-width: 600px) 480px", "800px"});
         String escapedResourcePath = AbstractImageTest.IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
         assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt());
@@ -300,7 +301,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     @Test
     protected void testImageWithMoreThanOneSmartSize() {
         context.contentPolicyMapping(resourceType,
-            "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
+            "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500},
+                "sizes", new String[]{"(max-width: 600px) 480px", "800px"});
         Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
         assertArrayEquals(new int[]{600, 700, 800, 2000, 2500}, image.getWidths());
         assertTrue(image.isLazyEnabled());
@@ -317,6 +319,17 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         assertArrayEquals(new int[]{}, image.getWidths());
         assertTrue(image.isLazyEnabled());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE4_PATH));
+    }
+
+    @Override
+    @Test
+    protected void testGetUuid() {
+        context.contentPolicyMapping(resourceType,
+                "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500},
+                "sizes", new String[]{"(max-width: 600px) 480px", "800px"});
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
+        assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE0_PATH));
     }
 
     @Override
@@ -612,7 +625,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         context.contentPolicyMapping(com.adobe.cq.wcm.core.components.internal.models.v3.ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
         Image image = getImageUnderTest(IMAGE42_PATH);
         assertTrue(image.isDmImage());
-        assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=off", image.getSrc());
+        assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=on,{dpr}", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
     }
 

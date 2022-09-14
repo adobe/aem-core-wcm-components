@@ -16,12 +16,15 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 
 import com.adobe.cq.testing.client.CQClient;
@@ -67,6 +70,7 @@ public class ImageTests {
     private String redirectPage;
     private PropertiesPage propertiesPage;
     private String contextPath;
+    private String label;
 
     public String getProxyPath() {
         return proxyPath;
@@ -97,7 +101,7 @@ public class ImageTests {
         editorPage.open();
 
         this.image = image;
-
+        this.label = label;
         this.contextPath = contextPath;
 
     }
@@ -206,7 +210,7 @@ public class ImageTests {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.openMetadataTab();
         Commons.saveConfigureDialog();
-        String assetWithoutDescriptionErrorMessageSelector = "coral-tooltip[variant='error'] coral-tooltip-content";
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel";
         assertEquals("Error: Please provide an asset which has a description that can be used as alt text.", $(assetWithoutDescriptionErrorMessageSelector).innerText());
     }
 
@@ -214,7 +218,7 @@ public class ImageTests {
         Commons.openSidePanel();
         dragImageWithoutDescription();
         Commons.saveConfigureDialog();
-        String assetWithoutDescriptionErrorMessageSelector = "coral-tooltip[variant='error'] coral-tooltip-content";
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel";
         String errorIcon = "input[name='./alt'] + coral-icon[icon='alert']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", $(errorIcon));
@@ -342,6 +346,29 @@ public class ImageTests {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImageWithLazyLoadingEnabled(), "Image with native lazy loading enabled should be present");
+    }
+
+    public void testLazyLoadingDisabled() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.checkDisableLazyLoading();
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertFalse(image.isImageWithLazyLoadingEnabled(), "Image with native lazy loading enabled shouldn't be present");
+    }
+
+    public void testSetSizes() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithSizes(testPage, "(min-width: 36em) 33.3vw, 100vw"), "Image with sizes attribute should be " +
+                "present");
     }
 
     public void testPageImageWithEmptyAltTextFromPageImage(boolean aem65) throws InterruptedException, ClientException {
