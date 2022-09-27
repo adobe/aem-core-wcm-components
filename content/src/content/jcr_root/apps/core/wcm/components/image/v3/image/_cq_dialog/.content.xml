@@ -114,11 +114,11 @@
                                             <disableLazyLoading
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="${not empty cqDesign.disableLazyLoading ? cqDesign.disableLazyLoading : false}"
-                                                fieldDescription="When checked, it will preload all images, without using lazy loading."
+                                                granite:hide="${cqDesign.disableLazyLoading}"
+                                                fieldDescription="When checked, image will be loaded eagerly, regardless of if the image is currently visible by the user."
                                                 name="./disableLazyLoading"
                                                 text="Disable lazy loading"
-                                                uncheckedValue="false"
+                                                deleteHint="{Boolean}true"
                                                 value="{Boolean}true"/>
                                         </items>
                                     </column>
@@ -247,7 +247,8 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>

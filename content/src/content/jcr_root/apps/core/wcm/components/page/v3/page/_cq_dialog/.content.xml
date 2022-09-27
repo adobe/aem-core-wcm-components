@@ -74,7 +74,8 @@
                                                 cq:showOnCreate="true"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </htmlid>
                                     <moretitles

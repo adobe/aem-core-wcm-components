@@ -18,6 +18,9 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor.Editor;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
 import com.day.cq.wcm.api.WCMMode;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.sling.api.SlingConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestDispatcherOptions;
@@ -106,7 +109,12 @@ public class ContainerServlet extends SlingAllMethodsServlet {
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws ServletException, IOException {
         Resource container = request.getResource();
         RequestDispatcherOptions options = new RequestDispatcherOptions();
-        options.setForceResourceType(Editor.RESOURCE_TYPE);
+        String resourceType = request.getParameter(SlingConstants.PROPERTY_RESOURCE_TYPE);
+        if (StringUtils.isNotEmpty(resourceType)) {
+            options.setForceResourceType(resourceType);
+        } else {
+            options.setForceResourceType(Editor.RESOURCE_TYPE);
+        }
         request.setAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME, WCMMode.DISABLED);
         options.setReplaceSuffix(container.getPath());
         RequestDispatcher dispatcher = request.getRequestDispatcher(container, options);
