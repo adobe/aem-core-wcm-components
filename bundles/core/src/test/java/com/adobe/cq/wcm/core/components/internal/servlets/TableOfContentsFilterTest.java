@@ -215,8 +215,8 @@ public class TableOfContentsFilterTest {
             StandardCharsets.UTF_8
         );
         assertEquals(
-            expectedContent,
-            responseWriter.toString(),
+            expectedContent.replaceAll("\\R", System.lineSeparator()),
+            responseWriter.toString().replaceAll("\\R", System.lineSeparator()),
             errorMessage
         );
     }
