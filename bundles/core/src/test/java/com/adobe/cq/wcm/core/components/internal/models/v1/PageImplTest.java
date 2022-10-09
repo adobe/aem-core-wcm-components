@@ -19,6 +19,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import org.apache.sling.api.resource.ModifiableValueMap;
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.osgi.MapUtil;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
@@ -38,7 +41,9 @@ import com.google.common.collect.Sets;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static com.day.cq.wcm.api.NameConstants.PN_TEMPLATE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -116,6 +121,29 @@ public class PageImplTest {
         assertEquals("coretest.product-page", page.getClientLibCategories()[0]);
         assertEquals("product-page", page.getTemplateName());
         Utils.testJSONExport(page, Utils.getTestExporterJSONPath(testBase, PAGE));
+    }
+
+    /**
+     * Tests that the page data template is null - if the page does not
+     * have a template set - without causing NPE.
+     */
+    @Test
+    protected void testPageData_noTemplate() throws PersistenceException {
+        context.load().binaryFile(TEST_BASE + "/static.css", DESIGN_PATH + "/static.css");
+
+        // remove the template value
+        ModifiableValueMap props = Objects.requireNonNull(
+            Optional.ofNullable((context.pageManager().getPage(PAGE)))
+                .map(com.day.cq.wcm.api.Page::getContentResource)
+                .map(r -> r.adaptTo(ModifiableValueMap.class))
+                .orElse(null)
+        );
+        props.remove(PN_TEMPLATE);
+        context.resourceResolver().commit();
+
+        PageData pageData = (PageData) getPageUnderTest(PAGE).getData();
+        assertNotNull(pageData);
+        assertNull(pageData.getTemplatePath());
     }
 
     @Test
