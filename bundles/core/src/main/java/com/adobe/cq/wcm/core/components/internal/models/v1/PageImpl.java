@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -337,7 +338,9 @@ public class PageImpl extends AbstractComponentImpl implements Page {
             .withTitle(this::getTitle)
             .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
             .withDescription(() -> this.pageProperties.get(NameConstants.PN_DESCRIPTION, String.class))
-            .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
+            .withTemplatePath(() -> Optional.ofNullable(this.currentPage.getTemplate())
+                .map(Template::getPath)
+                .orElse(null))
             .withUrl(() -> linkManager.get(currentPage).build().getURL())
             .withLanguage(this::getLanguage)
             .build();
