@@ -32,6 +32,7 @@
             class="cmp-accordion__header">
             <button id="${item.id}-button"
                     class="cmp-accordion__button${item.name in accordion.expandedItems ? ' cmp-accordion__button--expanded' : ''}"
+                    type="button"
                     aria-controls="${item.id}-panel"
                     data-cmp-hook-accordion="button">
                 <span class="cmp-accordion__title">${item.title}</span>
