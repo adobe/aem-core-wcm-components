@@ -16,6 +16,9 @@
 package com.adobe.cq.wcm.core.extensions.amp.internal;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -77,6 +80,7 @@ class AmpModeForwardFilterTest {
 
     @Test
     void testFilteringWithNoSelector() throws IOException, ServletException {
+    	registerFilterAsEnabled();
         context.currentPage(AMP_PAGE_PROPERTY);
         context.currentResource();
         spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
@@ -85,6 +89,7 @@ class AmpModeForwardFilterTest {
 
     @Test
     void testFilteringWithAmpSelector() throws IOException, ServletException {
+    	registerFilterAsEnabled();
         //without amp selector
         context.currentPage(AMP_SELECTOR);
         spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
@@ -116,6 +121,7 @@ class AmpModeForwardFilterTest {
 
     @Test
     void testFilteringWithoutAmpSelector() throws IOException, ServletException {
+    	registerFilterAsEnabled();
         context.request().setRequestDispatcherFactory(new MockRequestDispatcherFactory() {
             @Override
             public RequestDispatcher getRequestDispatcher(String path, RequestDispatcherOptions options) {
@@ -155,6 +161,7 @@ class AmpModeForwardFilterTest {
 
     @Test
     void testFilteringWithSelectorWithAmpMode() throws IOException, ServletException {
+    	registerFilterAsEnabled();
         context.currentPage(AMP_SELECTOR_WITH_AMP_MODE);
         context.requestPathInfo().setResourcePath(AMP_SELECTOR);
         //with .amp selector
@@ -164,5 +171,31 @@ class AmpModeForwardFilterTest {
         spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
         verify(spyAmpModeForwardFilter, atLeastOnce()).doFilter(eq(context.request()), eq(context.response()) , eq(filterChain));
     }
+    
+    
+    
+    
+    private void registerFilterAsEnabled() {
+    	Map<String,Object> props = new HashMap<>();
+    	props.put("enabled","true");
+    	context.registerInjectActivateService(spyAmpModeForwardFilter, props);
+    }
+    
+    @Test
+    void testWithDisabledFilter() throws IOException, ServletException {
+    	Map<String,Object> props = new HashMap<>();
+    	props.put("enabled","false");
+    	context.registerInjectActivateService(spyAmpModeForwardFilter, props);
+    	
+        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE);
+        context.requestPathInfo().setResourcePath(AMP_SELECTOR);
+        //with .amp selector
+        context.requestPathInfo().setSelectorString(".amp");
+        context.requestPathInfo().setExtension("html");
+
+        spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+        verify(spyAmpModeForwardFilter, never()).forward(eq(context.request()), eq(context.response()), anyObject());
+    }
+    
 
 }
