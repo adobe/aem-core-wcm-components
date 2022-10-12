@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.extensions.amp.internal;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +58,7 @@ class AmpModeForwardFilterTest {
     @BeforeEach
     void setUp() {
         //use spy to verify the filter
-        spyAmpModeForwardFilter = Mockito.spy(new AmpModeForwardFilter());
+        spyAmpModeForwardFilter = Mockito.spy(new AmpModeForwardFilter(true));
 
         filterChain = mock(FilterChain.class);
         MockRequestDispatcherFactory mockRequestDispatcherFactory = new MockRequestDispatcherFactory() {
@@ -80,7 +81,6 @@ class AmpModeForwardFilterTest {
 
     @Test
     void testFilteringWithNoSelector() throws IOException, ServletException {
-    	registerFilterAsEnabled();
         context.currentPage(AMP_PAGE_PROPERTY);
         context.currentResource();
         spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
@@ -89,7 +89,6 @@ class AmpModeForwardFilterTest {
 
     @Test
     void testFilteringWithAmpSelector() throws IOException, ServletException {
-    	registerFilterAsEnabled();
         //without amp selector
         context.currentPage(AMP_SELECTOR);
         spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
@@ -121,7 +120,6 @@ class AmpModeForwardFilterTest {
 
     @Test
     void testFilteringWithoutAmpSelector() throws IOException, ServletException {
-    	registerFilterAsEnabled();
         context.request().setRequestDispatcherFactory(new MockRequestDispatcherFactory() {
             @Override
             public RequestDispatcher getRequestDispatcher(String path, RequestDispatcherOptions options) {
@@ -161,7 +159,6 @@ class AmpModeForwardFilterTest {
 
     @Test
     void testFilteringWithSelectorWithAmpMode() throws IOException, ServletException {
-    	registerFilterAsEnabled();
         context.currentPage(AMP_SELECTOR_WITH_AMP_MODE);
         context.requestPathInfo().setResourcePath(AMP_SELECTOR);
         //with .amp selector
@@ -174,27 +171,28 @@ class AmpModeForwardFilterTest {
     
     
     
-    
-    private void registerFilterAsEnabled() {
-    	Map<String,Object> props = new HashMap<>();
-    	props.put("enabled","true");
-    	context.registerInjectActivateService(spyAmpModeForwardFilter, props);
-    }
-    
     @Test
     void testWithDisabledFilter() throws IOException, ServletException {
-    	Map<String,Object> props = new HashMap<>();
-    	props.put("enabled","false");
-    	context.registerInjectActivateService(spyAmpModeForwardFilter, props);
-    	
+    	AmpModeForwardFilter filter = Mockito.spy(new AmpModeForwardFilter(new AmpModeForwardFilter.Config() {
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return null;
+			}
+			
+			@Override
+			public boolean enabled() {
+				return false;
+			}
+		}));
+
         context.currentPage(AMP_SELECTOR_WITH_AMP_MODE);
         context.requestPathInfo().setResourcePath(AMP_SELECTOR);
         //with .amp selector
         context.requestPathInfo().setSelectorString(".amp");
         context.requestPathInfo().setExtension("html");
 
-        spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
-        verify(spyAmpModeForwardFilter, never()).forward(eq(context.request()), eq(context.response()), anyObject());
+        filter.doFilter(context.request(), context.response(), filterChain);
+        verify(filter, never()).forward(eq(context.request()), eq(context.response()), anyObject());
     }
     
 

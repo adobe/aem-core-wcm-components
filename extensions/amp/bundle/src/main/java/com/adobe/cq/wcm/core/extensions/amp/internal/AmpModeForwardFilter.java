@@ -62,7 +62,17 @@ public class AmpModeForwardFilter implements Filter {
     private static final Logger LOG = LoggerFactory.getLogger(AmpModeForwardFilter.class);
     
     boolean isEnabled;
-
+    
+    
+    public AmpModeForwardFilter (Config config) {
+    	this(config.enabled());
+    }
+    
+    protected AmpModeForwardFilter (boolean enabled) {
+    	this.isEnabled = enabled;
+    	LOG.debug("AmpModeForwardFilter.isEnabled={}",isEnabled);
+    }
+    
     /**
      * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
      */
@@ -125,13 +135,6 @@ public class AmpModeForwardFilter implements Filter {
      */
     @Override
     public void destroy() {}
-    
-    
-    @Activate
-    public void activate (Config config) {
-    	this.isEnabled = config.enabled();
-    	LOG.debug("AmModeForwardFilter isEnabled={}",isEnabled);
-    }
     
     
     @ObjectClassDefinition(name="AmpMode Forward Filter")
