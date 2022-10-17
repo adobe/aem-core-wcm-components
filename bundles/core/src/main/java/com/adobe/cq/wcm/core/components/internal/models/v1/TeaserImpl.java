@@ -510,7 +510,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          */
         @NotNull
         public Optional<Page> getCtaPage() {
-            return Optional.ofNullable((Page) ctaLink.getReference());
+            return Optional.ofNullable(ctaLink.getReference())
+                    .map(reference -> {
+                        if (reference instanceof Page) {
+                            return (Page) reference;
+                        }
+                        return null;
+                    });
         }
 
         @Nullable
@@ -522,14 +528,14 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Nullable
         @Override
         public String getPath() {
-            Page page = (Page) ctaLink.getReference();
-            if (page != null) {
-                return page.getPath();
+            if (ctaLink.getReference() instanceof Page) {
+                Page page = (Page) ctaLink.getReference();
+                if (page != null) {
+                    return page.getPath();
+                }
             }
-            else {
-                // probably would make more sense to return null when not page is target, but we keep this for backward compatibility
-                return ctaLink.getURL();
-            }
+            // probably would make more sense to return null when not page is target, but we keep this for backward compatibility
+            return ctaLink.getURL();
         }
 
         @Nullable
