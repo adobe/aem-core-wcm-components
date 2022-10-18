@@ -1,0 +1,18 @@
+{
+  "test" : {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "responsivegrid": {
+          "jcr:primaryType": "nt:unstructured",
+          "teaser": {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType": "core/wcm/components/teaser"
+          }
+        }
+      }
+    }
+  }
+}
