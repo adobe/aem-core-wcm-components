@@ -511,12 +511,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @NotNull
         public Optional<Page> getCtaPage() {
             return Optional.ofNullable(ctaLink.getReference())
-                    .map(reference -> {
-                        if (reference instanceof Page) {
-                            return (Page) reference;
-                        }
-                        return null;
-                    });
+                    .filter(reference -> reference instanceof Page)
+                    .map(reference -> (Page) reference);
         }
 
         @Nullable
