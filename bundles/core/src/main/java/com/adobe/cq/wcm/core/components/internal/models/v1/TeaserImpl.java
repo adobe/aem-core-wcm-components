@@ -524,14 +524,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Nullable
         @Override
         public String getPath() {
-            if (ctaLink.getReference() instanceof Page) {
-                Page page = (Page) ctaLink.getReference();
-                if (page != null) {
-                    return page.getPath();
-                }
-            }
-            // probably would make more sense to return null when not page is target, but we keep this for backward compatibility
-            return ctaLink.getURL();
+            return getCtaPage()
+                    .map(Page::getPath)
+                    // probably would make more sense to return null when not page is target, but we keep this for backward compatibility
+                    .orElse(ctaLink.getURL());
         }
 
         @Nullable
