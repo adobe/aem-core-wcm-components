@@ -39,6 +39,7 @@ import com.adobe.cq.testing.junit.rules.CQAuthorClassRule;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.ImmutableSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -127,7 +128,7 @@ public class ComponentsIT {
                 for (String attr : new String[] { "src", "data-cmp-src", "href" }) {
                     String value = child.attr(attr);
                     if (StringUtils.startsWith(value, "/") && !StringUtils.startsWith(value, cp + '/')) {
-                        value = value.replaceAll("/\\d+/", "/0/");
+                        value = cp + value;
                         child.attr(attr, value);
                     }
                 }
@@ -174,12 +175,10 @@ public class ComponentsIT {
             } else if (value instanceof String) {
                 // prepend context path if needed
                 if (StringUtils.isNotEmpty(cp)) {
-                    for (String attr : new String[] { "xdm:linkURL" }) {
-                        if (key.equals(attr)
-                            && StringUtils.startsWith((String) value, "/")
-                            && !StringUtils.startsWith((String) value, cp + '/')) {
-                            value = cp + value;
-                        }
+                    if (ImmutableSet.of("xdm:linkURL").contains(key)
+                        && StringUtils.startsWith((String) value, "/")
+                        && !StringUtils.startsWith((String) value, cp + '/')) {
+                        value = cp + value;
                     }
                 }
             }
