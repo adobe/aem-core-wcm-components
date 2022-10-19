@@ -135,6 +135,7 @@
                     <excludes combine.children="append">
                         <!-- exclude comparison files -->
                         <exclude>**/resources/*.txt</exclude>
+                        <exclude>**/resources/components/*.html</exclude>
                         <exclude>**/*.md</exclude>
                     </excludes>
                 </configuration>

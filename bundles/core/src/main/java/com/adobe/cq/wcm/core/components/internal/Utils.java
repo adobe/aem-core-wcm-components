@@ -364,14 +364,19 @@ public class Utils {
                 // the inherited resource is the featured image of the linked page
                 Optional<Link> link = getOptionalLink(linkManager.get(resource).build());
                 inheritedResource = link
-                        .map(link1 -> (Page) link1.getReference())
+                        .map(link1 -> {
+                            if (link1.getReference() instanceof Page) {
+                                return (Page) link1.getReference();
+                            }
+                            return null;
+                        })
                         .map(ComponentUtils::getFeaturedImage)
                         .orElse(null);
             } else if (actionsEnabled && firstAction != null) {
                 // the inherited resource is the featured image of the first action's page (the resource is assumed to be a teaser)
                 inheritedResource = getOptionalLink(linkManager.get(firstAction).withLinkUrlPropertyName(Teaser.PN_ACTION_LINK).build())
                         .map(link1 -> {
-                            if (getOptionalLink(link1).isPresent()) {
+                            if (getOptionalLink(link1).isPresent() && (link1.getReference() instanceof Page)) {
                                 Page linkedPage = (Page) link1.getReference();
                                 return Optional.ofNullable(linkedPage)
                                         .map(ComponentUtils::getFeaturedImage)
