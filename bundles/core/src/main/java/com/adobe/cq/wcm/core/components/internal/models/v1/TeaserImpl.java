@@ -260,7 +260,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                         return this.getActions()
                                 .stream()
                                 .findFirst()
-                                .map(action -> linkManager.get(action.getURL()).build())
+                                .map(ListItem::getLink)
                                 .orElse(null);
                     } else {
                         // use the property value if actions are not enabled
