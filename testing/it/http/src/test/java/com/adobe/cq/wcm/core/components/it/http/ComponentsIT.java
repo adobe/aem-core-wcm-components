@@ -17,13 +17,18 @@ package com.adobe.cq.wcm.core.components.it.http;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.testing.clients.ClientException;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -115,7 +120,6 @@ public class ComponentsIT {
                 continue;
             }
             // remove timestamps from img src
-
             for (String attr : new String[] { "src", "data-cmp-src" }) {
                 String value = child.attr(attr);
                 if (StringUtils.isNotEmpty(value)) {
@@ -147,6 +151,10 @@ public class ComponentsIT {
                         LOG.warn("Failed to normalize json attribute: {}", stringValue, ex);
                     }
                 }
+            }
+
+            if (!StringUtils.startsWith(child.nodeName(), "#")) {
+                sortAttributes(child);
             }
 
             // recurse
@@ -187,5 +195,22 @@ public class ComponentsIT {
         }
 
         return copy;
+    }
+
+    /**
+     * For a reproducible parsing outcome we have to sort the attributes in a specific order. This is method is based on the implementation
+     * detail that the node.attributes().dataset() uses a {@link java.util.LinkedHashMap} internally.
+     * @param node
+     */
+    private void sortAttributes(Node node) {
+        Attributes attributes = node.attributes();
+        if (attributes.size() > 1) {
+            TreeMap<String, String> sortedAttributes = new TreeMap<>();
+            attributes.asList().forEach(attribute -> sortedAttributes.put(attribute.getKey(), attribute.getValue()));
+
+            // clear the original attributes and re-add the sorted ones
+            sortedAttributes.forEach((key, value) -> attributes.remove(key));
+            sortedAttributes.forEach(attributes::put);
+        }
     }
 }
