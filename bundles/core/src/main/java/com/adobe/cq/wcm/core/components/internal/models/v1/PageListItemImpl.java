@@ -59,7 +59,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
         super(parentId, page.getContentResource(), component);
         this.parentId = parentId;
         this.link = linkManager.get(page).build();
-        if (this.link.isValid()) {
+        if (this.link.isValid() && (link.getReference() instanceof Page)) {
             this.page = (Page) link.getReference();
         } else {
             this.page = page;
