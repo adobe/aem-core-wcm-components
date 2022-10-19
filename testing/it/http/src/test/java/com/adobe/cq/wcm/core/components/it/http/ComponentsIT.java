@@ -87,7 +87,7 @@ public class ComponentsIT {
         Element expectedElement = expectedDocument.body().children().first();
         Element actualElement = actualDocument.select(selector).get(selectorSetIndex);
 
-        assertNotNull(selector + " did not match any element in the page", actualElement);
+        assertNotNull(selector + " did not match any element in the page", actualElement.toString());
         assertEquals(selector + " does not match " + expectation, expectedElement.toString(), actualElement.toString());
     }
 
