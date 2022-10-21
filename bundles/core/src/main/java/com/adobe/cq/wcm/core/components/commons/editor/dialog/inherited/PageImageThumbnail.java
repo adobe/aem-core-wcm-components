@@ -118,7 +118,7 @@ public class PageImageThumbnail {
                     link = imageModel.getImageLink();
                 }
             }
-            if (link != null) {
+            if (link != null && (link.getReference() instanceof Page)) {
                 targetPage = (Page) link.getReference();
             } else {
                 targetPage = currentPage;
