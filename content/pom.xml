@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.21.3-SNAPSHOT</version>
+        <version>0.20.0</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,7 @@
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.content</artifactId>
-    <version>2.21.3-SNAPSHOT</version>
+    <version>0.20.0</version>
     <packaging>content-package</packaging>
     <name>Adobe Experience Manager Core WCM Components Content Package</name>
 
