@@ -56,3 +56,31 @@ jobs:
       # Run code coverage check
       - name: Run core coverage check
         run: bash <(curl -s https://codecov.io/bash)
+  build-js:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 14.10 ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - name: Install dependencies
+        run: npm install
+      - name: Run lint
+        run: npm lint
+      - name: Run tests
+        run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI

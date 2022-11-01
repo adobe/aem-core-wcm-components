@@ -20,29 +20,61 @@
     window.CMP = window.CMP || {};
     window.CMP.image = window.CMP.image || {};
     window.CMP.image.v3 = (function() {
+        var IS = "image";
+
         var selectors = {
             self: "[data-cmp-hook-image='imageV3']"
         };
 
-        /**
-         * Init the image if the image is from dynamic media
-         * @param {HTMLElement} component the image component
-         */
-        var initImage = function(component) {
-            var dmImage = component.matches("[data-cmp-dmimage]");
-            if (dmImage) {
-                var image = component.querySelector("img");
-                CMP.image.dynamicMedia.setDMAttributes(component, image);
-            }
+        var properties = {
+            "widths": {
+                "default": [],
+                "transform": function(value) {
+                    var widths = [];
+                    value.split(",").forEach(function(item) {
+                        item = parseFloat(item);
+                        if (!isNaN(item)) {
+                            widths.push(item);
+                        }
+                    });
+                    return widths;
+                }
+            },
+            "dmimage": {
+                "default": false,
+                "transform": function(value) {
+                    return !(value === null || typeof value === "undefined");
+                }
+            },
+            "src": {
+                "transform": function(value) {
+                    return decodeURIComponent(value);
+                }
+            },
+            "smartcroprendition": ""
         };
+
+        function Image(config) {
+            var that = this;
+            /**
+             * Init the image if the image is from dynamic media
+             * @param {HTMLElement} component the image component
+             */
+            that.initImage = function(component) {
+                var options = CMP.utils.readData(component, IS);
+                that._properties = CMP.utils.setupProperties(options, properties);
+                if (that._properties.dmimage) {
+                    CMP.image.dynamicMedia.setDMAttributes(component, that._properties);
+                }
+            };
+            that.initImage(config.element);
+        }
 
         return {
             init: function() {
-                var componentList = document.querySelectorAll(selectors.self);
-                var listLength = componentList.length;
-                for (var i = 0; i < listLength; i++) {
-                    var component = componentList[i];
-                    initImage(component);
+                var elements = document.querySelectorAll(selectors.self);
+                for (var i = 0; i < elements.length; i++) {
+                    new Image({ element: elements[i], options: CMP.utils.readData(elements[i], IS) });
                 }
 
                 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -56,7 +88,7 @@
                                 if (addedNode.querySelectorAll) {
                                     var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
                                     elementsArray.forEach(function(element) {
-                                        initImage(element);
+                                        new Image({ element: element, options: CMP.utils.readData(element, IS) });
                                     });
                                 }
                             });
