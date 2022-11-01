@@ -19,7 +19,7 @@
         "sync-pom-version": "sync-pom-version",
         "build": "clientlib --verbose",
         "unit": "karma start karma.conf.js",
-        "test": "npm run unit"
+        "test": "npm run unit --"
     },
     "devDependencies": {
         "aem-clientlib-generator": "^1.7.7",
