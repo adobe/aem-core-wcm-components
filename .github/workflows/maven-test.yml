@@ -58,7 +58,9 @@ jobs:
         run: bash <(curl -s https://codecov.io/bash)
   build-js:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: content
     strategy:
       matrix:
         node-version: [ 14.10 ]
@@ -81,6 +83,6 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run lint
-        run: npm lint
+        run: npm run eslint
       - name: Run tests
         run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
