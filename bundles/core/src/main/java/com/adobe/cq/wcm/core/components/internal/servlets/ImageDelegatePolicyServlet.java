@@ -21,6 +21,7 @@ import java.util.Optional;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -73,7 +74,11 @@ public class ImageDelegatePolicyServlet extends SlingSafeMethodsServlet {
                             imageDelegate), expressionResolver, request)).map(request::getRequestDispatcher).orElse(null);
             if (Objects.nonNull(requestDispatcher)) {
                 requestDispatcher.include(request, response);
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
+        } else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 }

@@ -19,6 +19,7 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
+import org.apache.http.HttpStatus;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestDispatcherFactory;
@@ -35,9 +36,8 @@ import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
@@ -58,12 +58,12 @@ class ImageDelegatePolicyServletTest {
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, APPS_ROOT);
-        context.requestPathInfo().setSuffix(SUFFIX);
         underTest = new ImageDelegatePolicyServlet();
     }
 
     @Test
     void testCqDesignAttribute() throws ServletException, IOException {
+        context.requestPathInfo().setSuffix(SUFFIX);
         context.currentResource("/apps/core/wcm/components/teaser/cq:design/content/items/tabs/items/image");
         MockSlingHttpServletRequest request = context.request();
         request.setRequestDispatcherFactory(new MockRequestDispatcherFactory() {
@@ -82,6 +82,35 @@ class ImageDelegatePolicyServletTest {
         assertNotNull(expressionCustomizer);
         Style cqDesign = (Style) expressionCustomizer.getVariable("cqDesign");
         assertNotNull(cqDesign);
-        verify(requestDispatcher, times(1)).include(any(), any());
+        verify(requestDispatcher).include(context.request(), context.response());
+    }
+
+    @Test
+    void testComponentNotFound() throws ServletException, IOException {
+        context.requestPathInfo().setSuffix(SUFFIX + "non-existing");
+        context.currentResource("/apps/core/wcm/components/teaser/cq:design/content/items/tabs/items/image");
+        MockSlingHttpServletRequest request = context.request();
+        underTest.doGet(request, context.response());
+        assertEquals(HttpStatus.SC_NOT_FOUND, context.response().getStatus());
+    }
+
+    @Test
+    void testNoRequestDispatcher() throws ServletException, IOException {
+        MockSlingHttpServletRequest request = context.request();
+        context.currentResource("/apps/core/wcm/components/teaser/cq:design/content/items/tabs/items/image");
+        request.setRequestDispatcherFactory(new MockRequestDispatcherFactory() {
+            @Override
+            public RequestDispatcher getRequestDispatcher(String s, RequestDispatcherOptions requestDispatcherOptions) {
+                return null;
+            }
+
+            @Override
+            public RequestDispatcher getRequestDispatcher(Resource resource, RequestDispatcherOptions requestDispatcherOptions) {
+                return null;
+            }
+        });
+        context.requestPathInfo().setSuffix(SUFFIX);
+        underTest.doGet(request, context.response());
+        assertEquals(HttpStatus.SC_NOT_FOUND, context.response().getStatus());
     }
 }
