@@ -16,8 +16,11 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
+import org.apache.sling.api.request.RequestDispatcherOptions;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestDispatcherFactory;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,12 +31,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ExpressionCustomizer;
-import com.adobe.granite.ui.components.ExpressionResolver;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
 class ImageDelegatePolicyServletTest {
@@ -47,7 +52,7 @@ class ImageDelegatePolicyServletTest {
     private ImageDelegatePolicyServlet underTest;
 
     @Mock
-    private MockRequestDispatcherFactory mockRequestDispatcherFactory;
+    private RequestDispatcher requestDispatcher;
 
     @BeforeEach
     void setUp() {
@@ -61,11 +66,22 @@ class ImageDelegatePolicyServletTest {
     void testCqDesignAttribute() throws ServletException, IOException {
         context.currentResource("/apps/core/wcm/components/teaser/cq:design/content/items/tabs/items/image");
         MockSlingHttpServletRequest request = context.request();
-        request.setRequestDispatcherFactory(mockRequestDispatcherFactory);
+        request.setRequestDispatcherFactory(new MockRequestDispatcherFactory() {
+            @Override
+            public RequestDispatcher getRequestDispatcher(String s, RequestDispatcherOptions requestDispatcherOptions) {
+                return requestDispatcher;
+            }
+
+            @Override
+            public RequestDispatcher getRequestDispatcher(Resource resource, RequestDispatcherOptions requestDispatcherOptions) {
+                return requestDispatcher;
+            }
+        });
         underTest.doGet(request, context.response());
         ExpressionCustomizer expressionCustomizer = (ExpressionCustomizer) request.getAttribute(ExpressionCustomizer.class.getName());
         assertNotNull(expressionCustomizer);
         Style cqDesign = (Style) expressionCustomizer.getVariable("cqDesign");
         assertNotNull(cqDesign);
+        verify(requestDispatcher, times(1)).include(any(), any());
     }
 }
