@@ -3,5 +3,5 @@
     jcr:primaryType="cq:ClientLibraryFolder"
     allowProxy="{Boolean}true"
     categories="[core.wcm.components.image.v2]"
-    dependencies="[core.wcm.components.commons.site.utils,core.wcm.components.commons.site.image.dynamic-media]"
+    embed="[core.wcm.components.commons.site.utils,core.wcm.components.commons.site.image.dynamic-media]"
     jsProcessor="[default:none,min:gcc;languageIn=ECMASCRIPT_2015;languageOut=ECMASCRIPT_2015]"/>
