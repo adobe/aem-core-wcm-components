@@ -149,7 +149,6 @@
          * @returns {String} the final src attribute
          */
         var getSrc = function(src, width) {
-            console.log(src, width);
             if (src.indexOf(SRC_URI_TEMPLATE_WIDTH_VAR) > -1) {
                 src = src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, width);
             }
