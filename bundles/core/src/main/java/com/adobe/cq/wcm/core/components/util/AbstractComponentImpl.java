@@ -137,9 +137,9 @@ public abstract class AbstractComponentImpl implements Component {
             if (this.dataLayerEnabled == null) {
                 if (this.currentPage != null ) {
                     // Check at page level to allow components embedded via containers in editable templates to inherit the setting
-                    this.dataLayerEnabled = ComponentUtils.isDataLayerEnabled(this.currentPage.getContentResource());
+                    this.dataLayerEnabled = ComponentUtils.isDataLayerEnabled(this.request, this.currentPage.getContentResource());
                 } else {
-                    this.dataLayerEnabled = ComponentUtils.isDataLayerEnabled(this.resource);
+                    this.dataLayerEnabled = ComponentUtils.isDataLayerEnabled(this.request, this.resource);
                 }
             }
             if (this.dataLayerEnabled) {
