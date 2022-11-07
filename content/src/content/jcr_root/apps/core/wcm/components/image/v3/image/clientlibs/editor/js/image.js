@@ -33,6 +33,8 @@
     var $dynamicMediaGroup;
     var areDMFeaturesEnabled;
     var fileReference;
+    var urlReference;
+    var remotePath;
     var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
     var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
     var smartCropRenditionDropDownSelector = ".cmp-image__editor-dynamicmedia-smartcroprendition";
@@ -132,11 +134,40 @@
             }
             if ($cqFileUploadEdit) {
                 fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
+                urlReference = $cqFileUploadEdit.data("cqFileuploadUrlreference");
+                remotePath = $cqFileUploadEdit.data("cqFileuploadRemotepath");
+                console.log("urlReference ", urlReference);
+                console.log("remotePath ", remotePath);
                 if (fileReference === "") {
                     fileReference = undefined;
                 }
                 if (fileReference) {
                     retrieveDAMInfo(fileReference);
+                } else if (urlReference) {
+                    // if (altTuple) {
+                    //     altTextFromDAM = "Test Description";
+                    //     if (altTextFromDAM === undefined || altTextFromDAM.trim() === "") {
+                    //         altTextFromDAM = "Test Title";
+                    //     }
+                    //     altTuple.seedTextValue(altTextFromDAM);
+                    //     altTuple.update();
+                    //     toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
+                    // }
+                    // if (captionTuple) {
+                    //     var title = "Test Title";
+                    //     captionTuple.seedTextValue(title);
+                    //     captionTuple.update();
+                    // }
+                    // // show or hide "DynamicMedia section" depending on whether the file is DM
+                    // // TODO::Check is DM flow
+                    // // var isFileDM = data["dam:scene7File"];
+                    // // if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
+                    // //     $dynamicMediaGroup.hide();
+                    // // } else {
+                    // //     $dynamicMediaGroup.show();
+                    // //     getSmartCropRenditions(data["dam:scene7File"]);
+                    // // }
+                    retrieveDAMInfoForRemoteAsset(remotePath);
                 } else {
                     altTuple.hideCheckbox(true);
                     captionTuple.hideCheckbox(true);
@@ -159,6 +190,31 @@
     $(window).on("focus", function() {
         if (fileReference) {
             retrieveDAMInfo(fileReference);
+        } else if (urlReference) {
+            // if (altTuple) {
+            //     altTextFromDAM = "Test Description";
+            //     if (altTextFromDAM === undefined || altTextFromDAM.trim() === "") {
+            //         altTextFromDAM = "Test Title";
+            //     }
+            //     altTuple.seedTextValue(altTextFromDAM);
+            //     altTuple.update();
+            //     toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
+            // }
+            // if (captionTuple) {
+            //     var title = "Test Title";
+            //     captionTuple.seedTextValue(title);
+            //     captionTuple.update();
+            // }
+            // // show or hide "DynamicMedia section" depending on whether the file is DM
+            // // TODO::Check is DM flow
+            // // var isFileDM = data["dam:scene7File"];
+            // // if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
+            // //     $dynamicMediaGroup.hide();
+            // // } else {
+            // //     $dynamicMediaGroup.show();
+            // //     getSmartCropRenditions(data["dam:scene7File"]);
+            // // }
+            retrieveDAMInfoForRemoteAsset(remotePath);
         }
     });
 
@@ -346,6 +402,63 @@
             }
         });
     }
+
+    function retrieveDAMInfoForRemoteAsset(remotePath) {
+        return $.ajax({
+            url: remotePath + "/_jcr_content/metadata.json"
+        }).done(function(data) {
+            if (data) {
+                if (altTuple) {
+                    var description = data["dc:description"];
+                    if (description === undefined || description.trim() === "") {
+                        description = data["dc:title"];
+                    }
+                    altTuple.seedTextValue(description);
+                    altTuple.update();
+                    toggleAlternativeFieldsAndLink(isDecorative);
+                }
+                if (captionTuple) {
+                    var title = data["dc:title"];
+                    captionTuple.seedTextValue(title);
+                    captionTuple.update();
+                }
+                // show or hide "DynamicMedia section" depending on whether the file is DM
+                var isFileDM = data["dam:scene7File"];
+                if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
+                    $dynamicMediaGroup.hide();
+                } else {
+                    $dynamicMediaGroup.show();
+                    getSmartCropRenditions(data["dam:scene7File"]);
+                }
+            }
+        });
+    }
+
+    // function setRequiredValues() {
+    //     if (altTuple) {
+    //         altTextFromDAM = "testDescription";
+    //         if (altTextFromDAM === undefined || altTextFromDAM.trim() === "") {
+    //             altTextFromDAM = "testTitle";
+    //         }
+    //         altTuple.seedTextValue(altTextFromDAM);
+    //         altTuple.update();
+    //         toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
+    //     }
+    //     if (captionTuple) {
+    //         var title = "testTitle";
+    //         captionTuple.seedTextValue(title);
+    //         captionTuple.update();
+    //     }
+    //     // How the flow for scene7 works? Should we fetch it from metadata of RD?
+    //     // show or hide "DynamicMedia section" depending on whether the file is DM
+    //     var isFileDM = ""; //data["dam:scene7File"];
+    //     if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
+    //         $dynamicMediaGroup.hide();
+    //     } else {
+    //         $dynamicMediaGroup.show();
+    //         //getSmartCropRenditions(data["dam:scene7File"]);
+    //     }
+    // }
 
     /**
      * Helper function to get core image instance 'smartCropRendition' property

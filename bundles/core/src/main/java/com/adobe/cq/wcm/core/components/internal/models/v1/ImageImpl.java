@@ -34,6 +34,7 @@ import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ValueMap;
@@ -111,8 +112,11 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     protected ValueMap properties;
     protected String fileReference;
+    protected String urlReference;
+    protected String imageMimeType;
     protected String alt;
     protected String title;
+    protected Boolean isConnectedAsset;
 
     protected String src;
     protected String[] smartImages = new String[]{};
@@ -162,9 +166,11 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         properties = resource.getValueMap();
         fileResource = resource.getChild(DownloadResource.NN_FILE);
         fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
+        urlReference = properties.get("urlReference", String.class);
+        imageMimeType = properties.get("imageMimeType", String.class);
         alt = properties.get(ImageResource.PN_ALT, String.class);
         title = properties.get(JcrConstants.JCR_TITLE, String.class);
-
+        isConnectedAsset = properties.get("isConnectedAsset", false);
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
@@ -185,10 +191,19 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     useAssetDelivery = false;
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
                 }
-            } else {
+            } else if(urlReference != null) {
+                mimeType = PropertiesUtil.toString(imageMimeType, MIME_TYPE_IMAGE_JPEG);
+                imageName = getImageNameFromDeliveryUrl(urlReference);
+                hasContent = true;
+            }
+            else {
                 useAssetDelivery = false;
                 LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
             }
+        } else if(urlReference != null) {
+            mimeType = PropertiesUtil.toString(imageMimeType, MIME_TYPE_IMAGE_JPEG);
+            imageName = getImageNameFromDeliveryUrl(urlReference); // Should we send it?
+            hasContent = true;
         } else {
             useAssetDelivery = false;
             if (fileResource != null) {
@@ -311,6 +326,24 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             .map(FilenameUtils::getBaseName)
             .map(this::getSeoFriendlyName)
             .orElse(StringUtils.EMPTY);
+    }
+
+    /**
+     * Extracts the image name from the DAM resource
+     *
+     * @return image name from DAM
+     */
+    protected String getImageNameFromDeliveryUrl(String urlReference) {
+        String defaultBaseUrl = "/adobe/dynamicmedia/deliver/";
+        String builtUrlWithoutBase = urlReference.substring(defaultBaseUrl.length());
+        String[] parts = builtUrlWithoutBase.split("/");
+        if(parts.length < 2) {
+            return "";
+        }
+        String seoNameWithFormatAndParams = parts[1];
+        String seoNameWithFormat = seoNameWithFormatAndParams.split("\\?")[0];
+        String seoName = seoNameWithFormat.split("\\.")[0];
+        return seoName;
     }
 
     /**
