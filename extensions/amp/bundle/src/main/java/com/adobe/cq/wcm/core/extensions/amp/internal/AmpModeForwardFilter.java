@@ -61,7 +61,7 @@ public class AmpModeForwardFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(AmpModeForwardFilter.class);
     
-    boolean isEnabled;
+    boolean isEnabled = true;
     
 
     
