@@ -858,7 +858,7 @@
             <dependency>
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.testing.caconfig-mock-plugin</artifactId>
-                <version>1.3.2</version>
+                <version>1.4.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
