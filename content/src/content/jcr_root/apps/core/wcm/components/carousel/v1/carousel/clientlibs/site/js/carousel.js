@@ -697,9 +697,12 @@
         });
     }
 
-    var documentReady = document.readyState !== 'loading' ? Promise.resolve() : new Promise(r => document.addEventListener('DOMContentLoaded', r));
-    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(r => document.addEventListener('core.wcm.components.commons.site.utils.loaded', r));
-
+    var documentReady = document.readyState !== "loading" ? Promise.resolve() : new Promise(function(resolve) {
+        document.addEventListener("DOMContentLoaded", resolve);
+    });
+    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(function(resolve) {
+        document.addEventListener("core.wcm.components.commons.site.utils.loaded", resolve);
+    });
     Promise.all([documentReady, utilsReady]).then(onDocumentReady);
 
     if (containerUtils) {

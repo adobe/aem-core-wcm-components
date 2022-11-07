@@ -104,9 +104,15 @@
             }
         };
     }());
-    var documentReady = document.readyState !== 'loading' ? Promise.resolve() : new Promise(r => document.addEventListener('DOMContentLoaded', r));
-    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(r => document.addEventListener('core.wcm.components.commons.site.utils.loaded', r));
-    var dynamicMediaReady = (window.CMP && window.CMP.image && window.CMP.image.dynamicMedia) ? Promise.resolve() : new Promise(r => document.addEventListener('core.wcm.components.commons.site.image.dynamic-media.loaded', r));
 
+    var documentReady = document.readyState !== "loading" ? Promise.resolve() : new Promise(function(resolve) {
+        document.addEventListener("DOMContentLoaded", resolve);
+    });
+    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(function(resolve) {
+        document.addEventListener("core.wcm.components.commons.site.utils.loaded", resolve);
+    });
+    var dynamicMediaReady = (window.CMP && window.CMP.image && window.CMP.image.dynamicMedia) ? Promise.resolve() : new Promise(function(resolve) {
+        document.addEventListener("core.wcm.components.commons.site.image.dynamic-media.loaded", resolve);
+    });
     Promise.all([documentReady, utilsReady, dynamicMediaReady]).then(window.CMP.image.v3.init);
 }(window.document));

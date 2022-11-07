@@ -155,7 +155,7 @@
             return src;
         };
 
-        document.dispatchEvent(new CustomEvent('core.wcm.components.commons.site.image.dynamic-media.loaded'));
+        document.dispatchEvent(new CustomEvent("core.wcm.components.commons.site.image.dynamic-media.loaded"));
 
         return {
             getAutoSmartCrops: getAutoSmartCrops,
