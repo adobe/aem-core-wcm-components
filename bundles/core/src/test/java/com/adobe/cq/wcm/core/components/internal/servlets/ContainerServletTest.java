@@ -67,7 +67,7 @@ public class ContainerServletTest {
     // servlet under test
     private final ContainerServlet servlet = new ContainerServlet();
 
-    public final AemContext context = new AemContextBuilder().resourceResolverType(ResourceResolverType.JCR_OAK).build();
+    public final AemContext context = new AemContextBuilder().resourceResolverType(ResourceResolverType.JCR_MOCK).build();
 
     @Mock
     RequestDispatcher requestDispatcher;
