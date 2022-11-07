@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
+import com.day.cq.wcm.foundation.forms.FormsManager;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -57,7 +58,7 @@ public class FormsHelperStubber {
             ctClass.getDeclaredMethod("getValues")
                     .setBody("return com.adobe.cq.wcm.core.components.internal.models.v1.form.FormsHelperGetValuesStubMethod.get();");
             // load the stubbed class
-            ctClass.toClass();
+            ctClass.toClass(FormsManager.class);
         } catch (NotFoundException e) {
             e.printStackTrace();
         } catch (CannotCompileException e) {
