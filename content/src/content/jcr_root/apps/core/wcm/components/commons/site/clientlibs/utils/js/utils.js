@@ -77,11 +77,11 @@
             return transformedProperties;
         };
 
-        document.dispatchEvent(new CustomEvent("core.wcm.components.commons.site.utils.loaded"));
 
         return {
             readData: readData,
             setupProperties: setupProperties
         };
     }());
+    document.dispatchEvent(new CustomEvent("core.wcm.components.commons.site.utils.loaded"));
 }(window.document));

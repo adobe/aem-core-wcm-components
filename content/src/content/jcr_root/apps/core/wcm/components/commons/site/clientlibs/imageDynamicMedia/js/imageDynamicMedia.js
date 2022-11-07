@@ -155,7 +155,6 @@
             return src;
         };
 
-        document.dispatchEvent(new CustomEvent("core.wcm.components.commons.site.image.dynamic-media.loaded"));
 
         return {
             getAutoSmartCrops: getAutoSmartCrops,
@@ -165,4 +164,5 @@
             getWidth: getWidth
         };
     }());
+    document.dispatchEvent(new CustomEvent("core.wcm.components.commons.site.image.dynamic-media.loaded"));
 }(window.document));
