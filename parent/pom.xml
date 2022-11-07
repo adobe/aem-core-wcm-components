@@ -61,7 +61,7 @@
         <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
         <node.version>v16.13.1</node.version>
         <npm.version>8.3.0</npm.version>
-        <mockitio.version>2.24.5</mockitio.version>
+        <mockitio.version>4.8.1</mockitio.version>
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
         <jackson.version>2.11.3</jackson.version>
