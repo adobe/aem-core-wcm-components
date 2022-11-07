@@ -398,7 +398,7 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.servlets.annotations</artifactId>
-            <version>1.2.4</version>
+            <version>1.2.6</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -445,6 +445,10 @@
 
         <!-- Testing dependencies -->
         <dependency>
+            <groupId>io.wcm</groupId>
+            <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.junit.core</artifactId>
             <scope>test</scope>
@@ -467,15 +471,6 @@
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.testing.caconfig-mock-plugin</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.testing.sling-mock-oak</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.wcm</groupId>
-            <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>

@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+@Deprecated
 public class MockExternalizerFactory {
 
     public static final String ROOT = "https://example.org";
