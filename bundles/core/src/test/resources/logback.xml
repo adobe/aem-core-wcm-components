@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%thread] %level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="OFF">
+        <appender-ref ref="CONSOLE" />
+    </root>
+    <logger name="com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited.InheritedField" additivity="false" level="warn" />
+    <logger name="com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet" additivity="false" level="warn" />
+</configuration>
