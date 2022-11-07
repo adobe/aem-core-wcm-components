@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function() {
+(function(document) {
     "use strict";
 
     window.CMP = window.CMP || {};
@@ -77,9 +77,11 @@
             return transformedProperties;
         };
 
+        document.dispatchEvent(new CustomEvent('core.wcm.components.commons.site.utils.loaded'));
+
         return {
             readData: readData,
             setupProperties: setupProperties
         };
     }());
-}());
+}(window.document));

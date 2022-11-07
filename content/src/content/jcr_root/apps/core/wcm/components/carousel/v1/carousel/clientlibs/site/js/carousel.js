@@ -697,11 +697,11 @@
         });
     }
 
-    if (document.readyState !== "loading") {
-        onDocumentReady();
-    } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady);
-    }
+    var documentReady = document.readyState !== 'loading' ? Promise.resolve() : new Promise(r => document.addEventListener('DOMContentLoaded', r));
+    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(r => document.addEventListener('core.wcm.components.commons.site.utils.loaded', r));
+
+    Promise.all([documentReady, utilsReady]).then(onDocumentReady);
+
     if (containerUtils) {
         window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }

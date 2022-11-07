@@ -415,12 +415,11 @@
         });
     }
 
-    if (document.readyState !== "loading") {
-        onDocumentReady();
-    } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady);
-    }
+    var documentReady = document.readyState !== 'loading' ? Promise.resolve() : new Promise(r => document.addEventListener('DOMContentLoaded', r));
+    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(r => document.addEventListener('core.wcm.components.commons.site.utils.loaded', r));
+    var dynamicMediaReady = (window.CMP && window.CMP.image && window.CMP.image.dynamicMedia) ? Promise.resolve() : new Promise(r => document.addEventListener('core.wcm.components.commons.site.image.dynamic-media.loaded', r));
 
+    Promise.all([documentReady, utilsReady, dynamicMediaReady]).then(onDocumentReady);
     /*
         on drag & drop of the component into a parsys, noscript's content will be escaped multiple times by the editor which creates
         the DOM for editing; the HTML parser cannot be used here due to the multiple escaping

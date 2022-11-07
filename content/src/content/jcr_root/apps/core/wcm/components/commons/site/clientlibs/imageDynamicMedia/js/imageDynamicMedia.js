@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function() {
+(function(document) {
     "use strict";
 
     window.CMP = window.CMP || {};
@@ -155,6 +155,8 @@
             return src;
         };
 
+        document.dispatchEvent(new CustomEvent('core.wcm.components.commons.site.image.dynamic-media.loaded'));
+
         return {
             getAutoSmartCrops: getAutoSmartCrops,
             getSrcSet: getSrcSet,
@@ -163,4 +165,4 @@
             getWidth: getWidth
         };
     }());
-}());
+}(window.document));
