@@ -791,15 +791,9 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>5.3.2</version>
+                <version>5.9.1</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.13.1</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -873,18 +867,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>io.wcm</groupId>
-                <artifactId>io.wcm.testing.aem-mock.junit4</artifactId>
-                <version>3.1.0</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.sling</groupId>
-                <artifactId>org.apache.sling.testing.sling-mock.junit4</artifactId>
-                <version>2.3.4</version>
-                <scope>test</scope>
-            </dependency>
+
             <dependency>
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.servlet-helpers</artifactId>
