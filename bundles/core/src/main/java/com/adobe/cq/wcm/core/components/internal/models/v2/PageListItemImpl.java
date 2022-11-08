@@ -60,8 +60,8 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     /**
      * List of properties that should be inherited when delegating to the featured image of the page.
      */
-    private Map<String, String> overriddenProperties = new HashMap<>();
-    private List<String> hiddenProperties = new ArrayList<>();
+    private final Map<String, Object> overriddenProperties = new HashMap<>();
+    private final List<String> hiddenProperties = new ArrayList<>();
 
     public PageListItemImpl(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component) {
         super(linkManager, page, parentId, component);

@@ -82,7 +82,7 @@ public class CoreResourceWrapperTest {
         when(toBeWrapped.getValueMap()).thenReturn(new ValueMapDecorator(Collections.emptyMap()));
         when(toBeWrapped.getResourceResolver()).thenReturn(resourceResolver);
         when(resourceResolver.isResourceType(any(CoreResourceWrapper.class), any(String.class))).thenReturn(true);
-        Map<String, String> overriddenProperties = new HashMap<>();
+        Map<String, Object> overriddenProperties = new HashMap<>();
         overriddenProperties.put("a", "1");
         overriddenProperties.put("b", "2");
         Resource wrappedResource = new CoreResourceWrapper(toBeWrapped, "a/b/c", new ArrayList<>(), overriddenProperties, null);
