@@ -57,7 +57,7 @@ public class ModelDataSourceServletTest {
     @Test
     public void verifyDataSourceWhenSessionIsNull() throws Exception {
         // GIVEN
-        SlingHttpServletRequest request = new MockSlingHttpServletRequest(context.bundleContext());
+        SlingHttpServletRequest request = context.request();
 
         // WHEN
         modelDatasourceServlet.doGet(request, context.response());
