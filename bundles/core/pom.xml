@@ -463,12 +463,6 @@
         <!-- for testing we need the new ResourceTypeBasedResourcePicker -->
         <dependency>
             <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.models.impl</artifactId>
-            <version>1.4.10</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.testing.caconfig-mock-plugin</artifactId>
             <scope>test</scope>
         </dependency>
@@ -484,18 +478,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-imaging</artifactId>
             <version>1.0-R1534292</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>20.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -530,14 +512,14 @@
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-core</artifactId>
-            <version>2.2.11</version>
+            <version>2.3.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.2.11</version>
+            <version>2.3.7</version>
             <scope>test</scope>
         </dependency>
 

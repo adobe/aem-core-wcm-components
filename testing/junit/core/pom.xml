@@ -166,21 +166,9 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <artifactId>commons-collections</artifactId>
-            <version>3.2.2</version>
-            <groupId>commons-collections</groupId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>20.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.9</version>
+            <version>0.10.2</version>
         </dependency>
 
         <!-- Servlet -->
