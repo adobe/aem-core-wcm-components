@@ -90,6 +90,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
     protected static final String PNG_RECTANGLE_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_RECTANGLE_BINARY_NAME;
     protected static final String PNG_IMAGE_SMALL_BINARY_NAME = "Adobe_Systems_logo_and_wordmark_small.png";
     protected static final String PNG_SMALL_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_SMALL_BINARY_NAME;
+    private static final String FEATURED_IMAGE_PATH = "/content/test-featured-image/jcr:content/cq:featuredimage/1490005239000/" + PNG_IMAGE_BINARY_NAME;
+
     private Logger testLogger;
 
     @BeforeEach
@@ -721,7 +723,24 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
+    }
 
+    @Test
+    void testImageFromFeaturedImage() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(LIST01_PATH, "img",
+                "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix(FEATURED_IMAGE_PATH);
+        servlet.doGet(request, response);
+        Assertions.assertEquals(200, response.getStatus(), "Expected a 200 response code.");
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
+        BufferedImage image = ImageIO.read(byteArrayInputStream);
+        Dimension expectedDimension = new Dimension(ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH);
+        Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
+        Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
+        Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
     }
 
     @Test

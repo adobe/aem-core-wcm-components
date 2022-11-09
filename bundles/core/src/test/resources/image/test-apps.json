@@ -12,5 +12,14 @@
                 "componentGroup"         : ".core-wcm"
             }
         }
+    },
+    "list": {
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:title"              : "List",
+        "sling:resourceSuperType": "core/wcm/components/image",
+        "jcr:description"        : "List component",
+        "cq:icon"                :"textBulleted",
+        "componentGroup"         : ".core-wcm",
+        "teaserDelegate"         : "core/wcm/components/teaser/v2/teaser"
     }
 }
