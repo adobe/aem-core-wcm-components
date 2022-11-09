@@ -242,6 +242,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                         SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                         (inTemplate ? templateRelativePath : "") +
+                        (pageListItem ? featuredImageResourcePath : "") +
                         (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                         (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
                 }

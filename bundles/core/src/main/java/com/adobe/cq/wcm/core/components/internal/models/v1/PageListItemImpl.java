@@ -37,6 +37,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
+    public static final String PN_FEATURED_IMAGE_RESOURCE_PATH = "featuredImageResourcePath";
+
     /**
      * The page for this list item.
      */

@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
@@ -49,6 +51,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
 
     private final Component component;
+    private Resource listResource;
     private Resource teaserResource;
     private boolean showDescription;
     private boolean linkItems;
@@ -65,11 +68,12 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     }
 
     public PageListItemImpl(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component,
-                            boolean showDescription, boolean linkItems) {
+                            boolean showDescription, boolean linkItems, Resource resource) {
         super(linkManager, page, parentId, component);
         this.component = component;
         this.showDescription = showDescription;
         this.linkItems = linkItems;
+        this.listResource = resource;
     }
 
     @Override
@@ -97,6 +101,10 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
             } else {
                 Resource resourceToBeWrapped = ComponentUtils.getFeaturedImage(page);
                 if (resourceToBeWrapped != null) {
+                    ValueMap valueMap = resourceToBeWrapped.getValueMap();
+                    String inheritedFileReference = valueMap.get(DownloadResource.PN_REFERENCE, String.class);
+                    overriddenProperties.put(DownloadResource.PN_REFERENCE, inheritedFileReference);
+                    overriddenProperties.put(PN_FEATURED_IMAGE_RESOURCE_PATH, resourceToBeWrapped.getPath());
                     // use the page featured image and inherit properties from the page item
                     overriddenProperties.put(JcrConstants.JCR_TITLE, this.getTitle());
                     if (showDescription) {
@@ -118,7 +126,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                         overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
                     }
                 }
-                teaserResource = new CoreResourceWrapper(resourceToBeWrapped, delegateResourceType, hiddenProperties, overriddenProperties);
+                teaserResource = new CoreResourceWrapper(listResource, delegateResourceType, hiddenProperties, overriddenProperties);
             }
         }
         return teaserResource;
