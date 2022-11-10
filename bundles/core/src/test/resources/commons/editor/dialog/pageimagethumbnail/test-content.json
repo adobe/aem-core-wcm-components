@@ -68,17 +68,7 @@
         "jcr:createdBy": "admin",
         "altValueFromDAM"   : "false",
         "alt"               : "featured image alt for page 1",
-        "file"              : {
-          "jcr:primaryType": "nt:file",
-          "jcr:createdBy"  : "admin",
-          "jcr:content"    : {
-            "jcr:primaryType"   : "nt:resource",
-            "jcr:lastModifiedBy": "admin",
-            "jcr:mimeType"      : "image/png",
-            ":jcr:data"         : 10453365,
-            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
-          }
-        },
+        "fileReference"     : "/content/dam/example/Adobe_Systems_logo_and_wordmark.png",
         "sling:resourceType": "core/wcm/components/image/v3/image"
       }
     }
