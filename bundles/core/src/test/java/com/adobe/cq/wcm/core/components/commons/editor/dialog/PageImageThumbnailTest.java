@@ -34,6 +34,7 @@ public class PageImageThumbnailTest {
 
     private static final String TEST_BASE = "/commons/editor/dialog/pageimagethumbnail";
     private static final String CONTENT_ROOT = "/content";
+    private static final String TEST_CONTENT_DAM_JSON = "/test-content-dam.json";
     private static final String RESOURCE = CONTENT_ROOT + "/page/jcr:content/root/responsivegrid/image";
     private static final String RESOURCE1 = CONTENT_ROOT + "/page/jcr:content/root/responsivegrid/image1";
     private static final String TEASER1 = CONTENT_ROOT + "/page/jcr:content/root/responsivegrid/teaser_empty";
@@ -43,7 +44,8 @@ public class PageImageThumbnailTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        context.load().json(TEST_BASE + "/test-content.json", CONTENT_ROOT);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(TEST_BASE + TEST_CONTENT_DAM_JSON, "/content/dam/example");
     }
 
     @Test
@@ -85,7 +87,8 @@ public class PageImageThumbnailTest {
         PageImageThumbnail pageImageThumbnail = request.adaptTo(PageImageThumbnail.class);
         if (pageImageThumbnail != null) {
             assertEquals("featured image alt for page 1", pageImageThumbnail.getAlt(), "getAlt()");
-            assertEquals("/content/page1/_jcr_content/_cq_featuredimage.coreimg.png", pageImageThumbnail.getSrc(), "getSrc()");
+            assertEquals("/content/page1/_jcr_content/_cq_featuredimage.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png", pageImageThumbnail.getSrc(), "getSrc()");
+            assertEquals("/content/dam/example/Adobe_Systems_logo_and_wordmark.png", pageImageThumbnail.getFileReference(), "getFileReference()");
         }
     }
 
@@ -109,6 +112,7 @@ public class PageImageThumbnailTest {
         if (pageImageThumbnail != null) {
             assertNull(pageImageThumbnail.getAlt(), "getAlt()");
             assertNull(pageImageThumbnail.getSrc(), "getSrc()");
+            assertNull(pageImageThumbnail.getFileReference(), "getFileReference()");
         }
     }
 
