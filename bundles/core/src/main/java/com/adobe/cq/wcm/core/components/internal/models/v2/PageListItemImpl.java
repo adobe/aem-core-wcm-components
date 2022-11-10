@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
+import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
@@ -104,7 +105,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                     ValueMap valueMap = resourceToBeWrapped.getValueMap();
                     String inheritedFileReference = valueMap.get(DownloadResource.PN_REFERENCE, String.class);
                     overriddenProperties.put(DownloadResource.PN_REFERENCE, inheritedFileReference);
-                    overriddenProperties.put(PN_FEATURED_IMAGE_RESOURCE_PATH, resourceToBeWrapped.getPath());
+                    overriddenProperties.put(Image.PN_EXTERNAL_IMAGE_RESOURCE_PATH, resourceToBeWrapped.getPath());
                     // use the page featured image and inherit properties from the page item
                     overriddenProperties.put(JcrConstants.JCR_TITLE, this.getTitle());
                     if (showDescription) {

@@ -113,7 +113,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected String fileReference;
     protected String alt;
     protected String title;
-    protected String featuredImageResourcePath;
+    protected String externalImageResourcePath;
 
     protected String src;
     protected String[] smartImages = new String[]{};
@@ -128,7 +128,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected String extension;
     protected long lastModifiedDate = 0;
     protected boolean inTemplate = false;
-    protected boolean pageListItem = false;
+    protected boolean hasExternalImageResource = false;
     protected String baseResourcePath;
     protected String templateRelativePath;
     protected boolean disableLazyLoading;
@@ -166,9 +166,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         alt = properties.get(ImageResource.PN_ALT, String.class);
         title = properties.get(JcrConstants.JCR_TITLE, String.class);
-        featuredImageResourcePath = properties.get(PageListItemImpl.PN_FEATURED_IMAGE_RESOURCE_PATH, String.class);
-        if (StringUtils.isNotEmpty(featuredImageResourcePath)) {
-            pageListItem = true;
+        externalImageResourcePath = properties.get(PN_EXTERNAL_IMAGE_RESOURCE_PATH, String.class);
+        if (StringUtils.isNotEmpty(externalImageResourcePath)) {
+            hasExternalImageResource = true;
         }
 
         mimeType = MIME_TYPE_IMAGE_JPEG;
@@ -263,10 +263,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     if (StringUtils.isEmpty(smartImage)) {
                         smartImage = baseResourcePath + DOT +
                             selector + DOT + jpegQuality + DOT + width + DOT + extension +
-                            (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                            (pageListItem ? featuredImageResourcePath : "") +
+                            (inTemplate ? Text.escapePath(templateRelativePath) : hasExternalImageResource ? externalImageResourcePath : "") +
                             (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
-                            (inTemplate || pageListItem || lastModifiedDate > 0 ? DOT + extension : "");
+                            (inTemplate || hasExternalImageResource || lastModifiedDate > 0 ? DOT + extension : "");
                     }
                     smartImages[index] = smartImage;
                     smartSizes[index] = width;
@@ -290,10 +289,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 } else {
                     src += extension;
                 }
-                src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                        (pageListItem ? featuredImageResourcePath : "") +
+                src += (inTemplate ? Text.escapePath(templateRelativePath) : hasExternalImageResource ? externalImageResourcePath : "") +
                         (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
-                        (inTemplate || pageListItem || lastModifiedDate > 0 ? DOT + extension : "");
+                        (inTemplate || hasExternalImageResource || lastModifiedDate > 0 ? DOT + extension : "");
             }
 
             if (!isDecorative) {

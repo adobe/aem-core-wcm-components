@@ -32,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Template;
 import com.google.common.base.Joiner;
 
 public class AdaptiveImageHelper {
@@ -43,6 +42,14 @@ public class AdaptiveImageHelper {
 
     }
 
+    /**
+     * Get an alternative image component candidate {@link Resource}. Alternative image component is used when an image component is part
+     * of an editable template or an external image resource is provided as selector.
+     *
+     * @param suffix the Sling {@link RequestPathInfo} suffix which contains the alternative image component path
+     * @param component the current image component instance
+     * @return the alternative image component resource or {@code null}
+     */
     @Nullable
     public static Resource getComponentCandidate(@NotNull String suffix, Resource component) {
         Resource componentCandidate = null;
@@ -62,16 +69,22 @@ public class AdaptiveImageHelper {
                         .map(template -> ResourceUtil.normalize(template.getPath() + suffixPath))
                         .map(resourceResolver::getResource).orElse(null);
             } else {
-                // image coming from featured image
-                Resource featuredImageResource = resourceResolver.getResource(suffixPath);
-                if (featuredImageResource != null && featuredImageResource.isResourceType(IMAGE_RESOURCE_TYPE)) {
-                    componentCandidate = featuredImageResource;
+                // image coming from external resource
+                Resource externalImageResource = resourceResolver.getResource(suffixPath);
+                if (externalImageResource != null && externalImageResource.isResourceType(IMAGE_RESOURCE_TYPE)) {
+                    componentCandidate = externalImageResource;
                 }
             }
         }
         return componentCandidate;
     }
 
+    /**
+     * Extract the lastModified timestamp from the suffix.
+     *
+     * @param suffix the {@link RequestPathInfo} suffix which contains the timestamp
+     * @return the lastModified timestamp as {@code long}, or default value 0 if no timestamp can be extracted.
+     */
     public static long getRequestLastModifiedSuffix(@Nullable String suffix) {
         long requestLastModified = 0;
         if (StringUtils.isNotEmpty(suffix) && suffix.contains(".")) {
@@ -90,6 +103,14 @@ public class AdaptiveImageHelper {
         return requestLastModified;
     }
 
+    /**
+     * Get the HTTP redirect location of the image request in case the provided timestamp is outdated or not provided in the current
+     * request.
+     *
+     * @param request the current {@link SlingHttpServletRequest}
+     * @param lastModifiedEpoch the latest timestamp of the asset or image component resource
+     * @return the redirect location
+     */
     @Nullable
     public static String getRedirectLocation(SlingHttpServletRequest request, long lastModifiedEpoch) {
         String redirectLocation = null;
