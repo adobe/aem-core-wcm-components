@@ -86,6 +86,11 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
         ServiceReference<Servlet> servletReference = servletServiceReferences.iterator().next();
         Servlet ais = context.bundleContext().getService(servletReference);
         assertTrue(ais instanceof AdaptiveImageServlet);
+
+        // test that servlets are cleared up after deactivation
+        configurationConsumer.deactivate();
+        assertEquals(0, context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)").size());
+        assertEquals(0, context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=d/e/f)").size());
     }
 
     @Test
