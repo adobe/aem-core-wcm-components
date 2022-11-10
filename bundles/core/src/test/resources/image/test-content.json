@@ -414,7 +414,7 @@
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo"
                 },
-                "image31"            : {
+                "image45"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "sling:resourceType": "core/wcm/components/image/v1/image",

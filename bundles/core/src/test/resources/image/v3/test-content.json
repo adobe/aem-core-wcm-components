@@ -661,6 +661,13 @@
                   }
               }
           },
+        "image45"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "externalImageResourcePath": "/content/test/jcr:content/root/image0"
+        },
         "image50"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
