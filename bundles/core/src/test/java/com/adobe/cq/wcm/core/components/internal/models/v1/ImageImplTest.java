@@ -326,6 +326,12 @@ public class ImageImplTest extends AbstractImageTest {
         assertEquals(expectedJson, image.getJson());
     }
 
+    @Test
+    void testExternalImageResource() {
+        Image image = getImageUnderTest(IMAGE31_PATH);
+        assertEquals("/core/content/test/_jcr_content/root/image31.img.png/content/test/jcr:content/root/image0/1490005239000/adobe-systems-logo-and-wordmark.png", image.getSrc());
+    }
+
     protected void compareJSON(String expectedJson, String json) {
         JsonReader expected = Json.createReader(new StringReader(expectedJson));
         JsonReader actual = Json.createReader(new StringReader(json));
