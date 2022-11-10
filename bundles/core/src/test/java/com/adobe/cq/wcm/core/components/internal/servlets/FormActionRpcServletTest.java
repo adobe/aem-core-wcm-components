@@ -34,7 +34,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.form.FormHandlerImpl;
-import com.adobe.cq.wcm.core.components.internal.models.v1.form.FormsHelperStubber;
 import com.day.cq.wcm.foundation.forms.ValidationInfo;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.google.common.collect.ImmutableMap;
@@ -82,7 +81,6 @@ class FormActionRpcServletTest {
             }
         });
         underTest = context.registerInjectActivateService(new FormActionRpcServlet());
-        FormsHelperStubber.createStub();
     }
 
     @Test

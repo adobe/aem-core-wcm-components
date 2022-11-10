@@ -821,12 +821,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>3.29.2-GA</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
                 <version>5.1.0</version>
