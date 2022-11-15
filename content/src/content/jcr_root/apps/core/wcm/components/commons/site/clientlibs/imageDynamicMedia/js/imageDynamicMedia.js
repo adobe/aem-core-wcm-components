@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function() {
+(function(document) {
     "use strict";
 
     window.CMP = window.CMP || {};
@@ -34,7 +34,7 @@
          */
         var getAutoSmartCrops = function(src) {
             var request = new XMLHttpRequest();
-            var url = decodeURIComponent(src).split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
+            var url = src.split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
             request.open("GET", url, false);
             request.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
@@ -69,18 +69,16 @@
         /**
          * Build and return the srcset value based on the available auto smart crops
          * @param {String} src the src uri
+         * @param smartCrops the smart crops object
          * @returns {String} the srcset
          */
-        var getSrcSet = function(src) {
+        var getSrcSet = function(src, smartCrops) {
             var srcset;
-            if (Object.keys(autoSmartCrops).length === 0) {
-                getAutoSmartCrops(src);
-            }
-            var keys = Object.keys(autoSmartCrops);
+            var keys = Object.keys(smartCrops);
             if (keys.length > 0) {
                 srcset = [];
                 for (var key in autoSmartCrops) {
-                    srcset.push(src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, autoSmartCrops[key]) + " " + key + "w");
+                    srcset.push(src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, smartCrops[key]) + " " + key + "w");
                 }
             }
             return  srcset.join(",");
@@ -100,7 +98,7 @@
                 key++;
             }
 
-            return sizes[key].toString();
+            return sizes[key] !== undefined ? sizes[key].toString() : width;
         }
 
         /**
@@ -121,32 +119,43 @@
         /**
          * Set the src and srcset attribute for a Dynamic Media Image which auto smart crops enabled.
          * @param {HTMLElement} component the image component
-         * @param {HTMLElement} image the image element
+         * @param {{}} properties the component properties
          */
-        var setDMAttributes = function(component, image) {
-            var src = component.getAttribute("data-cmp-src");
-            if (src) {
-                if (component.matches('[data-cmp-smartcroprendition="SmartCrop:Auto"]')) {
-                    src = src.replace(SRC_URI_TEMPLATE_DPR_VAR, dpr);
-                    image.setAttribute("srcset", CMP.image.dynamicMedia.getSrcSet(src));
+        var setDMAttributes = function(component, properties) {
+            var src = properties.src.replace(SRC_URI_TEMPLATE_DPR_VAR, dpr);
+            var smartCrops = {};
+            var width;
+            if (properties["smartcroprendition"] === "SmartCrop:Auto") {
+                smartCrops = getAutoSmartCrops(src);
+            }
+            var hasWidths = (properties.widths && properties.widths.length > 0) || Object.keys(smartCrops).length > 0;
+            if (hasWidths) {
+                var image = component.querySelector("img");
+                var elemWidth = getWidth(component, component.parentNode);
+                if (properties["smartcroprendition"] === "SmartCrop:Auto") {
+                    image.setAttribute("srcset", CMP.image.dynamicMedia.getSrcSet(src, smartCrops));
+                    width = getOptimalWidth(Object.keys(smartCrops, elemWidth));
+                    image.setAttribute("src", CMP.image.dynamicMedia.getSrc(src, smartCrops[width]));
+                } else {
+                    width = getOptimalWidth(properties.widths, elemWidth);
+                    image.setAttribute("src", CMP.image.dynamicMedia.getSrc(src, width));
                 }
-                image.setAttribute("src", CMP.image.dynamicMedia.getSrc(src, getWidth(component, component.parentNode)));
             }
         };
 
         /**
          * Get the src attribute based on the optimal width
          * @param {String} src the src uri
-         * @param {Number} elemWidth the element width
+         * @param {String} width the element width
          * @returns {String} the final src attribute
          */
-        var getSrc = function(src, elemWidth) {
-            if (Object.keys(autoSmartCrops).length === 0) {
-                getAutoSmartCrops(src);
+        var getSrc = function(src, width) {
+            if (src.indexOf(SRC_URI_TEMPLATE_WIDTH_VAR) > -1) {
+                src = src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, width);
             }
-            var keys = Object.keys(autoSmartCrops);
-            return src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, autoSmartCrops[getOptimalWidth(keys, elemWidth)]);
+            return src;
         };
+
 
         return {
             getAutoSmartCrops: getAutoSmartCrops,
@@ -156,4 +165,5 @@
             getWidth: getWidth
         };
     }());
-}());
+    document.dispatchEvent(new CustomEvent("core.wcm.components.commons.site.image.dynamic-media.loaded"));
+}(window.document));

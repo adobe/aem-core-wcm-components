@@ -49,7 +49,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private boolean displayItemAsTeaser;
 
     protected ListItem newPageListItem(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component) {
-        return new PageListItemImpl(linkManager, page, parentId, component, showDescription, linkItems || displayItemAsTeaser);
+        return new PageListItemImpl(linkManager, page, parentId, component, showDescription, linkItems || displayItemAsTeaser, resource);
     }
 
     /**
