@@ -15,15 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Separator;
+
+import javax.annotation.PostConstruct;
 
 @Model(adaptables = SlingHttpServletRequest.class,
     adapters = {Separator.class, ComponentExporter.class},
@@ -35,6 +41,34 @@ public class SeparatorImpl implements Separator {
 
     @Self
     private SlingHttpServletRequest request;
+
+    /**
+     * Component properties.
+     */
+    @ScriptVariable
+    protected ValueMap properties;
+
+    /**
+     * The current style.
+     */
+    @ScriptVariable
+    protected Style currentStyle;
+
+    /**
+     * Flag indicating if the separator is decorative.
+     */
+    private boolean decorative;
+
+    @PostConstruct
+    protected void initModel() {
+        decorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isDecorative() {
+        return decorative;
+    }
 
     @NotNull
     @Override
