@@ -72,12 +72,6 @@ public class Utils {
             ":cq_csrf_token"
     );
 
-    /**
-     * Name of the subservice used to authenticate as in order to be able to read details about components and
-     * client libraries.
-     */
-    public static final String COMPONENTS_SERVICE = "components-service";
-
     private Utils() {
     }
 
@@ -400,12 +394,12 @@ public class Utils {
                         .orElse(null);
             }
 
-            Map<String, String> overriddenProperties = new HashMap<>();
+            Map<String, Object> overriddenProperties = new HashMap<>();
             Map<String, Resource> overriddenChildren = new HashMap<>();
             String inheritedFileReference = null;
             Resource inheritedFileResource = null;
             String inheritedAlt = null;
-            String inheritedAltValueFromDAM = null;
+            Boolean inheritedAltValueFromDAM = null;
 
             if (inheritedResource != null) {
                 // Define the inherited properties
@@ -413,17 +407,17 @@ public class Utils {
                 inheritedFileReference = inheritedProperties.get(DownloadResource.PN_REFERENCE, String.class);
                 inheritedFileResource = inheritedResource.getChild(DownloadResource.NN_FILE);
                 inheritedAlt = inheritedProperties.get(ImageResource.PN_ALT, String.class);
-                inheritedAltValueFromDAM = inheritedProperties.get(PN_ALT_VALUE_FROM_DAM, String.class);
+                inheritedAltValueFromDAM = inheritedProperties.get(PN_ALT_VALUE_FROM_DAM, Boolean.class);
             }
             overriddenProperties.put(DownloadResource.PN_REFERENCE, inheritedFileReference);
             overriddenChildren.put(DownloadResource.NN_FILE, inheritedFileResource);
             // don't inherit the image title from the page image
-            overriddenProperties.put(PN_TITLE_VALUE_FROM_DAM, "false");
+            overriddenProperties.put(PN_TITLE_VALUE_FROM_DAM, false);
             if (altValueFromPageImage) {
                 overriddenProperties.put(ImageResource.PN_ALT, inheritedAlt);
                 overriddenProperties.put(PN_ALT_VALUE_FROM_DAM, inheritedAltValueFromDAM);
             } else {
-                overriddenProperties.put(PN_ALT_VALUE_FROM_DAM, "false");
+                overriddenProperties.put(PN_ALT_VALUE_FROM_DAM, false);
             }
 
             return new CoreResourceWrapper(resource, resource.getResourceType(), null, overriddenProperties, overriddenChildren);

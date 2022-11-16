@@ -15,7 +15,7 @@
       ":type": "nt:unstructured",
       "dataLayer": {
         "teaser-a5953f71e6-cta-5175dd1bb6": {
-          "@type": "cq:Component/cta",
+          "@type": "core/wcm/components/teaser/v2/teaser/cta",
           "dc:title": "Adobe",
           "xdm:linkURL": "/core/content/page2.html"
         }
@@ -31,7 +31,7 @@
       ":type": "nt:unstructured",
       "dataLayer": {
         "teaser-a5953f71e6-cta-36320eea12": {
-          "@type": "cq:Component/cta",
+          "@type": "core/wcm/components/teaser/v2/teaser/cta",
           "dc:title": "Adobe",
           "xdm:linkURL": "/core/content/non_existing1"
         }
@@ -47,7 +47,7 @@
       ":type": "nt:unstructured",
       "dataLayer": {
         "teaser-a5953f71e6-cta-64ac4fbcc2": {
-          "@type": "cq:Component/cta",
+          "@type": "core/wcm/components/teaser/v2/teaser/cta",
           "dc:title": "Adobe",
           "xdm:linkURL": "/core/content/non_existing2"
         }

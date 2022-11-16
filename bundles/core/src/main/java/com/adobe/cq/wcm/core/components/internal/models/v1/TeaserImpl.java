@@ -168,7 +168,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         add(JcrConstants.JCR_DESCRIPTION);
     }};
 
-    protected final Map<String, String> overriddenImageResourceProperties = new HashMap<>();
+    protected final Map<String, Object> overriddenImageResourceProperties = new HashMap<>();
 
     /**
      * The teaser link

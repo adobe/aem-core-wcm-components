@@ -15,25 +15,26 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
 
-import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(AemContextExtension.class)
 class InheritedFieldTest {
@@ -43,13 +44,11 @@ class InheritedFieldTest {
     private static final String TEST_APPS = "/apps/dialog";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
-    private Logger logger;
 
     @BeforeEach
     void setUp() throws Exception {
         context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
         context.load().json(TEST_BASE + "/test-apps.json", TEST_APPS);
-        logger = Utils.mockLogger(InheritedField.class, "log");
     }
 
     @Test
@@ -92,8 +91,17 @@ class InheritedFieldTest {
     void testMissingPathError() {
         context.currentResource(TEST_APPS + "/brandSlug");
         MockSlingHttpServletRequest request = context.request();
+
+        ListAppender<ILoggingEvent> appender = new ListAppender<>();
+        appender.start();
+        Logger appLogger = (Logger) LoggerFactory.getLogger(InheritedField.class);
+        appLogger.addAppender(appender);
         request.adaptTo(InheritedField.class);
-        verify(logger, times(1)).error("Suffix and 'item' param are blank");
+        assertEquals(1, appender.list.stream()
+            .filter(entry -> Level.ERROR.equals(entry.getLevel()))
+            .filter(entry -> "Suffix and 'item' param are blank".equals(entry.getFormattedMessage()))
+            .count()
+        );
     }
 
     @Test
@@ -101,7 +109,15 @@ class InheritedFieldTest {
         context.currentResource(TEST_APPS + "/missingProp");
         MockSlingHttpServletRequest request = context.request();
         request.setParameterMap(ImmutableMap.of("item", "/content/test/parent/child"));
+        ListAppender<ILoggingEvent> appender = new ListAppender<>();
+        appender.start();
+        Logger appLogger = (Logger) LoggerFactory.getLogger(InheritedField.class);
+        appLogger.addAppender(appender);
         request.adaptTo(InheritedField.class);
-        verify(logger, times(1)).error("'prop' value is null");
+        assertEquals(1, appender.list.stream()
+            .filter(entry -> Level.ERROR.equals(entry.getLevel()))
+            .filter(entry -> "'prop' value is null".equals(entry.getFormattedMessage()))
+            .count()
+        );
     }
 }
