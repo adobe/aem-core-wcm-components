@@ -45,7 +45,6 @@ class HiddenImplTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTAINING_PAGE);
-        FormsHelperStubber.createStub();
         context.registerService(FormStructureHelperFactory.class, resource -> null);
     }
 

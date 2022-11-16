@@ -87,7 +87,6 @@ public class ContainerImplTest {
                         .collect(Collectors.toList());
             }
         });
-        FormsHelperStubber.createStub();
     }
 
     @Test
