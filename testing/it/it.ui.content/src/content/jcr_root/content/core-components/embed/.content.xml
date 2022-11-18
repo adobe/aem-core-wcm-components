@@ -19,6 +19,7 @@
     <jcr:content
         cq:template="/conf/core-components/settings/wcm/templates/simple-template-v3"
         jcr:primaryType="cq:PageContent"
+        jcr:language="en_us"
         jcr:title="Embed"
         sling:resourceType="core/wcm/components/page/v3/page">
         <root
