@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.http;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,8 @@ import java.util.TreeMap;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
@@ -53,6 +56,7 @@ public class ComponentsIT {
 
     private static final Logger LOG = LoggerFactory.getLogger(ComponentsIT.class);
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+    private static final List<NameValuePair> WCMMODE_DISABLED = Collections.singletonList(new BasicNameValuePair("wcmmode", "disabled"));
 
     @ClassRule
     public static final CQAuthorClassRule cqBaseClassRule = new CQAuthorClassRule();
@@ -78,6 +82,16 @@ public class ComponentsIT {
         testComponent(document, ".teaser.teaser-v1", 1, "/components/teaser-v1-with-cta-to-asset.html");
         testComponent(document, ".teaser.teaser-v2", 0, "/components/teaser-v2-with-link-to-asset.html");
         testComponent(document, ".teaser.teaser-v2", 1, "/components/teaser-v2-with-cta-to-asset.html");
+    }
+
+    @Test
+    public void testEmbed() throws ClientException, IOException {
+        String content = adminAuthor.doGet("/content/core-components/embed.html", WCMMODE_DISABLED, 200).getContent();
+        Document document = parse(content);
+
+        testComponent(document, ".embed.embed-v1", 0, "/components/embed-v1-youtube-defaults.html");
+        testComponent(document, ".embed.embed-v1", 1, "/components/embed-v1-youtube-fixed.html");
+        testComponent(document, ".embed.embed-v1", 2, "/components/embed-v1-youtube-responsive.html");
     }
 
     private void testComponent(Document actualDocument, String selector, int selectorSetIndex, String expectation) throws IOException {
