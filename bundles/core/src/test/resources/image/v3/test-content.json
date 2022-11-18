@@ -248,8 +248,8 @@
           "linkURL"            : "https://www.adobe.com",
           "alt"                : "Adobe Logo",
           "jcr:title"          : "Adobe Logo",
-          "altValueFromDAM"    : "true",
-          "titleValueFromDAM"  : "true"
+          "altValueFromDAM"    : true,
+          "titleValueFromDAM"  : true
         },
         "image21": {
           "jcr:primaryType"    : "nt:unstructured",
@@ -261,8 +261,8 @@
           "linkURL"            : "https://www.adobe.com",
           "alt"                : "Adobe Logo",
           "jcr:title"          : "Adobe Logo",
-          "altValueFromDAM"    : "true",
-          "titleValueFromDAM"  : "true"
+          "altValueFromDAM"    : true,
+          "titleValueFromDAM"  : true
         },
         "image22"            : {
           "jcr:primaryType"   : "nt:unstructured",
@@ -294,7 +294,7 @@
           "cq:policy"         : "coretest/components/content/image/policy_1478854677399",
           "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
           "imageMap"          : "[circle(256,256,256)\"http://adobe.com\"|\"\"|\"\"|(0.2000,0.3001,0.2000)][rect(256,171,1023,682)\"http://adobe.com\"|\"\"|\"altText\"|(0.1992,0.2005,0.7992,0.7995)][poly(917,344,1280,852,532,852)\"http://adobe.com\"|\"_blank\"|\"\"|(0.7164,0.4033,1.0000,0.9988,0.4156,0.9988)]",
-          "titleValueFromDAM" : "true"
+          "titleValueFromDAM" : true
         },
         "image27"            : {
           "jcr:primaryType"   : "nt:unstructured",
@@ -661,6 +661,13 @@
                   }
               }
           },
+        "image45"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "jcr:createdBy"     : "admin",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+          "externalImageResourcePath": "/content/test/jcr:content/root/image0"
+        },
         "image50"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
@@ -669,40 +676,40 @@
         "image51"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
-          "imageFromPageImage": "true",
-          "altValueFromPageImage"   : "true",
+          "imageFromPageImage": true,
+          "altValueFromPageImage"   : true,
           "sling:resourceType": "core/wcm/components/image/v3/image"
         },
         "image52"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
-          "imageFromPageImage": "true",
-          "altValueFromPageImage"   : "false",
+          "imageFromPageImage": true,
+          "altValueFromPageImage"   : false,
           "alt"               : "image52 alt",
           "sling:resourceType": "core/wcm/components/image/v3/image"
         },
         "image53"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
-          "imageFromPageImage"   : "true",
-          "altValueFromPageImage"   : "true",
-          "isDecorative"      : "true",
+          "imageFromPageImage"   : true,
+          "altValueFromPageImage"   : true,
+          "isDecorative"      : true,
           "sling:resourceType": "core/wcm/components/image/v3/image"
         },
         "image54"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
-          "imageFromPageImage"   : "true",
-          "altValueFromPageImage"   : "false",
+          "imageFromPageImage"   : true,
+          "altValueFromPageImage"   : false,
           "alt"               : "image54 alt",
-          "isDecorative"      : "true",
+          "isDecorative"      : true,
           "sling:resourceType": "core/wcm/components/image/v3/image"
         },
         "image55"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
-          "imageFromPageImage": "false",
-          "altValueFromDAM"   : "true",
+          "imageFromPageImage": false,
+          "altValueFromDAM"   : true,
           "alt"               : "image51a alt",
           "fileReference"     : "/content/dam/core/images/transparent_hd.png",
           "sling:resourceType": "core/wcm/components/image/v3/image"
@@ -710,8 +717,8 @@
         "image56"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
-          "imageFromPageImage": "false",
-          "altValueFromDAM"   : "false",
+          "imageFromPageImage": false,
+          "altValueFromDAM"   : false,
           "alt"               : "image52a alt",
           "file"              : {
             "jcr:primaryType": "nt:file",
@@ -732,21 +739,21 @@
         "image57"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
-          "imageFromPageImage": "false",
-          "altValueFromDAM"   : "true",
+          "imageFromPageImage": false,
+          "altValueFromDAM"   : true,
           "alt"               : "image53a alt",
           "fileReference"     : "/content/dam/core/images/transparent_hd.png",
-          "isDecorative"      : "true",
+          "isDecorative"      : true,
           "sling:resourceType": "core/wcm/components/image/v3/image"
         },
         "image58"            : {
           "jcr:primaryType"   : "nt:unstructured",
           "jcr:createdBy"     : "admin",
-          "imageFromPageImage": "false",
-          "altValueFromDAM"   : "false",
+          "imageFromPageImage": false,
+          "altValueFromDAM"   : false,
           "alt"               : "image53a alt",
           "fileReference"     : "/content/dam/core/images/transparent_hd.png",
-          "isDecorative"      : "true",
+          "isDecorative"      : true,
           "sling:resourceType": "core/wcm/components/image/v3/image"
         },
         "container"             : {
@@ -794,15 +801,15 @@
         "page0_image1": {
           "jcr:primaryType": "nt:unstructured",
           "jcr:createdBy": "admin",
-          "imageFromPageImage": "true",
+          "imageFromPageImage": true,
           "sling:resourceType": "core/wcm/components/image/v3/image"
         },
         "page0_image2": {
           "jcr:primaryType": "nt:unstructured",
           "jcr:createdBy": "admin",
           "alt": "alt from page0_image2",
-          "altValueFromPageImage": "true",
-          "imageFromPageImage": "true",
+          "altValueFromPageImage": true,
+          "imageFromPageImage": true,
           "linkURL": "/content/test_page4",
           "sling:resourceType": "core/wcm/components/image/v3/image"
         },
@@ -810,8 +817,8 @@
           "jcr:primaryType": "nt:unstructured",
           "jcr:createdBy": "admin",
           "alt": "alt from page0_image2",
-          "altValueFromPageImage": "true",
-          "imageFromPageImage": "true",
+          "altValueFromPageImage": true,
+          "imageFromPageImage": true,
           "linkURL": "/wrong_page",
           "sling:resourceType": "core/wcm/components/image/v3/image"
         }
@@ -826,7 +833,7 @@
       "cq:featuredimage": {
         "jcr:primaryType": "nt:unstructured",
         "jcr:createdBy": "admin",
-        "altValueFromDAM"   : "true",
+        "altValueFromDAM"   : true,
         "alt"               : "featured image alt",
         "fileReference": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
         "sling:resourceType": "core/wcm/components/image/v3/image"
@@ -837,7 +844,7 @@
         "page1_image0": {
           "jcr:primaryType": "nt:unstructured",
           "jcr:createdBy": "admin",
-          "imageFromPageImage": "true",
+          "imageFromPageImage": true,
           "sling:resourceType": "core/wcm/components/image/v3/image"
         }
       },
@@ -851,7 +858,7 @@
       "cq:featuredimage": {
         "jcr:primaryType": "nt:unstructured",
         "jcr:createdBy": "admin",
-        "altValueFromDAM"   : "false",
+        "altValueFromDAM"   : false,
         "alt"               : "featured image alt",
         "fileReference": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
         "sling:resourceType": "core/wcm/components/image/v3/image"
@@ -862,7 +869,7 @@
         "page2_image0": {
           "jcr:primaryType": "nt:unstructured",
           "jcr:createdBy": "admin",
-          "imageFromPageImage": "true",
+          "imageFromPageImage": true,
           "sling:resourceType": "core/wcm/components/image/v3/image"
         }
       },
@@ -876,7 +883,7 @@
       "cq:featuredimage": {
         "jcr:primaryType": "nt:unstructured",
         "jcr:createdBy": "admin",
-        "altValueFromDAM"   : "false",
+        "altValueFromDAM"   : false,
         "alt"               : "featured image alt",
         "file"              : {
           "jcr:primaryType": "nt:file",
@@ -897,7 +904,7 @@
         "page3_image0": {
           "jcr:primaryType": "nt:unstructured",
           "jcr:createdBy": "admin",
-          "imageFromPageImage": "true",
+          "imageFromPageImage": true,
           "sling:resourceType": "core/wcm/components/image/v3/image"
         }
       },
@@ -911,7 +918,7 @@
       "cq:featuredimage": {
         "jcr:primaryType": "nt:unstructured",
         "jcr:createdBy": "admin",
-        "altValueFromDAM"   : "true",
+        "altValueFromDAM"   : true,
         "alt"               : "featured image alt",
         "fileReference": "/content/dam/core/images/asset1.png",
         "sling:resourceType": "core/wcm/components/image/v3/image"

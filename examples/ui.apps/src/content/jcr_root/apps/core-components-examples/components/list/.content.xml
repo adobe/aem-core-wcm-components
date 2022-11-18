@@ -20,5 +20,5 @@
     jcr:primaryType="cq:Component"
     jcr:title="List"
     sling:resourceSuperType="core/wcm/components/list/v3/list"
-    teaserDelegate="core/wcm/components/teaser/v2/teaser"
+    teaserDelegate="core-components-examples/components/teaser"
     componentGroup="Core Components Examples"/>

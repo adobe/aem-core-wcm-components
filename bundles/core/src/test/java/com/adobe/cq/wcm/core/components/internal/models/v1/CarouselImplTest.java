@@ -69,13 +69,13 @@ class CarouselImplTest {
     void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
         Object[][] expectedItems = {
-                { "item_1", "Teaser 1", "cq:Component/item",
+                { "item_1", "Teaser 1", "core/wcm/components/carousel/v1/carousel/item",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1" },
-                { "item_2", "Teaser 2", "cq:Component/item",
+                { "item_2", "Teaser 2", "core/wcm/components/carousel/v1/carousel/item",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2" },
-                { "item_3", "Carousel Panel 3", "cq:Component/item",
+                { "item_3", "Carousel Panel 3", "core/wcm/components/carousel/v1/carousel/item",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" },
-                { "item_4", "Carousel Panel 4", "cq:Component/item",
+                { "item_4", "Carousel Panel 4", "core/wcm/components/carousel/v1/carousel/item",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_4" }, };
         verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));

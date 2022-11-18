@@ -15,10 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.util;
 
+import static com.adobe.cq.wcm.core.components.models.Page.NN_PAGE_FEATURED_IMAGE;
+
 import java.util.Optional;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +33,6 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
-
-import static com.adobe.cq.wcm.core.components.models.Page.NN_PAGE_FEATURED_IMAGE;
 
 /**
  * Utility helper functions for components.
@@ -53,6 +54,9 @@ public final class ComponentUtils {
      */
     private static final int ID_HASH_LENGTH = 10;
 
+    
+    private static final String DATALAYER_ATTRIBUTE_NAME = "isDataLayerEnabled";
+    
     /**
      * Private constructor to prevent instantiation of utility class.
      */
@@ -63,14 +67,37 @@ public final class ComponentUtils {
     /**
      * Check if data layer is enabled.
      *
+     * @param request  The request in which context this happens
+     * @param resource The resource to check.
+     * @return True if data layer is enabled for this resource, false otherwise.
+     */
+    public static boolean isDataLayerEnabled(@Nullable SlingHttpServletRequest request, 
+    		@NotNull final Resource resource) {
+    	
+    	if (request == null) {
+        	return isDataLayerEnabled (resource);
+    	}
+    	Object storedValue = request.getAttribute(DATALAYER_ATTRIBUTE_NAME);
+    	if (storedValue != null) {
+    		return (Boolean) storedValue;
+    	} else {
+            boolean isEnabled = isDataLayerEnabled (resource);
+            request.setAttribute(DATALAYER_ATTRIBUTE_NAME, Boolean.valueOf(isEnabled));
+            return isEnabled;
+    	}
+    }
+    
+    /**
+     * Check if data layer is enabled.
+     *
      * @param resource The resource to check.
      * @return True if data layer is enabled for this resource, false otherwise.
      */
     public static boolean isDataLayerEnabled(@NotNull final Resource resource) {
-        return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
-            .map(builder -> builder.as(DataLayerConfig.class))
-            .map(DataLayerConfig::enabled)
-            .orElse(false);
+    	return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
+    			.map(builder -> builder.as(DataLayerConfig.class))
+    			.map(DataLayerConfig::enabled)
+    			.orElse(false);
     }
 
 

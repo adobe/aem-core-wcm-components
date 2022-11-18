@@ -17,8 +17,6 @@ package com.adobe.cq.wcm.core.extensions.amp.internal;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
@@ -40,7 +38,11 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(AemContextExtension.class)
 class AmpModeForwardFilterTest {
@@ -137,9 +139,9 @@ class AmpModeForwardFilterTest {
         spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
     }
 
-    private class MockRequestDispatcher implements RequestDispatcher {
+    private static class MockRequestDispatcher implements RequestDispatcher {
 
-        private RequestDispatcherOptions options;
+        private final RequestDispatcherOptions options;
 
         MockRequestDispatcher(RequestDispatcherOptions options) {
             this.options = options;
@@ -168,19 +170,17 @@ class AmpModeForwardFilterTest {
         spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
         verify(spyAmpModeForwardFilter, atLeastOnce()).doFilter(eq(context.request()), eq(context.response()) , eq(filterChain));
     }
-    
-    
-    
+
     @Test
     void testWithDisabledFilter() throws IOException, ServletException {
     	AmpModeForwardFilter filter = Mockito.spy(new AmpModeForwardFilter());
     	filter.activate(new AmpModeForwardFilter.Config() {
-			
+
 			@Override
 			public Class<? extends Annotation> annotationType() {
 				return null;
 			}
-			
+
 			@Override
 			public boolean enabled() {
 				return false;
@@ -194,8 +194,7 @@ class AmpModeForwardFilterTest {
         context.requestPathInfo().setExtension("html");
 
         filter.doFilter(context.request(), context.response(), filterChain);
-        verify(filter, never()).forward(eq(context.request()), eq(context.response()), anyObject());
+        verify(filter, never()).forward(eq(context.request()), eq(context.response()), any());
     }
-    
 
 }

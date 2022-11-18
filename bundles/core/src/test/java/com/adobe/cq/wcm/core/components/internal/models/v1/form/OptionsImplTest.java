@@ -20,6 +20,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.util.List;
 
+import com.day.cq.wcm.foundation.forms.FormsHelper;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
@@ -65,7 +66,6 @@ public class OptionsImplTest {
     @BeforeEach
     public void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
-        FormsHelperStubber.createStub();
     }
 
     @Test
@@ -90,7 +90,7 @@ public class OptionsImplTest {
 
     @Test
     public void testLocalAsOptionsSource() {
-        FormsHelperGetValuesStubMethod.values = new String[] {"local-item2-value"};
+        FormsHelper.values = new String[] {"local-item2-value"};
         Options options = getOptionsUnderTest(OPTIONS_2);
         assertEquals(Type.CHECKBOX, options.getType());
 
@@ -108,7 +108,7 @@ public class OptionsImplTest {
         evaluateOptionItem(optionItems.get(0), "local-item1-name", "local-item1-value", false, false);
         evaluateOptionItem(optionItems.get(1), "local-item2-name", "local-item2-value", true, true);
         Utils.testJSONExport(options, Utils.getTestExporterJSONPath(TEST_BASE, OPTIONS_2));
-        FormsHelperGetValuesStubMethod.values = null;
+        FormsHelper.values = null;
     }
 
     @Test

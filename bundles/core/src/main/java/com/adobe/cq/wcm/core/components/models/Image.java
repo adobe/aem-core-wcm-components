@@ -104,6 +104,13 @@ public interface Image extends Component {
     String PN_DISPLAY_POPUP_TITLE = "displayPopupTitle";
 
     /**
+     * Name of the resource property that will indicate if the image component should render an external image resource.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
+    String PN_EXTERNAL_IMAGE_RESOURCE_PATH = "externalImageResourcePath";
+
+    /**
      * Name of the JSON property that will store the smart sizes for smart loading.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
