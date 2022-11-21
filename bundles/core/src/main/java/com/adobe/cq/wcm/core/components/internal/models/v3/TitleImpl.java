@@ -37,7 +37,7 @@ public class TitleImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public Link getLink() {
-        return link.orElse(null);
+        return link.isValid() ? link : null;
     }
 
     @Override

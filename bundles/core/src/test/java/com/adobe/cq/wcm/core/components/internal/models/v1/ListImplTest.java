@@ -67,6 +67,8 @@ public class ListImplTest {
     protected static final String LIST_16 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithAccent";
     protected static final String LIST_20 = TEST_PAGE_CONTENT_ROOT + "/listRenderedAsTeaserItems";
 
+    protected static final String LIST_21 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithBlankTitle";
+
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
     protected String testBase;
@@ -208,6 +210,17 @@ public class ListImplTest {
     protected void testOrderByTitleWithNoTitleForOneItem() {
         List list = getListUnderTest(LIST_15);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_4", "/content/list/pages/page_1", "/content/list/pages/page_2" });
+    }
+
+    @Test
+    protected void testOrderByTitleWithBlankTitle() {
+        List list = getListUnderTest(LIST_21);
+        checkListConsistencyByPaths(list, new String[]{
+            "/content/list/pages/page_4",
+            "/content/list/pages/page_6",
+            "/content/list/pages/page_1",
+            "/content/list/pages/page_2"
+        });
     }
 
     @Test

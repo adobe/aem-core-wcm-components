@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 public class ImageImplTest extends AbstractImageTest {
@@ -324,6 +325,13 @@ public class ImageImplTest extends AbstractImageTest {
                 "\"lazyEnabled\":true" +
                 "}";
         assertEquals(expectedJson, image.getJson());
+    }
+
+    @Test
+    void testExternalImageResource() {
+        Image image = getImageUnderTest(IMAGE45_PATH);
+        assertTrue(image.getSrc().matches("/core/content/test/_jcr_content/root/image45.(core)?img" +
+                ".png/content/test/jcr:content/root/image0/1490005239000/adobe-systems-logo-and-wordmark.png"));
     }
 
     protected void compareJSON(String expectedJson, String json) {

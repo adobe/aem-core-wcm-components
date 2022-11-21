@@ -93,7 +93,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     /**
      * The smartcrop "auto" constant.
      */
-    private static final String SMART_CROP_AUTO = "SmartCrop:Auto";
+    protected static final String SMART_CROP_AUTO = "SmartCrop:Auto";
 
     /**
      * The path of the delegated content policy.
@@ -195,10 +195,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         //sets to '/is/image/ or '/is/content' based on dam:scene7Type property
                         String dmServerPath;
-                        if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
-                            dmServerPath = DM_CONTENT_SERVER_PATH;
-                        } else {
+                        // '/is/image' DM url is for optimized image delivery supporting run time transformations.
+                        //  Use '/is/image' url if dam:scene7Type is explicitly set to 'Image' or DM processor does not set dam:scene7Type
+                        if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.IMAGE.getValue())
+                            || asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(StringUtils.EMPTY)) {
                             dmServerPath = DM_IMAGE_SERVER_PATH;
+                        } else {
+                        // All other file types should be loaded as content via '/is/content'
+                            dmServerPath = DM_CONTENT_SERVER_PATH;
                         }
                         String dmServerUrl;
                         // for Author
@@ -237,7 +241,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     }
                     srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                         SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-                        (inTemplate ? templateRelativePath : "") +
+                        (inTemplate ? templateRelativePath : hasExternalImageResource ? externalImageResourcePath : "") +
                         (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
                         (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
                 }
@@ -290,7 +294,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
                 String dprParameter = "";
                 // If DM is enabled, use smart imaging for smartcrop renditions
-                if (getClass().equals(com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl.class) && isDmFeaturesEnabled && !StringUtils.isBlank(smartCropRendition)) {
+                if (isDmFeaturesEnabled && !StringUtils.isBlank(smartCropRendition)) {
                     dprParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=on,{dpr}";
                 } else {
                     //add "dpr=off" parameter to image source url
@@ -377,8 +381,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     String href = StringUtils.removeAll(remainingTokens[0], "\"");
                     String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
 
-                    Link link = linkHandler.getLink(href, target).orElse(null);
-                    if (link == null || !link.isValid()) {
+                    Link link = linkManager.get(href).withLinkTarget(target).build();
+                    if (!link.isValid()) {
                         break;
                     }
 

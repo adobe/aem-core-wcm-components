@@ -16,8 +16,12 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v3;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v2.Image;
+import com.google.common.collect.ImmutableMap;
 
 @Tag("group2")
 public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.image.v2.ImageIT {
@@ -56,6 +61,22 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @DisplayName("Test: Lazy loading enabled by default")
     public void testLazyLoadingEnabled() throws TimeoutException, InterruptedException {
         imageTests.testLazyLoadingEnabled();
+    }
+
+    @Test
+    @DisplayName("Test: Lazy loading enabled by default")
+    public void testLazyLoadingDisabled() throws TimeoutException, InterruptedException {
+        imageTests.testLazyLoadingDisabled();
+    }
+
+    @Test
+    @DisplayName("Test: Set image sizes attribute")
+    public void testSizesAttribute() throws TimeoutException, InterruptedException, ClientException {
+        createComponentPolicy(Commons.RT_IMAGE_V3.substring(Commons.RT_IMAGE_V3.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
+            add(new BasicNameValuePair("sizes", "(min-width: 36em) 33.3vw"));
+            add(new BasicNameValuePair("sizes", "100vw"));
+        }});
+        imageTests.testSetSizes();
     }
 
     /**

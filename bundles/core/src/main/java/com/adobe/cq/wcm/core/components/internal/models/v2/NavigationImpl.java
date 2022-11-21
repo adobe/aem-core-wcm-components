@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
@@ -38,9 +38,9 @@ public class NavigationImpl extends com.adobe.cq.wcm.core.components.internal.mo
 
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v2/navigation";
 
-    protected NavigationItem newNavigationItem(Page page, boolean active, boolean current, @NotNull LinkHandler linkHandler, int level,
+    protected NavigationItem newNavigationItem(Page page, boolean active, boolean current, @NotNull LinkManager linkManager, int level,
                                                List<NavigationItem> children, String parentId, Component component) {
-        return new NavigationItemImpl(page, active, current, linkHandler, level, children, parentId, component);
+        return new NavigationItemImpl(page, active, current, linkManager, level, children, parentId, component);
     }
 
 }

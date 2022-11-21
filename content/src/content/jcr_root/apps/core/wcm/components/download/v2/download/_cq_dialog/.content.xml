@@ -37,7 +37,7 @@
                                                 fieldLabel="Download Asset"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./fileReference"
-                                                mimeTypes="[image/*,video/*,audio/*,.pdf,.doc,.zip,.txt]"
+                                                mimeTypes="[image/*,video/*,audio/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,application/zip,text/plain]"
                                                 name="./file"/>
                                         </items>
                                     </column>
@@ -251,7 +251,8 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>

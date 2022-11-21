@@ -37,9 +37,9 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
-import org.codehaus.jackson.JsonNode;
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -335,14 +335,14 @@ public class PageTests {
         assertNotNull(robotsTags);
         assertTrue(robotsTags.isArray());
         assertEquals(2, robotsTags.size());
-        assertEquals("index", robotsTags.get(0).getTextValue());
-        assertEquals("follow", robotsTags.get(1).getTextValue());
+        assertEquals("index", robotsTags.get(0).asText());
+        assertEquals("follow", robotsTags.get(1).asText());
         JsonNode sitemapRoot = content.get("sling:sitemapRoot");
         assertNotNull(sitemapRoot);
-        assertEquals("true", sitemapRoot.getTextValue());
+        assertEquals("true", sitemapRoot.asText());
         JsonNode canonicalUrl = content.get("cq:canonicalUrl");
         assertNotNull(canonicalUrl);
-        assertEquals(testPage, canonicalUrl.getTextValue());
+        assertEquals(testPage, canonicalUrl.asText());
     }
 
     public void testThumbnailPageProperties() {

@@ -15,14 +15,18 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import java.util.Optional;
+
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.models.v2.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
@@ -48,8 +52,17 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return false;
     }
 
-    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
-        return new RedirectItemImpl(redirectTarget, request, linkHandler);
+    @Override
+    @JsonIgnore
+    public boolean isDataLayerClientlibIncluded() {
+        return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
+                .map(builder -> builder.as(DataLayerConfig.class))
+                .map(config -> !config.skipClientlibInclude())
+                .orElse(true);
+    }
+
+    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
+        return new RedirectItemImpl(redirectTarget, request, linkManager);
     }
 
 }

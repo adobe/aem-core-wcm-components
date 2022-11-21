@@ -53,8 +53,9 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
@@ -106,12 +107,13 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected AssetDelivery assetDelivery;
 
     @Self
-    protected LinkHandler linkHandler;
+    protected LinkManager linkManager;
 
     protected ValueMap properties;
     protected String fileReference;
     protected String alt;
     protected String title;
+    protected String externalImageResourcePath;
 
     protected String src;
     protected String[] smartImages = new String[]{};
@@ -125,14 +127,15 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected String selector;
     protected String extension;
     protected long lastModifiedDate = 0;
-    protected boolean inTemplate;
+    protected boolean inTemplate = false;
+    protected boolean hasExternalImageResource = false;
     protected String baseResourcePath;
     protected String templateRelativePath;
     protected boolean disableLazyLoading;
     protected int jpegQuality;
     protected String imageName;
     protected Resource fileResource;
-    protected Optional<Link> link;
+    protected Link link;
     protected boolean useAssetDelivery = false;
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
@@ -163,7 +166,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         alt = properties.get(ImageResource.PN_ALT, String.class);
         title = properties.get(JcrConstants.JCR_TITLE, String.class);
-        link = Optional.empty();
+        externalImageResourcePath = properties.get(PN_EXTERNAL_IMAGE_RESOURCE_PATH, String.class);
+        if (StringUtils.isNotEmpty(externalImageResourcePath)) {
+            hasExternalImageResource = true;
+        }
 
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
@@ -257,9 +263,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     if (StringUtils.isEmpty(smartImage)) {
                         smartImage = baseResourcePath + DOT +
                             selector + DOT + jpegQuality + DOT + width + DOT + extension +
-                            (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                            (inTemplate ? Text.escapePath(templateRelativePath) : hasExternalImageResource ? externalImageResourcePath : "") +
                             (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
-                            (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+                            (inTemplate || hasExternalImageResource || lastModifiedDate > 0 ? DOT + extension : "");
                     }
                     smartImages[index] = smartImage;
                     smartSizes[index] = width;
@@ -283,13 +289,13 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 } else {
                     src += extension;
                 }
-                src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
-                    (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+                src += (inTemplate ? Text.escapePath(templateRelativePath) : hasExternalImageResource ? externalImageResourcePath : "") +
+                        (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
+                        (inTemplate || hasExternalImageResource || lastModifiedDate > 0 ? DOT + extension : "");
             }
 
             if (!isDecorative) {
-                link = linkHandler.getLink(resource);
+                link = linkManager.get(resource).build();
             } else {
                 alt = null;
             }
@@ -358,7 +364,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     @Override
     public String getLink() {
-        return link == null ? null : link.map(Link::getURL).orElse(null);
+        return link == null ? null : link.getURL();
     }
 
     @Override
@@ -435,7 +441,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected ImageData getComponentData(String fileReference) {
         return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
                 .withTitle(this::getTitle)
-                .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
+                .withLinkUrl(() -> Utils.getOptionalLink(link).map(Link::getMappedURL).orElse(null))
                 .withAssetData(() ->
                         Optional.ofNullable(fileReference)
                                 .map(reference -> this.request.getResourceResolver().getResource(reference))

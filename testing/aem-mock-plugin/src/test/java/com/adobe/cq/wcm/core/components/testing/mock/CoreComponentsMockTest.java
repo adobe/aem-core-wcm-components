@@ -19,12 +19,12 @@ import static com.adobe.cq.wcm.core.components.testing.mock.ContextPlugins.CORE_
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import io.wcm.testing.mock.aem.MockExternalizer;
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.models.Title;
-import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.Page;
 
@@ -32,12 +32,18 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import java.util.Optional;
+
 @ExtendWith(AemContextExtension.class)
 class CoreComponentsMockTest {
 
-  private AemContext context = new AemContextBuilder()
+  private final AemContext context = new AemContextBuilder()
           .beforeSetUp(context -> {
-              context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
+              Optional.ofNullable(context.getService(Externalizer.class)).ifPresent((externalizer -> {
+                  if (externalizer instanceof MockExternalizer) {
+                      ((MockExternalizer) externalizer).setMapping(Externalizer.PUBLISH, "https://example.org");
+                  }
+              }));
           })
           .plugin(CORE_COMPONENTS)
           .build();
