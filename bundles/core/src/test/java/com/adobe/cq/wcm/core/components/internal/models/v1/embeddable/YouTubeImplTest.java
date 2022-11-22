@@ -79,7 +79,7 @@ class YouTubeImplTest {
 
     @Mock
     private ComponentContext componentContext;
-    
+
     @Mock
     private ComponentContext parentComponentContext;
 
@@ -113,6 +113,7 @@ class YouTubeImplTest {
         assertEquals("200", youTube.getIFrameHeight());
         assertEquals("56.25", youTube.getIFrameAspectRatio());
         assertEquals("responsive", youTube.getLayout());
+        assertEquals("YouTube Video", youTube.getAccessibilityLabel());
     }
 
     @Test
@@ -137,6 +138,7 @@ class YouTubeImplTest {
         assertNull(youTube.getIFrameHeight());
         assertNull(youTube.getIFrameAspectRatio());
         assertNull(youTube.getLayout());
+        assertEquals("Test Video", youTube.getAccessibilityLabel());
     }
 
     @Test

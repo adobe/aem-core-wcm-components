@@ -167,7 +167,8 @@
                             type="embeddable"
                             youtubeVideoId="f7hbWvHKns0"
                             layout="responsive"
-                            youtubeAspectRatio="56.25"/>
+                            youtubeAspectRatio="56.25"
+                            accessibilityLabel="Greenland land of ice"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"

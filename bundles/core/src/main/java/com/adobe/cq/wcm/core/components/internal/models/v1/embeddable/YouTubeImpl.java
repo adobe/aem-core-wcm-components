@@ -112,6 +112,9 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     @Nullable
     private Boolean isPlaysInline;
 
+    @ValueMapValue(name = PN_ACCESSIBILITY_LABEL)
+    private String accessibilityLabel;
+
     @ScriptVariable(injectionStrategy = InjectionStrategy.REQUIRED)
     private Page currentPage;
 
@@ -120,6 +123,11 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
 
     @Self
     private SlingHttpServletRequest request;
+
+    @Override
+    public String getAccessibilityLabel() {
+        return StringUtils.defaultIfEmpty(this.accessibilityLabel, YouTube.super.getAccessibilityLabel());
+    }
 
     @Override
     public boolean isEmpty() {

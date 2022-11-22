@@ -33,7 +33,8 @@
                         "youtubeMute": "false",
                         "youtubeLoop": "false",
                         "youtubeRel": "false",
-                        "youtubePlaysInline": "false"
+                        "youtubePlaysInline": "false",
+                        "accessibilityLabel": "Test Video"
                     },
                     "video3": {
                         "jcr:primaryType": "nt:unstructured",

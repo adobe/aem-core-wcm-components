@@ -27,6 +27,13 @@
             fieldLabel="Video ID"
             name="./youtubeVideoId"
             required="{Boolean}true"/>
+        <accessibilityLabel
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+            fieldDescription="Value of an aria-label attribute for the iframe."
+            fieldLabel="Accessibility Label"
+            name="./accessibilityLabel"
+            value=""/>
         <layout
             jcr:primaryType="nt:unstructured"
             sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
