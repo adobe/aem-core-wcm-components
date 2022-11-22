@@ -21,7 +21,7 @@ Embed component written in HTL that allows third-party widgets (e.g. chatbots, l
 * The following input types are supported:
     * **URL** - an author is able to paste a URL of a widget to embed. URLs are checked against registered processors for a match. The following URL processors are provided:
         * **oEmbed** - generic oEmbed URL processor with out-of-the-box configurations for Facebook Post, Facebook Video, Flickr, Instagram, SoundCloud, Twitter and YouTube.
-        * **Pinterest** - processes Pinterest URLs. 
+        * **Pinterest** - processes Pinterest URLs.
     * **Embeddable** - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags. A YouTube embeddable is included out-of-the-box.
     * **HTML** - an author is able to enter free-form HTML. HTML is restricted to safe tags only.
 * Each input type can be disabled by a template author.
@@ -35,7 +35,7 @@ The following configuration properties are used:
 1. `./htmlDisabled` - defines whether or not free-form HTML input is disabled in the edit dialog.
 3. `./allowedEmbeddables` - defines the embeddables that are allowed to be selected by an author when embeddables are not disabled.
 
-In addition once the YouTube embeddable is allowed a tab from [YouTube component](embeddable/youtube)'s design dialog is included.
+In addition once the YouTube embeddable is allowed a tab from [YouTube component](../../v1/embed/embeddable/youtube)'s design dialog is included.
 
 
 ### Edit Dialog Properties
@@ -88,14 +88,14 @@ See also:
 2. Create a rendering HTL script suitable for what your want to render.
 3. Create a cq:dialog node with only the configuration options needed for your embeddable.
 4. Make sure to have the following properties added to a `granite:data` node under the `cq:dialog` node:
-   
+
    ```
    cmp-embed-dialog-edit-embeddableoptions="true"
    cmp-embed-dialog-edit-showhidetargetvalue="<embeddableResourceType>"
    ```
    where `<embeddableResourceType>` is the resource type of your custom embeddable. See [YouTube embeddable options](./embeddable/youtube/_cq_dialog/.content.xml#L122-123) for an example!
 5. The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes.
-6. (Optional) Create a cq:design_dialog node if the custom embeddable should also extend the content policy configuration for the 
+6. (Optional) Create a cq:design_dialog node if the custom embeddable should also extend the content policy configuration for the
    embeddable. Make sure to also add the properties which are required for the edit dialog. See step 4 and  [YouTube embeddable options](./embeddable/youtube/_cq_design_dialog/.content.xml#L23) for an example!
 
 Example:
