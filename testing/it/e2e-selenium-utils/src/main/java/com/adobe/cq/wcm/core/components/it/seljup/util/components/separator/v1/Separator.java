@@ -34,6 +34,7 @@ public class Separator extends BaseComponent {
 
     public boolean isDecorative() {
         String role = currentElement.$(HORIZONTAL_RULE).getAttribute("role");
-        return "none".equals(role);
+        String ariaHidden = currentElement.$(HORIZONTAL_RULE).getAttribute("aria-hidden");
+        return "none".equals(role) && "true".equals(ariaHidden);
     }
 }

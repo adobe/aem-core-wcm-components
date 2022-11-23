@@ -17,5 +17,7 @@
      data-sly-use.separator="com.adobe.cq.wcm.core.components.models.Separator"
      id="${component.id}"
      class="cmp-separator">
-    <hr class="cmp-separator__horizontal-rule" data-sly-attribute.role="${separator.decorative ? 'none': ''}"/>
+    <hr class="cmp-separator__horizontal-rule"
+        data-sly-attribute.role="${separator.decorative ? 'none': ''}"
+        data-sly-attribute.aria-hidden="${separator.decorative ? 'true': ''}"/>
 </div>
