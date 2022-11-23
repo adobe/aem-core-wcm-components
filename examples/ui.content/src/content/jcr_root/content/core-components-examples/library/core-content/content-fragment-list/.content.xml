@@ -108,7 +108,7 @@
                 <text_1424864129_copy
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>The list can be filtered to display content fragments associated with a tag. In this example, the list is filtered by the &lt;i>core-components-examples:region/north-america&amp;nbsp;&lt;/i>tag - to show offices in North America.&lt;/p>"
+                    text="&lt;p>The list can be filtered to display content fragments associated with a tag. In this example, the list is filtered by the &lt;i>core-components-examples:region/north-america&amp;nbsp;&lt;/i>tag - to show offices in North America. Uses the default match &lt;i>Any tag&lt;/i> feature, but it's also possible to configure the component to match all tags.&lt;/p>"
                     textIsRich="true"/>
                 <demo
                     jcr:primaryType="nt:unstructured"
