@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.jcr.Session;
 
+import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.tagging.TagConstants;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,7 +90,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         when(iterator.next()).thenReturn(resource);
         when(resource.getResourceResolver()).thenReturn(leakingResourceResolverMock);
         when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class)))
-                .thenReturn(query);
+            .thenReturn(query);
     }
 
     @Test
@@ -145,8 +147,11 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         expectedPredicates.put("path", ImmutableMap.of("path", ContentFragmentListImpl.DEFAULT_DAM_PARENT_PATH));
         expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
         expectedPredicates.put("1_property", ImmutableMap.of(
-                "property", "jcr:content/data/cq:model",
-                "value", "foobar"));
+            "property", "jcr:content/data/cq:model",
+            "value", "foobar"));
+        expectedPredicates.put("orderby", ImmutableMap.of(
+            "orderby", "@" + JcrConstants.JCR_CREATED,
+            "sort", Predicate.SORT_ASCENDING));
 
         // WHEN
         getModelInstanceUnderTest(NON_EXISTING_MODEL);
@@ -163,11 +168,11 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         expectedPredicates.put("path", ImmutableMap.of("path", ContentFragmentListImpl.DEFAULT_DAM_PARENT_PATH));
         expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
         expectedPredicates.put("1_property", ImmutableMap.of(
-                "property", "jcr:content/data/cq:model",
-                "value", "foobar"));
+            "property", "jcr:content/data/cq:model",
+            "value", "foobar"));
         expectedPredicates.put("orderby", ImmutableMap.of(
-                "orderby", "@main",
-                "sort", "desc"));
+            "orderby", "@main",
+            "sort", "desc"));
 
 
         // WHEN
@@ -195,11 +200,17 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         expectedPredicates.put("path", ImmutableMap.of("path", "/content/dam/some-other-parent-path"));
         expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
         expectedPredicates.put("1_property", ImmutableMap.of(
-                "property", "jcr:content/data/cq:model",
-                "value", "foobar"));
+            "property", "jcr:content/data/cq:model",
+            "value", "foobar"));
+        expectedPredicates.put("2_property", ImmutableMap.of(
+            "property", "jcr:content/metadata/jcr:mixinTypes",
+            "value", TagConstants.NT_TAGGABLE));
         expectedPredicates.put("tagid", ImmutableMap.of(
-                "property", "jcr:content/metadata/cq:tags",
-                "1_value", "quux"));
+            "property", "jcr:content/metadata/cq:tags",
+            "1_value", "quux"));
+        expectedPredicates.put("orderby", ImmutableMap.of(
+            "orderby", "@" + JcrConstants.JCR_CREATED,
+            "sort", Predicate.SORT_ASCENDING));
 
         // WHEN
         getModelInstanceUnderTest(NON_EXISTING_MODEL_WITH_PATH_AND_TAGS);
@@ -216,8 +227,11 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         expectedPredicates.put("path", ImmutableMap.of("path", ContentFragmentListImpl.DEFAULT_DAM_PARENT_PATH));
         expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
         expectedPredicates.put("1_property", ImmutableMap.of(
-                "property", "jcr:content/data/cq:model",
-                "value", "foobar"));
+            "property", "jcr:content/data/cq:model",
+            "value", "foobar"));
+        expectedPredicates.put("orderby", ImmutableMap.of(
+            "orderby", "@" + JcrConstants.JCR_CREATED,
+            "sort", Predicate.SORT_ASCENDING));
 
         //Expected Max Limit
         String expectedLimit = "20";
@@ -242,12 +256,17 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
                 return false;
             }
 
+            // checks length to ensure that there are no predicates in the result that aren't in the expected
+            if (expectedPredicates.size() != argument.size()) {
+                return false;
+            }
+
             for (String predicateName : expectedPredicates.keySet()) {
                 Predicate predicate = argument.getByName(predicateName);
                 for (String predicateParameterName : expectedPredicates.get(predicateName).keySet()) {
                     String predicateParameterValue = predicate.getParameters().get(predicateParameterName);
                     String expectedPredicateParameterValue =
-                            expectedPredicates.get(predicateName).get(predicateParameterName);
+                        expectedPredicates.get(predicateName).get(predicateParameterName);
                     if (!predicateParameterValue.equals(expectedPredicateParameterValue)) {
                         return false;
                     }
