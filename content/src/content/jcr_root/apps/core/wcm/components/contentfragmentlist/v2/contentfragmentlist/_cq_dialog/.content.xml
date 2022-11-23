@@ -55,6 +55,22 @@
                                         fieldLabel="Tags"
                                         multiple="{Boolean}true"
                                         name="./tagNames"/>
+                                    <match
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        fieldLabel="Match"
+                                        name="./tagsMatch">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <any
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Any tag"
+                                                value="any"/>
+                                            <all
+                                                jcr:primaryType="nt:unstructured"
+                                                text="All tags"
+                                                value="all"/>
+                                        </items>
+                                    </match>
                                     <orderBy
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
