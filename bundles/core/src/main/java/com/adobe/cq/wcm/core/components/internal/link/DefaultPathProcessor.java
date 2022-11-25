@@ -158,12 +158,20 @@ public class DefaultPathProcessor implements PathProcessor {
         ResourceResolver resourceResolver = request.getResourceResolver();
         String externalPath;
         try {
-            if (vanityConfig == VanityConfig.MAPPING || vanityConfig == VanityConfig.ALWAYS) {
-                externalPath = externalizer.publishLink(resourceResolver, getPathOrVanityUrl(path, resourceResolver));
+            externalPath = LinkMaskingUtil.maskAndDo(path, maskedPath -> {
+                if (vanityConfig == VanityConfig.MAPPING || vanityConfig == VanityConfig.ALWAYS) {
+                    return externalizer.publishLink(resourceResolver, getPathOrVanityUrl(maskedPath, resourceResolver));
+                } else {
+                    return externalizer.publishLink(resourceResolver, maskedPath);
+                }
+            });
+        } catch (Exception ex) {
+            String message = "Failed to externalize url '{}': {}";
+            if (LOG.isDebugEnabled()) {
+                LOG.warn(message, path, ex.getMessage(), ex);
             } else {
-                externalPath = externalizer.publishLink(resourceResolver, path);
+                LOG.warn(message, path, ex.getMessage());
             }
-        } catch (Exception e) {
             externalPath = path;
         }
         return externalPath;

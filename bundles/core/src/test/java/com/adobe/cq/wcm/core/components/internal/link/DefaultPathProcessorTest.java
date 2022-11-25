@@ -20,6 +20,9 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.commons.Externalizer;
@@ -30,10 +33,13 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkBuilderImpl.HTML_EXTENSION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.RETURNS_DEFAULTS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({AemContextExtension.class})
@@ -47,10 +53,26 @@ class DefaultPathProcessorTest {
     void testExternalizeWithException() {
         Externalizer externalizer = mock(Externalizer.class);
         when(externalizer.publishLink(any(ResourceResolver.class), anyString())).thenThrow(IllegalArgumentException.class);
-        localContext.registerService(externalizer);
-        DefaultPathProcessor underTest = localContext.registerService(new DefaultPathProcessor());
+        localContext.registerService(Externalizer.class, externalizer);
+        DefaultPathProcessor underTest = localContext.registerInjectActivateService(new DefaultPathProcessor());
         String path = PATH;
         assertEquals(path, underTest.externalize(path, localContext.request()));
+    }
+
+    @Test
+    void testExternalizerIsCalledWithMaskedUrl() {
+        ArgumentCaptor<String> url = ArgumentCaptor.forClass(String.class);
+        Externalizer externalizer = mock(Externalizer.class);
+        when(externalizer.publishLink(any(ResourceResolver.class), anyString())).then(AdditionalAnswers.returnsSecondArg());
+        localContext.registerService(Externalizer.class, externalizer);
+        DefaultPathProcessor underTest = localContext.registerInjectActivateService(new DefaultPathProcessor());
+        String path = PATH + ".html?recipient=<%= recipient.id %>";
+
+        assertEquals(path, underTest.externalize(path, localContext.request()));
+
+        verify(externalizer).publishLink(any(ResourceResolver.class), url.capture());
+        assertFalse(url.getValue().contains("<%="));
+        assertFalse(url.getValue().contains("%>"));
     }
 
     @Test
