@@ -143,6 +143,8 @@ public class PageImplTest {
 
         PageData pageData = (PageData) getPageUnderTest(PAGE).getData();
         assertNotNull(pageData);
+        assertEquals("2016-01-20T10:33:36Z", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+                .format(pageData.getLastModifiedDate()));
         assertNull(pageData.getTemplatePath());
     }
 

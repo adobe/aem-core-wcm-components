@@ -55,6 +55,7 @@ import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -336,6 +337,13 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     protected final PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
             .withTitle(this::getTitle)
+            .withLastModifiedDate(() ->
+                    Optional.ofNullable(this.getLastModifiedDate())
+                            .map(Calendar::getTime)
+                            .orElseGet(() ->
+                                    Optional.ofNullable(pageProperties.get(JcrConstants.JCR_CREATED, Calendar.class))
+                                            .map(Calendar::getTime)
+                                            .orElse(null)))
             .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
             .withDescription(() -> this.pageProperties.get(NameConstants.PN_DESCRIPTION, String.class))
             .withTemplatePath(() -> Optional.ofNullable(this.currentPage.getTemplate())
