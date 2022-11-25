@@ -99,6 +99,49 @@
                             reference="../../component"/>
                     </info>
                 </demo>
+                <title_2
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Decorative"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_2
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Decorative Separator ignored by assistive technologies.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_2
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <separator
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/separator"
+                            isDecorative="true"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_2>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">

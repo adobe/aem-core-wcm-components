@@ -21,10 +21,19 @@ Separator component written in HTL.
 
 * Allows addition of a horizontal rule element for separating content sections.
 
+### Use Object
+The Separator component uses the `com.adobe.cq.wcm.core.components.models.Separator` Sling Model as its Use-object.
+
+### Component Policy Configuration Properties
+The following configuration properties are used:
+
+1. `./isDecorative` - if set to `true`, then the separator will be ignored by assistive technology
+
 ## Edit Dialog Properties
 The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:
 
 1. `./id` - defines the component HTML ID attribute.
+2. `./isDecorative` - if set to `true`, then the separator will be ignored by assistive technology
 
 ## BEM Description
 ```

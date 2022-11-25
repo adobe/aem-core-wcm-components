@@ -144,6 +144,8 @@ public class Commons {
     public static final String CLIENTLIBS_TABS_V1 = "core.wcm.components.tabs.v1";
     // content fragment component
     public static final String RT_CONTENTFRAGMENT_V1 = "core-component/components/contentfragment-v1";
+    // separator component
+    public static final String RT_SEPARATOR_V1 = "core-component/components/separator-v1";
     // content fragment list component
     public static final String RT_CONTENTFRAGMENTLIST_V1 = "core-component/components/contentfragmentlist-v1";
     public static final String RT_CONTENTFRAGMENTLIST_V2 = "core-component/components/contentfragmentlist-v2";
