@@ -34,6 +34,7 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.designer.Design;
 import com.day.cq.wcm.api.designer.Designer;
@@ -148,6 +149,23 @@ public class PageImplTest {
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
         assertEquals(calendar.getTime(), pageData.getLastModifiedDate());
         assertNull(pageData.getTemplatePath());
+    }
+
+    @Test
+    protected void testPageData_noModificationDate() throws PersistenceException, ParseException {
+        // remove the lastModification value
+        ModifiableValueMap props = Objects.requireNonNull(
+                Optional.ofNullable((context.pageManager().getPage(PAGE)))
+                        .map(com.day.cq.wcm.api.Page::getContentResource)
+                        .map(r -> r.adaptTo(ModifiableValueMap.class))
+                        .orElse(null)
+        );
+        props.remove(NameConstants.PN_PAGE_LAST_MOD);
+        context.resourceResolver().commit();
+
+        PageData pageData = (PageData) getPageUnderTest(PAGE).getData();
+        assertNotNull(pageData);
+        assertNull(pageData.getLastModifiedDate());
     }
 
     @Test
