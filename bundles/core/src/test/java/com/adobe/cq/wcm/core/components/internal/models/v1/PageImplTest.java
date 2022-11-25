@@ -128,7 +128,7 @@ public class PageImplTest {
      * have a template set - without causing NPE.
      */
     @Test
-    protected void testPageData_noTemplate() throws PersistenceException {
+    protected void testPageData_noTemplate() throws PersistenceException, ParseException {
         context.load().binaryFile(TEST_BASE + "/static.css", DESIGN_PATH + "/static.css");
 
         // remove the template value
@@ -143,8 +143,10 @@ public class PageImplTest {
 
         PageData pageData = (PageData) getPageUnderTest(PAGE).getData();
         assertNotNull(pageData);
-        assertEquals("2016-01-20T10:33:36Z", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-                .format(pageData.getLastModifiedDate()));
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
+        calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
+        assertEquals(calendar.getTime(), pageData.getLastModifiedDate());
         assertNull(pageData.getTemplatePath());
     }
 
