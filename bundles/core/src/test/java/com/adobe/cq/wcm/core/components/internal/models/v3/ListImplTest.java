@@ -16,7 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.util.Collection;
+import java.util.Iterator;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +39,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ListImplTest {
 
     private static final String TEST_BASE = "/list/v3";
+
+    protected static final String MIXED_LIST_1 = TEST_PAGE_CONTENT_ROOT + "/mixedListTypeWithNoLinks";
+    protected static final String MIXED_LIST_2 = TEST_PAGE_CONTENT_ROOT + "/mixedListTypeWithPageLinks";
+    protected static final String MIXED_LIST_3 = TEST_PAGE_CONTENT_ROOT + "/mixedListTypeWithPageAndExternalLinks";
+    protected static final String MIXED_LIST_4 = TEST_PAGE_CONTENT_ROOT + "/mixedListTypeWithPageAndExternalLinksSorted";
+
+    protected static final String MIXED_LIST_5 = TEST_PAGE_CONTENT_ROOT + "/mixedListTypeWithPageLinksSorted";
+    protected static final String MIXED_LIST_6 = TEST_PAGE_CONTENT_ROOT + "/mixedListTypeWithEmptyLink";
 
     @BeforeEach
     @Override
@@ -86,4 +97,118 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_20));
     }
 
+    @Test
+    protected void testMixedListTypeWithNoLinks() {
+        List list = getListUnderTest(MIXED_LIST_1);
+
+        assertEquals(0, list.getListItems().size());
+    }
+
+    @Test
+    protected void testMixedListTypeWithPageLinks() {
+        List list = getListUnderTest(MIXED_LIST_2);
+
+        assertFalse(list.linkItems());
+        assertTrue(list.displayItemAsTeaser());
+        assertFalse(list.showModificationDate());
+        assertFalse(list.showDescription());
+
+        Collection<ListItem> listItems = list.getListItems();
+        assertEquals(2, listItems.size());
+
+        Iterator<ListItem> itemIterator = listItems.iterator();
+        // item 1
+        ListItem item = itemIterator.next();
+        assertEquals("Page One", item.getTitle());
+        Link link = item.getLink();
+        assertEquals("/content/list/pages/page_1.html", item.getURL());
+        assertEquals("/content/list/pages/page_1.html", link.getURL());
+        assertEquals("_blank", link.getHtmlAttributes().get(LinkImpl.ATTR_TARGET));
+        Resource teaserResource = item.getTeaserResource();
+        ValueMap teaserResourceProperties = teaserResource.getValueMap();
+        assertEquals("/content/list/pages/page_1", teaserResourceProperties.get(Link.PN_LINK_URL));
+        assertEquals("_blank", teaserResourceProperties.get(Link.PN_LINK_TARGET));
+    }
+
+    @Test
+    protected void testMixedListTypeWithPageAndExternalLinks() {
+        List list = getListUnderTest(MIXED_LIST_3);
+
+        assertTrue(list.linkItems());
+        assertFalse(list.displayItemAsTeaser());
+        assertFalse(list.showModificationDate());
+        assertFalse(list.showDescription());
+
+        Collection<ListItem> listItems = list.getListItems();
+        // maxItems (2) is ignored
+        assertEquals(4, listItems.size());
+        Iterator<ListItem> itemIterator = listItems.iterator();
+        // item 1
+        ListItem item = itemIterator.next();
+        assertEquals("Page One", item.getTitle());
+        Link link = item.getLink();
+        assertEquals("/content/list/pages/page_1.html", item.getURL());
+        assertEquals("/content/list/pages/page_1.html", link.getURL());
+        assertEquals("_blank", link.getHtmlAttributes().get(LinkImpl.ATTR_TARGET));
+        // item 2
+        item = itemIterator.next();
+        assertEquals("Page 2", item.getTitle());
+        link = item.getLink();
+        assertEquals("/content/list/pages/page_2.html", item.getURL());
+        assertEquals("/content/list/pages/page_2.html", link.getURL());
+        assertNull(link.getHtmlAttributes().get(LinkImpl.ATTR_TARGET));
+        // item 3
+        item = itemIterator.next();
+        assertEquals("External Link 1", item.getTitle());
+        link = item.getLink();
+        assertEquals("http://www.external1.link", item.getURL());
+        assertEquals("http://www.external1.link", link.getURL());
+        assertEquals("_blank", link.getHtmlAttributes().get(LinkImpl.ATTR_TARGET));
+        // item 4
+        item = itemIterator.next();
+        assertEquals("http://www.external2.link", item.getTitle());
+    }
+
+    @Test
+    protected void testMixedListTypeWithPageAndExternalLinksSorted() {
+        List list = getListUnderTest(MIXED_LIST_4);
+
+        Collection<ListItem> listItems = list.getListItems();
+        assertEquals(4, listItems.size());
+        Iterator<ListItem> itemIterator = listItems.iterator();
+        // item 1
+        ListItem item = itemIterator.next();
+        assertEquals("External Link 1", item.getTitle());
+        // item 2
+        item = itemIterator.next();
+        assertEquals("http://www.external2.link", item.getTitle());
+        // item 3
+        item = itemIterator.next();
+        assertEquals("Page 2", item.getTitle());
+        // item 4
+        item = itemIterator.next();
+        assertEquals("Page One", item.getTitle());
+    }
+
+    @Test
+    protected void testMixedListTypeWithPageLinksSorted() {
+        List list = getListUnderTest(MIXED_LIST_5);
+        Collection<ListItem> listItems = list.getListItems();
+        assertEquals(2, listItems.size());
+
+        Iterator<ListItem> itemIterator = listItems.iterator();
+        // item 1
+        ListItem item = itemIterator.next();
+        assertEquals("Page Two", item.getTitle());
+        // item 2
+        item = itemIterator.next();
+        assertEquals("Page One", item.getTitle());
+    }
+
+    @Test
+    protected void testMixedListTypeWithEmptyLink() {
+        List list = getListUnderTest(MIXED_LIST_6);
+
+        assertEquals(2, list.getListItems().size());
+    }
 }

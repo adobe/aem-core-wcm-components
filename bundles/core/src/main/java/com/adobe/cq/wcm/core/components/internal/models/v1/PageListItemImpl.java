@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import com.adobe.cq.wcm.core.components.commons.link.LinkBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,9 +60,16 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
                             @NotNull final Page page,
                             final String parentId,
                             final Component component) {
+        this(linkManager.get(page), page, parentId, component);
+    }
+
+    protected PageListItemImpl(@NotNull final LinkBuilder linkBuilder,
+                            @NotNull final Page page,
+                            final String parentId,
+                            final Component component) {
         super(parentId, page.getContentResource(), component);
         this.parentId = parentId;
-        this.link = linkManager.get(page).build();
+        this.link = linkBuilder.build();
         if (this.link.isValid() && (link.getReference() instanceof Page)) {
             this.page = (Page) link.getReference();
         } else {

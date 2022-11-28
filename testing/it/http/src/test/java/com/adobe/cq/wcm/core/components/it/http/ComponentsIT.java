@@ -105,6 +105,20 @@ public class ComponentsIT {
             .select(".embed.embed-v1", 2).expect("embed-v1-youtube-responsive.html");
     }
 
+    @Test
+    public void testList() throws ClientException, IOException {
+        String content = adminAuthor.doGet("/content/core-components/list.html", 200).getContent();
+        Document document = parse(content);
+
+        new ComponentTest(document)
+            .select(".list.list-v3", 0).expect("list-v3-mixed-pages.html")
+            .select(".list.list-v3", 1).expect("list-v3-mixed-pages-linked.html")
+            .select(".list.list-v3", 2).expect("list-v3-mixed-pages-and-links.html")
+            .select(".list.list-v3", 3).expect("list-v3-mixed-pages-linked-description-modified.html")
+            .select(".list.list-v3", 4).expect("list-v3-mixed-pages-linked-description-modifieddate-teaser.html")
+            .select(".list.list-v3", 5).expect("list-v3-mixed-pages-empty.html");
+    }
+
     private class ComponentTest {
 
         private Document actualDocument;

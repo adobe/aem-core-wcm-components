@@ -21,10 +21,11 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 
 public class ListEditDialog extends Dialog {
     private static String parentPageField = "[name='./parentPage']";
@@ -64,6 +65,42 @@ public class ListEditDialog extends Dialog {
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         $$("foundation-autocomplete[name='./pages'] input[role='combobox']").last().sendKeys(value);
         $("foundation-autocomplete[name='./pages'] button[value^='" + value + "']").click();
+    }
+
+    public void addMixedListPage(String value) throws InterruptedException {
+        $("coral-multifield[data-granite-coral-multifield-name='./mixed'] > button").click();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        $$("foundation-autocomplete.cmp-list__editor-mixed-multifield-linkURL input[role='combobox']").last().sendKeys(value);
+        $("foundation-autocomplete.cmp-list__editor-mixed-multifield-linkURL button[value^='" + value + "']").click();
+    }
+
+    public void addMixedListLink(String linkUrl, String linkTitle) throws InterruptedException {
+        // add new item
+        $("coral-multifield[data-granite-coral-multifield-name='./mixed'] > button").click();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        // set link URL, also opens the dropdown of autocomplete
+        SelenideElement autocompleteInput = $$(".cmp-list__editor-mixed-multifield-linkURL input[role='combobox']").last();
+        autocompleteInput.sendKeys(linkUrl);
+        // hide dropdown of autocomplete
+        autocompleteInput.sendKeys(Keys.ENTER);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        // set link text
+        $$("input.cmp-list__editor-mixed-multifield-linkText[type='text']").last().sendKeys(linkTitle);
+    }
+
+    public void removeLastMixedListLink() {
+        $$(".cmp-list__editor-mixed-multifield button[handle='remove']").last().click();
+    }
+
+    public boolean isMaxItemsDisplayed() {
+        return $("coral-numberinput[name='./maxItems']").ancestor(".coral-Form-fieldwrapper").isDisplayed();
+    }
+
+    public boolean isExternalLinksMode() {
+        SelenideElement orderByModified = $(".cmp-list__editor coral-selectlist-item[value=\"modified\"]");
+        SelenideElement itemSettings = $$(".cmp-list__editor coral-tab").last();
+
+        return orderByModified.has(Condition.cssClass("hide")) && itemSettings.has(Condition.cssClass("hide"));
     }
 
     public void enterSearchQuery(String query) {

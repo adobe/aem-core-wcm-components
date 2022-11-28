@@ -23,6 +23,7 @@ List component written in HTL that renders a configurable collection of items or
   * List tagged items
   * List query result
   * List static items
+  * List mixed items (static page and external link)
 * Ordering and limit
 * Styles
 
@@ -44,28 +45,39 @@ The following properties are written to JCR for this List component and are expe
 1. `./listFrom` - defines the source of this List; possible values:
   * `children` - the list is built from the child pages of a root page
   * `static` - the list is built from a statically defined collection of pages
+  * `mixed` - the list is built from a statically defined collection of pages and external links
   * `search` - the list is built from the search results of a query
   * `tags` - the list is built from the tagged children pages of a root page
 2. `./parentPage` - defines the root page when the `./listFrom` property is set to `children`
 3. `./childDepth` - defines the max depth for children pages, when the `./listFrom` property is set to `children`
 4. `./pages` - defines the pages to be rendered, when the `./listFrom` property is set to `static`
-5. `./query` - defines the search query, when the `./listFrom` property is set to `search`
-6. `./searchIn` - defines where to start the search, when the `./listFrom` property is set to `search`
-7. `./tagsSearchRoot` - defines the root path of the tag search, when the `./listFrom` property is set to `tags`
-8. `./tags` - defines the tags list to search for, when the `./listFrom` property is set to `tags`
-9. `./tagsMatch` - defines if the results of the tag search have to match all tags or just some of them,
+5. `./mixed` - name of the child JCR node where the list elements are stored, when the `./listFrom` property is set to `mixed`,
+               as a list of `item` nodes with the following properties:
+               `linkURL` - stores the page path or external links,
+               `linkTarget` - stores the link target,
+               `linkText` - stores the link text.
+               If the list contains external links then it will have a special state which is equivalent to the
+               following property settings: `./showDescription` is `false`, `./showModificationDate` is `false`,
+               `./displayItemAsTeaser` is `false` and `./linkItems` is `true` and only sorting by title is possible.
+               When `./listFrom` property is set to `mixed`, the `./maxItems` property is ignored.
+6. `./query` - defines the search query, when the `./listFrom` property is set to `search`
+7. `./searchIn` - defines where to start the search, when the `./listFrom` property is set to `search`
+8. `./tagsSearchRoot` - defines the root path of the tag search, when the `./listFrom` property is set to `tags`
+9. `./tags` - defines the tags list to search for, when the `./listFrom` property is set to `tags`
+10. `./tagsMatch` - defines if the results of the tag search have to match all tags or just some of them,
 when the `./listFrom` property is set to `tags`; possible values: `any` and `all`
-10. `./orderBy` - defines what criterion is used for ordering the list items: the item's title or the
+11. `./orderBy` - defines what criterion is used for ordering the list items: the item's title or the
 last modification date of the item; possible values: `title`, `modified`
-11. `./sortOrder` - defines the sorting order; possible values: `asc`, `desc`
-12. `./maxItems` - defines the maximum number of items rendered by the list
-13. `./linkItems` - if set to `true` the list will link all items to the corresponding pages
-14. `./showDescription` - if set to `true` each item's description will be rendered
-15. `./showModificationDate` - if set to `true` each item's last modification date will be rendered
-16. `./id` - defines the component HTML ID attribute.
+12. `./sortOrder` - defines the sorting order; possible values: `asc`, `desc`
+13. `./maxItems` - defines the maximum number of items rendered by the list
+14. `./linkItems` - if set to `true` the list will link all items to the corresponding pages
+15. `./showDescription` - if set to `true` each item's description will be rendered
+16. `./showModificationDate` - if set to `true` each item's last modification date will be rendered
+17. `./displayItemAsTeaser` - if set to `true` the rendering of each list item is delegated to the configured teaser component
+18. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
-The component uses the `core.wcm.components.list.v2.editor` editor client library category that includes JavaScript
+The component uses the `core.wcm.components.list.v3.editor` editor client library category that includes JavaScript
 handling for dialog interaction. It is already included by its edit dialog.
 
 ## BEM Description

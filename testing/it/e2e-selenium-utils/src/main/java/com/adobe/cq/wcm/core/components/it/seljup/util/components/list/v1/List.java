@@ -47,6 +47,10 @@ public class List extends BaseComponent {
         return isPagePresentWithText(page);
     }
 
+    public boolean isPresentInList(String text) {
+        return isPagePresentWithText(text);
+    }
+
     public boolean isPagePresentInListAtPosition(int idx, String page) {
         ElementsCollection items = $$("span");
         return items.get(idx).getText().trim().contains(page);

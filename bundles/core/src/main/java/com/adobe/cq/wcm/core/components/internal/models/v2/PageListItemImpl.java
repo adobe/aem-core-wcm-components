@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.adobe.cq.wcm.core.components.commons.link.LinkBuilder;
+import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -77,6 +79,15 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
         this.listResource = resource;
     }
 
+    protected PageListItemImpl(@NotNull LinkBuilder linkBuilder, @NotNull Page page, String parentId, Component component,
+                            boolean showDescription, boolean linkItems, Resource resource) {
+        super(linkBuilder, page, parentId, component);
+        this.component = component;
+        this.showDescription = showDescription;
+        this.linkItems = linkItems;
+        this.listResource = resource;
+    }
+
     @Override
     @JsonIgnore(false)
     @Nullable
@@ -113,6 +124,13 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                     }
                     if (linkItems) {
                         overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
+                        Link<Page> itemLink = this.getLink();
+                        if (itemLink != null) {
+                            String target = itemLink.getHtmlAttributes().get(LinkImpl.ATTR_TARGET);
+                            if (StringUtils.isNotBlank(target)) {
+                                overriddenProperties.put(Link.PN_LINK_TARGET, target);
+                            }
+                        }
                     }
                 } else {
                     // use the page content node and inherit properties from the page item
@@ -125,6 +143,13 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                     }
                     if (linkItems) {
                         overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
+                        Link<Page> itemLink = this.getLink();
+                        if (itemLink != null) {
+                            String target = itemLink.getHtmlAttributes().get(LinkImpl.ATTR_TARGET);
+                            if (StringUtils.isNotBlank(target)) {
+                                overriddenProperties.put(Link.PN_LINK_TARGET, target);
+                            }
+                        }
                     }
                 }
                 teaserResource = new CoreResourceWrapper(listResource, delegateResourceType, hiddenProperties, overriddenProperties);

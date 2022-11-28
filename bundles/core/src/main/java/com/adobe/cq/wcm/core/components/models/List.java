@@ -56,6 +56,23 @@ public interface List extends Component {
     String PN_PAGES = "pages";
 
     /**
+     * Name of the child node storing the list items if the source of the list is {@code mixed}.
+     *
+     * @see #PN_SOURCE
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
+    String NN_MIXED = "mixed";
+
+    /**
+     * Name of the resource property storing the text of link in the mixed list item when the source of the list is {@code mixed}.
+     *
+     * @see #PN_SOURCE
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
+    String PN_LINK_TEXT = "linkText";
+
+
+    /**
      * Name of the resource property storing the root page from which to build the list if the source of the list is <code>children</code>.
      *
      * @see #PN_SOURCE
@@ -111,7 +128,7 @@ public interface List extends Component {
     String PN_LINK_ITEMS = "linkItems";
 
     /**
-     * Name of the boolean resource property indication if the items should render a link to the page they represent.
+     * Name of the boolean resource property indicating if the list item rendering is delegated to the configured teaser component.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
@@ -148,7 +165,7 @@ public interface List extends Component {
     String PN_DATE_FORMAT = "dateFormat";
 
     /**
-     * Name of the component property indicating to which teaser component the list items should be delegated.
+     * Name of the component property indicating to which teaser component the list item rendering should be delegated.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.21.0
      */
