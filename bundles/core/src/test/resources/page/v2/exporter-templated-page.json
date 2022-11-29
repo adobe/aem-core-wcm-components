@@ -66,6 +66,7 @@
   "dataLayer": {
     "page-bb590de134": {
       "@type": "core/wcm/components/page/v2/page",
+      "repo:modifyDate": "2016-01-20T09:33:36Z",
       "dc:title": "Templated Page",
       "dc:description": "Description",
       "xdm:template": "/conf/coretest/settings/wcm/templates/product-page",
