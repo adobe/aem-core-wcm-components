@@ -70,6 +70,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private String srcSet = StringUtils.EMPTY;
     private Map<String, String> srcSetWithMimeType = Collections.EMPTY_MAP;
     private String sizes;
+    
+    private Dimension dimension;
 
     @PostConstruct
     protected void initModel() {
@@ -213,7 +215,15 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return !disableLazyLoading;
     }
 
+    
     private Dimension getOriginalDimension() {
+    	if (dimension == null) {
+    		this.dimension = getOriginalDimensionInternal();
+    	}
+    	return this.dimension;
+    }
+    
+    private Dimension getOriginalDimensionInternal() {
         ValueMap inheritedResourceProperties = resource.getValueMap();
         String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
         Asset asset;
