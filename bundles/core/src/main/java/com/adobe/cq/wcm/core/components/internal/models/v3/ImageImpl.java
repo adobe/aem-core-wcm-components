@@ -217,7 +217,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     
     private Dimension getOriginalDimension() {
-    	if (dimension == null) {
+    	if (this.dimension == null) {
     		this.dimension = getOriginalDimensionInternal();
     	}
     	return this.dimension;
