@@ -24,14 +24,16 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.jcr.RepositoryException;
 
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.servlets.post.Modification;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
-import com.day.cq.wcm.api.WCMException;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -69,7 +71,7 @@ class ContainerPostProcessorTest {
     }
 
     @Test
-    public void testDeleteChildren() throws IOException, RepositoryException, WCMException {
+    public void testDeleteChildren() throws IOException, RepositoryException {
         Resource container = context.create().resource("/test/dummy/container");
         context.create().resource("/test/dummy/container/child1");
         context.create().resource("/test/dummy/container/child2");
@@ -77,6 +79,30 @@ class ContainerPostProcessorTest {
         String deletedChildren = "child2";
         context.request().setParameterMap(ImmutableMap.of(PARAM_DELETED_CHILDREN, deletedChildren));
         containerPostProcessor.handleDelete(container, context.request(), context.resourceResolver(), new ArrayList<>());
+        Iterable<Resource> childrenIterator = context.currentResource().getChildren();
+        List<Resource> childList     = StreamSupport
+                .stream(childrenIterator.spliterator(), false)
+                .collect(Collectors.toList());
+        assertEquals(1, childList.size());
+    }
+
+    @Test
+    public void testThrowRepositoryException() throws Exception {
+        ContainerPostProcessor exceptionPostProcessor = new ContainerPostProcessor(){
+            @Override
+            protected void handleDelete(Resource container, SlingHttpServletRequest request, ResourceResolver resolver,
+                                        List<Modification> addedModifications) throws RepositoryException {
+                throw new RepositoryException("Dummy exception to meet code coverage");
+            }
+        };
+        Resource container = context.create().resource("/test/dummy/container", ImmutableMap.of(
+                "sling:resourceType", PanelContainerImpl.RESOURCE_TYPE
+        ));
+        context.create().resource("/test/dummy/container/child1");
+        String deletedChildren = "child1";
+        context.request().setParameterMap(ImmutableMap.of(PARAM_DELETED_CHILDREN, deletedChildren));
+        context.currentResource(container);
+        exceptionPostProcessor.process(context.request(), new ArrayList<>());
         Iterable<Resource> childrenIterator = context.currentResource().getChildren();
         List<Resource> childList     = StreamSupport
                 .stream(childrenIterator.spliterator(), false)
