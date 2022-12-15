@@ -105,6 +105,16 @@ public class ComponentsIT {
             .select(".embed.embed-v1", 2).expect("embed-v1-youtube-responsive.html");
     }
 
+    @Test
+    public void testPdfViewer() throws ClientException, IOException {
+        String content = adminAuthor.doGet("/content/core-components/pdfviewer.html", 200).getContent();
+        Document document = parse(content);
+
+        new ComponentTest(document)
+            .select(".pdfviewer.pdfviewer-v1", 0).expect("pdfviewer-v1-empty.html")
+            .select(".pdfviewer.pdfviewer-v1", 1).expect("pdfviewer-v1-defaults.html");
+    }
+
     private class ComponentTest {
 
         private Document actualDocument;
