@@ -102,7 +102,14 @@ public class ComponentsIT {
             })
             .select(".embed.embed-v1", 0).expect("embed-v1-youtube-defaults.html")
             .select(".embed.embed-v1", 1).expect("embed-v1-youtube-fixed.html")
-            .select(".embed.embed-v1", 2).expect("embed-v1-youtube-responsive.html");
+            .select(".embed.embed-v1", 2).expect("embed-v1-youtube-responsive.html")
+            .select(".embed.embed-v1", 3).expect("embed-v1-url-youtube.html")
+            .select(".embed.embed-v1", 4).expect("embed-v1-url-trailing-whitespace.html")
+            .select(".embed.embed-v2", 0).expect("embed-v2-youtube-defaults.html")
+            .select(".embed.embed-v2", 1).expect("embed-v2-youtube-fixed.html")
+            .select(".embed.embed-v2", 2).expect("embed-v2-youtube-responsive.html")
+            .select(".embed.embed-v2", 3).expect("embed-v2-url-youtube.html")
+            .select(".embed.embed-v2", 4).expect("embed-v2-url-trailing-whitespace.html");
     }
 
     @Test

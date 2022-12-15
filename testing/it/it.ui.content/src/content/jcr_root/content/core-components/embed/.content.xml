@@ -32,6 +32,7 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-component/components/embed-v1"
                     embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
+                    id="embed_v1_youtube_defaults"
                     type="embeddable"
                     youtubeVideoId="f7hbWvHKns0"
                     layout="fixed"/>
@@ -39,6 +40,7 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-component/components/embed-v1"
                     embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
+                    id="embed_v1_youtube_fixed"
                     type="embeddable"
                     youtubeVideoId="f7hbWvHKns0"
                     layout="fixed"
@@ -54,6 +56,7 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-component/components/embed-v1"
                     embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
+                    id="embed_v1_youtube_responsive"
                     type="embeddable"
                     youtubeVideoId="f7hbWvHKns0"
                     layout="responsive"
@@ -64,6 +67,69 @@
                     youtubeMute="true"
                     youtubePlaysInline="true"
                     youtubeRel="true"/>
+                <embed_v1_url_youtube
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-component/components/embed-v1"
+                    id="embed_v1_url_youtube"
+                    type="url"
+                    url="https://youtu.be/vpdcMZnYCko"/>
+                <embed_v1_url_trailing_whitespace
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-component/components/embed-v1"
+                    id="embed_v1_url_trailing_whitespace"
+                    type="url"
+                    url="https://youtu.be/vpdcMZnYCko "/>
+                <embed_v2_youtube_defaults
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-component/components/embed-v2"
+                    embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
+                    id="embed_v2_youtube_defaults"
+                    type="embeddable"
+                    youtubeVideoId="f7hbWvHKns0"
+                    layout="fixed"/>
+                <embed_v2_youtube_fixed
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-component/components/embed-v2"
+                    embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
+                    id="embed_v2_youtube_fixed"
+                    type="embeddable"
+                    youtubeVideoId="f7hbWvHKns0"
+                    layout="fixed"
+                    accessibilityLabel="Greenland land of ice"
+                    youtubeAutoPlay="true"
+                    youtubeHeight="300"
+                    youtubeWidth="400"
+                    youtubeLoop="true"
+                    youtubeMute="true"
+                    youtubePlaysInline="true"
+                    youtubeRel="true"/>
+                <embed_v2_youtube_responsive
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-component/components/embed-v2"
+                    embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
+                    id="embed_v2_youtube_responsive"
+                    type="embeddable"
+                    youtubeVideoId="f7hbWvHKns0"
+                    layout="responsive"
+                    accessibilityLabel="Greenland land of ice"
+                    youtubeAutoPlay="true"
+                    youtubeAspectRatio="56.25"
+                    youtubeLoop="true"
+                    youtubeMute="true"
+                    youtubePlaysInline="true"
+                    youtubeRel="true"/>
+                <embed_v2_url_youtube
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-component/components/embed-v2"
+                    id="embed_v2_url_youtube"
+                    type="url"
+                    url="https://youtu.be/vpdcMZnYCko"/>
+                <embed_v2_url_trailing_whitespace
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-component/components/embed-v2"
+                    id="embed_v2_url_trailing_whitespace"
+                    type="url"
+                    url="https://youtu.be/vpdcMZnYCko "/>
             </container>
         </root>
     </jcr:content>

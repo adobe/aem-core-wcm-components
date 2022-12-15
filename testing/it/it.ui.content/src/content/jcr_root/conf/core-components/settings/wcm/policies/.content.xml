@@ -128,6 +128,28 @@
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1668764855725>
             </embed-v1>
+            <embed-v2 jcr:primaryType="nt:unstructured">
+                <policy_1668764855725
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Youtube"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    allowedEmbeddables="[core/wcm/components/embed/v1/embed/embeddable/youtube]"
+                    embeddablesDisabled="false"
+                    htmlDisabled="false"
+                    urlDisabled="false"
+                    youtubeAutoPlayDefaultValue="false"
+                    youtubeAutoPlayEnabled="true"
+                    youtubeLoopDefaultValue="false"
+                    youtubeLoopEnabled="true"
+                    youtubeMuteDefaultValue="false"
+                    youtubeMuteEnabled="true"
+                    youtubePlaysInlineDefaultValue="false"
+                    youtubePlaysInlineEnabled="true"
+                    youtubeRelatedVideosDefaultValue="false"
+                    youtubeRelatedVideosEnabled="true">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1668764855725>
+            </embed-v2>
         </components>
     </core-component>
     <core jcr:primaryType="nt:unstructured">
