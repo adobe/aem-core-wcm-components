@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.page.v1;
 
+import java.time.Duration;
+
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.CalendarPicker;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
@@ -139,7 +141,7 @@ public class Page {
     public void generateThumbnail(ThumbnailTab thumbnailTab) {
         thumbnailTab.getThumbnailGeneratePreviewActivator().click();
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC))
             .until(ExpectedConditions.invisibilityOf(thumbnailTab.getDefaultThumbnailImg().toWebElement()));
     }
 

@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.embed;
 
+import java.time.Duration;
+
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
@@ -62,7 +64,7 @@ public class EmbedEditDialog extends Dialog {
         public void waitForUrlFieldToBeValid() throws InterruptedException {
             final WebDriver webDriver = WebDriverRunner.getWebDriver();
             Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-            new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".is-invalid" + urlField)));
+            new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC)).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".is-invalid" + urlField)));
             Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         }
 
