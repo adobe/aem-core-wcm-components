@@ -349,7 +349,8 @@
 
     /**
      * Helper function to get core image instance 'smartCropRendition' property
-     * @param filePath
+     * @param {String} filePath url path of the image instance
+     * @returns {Deferred} done after successful request
      */
     function retrieveInstanceInfo(filePath) {
         return $.ajax({

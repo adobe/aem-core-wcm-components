@@ -222,6 +222,7 @@
     /**
      * Helper function to get core image instance 'smartCropRendition' property
      * @param {String} filePath url path of the image instance
+     * @returns {Deferred} done after successful request
      */
     function retrieveInstanceInfo(filePath) {
         return $.ajax({
@@ -333,7 +334,7 @@
 
     /**
      * Get selected radio option helper
-     * @param component The radio option component
+     * @param {jQuery} component The radio option component
      * @returns {String} Value of the selected radio option
      */
     function getSelectedPresetType(component) {
@@ -348,8 +349,8 @@
 
     /**
      * Select radio option helper
-     * @param component
-     * @param val
+     * @param {jQuery} component The radio option component
+     * @param {String} val The value which should be selected
      */
     function selectPresetType(component, val) {
         var radioComp = component.find('[type="radio"]');
@@ -360,7 +361,7 @@
 
     /**
      * Reset selection field
-     * @param field
+     * @param {jQuery[]} field The array of select fields
      */
     function resetSelectField(field) {
         if (field[0]) {
