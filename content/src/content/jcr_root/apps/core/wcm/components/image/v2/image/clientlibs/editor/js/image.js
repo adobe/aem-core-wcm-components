@@ -221,7 +221,7 @@
 
     /**
      * Helper function to get core image instance 'smartCropRendition' property
-     * @param filePath
+     * @param {String} filePath url path of the image instance
      */
     function retrieveInstanceInfo(filePath) {
         return $.ajax({
@@ -236,7 +236,7 @@
 
     /**
      * Get the list of available image's smart crop renditions and fill drop-down list
-     * @param imageUrl The link to image asset
+     * @param {String} imageUrl The link to image asset
      */
     function getSmartCropRenditions(imageUrl) {
         if (imagePropertiesRequest) {
@@ -293,6 +293,9 @@
 
     /**
      * Helper function for populating dropdown list
+     * @param {String} label of the dropdown element
+     * @param {String} value of the dropdown element
+     * @param {Boolean} selected if item should be selected
      */
     function addSmartCropDropDownItem(label, value, selected) {
         smartCropRenditionsDropDown.items.add({
