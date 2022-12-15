@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:pdf="http://ns.adobe.com/pdf/1.3/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="6a2ca862-03a6-4456-b51f-bef0e09c6557">
+    <jcr:content
+        dam:assetState="processed"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:Author="James Lee"
+            dam:extracted="{Date}2020-03-11T19:38:58.875-07:00"
+            dam:numPages="{Long}7"
+            dam:Physicalheightininches="{Decimal}5.826666666666666"
+            dam:Physicalwidthininches="{Decimal}8.268333333333334"
+            dam:Producer="Adobe PDF Library 18.12.71"
+            dam:sha1="344b8a7f517d7e80ab2cc4869f7cfc2728fbc950"
+            dam:size="{Long}699643"
+            dc:creator="[James Lee]"
+            dc:creator_xmpArrayType="rdf:Seq"
+            dc:description=""
+            dc:format="application/pdf"
+            dc:title=""
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"
+            pdf:Producer="Adobe PDF Library 18.12.71"
+            xmp:CreateDate="{Date}2018-04-17T10:01:44.000-07:00"
+            xmp:CreatorTool="Acrobat PDFMaker 18 for Word"
+            xmp:MetadataDate="{Date}2019-07-19T18:10:14.000+05:30"
+            xmp:ModifyDate="{Date}2019-07-19T05:40:14.000-07:00"
+            xmpMM:DocumentID="uuid:95aa2ea1-bf73-4ff5-9bcd-821cf629b291"
+            xmpMM:InstanceID="uuid:3c1e37b2-1275-ef43-bc50-deb0e0c54707"
+            xmpMM:subject="{Long}[2]"
+            xmpMM:subject_xmpArrayType="rdf:Seq"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

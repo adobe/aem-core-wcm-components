@@ -17,11 +17,7 @@ package com.adobe.cq.wcm.core.components.it.http;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.io.IOUtils;
@@ -78,6 +74,15 @@ public class ComponentsIT {
         testComponent(document, ".teaser.teaser-v1", 1, "/components/teaser-v1-with-cta-to-asset.html");
         testComponent(document, ".teaser.teaser-v2", 0, "/components/teaser-v2-with-link-to-asset.html");
         testComponent(document, ".teaser.teaser-v2", 1, "/components/teaser-v2-with-cta-to-asset.html");
+    }
+
+    @Test
+    public void testPdfViewer() throws ClientException, IOException {
+        String content = adminAuthor.doGet("/content/core-components/pdfviewer.html", 200).getContent();
+        Document document = parse(content);
+
+        testComponent(document, ".pdfviewer.pdfviewer-v1", 0, "/components/pdfviewer-v1-empty.html");
+        testComponent(document, ".pdfviewer.pdfviewer-v1", 1, "/components/pdfviewer-v1-defaults.html");
     }
 
     private void testComponent(Document actualDocument, String selector, int selectorSetIndex, String expectation) throws IOException {
