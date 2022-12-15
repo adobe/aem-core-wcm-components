@@ -32,7 +32,7 @@ jobs:
     steps:
       # Check out Git repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Set up environment with Java and Maven
       - name: Setup JDK
@@ -66,9 +66,9 @@ jobs:
         node-version: [ 14 ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'

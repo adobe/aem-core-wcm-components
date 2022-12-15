@@ -69,7 +69,7 @@
         /**
          * Build and return the srcset value based on the available auto smart crops
          * @param {String} src the src uri
-         * @param smartCrops the smart crops object
+         * @param {Object} smartCrops the smart crops object
          * @returns {String} the srcset
          */
         var getSrcSet = function(src, smartCrops) {

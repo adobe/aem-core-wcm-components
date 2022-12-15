@@ -62,7 +62,7 @@ public class EmbedEditDialog extends Dialog {
         public void waitForUrlFieldToBeValid() throws InterruptedException {
             final WebDriver webDriver = WebDriverRunner.getWebDriver();
             Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-            new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".is-invalid" + urlField)));
+            new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".is-invalid" + urlField)));
             Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         }
 
