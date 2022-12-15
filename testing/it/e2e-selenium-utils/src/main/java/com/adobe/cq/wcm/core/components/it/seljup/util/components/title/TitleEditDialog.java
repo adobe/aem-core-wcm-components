@@ -52,7 +52,7 @@ public class TitleEditDialog extends Dialog {
 
     public void setTitle(String value) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC))
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
         content().find(Selectors.SELECTOR_BUTTON_TITLE).click();
         content().find(Selectors.SELECTOR_BUTTON_TITLE).sendKeys(value);

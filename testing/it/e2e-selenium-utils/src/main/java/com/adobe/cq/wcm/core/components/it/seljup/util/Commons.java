@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.it.seljup.util;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -684,7 +683,7 @@ public class Commons {
     public static void openEditDialog(EditorPage editorPage, String compPath) throws TimeoutException, InterruptedException {
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC)).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
         editableToolbar.clickConfigure();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
@@ -701,7 +700,7 @@ public class Commons {
     public static InlineEditor openInlineEditor(EditorPage editorPage, String compPath) throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC)).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
         return editableToolbar.clickEdit();
     }

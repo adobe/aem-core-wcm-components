@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.carousel.v1;
 
 import java.net.MalformedURLException;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
@@ -256,7 +255,7 @@ public class CarouselIT extends AuthorBaseUITest {
     public void testPanelSelect() throws InterruptedException {
         String component = "[data-type='Editable'][data-path='" + cmpPath +"']";
         WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC)).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         Commons.openEditableToolbar(cmpPath);
         assertTrue(!Commons.isPanelSelectPresent(), "Panel Select should not be present");
         createItems();
@@ -281,7 +280,7 @@ public class CarouselIT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
 
         webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC)).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
 
         //4.
         panelSelector.reorderItems(0, 2);
@@ -367,7 +366,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC)).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
 
         //2.

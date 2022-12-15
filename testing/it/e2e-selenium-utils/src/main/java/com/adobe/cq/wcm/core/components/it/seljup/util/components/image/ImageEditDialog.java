@@ -16,8 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.image;
 
-import java.time.Duration;
-
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
@@ -57,7 +55,7 @@ public class ImageEditDialog extends Dialog {
 
     public void setAltText(String text) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC))
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
         content().find(altText).clear();
         content().find(altText).sendKeys(text);
@@ -71,7 +69,7 @@ public class ImageEditDialog extends Dialog {
 
     public void setTitle(String value) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, Duration.ofSeconds(RequestConstants.TIMEOUT_TIME_SEC))
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
         content().find(title).clear();
         content().find(title).sendKeys(value);
