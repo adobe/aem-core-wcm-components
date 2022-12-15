@@ -349,7 +349,8 @@
 
     /**
      * Helper function to get core image instance 'smartCropRendition' property
-     * @param filePath
+     * @param {String} filePath url path of the image instance
+     * @returns {Deferred} done after successful request
      */
     function retrieveInstanceInfo(filePath) {
         return $.ajax({
@@ -364,7 +365,7 @@
 
     /**
      * Get the list of available image's smart crop renditions and fill drop-down list
-     * @param imageUrl The link to image asset
+     * @param {String} imageUrl The link to image asset
      */
     function getSmartCropRenditions(imageUrl) {
         if (imagePropertiesRequest) {
@@ -421,6 +422,9 @@
 
     /**
      * Helper function for populating dropdown list
+     * @param {String} label of the dropdown element
+     * @param {String} value of the dropdown element
+     * @param {Boolean} selected if item should be selected
      */
     function addSmartCropDropDownItem(label, value, selected) {
         smartCropRenditionsDropDown.items.add({
@@ -458,7 +462,7 @@
 
     /**
      * Get selected radio option helper
-     * @param component The radio option component
+     * @param {jQuery} component The radio option component
      * @returns {String} Value of the selected radio option
      */
     function getSelectedPresetType(component) {
@@ -473,8 +477,8 @@
 
     /**
      * Select radio option helper
-     * @param component
-     * @param val
+     * @param {jQuery} component The radio option component
+     * @param {String} val The value to be selected
      */
     function selectPresetType(component, val) {
         var radioComp = component.find('[type="radio"]');
@@ -485,7 +489,7 @@
 
     /**
      * Reset selection field
-     * @param field
+     * @param {jQuery[]} field Array of select fields
      */
     function resetSelectField(field) {
         if (field[0]) {
