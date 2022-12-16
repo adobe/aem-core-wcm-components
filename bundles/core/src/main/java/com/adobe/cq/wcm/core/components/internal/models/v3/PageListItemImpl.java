@@ -15,9 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import com.adobe.cq.wcm.core.components.commons.link.LinkBuilder;
-import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
-import com.adobe.cq.wcm.core.components.internal.models.v2.PageListItemImpl;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
@@ -26,30 +24,21 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
+class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.PageListItemImpl {
+    private String linkText;
 
-class MixedPageListItemImpl extends PageListItemImpl {
-    private final String linkText;
-
-    MixedPageListItemImpl(@NotNull LinkManager linkManager, @NotNull Page page, Resource itemResource, String parentId, Component component, boolean showDescription, boolean linkItems, Resource resource) {
-        super(prepareLinkBuilder(linkManager, page, itemResource), page, parentId, component, showDescription, linkItems, resource);
+    PageListItemImpl(@NotNull Link link, Page page, Resource itemResource, String parentId, Component component, boolean showDescription, boolean linkItems, Resource resource) {
+        super(link, page, parentId, component, showDescription, linkItems, resource);
         ValueMap properties = itemResource.getValueMap();
         this.linkText = properties.get(List.PN_LINK_TEXT, String.class);
+    }
+
+    public PageListItemImpl(Link build, Page page, String parentId, Component component, boolean showDescription, boolean showDescription1, Resource resource) {
+        super(build, page, parentId, component, showDescription, showDescription1, resource);
     }
 
     @Override
     public String getTitle() {
         return StringUtils.isNotBlank(linkText) ? linkText : super.getTitle();
-    }
-
-    @NotNull
-    private static LinkBuilder prepareLinkBuilder(@NotNull LinkManager linkManager, @NotNull Page page, Resource resource) {
-        ValueMap properties = resource.getValueMap();
-        String linkTarget = properties.get(PN_LINK_TARGET, String.class);
-        LinkBuilder linkBuilder = linkManager.get(page);
-        if (StringUtils.isNotBlank(linkTarget)) {
-            linkBuilder.withLinkTarget(linkTarget);
-        }
-        return linkBuilder;
     }
 }

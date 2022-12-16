@@ -20,6 +20,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -37,6 +38,8 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 import com.google.common.collect.ImmutableSet;
+
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 
 @Model(adaptables = SlingHttpServletRequest.class,
         adapters = LinkManager.class)
@@ -121,4 +124,27 @@ public class LinkManagerImpl implements LinkManager {
         return new LinkBuilderImpl(url, request, pathProcessors, shadowingDisabled);
     }
 
+    /**
+     * Checks whether the provided URL string represents an external link.
+     *
+     * @param url an URL string
+     *
+     * @return {@code true} if the {@code url} is an external link, {@code false} otherwise.
+     */
+    public static boolean isExternalLink(String url) {
+        return StringUtils.isNotBlank(url) && !url.startsWith("/");
+    }
+
+    /**
+     * Checks whether the provided resource has a configured external link.
+     * It checks that the resource property defined by
+     * {@link  com.adobe.cq.wcm.core.components.commons.link.Link#PN_LINK_URL} represents an external link.
+     *
+     * @param resource the resource
+     *
+     * @return {@code true} if the resource has an external link, {@code false} otherwise.
+     */
+    public static boolean hasExternalLink(Resource resource) {
+        return resource != null && isExternalLink(resource.getValueMap().get(PN_LINK_URL, "").trim());
+    }
 }

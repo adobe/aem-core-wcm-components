@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.adobe.cq.wcm.core.components.commons.link.LinkBuilder;
 import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -70,18 +69,9 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
         this.component = component;
     }
 
-    public PageListItemImpl(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component,
+    protected PageListItemImpl(@NotNull Link link, @NotNull Page page, String parentId, Component component,
                             boolean showDescription, boolean linkItems, Resource resource) {
-        super(linkManager, page, parentId, component);
-        this.component = component;
-        this.showDescription = showDescription;
-        this.linkItems = linkItems;
-        this.listResource = resource;
-    }
-
-    protected PageListItemImpl(@NotNull LinkBuilder linkBuilder, @NotNull Page page, String parentId, Component component,
-                            boolean showDescription, boolean linkItems, Resource resource) {
-        super(linkBuilder, page, parentId, component);
+        super(link, page, parentId, component);
         this.component = component;
         this.showDescription = showDescription;
         this.linkItems = linkItems;

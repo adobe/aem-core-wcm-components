@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkManagerImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractListItemImpl;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
-import com.adobe.cq.wcm.core.components.internal.models.v2.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
@@ -43,8 +44,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {List.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -68,7 +67,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private Boolean hasExternalLink;
 
     protected ListItem newPageListItem(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component) {
-        return new PageListItemImpl(linkManager, page, parentId, component, showDescription, linkItems || displayItemAsTeaser, resource);
+        return new PageListItemImpl(linkManager.get(page).build(), page, parentId, component, showDescription, linkItems || displayItemAsTeaser, resource);
     }
 
     /**
@@ -101,20 +100,18 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     private Collection<ListItem> getMixedListItems() {
         Stream<AbstractListItemImpl> itemStream = getMixedLinkResourceStream().map(linkResource -> {
-            String link = linkResource.getValueMap().get(PN_LINK_URL, "").trim();
-            if (StringUtils.isNotBlank(link)) {
-                if (isExternalLink(link)) {
-                    return new MixedLinkListItemImpl(linkManager, linkResource, getId(), component);
+            Link link = linkManager.get(linkResource).build();
+            if (LinkManagerImpl.isExternalLink(link.getURL())) {
+                return new ExternalLinkListItemImpl(link, linkResource, getId(), component);
+            } else {
+                Object reference = link.getReference();
+                if (reference instanceof Page) {
+                    return new PageListItemImpl(link, (Page) reference, linkResource, getId(), component, showDescription, linkItems || displayItemAsTeaser, resource);
                 } else {
-                    Page page = this.currentPage.getPageManager().getPage(link);
-                    if (page != null) {
-                        return new MixedPageListItemImpl(linkManager, page, linkResource, getId(), component, showDescription, linkItems || displayItemAsTeaser, resource);
-                    }
+                    return null;
                 }
             }
-
-            return null;
-        }).filter(Objects::nonNull);
+        }).filter(Objects::nonNull).filter(item -> item.getLink() != null && item.getLink().isValid());
 
         // apply sorting
         OrderBy orderBy = OrderBy.fromString(properties.get(PN_ORDER_BY, StringUtils.EMPTY));
@@ -145,13 +142,9 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     private boolean hasExternalLink() {
         if (hasExternalLink == null) {
-            hasExternalLink = getMixedLinkResourceStream().map(resource ->
-                resource.getValueMap().get(PN_LINK_URL, "").trim()).anyMatch(ListImpl::isExternalLink);
+            hasExternalLink = getMixedLinkResourceStream().anyMatch(LinkManagerImpl::hasExternalLink);
         }
-        return hasExternalLink;
-    }
 
-    private static boolean isExternalLink(String s) {
-        return !s.startsWith("/");
+        return hasExternalLink;
     }
 }
