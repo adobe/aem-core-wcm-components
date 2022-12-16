@@ -47,6 +47,7 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
 
     protected static final String MIXED_LIST_5 = TEST_PAGE_CONTENT_ROOT + "/mixedListTypeWithPageLinksSorted";
     protected static final String MIXED_LIST_6 = TEST_PAGE_CONTENT_ROOT + "/mixedListTypeWithEmptyLink";
+    protected static final String MIXED_LIST_7 = TEST_PAGE_CONTENT_ROOT + "/mixedListRenderedAsTeaserItems";
 
     @BeforeEach
     @Override
@@ -102,6 +103,8 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         List list = getListUnderTest(MIXED_LIST_1);
 
         assertEquals(0, list.getListItems().size());
+
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, MIXED_LIST_1));
     }
 
     @Test
@@ -128,6 +131,8 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         ValueMap teaserResourceProperties = teaserResource.getValueMap();
         assertEquals("/content/list/pages/page_1", teaserResourceProperties.get(Link.PN_LINK_URL));
         assertEquals("_blank", teaserResourceProperties.get(Link.PN_LINK_TARGET));
+
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, MIXED_LIST_2));
     }
 
     @Test
@@ -167,6 +172,8 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         // item 4
         item = itemIterator.next();
         assertEquals("http://www.external2.link", item.getTitle());
+
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, MIXED_LIST_3));
     }
 
     @Test
@@ -188,6 +195,8 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         // item 4
         item = itemIterator.next();
         assertEquals("Page One", item.getTitle());
+
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, MIXED_LIST_4));
     }
 
     @Test
@@ -203,6 +212,8 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         // item 2
         item = itemIterator.next();
         assertEquals("Page One", item.getTitle());
+
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, MIXED_LIST_5));
     }
 
     @Test
@@ -210,5 +221,40 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         List list = getListUnderTest(MIXED_LIST_6);
 
         assertEquals(2, list.getListItems().size());
+
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, MIXED_LIST_6));
+    }
+
+    @Test
+    protected void testMixedListItemsRenderedAsTeaser() {
+        List list = getListUnderTest(MIXED_LIST_7);
+        Collection<ListItem> listItems = list.getListItems();
+        assertEquals(2, listItems.size());
+
+        Iterator<ListItem> itemIterator = listItems.iterator();
+
+        // item 1
+        // The featured image of the page exists: the featured image node of the page is used to render the teaser item
+        ListItem item = itemIterator.next();;
+        Resource teaserResource0 = item.getTeaserResource();
+        ValueMap teaserProperties = teaserResource0.getValueMap();
+        String linkURL = teaserProperties.get("linkURL", String.class);
+        String fileReference = teaserProperties.get("fileReference", String.class);
+        String title = teaserProperties.get("jcr:title", String.class);
+        String description = teaserProperties.get("jcr:description", String.class);
+        assertEquals("/content/list/jcr:content/root/mixedListRenderedAsTeaserItems", teaserResource0.getPath(), "image resource: path");
+        assertEquals("core/wcm/components/teaser/v2/teaser", teaserResource0.getResourceType(), "image resource: resource type");
+        assertEquals("/content/list/pages/page_1/page_1_1", linkURL, "image resource: linkURL");
+        assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", fileReference, "image resource: fileReference");
+        assertEquals("Page 1.1", title, "image resource: title");
+        assertEquals("Description for Page 1.1", description, "image resource: description");
+
+        // item 2
+        // The featured image of the page does not exist: the content node of the page is used to render the teaser item
+        item = itemIterator.next();
+        Resource teaserResource2 = item.getTeaserResource();
+        assertEquals("/content/list/jcr:content/root/mixedListRenderedAsTeaserItems", teaserResource2.getPath(), "image resource: path");
+
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, MIXED_LIST_7));
     }
 }

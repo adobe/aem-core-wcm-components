@@ -349,6 +349,27 @@
                             "linkText": "External Link"
                         }
                     }
+                },
+                "mixedListRenderedAsTeaserItems": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list/v3/list",
+                    "displayItemAsTeaser": "true",
+                    "listFrom": "mixed",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "mixed": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "item0": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "linkURL": "/content/list/pages/page_1/page_1_1",
+                            "linkTarget": "_blank"
+                        },
+                        "item1": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "linkURL": "/content/list/pages/page_2",
+                            "linkText": "Page Two"
+                        }
+                    }
                 }
             }
         },
