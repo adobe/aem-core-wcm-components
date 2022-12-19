@@ -144,6 +144,9 @@ public class Commons {
     public static final String CLIENTLIBS_TABS_V1 = "core.wcm.components.tabs.v1";
     // content fragment component
     public static final String RT_CONTENTFRAGMENT_V1 = "core-component/components/contentfragment-v1";
+    // pdfviewer component
+    public static final String RT_PDFVIEWER_V1 = "core-component/components/pdfviewer-v1";
+    public static final String CLIENTLIBS_PDFVIEWER_V1 = "core.wcm.components.pdfviewer.v1";
     // separator component
     public static final String RT_SEPARATOR_V1 = "core-component/components/separator-v1";
     // content fragment list component
@@ -205,7 +208,7 @@ public class Commons {
             ElementUtils.clickableClick($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox"));
         }
         else {
-            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-icon").click();
+            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-columnview-item-thumbnail").click();
         }
         $("button.granite-pickerdialog-submit[is='coral-button']").click();
     }

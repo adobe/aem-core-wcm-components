@@ -45,9 +45,11 @@ class EmbedImplTest {
     private static final String EMBED_1 = "/embed1";
     private static final String EMBED_2 = "/embed2";
     private static final String EMBED_3 = "/embed3";
+    private static final String EMBED_4 = "/embed4";
     private static final String PATH_EMBED_1 = GRID + EMBED_1;
     private static final String PATH_EMBED_2 = GRID + EMBED_2;
     private static final String PATH_EMBED_3 = GRID + EMBED_3;
+    private static final String PATH_EMBED_4 = GRID + EMBED_4;
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -70,6 +72,20 @@ class EmbedImplTest {
         assertNull(embed.getEmbeddableResourceType());
         assertEquals("https://www.youtube.com/embed/vpdcMZnYCko", embed.getUrl());
         Utils.testJSONExport(embed, Utils.getTestExporterJSONPath(BASE, EMBED_1));
+    }
+
+    @Test
+    void testUrlTrailingWhitespace() {
+        style = mock(Style.class);
+        Mockito.when(style.get(Embed.PN_DESIGN_URL_DISABLED, false)).thenReturn(false);
+        Mockito.when(style.get(Embed.PN_DESIGN_HTML_DISABLED, false)).thenReturn(true);
+        Mockito.when(style.get(Embed.PN_DESIGN_EMBEDDABLES_DISABLED, false)).thenReturn(true);
+        Embed embed = getEmbedUnderTest(PATH_EMBED_4);
+        assertEquals(Embed.Type.URL, embed.getType());
+        assertNull(embed.getHtml());
+        assertNull(embed.getEmbeddableResourceType());
+        assertEquals("https://youtu.be/vpdcMZnYCko", embed.getUrl());
+        Utils.testJSONExport(embed, Utils.getTestExporterJSONPath(BASE, EMBED_4));
     }
 
     @Test

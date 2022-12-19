@@ -30,6 +30,12 @@
                         "sling:resourceType": "core/wcm/components/embed/v1/embed",
                         "type": "html",
                         "html": "<div>html</div>"
+                    },
+                    "embed4": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/embed/v1/embed",
+                        "type": "url",
+                        "url": "https://youtu.be/vpdcMZnYCko "
                     }
                 }
             }
