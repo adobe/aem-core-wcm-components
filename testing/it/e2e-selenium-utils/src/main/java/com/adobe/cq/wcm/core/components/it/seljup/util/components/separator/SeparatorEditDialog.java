@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe
+ ~ Copyright 2022 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,13 +13,16 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
-public class FormsHelperGetValuesStubMethod {
+package com.adobe.cq.wcm.core.components.it.seljup.util.components.separator;
 
-    protected static String[] values = null;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 
-    public static String[] get() {
-        return values;
+public class SeparatorEditDialog {
+    public static final String DECORATIVE = "[name='./isDecorative']";
+
+    public void checkDecorative() {
+        CoralCheckbox checkbox = new CoralCheckbox(DECORATIVE);
+        checkbox.click();
     }
 }

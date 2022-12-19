@@ -17,15 +17,17 @@ package com.adobe.cq.wcm.core.components.it.http;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
@@ -53,6 +55,7 @@ public class ComponentsIT {
 
     private static final Logger LOG = LoggerFactory.getLogger(ComponentsIT.class);
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+    private static final List<NameValuePair> WCMMODE_DISABLED = Collections.singletonList(new BasicNameValuePair("wcmmode", "disabled"));
 
     @ClassRule
     public static final CQAuthorClassRule cqBaseClassRule = new CQAuthorClassRule();
@@ -74,24 +77,90 @@ public class ComponentsIT {
         String content = adminAuthor.doGet("/content/core-components/teaser.html", 200).getContent();
         Document document = parse(content);
 
-        testComponent(document, ".teaser.teaser-v1", 0, "/components/teaser-v1-with-link-to-asset.html");
-        testComponent(document, ".teaser.teaser-v1", 1, "/components/teaser-v1-with-cta-to-asset.html");
-        testComponent(document, ".teaser.teaser-v2", 0, "/components/teaser-v2-with-link-to-asset.html");
-        testComponent(document, ".teaser.teaser-v2", 1, "/components/teaser-v2-with-cta-to-asset.html");
+        new ComponentTest(document)
+            .select(".teaser.teaser-v1", 0).expect("teaser-v1-with-link-to-asset.html")
+            .select(".teaser.teaser-v1", 1).expect("teaser-v1-with-cta-to-asset.html")
+            .select(".teaser.teaser-v2", 0).expect("teaser-v2-with-link-to-asset.html")
+            .select(".teaser.teaser-v2", 1).expect("teaser-v2-with-cta-to-asset.html");
     }
 
-    private void testComponent(Document actualDocument, String selector, int selectorSetIndex, String expectation) throws IOException {
-        String expected = IOUtils.resourceToString(expectation, StandardCharsets.UTF_8);
-        Document expectedDocument = parse(expected);
+    @Test
+    public void testEmbed() throws ClientException, IOException {
+        String content = adminAuthor.doGet("/content/core-components/embed.html", WCMMODE_DISABLED, 200).getContent();
+        Document document = parse(content);
 
-        Element expectedElement = expectedDocument.body().children().first();
-        Element actualElement = actualDocument.select(selector).get(selectorSetIndex);
-
-        assertNotNull(selector + " did not match any element in the page", actualElement.toString());
-        assertEquals(selector + " does not match " + expectation, expectedElement.toString(), actualElement.toString());
+        new ComponentTest(document)
+            // fix the origin parameter in the expected documents by setting them to the adminAuthor url
+            .withExpectationProcessor(expectedDocument -> {
+                BasicNameValuePair origin = new BasicNameValuePair("origin", StringUtils.removeEnd(adminAuthor.getUrl().toString(), "/"));
+                String encodedOrigin = URLEncodedUtils.format(Collections.singleton(origin), StandardCharsets.UTF_8);
+                for (Element iframe : expectedDocument.select("iframe")) {
+                    String src = iframe.attr("src");
+                    src = src.replace("origin=http%3A%2F%2Flocalhost%3A4502", encodedOrigin);
+                    iframe.attr("src", src);
+                }
+            })
+            .select(".embed.embed-v1", 0).expect("embed-v1-youtube-defaults.html")
+            .select(".embed.embed-v1", 1).expect("embed-v1-youtube-fixed.html")
+            .select(".embed.embed-v1", 2).expect("embed-v1-youtube-responsive.html")
+            .select(".embed.embed-v1", 3).expect("embed-v1-url-youtube.html")
+            .select(".embed.embed-v1", 4).expect("embed-v1-url-trailing-whitespace.html")
+            .select(".embed.embed-v2", 0).expect("embed-v2-youtube-defaults.html")
+            .select(".embed.embed-v2", 1).expect("embed-v2-youtube-fixed.html")
+            .select(".embed.embed-v2", 2).expect("embed-v2-youtube-responsive.html")
+            .select(".embed.embed-v2", 3).expect("embed-v2-url-youtube.html")
+            .select(".embed.embed-v2", 4).expect("embed-v2-url-trailing-whitespace.html");
     }
 
-    private Document parse(String content) {
+    @Test
+    public void testPdfViewer() throws ClientException, IOException {
+        String content = adminAuthor.doGet("/content/core-components/pdfviewer.html", 200).getContent();
+        Document document = parse(content);
+
+        new ComponentTest(document)
+            .select(".pdfviewer.pdfviewer-v1", 0).expect("pdfviewer-v1-empty.html")
+            .select(".pdfviewer.pdfviewer-v1", 1).expect("pdfviewer-v1-defaults.html");
+    }
+
+    private class ComponentTest {
+
+        private Document actualDocument;
+        private Consumer<Document> expectationProcessor;
+        private String selector;
+        private int selectorSetIndex;
+
+        ComponentTest(Document actualDocument) {
+            this.actualDocument = actualDocument;
+        }
+
+        ComponentTest withExpectationProcessor(Consumer<Document> processor) {
+            this.expectationProcessor = processor;
+            return this;
+        }
+
+        ComponentTest select(String selector, int selectorSetIndex) {
+            this.selector = selector;
+            this.selectorSetIndex = selectorSetIndex;
+            return this;
+        }
+
+        ComponentTest expect(String expectation) throws IOException {
+            String expected = IOUtils.resourceToString("/components/" + expectation, StandardCharsets.UTF_8);
+            Document expectedDocument = parse(expected);
+
+            if (expectationProcessor != null) {
+                expectationProcessor.accept(expectedDocument);
+            }
+
+            Element expectedElement = expectedDocument.body().children().first();
+            Element actualElement = actualDocument.select(selector).get(selectorSetIndex);
+            assertNotNull(selector + " did not match any element in the page", actualElement.toString());
+            assertEquals(selector + " does not match " + expectation, expectedElement.toString(), actualElement.toString());
+            return this;
+        }
+    }
+
+    private static Document parse(String content) {
         // normalize date times
         content = content.replaceAll("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(.\\d{2,4})?", "0000-00-00T00:00:00");
 
@@ -106,7 +175,7 @@ public class ComponentsIT {
      *
      * @param element
      */
-    private void removeNoise(Node element) {
+    private static void removeNoise(Node element) {
         for (int i = 0; i < element.childNodeSize(); ) {
             Node child = element.childNode(i);
             // remove nodes that are: comments, cq tags
@@ -170,7 +239,7 @@ public class ComponentsIT {
      * @param jsonMap
      * @return
      */
-    private Map<String, Object> removeNoise(Map<String, Object> jsonMap) {
+    private static Map<String, Object> removeNoise(Map<String, Object> jsonMap) {
         // use a tree map as copy to enforce a natural ordering of the keys
         Map<String, Object> copy = new TreeMap<>();
 
@@ -200,9 +269,10 @@ public class ComponentsIT {
     /**
      * For a reproducible parsing outcome we have to sort the attributes in a specific order. This is method is based on the implementation
      * detail that the node.attributes().dataset() uses a {@link java.util.LinkedHashMap} internally.
+     *
      * @param node
      */
-    private void sortAttributes(Node node) {
+    private static void sortAttributes(Node node) {
         Attributes attributes = node.attributes();
         if (attributes.size() > 1) {
             TreeMap<String, String> sortedAttributes = new TreeMap<>();

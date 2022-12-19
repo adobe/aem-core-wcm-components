@@ -356,7 +356,8 @@
                     </text>
                     <image
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        jcr:title="Asset"
+                        sling:resourceType="core/wcm/components/include/imagedelegate"
                         path="core/wcm/components/image/v3/image/cq:dialog/content/items/tabs/items/asset"/>
                     <styletab
                             jcr:primaryType="nt:unstructured"

@@ -44,7 +44,7 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
     private Resource toBeWrapped;
     private List<String> hiddenProperties;
     private Resource imageResource;
-    private Map<String, String> overriddenProperties;
+    private Map<String, Object> overriddenProperties;
 
     /**
      * Sets the resource that is used for the image rendering of the delegating component.
@@ -55,7 +55,7 @@ public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl
      * @param overriddenProperties The properties that are overridden in the wrapped image resource.
      */
     protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped,
-                                    @Nullable List<String> hiddenProperties, @Nullable Map<String, String> overriddenProperties) {
+                                    @Nullable List<String> hiddenProperties, @Nullable Map<String, Object> overriddenProperties) {
         this.toBeWrapped = toBeWrapped;
         this.component = component;
         this.hiddenProperties = hiddenProperties;

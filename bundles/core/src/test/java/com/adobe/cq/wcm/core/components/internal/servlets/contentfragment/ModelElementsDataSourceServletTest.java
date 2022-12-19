@@ -111,7 +111,8 @@ public class ModelElementsDataSourceServletTest {
                 hasItem(resourceWithPropertiesTextAndValue("Created", "jcr:created")),
                 hasItem(resourceWithPropertiesTextAndValue("Last Modified", "jcr:content/jcr:lastModified")),
                 hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "jcr:content/data/master/textField")),
-                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "jcr:content/data/master/multiTextField"))));
+                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "jcr:content/data/master/multiTextField")),
+                hasItem(resourceWithPropertiesTextAndValue("dateAndTimeFieldLabel", "jcr:content/data/master/dateAndTimeField"))));
     }
 
     @Test

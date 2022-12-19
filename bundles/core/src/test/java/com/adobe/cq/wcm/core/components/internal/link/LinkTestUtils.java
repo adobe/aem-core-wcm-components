@@ -15,13 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.google.common.collect.ImmutableMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,7 +39,7 @@ public final class LinkTestUtils {
     public static void assertValidLink(@NotNull Link link, @NotNull String linkURL,
                                        @Nullable SlingHttpServletRequest request) {
         assertTrue(link.isValid(), "linkValid");
-        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
         if (request != null && StringUtils.isNotEmpty(request.getContextPath()) && !linkURL.startsWith("http")) {
             linkURL = request.getContextPath().concat(linkURL);
         }
@@ -56,7 +56,7 @@ public final class LinkTestUtils {
         assertTrue(link.isValid(), "linkValid");
         assertEquals(linkURL, link.getURL(), "linkUrl");
         assertEquals(linkURL.replaceAll("^\\/content\\/links\\/site1\\/(.+)","/content/site1/$1"), link.getMappedURL(), "linkMappedUrl");
-        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
         assertEquals(ImmutableMap.of("href", linkURL, "target", linkTarget), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
@@ -64,7 +64,7 @@ public final class LinkTestUtils {
         assertTrue(link.isValid(), "linkValid");
         assertEquals(linkURL, link.getURL(), "linkUrl");
         assertEquals(linkURL, link.getMappedURL(), "linkMappedUrl");
-        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
         assertEquals(ImmutableMap.of("href", linkURL, "aria-label", linkAccessibilityLabel, "title", linkTitleAttribute), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
@@ -76,7 +76,7 @@ public final class LinkTestUtils {
         assertTrue(link.isValid(), "linkValid");
         assertEquals(linkURL, link.getURL(), "linkUrl");
         assertEquals(linkURL, link.getMappedURL(), "linkMappedUrl");
-        assertEquals(MockExternalizerFactory.ROOT + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
         assertEquals(ImmutableMap.of("href", linkURL, "aria-label", linkAccessibilityLabel, "title", linkTitleAttribute, "target", linkTarget), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 

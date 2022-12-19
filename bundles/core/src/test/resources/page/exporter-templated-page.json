@@ -14,6 +14,7 @@
             "xdm:language": "en-GB",
             "@type": "core/wcm/components/page/v1/page",
             "dc:title": "Templated Page",
+            "repo:modifyDate": "2016-01-20T09:33:36Z",
             "xdm:template": "/conf/coretest/settings/wcm/templates/product-page",
             "repo:path": "/core/content/page/templated-page.html",
             "xdm:tags": [

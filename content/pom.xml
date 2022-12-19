@@ -158,6 +158,7 @@
                     <excludes combine.children="append">
                         <!-- Ignore lint-files -->
                         <exclude>**/*.eslintrc</exclude>
+                        <exclude>**/*.stylelintignore</exclude>
                         <exclude>**/*.editorconfig</exclude>
                         <exclude>**/*.stylelintrc.yaml</exclude>
                         <exclude>**/*.eslintignore</exclude>
@@ -166,6 +167,8 @@
                         <exclude>**/node_modules/**</exclude>
                         <!-- Ignore generated datalayer clientlib -->
                         <exclude>**/core.wcm.components.commons.datalayer.v1/**</exclude>
+                        <!-- Ignore karma -->
+                        <exclude>**/coverage/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

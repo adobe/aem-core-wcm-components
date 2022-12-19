@@ -60,6 +60,7 @@ import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.dam.api.Asset;
@@ -71,6 +72,7 @@ import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
@@ -86,6 +88,10 @@ import com.google.common.net.HttpHeaders;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
+import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper.IMAGE_RESOURCE_TYPE;
+import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper.getComponentCandidate;
+import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper.getRedirectLocation;
+import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper.getRequestLastModifiedSuffix;
 
 /**
  * Servlet for adaptive images, can render images with different widths based on policies and requested width.
@@ -103,7 +109,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     public static final String DEFAULT_SELECTOR = "img";
     public static final String CORE_DEFAULT_SELECTOR = "coreimg";
-    private static final String IMAGE_RESOURCE_TYPE = "core/wcm/components/image";
     static final int DEFAULT_RESIZE_WIDTH = 1280;
     public static final int DEFAULT_JPEG_QUALITY = 82; // similar to what is the default in com.day.image.Layer#write(...)
     public static final int DEFAULT_MAX_SIZE = 3840; // 4K UHD width
@@ -159,37 +164,17 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             Resource component = request.getResource();
             ResourceResolver resourceResolver = request.getResourceResolver();
-            if (!component.isResourceType(IMAGE_RESOURCE_TYPE)) {
-                // image coming from template; need to switch resource
-                Resource componentCandidate = null;
-                PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-                if (pageManager != null) {
-                    Page page = pageManager.getContainingPage(component);
-                    if (page != null) {
-                        Template template = page.getTemplate();
-                        if (template != null) {
-                            if (StringUtils.isNotEmpty(suffix)) {
-                                long lastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
-                                String relativeTemplatePath = lastModifiedSuffix == 0 ?
-                                        // no timestamp info, but extension is valid; get resource name
-                                        suffix.substring(0, suffix.lastIndexOf('.')) :
-                                        // timestamp info, get parent path from suffix
-                                        suffix.substring(0, suffix.lastIndexOf("/" + String.valueOf(lastModifiedSuffix)));
-                                String imagePath = ResourceUtil.normalize(template.getPath() + relativeTemplatePath);
-                                if (StringUtils.isNotEmpty(imagePath) && !template.getPath().equals(imagePath)) {
-                                    componentCandidate = resourceResolver.getResource(imagePath);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (componentCandidate == null) {
+            if (StringUtils.isNotEmpty(suffix)) {
+                // image coming from template or featured image in list; need to switch resource
+                Resource componentCandidate = getComponentCandidate(suffix, component);
+                if (componentCandidate != null) {
+                    component = componentCandidate;
+                } else if (!component.isResourceType(IMAGE_RESOURCE_TYPE)) {
                     LOGGER.error("Unable to retrieve an image from this page's template.");
                     metrics.markImageErrors();
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
-                component = componentCandidate;
             }
 
             LinkManager linkManager = request.adaptTo(LinkManager.class);
@@ -274,27 +259,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             requestDuration.stop();
         }
 
-    }
-
-    @Nullable
-    private String getRedirectLocation(SlingHttpServletRequest request, long lastModifiedEpoch) {
-        RequestPathInfo requestPathInfo = request.getRequestPathInfo();
-        if (request.getResource().isResourceType(IMAGE_RESOURCE_TYPE)) {
-            return Joiner.on('.').join(Text.escapePath(request.getContextPath() + requestPathInfo.getResourcePath()),
-                    requestPathInfo.getSelectorString(), requestPathInfo.getExtension() + "/" + lastModifiedEpoch,
-                    requestPathInfo.getExtension());
-        }
-        long lastModifiedSuffix = getRequestLastModifiedSuffix(request.getPathInfo());
-        String resourcePath = lastModifiedSuffix > 0 ? ResourceUtil.getParent(request.getPathInfo()) : request.getPathInfo();
-        String extension = FilenameUtils.getExtension(resourcePath);
-        if (StringUtils.isNotEmpty(resourcePath)) {
-            if (StringUtils.isNotEmpty(extension)) {
-                resourcePath = resourcePath.substring(0, resourcePath.length() - extension.length() - 1);
-            }
-            return request.getContextPath() + Text.escapePath(resourcePath) + "/" + lastModifiedEpoch + "." +
-                    requestPathInfo.getExtension();
-        }
-        return null;
     }
 
     @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "Scanning generated code of try-with-resources")
@@ -841,26 +805,38 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param request the request object
      * @return the content policy. May be {@code null} in case no content policy can be found.
      */
+    @Nullable
     private ContentPolicy getContentPolicy(@NotNull Resource imageResource, @NotNull SlingHttpServletRequest request) {
-        ResourceResolver resourceResolver = imageResource.getResourceResolver();
+        ContentPolicy contentPolicy = null;
+        ResourceResolver resourceResolver = request.getResourceResolver();
+        if (request.getResource().isResourceType(IMAGE_RESOURCE_TYPE)) {
+            imageResource = request.getResource();
+        }
         ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
             ComponentManager componentManager = resourceResolver.adaptTo(ComponentManager.class);
             if (componentManager != null) {
                 com.day.cq.wcm.api.components.Component component = componentManager.getComponentOfResource(imageResource);
                 if (component != null && component.getProperties() != null) {
-                    String delegatingResourceType =
-                            component.getProperties().get(AbstractImageDelegatingModel.IMAGE_DELEGATE, String.class);
+                    String delegatingResourceType = component.getProperties().get(com.adobe.cq.wcm.core.components.models.List.PN_TEASER_DELEGATE, String.class);
+                    if (StringUtils.isNotEmpty(delegatingResourceType)) {
+                        imageResource = new CoreResourceWrapper(imageResource, delegatingResourceType);
+                        Component teaserComponent = componentManager.getComponentOfResource(imageResource);
+                        if (teaserComponent != null) {
+                            component = teaserComponent;
+                        }
+                    }
+                    delegatingResourceType = component.getProperties().get(AbstractImageDelegatingModel.IMAGE_DELEGATE, String.class);
                     if (StringUtils.isNotEmpty(delegatingResourceType)) {
                         imageResource = new CoreResourceWrapper(imageResource, delegatingResourceType);
                     }
                 }
             }
-            return policyManager.getPolicy(imageResource, request);
+            contentPolicy = policyManager.getPolicy(imageResource, request);
         } else {
             LOGGER.warn("Could not get policy manager from resource resolver!");
         }
-        return null;
+        return contentPolicy;
     }
 
     /**
@@ -1026,23 +1002,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return  allowedResizeWidth;
     }
 
-    private long getRequestLastModifiedSuffix(@Nullable String suffix) {
-        long requestLastModified = 0;
-        if (StringUtils.isNotEmpty(suffix) && suffix.contains(".")) {
-            // check if the 13 digits UTC milliseconds timestamp, preceded by a forward slash is present in the suffix
-            Pattern p = Pattern.compile("\\(|\\)|\\/\\d{13}");
-            Matcher m = p.matcher(suffix);
-            if (!m.find()) {
-                return requestLastModified;
-            }
-            try {
-                requestLastModified = Long.parseLong(ResourceUtil.getName(m.group()));
-            } catch (NumberFormatException e) {
-                // do nothing
-            }
-        }
-        return requestLastModified;
-    }
+
 
     private enum Source {
         ASSET,
