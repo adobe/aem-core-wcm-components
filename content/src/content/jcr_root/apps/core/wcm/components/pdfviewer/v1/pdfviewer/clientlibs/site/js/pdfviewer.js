@@ -18,7 +18,7 @@
 
     var NS = "cmp";
     var IS = "pdfviewer";
-    var SDK_URL = "https://documentcloud.adobe.com/view-sdk/main.js";
+    var SDK_URL = "https://documentservices.adobe.com/view-sdk/viewer.js";
     var SDK_READY_EVENT = "adobe_dc_view_sdk.ready";
 
     var selectors = {

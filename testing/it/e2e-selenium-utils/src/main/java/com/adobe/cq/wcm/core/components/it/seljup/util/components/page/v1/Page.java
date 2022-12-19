@@ -139,7 +139,7 @@ public class Page {
     public void generateThumbnail(ThumbnailTab thumbnailTab) {
         thumbnailTab.getThumbnailGeneratePreviewActivator().click();
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
             .until(ExpectedConditions.invisibilityOf(thumbnailTab.getDefaultThumbnailImg().toWebElement()));
     }
 

@@ -53,9 +53,9 @@
 
         /**
          * Set up the final properties of a component by evaluating the transform function or fall back to the default value on demand
-         * @param {String[]} options
-         * @param {{}}properties
-         * @returns {{String}}
+         * @param {String[]} options the options to transform
+         * @param {Object} properties object of properties of property functions
+         * @returns {Object} transformed properties
          */
         var setupProperties = function(options, properties) {
             var transformedProperties = {};
