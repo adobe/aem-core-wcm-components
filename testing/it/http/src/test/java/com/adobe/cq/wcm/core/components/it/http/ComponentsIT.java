@@ -136,6 +136,16 @@ public class ComponentsIT {
             .select(".list.list-v3", 5).expect("list-v3-mixed-pages-empty.html");
     }
 
+    @Test
+    public void testSeparator() throws ClientException, IOException {
+        String content = adminAuthor.doGet("/content/core-components/separator.html", 200).getContent();
+        Document document = parse(content);
+
+        new ComponentTest(document)
+            .select(".separator.separator-v1", 0).expect("separator-v1-defaults.html")
+            .select(".separator.separator-v1", 1).expect("separator-v1-decorative.html");
+    }
+
     private class ComponentTest {
 
         private Document actualDocument;
