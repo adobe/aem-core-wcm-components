@@ -35,6 +35,10 @@
                             jcr:primaryType="nt:unstructured"
                             cq:policy="core-component/components/embed-v1/policy_1668764855725"
                             sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <embed-v2
+                            jcr:primaryType="nt:unstructured"
+                            cq:policy="core-component/components/embed-v2/policy_1668764855725"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
                     </components>
                 </core-component>
             </container>

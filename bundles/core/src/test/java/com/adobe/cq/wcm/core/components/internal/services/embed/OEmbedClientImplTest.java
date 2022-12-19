@@ -45,57 +45,64 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class OEmbedClientImplTest {
 
-    @Test
-    void testJSON() throws IOException {
+    private OEmbedClientImpl setupForJson() throws IOException {
         OEmbedClientImpl client = new OEmbedClientImpl();
         OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
         configurationFactory.configure(
-                new OEmbedClientImplConfigurationFactory.Config() {
+            new OEmbedClientImplConfigurationFactory.Config() {
 
-                    @Override
-                    public Class<? extends Annotation> annotationType() {
-                        return null;
-                    }
+                @Override
+                public Class<? extends Annotation> annotationType() {
+                    return null;
+                }
 
-                    @Override
-                    public String provider() {
-                        return "Test JSON";
-                    }
+                @Override
+                public String provider() {
+                    return "Test JSON";
+                }
 
-                    @Override
-                    public String format() {
-                        return OEmbedResponse.Format.JSON.getValue();
-                    }
+                @Override
+                public String format() {
+                    return OEmbedResponse.Format.JSON.getValue();
+                }
 
-                    @Override
-                    public String endpoint() {
-                        return "http://test.com/embed";
-                    }
+                @Override
+                public String endpoint() {
+                    return "http://test.com/embed";
+                }
 
-                    @Override
-                    public String[] scheme() {
-                        return new String[]{
-                                "http://test\\.com/json.*"
-                        };
-                    }
+                @Override
+                public String[] scheme() {
+                    return new String[]{
+                        "http://test\\.com/json.*"
+                    };
+                }
 
-                    @Override
-                    public boolean unsafeContext() {
-                        return false;
-                    }
-                });
+                @Override
+                public boolean unsafeContext() {
+                    return false;
+                }
+            });
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
         ObjectMapper mapper = mock(ObjectMapper.class);
         mockHttpClient(client);
         when(mapper.readValue(any(InputStream.class), any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
         setField(client.getClass(), "mapper", client, mapper);
+
+        return client;
+    }
+
+    @Test
+    void testJSON() throws IOException {
+        OEmbedClientImpl client = setupForJson();
         String provider = client.getProvider("http://test.com/json");
         assertEquals("Test JSON", provider);
         OEmbedResponse response = client.getResponse("http://test.com/json");
@@ -105,7 +112,14 @@ class OEmbedClientImplTest {
     }
 
     @Test
-    void testXML() throws JAXBException, IOException {
+    void testJsonReturnsNullOnMalformedUri() throws IOException {
+        OEmbedClientImpl client = setupForJson();
+        // trailing whitespace will cause an invalid uri
+        OEmbedResponse response = client.getResponse("http://test.com/json ");
+        assertNull(response);
+    }
+
+    private OEmbedClientImpl setupForXml() throws IOException, JAXBException {
         OEmbedClientImpl client = new OEmbedClientImpl();
         OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
         configurationFactory.configure(new OEmbedClientImplConfigurationFactory.Config() {
@@ -133,7 +147,7 @@ class OEmbedClientImplTest {
             @Override
             public String[] scheme() {
                 return new String[]{
-                        "http://test\\.com/xml.*"
+                    "http://test\\.com/xml.*"
                 };
             }
 
@@ -150,11 +164,25 @@ class OEmbedClientImplTest {
         when(jaxbContext.createUnmarshaller()).thenReturn(unmarshaller);
         mockHttpClient(client);
         when(unmarshaller.unmarshal(any(Source.class))).thenReturn(new OEmbedXMLResponseImpl());
+
+        return client;
+    }
+
+    @Test
+    void testXML() throws JAXBException, IOException {
+        OEmbedClientImpl client = setupForXml();
         String provider = client.getProvider("http://test.com/xml");
         assertEquals("Test XML", provider);
         assertNotNull(client.getResponse("http://test.com/xml"));
         boolean unsafeContext = client.isUnsafeContext("https://test.com/json");
         assertFalse(unsafeContext);
+    }
+
+    @Test
+    void testXMLReturnsNullOnMalformedUri() throws JAXBException, IOException {
+        OEmbedClientImpl client = setupForXml();
+        // trailing whitespace will cause an invalid uri
+        assertNull(client.getResponse("http://test.com/xml "));
     }
 
     protected void mockHttpClient(OEmbedClient client) throws IOException {
