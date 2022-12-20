@@ -343,7 +343,7 @@
         var validation = $field.adaptTo("foundation-validation");
         validation.checkValidity();
         validation.updateUI();
-    }
+    };
 
     /**
      * Updates dom of variation name select dropdown.
