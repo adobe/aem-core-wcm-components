@@ -1,0 +1,11 @@
+html
+    head
+    body.page
+    	div.root
+    		div.cmp-container
+    			div.container
+    				div.cmp-container
+    					div.container
+    						div.cmp-container
+    							div.button
+    								button.cmp-button
