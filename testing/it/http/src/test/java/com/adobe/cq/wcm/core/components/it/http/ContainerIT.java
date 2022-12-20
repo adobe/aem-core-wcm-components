@@ -16,9 +16,19 @@
 package com.adobe.cq.wcm.core.components.it.http;
 
 
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
-import com.adobe.cq.testing.junit.rules.CQRule;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.testing.clients.ClientException;
 import org.jsoup.Jsoup;
@@ -30,14 +40,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
+import com.adobe.cq.testing.junit.rules.CQRule;
 
 public class ContainerIT {
 
@@ -72,6 +77,14 @@ public class ContainerIT {
     public void testSimplePage() throws ClientException, IOException {
         Tree expected = Tree.read(getClass().getClassLoader().getResourceAsStream("simple-page.txt"));
         String content = adminAuthor.doGet("/content/core-components/simple-page.html", 200).getContent();
+        Elements html = Jsoup.parse(content).select("html");
+        assertStructure(expected, html);
+    }
+
+    @Test
+    public void testStructureLayoutContainerPage() throws ClientException, IOException {
+        Tree expected = Tree.read(getClass().getClassLoader().getResourceAsStream("structure-layout-page.txt"));
+        String content = adminAuthor.doGet("/content/core-components/simple-page/structure-layout-page.html",200).getContent();
         Elements html = Jsoup.parse(content).select("html");
         assertStructure(expected, html);
     }
