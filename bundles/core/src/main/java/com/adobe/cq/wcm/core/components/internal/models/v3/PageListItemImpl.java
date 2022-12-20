@@ -33,12 +33,20 @@ class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.
         this.linkText = properties.get(List.PN_LINK_TEXT, String.class);
     }
 
-    public PageListItemImpl(Link build, Page page, String parentId, Component component, boolean showDescription, boolean showDescription1, Resource resource) {
-        super(build, page, parentId, component, showDescription, showDescription1, resource);
+    public PageListItemImpl(Link build, Page page, String parentId, Component component, boolean showDescription, boolean linkItems, Resource resource) {
+        super(build, page, parentId, component, showDescription, linkItems, resource);
     }
 
     @Override
     public String getTitle() {
         return StringUtils.isNotBlank(linkText) ? linkText : super.getTitle();
+    }
+
+    void setSowDescription(boolean showDescription) {
+        this.showDescription = showDescription;
+    }
+
+    void setLinkItems(boolean linkItems) {
+        this.linkItems = linkItems;
     }
 }

@@ -134,17 +134,4 @@ public class LinkManagerImpl implements LinkManager {
     public static boolean isExternalLink(String url) {
         return StringUtils.isNotBlank(url) && !url.startsWith("/");
     }
-
-    /**
-     * Checks whether the provided resource has a configured external link.
-     * It checks that the resource property defined by
-     * {@link  com.adobe.cq.wcm.core.components.commons.link.Link#PN_LINK_URL} represents an external link.
-     *
-     * @param resource the resource
-     *
-     * @return {@code true} if the resource has an external link, {@code false} otherwise.
-     */
-    public static boolean hasExternalLink(Resource resource) {
-        return resource != null && isExternalLink(resource.getValueMap().get(PN_LINK_URL, "").trim());
-    }
 }

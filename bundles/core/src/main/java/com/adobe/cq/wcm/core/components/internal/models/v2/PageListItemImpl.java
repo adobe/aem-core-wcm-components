@@ -55,8 +55,8 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     private final Component component;
     private Resource listResource;
     private Resource teaserResource;
-    private boolean showDescription;
-    private boolean linkItems;
+    protected boolean showDescription;
+    protected boolean linkItems;
 
     /**
      * List of properties that should be inherited when delegating to the featured image of the page.
