@@ -321,6 +321,7 @@
             // replace the element names multifield's template
             this.elementNames.template = dom.template;
         } else {
+            this._clearValidationError(this.singleTextSelector);
             dom.value = this.singleTextSelector.value;
             this.singleTextSelector.parentNode.replaceChild(dom, this.singleTextSelector);
             this.singleTextSelector = dom;
@@ -328,6 +329,21 @@
         }
         this._updateFields();
     };
+
+    /**
+     * Removes required attribute and validation error of the provided field.
+     * Can be used before a required field get replaced with a new field.
+     *
+     * @param {HTMLElement} field - the field which should be cleared
+     */
+    ElementsController.prototype._clearValidationError = function(field) {
+        var $field = $(field);
+        var fieldAPI = $field.adaptTo("foundation-field");
+        fieldAPI.setRequired(false);
+        var validation = $field.adaptTo("foundation-validation");
+        validation.checkValidity();
+        validation.updateUI();
+    }
 
     /**
      * Updates dom of variation name select dropdown.
