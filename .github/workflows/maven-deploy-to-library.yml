@@ -48,6 +48,8 @@ jobs:
           mv sub main/${PROJECT_DIR}
       - name: Commit Changes
         run: |
-          git -C main add ${PROJECT_DIR}
-          git -C main commit -F ../commit.txt
-          git -C main push
+          pushd main
+          git add ${PROJECT_DIR}
+          git commit -F ../commit.txt
+          git push
+          popd
