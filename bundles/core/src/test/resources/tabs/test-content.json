@@ -157,6 +157,7 @@
                             "jcr:primaryType"   : "nt:unstructured",
                             "jcr:title"         : "Tab 1",
                             "jcr:description"   : "Tab 1 description",
+                            "jcr:lastModified"  : "Wed Jul 27 2016 16:17:43 GMT+0300",
                             "sling:resourceType": "core/wcm/components/responsivegrid",
                             "item_1_1": {
                                 "jcr:primaryType"   : "nt:unstructured",

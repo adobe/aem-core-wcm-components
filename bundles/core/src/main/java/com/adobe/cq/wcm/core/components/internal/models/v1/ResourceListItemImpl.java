@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Resource-backed list item implementation.
  */
+@Deprecated
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
     protected Link link;
@@ -57,9 +58,12 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
     /**
      * Construct a resource-backed list item.
      *
+     * @param linkManager The link manager.
      * @param resource The resource.
      * @param parentId The ID of the containing component.
+     * @param component The component.
      */
+    @Deprecated
     public ResourceListItemImpl(@NotNull LinkManager linkManager, @NotNull Resource resource,
                                 String parentId, Component component) {
         super(parentId, resource, component);
@@ -71,7 +75,6 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
         name = resource.getName();
         link = linkManager.get(resource).build();
     }
-
 
     @Override
     @NotNull

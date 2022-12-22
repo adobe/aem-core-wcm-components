@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe
+ ~ Copyright 2020 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,33 +15,29 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
- * Defines the {@code Tabs} Sling Model used for the {@code /apps/core/wcm/components/tabs} component.
+ * Interface for a single item in a container.
+ * Every container item has at least a resource.
  *
- * @since com.adobe.cq.wcm.core.components.models 12.5.0
+ * @since com.adobe.cq.wcm.core.components.models 12.27.0
  */
 @ConsumerType
-public interface Tabs extends PanelContainer {
+public interface ContainerItem {
 
     /**
-     * Returns the default active item
+     * Gets the resource for this container item.
      *
-     * @return The default active item
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @return The resource for this container item.
      */
-    default String getActiveItem() {
-        return null;
-    }
-
-    /**
-     * Returns an accessibility label that describes the tabs.
-     *
-     * @return an accessibility label for tabs
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
-     */
-    default String getAccessibilityLabel() {
+    @Nullable
+    @JsonIgnore
+    default Resource getResource() {
         return null;
     }
 }
