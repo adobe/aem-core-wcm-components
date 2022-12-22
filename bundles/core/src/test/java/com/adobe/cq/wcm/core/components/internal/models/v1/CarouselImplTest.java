@@ -36,13 +36,15 @@ import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(AemContextExtension.class)
-class CarouselImplTest {
+class CarouselImplTest extends AbstractPanelTest {
 
     private static final String TEST_BASE = "/carousel";
     private static final String CONTENT_ROOT = "/content";

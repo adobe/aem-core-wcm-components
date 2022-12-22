@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -33,8 +32,6 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Carousel;
-import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -45,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
     adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class},
     resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class CarouselImpl extends PanelContainerImpl implements Carousel {
+public class CarouselImpl extends AbstractPanelContainerImpl implements Carousel {
 
     /**
      * The resource type.
@@ -69,7 +66,6 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     protected String accessibilityLabel;
-
     /**
      * The accessibility label.
      */
@@ -217,20 +213,11 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
         return controlsPrepended;
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
     @Override
     public String[] getDataLayerShownItems() {
-        String[] shownItems = new String[0];
-        List<ListItem> items = getItems();
-        if (!items.isEmpty()) {
-            ComponentData componentData = items.get(0).getData();
-            if (componentData != null) {
-                shownItems = new String[] {componentData.getId()};
-            }
-        }
-        return shownItems;
+        return this.getChildren().stream().findFirst()
+            .map(PanelContainerItemImpl::getId)
+            .map(id -> new String[] {id})
+            .orElse(null);
     }
 }

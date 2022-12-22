@@ -15,9 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor.Editor;
-import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
-import com.day.cq.wcm.api.WCMMode;
+import java.io.IOException;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingConstants;
@@ -34,13 +38,9 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor.Editor;
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractPanelContainerImpl;
+import com.day.cq.wcm.api.WCMMode;
 
 /**
  * Servlet that deletes/reorders the child nodes of a Accordion/Carousel/Tabs container.
@@ -50,7 +50,7 @@ import java.io.IOException;
     property = {
         "sling.servlet.methods=" + HttpConstants.METHOD_POST,
         "sling.servlet.methods=" + HttpConstants.METHOD_GET,
-        "sling.servlet.resourceTypes=" + PanelContainerImpl.RESOURCE_TYPE,
+        "sling.servlet.resourceTypes=" + AbstractPanelContainerImpl.RESOURCE_TYPE,
         "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
         "sling.servlet.extensions=" + ContainerServlet.EXTENSION
     }
