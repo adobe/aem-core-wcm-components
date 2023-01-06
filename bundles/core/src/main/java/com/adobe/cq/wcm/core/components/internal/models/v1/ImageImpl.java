@@ -185,7 +185,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
-                    imageName = getImageNameFromDam(fileReference);
+                    imageName = getImageNameFromAsset(asset);
                     hasContent = true;
                 } else {
                     useAssetDelivery = false;
@@ -302,21 +302,19 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             buildJson();
         }
     }
-
+    
     /**
-     * Extracts the image name from the DAM resource
-     *
-     * @return image name from DAM
+     * Extract the image name from the asset
+     * @param asset the asset
+     * @return the image name
      */
-    protected String getImageNameFromDam(String fileReference) {
-        return Optional.ofNullable(fileReference)
-            .map(reference -> request.getResourceResolver().getResource(reference))
-            .map(damResource -> damResource.adaptTo(Asset.class))
-            .map(Asset::getName)
-            .map(StringUtils::trimToNull)
-            .map(FilenameUtils::getBaseName)
-            .map(this::getSeoFriendlyName)
-            .orElse(StringUtils.EMPTY);
+    protected String getImageNameFromAsset(Asset asset) {
+    	return Optional.ofNullable(asset)
+                .map(Asset::getName)
+                .map(StringUtils::trimToNull)
+                .map(FilenameUtils::getBaseName)
+                .map(this::getSeoFriendlyName)
+                .orElse(StringUtils.EMPTY);
     }
 
     /**

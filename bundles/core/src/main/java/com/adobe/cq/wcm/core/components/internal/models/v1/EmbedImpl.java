@@ -108,12 +108,15 @@ public class EmbedImpl extends AbstractComponentImpl implements Embed {
                 embeddableResourceType = null;
             }
         }
-        if (StringUtils.isNotEmpty(url) && urlProcessors != null) {
-            for (UrlProcessor urlProcessor : urlProcessors) {
-                UrlProcessor.Result result = urlProcessor.process(url);
-                if (result != null) {
-                    this.result = result;
-                    break;
+        if (StringUtils.isNotEmpty(url)) {
+            url = StringUtils.trim(url);
+            if (urlProcessors != null) {
+                for (UrlProcessor urlProcessor : urlProcessors) {
+                    UrlProcessor.Result result = urlProcessor.process(url);
+                    if (result != null) {
+                        this.result = result;
+                        break;
+                    }
                 }
             }
         }

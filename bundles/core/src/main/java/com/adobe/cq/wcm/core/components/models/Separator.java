@@ -24,5 +24,20 @@ import org.osgi.annotation.versioning.ConsumerType;
  */
 @ConsumerType
 public interface Separator extends Component {
+    /**
+     * Name of the resource property that will indicate if the separator is decorative.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
+    String PN_IS_DECORATIVE = "isDecorative";
 
+    /**
+     * Indicates whether the separator is decorative.
+     *
+     * @return {@code true} if the separator is decorative; {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
+    default boolean isDecorative() {
+        return false;
+    }
 }

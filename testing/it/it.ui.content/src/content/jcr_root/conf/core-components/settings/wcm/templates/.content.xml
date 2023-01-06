@@ -21,4 +21,5 @@
     <responsive-template/>
     <simple-template/>
     <simple-template-v3/>
+    <structure-layout-template/>
 </jcr:root>
