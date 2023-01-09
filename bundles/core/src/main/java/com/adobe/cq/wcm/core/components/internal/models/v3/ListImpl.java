@@ -115,7 +115,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             itemStream = itemStream.peek(item -> {
                 if (item instanceof PageListItemImpl) {
                     PageListItemImpl pageListItem = (PageListItemImpl) item;
-                    pageListItem.setSowDescription(false);
+                    pageListItem.setShowDescription(false);
                     pageListItem.setLinkItems(true);
                 }
             });

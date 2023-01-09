@@ -179,13 +179,16 @@
                                 jcr:primaryType="nt:unstructured">
                                 <item0
                                     jcr:primaryType="nt:unstructured"
+                                    linkText="Carousel"
                                     linkURL="/content/core-components-examples/library/core-content/carousel"/>
                                 <item1
                                     jcr:primaryType="nt:unstructured"
+                                    linkText="Teaser"
                                     linkURL="/content/core-components-examples/library/core-content/teaser"
                                     linkTarget="_blank"/>
                                 <item2
                                     jcr:primaryType="nt:unstructured"
+                                    linkText="http://www.adobe.com"
                                     linkURL="http://www.adobe.com"/>
                                 <item3
                                     jcr:primaryType="nt:unstructured"
