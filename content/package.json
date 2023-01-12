@@ -22,7 +22,7 @@
         "test": "npm run unit --"
     },
     "devDependencies": {
-        "aem-clientlib-generator": "^1.7.7",
+        "aem-clientlib-generator": "^1.8.0",
         "aemfed": "^0.1.1",
         "eslint": "^7.32.0",
         "jasmine-core": "^4.4.0",
