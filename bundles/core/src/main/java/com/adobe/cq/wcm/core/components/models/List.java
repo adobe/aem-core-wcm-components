@@ -37,7 +37,7 @@ public interface List extends Component {
      *
      * <ul>
      *     <li><code>children</code> - the list will be built from the child pages of the page identified by {@link #PN_PARENT_PAGE}</li>
-     *     <li><code>static</code> - the list will be built from a custom set of pages, stored by the {@link #PN_PAGES} property</li>
+     *     <li><code>static</code> - the list will be built from a custom set of pages and external links, stored under the {@link #NN_STATIC} node</li>
      *     <li><code>search</code> - the list will be built from the result of a search query</li>
      *     <li><code>tags</code> - the list will be built from the sub-pages of the page identified by {@link #PN_TAGS_PARENT_PAGE}
      *     which are tagged with the tags stored by the {@link #PN_TAGS} property</li>
@@ -52,19 +52,20 @@ public interface List extends Component {
      *
      * @see #PN_SOURCE
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
+     * @deprecated since 12.27.0, the latest List implementation relies on the {@link #NN_STATIC} content structure
      */
     String PN_PAGES = "pages";
 
     /**
-     * Name of the child node storing the list items if the source of the list is {@code mixed}.
+     * Name of the child node storing the list items if the source of the list is {@code static}.
      *
      * @see #PN_SOURCE
      * @since com.adobe.cq.wcm.core.components.models 12.27.0
      */
-    String NN_MIXED = "mixed";
+    String NN_STATIC = "static";
 
     /**
-     * Name of the resource property storing the text of link in the mixed list item when the source of the list is {@code mixed}.
+     * Name of the resource property storing the text of link in the static list item when the source of the list is {@code static}.
      *
      * @see #PN_SOURCE
      * @since com.adobe.cq.wcm.core.components.models 12.27.0

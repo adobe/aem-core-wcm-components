@@ -64,14 +64,6 @@
                                 text="Disable static"
                                 uncheckedValue="false"
                                 value="true"/>
-                            <disableMixed
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                fieldDescription="Disable mixed list type"
-                                name="./disableMixed"
-                                text="Disable mixed"
-                                uncheckedValue="false"
-                                value="true"/>
                             <disableSearch
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

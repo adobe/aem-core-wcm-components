@@ -28,11 +28,11 @@
             <container
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="core/wcm/components/container/v1/container">
-                <list_v3_mixed_pages
+                <list_v4_static_pages
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-component/components/list-v3"
-                    listFrom="mixed">
-                    <mixed
+                    sling:resourceType="core-component/components/list-v4"
+                    listFrom="static">
+                    <static
                         jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
@@ -41,14 +41,14 @@
                             jcr:primaryType="nt:unstructured"
                             linkURL="/content/core-components/embed"
                             linkText="Embed Test"/>
-                    </mixed>
-                </list_v3_mixed_pages>
-                <list_v3_mixed_pages_linked
+                    </static>
+                </list_v4_static_pages>
+                <list_v4_static_pages_linked
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-component/components/list-v3"
-                    listFrom="mixed"
+                    sling:resourceType="core-component/components/list-v4"
+                    listFrom="static"
                     linkItems="true">
-                    <mixed
+                    <static
                         jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
@@ -58,13 +58,13 @@
                             linkURL="/content/core-components/embed"
                             linkText="Embed Test"
                             linkTarget="_blank"/>
-                    </mixed>
-                </list_v3_mixed_pages_linked>
-                <list_v3_mixed_pages_and_links
+                    </static>
+                </list_v4_static_pages_linked>
+                <list_v4_static_pages_and_links
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-component/components/list-v3"
-                    listFrom="mixed">
-                    <mixed
+                    sling:resourceType="core-component/components/list-v4"
+                    listFrom="static">
+                    <static
                         jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
@@ -76,16 +76,16 @@
                             jcr:primaryType="nt:unstructured"
                             linkURL="http://www.adobe.com"
                             linkTarget="_blank"/>
-                    </mixed>
-                </list_v3_mixed_pages_and_links>
-                <list_v3_mixed_pages_linked_description_modifieddate
+                    </static>
+                </list_v4_static_pages_and_links>
+                <list_v4_static_pages_linked_description_modifieddate
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-component/components/list-v3"
-                    listFrom="mixed"
+                    sling:resourceType="core-component/components/list-v4"
+                    listFrom="static"
                     linkItems="true"
                     showDescription="true"
                     showModificationDate="true">
-                    <mixed
+                    <static
                         jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
@@ -95,17 +95,17 @@
                             linkURL="/content/core-components/embed"
                             linkText="Embed Test"
                             linkTarget="_blank"/>
-                    </mixed>
-                </list_v3_mixed_pages_linked_description_modifieddate>
-                <list_v3_mixed_pages_linked_description_modifieddate_teaser
+                    </static>
+                </list_v4_static_pages_linked_description_modifieddate>
+                <list_v4_static_pages_linked_description_modifieddate_teaser
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-component/components/list-v3"
+                    sling:resourceType="core-component/components/list-v4"
                     displayItemAsTeaser="true"
-                    listFrom="mixed"
+                    listFrom="static"
                     linkItems="true"
                     showDescription="true"
                     showModificationDate="true">
-                    <mixed
+                    <static
                         jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
@@ -115,12 +115,12 @@
                             linkURL="/content/core-components/embed"
                             linkText="Embed Test"
                             linkTarget="_blank"/>
-                    </mixed>
-                </list_v3_mixed_pages_linked_description_modifieddate_teaser>
-                <list_v3_mixed_pages_empty
+                    </static>
+                </list_v4_static_pages_linked_description_modifieddate_teaser>
+                <list_v4_static_pages_empty
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-component/components/list-v3"
-                    listFrom="mixed"/>
+                    sling:resourceType="core-component/components/list-v4"
+                    listFrom="static"/>
             </container>
         </root>
     </jcr:content>

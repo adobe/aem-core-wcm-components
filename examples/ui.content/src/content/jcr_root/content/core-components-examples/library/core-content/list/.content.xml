@@ -104,67 +104,18 @@
                             reference="../../component"/>
                     </info>
                 </demo>
-                <title_290387112
+                <title_external
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Built from Fixed List"
+                    jcr:title="Built from Fixed List with External Links"
                     sling:resourceType="core-components-examples/components/title"
                     type="h3"/>
-                <text_1337507111
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>List built from a bespoke set of pages defined directly in the component edit dialog.&lt;/p>"
-                    textIsRich="true"/>
-                <demo_1611536266
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
-                    <component
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <list
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/list"
-                            childDepth="1"
-                            linkItems="false"
-                            listFrom="static"
-                            pages="[/content/core-components-examples/library/core-content/carousel,/content/core-components-examples/library/core-content/teaser,/content/core-components-examples/library/core-content/text]"
-                            showDescription="false"
-                            showModificationDate="false"
-                            sortOrder="asc"
-                            tagsMatch="any"/>
-                    </component>
-                    <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/tabs">
-                        <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
-                        <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
-                        <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
-                    </info>
-                </demo_1611536266>
-                <title_mixed
-                    cq:styleIds="[1544759676459]"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Built from Mixed List"
-                    sling:resourceType="core-components-examples/components/title"
-                    type="h3"/>
-                <text_mixed
+                <text_external
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
                     text="&lt;p>List built from a bespoke set of pages and external URLs defined directly in the component edit dialog.&lt;/p>"
                     textIsRich="true"/>
-                <demo_mixed
+                <demo_external
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
@@ -173,9 +124,9 @@
                         <list
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/list"
-                            listFrom="mixed"
+                            listFrom="static"
                             sortOrder="asc">
-                            <mixed
+                            <static
                                 jcr:primaryType="nt:unstructured">
                                 <item0
                                     jcr:primaryType="nt:unstructured"
@@ -195,7 +146,7 @@
                                     linkURL="https://www.aemcomponents.dev"
                                     linkText="Component Library"
                                     linkTarget="_blank"/>
-                            </mixed>
+                            </static>
                         </list>
                     </component>
                     <info
@@ -217,7 +168,7 @@
                             sling:resourceType="core-components-examples/components/demo/json"
                             reference="../../component"/>
                     </info>
-                </demo_mixed>
+                </demo_external>
                 <title_290388111
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"

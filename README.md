@@ -53,7 +53,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v3/image)
 9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v2/button)
 10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v2/teaser)
-11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v3/list)
+11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v4/list)
 12. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v2/download)
 13. [PDF Viewer](content/src/content/jcr_root/apps/core/wcm/components/pdfviewer/v1/pdfviewer)
 14. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v2/embed)

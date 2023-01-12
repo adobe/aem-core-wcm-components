@@ -23,6 +23,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +34,7 @@ import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.ListEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.v1.ListEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.v1.List;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
@@ -127,7 +128,16 @@ public class ListIT extends AuthorBaseUITest {
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
 
-        list = new List();
+        list = createList();
+    }
+
+    @NotNull
+    protected List createList() {
+        return new List();
+    }
+
+    public List getList() {
+        return list;
     }
 
     /**

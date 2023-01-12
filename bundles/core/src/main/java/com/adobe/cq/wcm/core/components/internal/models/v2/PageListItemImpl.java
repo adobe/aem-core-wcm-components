@@ -69,7 +69,16 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
         this.component = component;
     }
 
-    protected PageListItemImpl(@NotNull Link link, @NotNull Page page, String parentId, Component component,
+    public PageListItemImpl(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component,
+                            boolean showDescription, boolean linkItems, Resource resource) {
+        super(linkManager, page, parentId, component);
+        this.component = component;
+        this.showDescription = showDescription;
+        this.linkItems = linkItems;
+        this.listResource = resource;
+    }
+
+    public PageListItemImpl(@NotNull Link link, @NotNull Page page, String parentId, Component component,
                             boolean showDescription, boolean linkItems, Resource resource) {
         super(link, page, parentId, component);
         this.component = component;

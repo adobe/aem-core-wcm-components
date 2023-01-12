@@ -439,7 +439,6 @@ public class ListImpl extends AbstractComponentImpl implements List {
     protected enum Source {
         CHILDREN("children"),
         STATIC("static"),
-        MIXED("mixed"),
         SEARCH("search"),
         TAGS("tags"),
         EMPTY(StringUtils.EMPTY);

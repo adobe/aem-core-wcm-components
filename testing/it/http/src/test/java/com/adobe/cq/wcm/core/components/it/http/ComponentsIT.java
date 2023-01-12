@@ -128,12 +128,12 @@ public class ComponentsIT {
         Document document = parse(content);
 
         new ComponentTest(document)
-            .select(".list.list-v3", 0).expect("list-v3-mixed-pages.html")
-            .select(".list.list-v3", 1).expect("list-v3-mixed-pages-linked.html")
-            .select(".list.list-v3", 2).expect("list-v3-mixed-pages-and-links.html")
-            .select(".list.list-v3", 3).expect("list-v3-mixed-pages-linked-description-modified.html")
-            .select(".list.list-v3", 4).expect("list-v3-mixed-pages-linked-description-modifieddate-teaser.html")
-            .select(".list.list-v3", 5).expect("list-v3-mixed-pages-empty.html");
+            .select(".list.list-v4", 0).expect("list-v4-static-pages.html")
+            .select(".list.list-v4", 1).expect("list-v4-static-pages-linked.html")
+            .select(".list.list-v4", 2).expect("list-v4-static-pages-and-links.html")
+            .select(".list.list-v4", 3).expect("list-v4-static-pages-linked-description-modified.html")
+            .select(".list.list-v4", 4).expect("list-v4-static-pages-linked-description-modifieddate-teaser.html")
+            .select(".list.list-v4", 5).expect("list-v4-static-pages-empty.html");
     }
 
     @Test
