@@ -54,7 +54,7 @@ class ContainerPostProcessorTest {
         context.create().resource("/test/dummy/container");
         context.create().resource("/test/dummy/container/child1");
         context.create().resource("/test/dummy/container/child2");
-        String[] reorderedChildren = new String[]{"child2","child1"};
+        String[] reorderedChildren = new String[]{"child2","child1","nonExistingChild"};
         context.request().setParameterMap(ImmutableMap.of(PARAM_ORDERED_CHILDREN,
                 String.join(",", reorderedChildren)));
         containerPostProcessor.handleOrder(context.currentResource("/test/dummy/container"), context.request());

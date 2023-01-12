@@ -66,10 +66,12 @@ public class ContainerPostProcessor implements SlingPostProcessor {
             final Node containerNode = container.adaptTo(Node.class);
             if (containerNode != null) {
                 for (int i = orderedChildrenNames.length - 1; i >= 0; i--) {
-                    if (i == orderedChildrenNames.length - 1 && containerNode.hasNode(orderedChildrenNames[i])) {
-                        containerNode.orderBefore(orderedChildrenNames[i], null);
-                    } else if (containerNode.hasNode(orderedChildrenNames[i]) && containerNode.hasNode(orderedChildrenNames[i])) {
-                        containerNode.orderBefore(orderedChildrenNames[i], orderedChildrenNames[i + 1]);
+                    if (containerNode.hasNode(orderedChildrenNames[i])) {
+                        if (i == orderedChildrenNames.length - 1) {
+                            containerNode.orderBefore(orderedChildrenNames[i], null);
+                        } else if (containerNode.hasNode(orderedChildrenNames[i + 1])) {
+                            containerNode.orderBefore(orderedChildrenNames[i], orderedChildrenNames[i + 1]);
+                        }
                     }
                 }
             }
