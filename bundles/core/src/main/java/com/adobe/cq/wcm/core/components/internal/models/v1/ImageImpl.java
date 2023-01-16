@@ -89,6 +89,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
     protected static final String MIME_TYPE_IMAGE_SVG = "image/svg+xml";
     private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
+    protected static final String SEO_NAME_FILTER_PATTERN = "[\\W|_]";
 
     @ScriptVariable
     protected PageManager pageManager;
@@ -327,16 +328,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      * @return the SEO friendly image name
      */
     protected String getSeoFriendlyName(String imageName) {
-
-        // Google recommends using hyphens (-) instead of underscores (_) for SEO. See
-        // https://support.google.com/webmasters/answer/76329?hl=en
-        String seoFriendlyName = imageName.replaceAll("[\\ _]", "-").toLowerCase();
-        try {
-            seoFriendlyName = URLEncoder.encode(seoFriendlyName, CharEncoding.UTF_8);
-        } catch (UnsupportedEncodingException e) {
-            LOGGER.error("The Character Encoding is not supported.");
-        }
-        return seoFriendlyName;
+        return imageName.replaceAll(SEO_NAME_FILTER_PATTERN, "-").toLowerCase();
     }
 
 
