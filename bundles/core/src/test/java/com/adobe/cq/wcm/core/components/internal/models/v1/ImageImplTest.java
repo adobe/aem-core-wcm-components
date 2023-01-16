@@ -44,8 +44,10 @@ public class ImageImplTest extends AbstractImageTest {
     private static final String IMAGE_TITLE_ALT = "Adobe Logo";
     protected static String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png";
     protected static String IMAGE_FILE_REFERENCE_NO_DATE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_no_date.png";
+    protected static String IMAGE_FILE_REFERENCE_NON_WORD_CHARACTERS = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark(1).png";
     private static final String IMAGE_LINK = "https://www.adobe.com";
     protected static String ASSET_NAME = "adobe-systems-logo-and-wordmark";
+    protected static String ASSET_NAME_NON_WORD_CHARACTERS = "adobe-systems-logo-and-wordmark-1-";
 
     protected String testBase = TEST_BASE;
     protected String resourceType = ImageImpl.RESOURCE_TYPE;
@@ -324,6 +326,27 @@ public class ImageImplTest extends AbstractImageTest {
                 "\"smartSizes\":[600,800]," +
                 "\"lazyEnabled\":true" +
                 "}";
+        assertEquals(expectedJson, image.getJson());
+    }
+
+    @Test
+    void testAssetDeliveryEnabledWithNonWordCharacterFilename() {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+                                     "enableAssetDelivery", true,
+                                     "allowedRenditionWidths", new int[]{600, 800},
+                                     "disableLazyLoading", false);
+        Image image = getImageUnderTest(IMAGE59_PATH);
+        String expectedSrc = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE_NON_WORD_CHARACTERS + "." + ASSET_NAME_NON_WORD_CHARACTERS  + ".png?quality=82&preferwebp=true";
+        assertEquals(expectedSrc, image.getSrc());
+        String expectedJson = "{" +
+            "\"smartImages\":[" +
+            "\"" + MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE_NON_WORD_CHARACTERS + "." + ASSET_NAME_NON_WORD_CHARACTERS  + ".png?width=600&quality=82&preferwebp=true\"," +
+            "\"" + MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE_NON_WORD_CHARACTERS + "." + ASSET_NAME_NON_WORD_CHARACTERS  + ".png?width=800&quality=82&preferwebp=true\"" +
+            "]," +
+            "\"smartSizes\":[600,800]," +
+            "\"lazyEnabled\":true" +
+            "}";
         assertEquals(expectedJson, image.getJson());
     }
 
