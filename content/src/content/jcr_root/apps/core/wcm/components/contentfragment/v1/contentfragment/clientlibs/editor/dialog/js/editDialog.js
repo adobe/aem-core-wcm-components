@@ -317,6 +317,7 @@
      * @param {HTMLElement} dom - new dom
      */
     ElementsController.prototype._updateElementsDOM = function(dom) {
+        this._updateFields();
         if (dom.tagName === "CORAL-MULTIFIELD") {
             // replace the element names multifield's template
             this.elementNames.template = dom.template;
@@ -382,7 +383,7 @@
         updateParagraphControlTabState();
 
         // register change listener
-        $(fragmentPath).on("foundation-field-change", onFragmentPathChange);
+        $(fragmentPath).off("foundation-field-change").on("foundation-field-change", onFragmentPathChange);
         $(document).on("change", SELECTOR_PARAGRAPH_SCOPE, setParagraphControlsState);
         var $radioGroup = $(dialog).find(SELECTOR_DISPLAY_MODE_RADIO_GROUP);
         $radioGroup.on("change", function(e) {
