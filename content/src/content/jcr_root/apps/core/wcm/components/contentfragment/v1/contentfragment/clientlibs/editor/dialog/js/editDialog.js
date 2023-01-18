@@ -317,16 +317,33 @@
      * @param {HTMLElement} dom - new dom
      */
     ElementsController.prototype._updateElementsDOM = function(dom) {
+        this._updateFields();
         if (dom.tagName === "CORAL-MULTIFIELD") {
             // replace the element names multifield's template
             this.elementNames.template = dom.template;
         } else {
+            this._clearValidationError(this.singleTextSelector);
             dom.value = this.singleTextSelector.value;
             this.singleTextSelector.parentNode.replaceChild(dom, this.singleTextSelector);
             this.singleTextSelector = dom;
             this.singleTextSelector.removeAttribute("disabled");
         }
         this._updateFields();
+    };
+
+    /**
+     * Removes required attribute and validation error of the provided field.
+     * Can be used before a required field get replaced with a new field.
+     *
+     * @param {HTMLElement} field - the field which should be cleared
+     */
+    ElementsController.prototype._clearValidationError = function(field) {
+        var $field = $(field);
+        var fieldAPI = $field.adaptTo("foundation-field");
+        fieldAPI.setRequired(false);
+        var validation = $field.adaptTo("foundation-validation");
+        validation.checkValidity();
+        validation.updateUI();
     };
 
     /**
@@ -366,7 +383,7 @@
         updateParagraphControlTabState();
 
         // register change listener
-        $(fragmentPath).on("foundation-field-change", onFragmentPathChange);
+        $(fragmentPath).off("foundation-field-change").on("foundation-field-change", onFragmentPathChange);
         $(document).on("change", SELECTOR_PARAGRAPH_SCOPE, setParagraphControlsState);
         var $radioGroup = $(dialog).find(SELECTOR_DISPLAY_MODE_RADIO_GROUP);
         $radioGroup.on("change", function(e) {
