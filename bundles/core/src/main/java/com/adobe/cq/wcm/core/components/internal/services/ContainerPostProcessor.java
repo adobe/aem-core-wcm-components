@@ -34,6 +34,12 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
 
+
+/**
+ * This {@link SlingPostProcessor} is invoked in the Sling post operation chain and accept updates for a {@link PanelContainerImpl} based
+ * resource type.
+ * It handles the removal and ordering of panel container items.
+ */
 @Component(service = SlingPostProcessor.class,
            property = {
                    Constants.SERVICE_RANKING + ":Integer=" + Integer.MAX_VALUE
@@ -44,6 +50,13 @@ public class ContainerPostProcessor implements SlingPostProcessor {
     private static final String PARAM_ORDERED_CHILDREN = "itemOrder";
     private static final String PARAM_DELETED_CHILDREN = "deletedItems";
 
+    /**
+     * Process the current post request
+     *
+     * @param request the current sling HTTP request
+     * @param modifications list of modification of the current post request
+     * @throws Exception
+     */
     @Override
     public void process(SlingHttpServletRequest request, List<Modification> modifications) throws Exception {
         ResourceResolver resourceResolver = request.getResource().getResourceResolver();
@@ -60,6 +73,13 @@ public class ContainerPostProcessor implements SlingPostProcessor {
         modifications.addAll(addedModifications);
     }
 
+    /**
+     * Order the panel container child items in the given request parameter order
+     *
+     * @param container the resource of the container
+     * @param request the current Sling HTTP request
+     * @throws RepositoryException
+     */
     protected void handleOrder(Resource container, SlingHttpServletRequest request) throws RepositoryException {
         String[] orderedChildrenNames = StringUtils.split(request.getParameter(PARAM_ORDERED_CHILDREN), ",");
         if (orderedChildrenNames != null && orderedChildrenNames.length > 0) {
@@ -78,6 +98,16 @@ public class ContainerPostProcessor implements SlingPostProcessor {
         }
     }
 
+    /**
+     * Delete the panel container child items which are specified in the request parameter.
+     *
+     * @param container the resource of the container
+     * @param request the current Sling HTTP request
+     * @param resolver the {@link ResourceResolver}
+     * @param addedModifications list of new modification items which are added in this {@link SlingPostProcessor}
+     * @throws PersistenceException
+     * @throws RepositoryException
+     */
     protected void handleDelete(Resource container, SlingHttpServletRequest request, ResourceResolver resolver,
                                 List<Modification> addedModifications)
             throws PersistenceException, RepositoryException {
