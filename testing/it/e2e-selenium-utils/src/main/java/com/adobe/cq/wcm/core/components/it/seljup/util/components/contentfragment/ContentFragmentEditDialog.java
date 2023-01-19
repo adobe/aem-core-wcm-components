@@ -22,6 +22,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
@@ -40,6 +41,8 @@ public class ContentFragmentEditDialog extends Dialog {
     private static String tagNames = "[name='./tagNames']";
     private static String elementNameSelectButton = "coral-select[name='./elementNames']  > button";
     private static String elementNames = "./elementNames";
+    private static String displayModeRadio = "coral-radio[name='./displayMode'][value=\"%s\"]";
+    private static String errorLabels = "label.coral-Form-errorlabel";
 
     /**
      * Opens the properties tab in editor dialog
@@ -65,6 +68,10 @@ public class ContentFragmentEditDialog extends Dialog {
         coralSelectList.selectByValue(value);
     }
 
+    public void setDisplayMode(String value) {
+        $(String.format(displayModeRadio,value)).click();
+    }
+
     public String getFragmentPath() {
         return fragmentPath;
     }
@@ -76,4 +83,16 @@ public class ContentFragmentEditDialog extends Dialog {
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 
+    public void confirmReplacingFragment() {
+        Dialog confirmationDialog = new Dialog("[variant='warning']");
+        confirmationDialog.clickPrimary();
+    }
+
+    public ElementsCollection getErrorLabels() {
+        return $$(errorLabels);
+    }
+
+    public void setElement(String value) throws InterruptedException {
+        Commons.useDialogSelect("./elementNames", value);
+    }
 }
