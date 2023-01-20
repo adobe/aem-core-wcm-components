@@ -131,18 +131,20 @@
         }
 
         // new multifield should not have items
-        if ($staticMultifield[0].items.length !== 0) {
+        var newItemsList = $staticMultifield[0].items;
+        if (newItemsList.length !== 0) {
             return;
         }
 
         // add an empty item to new multifield for each hidden item
         hiddenItems.map(function() {
-            $staticMultifield.find("button[coral-multifield-add]").click();
+            newItemsList.add(new Coral.Multifield.Item());
         });
 
-        // fill the new multifield items using old multifield items
-        setTimeout(function() {
-            var newItems = $staticMultifield[0].items.getAll();
+        // ensure the item template is rendered in the DOM for the new items
+        Coral.commons.nextFrame(function() {
+            // fill the new multifield items using old multifield items
+            var newItems = newItemsList.getAll();
             for (var index in hiddenItems) {
                 var autocomplete = $(newItems[index]).find(staticLinkUrlSelector);
                 var value = hiddenItems[index].content.querySelector("input[name='./pages']").value;
