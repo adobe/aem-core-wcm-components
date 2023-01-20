@@ -18,11 +18,7 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.ContainerItemImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -101,9 +97,7 @@ public interface Container extends Component, ContainerExporter {
     @NotNull
     @JsonIgnore
     default List<? extends ContainerItem> getChildren() {
-        return getItems().stream().
-                filter(listItem -> Objects.nonNull(listItem.getResource())).
-                map(i -> new ContainerItemImpl(i.getResource())).collect(Collectors.toList());
+        return Collections.emptyList();
     }
 
     /**
