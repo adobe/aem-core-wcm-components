@@ -21,10 +21,11 @@
     var PN_PANEL_TITLE = "cq:panelTitle";
     var PN_RESOURCE_TYPE = "sling:resourceType";
     var PN_COPY_FROM = "./@CopyFrom";
-    var SUFFIX = ".container.html";
 
     var selectors = {
         self: "[data-cmp-is='childrenEditor']",
+        order: "[data-cmp-hook-childreneditor='order']",
+        delete: "[data-cmp-hook-childreneditor='delete']",
         add: "[data-cmp-hook-childreneditor='add']",
         insertComponentDialog: {
             self: "coral-dialog.InsertComponentDialog",
@@ -56,6 +57,7 @@
         this._elements = {};
         this._path = "";
         this._orderedChildren = [];
+        this._deletedChildren = [];
         this._init();
 
         var that = this;
@@ -95,18 +97,8 @@
              * @returns {Promise} The promise for completion handling
              */
             update: function() {
-                var url = this._path + SUFFIX;
-
                 this._processChildren();
-
-                return $.ajax({
-                    type: "POST",
-                    url: url,
-                    async: false,
-                    data: {
-                        "order": this._orderedChildren
-                    }
-                });
+                return $.Deferred().resolve();
             },
 
             /**
@@ -117,6 +109,8 @@
             _init: function() {
                 this._elements.self = this._config.el;
                 this._elements.add = this._elements.self.querySelectorAll(selectors.add)[0];
+                this._elements.order = this._elements.self.querySelectorAll(selectors.order)[0];
+                this._elements.delete = this._elements.self.querySelectorAll(selectors.delete)[0];
                 this._path = this._elements.self.dataset["containerPath"];
 
                 // store a reference to the Children Editor object
@@ -269,32 +263,7 @@
                     that._elements.self.on("coral-collection:remove", function(event) {
                         var name = event.detail.item.dataset["name"];
                         if (movedItem !== name) {
-                            ns.ui.helpers.prompt({
-                                title: Granite.I18n.get("Delete"),
-                                message: Granite.I18n.get("You are going to delete the selected component(s)."),
-                                type: ns.ui.helpers.PROMPT_TYPES.WARNING,
-                                actions: [
-                                    {
-                                        id: "CANCEL",
-                                        text: Granite.I18n.get("Cancel", "Label for Cancel button")
-                                    },
-                                    {
-                                        id: "DELETE",
-                                        text: Granite.I18n.get("Delete", "Label for Confirm button"),
-                                        warning: true
-                                    }
-                                ],
-                                callback: function(actionId) {
-                                    if (actionId === "CANCEL") {
-                                        that._update(that._path + SUFFIX);
-                                    } else {
-                                        that._sendDeleteParagraph(that._path + "/" + name)
-                                            .then(function(data) {
-                                                that._update(that._path + SUFFIX);
-                                            });
-                                    }
-                                }
-                            });
+                            that._deletedChildren.push(name);
                         }
                     });
 
@@ -319,32 +288,8 @@
                     var name = items[i].dataset["name"];
                     this._orderedChildren.push(name);
                 }
-            },
-
-            _sendDeleteParagraph: function(path) {
-                return (new ns.persistence.PostRequest()
-                    .prepareDeleteParagraph({
-                        path: path
-                    })
-                    .send()
-                );
-            },
-
-            _update: function(url) {
-                var that = this;
-                return $.ajax({
-                    type: "GET",
-                    url: url,
-                    dataType: "html",
-                    async: false,
-                    success: function(data) {
-                        var tmp = document.createElement("div");
-                        tmp.innerHTML = data;
-                        var multifield = tmp.firstElementChild;
-                        that._elements.self.replaceWith(multifield);
-                        channel.trigger("foundation-contentloaded");
-                    }
-                });
+                this._elements.order.value = this._orderedChildren.join();
+                this._elements.delete.value = this._deletedChildren.join();
             }
         };
     })();
@@ -373,13 +318,9 @@
             var el = form.querySelectorAll(selectors.self)[0];
             var childrenEditor = $(el).data("childrenEditor");
             if (childrenEditor) {
-                return {
-                    post: function() {
-                        return childrenEditor.update();
-                    }
-                };
+                return childrenEditor.update();
             } else {
-                return {};
+                return $.Deferred().resolve();
             }
         }
     });
