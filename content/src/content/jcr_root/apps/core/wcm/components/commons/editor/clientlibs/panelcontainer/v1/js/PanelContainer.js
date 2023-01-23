@@ -175,8 +175,7 @@
                 type: "POST",
                 url: url,
                 data: {
-                    "delete": deleted,
-                    "order": ordered
+                    "itemOrder": ordered.join()
                 }
             });
         }
