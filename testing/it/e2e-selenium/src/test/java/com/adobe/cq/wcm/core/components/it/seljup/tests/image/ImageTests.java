@@ -210,7 +210,8 @@ public class ImageTests {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.openMetadataTab();
         Commons.saveConfigureDialog();
-        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel";
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel, " +
+                "coral-tooltip[variant='error'] > coral-tooltip-content";
         assertEquals("Error: Please provide an asset which has a description that can be used as alt text.", $(assetWithoutDescriptionErrorMessageSelector).innerText());
     }
 
@@ -218,7 +219,8 @@ public class ImageTests {
         Commons.openSidePanel();
         dragImageWithoutDescription();
         Commons.saveConfigureDialog();
-        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel";
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel, " +
+                "coral-tooltip[variant='error'] > coral-tooltip-content";
         String errorIcon = "input[name='./alt'] + coral-icon[icon='alert']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", $(errorIcon));
