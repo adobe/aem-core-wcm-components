@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.accordion;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.ChildrenEditor;
@@ -157,6 +158,19 @@ public class AccordionEditDialog extends Dialog  {
                 waitForElementAnimationFinished(popOver.getCssSelector());
                 return new CoralSelectList(popOver.element());
             }
+        }
+
+        /**
+         * Returns single expansion select list
+         * @return single expansion select list
+         */
+        public CoralSelectList selectListSingle() {
+            CoralSelectList coralSelectList = new CoralSelectList($(expandedSelectSingle));
+            if(!coralSelectList.isVisible()) {
+                CoralSelect selectList = new CoralSelect($(expandedSelectSingle));
+                coralSelectList = selectList.openSelectList();
+            }
+            return coralSelectList;
         }
 
         public String getSelectedItemValue(int i) {
