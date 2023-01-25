@@ -42,7 +42,7 @@ public class ContentFragmentEditDialog extends Dialog {
     private static String elementNameSelectButton = "coral-select[name='./elementNames']  > button";
     private static String elementNames = "./elementNames";
     private static String displayModeRadio = "coral-radio[name='./displayMode'][value=\"%s\"]";
-    private static String errorLabels = "label.coral-Form-errorlabel";
+    private static String errorLabels = "label.coral-Form-errorlabel, coral-tooltip[variant='error']";
 
     /**
      * Opens the properties tab in editor dialog
@@ -84,7 +84,7 @@ public class ContentFragmentEditDialog extends Dialog {
     }
 
     public void confirmReplacingFragment() {
-        Dialog confirmationDialog = new Dialog("[variant='warning']");
+        Dialog confirmationDialog = new Dialog("[role='alertdialog']");
         confirmationDialog.clickPrimary();
     }
 

@@ -58,6 +58,8 @@ public class PanelSelector extends BaseComponent {
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         actions().moveByOffset(0, yOffset).build().perform();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         actions().release().build().perform();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
     }
 }

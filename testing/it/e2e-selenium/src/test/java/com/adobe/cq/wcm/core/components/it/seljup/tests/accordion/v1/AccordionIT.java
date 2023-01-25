@@ -331,9 +331,10 @@ public class AccordionIT extends AuthorBaseUITest {
 
         //3.
         properties.openExpandedSelectSingle(" > button");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
         //4.
-        CoralSelectList selectedItems = properties.selectList();
+        CoralSelectList selectedItems = properties.selectListSingle();
         selectedItems.selectByIndex(idx + 1);
 
         //5.

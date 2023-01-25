@@ -15,18 +15,25 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.servlet.Servlet;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.servlets.HttpConstants;
+import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.servlets.post.Modification;
 import org.apache.sling.servlets.post.SlingPostProcessor;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
@@ -40,12 +47,18 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
  * resource type.
  * It handles the removal and ordering of panel container items.
  */
-@Component(service = SlingPostProcessor.class,
+@Component(service = {SlingPostProcessor.class, Servlet.class},
            property = {
-                   Constants.SERVICE_RANKING + ":Integer=" + Integer.MAX_VALUE
+                   Constants.SERVICE_RANKING + ":Integer=" + Integer.MAX_VALUE,
+                   "sling.servlet.methods=" + HttpConstants.METHOD_POST,
+                   "sling.servlet.resourceTypes=" + PanelContainerImpl.RESOURCE_TYPE,
+                   "sling.servlet.selectors=" + ContainerPostProcessor.SELECTOR,
+                   "sling.servlet.extensions=" + ContainerPostProcessor.EXTENSION
            })
-public class ContainerPostProcessor implements SlingPostProcessor {
+public class ContainerPostProcessor extends SlingAllMethodsServlet implements SlingPostProcessor {
 
+    protected static final String SELECTOR = "container";
+    protected static final String EXTENSION = "html";
     private static final Logger LOGGER = LoggerFactory.getLogger(ContainerPostProcessor.class);
     private static final String PARAM_ORDERED_CHILDREN = "itemOrder";
     private static final String PARAM_DELETED_CHILDREN = "deletedItems";
@@ -60,7 +73,7 @@ public class ContainerPostProcessor implements SlingPostProcessor {
     @Override
     public void process(SlingHttpServletRequest request, List<Modification> modifications) throws Exception {
         ResourceResolver resourceResolver = request.getResource().getResourceResolver();
-        ArrayList<Modification> addedModifications = new ArrayList<Modification>();
+        ArrayList<Modification> addedModifications = new ArrayList<>();
         if (accepts(request, resourceResolver)) {
             Resource container = request.getResource();
             try {
@@ -71,6 +84,22 @@ public class ContainerPostProcessor implements SlingPostProcessor {
             }
         }
         modifications.addAll(addedModifications);
+    }
+
+    @Override
+    protected void doPost(@NotNull SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response) throws IOException {
+
+        ResourceResolver resolver = request.getResourceResolver();
+        Resource container = request.getResource();
+
+        try {
+            handleOrder(container, request);
+            resolver.commit();
+        } catch (RepositoryException | PersistenceException e) {
+            LOGGER.error("Could not order items of the container at {}", container.getPath(), e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     /**

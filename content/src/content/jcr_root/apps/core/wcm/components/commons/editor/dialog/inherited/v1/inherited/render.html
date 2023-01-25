@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <section data-sly-use.inheritedField="com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited.InheritedField" class="${inheritedField.attrClass}">
-  <label class="coral-Form-fieldlabel">${inheritedField.heading}</label>
+  <label class="coral-Form-fieldlabel">${inheritedField.heading @ i18n}</label>
   <div class="coral-Form-fieldwrapper foundation-field-edit">
     <coral-checkbox name="./${inheritedField.prop}_override"
             value="true"
