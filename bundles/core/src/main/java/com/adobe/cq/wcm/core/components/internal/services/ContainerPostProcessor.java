@@ -51,7 +51,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractPanelContaine
            property = {
                    Constants.SERVICE_RANKING + ":Integer=" + Integer.MAX_VALUE,
                    "sling.servlet.methods=" + HttpConstants.METHOD_POST,
-                   "sling.servlet.resourceTypes=" + PanelContainerImpl.RESOURCE_TYPE,
+                   "sling.servlet.resourceTypes=" + AbstractPanelContainerImpl.RESOURCE_TYPE,
                    "sling.servlet.selectors=" + ContainerPostProcessor.SELECTOR,
                    "sling.servlet.extensions=" + ContainerPostProcessor.EXTENSION
            })
