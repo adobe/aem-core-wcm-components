@@ -140,14 +140,9 @@ public class ListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.lis
         // add items
         editDialog.addStaticListPage(page1Path);
         editDialog.addStaticListPage(page21Path);
-
-        assertFalse(editDialog.isExternalLinksMode());
-
         editDialog.addStaticListLink("http://www.adobe.com", "Adobe");
 
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-
-        assertTrue(editDialog.isExternalLinksMode());
 
         // close the dialog
         Commons.saveConfigureDialog();
@@ -176,10 +171,8 @@ public class ListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.lis
 
         // add items
         editDialog.addStaticListPage(page1Path);
-        assertFalse(editDialog.isExternalLinksMode());
         editDialog.addStaticListLink("http://www.adobe.com", "Adobe");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        assertTrue(editDialog.isExternalLinksMode());
 
         // close the dialog
         Commons.saveConfigureDialog();
@@ -194,25 +187,16 @@ public class ListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.lis
         editDialog = getList().getEditDialog();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertFalse(editDialog.isMaxItemsDisplayed());
-        assertTrue(editDialog.isExternalLinksMode());
 
         // change to children list
         editDialog.selectFromList("children");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(editDialog.isMaxItemsDisplayed());
-        assertFalse(editDialog.isExternalLinksMode());
 
         // change to static list
         editDialog.selectFromList("static");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertFalse(editDialog.isMaxItemsDisplayed());
-        assertTrue(editDialog.isExternalLinksMode());
-
-        // remove external link
-        editDialog.removeLastStaticListLink();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        assertFalse(editDialog.isMaxItemsDisplayed());
-        assertFalse(editDialog.isExternalLinksMode());
     }
 
     /**

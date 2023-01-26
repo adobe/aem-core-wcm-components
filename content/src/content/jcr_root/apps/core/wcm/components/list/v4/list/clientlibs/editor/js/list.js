@@ -33,18 +33,7 @@
                 var $target = $(event.target);
                 if ($target.is("foundation-autocomplete")) {
                     updateLinkText($target);
-                    applyExternalLinksMode();
-                } else if ($target.is("coral-multifield")) {
-                    applyExternalLinksMode();
                 }
-            });
-
-            $staticMultifield.find("foundation-autocomplete input[is='coral-textfield']").on("blur", function() {
-                applyExternalLinksMode();
-            });
-
-            $("coral-select[name='./orderBy']").get(0).addEventListener("coral-select:showitems", function() {
-                applyExternalLinksMode();
             });
 
             handleListV3StaticPages($dialogContent, $staticMultifield);
@@ -57,10 +46,8 @@
             if (target) {
                 Coral.commons.ready(element, function(component) {
                     showHide(component, target);
-                    applyExternalLinksMode();
                     component.on("change", function() {
                         showHide(component, target);
-                        applyExternalLinksMode();
                     });
                 });
             }
@@ -81,23 +68,6 @@
                     }
                 });
             }
-        }
-    }
-
-    function applyExternalLinksMode() {
-        var listFrom = $(".cmp-list__editor coral-select.cq-dialog-dropdown-showhide")[0].value;
-        var externals = $(staticMultifieldSelector).find("foundation-autocomplete").filter(function() {
-            var url = this.value;
-            return url && !url.startsWith("/");
-        });
-        if (externals.length === 0 || listFrom !== "static") {
-            $("coral-select-item[value='modified']").removeClass("hide");
-            $("coral-selectlist-item[value='modified']").removeClass("hide");
-            $("coral-tab:contains('Item Settings')").removeClass("hide");
-        } else {
-            $("coral-select-item[value='modified']").not(".hide").addClass("hide");
-            $("coral-selectlist-item[value='modified']").not(".hide").addClass("hide");
-            $("coral-tab:contains('Item Settings')").not(".hide").addClass("hide");
         }
     }
 

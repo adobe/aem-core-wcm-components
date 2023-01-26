@@ -38,7 +38,6 @@ import java.text.Collator;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -70,11 +69,9 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     private Collection<ListItem> getStaticListItems() {
-        AtomicBoolean hasExternalLink = new AtomicBoolean(false);
         Stream<AbstractListItemImpl> itemStream = getStaticItemResourceStream().map(linkResource -> {
             Link link = linkManager.get(linkResource).build();
             if (LinkManagerImpl.isExternalLink(link.getURL())) {
-                hasExternalLink.set(true);
                 return new ExternalLinkListItemImpl(link, linkResource, getId(), component);
             } else {
                 Object reference = link.getReference();
@@ -84,25 +81,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                     return null;
                 }
             }
-        }).filter(Objects::nonNull).filter(item -> item.getLink() != null && item.getLink().isValid())
-            // force stream execution to make hasExternalLink variable updated
-            .collect(Collectors.toList()).stream();
-
-        // When external links are configured, we display only the linked title for all list items,
-        // other display modes are ignored.
-        if (hasExternalLink.get()) {
-            showDescription = false;
-            showModificationDate = false;
-            displayItemAsTeaser = false;
-            linkItems = true;
-            itemStream = itemStream.peek(item -> {
-                if (item instanceof PageListItemImpl) {
-                    PageListItemImpl pageListItem = (PageListItemImpl) item;
-                    pageListItem.setShowDescription(false);
-                    pageListItem.setLinkItems(true);
-                }
-            });
-        }
+        }).filter(Objects::nonNull).filter(item -> item.getLink() != null && item.getLink().isValid());
 
         // apply sorting
         OrderBy orderBy = OrderBy.fromString(properties.get(PN_ORDER_BY, StringUtils.EMPTY));
@@ -114,7 +93,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             // getTitle may return null, define null to be greater than nonnull values
             Comparator<String> titleComparator = Comparator.nullsLast(collator);
             itemStream = itemStream.sorted((item1, item2) -> direction * titleComparator.compare(item1.getTitle(), item2.getTitle()));
-        } else if (!hasExternalLink.get() && OrderBy.MODIFIED.equals(orderBy)) {
+        } else if (OrderBy.MODIFIED.equals(orderBy)) {
             // getLastModified may return null, define null to be after nonnull values
             itemStream = itemStream.sorted((item1, item2) -> direction * ObjectUtils.compare(item1.getLastModified(), item2.getLastModified(), true));
         }

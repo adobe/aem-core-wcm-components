@@ -53,9 +53,6 @@ The following properties are written to JCR for this List component and are expe
                `linkURL` - stores the page path or external links,
                `linkTarget` - stores the link target,
                `linkText` - stores the link text.
-               If the list contains external links then it will have a special state which is equivalent to the
-               following property settings: `./showDescription` is `false`, `./showModificationDate` is `false`,
-               `./displayItemAsTeaser` is `false` and `./linkItems` is `true` and only sorting by title is possible.
                When `./listFrom` property is set to `static`, the `./maxItems` property is ignored.
 5`./query` - defines the search query, when the `./listFrom` property is set to `search`
 6`./searchIn` - defines where to start the search, when the `./listFrom` property is set to `search`

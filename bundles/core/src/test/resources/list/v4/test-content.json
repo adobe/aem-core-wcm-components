@@ -248,6 +248,7 @@
                     "jcr:primaryType": "nt:unstructured",
                     "sling:resourceType": "core/wcm/components/list/v4/list",
                     "listFrom": "static",
+                    "displayItemAsTeaser": "true",
                     "maxItems": 2,
                     "static": {
                         "jcr:primaryType": "nt:unstructured",
@@ -269,7 +270,8 @@
                         },
                         "item3": {
                             "jcr:primaryType": "nt:unstructured",
-                            "linkURL": "http://www.external2.link"
+                            "linkURL": "http://www.external2.link",
+                            "linkTarget": "_blank"
                         }
                     }
                 },

@@ -21,8 +21,12 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.Teaser;
+import com.day.cq.commons.jcr.JcrConstants;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.apache.sling.api.SlingConstants;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -137,8 +141,8 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     protected void testStaticListTypeWithPageAndExternalLinks() {
         List list = getListUnderTest(STATIC_LIST_3);
 
-        assertTrue(list.linkItems());
-        assertFalse(list.displayItemAsTeaser());
+        assertFalse(list.linkItems());
+        assertTrue(list.displayItemAsTeaser());
         assertFalse(list.showModificationDate());
         assertFalse(list.showDescription());
 
@@ -170,6 +174,16 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         // item 4
         item = itemIterator.next();
         assertEquals("http://www.external2.link", item.getTitle());
+        Resource teaserResource = item.getTeaserResource();
+        assertNotNull(teaserResource);
+        assertEquals("/content/list/jcr:content/root/staticListTypeWithPageAndExternalLinks/static/item3", teaserResource.getPath());
+        ValueMap trProps = teaserResource.getValueMap();
+        assertNotNull(trProps);
+        assertEquals("http://www.external2.link", trProps.get(Link.PN_LINK_URL));
+        assertEquals("core/wcm/components/teaser/v2/teaser", trProps.get(ResourceResolver.PROPERTY_RESOURCE_TYPE));
+        assertEquals(false, trProps.get(Teaser.PN_TITLE_FROM_PAGE));
+        assertEquals("http://www.external2.link", trProps.get(JcrConstants.JCR_TITLE));
+        assertEquals("_blank", trProps.get(Link.PN_LINK_TARGET));
 
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, STATIC_LIST_3));
     }

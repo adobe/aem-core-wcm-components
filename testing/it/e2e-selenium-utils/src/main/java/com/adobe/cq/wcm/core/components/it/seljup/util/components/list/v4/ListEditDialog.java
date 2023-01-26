@@ -54,11 +54,4 @@ public class ListEditDialog extends com.adobe.cq.wcm.core.components.it.seljup.u
     public boolean isMaxItemsDisplayed() {
         return $("coral-numberinput[name='./maxItems']").ancestor(".coral-Form-fieldwrapper").isDisplayed();
     }
-
-    public boolean isExternalLinksMode() {
-        SelenideElement orderByModified = $(".cmp-list__editor coral-selectlist-item[value=\"modified\"]");
-        SelenideElement itemSettings = $$(".cmp-list__editor coral-tab").last();
-
-        return orderByModified.has(Condition.cssClass("hide")) && itemSettings.has(Condition.cssClass("hide"));
-    }
 }
