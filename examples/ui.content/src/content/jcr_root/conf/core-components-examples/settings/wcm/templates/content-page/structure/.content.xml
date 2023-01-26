@@ -40,7 +40,7 @@
                 <accordion
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/accordion"
-                    expandedItems="[item_1579021121673,item_1579021131667,item_1579021109267,item_1579021109268,item_1579021109269,item_1579021109270]"
+                    expandedItems="[item_1579021121673,item_1579021131667,item_1579021109267,item_1579021109268,item_1579021109269,item_1579021109270,item_1879021109280]"
                     singleExpansion="false">
                     <item_1579021121673
                         cq:panelTitle="Core Structure"
@@ -68,6 +68,7 @@
                         structureStart="1"/>
                     <item_1579021109269/> <!-- Commerce menu items -->
                     <item_1579021109270/> <!-- Forms And Communications Portal menu items -->
+                    <item_1879021109280/> <!-- Adaptive Form Component Items -->
                 </accordion>
             </sidebar>
             <responsivegrid
