@@ -23,6 +23,7 @@
         <exclude pattern="/conf/core-components-examples/settings/cloudconfigs(/.*)?"/>
         <exclude pattern="/conf/core-components-examples/settings/wcm/templates/content-page/structure/jcr:content/root/sidebar/accordion/item_1579021109269"/>
         <exclude pattern="/conf/core-components-examples/settings/wcm/templates/content-page/structure/jcr:content/root/sidebar/accordion/item_1579021109270"/>
+        <exclude pattern="/conf/core-components-examples/settings/wcm/templates/content-page/structure/jcr:content/root/sidebar/accordion/item_1879021109280"/>
     </filter>
     <filter root="/content/core-components-examples">
         <exclude pattern="/content/core-components-examples/library/jcr:content/root/responsivegrid/container_1589240807(/.*)?"/>
@@ -32,6 +33,8 @@
         <exclude pattern="/content/core-components-examples/library/forms-and-communications-portal(/.*)?"/>
         <exclude pattern="/content/core-components-examples/library/jcr:content/root/responsivegrid/container_40754488/teaser_1837085907"/>
         <exclude pattern="/content/core-components-examples/library/core-content/aemform"/>
+        <exclude pattern="/content/core-components-examples/library/jcr:content/root/responsivegrid/container_1789240808(/.*)?"/>
+        <exclude pattern="/content/core-components-examples/library/adaptive-form(/.*)?"/>
     </filter>
     <filter root="/content/cq:tags/core-components-examples"/>
     <filter root="/content/dam/core-components-examples">
