@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:rep="internal"
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:rep="internal" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
     jcr:mixinTypes="[rep:AccessControllable]"
     jcr:primaryType="cq:Page">
     <wcm jcr:primaryType="nt:unstructured">
@@ -154,12 +154,13 @@
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
                             </policy_1606467713472>
                             <policy_1648728186333
-                                jcr:lastModified="{Date}2022-03-31T14:44:50.751+02:00"
+                                jcr:lastModified="{Date}2023-01-27T18:30:20.780+02:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Content Container"
                                 sling:resourceType="wcm/core/components/policy/policy"
-                                components="group:.test"
+                                backgroundColorEnabled="true"
+                                components="[group:Core Content,group:Core Form,group:Core Structure]"
                                 layoutDisabled="false">
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
                                 <cq:styleGroups jcr:primaryType="nt:unstructured">
@@ -190,6 +191,15 @@
                                 renderAlternateLanguageLinks="{Boolean}true">
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
                             </policy_1606475224445>
+                            <policy_2951601391800569
+                                jcr:lastModified="{Date}2023-01-27T18:34:10.780+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Perf Page Policy"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                clientlibs="[cmp-test.grid,cmp-test.base]">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_2951601391800569>
                         </page>
                     </v2>
                     <v3 jcr:primaryType="nt:unstructured">
