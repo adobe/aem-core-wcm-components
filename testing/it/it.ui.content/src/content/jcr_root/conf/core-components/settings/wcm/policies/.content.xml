@@ -223,6 +223,16 @@
                                 clientlibsAsync="true">
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
                             </policy_1648547608779>
+                            <policy_1203215945670599
+                                jcr:lastModified="{Date}2023-01-06T16:35:01.192+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Perf policy"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                clientlibs="cmp-test.grid"
+                                clientlibsAsync="false">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_1203215945670599>
                         </page>
                     </v3>
                 </page>
@@ -279,6 +289,25 @@
                         </image>
                     </v2>
                 </image>
+                <carousel jcr:primaryType="nt:unstructured">
+                    <v1 jcr:primaryType="nt:unstructured">
+                        <carousel jcr:primaryType="nt:unstructured">
+                            <policy_1675063697126
+                                jcr:lastModified="{Date}2023-01-30T09:28:42.311+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Perf Container"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                autopauseDisabled="false"
+                                autoplay="false"
+                                components="[group:Core Content,group:Core Form,group:Core Structure]"
+                                controlsPrepended="false"
+                                delay="5000">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_1675063697126>
+                        </carousel>
+                    </v1>
+                </carousel>
             </components>
         </wcm>
     </core>

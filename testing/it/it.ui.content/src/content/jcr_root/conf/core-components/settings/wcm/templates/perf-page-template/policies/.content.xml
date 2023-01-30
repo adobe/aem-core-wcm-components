@@ -2,11 +2,38 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
+        cq:lastModified="{Date}2023-01-30T09:28:42.314+02:00"
+        cq:lastModifiedBy="admin"
+        cq:policy="core/wcm/components/page/v2/page/policy_2951601391800569"
         jcr:primaryType="nt:unstructured"
         sling:resourceType="wcm/core/components/policies/mappings">
         <root
-            cq:policy="wcm/foundation/components/responsivegrid/content-default"
+            cq:policy="core/wcm/components/container/v1/container/policy_1648728186333"
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="wcm/core/components/policies/mapping"/>
+            sling:resourceType="wcm/core/components/policies/mapping">
+            <container_1670147837
+                cq:policy="core/wcm/components/container/v1/container/policy_1648728186333"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/core/components/policies/mapping">
+                <core jcr:primaryType="nt:unstructured">
+                    <wcm jcr:primaryType="nt:unstructured">
+                        <components jcr:primaryType="nt:unstructured">
+                            <carousel jcr:primaryType="nt:unstructured">
+                                <v1 jcr:primaryType="nt:unstructured">
+                                    <carousel
+                                        cq:policy="core/wcm/components/carousel/v1/carousel/policy_1675063697126"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="wcm/core/components/policies/mapping"/>
+                                </v1>
+                            </carousel>
+                        </components>
+                    </wcm>
+                </core>
+            </container_1670147837>
+            <container_1773079361
+                cq:policy="core/wcm/components/container/v1/container/policy_1648728186333"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/core/components/policies/mapping"/>
+        </root>
     </jcr:content>
 </jcr:root>

@@ -2,7 +2,7 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2023-01-27T18:49:23.642+02:00"
+        cq:lastModified="{Date}2023-01-30T09:31:15.443+02:00"
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components/settings/wcm/templates/perf-page-template"
         jcr:primaryType="cq:PageContent"
@@ -88,15 +88,71 @@
                         <item_1674838142617
                             cq:panelTitle="Car1"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/container/v1/container"/>
+                            sling:resourceType="core/wcm/components/container/v1/container">
+                            <title
+                                jcr:lastModified="{Date}2023-01-30T09:30:24.470+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Slide 1"
+                                sling:resourceType="core/wcm/components/title/v3/title"/>
+                            <text_copy
+                                jcr:lastModified="{Date}2023-01-27T18:47:01.653+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core/wcm/components/text/v2/text"
+                                text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam aliquam ex ut nisl mollis consequat id quis felis. Quisque tincidunt massa eu fermentum imperdiet. Etiam pharetra fermentum tincidunt. Pellentesque blandit metus ac aliquam euismod. Integer scelerisque erat a sapien porta convallis. Etiam non elit ex. Integer hendrerit urna a mauris interdum luctus. Vestibulum ante nunc, scelerisque a luctus non, porta et turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis semper felis. Sed a elementum dolor, sit amet tempus mauris. Suspendisse nec elementum dolor. Morbi ullamcorper enim et leo imperdiet pretium. Maecenas vulputate tincidunt pretium. Nullam bibendum, eros sit amet gravida tincidunt, felis tellus vehicula velit, vitae suscipit dolor metus id sapien.&lt;/p>&#xd;&#xa;&lt;p>Nunc sit amet placerat dolor. Vestibulum dolor arcu, dapibus ut ipsum dapibus, vestibulum tempus ex. Curabitur vitae viverra velit. Ut vehicula nulla vitae lacus condimentum pulvinar. Vestibulum et dui libero. Donec diam mauris, porttitor quis vehicula vitae, auctor non lectus. Phasellus et nibh eu ante egestas iaculis ut id augue. Etiam tincidunt euismod mauris ac feugiat. Fusce mollis non dui at pharetra. Suspendisse vitae risus libero. Ut nec hendrerit nulla. Aenean consectetur congue lacus vitae tincidunt. Nam euismod convallis volutpat.&lt;/p>&#xd;&#xa;"
+                                textIsRich="true"/>
+                        </item_1674838142617>
                         <item_1674838154746
                             cq:panelTitle="Car2"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/container/v1/container"/>
+                            sling:resourceType="core/wcm/components/container/v1/container">
+                            <title
+                                jcr:lastModified="{Date}2023-01-30T09:29:57.937+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Slide 2"
+                                sling:resourceType="core/wcm/components/title/v3/title"/>
+                            <teaser_copy
+                                jcr:lastModified="{Date}2023-01-27T18:47:31.698+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="###"
+                                sling:resourceType="core/wcm/components/teaser/v2/teaser"
+                                altValueFromDAM="false"
+                                descriptionFromPage="false"
+                                fileReference="/content/dam/core-components/core-comp-test-image.jpg"
+                                imageFromPageImage="false"
+                                isDecorative="false"
+                                linkTarget="_self"
+                                textIsRich="true"
+                                titleFromPage="false"/>
+                        </item_1674838154746>
                         <item_1674838159886
                             cq:panelTitle="Car3"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/container/v1/container"/>
+                            sling:resourceType="core/wcm/components/container/v1/container">
+                            <title
+                                jcr:lastModified="{Date}2023-01-30T09:30:11.300+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Slide 3"
+                                sling:resourceType="core/wcm/components/title/v3/title"/>
+                            <list_copy
+                                jcr:lastModified="{Date}2023-01-27T18:48:42.017+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core/wcm/components/list/v3/list"
+                                childDepth="1"
+                                displayItemAsTeaser="false"
+                                linkItems="true"
+                                listFrom="children"
+                                parentPage="/content/core-components"
+                                showDescription="true"
+                                showModificationDate="false"
+                                sortOrder="asc"
+                                tagsMatch="any"/>
+                        </item_1674838159886>
                     </carousel>
                 </container>
                 <container_341412832
