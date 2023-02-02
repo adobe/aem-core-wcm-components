@@ -45,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
     adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class},
     resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class CarouselImpl extends PanelContainerImpl implements Carousel {
+public class CarouselImpl extends ActiveItemAwarePanelContainerImpl implements Carousel {
 
     /**
      * The resource type.

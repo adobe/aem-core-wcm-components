@@ -37,7 +37,7 @@
         <div data-sly-repeat.item="${carousel.items}"
              data-sly-resource="${item.name @ decorationTagName='div'}"
              id="${item.id}-tabpanel"
-             class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
+             class="cmp-carousel__item${item.name == carousel.activeItem ? ' cmp-carousel__item--active' : ''}"
              role="tabpanel"
              aria-labelledby="${item.id}-tab"
              aria-roledescription="slide"
@@ -51,7 +51,7 @@
             data-cmp-hook-carousel="indicators">
             <li data-sly-repeat.item="${carousel.items}"
                 id="${item.id}-tab"
-                class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"
+                class="cmp-carousel__indicator${item.name == carousel.activeItem ? ' cmp-carousel__indicator--active' : ''}"
                 role="tab"
                 aria-controls="${item.id}-tabpanel"
                 aria-label="${'Slide {0}' @ format=[itemList.count], i18n}"

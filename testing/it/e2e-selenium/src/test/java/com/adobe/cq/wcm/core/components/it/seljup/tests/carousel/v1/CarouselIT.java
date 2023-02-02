@@ -463,4 +463,48 @@ public class CarouselIT extends AuthorBaseUITest {
         assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
     }
 
+    /**
+     * Test: Default Active Item
+     *
+     * 1. create new items with titles
+     * 2. verify that 1st item is active in carousel by default
+     * 3. open the edit dialog
+     * 4. set 2nd item as active
+     * 5. save the edit dialog
+     * 6. verify that 2nd item is active in carousel
+     * 7. open the edit dialog
+     * 8. set 3rd item as active
+     * 9. save the edit dialog
+     * 10. verify that 3rd item is active in carousel
+     */
+    @Test
+    @DisplayName("Test: Default Active Item")
+    public void testDefaultActiveItem() throws InterruptedException {
+        createItems();
+        Commons.switchContext("ContentFrame");
+
+        // 1st item active by default when activeItem not specified
+        assertTrue(carousel.isItemActive(0));
+        assertTrue(carousel.isIndicatorActive(0));
+
+        Commons.switchToDefaultContext();
+        CarouselEditDialog editDialog = carousel.openEditDialog(cmpPath);
+        editDialog.openEditDialogProperties();
+        editDialog.setItemActive("item1");
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(carousel.isItemActive(1));
+        assertTrue(carousel.isIndicatorActive(1));
+
+        Commons.switchToDefaultContext();
+        carousel.openEditDialog(cmpPath);
+        editDialog.openEditDialogProperties();
+        editDialog.setItemActive("item2");
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(carousel.isItemActive(2));
+        assertTrue(carousel.isIndicatorActive(2));
+    }
 }
