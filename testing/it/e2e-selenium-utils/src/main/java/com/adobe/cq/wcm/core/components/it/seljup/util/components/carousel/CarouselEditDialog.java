@@ -23,7 +23,6 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.waitForElementAnimationFinished;
@@ -71,12 +70,11 @@ public class CarouselEditDialog extends Dialog {
 
     public void setItemActive(String item) {
         $(activeSelectButton).click();
-        ElementsCollection items = selectList().items();
-        int itemsSize = items.size();
-        for(int i = 0; i < items.size(); i++) {
-            if(items.get(i).find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).isDisplayed() &&
-                items.get(i).find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).getText().contains(item) || (items.get(i).getText().contains(item))) {
-                items.get(i).click();
+        for (SelenideElement selenideElement : selectList().items()) {
+            if (selenideElement.find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).isDisplayed() &&
+                selenideElement.find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).getText().contains(item) ||
+                selenideElement.getText().contains(item)) {
+                selenideElement.click();
                 break;
             }
         }

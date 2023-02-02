@@ -16,11 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.day.cq.wcm.api.components.ComponentManager;
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,21 +31,11 @@ import java.util.stream.StreamSupport;
  */
 public abstract class ActiveItemAwarePanelContainerImpl extends PanelContainerImpl {
     /**
-     * The current request.
-     */
-    @Self
-    SlingHttpServletRequest request;
-    /**
      * The active item property.
      */
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String activeItem;
-    /**
-     * The current resource.
-     */
-    @SlingObject
-    private Resource resource;
     /**
      * The name of the default active item.
      */
