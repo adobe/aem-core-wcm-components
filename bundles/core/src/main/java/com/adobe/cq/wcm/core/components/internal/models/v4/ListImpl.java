@@ -25,6 +25,7 @@ import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -48,24 +49,25 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v4/list";
 
+    @Override
     protected ListItem newPageListItem(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component) {
         return new PageListItemImpl(linkManager.get(page).build(), page, parentId, component, showDescription, linkItems || displayItemAsTeaser, resource);
     }
 
-    /**
-     * Initialize the model.
-     */
-    @PostConstruct
-    protected void initModel() {
-        super.initModel();
-        if (Source.STATIC.equals(getListType())) {
-            if (this.listItems == null) {
+    @Override
+    @NotNull
+    @JsonProperty("items")
+    public Collection<ListItem> getListItems() {
+        if (this.listItems == null) {
+            if (Source.STATIC.equals(getListType())) {
                 Resource staticNode = this.resource.getChild(NN_STATIC);
                 if (staticNode != null) {
                     this.listItems = getStaticListItems();
                 }
             }
         }
+
+        return super.getListItems();
     }
 
     private Collection<ListItem> getStaticListItems() {

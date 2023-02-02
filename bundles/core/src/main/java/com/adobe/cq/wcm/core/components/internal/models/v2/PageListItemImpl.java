@@ -121,16 +121,6 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                     if (showDescription) {
                         overriddenProperties.put(JcrConstants.JCR_DESCRIPTION, this.getDescription());
                     }
-                    if (linkItems) {
-                        overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
-                        Link<Page> itemLink = this.getLink();
-                        if (itemLink != null) {
-                            String target = itemLink.getHtmlAttributes().get(LinkImpl.ATTR_TARGET);
-                            if (StringUtils.isNotBlank(target)) {
-                                overriddenProperties.put(Link.PN_LINK_TARGET, target);
-                            }
-                        }
-                    }
                 } else {
                     // use the page content node and inherit properties from the page item
                     resourceToBeWrapped = page.getContentResource();
@@ -140,14 +130,14 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                     if (!showDescription) {
                         hiddenProperties.add(JcrConstants.JCR_DESCRIPTION);
                     }
-                    if (linkItems) {
-                        overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
-                        Link<Page> itemLink = this.getLink();
-                        if (itemLink != null) {
-                            String target = itemLink.getHtmlAttributes().get(LinkImpl.ATTR_TARGET);
-                            if (StringUtils.isNotBlank(target)) {
-                                overriddenProperties.put(Link.PN_LINK_TARGET, target);
-                            }
+                }
+                if (linkItems) {
+                    overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
+                    Link<Page> itemLink = this.getLink();
+                    if (itemLink != null) {
+                        String target = itemLink.getHtmlAttributes().get(LinkImpl.ATTR_TARGET);
+                        if (StringUtils.isNotBlank(target)) {
+                            overriddenProperties.put(Link.PN_LINK_TARGET, target);
                         }
                     }
                 }
