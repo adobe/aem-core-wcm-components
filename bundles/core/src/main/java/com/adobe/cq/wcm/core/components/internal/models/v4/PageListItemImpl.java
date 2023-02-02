@@ -41,12 +41,4 @@ class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getTitle() {
         return StringUtils.isNotBlank(linkText) ? linkText : super.getTitle();
     }
-
-    void setShowDescription(boolean showDescription) {
-        this.showDescription = showDescription;
-    }
-
-    void setLinkItems(boolean linkItems) {
-        this.linkItems = linkItems;
-    }
 }
