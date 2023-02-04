@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 import java.util.*;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.jcr.Session;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +28,7 @@ import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
@@ -76,7 +76,7 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
 
-    @Inject
+    @OSGiService
     private ContentTypeConverter contentTypeConverter;
 
     @SlingObject

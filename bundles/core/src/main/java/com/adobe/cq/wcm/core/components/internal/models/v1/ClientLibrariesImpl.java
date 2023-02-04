@@ -48,6 +48,7 @@ import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,11 +82,11 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Named(OPTION_RESOURCE_TYPES)
     Object resourceTypes;
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_FILTER_REGEX)
     String filterRegex;
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_INHERITED)
     @Default(booleanValues = OPTION_INHERITED_DEFAULT)
     boolean inherited;
@@ -94,27 +95,27 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Named(OPTION_CATEGORIES)
     private Object categories;
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_ASYNC)
     @Nullable
     private boolean async;
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_DEFER)
     @Nullable
     private boolean defer;
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_CROSSORIGIN)
     @Nullable
     private String crossorigin;
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_ONLOAD)
     @Nullable
     private String onload;
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_MEDIA)
     @Nullable
     private String media;

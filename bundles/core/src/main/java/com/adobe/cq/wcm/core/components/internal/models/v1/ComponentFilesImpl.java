@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -35,6 +34,7 @@ import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ComponentFiles;
@@ -56,15 +56,15 @@ public class ComponentFilesImpl implements ComponentFiles {
      */
     public static final String COMPONENTS_SERVICE = "components-service";
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_RESOURCE_TYPES)
     Object resourceTypes;
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_FILTER_REGEX)
     String filterRegex;
 
-    @Inject
+    @ValueMapValue
     @Named(OPTION_INHERITED)
     @Default(booleanValues = OPTION_INHERITED_DEFAULT)
     boolean inherited;
