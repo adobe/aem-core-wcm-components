@@ -139,10 +139,11 @@ public class PageImpl extends AbstractComponentImpl implements Page {
             String designPath = currentDesign.getPath();
             if (!Designer.DEFAULT_DESIGN_PATH.equals(designPath)) {
                 this.designPath = designPath;
-                if (resolver.getResource(designPath + "/static.css") != null) {
+                final Resource designResource = resolver.getResource(designPath);
+                if (designResource != null && designResource.getChild("static.css") != null) {
                     staticDesignPath = designPath + "/static.css";
                 }
-                loadFavicons(designPath);
+                loadFavicons(designResource);
             }
         }
         populateClientlibCategories();
@@ -290,21 +291,20 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         return itemWrappers;
     }
 
-    protected void loadFavicons(String designPath) {
-        favicons.put(PN_FAVICON_ICO, getFaviconPath(designPath, FN_FAVICON_ICO));
-        favicons.put(PN_FAVICON_PNG, getFaviconPath(designPath, FN_FAVICON_PNG));
-        favicons.put(PN_TOUCH_ICON_120, getFaviconPath(designPath, FN_TOUCH_ICON_120));
-        favicons.put(PN_TOUCH_ICON_152, getFaviconPath(designPath, FN_TOUCH_ICON_152));
-        favicons.put(PN_TOUCH_ICON_60, getFaviconPath(designPath, FN_TOUCH_ICON_60));
-        favicons.put(PN_TOUCH_ICON_76, getFaviconPath(designPath, FN_TOUCH_ICON_76));
+    protected void loadFavicons(@NotNull Resource designResource) {
+        favicons.put(PN_FAVICON_ICO, getFaviconPath(designResource, FN_FAVICON_ICO));
+        favicons.put(PN_FAVICON_PNG, getFaviconPath(designResource, FN_FAVICON_PNG));
+        favicons.put(PN_TOUCH_ICON_120, getFaviconPath(designResource, FN_TOUCH_ICON_120));
+        favicons.put(PN_TOUCH_ICON_152, getFaviconPath(designResource, FN_TOUCH_ICON_152));
+        favicons.put(PN_TOUCH_ICON_60, getFaviconPath(designResource, FN_TOUCH_ICON_60));
+        favicons.put(PN_TOUCH_ICON_76, getFaviconPath(designResource, FN_TOUCH_ICON_76));
     }
 
-    protected String getFaviconPath(String designPath, String faviconName) {
-        String path = designPath + "/" + faviconName;
-        if (resolver.getResource(path) == null) {
-            return null;
-        }
-        return path;
+    protected String getFaviconPath(@NotNull Resource designResource, String faviconName) {
+    	if (designResource.getChild(faviconName) != null) {
+    		return designResource.getPath() + "/" + faviconName;
+    	}
+    	return null;
     }
 
     protected void populateClientlibCategories() {
