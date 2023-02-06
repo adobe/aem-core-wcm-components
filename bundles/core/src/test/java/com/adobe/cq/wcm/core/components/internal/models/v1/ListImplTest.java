@@ -48,7 +48,7 @@ public class ListImplTest {
     private static final String CURRENT_PAGE = "/content/list";
     protected static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
-    private static final String TEST_PAGE_CONTENT_ROOT = CURRENT_PAGE + "/jcr:content/root";
+    protected static final String TEST_PAGE_CONTENT_ROOT = CURRENT_PAGE + "/jcr:content/root";
     protected static final String LIST_1 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
     protected static final String LIST_2 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
     protected static final String LIST_3 = TEST_PAGE_CONTENT_ROOT + "/childrenListType";
