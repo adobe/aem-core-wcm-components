@@ -16,9 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 
-import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
+
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
 
 /**
  * An individual item found within a {@link com.adobe.cq.wcm.core.components.models.Container}.
@@ -45,6 +46,5 @@ public final class ContainerItemImpl implements ContainerItem {
     public Resource getResource() {
         return this.resource;
     }
-
 
 }

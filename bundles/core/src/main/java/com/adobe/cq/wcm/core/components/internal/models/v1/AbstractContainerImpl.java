@@ -21,12 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -37,11 +33,14 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

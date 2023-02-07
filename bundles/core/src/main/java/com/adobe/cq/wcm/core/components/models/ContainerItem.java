@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -34,10 +35,22 @@ public interface ContainerItem {
      * Gets the resource for this container item.
      *
      * @return The resource for this container item.
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
      */
     @Nullable
     @JsonIgnore
     default Resource getResource() {
         return null;
+    }
+
+    /**
+     * Gets the name of this container item.
+     *
+     * @return The name of this container item.
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
+    @NotNull
+    default String getName() {
+        return "";
     }
 }

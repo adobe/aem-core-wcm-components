@@ -30,11 +30,12 @@
      data-cmp-data-layer="${carousel.data.json}"
      data-placeholder-text="${wcmmode.edit && 'Please add Carousel components here' @ i18n}">
     <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${carousel.controlsPrepended}"></sly>
-    <div data-sly-test="${carousel.children && carousel.children.size > 0}"
+    <div data-sly-set.items="${carousel.children || carousel.items}"
+         data-sly-test="${items && items.size > 0}"
          class="cmp-carousel__content"
          aria-atomic="false"
          aria-live="${carousel.autoplay ? 'off' : 'polite'}">
-        <div data-sly-repeat.item="${carousel.children}"
+        <div data-sly-repeat.item="${items}"
              data-sly-resource="${item.resource @ decorationTagName='div'}"
              id="${item.id}"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
@@ -49,14 +50,15 @@
             role="tablist"
             aria-label="${carousel.accessibilityTablist || 'Choose a slide to display' @ i18n}"
             data-cmp-hook-carousel="indicators">
-            <li data-sly-repeat.item="${carousel.children}"
+            <li data-sly-repeat.item="${items}"
+                id="${item.id}-tab"
                 class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"
                 role="tab"
-                aria-controls="${carousel.id}-tabpanel"
+                aria-controls="${item.id}-tabpanel"
                 aria-label="${'Slide {0}' @ format=[itemList.count], i18n}"
                 data-cmp-hook-carousel="indicator">${item.title}</li>
         </ol>
     </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
-         data-sly-test="${(wcmmode.edit || wcmmode.preview) && carousel.children.size < 1}"></sly>
+         data-sly-test="${(wcmmode.edit || wcmmode.preview) && items.size < 1}"></sly>
 </div>

@@ -22,9 +22,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.wcm.core.components.models.ContainerItem;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -32,7 +29,10 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 
 /**
  * Layout container model implementation.

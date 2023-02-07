@@ -15,21 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
-import com.adobe.cq.wcm.core.components.models.Component;
-import com.adobe.cq.wcm.core.components.models.Container;
-import com.adobe.cq.wcm.core.components.models.PanelContainerItem;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
-import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.api.Page;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import java.util.AbstractMap;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Optional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -37,11 +28,18 @@ import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.AbstractMap;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Optional;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.models.Component;
+import com.adobe.cq.wcm.core.components.models.PanelContainerItem;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.day.cq.commons.jcr.JcrConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
  * An individual panel found within a {@link com.adobe.cq.wcm.core.components.models.PanelContainer}.
@@ -92,6 +90,12 @@ public final class PanelContainerItemImpl implements PanelContainerItem {
     @NotNull
     public Resource getResource() {
         return this.resource;
+    }
+
+    @Override
+    @NotNull
+    public String getName() {
+        return resource.getName();
     }
 
     @Override

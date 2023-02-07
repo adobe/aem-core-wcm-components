@@ -53,7 +53,7 @@ public class AbstractPanelTest {
         assertEquals(expectedItems.length, items.size(), "The tabs contains a different number of items than expected.");
         int index = 0;
         for (PanelContainerItem item : items) {
-            assertEquals(expectedItems[index][0], item.getResource().getName(), "The panel item's name is not what was expected.");
+            assertEquals(expectedItems[index][0], item.getName(), "The panel item's name is not what was expected.");
             assertEquals(expectedItems[index][1], item.getTitle(), "The panel item's title is not what was expected: " + item.getTitle());
             assertEquals(expectedItems[index][2], item.getId(), "The panel item's id is not what was expected: " + item.getId());
             assertEquals(expectedItems[index][3], item.getResource().getPath(), "The panel item's path is not what was expected: " + item.getResource().getPath());
