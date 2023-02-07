@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.list.v1;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.ListEditDialog;
 import com.codeborne.selenide.ElementsCollection;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -45,6 +44,10 @@ public class List extends BaseComponent {
 
     public boolean isPagePresentInList(String page) {
         return isPagePresentWithText(page);
+    }
+
+    public boolean isPresentInList(String text) {
+        return isPagePresentWithText(text);
     }
 
     public boolean isPagePresentInListAtPosition(int idx, String page) {

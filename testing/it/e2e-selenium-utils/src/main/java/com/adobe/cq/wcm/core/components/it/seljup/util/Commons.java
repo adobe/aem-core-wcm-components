@@ -105,6 +105,8 @@ public class Commons {
     public static final String RT_LIST_V1 = "core-component/components/list-v1";
     public static final String RT_LIST_V2 = "core-component/components/list-v2";
     public static final String RT_LIST_V3 = "core-component/components/list-v3";
+
+    public static final String RT_LIST_V4 = "core-component/components/list-v4";
     // image component
     public static final String RT_IMAGE_V1 = "core-component/components/image-v1";
     public static final String CLIENTLIBS_IMAGE_V1 = "core.wcm.components.image.v1";
