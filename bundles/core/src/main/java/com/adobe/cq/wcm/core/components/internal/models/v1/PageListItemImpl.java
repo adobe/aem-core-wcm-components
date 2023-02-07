@@ -45,7 +45,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * The link for this list item.
      */
-    protected Link link;
+    protected Link<Page> link;
 
     /**
      * Construct a list item for a given page.
@@ -59,9 +59,24 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
                             @NotNull final Page page,
                             final String parentId,
                             final Component component) {
+        this(linkManager.get(page).build(), page, parentId, component);
+    }
+
+    /**
+     * Construct a list item for a given page.
+     *
+     * @param link The link.
+     * @param page The current page.
+     * @param parentId The ID of the list containing this item.
+     * @param component The component containing this list item.
+     */
+    public PageListItemImpl(@NotNull final Link link,
+                            @NotNull final Page page,
+                            final String parentId,
+                            final Component component) {
         super(parentId, page.getContentResource(), component);
         this.parentId = parentId;
-        this.link = linkManager.get(page).build();
+        this.link = link;
         if (this.link.isValid() && (link.getReference() instanceof Page)) {
             this.page = (Page) link.getReference();
         } else {

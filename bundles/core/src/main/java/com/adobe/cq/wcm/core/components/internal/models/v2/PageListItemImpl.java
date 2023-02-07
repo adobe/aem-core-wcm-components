@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -54,8 +55,8 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     private final Component component;
     private Resource listResource;
     private Resource teaserResource;
-    private boolean showDescription;
-    private boolean linkItems;
+    protected boolean showDescription;
+    protected boolean linkItems;
 
     /**
      * List of properties that should be inherited when delegating to the featured image of the page.
@@ -71,6 +72,15 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
     public PageListItemImpl(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component,
                             boolean showDescription, boolean linkItems, Resource resource) {
         super(linkManager, page, parentId, component);
+        this.component = component;
+        this.showDescription = showDescription;
+        this.linkItems = linkItems;
+        this.listResource = resource;
+    }
+
+    public PageListItemImpl(@NotNull Link link, @NotNull Page page, String parentId, Component component,
+                            boolean showDescription, boolean linkItems, Resource resource) {
+        super(link, page, parentId, component);
         this.component = component;
         this.showDescription = showDescription;
         this.linkItems = linkItems;
@@ -111,9 +121,6 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                     if (showDescription) {
                         overriddenProperties.put(JcrConstants.JCR_DESCRIPTION, this.getDescription());
                     }
-                    if (linkItems) {
-                        overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
-                    }
                 } else {
                     // use the page content node and inherit properties from the page item
                     resourceToBeWrapped = page.getContentResource();
@@ -123,8 +130,15 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
                     if (!showDescription) {
                         hiddenProperties.add(JcrConstants.JCR_DESCRIPTION);
                     }
-                    if (linkItems) {
-                        overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
+                }
+                if (linkItems) {
+                    overriddenProperties.put(ImageResource.PN_LINK_URL, this.getPath());
+                    Link<Page> itemLink = this.getLink();
+                    if (itemLink != null) {
+                        String target = itemLink.getHtmlAttributes().get(LinkImpl.ATTR_TARGET);
+                        if (StringUtils.isNotBlank(target)) {
+                            overriddenProperties.put(Link.PN_LINK_TARGET, target);
+                        }
                     }
                 }
                 teaserResource = new CoreResourceWrapper(listResource, delegateResourceType, hiddenProperties, overriddenProperties);

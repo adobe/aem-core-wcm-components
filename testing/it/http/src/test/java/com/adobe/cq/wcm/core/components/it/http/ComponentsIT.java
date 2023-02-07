@@ -122,6 +122,30 @@ public class ComponentsIT {
             .select(".pdfviewer.pdfviewer-v1", 1).expect("pdfviewer-v1-defaults.html");
     }
 
+    @Test
+    public void testList() throws ClientException, IOException {
+        String content = adminAuthor.doGet("/content/core-components/list.html", 200).getContent();
+        Document document = parse(content);
+
+        new ComponentTest(document)
+            .select(".list.list-v4", 0).expect("list-v4-static-pages.html")
+            .select(".list.list-v4", 1).expect("list-v4-static-pages-linked.html")
+            .select(".list.list-v4", 2).expect("list-v4-static-pages-and-links.html")
+            .select(".list.list-v4", 3).expect("list-v4-static-pages-linked-description-modified.html")
+            .select(".list.list-v4", 4).expect("list-v4-static-pages-linked-description-modifieddate-teaser.html")
+            .select(".list.list-v4", 5).expect("list-v4-static-pages-empty.html");
+    }
+
+    @Test
+    public void testSeparator() throws ClientException, IOException {
+        String content = adminAuthor.doGet("/content/core-components/separator.html", 200).getContent();
+        Document document = parse(content);
+
+        new ComponentTest(document)
+            .select(".separator.separator-v1", 0).expect("separator-v1-defaults.html")
+            .select(".separator.separator-v1", 1).expect("separator-v1-decorative.html");
+    }
+
     private class ComponentTest {
 
         private Document actualDocument;

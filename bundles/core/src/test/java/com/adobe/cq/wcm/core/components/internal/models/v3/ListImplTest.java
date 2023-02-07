@@ -85,5 +85,4 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
 
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_20));
     }
-
 }
