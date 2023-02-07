@@ -134,6 +134,8 @@ public class ComponentsIT {
             .select(".carousel.carousel-v1", 3).expect("carousel-v1-autoplay-defaults.html")
             .select(".carousel.carousel-v1", 4).expect("carousel-v1-autoplay.html")
             .select(".carousel.carousel-v1", 5).expect("carousel-v1-accessibility.html");
+    }
+
     @Test
     public void testList() throws ClientException, IOException {
         String content = adminAuthor.doGet("/content/core-components/list.html", 200).getContent();
