@@ -125,7 +125,7 @@
             that._paused = false;
 
             if (that._elements.item) {
-                refreshActive();
+                initializeActive();
                 bindEvents();
                 resetAutoplayInterval();
                 refreshPlayPauseActions();
@@ -455,6 +455,21 @@
         function refreshPlayPauseActions() {
             setActionDisabled(that._elements["pause"], that._paused);
             setActionDisabled(that._elements["play"], !that._paused);
+        }
+
+        /**
+         * Initialize {@code Carousel#_active} based on the active item of the carousel.
+         */
+        function initializeActive() {
+            var items = that._elements["item"];
+            if (items && Array.isArray(items)) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].classList.contains("cmp-carousel__item--active")) {
+                        that._active = i;
+                        break;
+                    }
+                }
+            }
         }
 
         /**
