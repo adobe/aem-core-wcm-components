@@ -63,7 +63,8 @@
                 <list_v4_static_pages_and_links
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-component/components/list-v4"
-                    listFrom="static">
+                    listFrom="static"
+                    linkItems="true">
                     <static
                         jcr:primaryType="nt:unstructured">
                         <item0
