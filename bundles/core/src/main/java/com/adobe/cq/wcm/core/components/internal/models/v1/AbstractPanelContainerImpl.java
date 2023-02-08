@@ -19,15 +19,23 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import com.adobe.cq.wcm.core.components.models.PanelContainer;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.wcm.api.components.ComponentManager;
 
 
 /**
@@ -39,6 +47,18 @@ public abstract class AbstractPanelContainerImpl extends AbstractContainerImpl i
      * The resource type.
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/panelcontainer/v1/panelcontainer";
+
+    /**
+     * The active item property.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private String activeItem;
+
+    /**
+     * The name of the default active item.
+     */
+    private String activeItemName;
 
     /**
      * Map of the child items to be exported wherein the key is the child name, and the value is the child model.
@@ -68,6 +88,25 @@ public abstract class AbstractPanelContainerImpl extends AbstractContainerImpl i
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
         }
         return this.panelItems;
+    }
+
+
+
+    public String getActiveItem() {
+        if (activeItemName == null) {
+            this.activeItemName = Optional.ofNullable(this.activeItem)
+                    .map(resource::getChild)
+                    .map(Resource::getName)
+                    .orElseGet(() ->
+                            Optional.ofNullable(request.getResourceResolver().adaptTo(ComponentManager.class))
+                                    .flatMap(componentManager -> StreamSupport.stream(resource.getChildren().spliterator(), false)
+                                            .filter(Objects::nonNull)
+                                            .filter(res -> Objects.nonNull(componentManager.getComponentOfResource(res)))
+                                            .findFirst()
+                                            .map(Resource::getName))
+                                    .orElse(null));
+        }
+        return activeItemName;
     }
 
     @NotNull

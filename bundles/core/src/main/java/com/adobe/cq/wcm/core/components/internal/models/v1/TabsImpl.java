@@ -15,12 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Optional;
-
-import com.adobe.cq.wcm.core.components.models.PanelContainerItem;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -36,10 +32,10 @@ import com.adobe.cq.wcm.core.components.models.Tabs;
  * Tabs model implementation.
  */
 @Model(adaptables = SlingHttpServletRequest.class,
-    adapters = {Tabs.class, ComponentExporter.class, ContainerExporter.class},
-    resourceType = TabsImpl.RESOURCE_TYPE)
+       adapters = {Tabs.class, ComponentExporter.class, ContainerExporter.class},
+       resourceType = TabsImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
-    extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TabsImpl extends AbstractPanelContainerImpl implements Tabs {
 
     /**
@@ -48,38 +44,11 @@ public class TabsImpl extends AbstractPanelContainerImpl implements Tabs {
     public final static String RESOURCE_TYPE = "core/wcm/components/tabs/v1/tabs";
 
     /**
-     * The current active tab.
-     */
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private String activeItem;
-
-    /**
      * The accessibility label.
      */
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String accessibilityLabel;
-
-    /**
-     * The name of the active item.
-     */
-    private String activeItemName;
-
-    @Override
-    public String getActiveItem() {
-        if (this.activeItemName == null) {
-            this.activeItemName = Optional.ofNullable(this.activeItem)
-                .map(resource::getChild)
-                .map(Resource::getName)
-                .orElseGet(() -> this.getChildren().stream()
-                    .findFirst()
-                    .map(PanelContainerItem::getResource)
-                    .map(Resource::getName)
-                    .orElse(null));
-        }
-        return this.activeItemName;
-    }
 
     @Override
     @Nullable
@@ -91,10 +60,10 @@ public class TabsImpl extends AbstractPanelContainerImpl implements Tabs {
     public String[] getDataLayerShownItems() {
         String activeItemName = getActiveItem();
         return this.getChildren().stream()
-            .filter(e -> StringUtils.equals(e.getResource().getName(), activeItemName))
-            .findFirst()
-            .map(PanelContainerItemImpl::getId)
-            .map(id -> new String[]{id})
-            .orElseGet(() -> new String[0]);
+                .filter(e -> StringUtils.equals(e.getResource().getName(), activeItemName))
+                .findFirst()
+                .map(PanelContainerItemImpl::getId)
+                .map(id -> new String[]{id})
+                .orElseGet(() -> new String[0]);
     }
 }

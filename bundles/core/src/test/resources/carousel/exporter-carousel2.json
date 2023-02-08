@@ -1,0 +1,79 @@
+{
+    "id": "carousel-c874ed4ee1",
+    "activeItem": "item_3",
+    "accessibilityAutoItemTitles": false,
+    "autoplay": false,
+    "delay": 5000,
+    "autopauseDisabled": false,
+    "controlsPrepended": false,
+    ":itemsOrder": [
+        "item_1",
+        "item_2",
+        "item_3"
+    ],
+    ":items": {
+        "item_1": {
+            "id": "teaser-6ce625e432",
+            "title": "Teaser 1",
+            "description": "Teaser 1 description",
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "dataLayer": {
+                "teaser-6ce625e432": {
+                    "@type": "core/wcm/components/teaser/v1/teaser",
+                    "dc:title": "Teaser 1",
+                    "dc:description": "Teaser 1 description"
+                }
+            },
+            "cq:panelTitle": "Teaser 1"
+        },
+        "item_2": {
+            "id": "teaser-28a95805af",
+            "title": "Teaser 2",
+            "description": "Teaser 2 description",
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "dataLayer": {
+                "teaser-28a95805af": {
+                    "@type": "core/wcm/components/teaser/v1/teaser",
+                    "dc:title": "Teaser 2",
+                    "dc:description": "Teaser 2 description"
+                }
+            },
+            "cq:panelTitle": "Teaser 2"
+        },
+        "item_3": {
+            "id": "teaser-b1d404810b",
+            "title": "Teaser 3",
+            "description": "Teaser 3 description",
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "dataLayer": {
+                "teaser-b1d404810b": {
+                    "@type": "core/wcm/components/teaser/v1/teaser",
+                    "dc:title": "Teaser 3",
+                    "dc:description": "Teaser 3 description"
+                }
+            },
+            "cq:panelTitle": "Carousel Panel 3"
+        }
+    },
+    "dataLayer": {
+        "carousel-c874ed4ee1": {
+            "shownItems": [
+                "carousel-c874ed4ee1-item-6ce625e432"
+            ],
+            "@type": "core/wcm/components/carousel/v1/carousel"
+        }
+    },
+    ":type": "core/wcm/components/carousel/v1/carousel"
+}

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -35,6 +36,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Heading;
 import com.adobe.cq.wcm.core.components.models.Accordion;
 import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * V1 Accordion model implementation.
@@ -139,5 +141,14 @@ public class AccordionImpl extends AbstractPanelContainerImpl implements Accordi
                 .toArray(String[]::new);
         }
         return Arrays.copyOf(expandedItemIds, expandedItemIds.length);
+    }
+
+    /**
+     * @return always empty as the accordion uses the expanded items
+     */
+    @Override
+    @JsonIgnore
+    public String getActiveItem() {
+        return StringUtils.EMPTY;
     }
 }
