@@ -23,7 +23,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @since com.adobe.cq.wcm.core.components.models 12.5.0
  */
 @ConsumerType
-public interface Carousel extends Container {
+public interface Carousel extends PanelContainer {
 
     /**
      * Name of the resource property that indicates whether to automatically transition between slides, or not.

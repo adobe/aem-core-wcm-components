@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
@@ -28,9 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 
 /**
  * Tabs model implementation.
@@ -40,7 +36,7 @@ import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
        resourceType = TabsImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TabsImpl extends ActiveItemAwarePanelContainerImpl implements Tabs {
+public class TabsImpl extends AbstractPanelContainerImpl implements Tabs {
 
     /**
      * The resource type.
@@ -57,22 +53,17 @@ public class TabsImpl extends ActiveItemAwarePanelContainerImpl implements Tabs 
     @Override
     @Nullable
     public String getAccessibilityLabel() {
-        return accessibilityLabel;
+        return this.accessibilityLabel;
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
     @Override
     public String[] getDataLayerShownItems() {
         String activeItemName = getActiveItem();
-        List<ListItem> items = getItems();
-        return items.stream()
-            .filter(e -> StringUtils.equals(e.getName(), activeItemName))
-            .findFirst()
-            .map(ListItem::getData)
-            .map(ComponentData::getId)
-            .map(item -> new String[]{item})
-            .orElseGet(() -> new String[0]);
+        return this.getChildren().stream()
+                .filter(e -> StringUtils.equals(e.getResource().getName(), activeItemName))
+                .findFirst()
+                .map(PanelContainerItemImpl::getId)
+                .map(id -> new String[]{id})
+                .orElseGet(() -> new String[0]);
     }
 }
