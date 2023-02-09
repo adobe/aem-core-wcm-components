@@ -25,8 +25,10 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import com.adobe.cq.wcm.core.components.models.PanelContainer;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
@@ -125,5 +127,17 @@ public abstract class AbstractPanelContainerImpl extends AbstractContainerImpl i
                         LinkedHashMap::new));
         }
         return this.itemModels;
+    }
+
+    @Override
+    public String[] getDataLayerShownItems() {
+        String activeItemName = getActiveItem();
+        return this.getChildren().stream()
+                .filter(e -> StringUtils.equals(e.getName(), activeItemName))
+                .findFirst()
+                .map(PanelContainerItemImpl::getData)
+                .map(ComponentData::getId)
+                .map(id -> new String[]{id})
+                .orElseGet(() -> new String[0]);
     }
 }

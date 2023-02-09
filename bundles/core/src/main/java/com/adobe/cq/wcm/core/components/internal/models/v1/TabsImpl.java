@@ -55,15 +55,4 @@ public class TabsImpl extends AbstractPanelContainerImpl implements Tabs {
     public String getAccessibilityLabel() {
         return this.accessibilityLabel;
     }
-
-    @Override
-    public String[] getDataLayerShownItems() {
-        String activeItemName = getActiveItem();
-        return this.getChildren().stream()
-                .filter(e -> StringUtils.equals(e.getResource().getName(), activeItemName))
-                .findFirst()
-                .map(PanelContainerItemImpl::getId)
-                .map(id -> new String[]{id})
-                .orElseGet(() -> new String[0]);
-    }
 }

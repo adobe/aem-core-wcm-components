@@ -213,12 +213,4 @@ public class CarouselImpl extends AbstractPanelContainerImpl implements Carousel
     public boolean isControlsPrepended() {
         return controlsPrepended;
     }
-
-    @Override
-    public String[] getDataLayerShownItems() {
-        return this.getChildren().stream().findFirst()
-                .map(PanelContainerItemImpl::getId)
-                .map(id -> new String[]{id})
-                .orElse(null);
-    }
 }
