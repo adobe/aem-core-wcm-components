@@ -39,19 +39,19 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractPanelContainerImpl;
 
 
 /**
- * This {@link SlingPostProcessor} is invoked in the Sling post operation chain and accept updates for a {@link PanelContainerImpl} based
- * resource type.
+ * This {@link SlingPostProcessor} is invoked in the Sling post operation chain and accept updates for a {@link AbstractPanelContainerImpl}
+ * based resource type.
  * It handles the removal and ordering of panel container items.
  */
 @Component(service = {SlingPostProcessor.class, Servlet.class},
            property = {
                    Constants.SERVICE_RANKING + ":Integer=" + Integer.MAX_VALUE,
                    "sling.servlet.methods=" + HttpConstants.METHOD_POST,
-                   "sling.servlet.resourceTypes=" + PanelContainerImpl.RESOURCE_TYPE,
+                   "sling.servlet.resourceTypes=" + AbstractPanelContainerImpl.RESOURCE_TYPE,
                    "sling.servlet.selectors=" + ContainerPostProcessor.SELECTOR,
                    "sling.servlet.extensions=" + ContainerPostProcessor.EXTENSION
            })
@@ -154,6 +154,6 @@ public class ContainerPostProcessor extends SlingAllMethodsServlet implements Sl
     }
 
     private boolean accepts(SlingHttpServletRequest request, ResourceResolver resolver) {
-        return resolver.isResourceType(request.getResource(), PanelContainerImpl.RESOURCE_TYPE);
+        return resolver.isResourceType(request.getResource(), AbstractPanelContainerImpl.RESOURCE_TYPE);
     }
 }

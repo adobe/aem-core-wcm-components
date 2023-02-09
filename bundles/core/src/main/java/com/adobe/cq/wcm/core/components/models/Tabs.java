@@ -23,7 +23,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @since com.adobe.cq.wcm.core.components.models 12.5.0
  */
 @ConsumerType
-public interface Tabs extends Container {
+public interface Tabs extends PanelContainer {
 
     /**
      * Returns the default active item

@@ -367,6 +367,7 @@ public class TabsIT extends AuthorBaseUITest {
         assertTrue(Commons.isPanelSelectPresent(), "Panel Select button should be present");
         // open the panel selector and verify it's open
         Commons.openPanelSelect();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         PanelSelector panelSelector = new PanelSelector();
         assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
 

@@ -42,12 +42,12 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v2/list";
 
     @Self
-    private LinkManager linkManager;
+    protected LinkManager linkManager;
 
     /**
      * Result list.
      */
-    private Collection<ListItem> listItems;
+    protected Collection<ListItem> listItems;
 
     @Override
     @NotNull

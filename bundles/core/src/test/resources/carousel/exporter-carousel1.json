@@ -1,5 +1,6 @@
 {
     "id": "carousel-c39ba25916",
+    "activeItem":"item_1",
     "autoplay": true,
     "delay": 7000,
     "autopauseDisabled": true,

@@ -153,7 +153,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
      * The current page.
      */
     @ScriptVariable
-    private Page currentPage;
+    protected Page currentPage;
 
     /**
      * Date format string.
@@ -168,7 +168,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
     /**
      * Flag indicating if modification date should be shown.
      */
-    private boolean showModificationDate;
+    protected boolean showModificationDate;
 
     /**
      * Flag indicating if items should be linked.
@@ -239,7 +239,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
      * @return The list type.
      */
     @NotNull
-    private Source getListType() {
+    protected Source getListType() {
         // Note: this can be done a lot cleaner in JDK 11.
         return Optional.ofNullable(
             // get the source from the properties
@@ -469,7 +469,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
     /**
      * Sort orders.
      */
-    private enum SortOrder {
+    protected enum SortOrder {
         /**
          * Ascending.
          */
@@ -480,7 +480,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
          */
         DESC("desc");
 
-        private final String value;
+        public final String value;
 
         SortOrder(String value) {
             this.value = value;
@@ -506,7 +506,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
     /**
      * Order by options.
      */
-    private enum OrderBy {
+    protected enum OrderBy {
         /**
          * Order by page title.
          */

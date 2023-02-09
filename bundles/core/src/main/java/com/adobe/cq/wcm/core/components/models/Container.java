@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -27,7 +28,11 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 
 /**
- * A base interface to be extended by containers such as the {@link Carousel}, {@link Tabs} and {@link Accordion} models.
+ * A base interface to be extended by all containers.
+ *
+ * A container is a component that provides access to child resources.
+ * If the container contains panels, such as the {@link Carousel}, {@link Tabs} and {@link Accordion} models, then
+ * the {@link PanelContainer} class should be used instead.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.5.0
  */
@@ -74,9 +79,24 @@ public interface Container extends Component, ContainerExporter {
      *
      * @return List of container items
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @deprecated since 12.17.0 - use {@link #getChildren()}
      */
     @NotNull
+    @Deprecated
+    @JsonIgnore
     default List<ListItem> getItems() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * Returns a list of container items.
+     *
+     * @return List of container items.
+     * @since com.adobe.cq.wcm.core.components.models 12.17.0
+     */
+    @NotNull
+    @JsonIgnore
+    default List<? extends ContainerItem> getChildren() {
         return Collections.emptyList();
     }
 

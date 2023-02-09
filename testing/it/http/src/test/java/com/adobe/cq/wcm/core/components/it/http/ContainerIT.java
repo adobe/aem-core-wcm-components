@@ -41,16 +41,12 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
 import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
-import com.adobe.cq.testing.junit.rules.CQRule;
+import com.adobe.cq.testing.junit.rules.CQAuthorClassRule;
 
 public class ContainerIT {
 
     @ClassRule
-    public static final CQAuthorPublishClassRule cqBaseClassRule = new CQAuthorPublishClassRule();
-
-    @Rule
-    public CQRule cqBaseRule = new CQRule(cqBaseClassRule.authorRule, cqBaseClassRule.publishRule);
+    public static final CQAuthorClassRule cqBaseClassRule = new CQAuthorClassRule();
 
     @Rule
     public ErrorCollector collector = new ErrorCollector();
@@ -62,7 +58,6 @@ public class ContainerIT {
     @BeforeClass
     public static void beforeClass() {
         adminAuthor = cqBaseClassRule.authorRule.getAdminClient(CQClient.class);
-        adminPublish = cqBaseClassRule.publishRule.getAdminClient(CQClient.class);
     }
 
     @Test
