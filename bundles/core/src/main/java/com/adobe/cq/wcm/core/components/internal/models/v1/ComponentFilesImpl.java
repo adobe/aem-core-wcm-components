@@ -34,6 +34,7 @@ import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
@@ -56,16 +57,13 @@ public class ComponentFilesImpl implements ComponentFiles {
      */
     public static final String COMPONENTS_SERVICE = "components-service";
 
-    @ValueMapValue
-    @Named(OPTION_RESOURCE_TYPES)
+    @ScriptVariable(name=OPTION_RESOURCE_TYPES)
     Object resourceTypes;
 
-    @ValueMapValue
-    @Named(OPTION_FILTER_REGEX)
+    @ScriptVariable(name=OPTION_FILTER_REGEX)
     String filterRegex;
 
-    @ValueMapValue
-    @Named(OPTION_INHERITED)
+    @ScriptVariable(name=OPTION_INHERITED)
     @Default(booleanValues = OPTION_INHERITED_DEFAULT)
     boolean inherited;
 
