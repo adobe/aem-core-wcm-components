@@ -47,6 +47,7 @@ import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
@@ -78,45 +79,36 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Self
     private SlingHttpServletRequest request;
 
-    @Inject
-    @Named(OPTION_RESOURCE_TYPES)
+    @ScriptVariable(name=OPTION_RESOURCE_TYPES)
     Object resourceTypes;
 
-    @ValueMapValue
-    @Named(OPTION_FILTER_REGEX)
+    @ScriptVariable(name=OPTION_FILTER_REGEX)
     String filterRegex;
 
-    @ValueMapValue
-    @Named(OPTION_INHERITED)
+    @ScriptVariable(name=OPTION_INHERITED)
     @Default(booleanValues = OPTION_INHERITED_DEFAULT)
     boolean inherited;
 
-    @Inject
-    @Named(OPTION_CATEGORIES)
+    @ScriptVariable(name=OPTION_CATEGORIES)
     private Object categories;
 
-    @ValueMapValue
-    @Named(OPTION_ASYNC)
+    @ScriptVariable(name=OPTION_ASYNC)
     @Nullable
     private boolean async;
 
-    @ValueMapValue
-    @Named(OPTION_DEFER)
+    @ScriptVariable(name=OPTION_DEFER)
     @Nullable
     private boolean defer;
 
-    @ValueMapValue
-    @Named(OPTION_CROSSORIGIN)
+    @ScriptVariable(name=OPTION_CROSSORIGIN)
     @Nullable
     private String crossorigin;
 
-    @ValueMapValue
-    @Named(OPTION_ONLOAD)
+    @ScriptVariable(name=OPTION_ONLOAD)
     @Nullable
     private String onload;
 
-    @ValueMapValue
-    @Named(OPTION_MEDIA)
+    @ScriptVariable(name=OPTION_MEDIA)
     @Nullable
     private String media;
 
