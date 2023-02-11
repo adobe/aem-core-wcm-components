@@ -216,7 +216,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     @Override
-    protected void loadFavicons(String designPath) {
+    protected void loadFavicons(Resource designPath) {
     }
 
     @Override
