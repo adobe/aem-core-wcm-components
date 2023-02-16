@@ -58,7 +58,7 @@
     var pageImageThumbnailComponentPathAttribute = "data-thumbnail-component-path";
     var pageImageThumbnailCurrentPagePathAttribute = "data-thumbnail-current-page-path";
 
-    $(document).on("dialog-loaded", async function(e) {
+    $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
         altTextFromDAM = undefined;
         var $dialog        = e.dialog;
@@ -133,21 +133,21 @@
 
             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
             togglePageImageInherited(imageFromPageImage, isDecorative);
-            await updateImageThumbnail();
-
-            $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit:visible");
-            if ($cqFileUploadEdit) {
-                fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
-                if (fileReference === "") {
-                    fileReference = undefined;
+            updateImageThumbnail().then(function() {
+                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit:visible");
+                if ($cqFileUploadEdit) {
+                    fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
+                    if (fileReference === "") {
+                        fileReference = undefined;
+                    }
+                    if (fileReference) {
+                        retrieveDAMInfo(fileReference);
+                    } else {
+                        altTuple.hideCheckbox(true);
+                        captionTuple.hideCheckbox(true);
+                    }
                 }
-                if (fileReference) {
-                    retrieveDAMInfo(fileReference);
-                } else {
-                    altTuple.hideCheckbox(true);
-                    captionTuple.hideCheckbox(true);
-                }
-            }
+            });
         }
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
