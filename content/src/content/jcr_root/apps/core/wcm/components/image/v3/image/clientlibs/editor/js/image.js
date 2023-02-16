@@ -58,7 +58,7 @@
     var pageImageThumbnailComponentPathAttribute = "data-thumbnail-component-path";
     var pageImageThumbnailCurrentPagePathAttribute = "data-thumbnail-current-page-path";
 
-    $(document).on("dialog-loaded", function(e) {
+    $(document).on("dialog-loaded", async function(e) {
         altTextFromPage = undefined;
         altTextFromDAM = undefined;
         var $dialog        = e.dialog;
@@ -81,7 +81,7 @@
             $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
-            $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
+
             $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
             $dynamicMediaGroup.hide();
             areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
@@ -130,6 +130,12 @@
                     fileReference = undefined;
                 });
             }
+
+            toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
+            togglePageImageInherited(imageFromPageImage, isDecorative);
+            await updateImageThumbnail();
+
+            $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit:visible");
             if ($cqFileUploadEdit) {
                 fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
                 if (fileReference === "") {
@@ -142,9 +148,6 @@
                     captionTuple.hideCheckbox(true);
                 }
             }
-            toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
-            togglePageImageInherited(imageFromPageImage, isDecorative);
-            updateImageThumbnail();
         }
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
