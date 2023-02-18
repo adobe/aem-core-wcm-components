@@ -26,6 +26,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
+import com.day.cq.dam.api.Asset;
+
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -98,5 +100,21 @@ class LinkBuilderImplTest {
         verify(pathProcessor).map(eq(passedDownToPathProcessor), any());
         verify(pathProcessor).externalize(eq(passedDownToPathProcessor), any());
         verify(pathProcessor).sanitize(eq(passedDownToPathProcessor), any());
+    }
+    
+    
+    void testLinkToAsset() {
+    	Asset asset = context.create().asset("/content/dam/asset.jpg", 0, 0, "image/jpeg");
+    	
+    	Link link = new LinkBuilderImpl(asset, context.request(),Collections.singletonList(pathProcessor)).build();
+    	assertEquals("/content/dam/asset.jpg", link.getURL());
+    	assertNotNull(link.getReference());
+    	assertEquals(asset,link.getReference());
+    	
+    	link = new LinkBuilderImpl("/content/dam/asset.jpg", context.request(), Collections.singletonList(pathProcessor),false).build();
+    	assertEquals("/content/dam/asset.jpg", link.getURL());
+    	assertEquals("/content/dam/asset.jpg", ((Asset) link.getReference()).getPath());
+    	
+    	
     }
 }

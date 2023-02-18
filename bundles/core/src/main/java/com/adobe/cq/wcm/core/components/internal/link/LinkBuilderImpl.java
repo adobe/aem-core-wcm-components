@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -145,16 +144,41 @@ public class LinkBuilderImpl implements LinkBuilder {
             linkUrl = targetAsset.getPath();
         }
 
-        Asset asset = getAsset(linkUrl);
-        Page page = getPage(linkUrl).orElse(null);
+        // linkUrl can be also set via the linkConfiguration, so we have to resolve it from the generic
+        // resource as well; but try to avoid duplicate resolutions as much as possible.
+        Asset asset = null;
+        Page page = null;
+        
+        if (targetAsset != null) {
+        	asset = targetAsset;
+        } else if (targetPage != null) {
+        	page = targetPage;
+        } else {
+        	asset = getAsset(linkUrl);
+        	page = getPage(linkUrl).orElse(null);
+        }
+        
+        boolean isExternalUrl = false; 
         if (asset != null) {
             this.reference = asset;
         } else if (page != null) {
             Pair<Page, String> pair = resolvePage(page);
             this.reference = pair.getLeft();
             linkUrl = StringUtils.isNotEmpty(pair.getRight()) ? pair.getRight() : linkUrl;
+            
+            // resolvePage() can resolve the linkUrl into an external URL; this can happen when
+            // there is a redirect from the page to an external URL; in this case
+            // the pair is not equivalent
+            isExternalUrl = !pair.getLeft().getPath().equals(linkUrl);
         }
-        String resolvedLinkURL = validateAndResolveLinkURL(linkUrl);
+        
+        String resolvedLinkURL = null;
+        if (this.reference != null && page != null && !isExternalUrl) {
+        	resolvedLinkURL = getPageLinkURL((Page)this.reference);
+        } else if (StringUtils.isNotEmpty(linkUrl)) {
+        	resolvedLinkURL = linkUrl;
+        } 
+        
         Map<String, String> htmlAttributes = mapLinkAttributesToHtml();
         return buildLink(resolvedLinkURL, request, htmlAttributes);
     }
@@ -226,34 +250,6 @@ public class LinkBuilderImpl implements LinkBuilder {
                 .filter(StringUtils::isNotBlank)
                 .map(String::trim)
                 .orElse(null);
-    }
-
-    /**
-     * Validates and resolves a link URL.
-     *
-     * @param linkURL Link URL
-     * @return The validated link URL or {@code null} if not valid
-     */
-    @Nullable
-    private String validateAndResolveLinkURL(@Nullable final String linkURL) {
-        return Optional.ofNullable(linkURL)
-                .filter(StringUtils::isNotEmpty)
-                .map(this::getLinkURL)
-                .orElse(null);
-    }
-
-    /**
-     * If the provided {@code path} identifies a {@link Page}, this method will generate the correct URL for the page. Otherwise the
-     * original {@code String} is returned.
-     * @param path the page path
-     *
-     * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
-     */
-    @NotNull
-    private String getLinkURL(@NotNull String path) {
-        return getPage(path)
-                .map(this::getPageLinkURL)
-                .orElse(path);
     }
 
     /**
