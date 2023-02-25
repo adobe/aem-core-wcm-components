@@ -18,13 +18,24 @@ package com.adobe.cq.wcm.core.components.internal;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
 /**
- * Resolve a value lazily
+ * Resolve a value lazily.
+ * 
+ * In SlingModels, not all values computed in the @PostConstruct method are always
+ * used. That means that there might be values which are only consumed in certain 
+ * circumstances, but which have overhead to calculate. In case this value is not used
+ * at all, this overhead is wasted time.
+ * 
+ * Wrapping them into the LazyValue type will do the calculation of the value only
+ * when required.
+ * 
+ * 
  *
- * @param <T>
+ * @param <T> the type of the value
  */
 
 public class LazyValue<T> {
@@ -32,7 +43,14 @@ public class LazyValue<T> {
 	private Optional<T> value;
 	private Supplier<T> supplier;
 	
-	public LazyValue(Supplier<T> supplier) {
+	/**
+	 * 
+	 * @param supplier to provide the value
+	 */
+	public LazyValue(@NotNull Supplier<T> supplier) {
+		if (supplier == null) {
+			throw new IllegalArgumentException("supplier must not be null");
+		}
 		this.supplier = supplier;
 	}
 	
@@ -41,7 +59,7 @@ public class LazyValue<T> {
 		if (value == null) {
 			value = Optional.ofNullable(supplier.get());
 		}
-		return value.get();
+		return value.orElse(null);
 	}
 	
 	
