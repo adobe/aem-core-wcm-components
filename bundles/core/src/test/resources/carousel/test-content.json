@@ -48,6 +48,31 @@
                             "jcr:description"   : "Teaser 4 description",
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         }
+                    },
+
+                    "carousel-2"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/carousel/v1/carousel",
+                        "activeItem"        : "item_3",
+                        "item_1": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Teaser 1",
+                            "jcr:description"   : "Teaser 1 description",
+                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                        },
+                        "item_2": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Teaser 2",
+                            "jcr:description"   : "Teaser 2 description",
+                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                        },
+                        "item_3": {
+                            "cq:panelTitle"     : "Carousel Panel 3",
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Teaser 3",
+                            "jcr:description"   : "Teaser 3 description",
+                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                        }
                     }
                 }
             }

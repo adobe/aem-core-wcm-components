@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.PanelContainerImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractPanelContainerImpl;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -96,7 +96,7 @@ class ContainerPostProcessorTest {
             }
         };
         Resource container = context.create().resource("/test/dummy/container", ImmutableMap.of(
-                "sling:resourceType", PanelContainerImpl.RESOURCE_TYPE
+                "sling:resourceType", AbstractPanelContainerImpl.RESOURCE_TYPE
         ));
         context.create().resource("/test/dummy/container/child1");
         String deletedChildren = "child1";
@@ -113,7 +113,7 @@ class ContainerPostProcessorTest {
     @Test
     public void testProcess() throws Exception {
         Resource container = context.create().resource("/test/dummy/container", ImmutableMap.of(
-                "sling:resourceType", PanelContainerImpl.RESOURCE_TYPE
+                "sling:resourceType", AbstractPanelContainerImpl.RESOURCE_TYPE
         ));
         context.create().resource("/test/dummy/container/child1");
         String deletedChildren = "child1";

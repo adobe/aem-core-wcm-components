@@ -91,10 +91,4 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl impleme
             .withLinkUrl(() -> Optional.ofNullable(this.getLink()).map(Link::getMappedURL).orElse(null))
             .build();
     }
-
-    @Override
-    @JsonIgnore
-    public @Nullable Resource getResource() {
-        return resource;
-    }
 }

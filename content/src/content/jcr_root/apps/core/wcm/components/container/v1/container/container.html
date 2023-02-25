@@ -17,7 +17,7 @@
     <sly data-sly-test.responsive="${container.layout == 'RESPONSIVE_GRID'}"
          data-sly-use.responsiveGridTemplate="responsiveGrid.html"
          data-sly-call="${responsiveGridTemplate.responsiveGrid @ container=container}"></sly>
-    <sly data-sly-test.simple="${!responsive}"
+    <sly data-sly-test="${!responsive}"
          data-sly-use.simpleTemplate="simple.html"
          data-sly-call="${simpleTemplate.simple @ container=container}"></sly>
 </sly>

@@ -100,17 +100,6 @@ public interface ListItem extends Component {
     }
 
     /**
-     * Returns the resource of this {@code ListItem}.
-     *
-     * @return the list item {@link Resource} or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 12.27.0
-     */
-    @Nullable
-    default Resource getResource() {
-        return null;
-    }
-
-    /**
      * Returns the name of this {@code ListItem}.
      *
      * @return the list item name or {@code null}
