@@ -33,6 +33,10 @@ public class Carousel extends BaseComponent {
     private static String indicator = ".cmp-carousel__indicator";
     private static String activeIndicator = ".cmp-carousel__indicator--active";
 
+    private static String item = ".cmp-carousel__item";
+
+    private static String activeItem = ".cmp-carousel__item--active";
+
     public Carousel() {
         super(".cmp-carousel");
     }
@@ -62,5 +66,13 @@ public class Carousel extends BaseComponent {
 
     public boolean isIndicatorActive(int idx) {
         return getIndicators().get(idx).getAttribute("class").contains("cmp-carousel__indicator--active");
+    }
+
+    public ElementsCollection getItems() {
+        return $$(item);
+    }
+
+    public boolean isItemActive(int idx) {
+        return getItems().get(idx).getAttribute("class").contains("cmp-carousel__item--active");
     }
 }

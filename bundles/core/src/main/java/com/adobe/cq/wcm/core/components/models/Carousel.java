@@ -23,7 +23,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @since com.adobe.cq.wcm.core.components.models 12.5.0
  */
 @ConsumerType
-public interface Carousel extends Container {
+public interface Carousel extends PanelContainer {
 
     /**
      * Name of the resource property that indicates whether to automatically transition between slides, or not.
@@ -45,6 +45,13 @@ public interface Carousel extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.6.0
      */
     String PN_AUTOPAUSE_DISABLED = "autopauseDisabled";
+
+    /**
+     * Name of the resource property that indicates the name of the Carousel item which is shown by default in the component.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
+    String PN_ACTIVE_ITEM = "activeItem";
 
     /**
      * Name of the policy property that defines whether the control elements should be placed in front of the carousel items.
@@ -161,5 +168,17 @@ public interface Carousel extends Container {
      */
     default boolean isControlsPrepended() {
         return false;
+    }
+
+    /**
+     * Returns the name of the default active item as defined by the {@code PN_ACTIVE_ITEM} property.
+     * If the property is missing then the name of the first item is returned.
+     *
+     * @return the default active item name
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
+    default String getActiveItem() {
+        return null;
     }
 }

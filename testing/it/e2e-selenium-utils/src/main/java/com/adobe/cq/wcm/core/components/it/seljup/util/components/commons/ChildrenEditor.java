@@ -16,18 +16,16 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.commons;
 
-import com.adobe.cq.testing.selenium.pagewidgets.Helpers;
-import com.adobe.cq.testing.selenium.pagewidgets.common.ActionComponent;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralMultiField;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.actions;
 
 public class ChildrenEditor extends BaseComponent {
     public ChildrenEditor () {
@@ -53,16 +51,14 @@ public class ChildrenEditor extends BaseComponent {
      * @return input elements in ChildrenEditor
      */
     public ElementsCollection getInputItems() {
-        return $$(inputItem).filter(visible);
+        return $$(inputItem);
     }
 
     /**
      * Removes the first element in ChildrenEditor
      */
     public void removeFirstItem() {
-        ActionComponent<Dialog> dialogActionComponent = new ActionComponent<>($$(item + " " + removeButton).first(), () -> new Dialog("coral-dialog[variant='warning']"), false);
-        Dialog dialog = Helpers.clickDialogAction(dialogActionComponent);
-        dialog.clickWarning();
+        $$(item + " " + removeButton).first().click();
     }
 
     /**

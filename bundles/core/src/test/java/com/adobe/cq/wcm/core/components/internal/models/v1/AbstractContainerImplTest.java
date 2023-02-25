@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
@@ -24,8 +25,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Container;
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -55,7 +58,7 @@ public class AbstractContainerImplTest {
     @Test
     public void testEmptyContainer() {
         Container container = new ContainerImpl();
-        List<ListItem> items = container.getItems();
+        List<? extends ContainerItem> items = container.getChildren();
         assertEquals(0, items.size());
     }
 
@@ -91,10 +94,24 @@ public class AbstractContainerImplTest {
     }
 
     private static class ContainerImpl extends AbstractContainerImpl {
+
         @Override
         @NotNull
-        protected List<ListItem> readItems() {
+        @Deprecated
+        protected final List<ListItem> readItems() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        @NotNull
+        public List<? extends ContainerItem> getChildren() {
             return new ArrayList<>();
+        }
+
+        @Override
+        @NotNull
+        public LinkedHashMap<String, ? extends ComponentExporter> getExportedItems() {
+            return new LinkedHashMap<>();
         }
 
         @Override

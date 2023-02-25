@@ -16,12 +16,16 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.carousel;
 
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.ChildrenEditor;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
 import com.codeborne.selenide.SelenideElement;
 
+import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.waitForElementAnimationFinished;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -31,6 +35,9 @@ public class CarouselEditDialog extends Dialog {
     private static String autoplayGroup = "[data-cmp-carousel-v1-dialog-hook='autoplayGroup']";
     private static String delay = "[data-cmp-carousel-v1-dialog-hook='delay']";
     private static String autopauseDisabled = "[data-cmp-carousel-v1-dialog-hook='autopauseDisabled']";
+    private static String activeSelect = "[data-cmp-carousel-v1-dialog-edit-hook='activeSelect']";
+    private static String activeSelectButton = "[data-cmp-carousel-v1-dialog-edit-hook='activeSelect'] button";
+
 
     public CarouselEditDialog() {
 
@@ -61,5 +68,27 @@ public class CarouselEditDialog extends Dialog {
         return $(autopauseDisabled);
     }
 
+    public void setItemActive(String item) {
+        $(activeSelectButton).click();
+        for (SelenideElement selenideElement : selectList().items()) {
+            if (selenideElement.find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).isDisplayed() &&
+                selenideElement.find(Selectors.SELECTOR_ITEM_ELEMENT_CONTENT).getText().contains(item) ||
+                selenideElement.getText().contains(item)) {
+                selenideElement.click();
+                break;
+            }
+        }
+    }
 
+    private CoralSelectList selectList() {
+        CoralSelectList coralSelectList = new CoralSelectList($(activeSelect));
+        if(coralSelectList.isVisible()) {
+            return coralSelectList;
+        } else {
+            CoralPopOver popOver = CoralPopOver.firstOpened();
+            popOver.waitVisible();
+            waitForElementAnimationFinished(popOver.getCssSelector());
+            return new CoralSelectList(popOver.element());
+        }
+    }
 }

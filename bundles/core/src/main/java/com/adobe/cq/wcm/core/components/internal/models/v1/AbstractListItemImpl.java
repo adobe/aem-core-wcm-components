@@ -24,8 +24,10 @@ import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.day.cq.wcm.api.components.Component;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Optional;
 
@@ -89,5 +91,4 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl impleme
             .withLinkUrl(() -> Optional.ofNullable(this.getLink()).map(Link::getMappedURL).orElse(null))
             .build();
     }
-
 }

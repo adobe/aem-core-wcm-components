@@ -19,7 +19,10 @@
     var selectors = {
         dialogContent: ".cmp-carousel__editor",
         autoplay: "[data-cmp-carousel-v1-dialog-hook='autoplay']",
-        autoplayGroup: "[data-cmp-carousel-v1-dialog-hook='autoplayGroup']"
+        autoplayGroup: "[data-cmp-carousel-v1-dialog-hook='autoplayGroup']",
+        childreneditorSelector: "[data-cmp-is='childrenEditor']",
+        activeItemSelector: "[data-cmp-carousel-v1-dialog-edit-hook='activeItem']",
+        activeSelectSelector: "[data-cmp-carousel-v1-dialog-edit-hook='activeSelect']"
     };
 
     var autoplay;
@@ -41,6 +44,8 @@
                         onAutoplayChange();
                     });
                 }
+
+                setupActiveSelect(dialogContent);
             }
         }
     });
@@ -62,4 +67,58 @@
         }
     }
 
+    /**
+     * Set up event handlers to populate active select and active item fields.
+     *
+     * @param {HTMLElement} dialogContent content element of the edit dialog
+     */
+    function setupActiveSelect(dialogContent) {
+        var childrenEditor = dialogContent.querySelector(selectors.childreneditorSelector);
+        var activeSelect = dialogContent.querySelector(selectors.activeSelectSelector);
+        var activeItem = dialogContent.querySelector(selectors.activeItemSelector);
+
+        if (childrenEditor && activeSelect && activeItem) {
+            Coral.commons.ready(childrenEditor, function() {
+                updateActiveSelect(childrenEditor, activeSelect, activeItem);
+            });
+
+            childrenEditor.on("change", function() {
+                updateActiveSelect(childrenEditor, activeSelect, activeItem);
+            });
+
+            activeSelect.on("change", function() {
+                activeItem.value = activeSelect.value;
+            });
+        }
+    }
+
+    /**
+     * Update the list of items in the active item selector.
+     *
+     * @param {HTMLElement} childrenEditor Children editor multifield
+     * @param {HTMLElement} activeSelect Active item select field
+     * @param {HTMLElement} activeItem Active item hidden input
+     */
+    function updateActiveSelect(childrenEditor, activeSelect, activeItem) {
+        if (childrenEditor && activeSelect && activeItem) {
+            var selectedValue = activeSelect.value || activeItem.value;
+            activeSelect.items.getAll().forEach(function(item) {
+                if (item.value !== "") {
+                    activeSelect.items.remove(item);
+                }
+            });
+            var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
+            if (cmpChildrenEditor) {
+                cmpChildrenEditor.items().forEach(function(item) {
+                    activeSelect.items.add({
+                        selected: item.name === selectedValue,
+                        value: item.name,
+                        content: {
+                            textContent: item.description
+                        }
+                    });
+                });
+            }
+        }
+    }
 })(jQuery);

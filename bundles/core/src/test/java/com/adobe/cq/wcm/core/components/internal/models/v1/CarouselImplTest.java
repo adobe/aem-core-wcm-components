@@ -36,19 +36,22 @@ import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(AemContextExtension.class)
-class CarouselImplTest {
+class CarouselImplTest extends AbstractPanelTest {
 
     private static final String TEST_BASE = "/carousel";
     private static final String CONTENT_ROOT = "/content";
     private static final String TEST_ROOT_PAGE = "/content/carousel";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-1";
+    private static final String CAROUSEL_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-2";
     private static final String CAROUSEL_EMPTY = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-empty";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
@@ -79,6 +82,13 @@ class CarouselImplTest {
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_4" }, };
         verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
+    }
+
+    @Test
+    void testCarouselActiveItem() {
+        Carousel carousel = getCarouselUnderTest(CAROUSEL_2);
+        assertEquals("item_3", carousel.getActiveItem());
+        Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel2"));
     }
 
     @Test
