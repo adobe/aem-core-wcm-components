@@ -79,6 +79,15 @@ class DefaultPathProcessorTest {
     }
 
     @Test
+    void testSanitizeExternalLink() {
+        DefaultPathProcessor underTest = context.registerService(new DefaultPathProcessor());
+        MockSlingHttpServletRequest request = context.request();
+        assertEquals("https://test.com?categ=cat1%7Ccat2", underTest.sanitize("https://test.com?categ=cat1|cat2", request));
+        assertEquals("https://test.com?categ=cat1%7Ccat2#top", underTest.sanitize("https://test.com?categ=cat1|cat2#top", request));
+        assertEquals("https://test.com?categ=cat1%7Ccat2#top%20level", underTest.sanitize("https://test.com?categ=cat1|cat2#top level", request));
+    }
+
+    @Test
     void testVanityUrl() {
         Page page = context.create().page("/content/links/site1/en", "/conf/example",
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));

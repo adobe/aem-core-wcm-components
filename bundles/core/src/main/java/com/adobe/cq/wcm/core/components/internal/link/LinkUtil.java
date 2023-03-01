@@ -15,17 +15,58 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.net.UrlEscapers;
+
+/**
+ * Utility methods for handling links
+ */
 public class LinkUtil {
 
     private final static List<Pattern> PATTERNS = Collections.singletonList(Pattern.compile("(<%[=@].*?%>)"));
+
+    /**
+     * Decodes and encoded or escaped URL taking care to not break Adobe Campaign expressions
+     * like: /content/path/to/page.html?recipient=<%= recipient.id %>
+     *
+     * @param url The URL to decode
+     * @return The decoded URL
+     * @throws UnsupportedEncodingException
+     */
+    public static String decode(String url) throws UnsupportedEncodingException {
+        // The link contain character sequences that are not well formatted and cannot be decoded, for example
+        // Adobe Campaign expressions like: /content/path/to/page.html?recipient=<%= recipient.id %>
+        Map<String, String> placeholders = new LinkedHashMap<>();
+        String masked = LinkUtil.mask(url, placeholders);
+        String decoded = URLDecoder.decode(masked, StandardCharsets.UTF_8.name());
+        String unmasked = unmask(decoded, placeholders);
+        return unmasked;
+    }
+
+    /**
+     * Escapes an URL fragment to encode not-allowed characters
+     *
+     * @param fragment The fragment to escape
+     * @return The escaped fragment
+     */
+    public static String escape(String fragment) {
+        Map<String, String> placeholders = new LinkedHashMap<>();
+        String masked = LinkUtil.mask(fragment, placeholders);
+        String escaped = UrlEscapers.urlFragmentEscaper().escape(masked);
+        String unmasked = LinkUtil.unmask(escaped, placeholders);
+        return unmasked;
+    }
 
     /**
      * Masks a given {@link String} by replacing all occurrences of {@link LinkUtil#PATTERNS} with a placeholder.
@@ -39,7 +80,7 @@ public class LinkUtil {
      * @return the masked {@link String}
      * @see LinkUtil#unmask(String, Map)
      */
-    public static String mask(String original, Map<String, String> placeholders) {
+    private static String mask(String original, Map<String, String> placeholders) {
         String masked = original;
         for (Pattern pattern : PATTERNS) {
             Matcher matcher = pattern.matcher(masked);
@@ -63,7 +104,7 @@ public class LinkUtil {
      * @param placeholders the {@link Map} of placeholders to replace
      * @return the unmasked {@link String}
      */
-    public static String unmask(String masked, Map<String, String> placeholders) {
+    private static String unmask(String masked, Map<String, String> placeholders) {
         String unmasked = masked;
         for (Map.Entry<String, String> placeholder : placeholders.entrySet()) {
             unmasked = unmasked.replaceFirst(placeholder.getKey(), placeholder.getValue());

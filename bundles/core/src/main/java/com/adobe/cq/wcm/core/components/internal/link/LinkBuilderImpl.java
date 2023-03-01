@@ -15,10 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -155,12 +152,7 @@ public class LinkBuilderImpl implements LinkBuilder {
     private @NotNull Link buildLink(String path, SlingHttpServletRequest request, Map<String, String> htmlAttributes) {
         if (StringUtils.isNotEmpty(path)) {
             try {
-                // The link contain character sequences that are not well formatted and cannot be decoded, for example
-                // Adobe Campaign expressions like: /content/path/to/page.html?recipient=<%= recipient.id %>
-                Map<String, String> placeholders = new LinkedHashMap<>();
-                String maskedPath = LinkUtil.mask(path, placeholders);
-                maskedPath = URLDecoder.decode(maskedPath, StandardCharsets.UTF_8.name());
-                path = LinkUtil.unmask(maskedPath, placeholders);
+                path = LinkUtil.decode(path);
             } catch (Exception ex) {
                 String message = "Failed to decode url '{}': {}";
                 if (LOGGER.isDebugEnabled()) {
