@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.httpclient.URI;
@@ -39,6 +41,7 @@ import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.google.common.net.UrlEscapers;
 
 @Designate(ocd = DefaultPathProcessor.Config.class)
 @Component(property = Constants.SERVICE_RANKING + ":Integer=" + Integer.MIN_VALUE,
@@ -131,7 +134,11 @@ public class DefaultPathProcessor implements PathProcessor {
         }
 
         if (fragmentQuery != null) {
-            path = path + fragmentQuery;
+            Map<String, String> placeholders = new LinkedHashMap<>();
+            String maskedFragmentQuery = LinkUtil.mask(fragmentQuery, placeholders);
+            String escapedFragmentQuery = UrlEscapers.urlFragmentEscaper().escape(maskedFragmentQuery);
+            String unmaskedFragmentQuery = LinkUtil.unmask(escapedFragmentQuery, placeholders);
+            path = path + unmaskedFragmentQuery;
         }
         return path;
     }
