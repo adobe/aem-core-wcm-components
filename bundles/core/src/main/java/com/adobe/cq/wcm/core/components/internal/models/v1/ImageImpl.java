@@ -112,6 +112,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
 
     protected ValueMap properties;
     protected String fileReference;
+    protected String urlReference;
+    protected String imageMimeType;
     protected String alt;
     protected String title;
     protected String externalImageResourcePath;
@@ -165,6 +167,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         properties = resource.getValueMap();
         fileResource = resource.getChild(DownloadResource.NN_FILE);
         fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
+        urlReference = properties.get("urlReference", String.class);
+        imageMimeType = properties.get("imageMimeType", String.class);
         alt = properties.get(ImageResource.PN_ALT, String.class);
         title = properties.get(JcrConstants.JCR_TITLE, String.class);
         externalImageResourcePath = properties.get(PN_EXTERNAL_IMAGE_RESOURCE_PATH, String.class);
@@ -176,7 +180,6 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
         useAssetDelivery = currentStyle.get(PN_DESIGN_ASSET_DELIVERY_ENABLED, false) && assetDelivery != null;
-
         Asset asset = null;
 
         if (StringUtils.isNotEmpty(fileReference)) {
@@ -192,10 +195,20 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     useAssetDelivery = false;
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
                 }
+            } else if(urlReference != null && !urlReference.equals("null")) {
+                mimeType = PropertiesUtil.toString(imageMimeType, MIME_TYPE_IMAGE_JPEG);
+                imageName = getImageNameFromDeliveryUrl(urlReference);
+                hasContent = true;
+                useAssetDelivery = true;
             } else {
                 useAssetDelivery = false;
                 LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
             }
+        } else if(urlReference != null && !urlReference.equals("null")) {
+            mimeType = PropertiesUtil.toString(imageMimeType, MIME_TYPE_IMAGE_JPEG);
+            imageName = getImageNameFromDeliveryUrl(urlReference); // Should we send it?
+            hasContent = true;
+            useAssetDelivery = true;
         } else {
             useAssetDelivery = false;
             if (fileResource != null) {
@@ -329,6 +342,16 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
     protected String getSeoFriendlyName(String imageName) {
         return imageName.replaceAll(SEO_NAME_FILTER_PATTERN, "-").toLowerCase();
+    }
+    
+    /**
+     * Extracts the image name from the DAM resource
+     *
+     * @return image name from DAM
+     */
+    protected String getImageNameFromDeliveryUrl(String urlReference) {
+        String nameWithFormat = urlReference.substring(urlReference.lastIndexOf("/") + 1);
+        return nameWithFormat.split("\\.")[0];
     }
 
 

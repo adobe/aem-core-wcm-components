@@ -46,6 +46,7 @@ public class AssetDeliveryHelper {
     private static String FORMAT_PARAMETER = "format";
     private static String PATH_PARAMETER = "path";
     private static String SEO_PARAMETER = "seoname";
+    private static String URL_REFERENCE_PARAMETER = "urlreference";
     private static String PREFER_WEBP_PARAMETER = "preferwebp";
     private static String HORIZONTAL_FLIP = "HORIZONTAL";
     private static String VERTICAL_FLIP = "VERTICAL";
@@ -92,19 +93,21 @@ public class AssetDeliveryHelper {
         Map<String, Object> params = new HashMap<>();
 
         ValueMap componentProperties = imageComponentResource.getValueMap();
-        String assetPath = componentProperties.get(DownloadResource.PN_REFERENCE, String.class);
+        //String assetPath = componentProperties.get(DownloadResource.PN_REFERENCE, String.class);
+        
+        String urlReference = componentProperties.get("urlReference", String.class);
 
-        if (StringUtils.isEmpty(imageName) || StringUtils.isEmpty(assetPath)
+        if (StringUtils.isEmpty(imageName)
                 || StringUtils.isEmpty(extension) || "svg".equalsIgnoreCase(extension)) {
             return null;
         }
 
-        Resource assetResource = imageComponentResource.getResourceResolver().getResource(assetPath);
+        /*Resource assetResource = imageComponentResource.getResourceResolver().getResource(assetPath);
         if (assetResource == null) {
             return null;
-        }
+        }*/
 
-        params.put(PATH_PARAMETER, assetPath);
+        params.put(URL_REFERENCE_PARAMETER, urlReference);
         params.put(SEO_PARAMETER, imageName);
         params.put(FORMAT_PARAMETER, extension);
         params.put(PREFER_WEBP_PARAMETER, "true");
@@ -120,12 +123,13 @@ public class AssetDeliveryHelper {
         addRotationParameter(params, componentProperties);
         addFlipParameter(params, componentProperties);
 
-        String assetDeliveryURL = assetDelivery.getDeliveryURL(assetResource, params);
+        String assetDeliveryURL = assetDelivery.getDeliveryURL(params);
         if (!StringUtils.isEmpty(assetDeliveryURL)) {
             return  assetDeliveryURL;
         }
         return StringUtils.EMPTY;
     }
+    
 
     private static void addQualityParameter(@NotNull Map<String, Object> params, @NotNull int quality) {
         params.put(QUALITY_PARAMETER, "" + quality);
