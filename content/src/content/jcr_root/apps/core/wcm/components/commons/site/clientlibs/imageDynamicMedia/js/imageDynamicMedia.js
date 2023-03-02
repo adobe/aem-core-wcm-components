@@ -22,6 +22,8 @@
         var autoSmartCrops = {};
         var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
         var SRC_URI_TEMPLATE_DPR_VAR = "{dpr}";
+        var SRC_URI_DPR_OFF = "dpr=off";
+        var SRC_URI_DPR_ON = "dpr=on,{dpr}";
         var dpr = window.devicePixelRatio || 1;
         var config = {
             minWidth: 20
@@ -122,7 +124,9 @@
          * @param {{}} properties the component properties
          */
         var setDMAttributes = function(component, properties) {
-            var src = properties.src.replace(SRC_URI_TEMPLATE_DPR_VAR, dpr);
+            // for v3 we first have to turn the dpr on
+            var src = properties.src.replace(SRC_URI_DPR_OFF, SRC_URI_DPR_ON);
+            src = src.replace(SRC_URI_TEMPLATE_DPR_VAR, dpr);
             var smartCrops = {};
             var width;
             if (properties["smartcroprendition"] === "SmartCrop:Auto") {
