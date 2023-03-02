@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.link;
 
 import java.util.Optional;
 
-import org.apache.commons.httpclient.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -134,20 +133,7 @@ public class DefaultPathProcessor implements PathProcessor {
             path = cp + path;
         }
 
-        try {
-            final URI uri = new URI(path, false);
-            path = uri.toString();
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-        }
-
-        if (queryString != null) {
-            path += "?" + LinkUtil.escape(queryString);
-        }
-
-        if (fragment != null) {
-            path += "#" + LinkUtil.escape(fragment);
-        }
+        path = LinkUtil.escape(path, queryString, fragment);
         return path;
     }
 

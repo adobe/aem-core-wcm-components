@@ -76,15 +76,22 @@ class DefaultPathProcessorTest {
         assertEquals(path, underTest.sanitize(path, request));
         path = "/some space#internal";
         assertEquals("/some%20space#internal", underTest.sanitize(path, request));
+        assertEquals("/content/path/to/page.html?recipient=<%= recipient.id %>",
+                underTest.sanitize("/content/path/to/page.html?recipient=<%= recipient.id %>", request));
     }
 
     @Test
     void testSanitizeExternalLink() {
         DefaultPathProcessor underTest = context.registerService(new DefaultPathProcessor());
         MockSlingHttpServletRequest request = context.request();
-        assertEquals("https://test.com?categ=cat1%7Ccat2", underTest.sanitize("https://test.com?categ=cat1|cat2", request));
-        assertEquals("https://test.com?categ=cat1%7Ccat2#top", underTest.sanitize("https://test.com?categ=cat1|cat2#top", request));
-        assertEquals("https://test.com?categ=cat1%7Ccat2#top%20level", underTest.sanitize("https://test.com?categ=cat1|cat2#top level", request));
+        assertEquals("https://test.com?categ=cat1%7Ccat2",
+                underTest.sanitize("https://test.com?categ=cat1|cat2", request));
+        assertEquals("https://test.com?categ=cat1%7Ccat2#top",
+                underTest.sanitize("https://test.com?categ=cat1|cat2#top", request));
+        assertEquals("https://test.com?categ=cat1%7Ccat2#top%20level",
+                underTest.sanitize("https://test.com?categ=cat1|cat2#top level", request));
+        assertEquals("https://test.com?recipient=<%= recipient.id %>",
+                underTest.sanitize("https://test.com?recipient=<%= recipient.id %>", request));
     }
 
     @Test

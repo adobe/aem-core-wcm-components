@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.link;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Collections;
@@ -27,12 +28,17 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.net.UrlEscapers;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.URIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility methods for handling links
  */
 public class LinkUtil {
+
+    private final static Logger LOG = LoggerFactory.getLogger(LinkUtil.class);
 
     private final static List<Pattern> PATTERNS = Collections.singletonList(Pattern.compile("(<%[=@].*?%>)"));
 
@@ -44,27 +50,59 @@ public class LinkUtil {
      * @return The decoded URL
      * @throws UnsupportedEncodingException
      */
-    public static String decode(String url) throws UnsupportedEncodingException {
+    public static String decode(final String url) throws UnsupportedEncodingException {
         // The link contain character sequences that are not well formatted and cannot be decoded, for example
         // Adobe Campaign expressions like: /content/path/to/page.html?recipient=<%= recipient.id %>
-        Map<String, String> placeholders = new LinkedHashMap<>();
-        String masked = LinkUtil.mask(url, placeholders);
-        String decoded = URLDecoder.decode(masked, StandardCharsets.UTF_8.name());
-        String unmasked = unmask(decoded, placeholders);
+        final Map<String, String> placeholders = new LinkedHashMap<>();
+        final String masked = LinkUtil.mask(url, placeholders);
+        final String decoded = URLDecoder.decode(masked, StandardCharsets.UTF_8.name());
+        final String unmasked = unmask(decoded, placeholders);
         return unmasked;
     }
 
     /**
-     * Escapes an URL fragment to encode not-allowed characters
+     * Escapes an URI based on path, query string and fragment: path?queryString#fragment
      *
-     * @param fragment The fragment to escape
+     * @param path The URI path
+     * @param queryString The URI query string
+     * @param fragment The URI fragment
      * @return The escaped fragment
      */
-    public static String escape(String fragment) {
-        Map<String, String> placeholders = new LinkedHashMap<>();
-        String masked = LinkUtil.mask(fragment, placeholders);
-        String escaped = UrlEscapers.urlFragmentEscaper().escape(masked);
-        String unmasked = LinkUtil.unmask(escaped, placeholders);
+    public static String escape(final String path, final String queryString, final String fragment) {
+        final Map<String, String> placeholders = new LinkedHashMap<>();
+        final String maskedQueryString = mask(queryString, placeholders);
+        String escaped;
+        URI parsed;
+        try {
+            parsed = new URI(path, false);
+        } catch (URIException e) {
+            parsed = null;
+            LOG.error(e.getMessage(), e);
+        }
+        try {
+            if (parsed != null) {
+                escaped = new URI(parsed.getScheme(), parsed.getAuthority(), parsed.getPath(), maskedQueryString, null).toString();
+            } else {
+                escaped = new URI(null, null, path, maskedQueryString, null).toString();
+            }
+            if (fragment != null) {
+                StringBuilder sb = new StringBuilder(escaped);
+                escaped = sb.append("#")
+                        .append(URLEncoder.encode(fragment, StandardCharsets.UTF_8.name()).replace("+", "%20"))
+                        .toString();
+            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            StringBuilder sb = new StringBuilder(path);
+            if (queryString != null) {
+                sb.append("?").append(maskedQueryString);
+            }
+            if (fragment != null) {
+                sb.append("#").append(fragment);
+            }
+            escaped = sb.toString();
+        }
+        final String unmasked = LinkUtil.unmask(escaped, placeholders);
         return unmasked;
     }
 
@@ -80,7 +118,10 @@ public class LinkUtil {
      * @return the masked {@link String}
      * @see LinkUtil#unmask(String, Map)
      */
-    private static String mask(String original, Map<String, String> placeholders) {
+    private static String mask(final String original, final Map<String, String> placeholders) {
+        if (original == null) {
+            return null;
+        }
         String masked = original;
         for (Pattern pattern : PATTERNS) {
             Matcher matcher = pattern.matcher(masked);
@@ -104,7 +145,10 @@ public class LinkUtil {
      * @param placeholders the {@link Map} of placeholders to replace
      * @return the unmasked {@link String}
      */
-    private static String unmask(String masked, Map<String, String> placeholders) {
+    private static String unmask(final String masked, final Map<String, String> placeholders) {
+        if (masked == null) {
+            return null;
+        }
         String unmasked = masked;
         for (Map.Entry<String, String> placeholder : placeholders.entrySet()) {
             unmasked = unmasked.replaceFirst(placeholder.getKey(), placeholder.getValue());
@@ -121,7 +165,7 @@ public class LinkUtil {
      * @param str the given {@link String}
      * @return the placeholder name
      */
-    private static String newPlaceholder(String str) {
+    private static String newPlaceholder(final String str) {
         SecureRandom random = new SecureRandom();
         StringBuilder placeholderBuilder = new StringBuilder(5);
 
