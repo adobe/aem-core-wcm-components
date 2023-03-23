@@ -173,8 +173,7 @@ public class Utils {
         Set<String> superTypes = new HashSet<>();
         String superType = resourceType;
         while (superType != null) {
-            superType = Optional.ofNullable(resourceResolver.getResource(superType))
-                .map(Resource::getResourceSuperType)
+            superType = Optional.ofNullable(resourceResolver.getParentResourceType(superType))
                 .filter(StringUtils::isNotEmpty)
                 .orElse(null);
             if (superType != null) {
