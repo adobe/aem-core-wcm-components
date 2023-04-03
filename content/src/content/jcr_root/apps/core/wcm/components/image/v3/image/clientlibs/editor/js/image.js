@@ -157,6 +157,9 @@
         });
 
         improveAltTextValidation();
+
+        var checkbox = $("input[name='./imageFromPageImage']");
+        disablePolarisAssetButton(checkbox.is(":checked"));
     });
 
     $(window).on("focus", function() {
@@ -187,6 +190,7 @@
 
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
         togglePageImageInherited(e.target, isDecorative);
+        disablePolarisAssetButton(e.target.checked);
     });
 
     // Update the image thumbnail when the link field is updated
@@ -215,6 +219,10 @@
                 break;
         }
     });
+
+    function disablePolarisAssetButton(checked) {
+        $(".btn__polaris-picker").prop("disabled", checked);
+    }
 
     function updateImageThumbnail() {
         var linkValue;

@@ -17,12 +17,12 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
           xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
           xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
-    jcr:primaryType="nt:unstructured"
-    jcr:title="Image"
-    sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.image.v3.editor,core.wcm.components.commons.editor.dialog.pageimagethumbnail.v1]"
-    helpPath="https://www.adobe.com/go/aem_cmp_image_v3"
-    trackingFeature="core-components:image:v3">
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Image"
+          sling:resourceType="cq/gui/components/authoring/dialog"
+          extraClientlibs="[core.wcm.components.image.v3.editor,core.wcm.components.commons.editor.dialog.pageimagethumbnail.v1]"
+          helpPath="https://www.adobe.com/go/aem_cmp_image_v3"
+          trackingFeature="core-components:image:v3">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container"
@@ -70,6 +70,12 @@
                                                 fileReferenceParameter="./fileReference"
                                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
                                                 name="./file"/>
+                                            <polarisPickerButton
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/button"
+                                                granite:class="btn__polaris-picker"
+                                                name="./polarisPicker"
+                                                text="Pick image from Polaris"/>
                                             <alternativeGroup
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/well"
@@ -250,7 +256,7 @@
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
                                                 name="./id"
-												validation="html-unique-id-validator"/>
+                                                validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>
@@ -258,9 +264,9 @@
                         </items>
                     </metadata>
                     <styletab
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/include"
-                            path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_edit/styletab"/>
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_edit/styletab"/>
                 </items>
             </tabs>
         </items>
