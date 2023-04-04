@@ -15,18 +15,17 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.awt.*;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.lang3.ArrayUtils;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
+import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
+import com.adobe.cq.wcm.core.components.internal.servlets.EnhancedRendition;
+import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.day.cq.commons.DownloadResource;
+import com.day.cq.dam.api.Asset;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -38,17 +37,11 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
-import com.adobe.cq.wcm.core.components.internal.servlets.EnhancedRendition;
-import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.models.ImageArea;
-import com.day.cq.commons.DownloadResource;
-import com.day.cq.dam.api.Asset;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
+import javax.annotation.PostConstruct;
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
 import static com.adobe.cq.wcm.core.components.models.Teaser.PN_IMAGE_LINK_HIDDEN;
@@ -70,7 +63,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private String srcSet = StringUtils.EMPTY;
     private Map<String, String> srcSetWithMimeType = Collections.EMPTY_MAP;
     private String sizes;
-    
+
     private Dimension dimension;
 
     @PostConstruct
@@ -81,6 +74,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             imageLinkHidden = properties.get(PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
             sizes = String.join((", "), currentStyle.get(PN_DESIGN_SIZES, new String[0]));
             disableLazyLoading = properties.get(PN_DESIGN_LAZY_LOADING_ENABLED, currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false));
+        }
+        String polarisImage = properties.get("polarisImage", String.class);
+        String fileName = properties.get("fileName", String.class);
+        if (StringUtils.isNotEmpty(polarisImage) && StringUtils.isEmpty(fileReference) && StringUtils.isEmpty(fileName)) {
+                src = polarisImage;
         }
     }
 
@@ -131,10 +129,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     for (int i = 0; i < widthsArray.length; i++) {
                         if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
                             srcsetArray[i] =
-                                    srcUritemplate.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                                srcUritemplate.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                         } else {
                             srcsetArray[i] =
-                                    srcUritemplate.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                                srcUritemplate.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                         }
                     }
                     srcSet = StringUtils.join(srcsetArray, ',');
@@ -154,7 +152,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     @Override
     @JsonIgnore
-    public String getHeight () {
+    public String getHeight() {
         int height = getOriginalDimension().height;
         if (height > 0) {
             return String.valueOf(height);
@@ -165,7 +163,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     @Override
     @JsonIgnore
-    public String getWidth () {
+    public String getWidth() {
         int width = getOriginalDimension().width;
         if (width > 0) {
             return String.valueOf(width);
@@ -215,14 +213,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return !disableLazyLoading;
     }
 
-    
+
     private Dimension getOriginalDimension() {
-    	if (this.dimension == null) {
-    		this.dimension = getOriginalDimensionInternal();
-    	}
-    	return this.dimension;
+        if (this.dimension == null) {
+            this.dimension = getOriginalDimensionInternal();
+        }
+        return this.dimension;
     }
-    
+
     private Dimension getOriginalDimensionInternal() {
         ValueMap inheritedResourceProperties = resource.getValueMap();
         String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
@@ -240,7 +238,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     Dimension dimension = original.getDimension();
                     if (dimension != null) {
                         if (resizeWidth != null && Integer.parseInt(resizeWidth) > 0 && Integer.parseInt(resizeWidth) < dimension.getWidth()) {
-                            int calculatedHeight = (int) Math.round(Integer.parseInt(resizeWidth) * (dimension.getHeight() / (float)dimension.getWidth()));
+                            int calculatedHeight = (int) Math.round(Integer.parseInt(resizeWidth) * (dimension.getHeight() / (float) dimension.getWidth()));
                             return new Dimension(Integer.parseInt(resizeWidth), calculatedHeight);
                         }
                         return dimension;

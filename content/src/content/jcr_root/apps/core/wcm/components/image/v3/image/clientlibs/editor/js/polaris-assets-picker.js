@@ -60,6 +60,11 @@
 		});
 	});
 
+	$(document).on("click", ".cq-FileUpload-clear", function(e) {
+        var polarisImage = $("input[name=\"./polarisImage\"]");
+        polarisImage.val("");
+	});
+
 	function registerAssetSelectorsIms() {
 	    if (registered) {
 	        return;
@@ -137,6 +142,12 @@
 		img.attr("src", url);
 		img.attr("alt", name);
 		img.attr("title", url);
+        var polarisImage = $("input[name=\"./polarisImage\"]");
+		polarisImage.val(url);
+		var fileNameInput = $("input[name=\"./fileName\"]");
+        fileNameInput.val("");
+        var fileReferenceInput = $("input[name=\"./fileReference\"]");
+        fileReferenceInput.val("");
 	}
 
 	function onClose() {
