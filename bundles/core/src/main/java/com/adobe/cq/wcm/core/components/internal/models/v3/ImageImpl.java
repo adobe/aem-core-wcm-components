@@ -78,7 +78,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         String polarisImage = properties.get("polarisImage", String.class);
         String fileName = properties.get("fileName", String.class);
         if (StringUtils.isNotEmpty(polarisImage) && StringUtils.isEmpty(fileReference) && StringUtils.isEmpty(fileName)) {
-                src = polarisImage;
+            // polarisConfiguration.repositoryId - should come from polaris configuration
+            String repositoryId = "delivery-p47604-e144858-cmstg.adobeaemcloud.com";
+            src = "https://" + repositoryId + "/adobe/dynamicmedia/deliver/" + polarisImage;
         }
     }
 
