@@ -17,5 +17,3 @@
 #base=js
 
 image.js
-assets-selector.js
-polaris-assets-picker.js

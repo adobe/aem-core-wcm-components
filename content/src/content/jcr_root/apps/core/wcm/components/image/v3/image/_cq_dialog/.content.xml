@@ -70,19 +70,11 @@
                                                 fileReferenceParameter="./fileReference"
                                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
                                                 name="./file"/>
-                                            <polarisPickerButton
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/button"
-                                                granite:class="btn__polaris-picker"
-                                                name="./polarisPicker"
-                                                text="Pick image from Polaris"/>
                                             <polarisImage
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="/libs/granite/ui/components/coral/foundation/form/textfield"
                                                 granite:class="lnk__polaris-picker"
-                                                name="./polarisImage"
-                                                fieldDescription="Shows the current Polaris image URL"
-                                                fieldLabel="Polaris image URL (for demo purposes)"/>
+                                                name="./polarisImage"/>
                                             <alternativeGroup
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/well"
