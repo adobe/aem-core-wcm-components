@@ -2,8 +2,6 @@
 /node_modules
 /target
 /src/content/jcr_root/apps/core/wcm/components/commons/datalayer
-/src/content/jcr_root/apps/core/wcm/components/image/v3/image/clientlibs/editor/js/assets-selector.js
-/src/content/jcr_root/apps/core/wcm/components/image/v3/image/clientlibs/editor/js/polaris-assets-picker.js
 /test
 /coverage
 karma.conf.js
