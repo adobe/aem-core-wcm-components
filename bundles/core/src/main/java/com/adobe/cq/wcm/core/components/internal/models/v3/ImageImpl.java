@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.ui.wcm.commons.config.NextGenDynamicMediaConfig;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
@@ -32,12 +33,14 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.awt.*;
 import java.util.Collections;
 import java.util.List;
@@ -58,6 +61,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String URI_WIDTH_PLACEHOLDER = "{.width}";
     private static final String EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
+    @Inject
+    @Optional
+    private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
+
     private boolean imageLinkHidden = false;
 
     private String srcSet = StringUtils.EMPTY;
@@ -77,9 +84,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
         String polarisImage = properties.get("polarisImage", String.class);
         String fileName = properties.get("fileName", String.class);
-        if (StringUtils.isNotEmpty(polarisImage) && StringUtils.isEmpty(fileReference) && StringUtils.isEmpty(fileName)) {
-            // polarisConfiguration.repositoryId - should come from polaris configuration
-            String repositoryId = "delivery-p47604-e144858-cmstg.adobeaemcloud.com";
+        if (StringUtils.isNotEmpty(polarisImage) && StringUtils.isEmpty(fileReference) && StringUtils.isEmpty(fileName) && nextGenDynamicMediaConfig != null) {
+            String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
             src = "https://" + repositoryId + "/adobe/dynamicmedia/deliver/" + polarisImage;
         }
     }
