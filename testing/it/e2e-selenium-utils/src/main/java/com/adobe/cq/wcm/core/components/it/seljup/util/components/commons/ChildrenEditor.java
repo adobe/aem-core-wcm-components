@@ -58,7 +58,7 @@ public class ChildrenEditor extends BaseComponent {
      * Removes the first element in ChildrenEditor
      */
     public void removeFirstItem() {
-         $$(item + " " + removeButton).first().click();
+        $$(item + " " + removeButton).first().click();
     }
 
     /**

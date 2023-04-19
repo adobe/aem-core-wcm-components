@@ -104,7 +104,7 @@
             if (that._config.el && that._config.panelContainerType) {
                 var items = $(this._config.el).find(that._config.panelContainerType.itemSelector);
                 items.each(function(index) {
-                    if ($(this).is(that._config.panelContainerType.itemActiveSelector)) {
+                    if ($(this).is("#" + that._config.el.id + " " + that._config.panelContainerType.itemActiveSelector)) {
                         activeIndex = index;
                         return false;
                     }
@@ -175,8 +175,7 @@
                 type: "POST",
                 url: url,
                 data: {
-                    "delete": deleted,
-                    "order": ordered
+                    "itemOrder": ordered.join()
                 }
             });
         }

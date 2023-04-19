@@ -19,9 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v1;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
-import org.codehaus.jackson.JsonNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -137,7 +137,7 @@ public class FormContainerIT extends AuthorBaseUITest {
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
 
         JsonNode json_allForm = authorClient.doGetJson(contentJsonUrl_allForm, 1, HttpStatus.SC_OK);
-        Iterator<JsonNode> itr = json_allForm.getElements();
+        Iterator<JsonNode> itr = json_allForm.elements();
         Boolean present = false;
         while(itr.hasNext()) {
             JsonNode node = itr.next();

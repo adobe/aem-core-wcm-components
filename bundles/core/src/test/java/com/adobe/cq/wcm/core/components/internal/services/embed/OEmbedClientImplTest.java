@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
 import javax.xml.bind.JAXBContext;
@@ -25,6 +26,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Source;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -32,8 +34,9 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.util.reflection.FieldSetter;
 
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedClient;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
@@ -42,57 +45,64 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class OEmbedClientImplTest {
 
-    @Test
-    void testJSON() throws NoSuchFieldException, IOException {
+    private OEmbedClientImpl setupForJson() throws IOException {
         OEmbedClientImpl client = new OEmbedClientImpl();
         OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
         configurationFactory.configure(
-                new OEmbedClientImplConfigurationFactory.Config() {
+            new OEmbedClientImplConfigurationFactory.Config() {
 
-                    @Override
-                    public Class<? extends Annotation> annotationType() {
-                        return null;
-                    }
+                @Override
+                public Class<? extends Annotation> annotationType() {
+                    return null;
+                }
 
-                    @Override
-                    public String provider() {
-                        return "Test JSON";
-                    }
+                @Override
+                public String provider() {
+                    return "Test JSON";
+                }
 
-                    @Override
-                    public String format() {
-                        return OEmbedResponse.Format.JSON.getValue();
-                    }
+                @Override
+                public String format() {
+                    return OEmbedResponse.Format.JSON.getValue();
+                }
 
-                    @Override
-                    public String endpoint() {
-                        return "http://test.com/embed";
-                    }
+                @Override
+                public String endpoint() {
+                    return "http://test.com/embed";
+                }
 
-                    @Override
-                    public String[] scheme() {
-                        return new String[]{
-                                "http://test\\.com/json.*"
-                        };
-                    }
+                @Override
+                public String[] scheme() {
+                    return new String[]{
+                        "http://test\\.com/json.*"
+                    };
+                }
 
-                    @Override
-                    public boolean unsafeContext() {
-                        return false;
-                    }
-                });
+                @Override
+                public boolean unsafeContext() {
+                    return false;
+                }
+            });
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
         ObjectMapper mapper = mock(ObjectMapper.class);
         mockHttpClient(client);
         when(mapper.readValue(any(InputStream.class), any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
-        FieldSetter.setField(client, client.getClass().getDeclaredField("mapper"), mapper);
+        setField(client.getClass(), "mapper", client, mapper);
+
+        return client;
+    }
+
+    @Test
+    void testJSON() throws IOException {
+        OEmbedClientImpl client = setupForJson();
         String provider = client.getProvider("http://test.com/json");
         assertEquals("Test JSON", provider);
         OEmbedResponse response = client.getResponse("http://test.com/json");
@@ -102,7 +112,14 @@ class OEmbedClientImplTest {
     }
 
     @Test
-    void testXML() throws NoSuchFieldException, JAXBException, IOException {
+    void testJsonReturnsNullOnMalformedUri() throws IOException {
+        OEmbedClientImpl client = setupForJson();
+        // trailing whitespace will cause an invalid uri
+        OEmbedResponse response = client.getResponse("http://test.com/json ");
+        assertNull(response);
+    }
+
+    private OEmbedClientImpl setupForXml() throws IOException, JAXBException {
         OEmbedClientImpl client = new OEmbedClientImpl();
         OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
         configurationFactory.configure(new OEmbedClientImplConfigurationFactory.Config() {
@@ -130,7 +147,7 @@ class OEmbedClientImplTest {
             @Override
             public String[] scheme() {
                 return new String[]{
-                        "http://test\\.com/xml.*"
+                    "http://test\\.com/xml.*"
                 };
             }
 
@@ -142,11 +159,18 @@ class OEmbedClientImplTest {
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
         JAXBContext jaxbContext = mock(JAXBContext.class);
-        FieldSetter.setField(client, client.getClass().getDeclaredField("jaxbContext"), jaxbContext);
+        setField(client.getClass(), "jaxbContext", client, jaxbContext);
         Unmarshaller unmarshaller = mock(Unmarshaller.class);
         when(jaxbContext.createUnmarshaller()).thenReturn(unmarshaller);
         mockHttpClient(client);
         when(unmarshaller.unmarshal(any(Source.class))).thenReturn(new OEmbedXMLResponseImpl());
+
+        return client;
+    }
+
+    @Test
+    void testXML() throws JAXBException, IOException {
+        OEmbedClientImpl client = setupForXml();
         String provider = client.getProvider("http://test.com/xml");
         assertEquals("Test XML", provider);
         assertNotNull(client.getResponse("http://test.com/xml"));
@@ -154,9 +178,16 @@ class OEmbedClientImplTest {
         assertFalse(unsafeContext);
     }
 
-    protected void mockHttpClient(OEmbedClient client) throws NoSuchFieldException, IOException {
+    @Test
+    void testXMLReturnsNullOnMalformedUri() throws JAXBException, IOException {
+        OEmbedClientImpl client = setupForXml();
+        // trailing whitespace will cause an invalid uri
+        assertNull(client.getResponse("http://test.com/xml "));
+    }
+
+    protected void mockHttpClient(OEmbedClient client) throws IOException {
         HttpClientBuilderFactory mockBuilderFactory = mock(HttpClientBuilderFactory.class);
-        FieldSetter.setField(client, client.getClass().getDeclaredField("httpClientBuilderFactory"), mockBuilderFactory);
+        setField(client.getClass(), "httpClientBuilderFactory", client, mockBuilderFactory);
 
         HttpClientBuilder mockBuilder = mock(HttpClientBuilder.class);
         when(mockBuilderFactory.newBuilder()).thenReturn(mockBuilder);
@@ -172,5 +203,18 @@ class OEmbedClientImplTest {
         when(mockResponse.getEntity()).thenReturn(mockEntity);
 
         when(mockEntity.getContent()).thenReturn(mock(InputStream.class));
+    }
+
+    public static void setField(@NotNull final Class<?> clazz,
+                                           @NotNull final String fieldName,
+                                           @Nullable final Object target,
+                                           @Nullable final Object value) {
+        final Field f = FieldUtils.getField(clazz, fieldName, true);
+        FieldUtils.removeFinalModifier(f);
+        try {
+            f.set(target, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

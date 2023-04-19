@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.20.3-SNAPSHOT</version>
+        <version>2.22.5-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.junit.core</artifactId>
-    <version>2.20.3-SNAPSHOT</version>
+    <version>2.22.5-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>Adobe Experience Manager Core WCM Components JUnit Testing</name>
@@ -166,21 +166,9 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <artifactId>commons-collections</artifactId>
-            <version>3.2.2</version>
-            <groupId>commons-collections</groupId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>20.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.9</version>
+            <version>0.10.2</version>
         </dependency>
 
         <!-- Servlet -->
@@ -194,7 +182,7 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.testing.resourceresolver-mock</artifactId>
-            <version>1.1.22</version>
+            <version>1.4.0</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -212,7 +200,7 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.models.api</artifactId>
-            <version>1.3.6</version>
+            <version>1.3.8</version>
             <scope>provided</scope>
         </dependency>
 
@@ -220,7 +208,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>com.adobe.cq.export.json</artifactId>
-            <version>0.0.12</version>
+            <version>0.1.10</version>
             <scope>provided</scope>
         </dependency>
 

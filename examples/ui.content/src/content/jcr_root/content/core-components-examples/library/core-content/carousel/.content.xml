@@ -341,6 +341,61 @@
                             reference="../../component"/>
                     </info>
                 </demo_293658729>
+                <title_activeitem
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Default Active Item"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_activeitem
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Carousel with three images with the default active item being the second image.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_activeitem
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <carousel_1655133361
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/carousel"
+                            activeItem="image_1321018784">
+                            <image_436039984
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
+                            <image_1321018784
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
+                            <image
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/image"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
+                        </carousel_1655133361>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_activeitem>
                 <title_290386009
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"

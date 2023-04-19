@@ -19,7 +19,9 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.accordion.v1;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
@@ -68,6 +70,8 @@ public class AccordionIT extends AuthorBaseUITest {
     private static final String deepLinkPagePath = "/content/core-components/deep-link/accordion/v1.html";
     private static final String itemTitleId1 = "accordion-24628d01df-item-5209084c68";
     private static final String itemContentId1 = "text-1";
+    private static final String itemTitleId1a = "accordion-24628d01df-item-5c22487585";
+    private static final String itemContentId1a = "text-1a";
     private static final String itemTitleId2 = "accordion-90566600bc-item-42c74c71b7";
     private static final String itemContentId2 = "text-2";
     private static final String itemTitleId3 = "accordion-83cc77b83d-item-fec7e9d490";
@@ -142,7 +146,7 @@ public class AccordionIT extends AuthorBaseUITest {
      * @throws InterruptedException
      */
 
-    private ElementsCollection createItem() throws InterruptedException {
+    private List<String> createItem() throws InterruptedException {
         //1.
         AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
         editDialog.openItemsTab();
@@ -171,9 +175,12 @@ public class AccordionIT extends AuthorBaseUITest {
         assertTrue(items.get(0).getValue().equals("item0"), "First input item should be item0");
         assertTrue(items.get(1).getValue().equals("item1"), "Second input item should be item1");
         assertTrue(items.get(2).getValue().equals("item2"), "Third input item should be item2");
+
+        List<String> itemValues = items.stream().map(SelenideElement::getValue).map(String::toString).collect(Collectors.toList());
+
         Commons.saveConfigureDialog();
 
-        return items;
+        return itemValues;
     }
 
     /**
@@ -188,7 +195,7 @@ public class AccordionIT extends AuthorBaseUITest {
      * 3. verify the expanded items match those passed
      */
 
-    private void verifyExpandedItemsSelect(ElementsCollection items, AccordionEditDialog.EditDialogProperties properties) {
+    private void verifyExpandedItemsSelect(List<String> items, AccordionEditDialog.EditDialogProperties properties) {
         //1.
         properties.openProperties();
 
@@ -197,10 +204,10 @@ public class AccordionIT extends AuthorBaseUITest {
 
         //3.
         CoralSelectList selectedItems = properties.selectList();
-        assertTrue(selectedItems.items().size() == items.size(), "Number of items in property config should be equal to added items number");
+        assertEquals(items.size(), selectedItems.items().size(), "Number of items in property config should be equal to added items number");
 
-        for(int i = 0; i < items.size(); i++) {
-                assertTrue(properties.getSelectedItemValue(i).contains(items.get(i).getValue()),  "Selected item should be same as added item");
+        for (int i = 0; i < items.size(); i++) {
+            assertTrue(properties.getSelectedItemValue(i).contains(items.get(i)), "Selected item should be same as added item");
         }
     }
 
@@ -302,6 +309,41 @@ public class AccordionIT extends AuthorBaseUITest {
     }
 
     /**
+     * Select the expanded accordion item when single expasion is checked
+     *
+     * @param idx id of the item to be expanded
+     *
+     * 1. open the edit dialog
+     * 2. open the properties tab
+     * 3. open the expandedselect list
+     * 4. select the idx item
+     * 5. save the edit dialog
+     *
+     * @throws InterruptedException
+     */
+    private CoralSelectList selectExpandedItemSingle(int idx) throws InterruptedException {
+        //1.
+        AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
+
+        //2.
+        AccordionEditDialog.EditDialogProperties properties =  editDialog.getEditDialogProperties();
+        properties.openProperties();
+
+        //3.
+        properties.openExpandedSelectSingle(" > button");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+
+        //4.
+        CoralSelectList selectedItems = properties.selectListSingle();
+        selectedItems.selectByIndex(idx + 1);
+
+        //5.
+        Commons.saveConfigureDialog();
+
+        return selectedItems;
+    }
+
+    /**
      * Test: Edit Dialog: Add items
      *
      * 1. create new items with titles
@@ -315,7 +357,7 @@ public class AccordionIT extends AuthorBaseUITest {
     @DisplayName("Test: Edit Dialog: Add items")
     public void testAddItem() throws  InterruptedException {
         //1.
-        ElementsCollection items = createItem();
+        List<String> items = createItem();
 
         //2.
         AccordionEditDialog editDialog = accordion.openEditDialog(cmpPath);
@@ -357,12 +399,14 @@ public class AccordionIT extends AuthorBaseUITest {
         //4.
         accordion.openEditDialog(cmpPath);
         editDialog.openItemsTab();
-        ElementsCollection items = childrenEditor.getInputItems();
+        List<String> items = childrenEditor.getInputItems().stream()
+                .map(SelenideElement::getValue).map(String::toString)
+                .collect(Collectors.toList());
 
         //5.
-        assertTrue(items.size() == 2, "Number to items added should be 2");
-        assertTrue(items.get(0).getValue().equals("item1"), "First input item should be item1");
-        assertTrue(items.get(1).getValue().equals("item2"), "Second input item should be item2");
+        assertEquals(2, items.size(), "Number to items added should be 2");
+        assertEquals("item1", items.get(0), "First input item should be item1");
+        assertEquals("item2", items.get(1), "Second input item should be item2");
 
         //6.
         verifyExpandedItemsSelect(items, editDialog.getEditDialogProperties());
@@ -408,13 +452,15 @@ public class AccordionIT extends AuthorBaseUITest {
         editDialog.openItemsTab();
 
         //6.
-        ElementsCollection items = childrenEditor.getInputItems();
+        List<String> items = childrenEditor.getInputItems().stream()
+                .map(SelenideElement::getValue).map(String::toString)
+                .collect(Collectors.toList());
 
-        assertTrue(items.size() == 3, "Number to items added should be 3");
+        assertEquals(3, items.size(), "Number to items added should be 3");
         //In chrome browser re-order is not working as expected
-        assertTrue(items.get(0).getValue().equals("item2") || items.get(0).getValue().equals("item0"), "First input item should be item2 or item0");
-        assertTrue(items.get(1).getValue().equals("item0") || items.get(1).getValue().equals("item2"), "Second input item should be item0 or item2");
-        assertTrue(items.get(2).getValue().equals("item1"), "Second input item should be item1");
+        assertTrue(items.get(0).equals("item2") || items.get(0).equals("item0"), "First input item should be item2 or item0");
+        assertTrue(items.get(1).equals("item0") || items.get(1).equals("item2"), "Second input item should be item0 or item2");
+        assertEquals("item1", items.get(2), "Second input item should be item1");
 
         //7.
         verifyExpandedItemsSelect(items, editDialog.getEditDialogProperties());
@@ -483,7 +529,8 @@ public class AccordionIT extends AuthorBaseUITest {
      * 5. enable single item expansion
      * 6. verify that the expanded items select is disabled and expanded item select is enabled.
      * 7. save the edit dialog
-     * 8. verify that the first item is expanded
+     * 8. verify that the no item is expanded
+     * 9. select an expanded item and verify it is expanded
      *
      * @throws InterruptedException
      */
@@ -524,7 +571,11 @@ public class AccordionIT extends AuthorBaseUITest {
 
         //8.
         ArrayList<String> items = new ArrayList<>();
-        items.add("item0");
+        verifyExpandedItems(items);
+
+        //9.
+        selectExpandedItemSingle(1);
+        items = new ArrayList<String>() {{ add("item1"); }};
         verifyExpandedItems(items);
     }
 
@@ -550,7 +601,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //1.
         String component = "[data-type='Editable'][data-path='" + cmpPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(cmpPath);
 
         //2.
@@ -631,7 +682,7 @@ public class AccordionIT extends AuthorBaseUITest {
         editableToolbar.clickPanelSelect();
         PanelSelector panelSelector = new PanelSelector();
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
 
         //4.
         panelSelector.reorderItems(0, 2);
@@ -705,7 +756,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
 
         //2.
@@ -751,6 +802,8 @@ public class AccordionIT extends AuthorBaseUITest {
         page.open();
         SelenideElement itemTitle1 = Selenide.$("#" + itemTitleId1);
         SelenideElement itemContent1 = Selenide.$("#" + itemContentId1);
+        SelenideElement itemTitle1a = Selenide.$("#" + itemTitleId1a);
+        SelenideElement itemContent1a = Selenide.$("#" + itemContentId1a);
         SelenideElement itemTitle2 = Selenide.$("#" + itemTitleId2);
         SelenideElement itemContent2 = Selenide.$("#" + itemContentId2);
         SelenideElement itemTitle3 = Selenide.$("#" + itemTitleId3);
@@ -768,6 +821,11 @@ public class AccordionIT extends AuthorBaseUITest {
         Selenide.$("#link-1").click();
         assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
         assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+
+        // clicking a link referencing the first accordion item expands it and scrolls to it
+        Selenide.$("#link-1a").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1a));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1a));
 
         // clicking a link referencing a nested accordion item expands all intermediary items and scrolls to it
         Commons.scrollToTop();

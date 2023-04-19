@@ -140,7 +140,8 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the table of contents component"
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                             <restrictedstartlevel
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/hidden"

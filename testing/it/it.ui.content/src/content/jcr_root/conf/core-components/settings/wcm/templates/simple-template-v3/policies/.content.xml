@@ -28,7 +28,20 @@
             <container
                 cq:policy="core/wcm/components/container/v1/container/policy_1648728186333"
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="wcm/core/components/policies/mapping"/>
+                sling:resourceType="wcm/core/components/policies/mapping">
+                <core-component jcr:primaryType="nt:unstructured">
+                    <components jcr:primaryType="nt:unstructured">
+                        <embed-v1
+                            jcr:primaryType="nt:unstructured"
+                            cq:policy="core-component/components/embed-v1/policy_1668764855725"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <embed-v2
+                            jcr:primaryType="nt:unstructured"
+                            cq:policy="core-component/components/embed-v2/policy_1668764855725"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                    </components>
+                </core-component>
+            </container>
         </root>
         <container
             cq:policy="core/wcm/components/container/v1/container/policy_1606467713472"

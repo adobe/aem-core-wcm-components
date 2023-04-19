@@ -53,7 +53,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v3/image)
 9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v2/button)
 10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v2/teaser)
-11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v3/list)
+11. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v4/list)
 12. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v2/download)
 13. [PDF Viewer](content/src/content/jcr_root/apps/core/wcm/components/pdfviewer/v1/pdfviewer)
 14. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v2/embed)
@@ -91,11 +91,9 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 ### System Requirements
 
-Core Components | AEM as a Cloud Service | AEM 6.5       | Java SE | Maven
-----------------|------------------------|---------------|---------|---------
-[2.20.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.20.2) | Continual | 6.5.13.0+ (*) | 8, 11 | 3.3.9+
-
-(*) - Since version 2.11.0 `org.apache.sling.models.impl` version 1.4.12 or higher is required (due to [SLING-8781](https://issues.apache.org/jira/browse/SLING-8781)). This will be provided for AEM 6.4 and 6.5 in a future Service Pack. Until then, the Sling Models bundle is included in the `core.wcm.components.all` package.
+Core Components | AEM as a Cloud Service | AEM 6.5   | Java SE | Maven
+----------------|------------------------|-----------|---------|---------
+[2.22.4](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.22.4) | Continual | 6.5.14.0+ | 8, <br/>11 | 3.3.9+
 
 For the requirements from previous Core Component releases, see [Historical System Requirements](VERSIONS.md).
 

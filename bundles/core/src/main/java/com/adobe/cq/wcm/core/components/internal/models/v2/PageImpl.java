@@ -50,10 +50,9 @@ import com.adobe.aem.wcm.seo.SeoTags;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -144,8 +143,15 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Nullable
     private String redirectTargetValue;
 
+    /**
+     * The canonical url overwrite if set, null otherwise
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = "cq:canonicalUrl")
+    @Nullable
+    private String customCanonicalUrl;
+
     @Self
-    private LinkHandler linkHandler;
+    private LinkManager linkManager;
 
     /**
      * The proxy path of the first client library listed in the style under the
@@ -186,8 +192,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 .orElse(null);
     }
 
-    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
-        return new RedirectItemImpl(redirectTarget, request, linkHandler);
+    protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
+        return new RedirectItemImpl(redirectTarget, request, linkManager);
     }
 
     private String getProxyPath(ClientLibrary lib) {
@@ -274,7 +280,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public NavigationItem getRedirectTarget() {
         if (redirectTarget == null && StringUtils.isNotEmpty(redirectTargetValue)) {
-            redirectTarget = newRedirectItem(redirectTargetValue, request, linkHandler);
+            redirectTarget = newRedirectItem(redirectTargetValue, request, linkManager);
         }
         return redirectTarget;
     }
@@ -343,7 +349,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             if (!getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
                 this.canonicalUrl = canonicalUrl != null
                     ? canonicalUrl
-                    : linkHandler.getLink(currentPage).map(Link::getExternalizedURL).orElse(null);
+                    : linkManager.get(currentPage).build().getExternalizedURL();
             }
         }
         return canonicalUrl;
@@ -354,7 +360,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public Map<Locale, String> getAlternateLanguageLinks() {
         if (alternateLanguageLinks == null) {
             try {
-                if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, Boolean.FALSE)) {
+                // if enabled, alternate language links should only be included on pages that are canonical (don't have a custom canonical
+                // url set) and are not marked with noindex.
+                String currentPath = currentPage.getPath();
+                boolean isCanonical = StringUtils.isEmpty(customCanonicalUrl) || StringUtils.equals(customCanonicalUrl, currentPath);
+                if (currentStyle != null && currentStyle.get(PN_STYLE_RENDER_ALTERNATE_LANGUAGE_LINKS, Boolean.FALSE)
+                    && isCanonical && !getRobotsTags().contains(ROBOTS_TAG_NOINDEX)) {
                     SeoTags seoTags = resource.adaptTo(SeoTags.class);
                     alternateLanguageLinks = seoTags != null && seoTags.getAlternateLanguages().size() > 0
                         ? Collections.unmodifiableMap(seoTags.getAlternateLanguages())

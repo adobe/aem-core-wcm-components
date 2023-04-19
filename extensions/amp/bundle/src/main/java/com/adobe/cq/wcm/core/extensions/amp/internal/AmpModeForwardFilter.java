@@ -32,7 +32,11 @@ import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.engine.EngineConstants;
 import org.osgi.framework.Constants;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,10 +56,15 @@ import static com.adobe.cq.wcm.core.extensions.amp.internal.AmpUtil.*;
                 Constants.SERVICE_RANKING + "Integer=1000"
         }
 )
+@Designate(ocd = AmpModeForwardFilter.Config.class)
 public class AmpModeForwardFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(AmpModeForwardFilter.class);
+    
+    boolean isEnabled = true;
+    
 
+    
     /**
      * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
      */
@@ -63,24 +72,26 @@ public class AmpModeForwardFilter implements Filter {
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
             throws IOException, ServletException {
 
-        SlingHttpServletRequest slingRequest = (SlingHttpServletRequest) request;
-        AMP_MODE ampMode = getAmpMode(slingRequest);
-
-        Supplier<Stream<String>> selectors = () -> Stream.of(slingRequest.getRequestPathInfo().getSelectors());
-
-        if (selectors.get().anyMatch(a -> a.equals(AMP_SELECTOR)) || ampMode == AMP_MODE.AMP_ONLY) {
-            RequestDispatcherOptions options = new RequestDispatcherOptions();
-            Stream<String> newSelectors = selectors.get().filter(e -> !e.equals(AMP_SELECTOR));
-
-            if (ampMode != AMP_MODE.NO_AMP) {
-                newSelectors = Stream.concat(Stream.of(AMP_SELECTOR), newSelectors);
-            }
-
-            options.setReplaceSelectors(newSelectors.collect(Collectors.joining(DOT)));
-            if (forward(slingRequest, response, options)) {
-                return;
-            }
-        }
+    	if (isEnabled) {
+	        SlingHttpServletRequest slingRequest = (SlingHttpServletRequest) request;
+	        AMP_MODE ampMode = getAmpMode(slingRequest);
+	
+	        Supplier<Stream<String>> selectors = () -> Stream.of(slingRequest.getRequestPathInfo().getSelectors());
+	
+	        if (selectors.get().anyMatch(a -> a.equals(AMP_SELECTOR)) || ampMode == AMP_MODE.AMP_ONLY) {
+	            RequestDispatcherOptions options = new RequestDispatcherOptions();
+	            Stream<String> newSelectors = selectors.get().filter(e -> !e.equals(AMP_SELECTOR));
+	
+	            if (ampMode != AMP_MODE.NO_AMP) {
+	                newSelectors = Stream.concat(Stream.of(AMP_SELECTOR), newSelectors);
+	            }
+	
+	            options.setReplaceSelectors(newSelectors.collect(Collectors.joining(DOT)));
+	            if (forward(slingRequest, response, options)) {
+	                return;
+	            }
+	        }
+    	}
         chain.doFilter(request, response);
     }
 
@@ -91,7 +102,7 @@ public class AmpModeForwardFilter implements Filter {
      * @param options The options to apply to the forward.
      * @return If request forwarded successfully.
      */
-    private boolean forward(SlingHttpServletRequest slingRequest, ServletResponse response,
+    protected boolean forward(SlingHttpServletRequest slingRequest, ServletResponse response,
                             RequestDispatcherOptions options) throws ServletException, IOException {
 
         RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(slingRequest.getResource(), options);
@@ -116,4 +127,20 @@ public class AmpModeForwardFilter implements Filter {
      */
     @Override
     public void destroy() {}
+    
+    
+    @Activate
+    public void activate (Config config) {
+    	this.isEnabled = config.enabled();
+    	LOG.debug("AmpModeForwardFilter.isEnabled={}",isEnabled);
+    }
+    
+    
+    @ObjectClassDefinition(name="AmpMode Forward Filter")
+    protected @interface Config {
+    	@AttributeDefinition (name = "enabled",description = "enable the filter")
+    	public boolean enabled() default true;
+    	
+    }
+    
 }

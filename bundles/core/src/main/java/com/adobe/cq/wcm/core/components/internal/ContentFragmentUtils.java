@@ -286,8 +286,7 @@ public class ContentFragmentUtils {
 
             if (!(resource instanceof TemplatedResource)) {
                 resource = Optional.ofNullable((Resource) resource.adaptTo(TemplatedResource.class))
-                        .orElse(Optional.ofNullable((Resource) slingHttpServletRequest.adaptTo(TemplatedResource.class))
-                                .orElse(resource));
+                                .orElse(resource);
             }
 
             ComponentExporter exporter = modelFactory.getModelFromWrappedRequest(wrappedSlingHttpServletRequest, resource, ComponentExporter.class);

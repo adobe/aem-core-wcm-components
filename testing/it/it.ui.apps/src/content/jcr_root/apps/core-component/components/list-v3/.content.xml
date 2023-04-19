@@ -18,4 +18,5 @@
     jcr:primaryType="cq:Component"
     jcr:title="List"
     sling:resourceSuperType="core/wcm/components/list/v3/list"
+    teaserDelegate="core-component/components/teaser-v2"
     componentGroup=".test"/>

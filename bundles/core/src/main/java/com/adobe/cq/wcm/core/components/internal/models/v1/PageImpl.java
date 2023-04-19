@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -49,12 +50,12 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -96,7 +97,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     private SlingModelFilter slingModelFilter;
 
     @Self
-    protected LinkHandler linkHandler;
+    protected LinkManager linkManager;
 
     protected String[] keywords = new String[0];
     protected String designPath;
@@ -336,10 +337,19 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     protected final PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
             .withTitle(this::getTitle)
+            .withLastModifiedDate(() ->
+                    Optional.ofNullable(this.getLastModifiedDate())
+                            .map(Calendar::getTime)
+                            .orElseGet(() ->
+                                    Optional.ofNullable(pageProperties.get(JcrConstants.JCR_CREATED, Calendar.class))
+                                            .map(Calendar::getTime)
+                                            .orElse(null)))
             .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
             .withDescription(() -> this.pageProperties.get(NameConstants.PN_DESCRIPTION, String.class))
-            .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
-            .withUrl(() -> linkHandler.getLink(currentPage).map(Link::getURL).orElse(null))
+            .withTemplatePath(() -> Optional.ofNullable(this.currentPage.getTemplate())
+                .map(Template::getPath)
+                .orElse(null))
+            .withUrl(() -> linkManager.get(currentPage).build().getURL())
             .withLanguage(this::getLanguage)
             .build();
     }

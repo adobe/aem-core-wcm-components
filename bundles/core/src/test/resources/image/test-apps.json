@@ -12,5 +12,22 @@
                 "componentGroup"         : ".core-wcm"
             }
         }
+    },
+    "teaser": {
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:title"              : "Teaser",
+        "sling:resourceSuperType": "core/wcm/components/image",
+        "jcr:description"        : "Teaser component",
+        "componentGroup"         : ".core-wcm",
+        "imageDelegate"         : "core/wcm/components/image/v1/image"
+    },
+    "list": {
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:title"              : "List",
+        "sling:resourceSuperType": "core/wcm/components/image",
+        "jcr:description"        : "List component",
+        "cq:icon"                :"textBulleted",
+        "componentGroup"         : ".core-wcm",
+        "teaserDelegate"         : "core/wcm/components/teaser"
     }
 }

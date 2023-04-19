@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.link;
 
 import java.util.Optional;
 
-import org.apache.commons.httpclient.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -106,33 +105,35 @@ public class DefaultPathProcessor implements PathProcessor {
         if (vanityConfig == VanityConfig.ALWAYS) {
             path = getPathOrVanityUrl(path, request.getResourceResolver());
         }
-        int fragmentQueryMark = path.indexOf('#');
-        if (fragmentQueryMark < 0) {
-            fragmentQueryMark = path.indexOf('?');
+        int queryStringMark = path.indexOf('?');
+        int fragmentMark = path.indexOf('#');
+        final String queryString;
+        final String fragment;
+        if (queryStringMark >= 0 || fragmentMark >= 0) {
+            if (queryStringMark >= 0) {
+                if (fragmentMark >= 0) {
+                    queryString = path.substring(queryStringMark + 1, fragmentMark);
+                    fragment = path.substring(fragmentMark + 1);
+                } else {
+                    queryString = path.substring(queryStringMark + 1);
+                    fragment = null;
+                }
+            } else {
+                queryString = null;
+                fragment = path.substring(fragmentMark + 1);
+            }
+            path = path.substring(0, queryStringMark >= 0 ? queryStringMark : fragmentMark);
+        } else {
+            queryString = null;
+            fragment = null;
         }
 
-        final String fragmentQuery;
-        if (fragmentQueryMark >= 0) {
-            fragmentQuery = path.substring(fragmentQueryMark);
-            path = path.substring(0, fragmentQueryMark);
-        } else {
-            fragmentQuery = null;
-        }
         String cp = request.getContextPath();
         if (!StringUtils.isEmpty(cp) && path.startsWith("/") && !path.startsWith(cp + "/")) {
             path = cp + path;
         }
 
-        try {
-            final URI uri = new URI(path, false);
-            path = uri.toString();
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-        }
-
-        if (fragmentQuery != null) {
-            path = path + fragmentQuery;
-        }
+        path = LinkUtil.escape(path, queryString, fragment);
         return path;
     }
 
@@ -179,10 +180,10 @@ public class DefaultPathProcessor implements PathProcessor {
     @Nullable
     private String getVanityUrl(@NotNull String path, @NotNull ResourceResolver resourceResolver) {
         String vanityUrl = null;
-        if (path.endsWith(LinkHandler.HTML_EXTENSION)) {
+        if (path.endsWith(LinkBuilderImpl.HTML_EXTENSION)) {
             PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
             if (pageManager != null) {
-                Page page = pageManager.getPage(path.substring(0, path.lastIndexOf(LinkHandler.HTML_EXTENSION)));
+                Page page = pageManager.getPage(path.substring(0, path.lastIndexOf(LinkBuilderImpl.HTML_EXTENSION)));
                 if (page != null) {
                     vanityUrl = page.getVanityUrl();
                     if (StringUtils.isNotBlank(vanityUrl) && !vanityUrl.startsWith("/")) {

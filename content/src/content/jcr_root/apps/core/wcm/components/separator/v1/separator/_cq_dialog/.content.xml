@@ -48,12 +48,22 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
+                                            <decorative
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="${not empty cqDesign.isDecorative ? cqDesign.isDecorative : false}"
+                                                fieldDescription="Check if the separator is merely decorative and should be ignored by assistive technology like screen readers."
+                                                name="./isDecorative"
+                                                text="Separator is decorative."
+                                                uncheckedValue="false"
+                                                value="{Boolean}true"/>
                                             <id
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>

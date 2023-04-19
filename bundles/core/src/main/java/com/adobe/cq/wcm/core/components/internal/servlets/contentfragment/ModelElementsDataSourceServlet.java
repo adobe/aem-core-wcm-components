@@ -80,7 +80,8 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
         // First try to get the model path from request parameters
         // otherwise determine model path from component resource.
         RequestParameter modelPathRequestParameter = request.getRequestParameter(PARAMETER_AND_PN_MODEL_PATH);
-        boolean isOrderBy = request.getResource().isResourceType(RESOURCE_TYPE_ORDER_BY_V1);
+        boolean isOrderBy = request.getResource().isResourceType(RESOURCE_TYPE_ORDER_BY_V1) ||
+                request.getResource().isResourceType(RESOURCE_TYPE_ORDER_BY_V2);
 
         String modelPath;
         if (modelPathRequestParameter != null) {
@@ -119,7 +120,8 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
                         valueValue = "jcr:content/data/master/" + valueValue;
                     }
                     String metaType = valueMap.get("metaType", StringUtils.EMPTY);
-                    if (!isOrderBy || StringUtils.startsWith(metaType, "text-")) {
+                    if (!isOrderBy || StringUtils.startsWith(metaType, "text-") || StringUtils.equals(metaType, "date")
+                        || StringUtils.equals(metaType, "number")) {
                         Resource syntheticResource = createResource(resourceResolver, textValue, valueValue);
                         resourceList.add(syntheticResource);
                     }

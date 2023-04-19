@@ -89,7 +89,7 @@
      *
      * @typedef {Object} CarouselConfig Represents a Carousel configuration
      * @property {HTMLElement} element The HTMLElement representing the Carousel
-     * @property {Object} options The Carousel options
+     * @property {*[]} options The Carousel options
      */
 
     /**
@@ -125,7 +125,7 @@
             that._paused = false;
 
             if (that._elements.item) {
-                refreshActive();
+                initializeActive();
                 bindEvents();
                 resetAutoplayInterval();
                 refreshPlayPauseActions();
@@ -160,7 +160,7 @@
         function scrollToDeepLinkIdInCarousel() {
             if (containerUtils) {
                 var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item", "item");
-                if (deepLinkItemIdx && deepLinkItemIdx !== -1) {
+                if (deepLinkItemIdx > -1) {
                     var deepLinkItem = that._elements["item"][deepLinkItemIdx];
                     if (deepLinkItem && that._elements["item"][that._active].id !== deepLinkItem.id) {
                         navigateAndFocusIndicator(deepLinkItemIdx, true);
@@ -458,6 +458,21 @@
         }
 
         /**
+         * Initialize {@code Carousel#_active} based on the active item of the carousel.
+         */
+        function initializeActive() {
+            var items = that._elements["item"];
+            if (items && Array.isArray(items)) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].classList.contains("cmp-carousel__item--active")) {
+                        that._active = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        /**
          * Refreshes the item markup based on the current {@code Carousel#_active} index
          *
          * @private
@@ -640,38 +655,6 @@
     }
 
     /**
-     * Reads options data from the Carousel wrapper element, defined via {@code data-cmp-*} data attributes
-     *
-     * @private
-     * @param {HTMLElement} element The Carousel element to read options data from
-     * @returns {Object} The options read from the component data attributes
-     */
-    function readData(element) {
-        var data = element.dataset;
-        var options = [];
-        var capitalized = IS;
-        capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
-        var reserved = ["is", "hook" + capitalized];
-
-        for (var key in data) {
-            if (Object.prototype.hasOwnProperty.call(data, key)) {
-                var value = data[key];
-
-                if (key.indexOf(NS) === 0) {
-                    key = key.slice(NS.length);
-                    key = key.charAt(0).toLowerCase() + key.substring(1);
-
-                    if (reserved.indexOf(key) === -1) {
-                        options[key] = value;
-                    }
-                }
-            }
-        }
-
-        return options;
-    }
-
-    /**
      * Parses the dataLayer string and returns the ID
      *
      * @private
@@ -700,7 +683,7 @@
 
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
-            new Carousel({ element: elements[i], options: readData(elements[i]) });
+            new Carousel({ element: elements[i], options: CMP.utils.readData(elements[i], IS) });
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -714,7 +697,7 @@
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
                             elementsArray.forEach(function(element) {
-                                new Carousel({ element: element, options: readData(element) });
+                                new Carousel({ element: element, options: CMP.utils.readData(element, IS) });
                             });
                         }
                     });
@@ -729,11 +712,14 @@
         });
     }
 
-    if (document.readyState !== "loading") {
-        onDocumentReady();
-    } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady);
-    }
+    var documentReady = document.readyState !== "loading" ? Promise.resolve() : new Promise(function(resolve) {
+        document.addEventListener("DOMContentLoaded", resolve);
+    });
+    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(function(resolve) {
+        document.addEventListener("core.wcm.components.commons.site.utils.loaded", resolve);
+    });
+    Promise.all([documentReady, utilsReady]).then(onDocumentReady);
+
     if (containerUtils) {
         window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }

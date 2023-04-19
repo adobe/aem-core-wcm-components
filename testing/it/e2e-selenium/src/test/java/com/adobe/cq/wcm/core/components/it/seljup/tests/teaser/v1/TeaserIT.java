@@ -491,6 +491,22 @@ public class TeaserIT extends AuthorBaseUITest {
         assertTrue(editDialog.isTitleTypeSelectDropdownDisplayed());
         assertEquals(editDialog.getTitleTypeSelectDropdownDefaultSelectedText(), "h3");
     }
+
+    @Test
+    @DisplayName("Test: Check the title type selection when no allowed types are defined (backwards compatibility mode).")
+    public void testTypeTypeSelectDropdownNoAllowedTypes() throws ClientException, InterruptedException, TimeoutException {
+        createComponentPolicy(teaserRT.substring(teaserRT.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
+            add(new BasicNameValuePair("showTitleType", "true"));
+        }});
+
+        editorPage.refresh();
+
+        Commons.openEditDialog(editorPage, cmpPath);
+        TeaserEditDialog editDialog = teaser.getEditDialog();
+        editDialog.openTextTab();
+        assertTrue(editDialog.isTitleTypeSelectDropdownDisplayed());
+        assertEquals("(default)", editDialog.getTitleTypeSelectDropdownDefaultSelectedText());
+    }
     // ----------------------------------------------------------
     // private stuff
     // ----------------------------------------------------------

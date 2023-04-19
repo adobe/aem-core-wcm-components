@@ -16,13 +16,15 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
-import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
@@ -43,25 +45,40 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * The link for this list item.
      */
-    protected Optional<Link<Page>> link;
+    protected Link<Page> link;
 
     /**
      * Construct a list item for a given page.
      *
-     * @param linkHandler The link handler.
+     * @param linkManager The link manager.
      * @param page The current page.
      * @param parentId The ID of the list containing this item.
      * @param component The component containing this list item.
      */
-    public PageListItemImpl(@NotNull final LinkHandler linkHandler,
+    public PageListItemImpl(@NotNull final LinkManager linkManager,
+                            @NotNull final Page page,
+                            final String parentId,
+                            final Component component) {
+        this(linkManager.get(page).build(), page, parentId, component);
+    }
+
+    /**
+     * Construct a list item for a given page.
+     *
+     * @param link The link.
+     * @param page The current page.
+     * @param parentId The ID of the list containing this item.
+     * @param component The component containing this list item.
+     */
+    public PageListItemImpl(@NotNull final Link link,
                             @NotNull final Page page,
                             final String parentId,
                             final Component component) {
         super(parentId, page.getContentResource(), component);
         this.parentId = parentId;
-        this.link = linkHandler.getLink(page);
-        if (this.link.isPresent()) {
-            this.page = link.get().getReference();
+        this.link = link;
+        if (this.link.isValid() && (link.getReference() instanceof Page)) {
+            this.page = (Page) link.getReference();
         } else {
             this.page = page;
         }
@@ -71,12 +88,12 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     @JsonIgnore
     @Nullable
     public Link<Page> getLink() {
-        return link.orElse(null);
+        return link;
     }
 
     @Override
     public String getURL() {
-        return link.map(Link::getURL).orElse(null);
+        return link.getURL();
     }
 
     @Override
@@ -86,7 +103,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     /**
      * Gets the title of a page list item from a given page.
-     * The list item title is derived from the page by selecting the first non-null value from the
+     * The list item title is derived from the page by selecting the first non-blank value from the
      * following:
      * <ul>
      *     <li>{@link Page#getNavigationTitle()}</li>
@@ -99,17 +116,11 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
      * @return The list item title.
      */
     public static String getTitle(@NotNull final Page page) {
-        String title = page.getNavigationTitle();
-        if (title == null) {
-            title = page.getPageTitle();
-        }
-        if (title == null) {
-            title = page.getTitle();
-        }
-        if (title == null) {
-            title = page.getName();
-        }
-        return title;
+        return Stream.<Supplier<String>>of(page::getNavigationTitle, page::getPageTitle, page::getTitle)
+            .map(Supplier::get)
+            .filter(StringUtils::isNotBlank)
+            .findFirst()
+            .orElseGet(page::getName);
     }
 
     @Override
@@ -138,7 +149,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     protected PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
             .withTitle(this::getTitle)
-            .withLinkUrl(() -> link.map(Link::getMappedURL).orElse(null))
+            .withLinkUrl(() -> link.getMappedURL())
             .build();
     }
 }

@@ -173,7 +173,8 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>

@@ -71,7 +71,7 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         String fileReference = teaserProperties.get("fileReference", String.class);
         String title = teaserProperties.get("jcr:title", String.class);
         String description = teaserProperties.get("jcr:description", String.class);
-        assertEquals("/content/list/pages/page_1/page_1_1/jcr:content/cq:featuredimage", teaserResource0.getPath(), "image resource: path");
+        assertEquals("/content/list/jcr:content/root/listRenderedAsTeaserItems", teaserResource0.getPath(), "image resource: path");
         assertEquals("core/wcm/components/teaser/v2/teaser", teaserResource0.getResourceType(), "image resource: resource type");
         assertEquals("/content/list/pages/page_1/page_1_1", linkURL, "image resource: linkURL");
         assertEquals("/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", fileReference, "image resource: fileReference");
@@ -81,9 +81,8 @@ public class ListImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         // The featured image of the page does not exist: the content node of the page is used to render the teaser item
         ListItem item2 = (ListItem) items.toArray()[2];
         Resource teaserResource2 = item2.getTeaserResource();
-        assertEquals("/content/list/pages/page_1/page_1_3/jcr:content", teaserResource2.getPath(), "image resource: path");
+        assertEquals("/content/list/jcr:content/root/listRenderedAsTeaserItems", teaserResource2.getPath(), "image resource: path");
 
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_20));
     }
-
 }

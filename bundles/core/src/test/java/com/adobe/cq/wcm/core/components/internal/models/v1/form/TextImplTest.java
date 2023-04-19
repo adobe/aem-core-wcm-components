@@ -47,7 +47,6 @@ public class TextImplTest {
     public void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTAINING_PAGE);
         context.registerService(FormStructureHelperFactory.class, resource -> null);
-        FormsHelperStubber.createStub();
     }
 
     @Test

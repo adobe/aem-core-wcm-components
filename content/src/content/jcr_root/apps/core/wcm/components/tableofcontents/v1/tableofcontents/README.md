@@ -17,6 +17,12 @@ Table of Contents (v1)
 ====
 Component written in HTL and HTTP Request Filter that renders a table of contents(TOC) to help navigate the page content.
 
+## Enabling Component
+
+This component requires the [TableOfContentsFilter](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/servlets/TableOfContentsFilter.java) 
+to be enabled through an [OSGi configuration](../../../../../../../../../../../config/src/content/jcr_root/apps/core/wcm/config/com.adobe.cq.wcm.core.components.internal.servlets.TableOfContentsFilter.config) 
+before it can be used. On AEMaaCS the filter is not enabled by default, the configuration needs to be deployed using the full-stack pipeline.
+
 ## Features
 * **List Type** - Whether to list items in the table of contents as an unordered list of bullet points, or as an ordered list of numbers.
 * **Title Start Level** - The highest title level to report in the table of contents, where `H1` corresponds to `h1` and includes all top-level titles.

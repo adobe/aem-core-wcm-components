@@ -413,9 +413,51 @@
                     "fileReference"     : "/content/dam/core/images/nonexisting.png",
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo"
+                },
+                "image45"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                    "externalImageResourcePath": "/content/test/jcr:content/root/image0"
+                },
+                "image59"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark(1).png",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "/content/test"
+                },
+                "list01" : {
+                    "jcr:primaryType":"nt:unstructured",
+                    "showModificationDate":"true",
+                    "linkItems":"true",
+                    "parentPage":"/content/test",
+                    "sortOrder":"asc",
+                    "displayItemAsTeaser":"true",
+                    "maxItems":"3",
+                    "showDescription":"true",
+                    "sling:resourceType":"core/wcm/components/list",
+                    "childDepth":"1",
+                    "listFrom":"children"
                 }
             },
             "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
         }
-    }
+    },
+    "test-featured-image" : {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType" : "cq:PageContent",
+            "cq:featuredimage": {
+                "jcr:primaryType" : "nr:unstructured",
+                "sling:resourceType": "core/wcm/components/image/v1/image",
+                "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                "altValueFromDAM": "false"
+            }
+        }
+        }
 }

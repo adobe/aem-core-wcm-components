@@ -41,6 +41,8 @@ import com.day.cq.wcm.api.components.ComponentManager;
 @Model(adaptables = {SlingHttpServletRequest.class})
 public class Editor {
 
+    public static final String RESOURCE_TYPE = "core/wcm/components/commons/editor/dialog/childreneditor/v1/childreneditor";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Editor.class);
 
     @Self

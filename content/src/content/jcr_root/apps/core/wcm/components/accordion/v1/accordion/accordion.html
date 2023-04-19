@@ -21,8 +21,9 @@
      data-cmp-data-layer="${accordion.data.json}"
      data-cmp-single-expansion="${accordion.singleExpansion}"
      data-placeholder-text="${wcmmode.edit && 'Please drag Accordion item components here' @ i18n}">
-    <div data-sly-test="${accordion.items.size > 0}"
-         data-sly-repeat.item="${accordion.items}"
+    <div data-sly-set.items="${accordion.children || accordion.items}"
+         data-sly-test="${items.size > 0}"
+         data-sly-repeat.item="${items}"
          class="cmp-accordion__item"
          data-cmp-hook-accordion="item"
          data-cmp-data-layer="${item.data.json}"
@@ -32,13 +33,14 @@
             class="cmp-accordion__header">
             <button id="${item.id}-button"
                     class="cmp-accordion__button${item.name in accordion.expandedItems ? ' cmp-accordion__button--expanded' : ''}"
+                    type="button"
                     aria-controls="${item.id}-panel"
                     data-cmp-hook-accordion="button">
                 <span class="cmp-accordion__title">${item.title}</span>
                 <span class="cmp-accordion__icon"></span>
             </button>
         </h3>
-        <div data-sly-resource="${item.name @ decorationTagName='div'}"
+        <div data-sly-resource="${item.resource @ decorationTagName='div'}"
              data-cmp-hook-accordion="panel"
              id="${item.id}-panel"
              class="cmp-accordion__panel${item.name in accordion.expandedItems ? ' cmp-accordion__panel--expanded' : ' cmp-accordion__panel--hidden'}"
@@ -46,5 +48,5 @@
              aria-labelledby="${item.id}-button"></div>
     </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
-         data-sly-test="${(wcmmode.edit || wcmmode.preview) && accordion.items.size < 1}"></sly>
+         data-sly-test="${(wcmmode.edit || wcmmode.preview) && items.size < 1}"></sly>
 </div>
