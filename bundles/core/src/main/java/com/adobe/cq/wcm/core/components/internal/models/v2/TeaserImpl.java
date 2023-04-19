@@ -31,7 +31,6 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Teaser;
-import com.adobe.cq.wcm.core.components.internal.models.v3.ImageImpl;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -167,7 +166,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
         return Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
                 .map(request.getResourceResolver()::getResource)
                 .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null ||
-                Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class)).filter(ImageImpl::isNgdmImageReference).isPresent();
+                Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class)).filter(StringUtils::isNotBlank).isPresent();
     }
 
     protected Action newAction(Resource actionRes, Component component) {
