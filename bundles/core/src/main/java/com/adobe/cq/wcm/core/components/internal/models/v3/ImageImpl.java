@@ -83,7 +83,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (StringUtils.isNotBlank(fileReference) && fileReference.startsWith("/urn:")) {
             polarisImage = true;
             String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
-            src = "https://" + repositoryId + "/adobe/dynamicmedia/deliver" + fileReference;
+            src = "https://" + repositoryId + "/adobe/dynamicmedia/deliver" + fileReference + "?width=320&preferwebp=true";
             hasContent = true;
         }
         super.initModel();
