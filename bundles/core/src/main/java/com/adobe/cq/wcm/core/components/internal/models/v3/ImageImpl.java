@@ -73,20 +73,25 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     private Dimension dimension;
 
+    private boolean polarisImage = false;
+
     @PostConstruct
     protected void initModel() {
+        initResource();
+        properties = resource.getValueMap();
+        String fileReference = properties.get("fileReference", String.class);
+        if (StringUtils.isNotBlank(fileReference) && fileReference.startsWith("/urn:")) {
+            polarisImage = true;
+            String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
+            src = "https://" + repositoryId + "/adobe/dynamicmedia/deliver" + fileReference;
+            hasContent = true;
+        }
         super.initModel();
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
             imageLinkHidden = properties.get(PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
             sizes = String.join((", "), currentStyle.get(PN_DESIGN_SIZES, new String[0]));
             disableLazyLoading = properties.get(PN_DESIGN_LAZY_LOADING_ENABLED, currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false));
-        }
-        String polarisImage = properties.get("polarisImage", String.class);
-        String fileName = properties.get("fileName", String.class);
-        if (StringUtils.isNotEmpty(polarisImage) && StringUtils.isEmpty(fileReference) && StringUtils.isEmpty(fileName) && nextGenDynamicMediaConfig != null) {
-            String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
-            src = "https://" + repositoryId + "/adobe/dynamicmedia/deliver/" + polarisImage;
         }
     }
 
@@ -182,6 +187,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     @JsonIgnore
     public String getSrcUriTemplate() {
+        if (polarisImage) {
+            int i = src.indexOf("&preferwebp");
+            if (i > -1) {
+                srcUriTemplate = src.substring(0, src.substring(0, i).lastIndexOf('=') + 1) + URI_WIDTH_PLACEHOLDER_ENCODED + src.substring(i);
+                return src.substring(0, src.substring(0, i).lastIndexOf('=') + 1) + URI_WIDTH_PLACEHOLDER + src.substring(i);
+            }
+        }
         return super.getSrcUriTemplate();
     }
 

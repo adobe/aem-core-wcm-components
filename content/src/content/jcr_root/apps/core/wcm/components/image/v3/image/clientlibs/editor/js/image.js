@@ -157,7 +157,6 @@
         });
 
         improveAltTextValidation();
-
     });
 
     $(window).on("focus", function() {

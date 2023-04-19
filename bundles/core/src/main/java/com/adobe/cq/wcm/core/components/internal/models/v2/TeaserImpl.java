@@ -165,7 +165,8 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
         Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkManager, currentStyle, currentPage);
         return Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
                 .map(request.getResourceResolver()::getResource)
-                .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null;
+                .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null ||
+                Optional.ofNullable(wrappedResource.getValueMap().get("polarisImage", String.class)).filter(StringUtils::isNotBlank).isPresent();
     }
 
     protected Action newAction(Resource actionRes, Component component) {
