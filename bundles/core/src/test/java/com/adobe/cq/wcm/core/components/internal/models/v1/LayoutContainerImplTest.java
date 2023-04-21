@@ -32,7 +32,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 public class LayoutContainerImplTest {
@@ -63,6 +65,7 @@ public class LayoutContainerImplTest {
             put(LayoutContainer.PN_LAYOUT, "simple");
         }});
         LayoutContainer container = getContainerUnderTest(CONTAINER_1);
+        Resource containerResource = context.resourceResolver().getResource(CONTAINER_1);
 
         assertEquals(
             "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
@@ -75,7 +78,7 @@ public class LayoutContainerImplTest {
                 {"item_1", "Teaser 1"},
                 {"item_2", "Teaser 2"}
         };
-        verifyContainerItems(expectedItems, container.getItems());
+        verifyContainerItems(containerResource, expectedItems, container.getItems());
         assertEquals("core/wcm/components/container/v1/container", container.getExportedType(), "Exported type mismatch");
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, "container1"));
     }
@@ -120,11 +123,16 @@ public class LayoutContainerImplTest {
         assertEquals("background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain%20range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;", container.getBackgroundStyle(), "Style mismatch");
     }
 
-    private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {
+    private void verifyContainerItems(Resource containerResource, Object[][] expectedItems, List<ListItem> items) {
         assertEquals(expectedItems.length, items.size(), "Item number mismatch");
+        String containerPath = containerResource.getPath();
         int index = 0;
         for (ListItem item : items) {
-            assertEquals(expectedItems[index][1], item.getTitle(), "Item title mismatch");
+            assertTrue(item instanceof ResourceListItemImpl);
+            ResourceListItemImpl resourceListItem = (ResourceListItemImpl) item;
+            assertNotNull(resourceListItem.getResource());
+            assertEquals(containerPath + "/" + expectedItems[index][0], resourceListItem.getResource().getPath());
+            assertEquals(expectedItems[index][1], resourceListItem.getTitle(), "Item title mismatch");
             index++;
         }
     }
