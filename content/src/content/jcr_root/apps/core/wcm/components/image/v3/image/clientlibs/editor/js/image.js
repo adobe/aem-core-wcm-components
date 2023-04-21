@@ -81,7 +81,7 @@
             $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
-            $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
+
             $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
             $dynamicMediaGroup.hide();
             areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
@@ -130,21 +130,24 @@
                     fileReference = undefined;
                 });
             }
-            if ($cqFileUploadEdit) {
-                fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
-                if (fileReference === "") {
-                    fileReference = undefined;
-                }
-                if (fileReference) {
-                    retrieveDAMInfo(fileReference);
-                } else {
-                    altTuple.hideCheckbox(true);
-                    captionTuple.hideCheckbox(true);
-                }
-            }
+
             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
             togglePageImageInherited(imageFromPageImage, isDecorative);
-            updateImageThumbnail();
+            updateImageThumbnail().then(function() {
+                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit:visible");
+                if ($cqFileUploadEdit) {
+                    fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
+                    if (fileReference === "") {
+                        fileReference = undefined;
+                    }
+                    if (fileReference) {
+                        retrieveDAMInfo(fileReference);
+                    } else {
+                        altTuple.hideCheckbox(true);
+                        captionTuple.hideCheckbox(true);
+                    }
+                }
+            });
         }
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
