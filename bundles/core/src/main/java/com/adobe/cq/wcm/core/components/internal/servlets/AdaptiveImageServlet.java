@@ -112,7 +112,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     static final int DEFAULT_RESIZE_WIDTH = 1280;
     public static final int DEFAULT_JPEG_QUALITY = 82; // similar to what is the default in com.day.image.Layer#write(...)
     public static final int DEFAULT_MAX_SIZE = 3840; // 4K UHD width
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveImageServlet.class);
+    private static final Logger AVOID_USAGE_LOGGER = 
+    		LoggerFactory.getLogger(AdaptiveImageServlet.class.getName() + ".AvoidUsage");
+    
     private static final String DEFAULT_MIME = "image/jpeg";
     private static final String SELECTOR_QUALITY_KEY = "quality";
     private static final String SELECTOR_WIDTH_KEY = "width";
@@ -134,6 +138,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         this.metrics = metrics;
         this.defaultResizeWidth = defaultResizeWidth > 0 ? defaultResizeWidth : DEFAULT_RESIZE_WIDTH;
         this.maxInputWidth = maxInputWidth > 0 ? maxInputWidth : DEFAULT_MAX_SIZE;
+        
+        if (!AVOID_USAGE_LOGGER.isWarnEnabled()) {
+        	LOGGER.info("Warnings for the use of the AdaptiveImageServlet disabled");
+        }
     }
 
     @Override
@@ -280,6 +288,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         boolean flipHorizontally = componentProperties.get(Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
         boolean flipVertically = componentProperties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
         if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically) {
+        	
+        	logUsageWarning();
             int originalWidth = getDimension(asset.getMetadataValue(DamConstants.TIFF_IMAGEWIDTH));
             int originalHeight = getDimension(asset.getMetadataValue(DamConstants.TIFF_IMAGELENGTH));
             Layer layer = null;
@@ -412,6 +422,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             boolean flipVertically = componentProperties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
             if (is != null) {
                 if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically) {
+                	logUsageWarning();
                     Layer layer = new Layer(is);
                     if (rectangle != null) {
                         layer.crop(rectangle);
@@ -1000,6 +1011,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 .get(Image.PN_DESIGN_RESIZE_WIDTH, 0);
         }
         return  allowedResizeWidth;
+    }
+    
+    private void logUsageWarning() {
+    	AVOID_USAGE_LOGGER.warn("An image is transformed on-the-fly, which can be a very resource intensive operation. " 
+    			+ "If done frequently, you should consider switching to  dynamic AEM web-optimized images "
+    			+ "or creating such a rendition upfront using processing profiles.");
     }
 
 
