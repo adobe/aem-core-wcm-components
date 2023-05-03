@@ -13,9 +13,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.element="${@ element='The content fragment element'}">
+<template data-sly-template.element="${@ element='The content fragment element',  useI18nForElementTitle='Use i18n to translate the element titles'}">
     <div class="cmp-contentfragment__element cmp-contentfragment__element--${element.name}" data-cmp-contentfragment-element-type="${element.dataType}">
-        <dt class="cmp-contentfragment__element-title">${element.title}</dt>
+        <dt class="cmp-contentfragment__element-title" data-sly-test="${!useI18nForElementTitle}">${element.title}</dt>
+        <dt class="cmp-contentfragment__element-title" data-sly-test="${useI18nForElementTitle}">${element.title @ i18n}</dt>
         <dd class="cmp-contentfragment__element-value">
             <sly data-sly-test="${element.dataType == 'calendar'}" data-sly-use.tpl="core/wcm/components/contentfragment/v1/contentfragment/calendar.html"
                  data-sly-call="${tpl.element @ date = element.value}"></sly>

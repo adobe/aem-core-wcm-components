@@ -15,7 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-use.fragment="com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment"
      data-sly-test="${properties.fragmentPath}" data-sly-use.cfTemplates="templates.html">
-    <sly data-sly-call="${cfTemplates.contentFragment @ fragment=fragment, fragmentPath=properties.fragmentPath, wcmmode=wcmmode}"></sly>
+    <sly data-sly-call="${cfTemplates.contentFragment @ fragment=fragment, fragmentPath=properties.fragmentPath, wcmmode=wcmmode, useI18nForElementTitle = fragment.useI18nForElementTitle}"></sly>
 </sly>
 
 <sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"

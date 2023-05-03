@@ -21,6 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.jcr.Session;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -109,6 +110,10 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
     @ValueMapValue(name = ContentFragmentList.PN_SORT_ORDER, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Default(values = Predicate.SORT_ASCENDING)
     private String sortOrder;
+
+    @ValueMapValue(name = ContentFragmentList.PN_USE_I18N_FOR_ELEMENT_TITLE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(booleanValues = false)
+    private Boolean useI18nForElementTitle;
 
     private final List<DAMContentFragment> items = new ArrayList<>();
 
@@ -208,5 +213,10 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
     @Override
     public String getExportedType() {
         return slingHttpServletRequest.getResource().getResourceType();
+    }
+
+    @Override
+    public boolean useI18nForElementTitle() {
+        return BooleanUtils.isTrue(useI18nForElementTitle);
     }
 }
