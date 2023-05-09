@@ -23,13 +23,13 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.22.7-SNAPSHOT</version>
+        <version>2.22.8</version>
         <relativePath>parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.reactor</artifactId>
     <packaging>pom</packaging>
-    <version>2.22.7-SNAPSHOT</version>
+    <version>2.22.8</version>
 
     <name>Adobe Experience Manager Core WCM Components Reactor</name>
 
@@ -40,7 +40,7 @@
         <connection>scm:git:https://github.com/adobe/aem-core-wcm-components.git</connection>
         <developerConnection>scm:git:https://github.com/adobe/aem-core-wcm-components.git</developerConnection>
         <url>https://github.com/adobe/aem-core-wcm-components/</url>
-        <tag>HEAD</tag>
+        <tag>core.wcm.components.reactor-2.22.8</tag>
     </scm>
 
     <build>
