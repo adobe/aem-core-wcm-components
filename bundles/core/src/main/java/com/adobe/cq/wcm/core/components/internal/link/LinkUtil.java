@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +70,10 @@ public class LinkUtil {
      * @return The escaped fragment
      */
     public static String escape(final String path, final String queryString, final String fragment) {
+        boolean pathContainsFragment = false;
+        if (StringUtils.contains(path, fragment)) {
+            pathContainsFragment = true;
+        }
         final Map<String, String> placeholders = new LinkedHashMap<>();
         final String maskedQueryString = mask(queryString, placeholders);
         String escaped;
@@ -87,9 +92,16 @@ public class LinkUtil {
             }
             if (fragment != null) {
                 StringBuilder sb = new StringBuilder(escaped);
-                escaped = sb.append("#")
-                        .append(URLEncoder.encode(fragment, StandardCharsets.UTF_8.name()).replace("+", "%20"))
-                        .toString();
+                if (pathContainsFragment) {
+                    if (parsed != null) {
+                        escaped = sb.insert(parsed.toString().length(), "#" + fragment).toString();
+                    } else {
+                        escaped = sb.insert(path.indexOf(fragment), "#" + fragment).toString();
+                    }
+                } else {
+                    escaped = sb.append("#").append(URLEncoder.encode(fragment, StandardCharsets.UTF_8.name())
+                            .replace("+", "%20")).toString();
+                }
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
