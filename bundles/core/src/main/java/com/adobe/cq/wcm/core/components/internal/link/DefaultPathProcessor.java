@@ -112,8 +112,13 @@ public class DefaultPathProcessor implements PathProcessor {
         if (queryStringMark >= 0 || fragmentMark >= 0) {
             if (queryStringMark >= 0) {
                 if (fragmentMark >= 0) {
-                    queryString = path.substring(queryStringMark + 1, fragmentMark);
-                    fragment = path.substring(fragmentMark + 1);
+                    if (queryStringMark < fragmentMark) {
+                        queryString = path.substring(queryStringMark + 1, fragmentMark);
+                        fragment = path.substring(fragmentMark + 1);
+                    } else {
+                        fragment = path.substring(fragmentMark + 1, queryStringMark);
+                        queryString = path.substring(queryStringMark + 1);
+                    }
                 } else {
                     queryString = path.substring(queryStringMark + 1);
                     fragment = null;
