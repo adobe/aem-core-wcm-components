@@ -92,6 +92,8 @@ class DefaultPathProcessorTest {
                 underTest.sanitize("https://test.com?categ=cat1|cat2#top level", request));
         assertEquals("https://test.com?recipient=<%= recipient.id %>",
                 underTest.sanitize("https://test.com?recipient=<%= recipient.id %>", request));
+        assertEquals("https://test.com/#/downloads/file.html?name=/content/file.zip",
+                underTest.sanitize("https://test.com/#/downloads/file.html?name=/content/file.zip", request));
     }
 
     @Test

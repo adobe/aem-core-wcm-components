@@ -76,6 +76,13 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
         link = linkManager.get(resource).build();
     }
 
+    @NotNull
+    @JsonIgnore
+    @Deprecated
+    public Resource getResource() {
+        return resource;
+    }
+
     @Override
     @NotNull
     @JsonIgnore

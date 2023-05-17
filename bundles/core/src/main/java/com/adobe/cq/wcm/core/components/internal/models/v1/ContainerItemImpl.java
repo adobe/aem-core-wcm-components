@@ -47,4 +47,18 @@ public final class ContainerItemImpl implements ContainerItem {
         return this.resource;
     }
 
+    @Override
+    @NotNull
+    public String getName() {
+        return this.resource.getName();
+    }
+
+    @Override
+    @NotNull
+    public String getPath() {
+        return this.resource.getPath();
+    }
+
+
+
 }
