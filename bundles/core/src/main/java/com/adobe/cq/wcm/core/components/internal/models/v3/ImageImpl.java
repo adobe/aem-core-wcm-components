@@ -80,7 +80,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         initResource();
         properties = resource.getValueMap();
         String fileReference = properties.get("fileReference", String.class);
-        if (StringUtils.isNotBlank(fileReference) && fileReference.startsWith("/urn:")) {
+        if (isPolarisImageReference(fileReference)) {
             polarisImage = true;
             String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
             src = "https://" + repositoryId + "/adobe/dynamicmedia/deliver" + fileReference + "?width=320&preferwebp=true";
@@ -269,4 +269,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return new Dimension(0, 0);
     }
 
+    public static boolean isPolarisImageReference(String fileReference) {
+        return StringUtils.isNotBlank(fileReference) && fileReference.startsWith("/urn:");
+    }
 }
