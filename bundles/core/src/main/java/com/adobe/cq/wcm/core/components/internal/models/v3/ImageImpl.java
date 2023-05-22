@@ -45,6 +45,7 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
 import static com.adobe.cq.wcm.core.components.models.Teaser.PN_IMAGE_LINK_HIDDEN;
@@ -61,6 +62,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String URI_WIDTH_PLACEHOLDER = "{.width}";
     private static final String EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
+    private static final String PATH_PLACEHOLDER_ASSET_ID = "{asset-id}";
+    private static final String PATH_PLACEHOLDER_SEO_NAME = "{seo-name}";
+    private static final String PATH_PLACEHOLDER_FORMAT = "{format}";
+    public static final String DEFAULT_NGDM_ASSET_EXTENSION = "jpg";
+
     @Inject
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
@@ -73,18 +79,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     private Dimension dimension;
 
-    private boolean polarisImage = false;
+    private boolean ngdmImage = false;
 
     @PostConstruct
     protected void initModel() {
-        initResource();
-        properties = resource.getValueMap();
-        String fileReference = properties.get("fileReference", String.class);
-        if (isPolarisImageReference(fileReference)) {
-            polarisImage = true;
-            String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
-            src = "https://" + repositoryId + "/adobe/dynamicmedia/deliver" + fileReference + "?width=320&preferwebp=true";
-            hasContent = true;
+        if (nextGenDynamicMediaConfig  != null && nextGenDynamicMediaConfig.enabled()) {
+            handleNextGenerationDynamicMedia();
         }
         super.initModel();
         if (hasContent) {
@@ -187,7 +187,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     @JsonIgnore
     public String getSrcUriTemplate() {
-        if (polarisImage) {
+        if (ngdmImage) {
             int i = src.indexOf("&preferwebp");
             if (i > -1) {
                 srcUriTemplate = src.substring(0, src.substring(0, i).lastIndexOf('=') + 1) + URI_WIDTH_PLACEHOLDER_ENCODED + src.substring(i);
@@ -269,7 +269,30 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return new Dimension(0, 0);
     }
 
-    public static boolean isPolarisImageReference(String fileReference) {
+    private void handleNextGenerationDynamicMedia() {
+        initResource();
+        properties = resource.getValueMap();
+        String fileReference = properties.get("fileReference", String.class);
+        if (isNgdmImageReference(fileReference)) {
+            Scanner scanner = new Scanner(fileReference);
+            scanner.useDelimiter("/");
+            String assetId = scanner.next();
+            scanner = new Scanner(scanner.next());
+            scanner.useDelimiter("\\.");
+            String assetName = scanner.hasNext() ? scanner.next() : assetId;
+            String assetExtension = scanner.hasNext() ? scanner.next() : DEFAULT_NGDM_ASSET_EXTENSION;
+            String imageDeliveryBasePath = nextGenDynamicMediaConfig.getImageDeliveryBasePath();
+            String imageDeliveryPath = imageDeliveryBasePath.replace(PATH_PLACEHOLDER_ASSET_ID, assetId);
+            imageDeliveryPath = imageDeliveryPath.replace(PATH_PLACEHOLDER_SEO_NAME, assetName);
+            imageDeliveryPath = imageDeliveryPath.replace(PATH_PLACEHOLDER_FORMAT, assetExtension);
+            ngdmImage = true;
+            String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
+            src = "https://" + repositoryId  + imageDeliveryPath + "?width=320&preferwebp=true";
+            hasContent = true;
+        }
+    }
+
+    public static boolean isNgdmImageReference(String fileReference) {
         return StringUtils.isNotBlank(fileReference) && fileReference.startsWith("/urn:");
     }
 }
