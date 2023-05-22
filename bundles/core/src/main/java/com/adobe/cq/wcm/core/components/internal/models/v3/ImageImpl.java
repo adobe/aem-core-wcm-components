@@ -84,7 +84,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @PostConstruct
     protected void initModel() {
         if (nextGenDynamicMediaConfig  != null && nextGenDynamicMediaConfig.enabled()) {
-            handleNextGenerationDynamicMedia();
+            initNextGenerationDynamicMedia();
         }
         super.initModel();
         if (hasContent) {
@@ -188,11 +188,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @JsonIgnore
     public String getSrcUriTemplate() {
         if (ngdmImage) {
-            int i = src.indexOf("&preferwebp");
-            if (i > -1) {
-                srcUriTemplate = src.substring(0, src.substring(0, i).lastIndexOf('=') + 1) + URI_WIDTH_PLACEHOLDER_ENCODED + src.substring(i);
-                return src.substring(0, src.substring(0, i).lastIndexOf('=') + 1) + URI_WIDTH_PLACEHOLDER + src.substring(i);
-            }
+            return prepareNgdmSrcUriTemplate();
         }
         return super.getSrcUriTemplate();
     }
@@ -269,7 +265,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return new Dimension(0, 0);
     }
 
-    private void handleNextGenerationDynamicMedia() {
+    private void initNextGenerationDynamicMedia() {
         initResource();
         properties = resource.getValueMap();
         String fileReference = properties.get("fileReference", String.class);
@@ -290,6 +286,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             src = "https://" + repositoryId  + imageDeliveryPath + "?width=320&preferwebp=true";
             hasContent = true;
         }
+    }
+
+    @NotNull
+    private String prepareNgdmSrcUriTemplate() {
+        // replace the value of the width URL parameter with the placeholder
+        srcUriTemplate = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER_ENCODED);
+        String ret = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER);
+        return ret;
     }
 
     public static boolean isNgdmImageReference(String fileReference) {
