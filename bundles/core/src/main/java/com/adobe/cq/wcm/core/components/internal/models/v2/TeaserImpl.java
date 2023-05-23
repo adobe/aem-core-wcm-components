@@ -167,7 +167,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
         return Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
                 .map(request.getResourceResolver()::getResource)
                 .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null ||
-                Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class)).filter(ImageImpl::isPolarisImageReference).isPresent();
+                Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class)).filter(ImageImpl::isNgdmImageReference).isPresent();
     }
 
     protected Action newAction(Resource actionRes, Component component) {
