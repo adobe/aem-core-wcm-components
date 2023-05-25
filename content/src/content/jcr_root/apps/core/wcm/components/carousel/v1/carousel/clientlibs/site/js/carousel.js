@@ -715,10 +715,7 @@
     var documentReady = document.readyState !== "loading" ? Promise.resolve() : new Promise(function(resolve) {
         document.addEventListener("DOMContentLoaded", resolve);
     });
-    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(function(resolve) {
-        document.addEventListener("core.wcm.components.commons.site.utils.loaded", resolve);
-    });
-    Promise.all([documentReady, utilsReady]).then(onDocumentReady);
+    Promise.all([documentReady]).then(onDocumentReady);
 
     if (containerUtils) {
         window.addEventListener("load", containerUtils.scrollToAnchor, false);
