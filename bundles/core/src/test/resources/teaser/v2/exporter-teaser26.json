@@ -1,0 +1,18 @@
+{
+    ":type": "core/wcm/components/teaser/v2/teaser",
+    "actions": [],
+    "actionsEnabled": true,
+    "dataLayer": {
+        "teaser-41b7eb69d9": {
+            "@type": "core/wcm/components/teaser/v2/teaser",
+            "dc:description": "Teasers description from &lt;page properties&gt;",
+            "dc:title": "Teasers Test"
+        }
+    },
+    "description": "Teasers description from &lt;page properties&gt;",
+    "id": "teaser-41b7eb69d9",
+    "imageLinkHidden": false,
+    "imagePath": "https://testrepo/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?width=320&preferwebp=true",
+    "title": "Teasers Test",
+    "titleLinkHidden": false
+}
