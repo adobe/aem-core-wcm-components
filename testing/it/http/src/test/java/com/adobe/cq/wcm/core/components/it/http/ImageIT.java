@@ -21,11 +21,9 @@ import com.adobe.cq.testing.junit.rules.CQRule;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.testing.clients.ClientException;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ErrorCollector;
 
 import java.util.Arrays;
@@ -62,6 +60,18 @@ public class ImageIT {
         String content = adminAuthor.doGet("/content/core-components/simple-page.html", 200).getContent();
         Elements html = Jsoup.parse(content).select("html");
         testImages(html);
+    }
+
+    @Test
+    public void testNgdmImage() throws ClientException {
+        String content = adminAuthor.doGet("/content/core-components/image/ngdm-image.html", 200).getContent();
+        Elements html = Jsoup.parse(content).select("html");
+
+        Elements images = html.select("[data-cmp-is=image] img");
+        Assert.assertEquals(1, images.size());
+        Element img = images.first();
+        String imageSource = img.attr("src");
+        Assert.assertEquals("https://testrepository/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?width=640&preferwebp=true", imageSource);
     }
 
     public void testImages(Elements html) {

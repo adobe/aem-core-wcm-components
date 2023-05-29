@@ -65,7 +65,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String PATH_PLACEHOLDER_ASSET_ID = "{asset-id}";
     private static final String PATH_PLACEHOLDER_SEO_NAME = "{seo-name}";
     private static final String PATH_PLACEHOLDER_FORMAT = "{format}";
-    public static final String DEFAULT_NGDM_ASSET_EXTENSION = "jpg";
+    private static final String DEFAULT_NGDM_ASSET_EXTENSION = "jpg";
+    private static final int DEFAULT_NGDM_ASSET_WIDTH = 640;
 
     @Inject
     @Optional
@@ -282,8 +283,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             imageDeliveryPath = imageDeliveryPath.replace(PATH_PLACEHOLDER_SEO_NAME, assetName);
             imageDeliveryPath = imageDeliveryPath.replace(PATH_PLACEHOLDER_FORMAT, assetExtension);
             ngdmImage = true;
+            int width = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, DEFAULT_NGDM_ASSET_WIDTH);
             String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
-            src = "https://" + repositoryId  + imageDeliveryPath + "?width=320&preferwebp=true";
+            src = "https://" + repositoryId  + imageDeliveryPath + "?width=" + width + "&preferwebp=true";
             hasContent = true;
         }
     }

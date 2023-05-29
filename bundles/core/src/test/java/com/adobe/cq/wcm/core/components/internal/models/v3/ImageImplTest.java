@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import com.adobe.cq.wcm.core.components.testing.MockNextGenDynamicMediaConfig;
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -50,6 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -673,6 +675,19 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
         Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_IMAGE1_PATH));
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void testNgdmImageWithResizeWidth() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        context.registerInjectActivateService(config);
+        context.contentPolicyMapping(resourceType, PN_DESIGN_RESIZE_WIDTH, 800);
+
+        Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_IMAGE1_PATH + "_resize_width"));
     }
 
     @Test
