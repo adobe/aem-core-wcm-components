@@ -194,7 +194,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 }
             } else {
                 useAssetDelivery = false;
-                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
+                // handle the case where the image is not coming from DAM but from a different source (e.g. NGDM)
+                if (!hasContent) {
+                    LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
+                }
             }
         } else {
             useAssetDelivery = false;
@@ -303,7 +306,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             buildJson();
         }
     }
-    
+
     /**
      * Extract the image name from the asset
      * @param asset the asset
