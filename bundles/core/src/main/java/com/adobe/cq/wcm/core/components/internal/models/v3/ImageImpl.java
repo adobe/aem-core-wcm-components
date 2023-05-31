@@ -84,7 +84,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @PostConstruct
     protected void initModel() {
-        if (nextGenDynamicMediaConfig  != null && nextGenDynamicMediaConfig.enabled()) {
+        if (isNgdmSupportAvailable()) {
             initNextGenerationDynamicMedia();
         }
         super.initModel();
@@ -264,6 +264,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             }
         }
         return new Dimension(0, 0);
+    }
+
+    private boolean isNgdmSupportAvailable() {
+        return nextGenDynamicMediaConfig != null && nextGenDynamicMediaConfig.enabled() &&
+            StringUtils.isNotBlank(nextGenDynamicMediaConfig.getRepositoryId());
     }
 
     private void initNextGenerationDynamicMedia() {
