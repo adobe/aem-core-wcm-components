@@ -18,6 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v3;
 import java.util.List;
 
 import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
+import com.adobe.cq.wcm.core.components.testing.MockNextGenDynamicMediaConfig;
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -49,6 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -78,6 +81,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private static final String PAGE1_IMAGE0_PATH = PAGE1 + "/jcr:content/root/page1_image0";
     private static final String PAGE2_IMAGE0_PATH = PAGE2 + "/jcr:content/root/page2_image0";
     private static final String PAGE3_IMAGE0_PATH = PAGE3 + "/jcr:content/root/page3_image0";
+    private static final String NGDM_IMAGE1_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_image1";
 
     @BeforeEach
     @Override
@@ -660,5 +664,40 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             "enableAssetDelivery", true);
         Image image = getImageUnderTest(IMAGE27_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000" + ".png", image.getSrc());
+    }
+
+    @Test
+    void testNgdmImage() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        context.registerInjectActivateService(config);
+
+        Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_IMAGE1_PATH));
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void testNgdmImageWithResizeWidth() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        context.registerInjectActivateService(config);
+        context.contentPolicyMapping(resourceType, PN_DESIGN_RESIZE_WIDTH, 800);
+
+        Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_IMAGE1_PATH + "_resize_width"));
+    }
+
+    @Test
+    void testNgdmImageWithNgdmConfigDisabled() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(false);
+        config.setRepositoryId("testrepo");
+        context.registerInjectActivateService(config);
+
+        Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_IMAGE1_PATH + "_ngm_disabled"));
     }
 }
