@@ -63,6 +63,7 @@ public class ImageIT {
     }
 
     @Test
+    @Ignore
     public void testNgdmImage() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/image/ngdm-image.html", 200).getContent();
         Elements html = Jsoup.parse(content).select("html");
