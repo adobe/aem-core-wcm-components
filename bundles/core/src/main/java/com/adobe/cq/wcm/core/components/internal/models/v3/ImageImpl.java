@@ -15,18 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.ui.wcm.commons.config.NextGenDynamicMediaConfig;
-import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
-import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
-import com.adobe.cq.wcm.core.components.internal.servlets.EnhancedRendition;
-import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.models.ImageArea;
-import com.day.cq.commons.DownloadResource;
-import com.day.cq.dam.api.Asset;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -39,13 +36,18 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.awt.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.ui.wcm.commons.config.NextGenDynamicMediaConfig;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
+import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
+import com.adobe.cq.wcm.core.components.internal.servlets.EnhancedRendition;
+import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.day.cq.commons.DownloadResource;
+import com.day.cq.dam.api.Asset;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
 import static com.adobe.cq.wcm.core.components.models.Teaser.PN_IMAGE_LINK_HIDDEN;
