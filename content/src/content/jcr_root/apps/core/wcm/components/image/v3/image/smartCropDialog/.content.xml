@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    granite:id="image-v3-smartcrop-dialog"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Smart Crop"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.image.v3.editor]"
+    trackingFeature="core-components:image:v3">
+    <content
+        granite:class="cmp-image__editor"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <columns
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                margin="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <column1
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <ngdmimage
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core/wcm/components/image/v3/image/nextgendmthumbnail"/>
+                            <smart-crop-selector
+                                granite:class="image-v3-dialog-smartcrop-field"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                emptyText="Enter aspect ratio. e.g. 4:3"
+                                enableNextGenDynamicMedia="{Boolean}true"
+                                fieldLabel="Aspect Ratio"
+                                name="./smartCrop"/>
+                        </items>
+                    </column1>
+                    <column2
+                        granite:class=" u-coral-padding u-coral-noMargin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <ngdmsmartcropimage
+                                granite:class="ngdm-smartcrop-thumbnail"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core/wcm/components/image/v3/image/nextgendmthumbnail"
+                                withSmartCrop="{Boolean}true"/>
+                        </items>
+                    </column2>
+                </items>
+            </columns>
+        </items>
+    </content>
+</jcr:root>

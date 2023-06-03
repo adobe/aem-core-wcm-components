@@ -62,11 +62,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String URI_WIDTH_PLACEHOLDER = "{.width}";
     private static final String EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
-    private static final String PATH_PLACEHOLDER_ASSET_ID = "{asset-id}";
-    private static final String PATH_PLACEHOLDER_SEO_NAME = "{seo-name}";
-    private static final String PATH_PLACEHOLDER_FORMAT = "{format}";
-    public static final String DEFAULT_NGDM_ASSET_EXTENSION = "jpg";
-
     @Inject
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
@@ -269,24 +264,21 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         initResource();
         properties = resource.getValueMap();
         String fileReference = properties.get("fileReference", String.class);
+        String smartCrop = properties.get("smartCrop", String.class);
         if (isNgdmImageReference(fileReference)) {
-            Scanner scanner = new Scanner(fileReference);
-            scanner.useDelimiter("/");
-            String assetId = scanner.next();
-            scanner = new Scanner(scanner.next());
-            scanner.useDelimiter("\\.");
-            String assetName = scanner.hasNext() ? scanner.next() : assetId;
-            String assetExtension = scanner.hasNext() ? scanner.next() : DEFAULT_NGDM_ASSET_EXTENSION;
-            String imageDeliveryBasePath = nextGenDynamicMediaConfig.getImageDeliveryBasePath();
-            String imageDeliveryPath = imageDeliveryBasePath.replace(PATH_PLACEHOLDER_ASSET_ID, assetId);
-            imageDeliveryPath = imageDeliveryPath.replace(PATH_PLACEHOLDER_SEO_NAME, assetName);
-            imageDeliveryPath = imageDeliveryPath.replace(PATH_PLACEHOLDER_FORMAT, assetExtension);
+            NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
+                .withPreferWebp(true)
+                .withWidth(320);
+            if(StringUtils.isNotEmpty(smartCrop)) {
+                builder.withSmartCrop(smartCrop);
+            }
+            src = builder.build();
             ngdmImage = true;
-            String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
-            src = "https://" + repositoryId  + imageDeliveryPath + "?width=320&preferwebp=true";
             hasContent = true;
         }
     }
+
+
 
     @NotNull
     private String prepareNgdmSrcUriTemplate() {
