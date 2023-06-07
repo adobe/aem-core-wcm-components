@@ -25,18 +25,21 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.ui.wcm.commons.config.NextGenDynamicMediaConfig;
 
+import static com.adobe.cq.wcm.core.components.internal.models.v3.ImageImpl.DEFAULT_NGDM_ASSET_WIDTH;
+
 public class NextGenDMImageURIBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(NextGenDMImageURIBuilder.class);
     private static final String PATH_PLACEHOLDER_ASSET_ID = "{asset-id}";
     private static final String PATH_PLACEHOLDER_SEO_NAME = "{seo-name}";
     private static final String PATH_PLACEHOLDER_FORMAT = "{format}";
     private static final String DEFAULT_NGDM_ASSET_EXTENSION = "jpg";
-    private static final int DEFAULT_WIDTH = 320;
 
     private NextGenDynamicMediaConfig config;
     private String fileReference;
     private String smartCropAspectRatio;
-    private int width = DEFAULT_WIDTH;
+    private int width = DEFAULT_NGDM_ASSET_WIDTH;
+
+    private int height;
     private boolean preferWebp = true;
 
     public NextGenDMImageURIBuilder(NextGenDynamicMediaConfig config, String fileReference) {
@@ -54,11 +57,20 @@ public class NextGenDMImageURIBuilder {
     }
 
     /**
-     *  Image widthl
+     *  Image width
      * @param width - an integer.
      */
     public NextGenDMImageURIBuilder withWidth(int width) {
         this.width = width;
+        return this;
+    }
+
+    /**
+     *  Image height
+     * @param height - an integer.
+     */
+    public NextGenDMImageURIBuilder withHeight(int height) {
+        this.height = height;
         return this;
     }
 
@@ -94,6 +106,9 @@ public class NextGenDMImageURIBuilder {
             Map<String, String> params = new HashMap<>();
             if(this.width > 0) {
                 params.put("width", Integer.toString(this.width));
+            }
+            if(this.height > 0) {
+                params.put("height", Integer.toString(this.width));
             }
             if(this.preferWebp) {
                 params.put("preferwebp", "true");

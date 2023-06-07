@@ -21,34 +21,15 @@
         authorNs.DialogFrame.openDialog(new ns.image.v3.smartCropDialog(editable));
     };
 
-    /**
-     * Represents the SMARTCROP action (opens a component [Dialog]{@link Granite.author.edit.Dialog}) that could be performed on an {@link Granite.author.Editable}
-     *
-     * @memberOf Granite.author.edit.ToolbarActions
-     * @type Granite.author.ui.ToolbarAction
-     * @alias SMARTCROP
-     */
-    authorNs.edit.ToolbarActions.SMARTCROP = new authorNs.ui.ToolbarAction({
-        name: "SMARTCROP",
-        icon: "cropLightning",
-        text: Granite.I18n.get("Smart Crop"),
-        order: "before CONFIGURE",
-        execute: function openEditDialog(editable) {
-            authorNs.DialogFrame.openDialog(new ns.image.v3.smartCropDialog(editable));
-        },
-        condition: function (editable) {
-            return authorNs.pageInfoHelper.canModify() && editable.hasAction("SMARTCROP");
-        },
-        isNonMulti: true
-    });
-
-    channel.on("cq-layer-activated", function(e) {
-        if (e.layer === "Edit") {
-            if(authorNs.EditorFrame && authorNs.EditorFrame.editableToolbar) {
-                authorNs.EditorFrame.editableToolbar.registerAction("SMARTCROP", authorNs.edit.ToolbarActions.SMARTCROP);
-            }
+    ns.image.v3.actions.smartCrop.condition = function(editable) {
+        var shouldShow = false;
+        if (authorNs.pageInfoHelper.canModify()) {
+            editable.config.editConfig.actions.forEach(function(action) {
+                if (typeof action === "object" && (action.name === "ngdm-smartcrop")) {
+                    shouldShow = true;
+                }
+            });
         }
-    });
-
+        return shouldShow;
+    };
 })(jQuery, CQ.CoreComponents, jQuery(document), Granite.author);
-

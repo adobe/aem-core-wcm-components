@@ -14,8 +14,5 @@
 # limitations under the License.
 ###############################################################################
 
-#base=js
-namespace.js
-smartcropdialog.js
-editor.js
-ngdmsmartcropthumb.js
+#base=css
+smartcrop.css

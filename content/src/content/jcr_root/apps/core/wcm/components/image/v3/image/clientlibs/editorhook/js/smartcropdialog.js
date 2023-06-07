@@ -33,7 +33,7 @@
 
     components.image.v3.smartCropDialog.prototype.getConfig = function() {
         return {
-            src: "/mnt/overlay/core/wcm/components/image/v3/image/smartCropDialog.html" + this.editable.path,
+            src: "/mnt/overlay/core/wcm/components/image/v3/image/smartcropdialog.html" + this.editable.path,
             loadingMode: this.editable.config.dialogLoadingMode,
             layout: this.editable.config.dialogLayout || "auto"
         };
