@@ -27,8 +27,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v3/image/nextgendmthumbnail"
                                 height="{Long}260"
-                                width="{Long}260"
-                                withSmartCrop="{Boolean}true"/>
+                                width="{Long}260"/>
                         </items>
                     </column1>
                     <column2

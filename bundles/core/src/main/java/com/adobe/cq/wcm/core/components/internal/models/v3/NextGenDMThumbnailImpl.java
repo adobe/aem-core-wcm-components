@@ -71,12 +71,13 @@ public class NextGenDMThumbnailImpl implements NextGenDMThumbnail {
         String smartCrop = properties.get("smartCrop", String.class);
         ValueMap configs = resource.getValueMap();
         int width = configs.get("width", 480);
-        boolean withSmartCrop = configs.get("withSmartCrop", false);
+        int height = configs.get("height", 480);
         if (isNgdmImageReference(fileReference)) {
             NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
                 .withPreferWebp(true)
-                .withWidth(width);
-            if (withSmartCrop && StringUtils.isNotEmpty(smartCrop)) {
+                .withWidth(width)
+                .withHeight(height);
+            if (StringUtils.isNotEmpty(smartCrop)) {
                 builder.withSmartCrop(smartCrop);
             }
             this.src = builder.build();

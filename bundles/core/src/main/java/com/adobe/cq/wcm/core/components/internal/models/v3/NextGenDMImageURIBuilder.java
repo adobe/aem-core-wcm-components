@@ -108,7 +108,7 @@ public class NextGenDMImageURIBuilder {
                 params.put("width", Integer.toString(this.width));
             }
             if(this.height > 0) {
-                params.put("height", Integer.toString(this.width));
+                params.put("height", Integer.toString(this.height));
             }
             if(this.preferWebp) {
                 params.put("preferwebp", "true");
