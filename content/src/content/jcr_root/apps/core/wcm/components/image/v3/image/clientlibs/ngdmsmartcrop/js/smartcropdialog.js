@@ -16,15 +16,6 @@
 (function($, ns, components, channel) {
     "use strict";
 
-    /**
-     * An Smart Crop Dialog represents a Component Dialog opened on an Editable.
-     *
-     * @class
-     * @alias Granite.author.edit.Dialog
-     * @extends Granite.author.ui.Dialog
-     *
-     * @param {Granite.author.Editable} editable The Editable on which the Dialog will be opened
-     */
     components.image.v3.smartCropDialog = function(editable) {
         this.editable = editable;
     };

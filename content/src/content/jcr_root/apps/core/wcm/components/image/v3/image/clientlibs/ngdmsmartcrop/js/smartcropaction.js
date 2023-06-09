@@ -22,14 +22,20 @@
     };
 
     ns.image.v3.actions.smartCrop.condition = function(editable) {
-        var shouldShow = false;
-        if (authorNs.pageInfoHelper.canModify()) {
-            editable.config.editConfig.actions.forEach(function(action) {
-                if (typeof action === "object" && (action.name === "ngdm-smartcrop")) {
-                    shouldShow = true;
-                }
-            });
-        }
-        return shouldShow;
+        return authorNs.pageInfoHelper.canModify() && hasNGDMSmartCropAction(editable) && isNGDMImage(editable);
     };
+
+    function hasNGDMSmartCropAction(editable) {
+        let hasAction = false;
+        editable.config.editConfig.actions.forEach(function(action) {
+            if (typeof action === "object" && (action.name === "ngdm-smartcrop")) {
+                hasAction = true;
+            }
+        });
+        return hasAction;
+    }
+
+    function isNGDMImage(editable) {
+        return ($(editable.dom).find(".cq-dd-image[data-cmp-filereference^='/urn:']").length > 0);
+    }
 })(jQuery, CQ.CoreComponents, jQuery(document), Granite.author);

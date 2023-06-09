@@ -17,5 +17,5 @@
 #base=js
 namespace.js
 smartcropdialog.js
-editor.js
-ngdmsmartcropthumb.js
+smartcropaction.js
+smartcroppreview.js

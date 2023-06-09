@@ -37,17 +37,18 @@
                         sling:resourceType="granite/ui/components/coral/foundation/container">
                         <items jcr:primaryType="nt:unstructured">
                             <smart-crop-selector
-                                granite:class="image-v3-dialog-smartcrop-field"
+                                granite:class="image-v3-dialog-smartcrop-select"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                 emptyText="Original"
                                 fieldLabel="Ratio"
                                 name="./smartCrop">
                                 <items jcr:primaryType="nt:unstructured">
-                                    <original
+                                    <custom
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/option"
-                                        text="Original"/>
+                                        text="Custom"
+                                        value=""/>
                                     <landscape
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/option"
@@ -75,14 +76,41 @@
                                         value="10:3"/>
                                 </items>
                             </smart-crop-selector>
-                            <smart-crop-input
-                                granite:class="image-v3-dialog-smartcrop-field"
+                            <container
+                                granite:class="smartcrop-ratio-fields-container"
+                                granite:id="smartcrop-ratio-fields-container"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                emptyText="Enter aspect ratio. e.g. 4:3"
-                                enableNextGenDynamicMedia="{Boolean}true"
-                                fieldLabel="Aspect Ratio"
-                                name="./smartCrop"/>
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <smart-crop-ratio-left
+                                        granite:class="smartcrop-ratio-field smartcrop-ratio-left"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                        emptyText="Ratio left"
+                                        min="{Long}1"
+                                        step="1"/>
+                                    <smart-crop-ratio-swap
+                                        granite:class="smartcrop-ratio-field smartcrop-ratio-swap"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/button"
+                                        hideText="{Boolean}true"
+                                        icon="sync"
+                                        text="Swap aspect ratio"
+                                        variant="quiet"/>
+                                    <smart-crop-ratio-right
+                                        granite:class="smartcrop-ratio-field smartcrop-ratio-right"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                        emptyText="Ratio right"
+                                        min="{Long}1"
+                                        step="1"/>
+                                    <hidden
+                                        granite:class="smartcrop-ratio-field smartcrop-ratio-value"
+                                        jcr:primaryType="nt:unstructured"
+                                        name="./smartCrop"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/hidden"/>
+                                </items>
+                            </container>
                         </items>
                     </column2>
                 </items>

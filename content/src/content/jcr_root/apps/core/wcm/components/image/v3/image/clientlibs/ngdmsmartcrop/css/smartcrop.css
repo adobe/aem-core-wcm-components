@@ -26,7 +26,7 @@
     padding-bottom: .9375rem;
 }
 
-.cq-dialog-floating .smartcropdialog {
+.cq-dialog-floating .cq-dialog-content.smartcropdialog {
     height: auto;
 }
 
@@ -34,4 +34,21 @@
     width: 227px;
     margin-left: .81rem;
     margin-right: 0;
+}
+
+.smartcrop-ratio-field {
+    display: inline-block;
+}
+
+.smartcrop-ratio-fields-container .smartcrop-ratio-field.smartcrop-ratio-left, .smartcrop-ratio-fields-container .smartcrop-ratio-field.smartcrop-ratio-right {
+    width: 5.7rem;
+    display: inline-block;
+}
+
+.smartcrop-ratio-fields-container .smartcrop-ratio-field .coral-InputGroup-button {
+    display: none;
+}
+
+.smartcrop-ratio-fields-container .smartcrop-ratio-field [is="coral-textfield"] {
+    min-width: 3rem;
 }
