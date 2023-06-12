@@ -62,6 +62,8 @@ public class NextGenDMThumbnailImpl implements NextGenDMThumbnail {
 
     private String src;
 
+    private String altText = "";
+
     @PostConstruct
     private void initModel() {
         componentPath = request.getRequestPathInfo().getSuffix();
@@ -72,6 +74,7 @@ public class NextGenDMThumbnailImpl implements NextGenDMThumbnail {
         ValueMap configs = resource.getValueMap();
         int width = configs.get("width", 480);
         int height = configs.get("height", 480);
+        altText = configs.get("alt", "image thumbnail");
         if (isNgdmImageReference(fileReference)) {
             NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
                 .withPreferWebp(true)
@@ -87,5 +90,10 @@ public class NextGenDMThumbnailImpl implements NextGenDMThumbnail {
     @Override
     public String getSrc() {
         return src;
+    }
+
+    @Override
+    public String getAlt() {
+        return altText;
     }
 }

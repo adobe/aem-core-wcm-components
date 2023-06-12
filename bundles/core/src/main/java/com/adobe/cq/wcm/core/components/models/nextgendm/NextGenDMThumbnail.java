@@ -22,4 +22,8 @@ public interface NextGenDMThumbnail {
     default public String getSrc() {
         return null;
     }
+
+    default public String getAlt() {
+        return null;
+    }
 }

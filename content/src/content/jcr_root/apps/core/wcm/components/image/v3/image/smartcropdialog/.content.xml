@@ -26,6 +26,7 @@
                                 granite:class="ngdm-smartcrop-thumbnail"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v3/image/nextgendmthumbnail"
+                                alt="Smart crop preview"
                                 height="{Long}260"
                                 width="{Long}260"/>
                         </items>
