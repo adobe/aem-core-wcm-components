@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-          granite:id="image-v3-smartcrop-dialog"
           jcr:primaryType="nt:unstructured"
           jcr:title="Smart Crop"
           sling:resourceType="cq/gui/components/authoring/dialog"
@@ -78,7 +77,6 @@
                             </smart-crop-selector>
                             <container
                                 granite:class="smartcrop-ratio-fields-container"
-                                granite:id="smartcrop-ratio-fields-container"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <items jcr:primaryType="nt:unstructured">
@@ -86,7 +84,7 @@
                                         granite:class="smartcrop-ratio-field smartcrop-ratio-left"
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                        emptyText="Ratio left"
+                                        emptyText="Ratio width"
                                         min="{Long}1"
                                         step="1"/>
                                     <smart-crop-ratio-swap
@@ -101,7 +99,7 @@
                                         granite:class="smartcrop-ratio-field smartcrop-ratio-right"
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                        emptyText="Ratio right"
+                                        emptyText="Ratio height"
                                         min="{Long}1"
                                         step="1"/>
                                     <hidden

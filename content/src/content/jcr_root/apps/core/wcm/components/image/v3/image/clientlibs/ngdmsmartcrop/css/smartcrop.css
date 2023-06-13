@@ -30,8 +30,8 @@
     height: auto;
 }
 
-.smartcrop-options-column {
-    width: 227px;
+.cq-dialog-content.smartcropdialog .coral-FixedColumn.smartcrop-dialog-columns .coral-FixedColumn-column.smartcrop-options-column {
+    width: 235px;
     margin-left: .81rem;
     margin-right: 0;
 }
@@ -40,15 +40,25 @@
     display: inline-block;
 }
 
+.smartcrop-ratio-fields-container {
+    display: inline-flex;
+}
+
 .smartcrop-ratio-fields-container .smartcrop-ratio-field.smartcrop-ratio-left, .smartcrop-ratio-fields-container .smartcrop-ratio-field.smartcrop-ratio-right {
     width: 5.7rem;
     display: inline-block;
 }
 
-.smartcrop-ratio-fields-container .smartcrop-ratio-field .coral-InputGroup-button {
+.smartcrop-ratio-fields-container .smartcrop-ratio-field [is="coral-button"] {
     display: none;
 }
 
 .smartcrop-ratio-fields-container .smartcrop-ratio-field [is="coral-textfield"] {
+    min-width: 3rem;
+    width: 5.7rem;
+    border-radius: 0;
+}
+
+.smartcrop-ratio-field.smartcrop-ratio-swap {
     min-width: 3rem;
 }
