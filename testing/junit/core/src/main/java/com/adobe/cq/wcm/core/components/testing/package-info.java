@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-@Version("2.2.0")
+@Version("2.3.0")
 package com.adobe.cq.wcm.core.components.testing;
 
 import org.osgi.annotation.versioning.Version;

@@ -221,7 +221,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             request.getResource().getPath());
                 }
             } else {
-                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
+                // handle the case where the image is not coming from DAM but from a different source (e.g. NGDM)
+                if (!hasContent) {
+                    LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
+                }
             }
         }
         if (hasContent) {
