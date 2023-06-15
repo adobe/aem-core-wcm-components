@@ -126,7 +126,8 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, 200, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
-            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 10 + "," + 20 + "," + 90 + "," + 180 + "&" + "preferwebp=true";
+            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 10.0 + "," + 20.0 + "," + 90.0 + "," + 180.0 + "&" +
+                "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -220,7 +221,7 @@ public class AssetDeliveryHelperTest {
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, 200, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
             "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY +
-            "&" + "c=" + 10 + "," + 20 + "," + 90 + "," + 180 +
+            "&" + "c=" + 10.0 + "," + 20.0 + "," + 90.0 + "," + 180.0 +
             "&" + "r=" + 90 +
             "&" + "flip=HORIZONTAL_AND_VERTICAL" +
             "&" + "preferwebp=true";

@@ -110,26 +110,30 @@ public class AssetDeliveryHelper {
         if (assetResource == null) {
             return null;
         }
-        Asset asset = assetResource.adaptTo(Asset.class);
-        if (asset != null) {
 
-            Rendition assetRendition = asset.getRendition(asset1 -> {
-                for (Rendition rendition : asset1.getRenditions()) {
-                    if (rendition.getName().startsWith("cq5dam.web")) {
-                        return rendition;
+        // we have to get the with and height of the web rendition to calculate relative crop parameter
+        if (StringUtils.isNotEmpty(componentProperties.get(ImageResource.PN_IMAGE_CROP, String.class))) {
+            Asset asset = assetResource.adaptTo(Asset.class);
+            if (asset != null) {
+
+                Rendition assetRendition = asset.getRendition(asset1 -> {
+                    for (Rendition rendition : asset1.getRenditions()) {
+                        if (rendition.getName().startsWith("cq5dam.web")) {
+                            return rendition;
+                        }
                     }
-                }
-                return null;
-            });
-            if (assetRendition != null) {
-                try {
-                    BufferedImage image = ImageIO.read(assetRendition.getStream());
-                    int imageHeight = image.getHeight();
-                    int imageWidth = image.getWidth();
-                    params.put("imageHeight", imageHeight);
-                    params.put("imageWidth", imageWidth);
-                } catch (IOException e) {
-                    LOGGER.error(e.getMessage());
+                    return null;
+                });
+                if (assetRendition != null) {
+                    try {
+                        BufferedImage image = ImageIO.read(assetRendition.getStream());
+                        int imageHeight = image.getHeight();
+                        int imageWidth = image.getWidth();
+                        params.put("imageHeight", imageHeight);
+                        params.put("imageWidth", imageWidth);
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
                 }
             }
         }
