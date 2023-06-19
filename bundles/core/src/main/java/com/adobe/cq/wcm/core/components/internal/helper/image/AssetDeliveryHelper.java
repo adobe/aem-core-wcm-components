@@ -198,6 +198,7 @@ public class AssetDeliveryHelper {
      */
     private static String getCropRect(@NotNull ValueMap properties, Map<String, Object> params) {
         String csv = properties.get(ImageResource.PN_IMAGE_CROP, String.class);
+        String cropRect = StringUtils.EMPTY;
         if (StringUtils.isNotEmpty(csv)) {
             try {
                 int ratio = csv.indexOf('/');
@@ -214,23 +215,22 @@ public class AssetDeliveryHelper {
                 double x2 = Integer.parseInt(coords[2]);
                 double y2 = Integer.parseInt(coords[3]);
                 if (imageHeight > 0 && imageWidth > 0) {
-                    x1 = round(( x1 / imageHeight * 100));
-                    x2 = round( x2 / imageHeight * 100);
-                    y1 = round( y1 / imageWidth * 100);
-                    y2 = round(y2 / imageWidth * 100);
+                    double width = round( (x2 - x1) / imageWidth * 100);
+                    double height = round((y2-y1) / imageHeight * 100);
+                    x1 = round(( x1 / imageWidth * 100));
+                    y1 = round( y1 / imageHeight * 100);
+                    cropRect = x1 + PERCENTAGE + COMMA + y1 + PERCENTAGE + COMMA + width + PERCENTAGE + COMMA + height + PERCENTAGE;
                 }
-                double width = x2-x1;
-                double height = y2-y1;
-                if (imageHeight > 0 && imageWidth > 0) {
-                    return x1 + PERCENTAGE + COMMA + y1 + PERCENTAGE + COMMA + width + PERCENTAGE + COMMA + height + PERCENTAGE;
-                } else {
-                    return x1 + COMMA + y1 + COMMA + width + COMMA + height;
+                else {
+                    double width = round(x2-x1);
+                    double height = round(y2-y1);
+                    cropRect =  x1 + COMMA + y1 + COMMA + width + COMMA + height;
                 }
             } catch (RuntimeException e) {
                 LOGGER.warn(String.format("Invalid cropping rectangle %s.", csv), e);
             }
         }
-        return null;
+        return cropRect;
     }
 
     private static double round(double value) {

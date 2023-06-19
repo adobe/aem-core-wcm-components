@@ -145,7 +145,7 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, "Adobe_Systems_logo_and_wordmark", JPEG_EXTENSION, 200, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH_CROP + "." + TEST_SEO_NAME_CROP + "." + JPEG_EXTENSION +
-                "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 0.8 + "p," + 1.6 + "p," + 7.0 + "p," + 14.0 + "p&" +
+                "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 0.8 + "p," + 1.6 + "p," + 7.0 + "p," + 14.1 + "p&" +
                 "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
