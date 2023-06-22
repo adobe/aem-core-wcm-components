@@ -58,7 +58,7 @@
     function setValueToSelect(value) {
         $(".image-v3-dialog-smartcrop-select").val(value);
         // set custom value
-        if (value !== "" && $(".image-v3-dialog-smartcrop-select").val() === "") {
+        if ($(".image-v3-dialog-smartcrop-select").val() === "") {
             $(".image-v3-dialog-smartcrop-select")[0].items.getAll()[0].value = value;
             $(".image-v3-dialog-smartcrop-select").val(value);
         }
@@ -71,6 +71,9 @@
         if (leftValue !== "" && rightValue !== "" && leftValue > 0 && rightValue > 0) {
             value = leftValue + ":" + rightValue;
             setValueToSelect(value);
+        } else if (leftValue === "" && rightValue === "") {
+            // clear crop and show original
+            setValueToSelect("");
         }
         Coral.commons.nextFrame(function() {
             $(".image-v3-dialog-smartcrop-select").trigger("change", ["from-input-fields"]);
@@ -83,8 +86,8 @@
             if (value && value !== "") {
                 $(".smartcrop-ratio-left").attr("value", value.split(":")[0]);
                 $(".smartcrop-ratio-right").attr("value", value.split(":")[1]);
-                setValueToSelect(value);
             }
+            setValueToSelect(value);
         });
     });
 
