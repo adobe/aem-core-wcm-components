@@ -123,7 +123,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             Rendition rendition = invocation.getArgument(0);
             return ImageIO.read(rendition.getStream());
         });
-        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
+        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH,
+                AdaptiveImageServlet.DEFAULT_MAX_SIZE, List.of("gif", "svg"), List.of());
     }
 
     @AfterEach
