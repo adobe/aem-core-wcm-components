@@ -68,7 +68,7 @@ public class AdaptiveImageServletMappingConfigurationFactoryTest {
         testValues(new String[] {"core/image"}, configurationFactory.getResourceTypes());
         testValues(new String[] {"coreimg"}, configurationFactory.getSelectors());
         testValues(new String[] {"jpg", "gif", "png"}, configurationFactory.getExtensions());
-        testValues(new String[] {"gif", "svg"}, configurationFactory.getNonTransformableImageTypes());
+        testValues(new String[] {"gif", "svg" }, configurationFactory.getNonTransformableImageTypes());
         testValues(new String[] { }, configurationFactory.getForcedTransformationImageTypes());
         assertEquals("{resourceTypes: [core/image], selectors: [coreimg], extensions: [jpg, gif, png], defaultResizeWidth: 1280, " +
                      "nonTransformableImageTypes: [gif, svg], forcedTransformationImageTypes: []}",

@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
@@ -116,6 +117,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String DEFAULT_MIME = "image/jpeg";
     private static final String SELECTOR_QUALITY_KEY = "quality";
     private static final String SELECTOR_WIDTH_KEY = "width";
+    private static final List<String> NON_TRANSFORMABLE_IMAGE_TYPES = List.of("gif", "svg");
     private int defaultResizeWidth;
     private int maxInputWidth;
     private List<String> nonTransformableImageTypes;
@@ -137,7 +139,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         this.metrics = metrics;
         this.defaultResizeWidth = defaultResizeWidth > 0 ? defaultResizeWidth : DEFAULT_RESIZE_WIDTH;
         this.maxInputWidth = maxInputWidth > 0 ? maxInputWidth : DEFAULT_MAX_SIZE;
-        this.nonTransformableImageTypes = nonTransformableImageTypes;
+        this.nonTransformableImageTypes = ListUtils.union(nonTransformableImageTypes, NON_TRANSFORMABLE_IMAGE_TYPES);
         this.forcedTransformationImageTypes = forcedTransformationImageTypes;
     }
 

@@ -84,7 +84,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
         @AttributeDefinition(
                 name = "Non-transformable image types",
                 description = "Images of the following types (identified by lower-case extension) will never be transformed (e.g. " +
-                        "rotated, cropped, etc.)"
+                        "rotated, cropped, etc.). svg and gif images are never transformed, even if not defined in this list."
         )
         String[] nonTransformableImageTypes() default { "gif", "svg" };
 
@@ -176,7 +176,6 @@ public class AdaptiveImageServletMappingConfigurationFactory {
 
     /**
      * Returns the image types' extensions that will not be transformed by the {@link AdaptiveImageServlet}.
-     * Defaults to gif and svg.
      * @return
      */
     @NotNull
