@@ -117,7 +117,7 @@ public class NextGenDMImageURIBuilder {
                 if (isValidSmartCrop(this.smartCropAspectRatio)) {
                     params.put("crop", String.format("%s,smart", this.smartCropAspectRatio));
                 } else {
-                    LOGGER.error("Invalid smartCrop value at {}", this.smartCropAspectRatio);
+                    LOGGER.info("Invalid smartCrop value at {}", this.smartCropAspectRatio);
                 }
             }
             if(params.size() > 0) {
@@ -130,7 +130,7 @@ public class NextGenDMImageURIBuilder {
             }
             return uriBuilder.toString();
         }
-        LOGGER.error("Invalid fileReference or NGDMConfig. fileReference = {}", this.fileReference);
+        LOGGER.info("Invalid fileReference or NGDMConfig. fileReference = {}", this.fileReference);
         return null;
     }
 

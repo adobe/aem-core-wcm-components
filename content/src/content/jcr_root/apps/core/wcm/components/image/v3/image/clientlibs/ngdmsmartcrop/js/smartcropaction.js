@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* global CQ */
-(function($, ns, channel, authorNs) {
+(function($, ns, authorNs) {
     "use strict";
     ns.image.v3.actions.smartCrop = function() {
         const editable = this;
@@ -26,16 +26,10 @@
     };
 
     function hasNGDMSmartCropAction(editable) {
-        let hasAction = false;
-        editable.config.editConfig.actions.forEach(function(action) {
-            if (typeof action === "object" && (action.name === "ngdm-smartcrop")) {
-                hasAction = true;
-            }
-        });
-        return hasAction;
+        return editable.config.editConfig.actions.some((action) => (typeof action === "object" && action.name === "ngdm-smartcrop"));
     }
 
     function isNGDMImage(editable) {
         return ($(editable.dom).find(".cq-dd-image[data-cmp-filereference^='/urn:']").length > 0);
     }
-})(jQuery, CQ.CoreComponents, jQuery(document), Granite.author);
+})(jQuery, CQ.CoreComponents, Granite.author);

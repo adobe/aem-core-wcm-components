@@ -24,7 +24,7 @@
 
     components.image.v3.smartCropDialog.prototype.getConfig = function() {
         return {
-            src: "/mnt/overlay/core/wcm/components/image/v3/image/smartcropdialog.html" + this.editable.path,
+            src: `/mnt/overlay/core/wcm/components/image/v3/image/smartcropdialog.html${this.editable.path}`,
             loadingMode: this.editable.config.dialogLoadingMode,
             layout: this.editable.config.dialogLayout || "auto"
         };
@@ -46,11 +46,11 @@
      * @param {jQuery} currentFloatingDialog The jQuery element representing the current floating dialog
      */
     components.image.v3.smartCropDialog.prototype.onSuccess = function(currentDialog, currentFloatingDialog) {
-        var self = this;
-        var properties = {};
+        const self = this;
+        let properties = {};
 
         if (currentFloatingDialog) {
-            var propertiesArray = currentFloatingDialog.serializeArray();
+            const propertiesArray = currentFloatingDialog.serializeArray();
 
             propertiesArray.forEach(function(propertyNameValue) {
                 properties[propertyNameValue.name] = propertyNameValue.value;
@@ -59,7 +59,7 @@
 
         channel.trigger("cq-persistence-after-update", [this.editable,  properties]);
 
-        var history = ns.history.Manager.getHistory();
+        const history = ns.history.Manager.getHistory();
         if (history) {
             history.clear();
         }
@@ -70,7 +70,7 @@
                 ns.selection.select(self.editable);
                 self.editable.afterEdit();
 
-                var editableParent = ns.editables.getParent(self.editable);
+                const editableParent = ns.editables.getParent(self.editable);
                 editableParent && editableParent.afterChildEdit(self.editable);
             });
     };

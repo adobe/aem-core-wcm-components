@@ -267,6 +267,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return nextGenDynamicMediaConfig != null && nextGenDynamicMediaConfig.enabled() &&
             StringUtils.isNotBlank(nextGenDynamicMediaConfig.getRepositoryId());
     }
+
     private void initNextGenerationDynamicMedia() {
         initResource();
         properties = resource.getValueMap();
