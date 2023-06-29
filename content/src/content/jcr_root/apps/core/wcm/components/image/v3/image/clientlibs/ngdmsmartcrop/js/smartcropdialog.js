@@ -60,9 +60,7 @@
         channel.trigger("cq-persistence-after-update", [this.editable,  properties]);
 
         const history = ns.history.Manager.getHistory();
-        if (history) {
-            history.clear();
-        }
+        history && history.clear();
 
         // refresh the editable and recreate its overlay
         ns.edit.EditableActions.REFRESH.execute(this.editable)
