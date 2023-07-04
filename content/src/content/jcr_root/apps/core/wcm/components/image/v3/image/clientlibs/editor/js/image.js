@@ -134,7 +134,7 @@
             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
             togglePageImageInherited(imageFromPageImage, isDecorative);
             updateImageThumbnail().then(function() {
-                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit:visible");
+                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit[trackingelement='edit']");
                 if ($cqFileUploadEdit) {
                     fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
                     if (fileReference === "") {
