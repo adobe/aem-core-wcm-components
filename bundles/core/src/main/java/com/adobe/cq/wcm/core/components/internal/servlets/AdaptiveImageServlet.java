@@ -152,7 +152,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             List<String> selectorList = selectorToList(requestPathInfo.getSelectorString());
             String suffix = requestPathInfo.getSuffix();
             String imageName = StringUtils.isNotEmpty(suffix) ? FilenameUtils.getName(suffix) : "";
-
             if (StringUtils.isNotEmpty(suffix)) {
                 String suffixExtension = FilenameUtils.getExtension(suffix);
                 if (StringUtils.isNotEmpty(suffixExtension)) {
@@ -241,6 +240,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     return;
                 }
             }
+
             if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
 
                 Map<String, Integer> transformationMap = getTransformationMap(selectorList, component, request);
@@ -1013,8 +1013,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         return  allowedResizeWidth;
     }
-
-
 
     private enum Source {
         ASSET,

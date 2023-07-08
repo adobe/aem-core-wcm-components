@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
+import javax.imageio.IIOException;
 import javax.imageio.spi.IIORegistry;
 import javax.imageio.spi.ImageReaderSpi;
 import javax.servlet.http.HttpServletResponse;
@@ -84,6 +85,9 @@ class AdaptiveImageServletTest extends AbstractImageTest {
     private static final String TEST_BASE = "/image";
 
     private AdaptiveImageServlet servlet;
+    private AssetStore assetStore;
+    private AdaptiveImageServletMetrics metrics;
+
     private static final int ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH = 1280;
     protected static final String IMAGE0_RECTANGLE_PATH = PAGE + "/jcr:content/root/image0r";
     protected static final String IMAGE0_SMALL_PATH = PAGE + "/jcr:content/root/image0s";
@@ -92,6 +96,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
     protected static final String PNG_IMAGE_SMALL_BINARY_NAME = "Adobe_Systems_logo_and_wordmark_small.png";
     protected static final String PNG_SMALL_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_SMALL_BINARY_NAME;
     private static final String FEATURED_IMAGE_PATH = "/content/test-featured-image/jcr:content/cq:featuredimage/1490005239000/" + PNG_IMAGE_BINARY_NAME;
+
 
     @BeforeEach
     void setUp() throws Exception {
@@ -104,8 +109,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             "/jcr:content/renditions/cq5dam.web.1280.1280.png");
         resourceResolver = context.resourceResolver();
         AssetHandler assetHandler = mock(AssetHandler.class);
-        AssetStore assetStore = mock(AssetStore.class);
-        AdaptiveImageServletMetrics metrics = mock(AdaptiveImageServletMetrics.class);
+        assetStore = mock(AssetStore.class);
+        metrics = mock(AdaptiveImageServletMetrics.class);
         when(metrics.startDurationRecording()).thenReturn(mock(Timer.Context.class));
         when(assetStore.getAssetHandler(anyString())).thenReturn(assetHandler);
         IIORegistry registry = IIORegistry.getDefaultInstance();
@@ -131,6 +136,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
     void tearDown() {
         resourceResolver = null;
         servlet = null;
+        assetStore = null;
+        metrics = null;
     }
 
     @Test
@@ -408,6 +415,24 @@ class AdaptiveImageServletTest extends AbstractImageTest {
     }
 
     @Test
+    void testPNGEnforcedDirectStream() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+            prepareRequestResponsePair(IMAGE22_PATH, 1494867377756L, "img.2000", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        AdaptiveImageServlet reconfiguredServlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics,
+            ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE, List.of("png"), List.of());
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new String[] {"2000"});
+        reconfiguredServlet.doGet(request, response);
+        Assertions.assertEquals(HttpServletResponse.SC_OK, response.getStatus(), "Expected a 200 response.");
+        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+        InputStream directStream =
+            this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.png");
+        Assertions.assertTrue(IOUtils.contentEquals(stream, directStream),
+            "Expected to get the original asset even though transformations are applied");
+    }
+
+    @Test
     void testGIFFileBrowserCached() throws Exception {
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
                 prepareRequestResponsePair(IMAGE5_PATH, 1489998822138L, "img", "gif");
@@ -499,6 +524,36 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         BufferedImage image = ImageIO.read(stream);
         Assertions.assertEquals(600, image.getWidth());
         Assertions.assertEquals(600, image.getHeight());
+    }
+
+    @Test
+    void testJPGFileDirectStream() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+            prepareRequestResponsePair(IMAGE31_PATH, "img.82.2000", "jpg");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new String[] {"2000"});
+        servlet.doGet(request, response);
+        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+        InputStream directStream = this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark_full_quality.jpg");
+        Assertions.assertTrue(IOUtils.contentEquals(directStream, stream),
+            "Expected to get the original asset back, since no transformation is required.");
+    }
+
+    @Test
+    void testJPGFileForcedTransformation() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+            prepareRequestResponsePair(IMAGE31_PATH, "img.82.2000", "jpg");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new String[] {"2000"});
+        AdaptiveImageServlet reconfiguredServlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics,
+            ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE, List.of(), List.of("jpeg"));
+        reconfiguredServlet.doGet(request, response);
+        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+        InputStream directStream = this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark_compressed_quality.jpg");
+        Assertions.assertTrue(IOUtils.contentEquals(directStream, stream),
+            "Expected to get a compressed asset back, even though no transformation is required.");
     }
 
     @Test
