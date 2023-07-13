@@ -99,10 +99,12 @@ public class LinkUtil {
                         escaped = sb.insert(path.indexOf(fragment), "#" + fragment).toString();
                     }
                 } else {
-                    escaped = sb.append("#").append(URLEncoder.encode(fragment, StandardCharsets.UTF_8.name())
-                            .replace("+", "%20")).toString();
+                    escaped = sb.append("#")
+                                .append(replaceEncodedCharacters(URLEncoder.encode(fragment, StandardCharsets.UTF_8.name())))
+                                .toString();
                 }
             }
+            
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             StringBuilder sb = new StringBuilder(path);
@@ -191,4 +193,20 @@ public class LinkUtil {
 
         return placeholderBuilder.toString();
     }
+
+    private static String replaceEncodedCharacters(final String str) {
+        return str.replace("%2B", "+")
+            .replace("%3D", "=")
+            .replace("%7E", "~")
+            .replace("%24", "$")
+            .replace("%26", "&")
+            .replace("%3B", ";")
+            .replace("%3A", ":")
+            .replace("%40", "@")
+            .replace("%21", "!")
+            .replace("%27", "'")
+            .replace("%28", "(")
+            .replace("%29", ")")
+            .replace("%2C", ",");
+    } 
 }
