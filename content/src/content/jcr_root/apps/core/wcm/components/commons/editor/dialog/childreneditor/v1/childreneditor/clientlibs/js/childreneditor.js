@@ -252,25 +252,23 @@
                 }
 
                 Coral.commons.ready(that._elements.self, function(item) {
-                    // As a reordering of the multifield also triggers the coral-collection:remove event we have to add
-                    // a check for moved items so the prompt get only shown on a real remove action.
-                    var movedItem;
-
                     that._elements.self.on("coral-multifield:itemorder", function(event) {
-                        movedItem = event.detail.item.dataset["name"];
                     });
 
+                    // coral-collection:remove event is triggered either when the element is removed
+                    // or when the element is moved/reordered (in that case we'll temporarily remove it
+                    // and it will be added back by the subsequent coral-collection:add event)
                     that._elements.self.on("coral-collection:remove", function(event) {
-                        var name = event.detail.item.dataset["name"];
-                        if (movedItem !== name) {
-                            that._deletedChildren.push(name);
-                        }
+                        let elementToDelete = event.detail.item.dataset["name"];
+                        that._deletedChildren.push(elementToDelete);
                     });
 
+                    // coral-collection:add event is triggered either when the new element is added
+                    // or when the element is moved/reordered (in that case we'll add back the temporarily
+                    // removed element, hence we have to remove that element from the deleted list)
                     that._elements.self.on("coral-collection:add", function(event) {
-                        if (movedItem !== event.detail.item.dataset["name"]) {
-                            movedItem = undefined;
-                        }
+                        let elementToAdd = event.detail.item.dataset["name"];
+                        that._deletedChildren = that._deletedChildren.filter(elementToDelete => elementToDelete !== elementToAdd);
                     });
                 });
             },
