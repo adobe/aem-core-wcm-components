@@ -252,14 +252,11 @@
                 }
 
                 Coral.commons.ready(that._elements.self, function(item) {
-                    that._elements.self.on("coral-multifield:itemorder", function(event) {
-                    });
-
                     // coral-collection:remove event is triggered either when the element is removed
                     // or when the element is moved/reordered (in that case we'll temporarily remove it
                     // and it will be added back by the subsequent coral-collection:add event)
                     that._elements.self.on("coral-collection:remove", function(event) {
-                        let elementToDelete = event.detail.item.dataset["name"];
+                        const elementToDelete = event.detail.item.dataset["name"];
                         that._deletedChildren.push(elementToDelete);
                     });
 
@@ -267,7 +264,7 @@
                     // or when the element is moved/reordered (in that case we'll add back the temporarily
                     // removed element, hence we have to remove that element from the deleted list)
                     that._elements.self.on("coral-collection:add", function(event) {
-                        let elementToAdd = event.detail.item.dataset["name"];
+                        const elementToAdd = event.detail.item.dataset["name"];
                         that._deletedChildren = that._deletedChildren.filter(elementToDelete => elementToDelete !== elementToAdd);
                     });
                 });
