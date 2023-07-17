@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.image;
 
+import java.security.PublicKey;
+
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
@@ -26,6 +28,7 @@ import org.openqa.selenium.WrapsDriver;
 
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.webdriver;
 
 public class BaseImage extends BaseComponent {
     private static String assetPath = "[name='assetfilter_image_path']";
@@ -47,6 +50,10 @@ public class BaseImage extends BaseComponent {
             ".'][sizes='%s']";
     public static String imageWithAltText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s']";
     public static String imageWithFileName = ".cmp-image__image[src*='/%s']";
+
+    private static final String ngdmSmartCropButton = "button.cq-editable-action[data-action='ngdm-smartcrop']";
+
+    private static final String ngdmSmartCropDialog = ".smartcropdialog";
 
     protected String title;
     protected String imgWithAltText;
@@ -164,5 +171,17 @@ public class BaseImage extends BaseComponent {
 
     public boolean checkLinkPresentWithTarget(String link, String target) {
         return $("a[href='" + link + "'][target='" + target + "']").isDisplayed();
+    }
+
+    public boolean isNGDMSmartCropButtonVisible() {
+        return $(ngdmSmartCropButton).isDisplayed();
+    }
+
+    public void clickNGDMSmartCropButton() {
+        $(ngdmSmartCropButton).click();
+    }
+
+    public boolean isNGDMSmartCropDialogVisible() {
+        return $(ngdmSmartCropDialog).isDisplayed();
     }
 }

@@ -23,6 +23,7 @@ import java.util.concurrent.TimeoutException;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -234,6 +235,13 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @DisplayName("Test: set asset from DAM without description")
     public void testSetAssetWithoutDescription() throws TimeoutException, InterruptedException {
         imageTests.testSetAssetWithoutDescriptionV3();
+    }
+
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop dialog.")
+    public void testSmartCropDialogOnNGDMImageV3() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testSmartCropDialogNGDMImageV3();
     }
 
 }

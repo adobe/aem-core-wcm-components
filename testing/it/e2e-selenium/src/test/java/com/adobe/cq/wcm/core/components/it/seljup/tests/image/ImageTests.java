@@ -36,8 +36,11 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImag
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.codeborne.selenide.SelenideElement;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest.adminClient;
@@ -468,6 +471,22 @@ public class ImageTests {
         String link = (contextPath != null)? contextPath + redirectPage + ".html": redirectPage + ".html";
         String target = "_blank";
         assertTrue(image.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
+    }
+
+    public void testSmartCropDialogNGDMImageV3() throws TimeoutException, InterruptedException, ClientException {
+        Commons.openSidePanel();
+        dragImage();
+        Commons.setNGDMImage(adminClient, compPath);
+        editorPage.refresh();
+        Commons.webDriverWait(3000);
+        String component = "[data-type='Editable'][data-path='" + compPath +"']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        WebElement element = webDriver.findElement(By.cssSelector(component));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].setAttribute('style', 'width:100%;height:2px');", element);
+        $(component).click();
+        assertTrue(image.isNGDMSmartCropButtonVisible(), "NextGen SmartCrop button should be present.");
+        image.clickNGDMSmartCropButton();
+        image.isNGDMSmartCropDialogVisible();
     }
 
     // ----------------------------------------------------------
