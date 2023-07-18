@@ -117,7 +117,7 @@ With AEM as a Cloud Service SDK, use the `cloud` profile as follows to deploy th
 
 Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install
-* `-am/-also-make` options specifies that dependencies should also be built
+* `-am/-also-make` option specifies the dependencies that should also be built
 
 For detailed informations see [BUILDING.md](BUILDING.md).
 
