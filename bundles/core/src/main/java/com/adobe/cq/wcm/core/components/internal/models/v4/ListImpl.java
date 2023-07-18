@@ -34,7 +34,6 @@ import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.PostConstruct;
 import java.text.Collator;
 import java.util.Collection;
 import java.util.Comparator;
@@ -51,7 +50,8 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Override
     protected ListItem newPageListItem(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component) {
-        return new PageListItemImpl(linkManager.get(page).build(), page, parentId, component, showDescription, linkItems || displayItemAsTeaser, resource);
+        Resource listResource = getListResource();
+        return new PageListItemImpl(linkManager.get(page).build(), page, parentId, component, showDescription, linkItems || displayItemAsTeaser, listResource);
     }
 
     @Override
