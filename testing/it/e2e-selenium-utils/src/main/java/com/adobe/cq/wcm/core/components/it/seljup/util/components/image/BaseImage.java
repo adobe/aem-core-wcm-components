@@ -53,7 +53,7 @@ public class BaseImage extends BaseComponent {
     private static final String ngdmSmartCropButton = "button.cq-editable-action[data-action='ngdm-smartcrop']";
     private static final String ngdmSmartCropDialog = ".smartcropdialog";
     private static final String ngdmSmartCropAspectRatioSelector = ".image-v3-dialog-smartcrop-select button";
-    private static final String ngdmSmartCropAspectRatioSelectorOption = ".smartcropdialog coral-selectlist coral-selectlist-item[value='%s']";
+    private static final String ngdmSmartCropAspectRatioSelectorOption = "coral-selectlist coral-selectlist-item[value='%s']";
     private static final String ngdmSmartCropPreview = ".ngdm-smartcrop-thumbnail";
     private static final String ngdmSmartCropAspectRatioInputLeft = ".smartcrop-ratio-left input";
     private static final String ngdmSmartCropAspectRatioInputRight = ".smartcrop-ratio-right input";
@@ -183,7 +183,8 @@ public class BaseImage extends BaseComponent {
         String component = "[data-type='Editable'][data-path='" + compPath + "']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector(component));
-        ((JavascriptExecutor) webDriver).executeScript("arguments[0].setAttribute('style', 'width:100%;height:2px');", element);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].setAttribute('style', 'width:100%;height:5px');", element);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         $(component).click();
         assertTrue(this.isNGDMSmartCropButtonVisible(), "NextGen SmartCrop button should be present.");
         this.clickNGDMSmartCropButton();

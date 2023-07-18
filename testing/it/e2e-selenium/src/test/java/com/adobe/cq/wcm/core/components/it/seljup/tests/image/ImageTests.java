@@ -521,7 +521,7 @@ public class ImageTests {
         dragImage();
         Commons.setNGDMImage(adminClient, compPath);
         editorPage.refresh();
-        Commons.webDriverWait(2000);
+        Commons.webDriverWait(3000);
     }
     private void dragImage() throws TimeoutException, InterruptedException {
         ImageEditDialog editDialog = image.getEditDialog();
