@@ -241,7 +241,27 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @Ignore
     @DisplayName("Test : NextGen DM image smart crop dialog.")
     public void testSmartCropDialogOnNGDMImageV3() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testSmartCropDialogNGDMImageV3();
+        imageTests.testNGDMSmartCropDialogImageV3();
     }
 
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop - select aspect ratio from list.")
+    public void testSmartCropDialogOnNGDMImageV3_aspectRatioSelection() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3_aspectRatioSelection();
+    }
+
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop - select custom aspect ratio.")
+    public void testSmartCropDialogOnNGDMImageV3_customAspectRatio() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3_customAspectRatio();
+    }
+
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop - flip aspect ratio.")
+    public void testSmartCropDialogOnNGDMImageV3_flipAspectRatio() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3_aspectRatioFlip();
+    }
 }

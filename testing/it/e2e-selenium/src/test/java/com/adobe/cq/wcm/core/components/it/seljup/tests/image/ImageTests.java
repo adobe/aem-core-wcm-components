@@ -16,15 +16,12 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 
 import com.adobe.cq.testing.client.CQClient;
@@ -37,10 +34,8 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEdi
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.codeborne.selenide.SelenideElement;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest.adminClient;
@@ -473,26 +468,61 @@ public class ImageTests {
         assertTrue(image.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
-    public void testSmartCropDialogNGDMImageV3() throws TimeoutException, InterruptedException, ClientException {
-        Commons.openSidePanel();
-        dragImage();
-        Commons.setNGDMImage(adminClient, compPath);
-        editorPage.refresh();
-        Commons.webDriverWait(3000);
-        String component = "[data-type='Editable'][data-path='" + compPath +"']";
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        WebElement element = webDriver.findElement(By.cssSelector(component));
-        ((JavascriptExecutor) webDriver).executeScript("arguments[0].setAttribute('style', 'width:100%;height:2px');", element);
-        $(component).click();
-        assertTrue(image.isNGDMSmartCropButtonVisible(), "NextGen SmartCrop button should be present.");
-        image.clickNGDMSmartCropButton();
-        image.isNGDMSmartCropDialogVisible();
+    public void testNGDMSmartCropDialogImageV3() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+    }
+
+    public void testNGDMSmartCropDialogImageV3_aspectRatioSelection() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+        image.selectAspectRatioInNGDMSmartCropDialog("5:3");
+        image.validateNGDMSmartCropInImageUrl("5:3");
+        image.saveNGDMSmartCropDialog();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.openNGDMSmartCropDialog(compPath);
+        image.validateNGDMAspectRationSelectorLabel("Wide Landscape");
+        image.validateNGDMSmartCropInImageUrl("5:3");
+    }
+
+    public void testNGDMSmartCropDialogImageV3_customAspectRatio() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+        image.addCustomAspectRatioInNGDMSmartCropDialog("2:7");
+        image.validateNGDMSmartCropInImageUrl("2:7");
+        image.saveNGDMSmartCropDialog();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.openNGDMSmartCropDialog(compPath);
+        image.validateNGDMAspectRationSelectorLabel("Custom");
+        image.validateNGDMSmartCropInImageUrl("2:7");
+    }
+
+    public void testNGDMSmartCropDialogImageV3_aspectRatioFlip() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+        image.selectAspectRatioInNGDMSmartCropDialog("5:3");
+        image.validateNGDMSmartCropInImageUrl("5:3");
+        image.flipNGDMSmartCropDialogAspectRatios();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.validateNGDMAspectRationSelectorLabel("Custom");
+        image.validateNGDMSmartCropInImageUrl("3:5");
+        image.flipNGDMSmartCropDialogAspectRatios();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.validateNGDMSmartCropInImageUrl("5:3");
+        image.validateNGDMAspectRationSelectorLabel("Wide Landscape");
     }
 
     // ----------------------------------------------------------
     // private stuff
     // ----------------------------------------------------------
 
+    private void setUpNGDMImage() throws InterruptedException, TimeoutException, ClientException {
+        Commons.openSidePanel();
+        dragImage();
+        Commons.setNGDMImage(adminClient, compPath);
+        editorPage.refresh();
+        Commons.webDriverWait(2000);
+    }
     private void dragImage() throws TimeoutException, InterruptedException {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.setAssetFilter(testAssetsPath);
