@@ -23,6 +23,7 @@ import java.util.concurrent.TimeoutException;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -236,4 +237,31 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testSetAssetWithoutDescriptionV3();
     }
 
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop dialog.")
+    public void testSmartCropDialogOnNGDMImageV3() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3();
+    }
+
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop - select aspect ratio from list.")
+    public void testSmartCropDialogOnNGDMImageV3_aspectRatioSelection() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3_aspectRatioSelection();
+    }
+
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop - select custom aspect ratio.")
+    public void testSmartCropDialogOnNGDMImageV3_customAspectRatio() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3_customAspectRatio();
+    }
+
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop - flip aspect ratio.")
+    public void testSmartCropDialogOnNGDMImageV3_flipAspectRatio() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3_aspectRatioFlip();
+    }
 }

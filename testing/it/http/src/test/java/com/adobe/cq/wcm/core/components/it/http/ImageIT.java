@@ -72,7 +72,7 @@ public class ImageIT {
         Assert.assertEquals(1, images.size());
         Element img = images.first();
         String imageSource = img.attr("src");
-        Assert.assertEquals("https://testrepository/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?width=640&preferwebp=true", imageSource);
+        Assert.assertEquals("https://testrepository/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?width=640&preferwebp=true&crop=3:5,smart", imageSource);
     }
 
     public void testImages(Elements html) {

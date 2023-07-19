@@ -250,7 +250,7 @@
 
                 // update the alt field
                 altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
-                if (imageFromPageImage.checked) {
+                if (imageFromPageImage && imageFromPageImage.checked) {
                     altFromPageTuple.seedTextValue(altTextFromPage);
                     altFromPageTuple.update();
                 }
