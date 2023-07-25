@@ -87,7 +87,7 @@
             if (areDMFeaturesEnabled) {
                 smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
             } else {
-				$dynamicMediaGroup.hide();
+                $dynamicMediaGroup.hide();
             }
 
             imageFromPageImage = dialogContent.querySelector("coral-checkbox[name='./imageFromPageImage']");
