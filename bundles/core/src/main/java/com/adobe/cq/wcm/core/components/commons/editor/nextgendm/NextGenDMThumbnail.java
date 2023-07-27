@@ -18,11 +18,22 @@ package com.adobe.cq.wcm.core.components.commons.editor.nextgendm;
 import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
+/**
+ * Thumbnails for Next Generation Dynamic Media Images.
+ */
 public interface NextGenDMThumbnail {
+    /**
+     * Get thumbnail source url for the next generation dynamic media image.
+     * @return {String} - the url of image thumbnail.
+     */
     default public String getSrc() {
         return null;
     }
 
+    /**
+     * Get thumbnail alternative text for the next generation dynamic media image.
+     * @return {String - the alternative text.
+     */
     default public String getAlt() {
         return null;
     }
