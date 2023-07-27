@@ -13,17 +13,20 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.models.nextgendm;
+package com.adobe.cq.wcm.core.components.commons.editor.dialog.nextgendm;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.junit.jupiter.api.Test;
 
-public interface NextGenDMThumbnail {
-    default public String getSrc() {
-        return null;
-    }
+import com.adobe.cq.wcm.core.components.commons.editor.nextgendm.NextGenDMThumbnail;
 
-    default public String getAlt() {
-        return null;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.spy;
+
+public class NextGenDMThumbnailTest {
+    @Test
+    void testNextGenThumbnailDefaultMethods() {
+        NextGenDMThumbnail nextGenDMThumbnail = spy(NextGenDMThumbnail.class);
+        assertNull(nextGenDMThumbnail.getAlt());
+        assertNull(nextGenDMThumbnail.getSrc());
     }
 }
