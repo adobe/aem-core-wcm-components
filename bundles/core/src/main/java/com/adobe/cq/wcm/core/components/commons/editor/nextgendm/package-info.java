@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
  * <p>
- *      This package defines the Sling Models exposed for the inherited component.
+ *      This package defines next generation dynamic media image thumbnail model.
  * </p>
  *
  */
