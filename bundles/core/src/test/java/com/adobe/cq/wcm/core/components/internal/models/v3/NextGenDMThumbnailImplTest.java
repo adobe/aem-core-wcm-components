@@ -27,7 +27,7 @@ import org.mockito.quality.Strictness;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.nextgendm.NextGenDMThumbnail;
+import com.adobe.cq.wcm.core.components.commons.editor.nextgendm.NextGenDMThumbnail;
 import com.adobe.cq.wcm.core.components.testing.MockNextGenDynamicMediaConfig;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -35,7 +35,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
-public class NextGenDmThumbnailImplTest {
+public class NextGenDMThumbnailImplTest {
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
     private static final String NGDM_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_image1";

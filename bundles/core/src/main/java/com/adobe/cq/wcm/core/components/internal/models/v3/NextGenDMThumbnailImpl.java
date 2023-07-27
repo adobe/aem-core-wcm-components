@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.ui.wcm.commons.config.NextGenDynamicMediaConfig;
-import com.adobe.cq.wcm.core.components.models.nextgendm.NextGenDMThumbnail;
+import com.adobe.cq.wcm.core.components.commons.editor.nextgendm.NextGenDMThumbnail;
 
 import static com.adobe.cq.wcm.core.components.internal.models.v3.ImageImpl.isNgdmImageReference;
 
