@@ -14,10 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
- * <p>
- *      This package defines next generation dynamic media image thumbnail model.
- * </p>
- *
+ * This package defines next generation dynamic media image thumbnail model.
  */
 @Version("1.0.0")
 package com.adobe.cq.wcm.core.components.commons.editor.nextgendm;

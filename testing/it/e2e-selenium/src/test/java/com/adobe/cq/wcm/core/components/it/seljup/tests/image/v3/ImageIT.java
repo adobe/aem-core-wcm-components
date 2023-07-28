@@ -237,6 +237,8 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testSetAssetWithoutDescriptionV3();
     }
 
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
     @Test
     @Ignore
     @DisplayName("Test : NextGen DM image smart crop dialog.")
@@ -244,6 +246,8 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testNGDMSmartCropDialogImageV3();
     }
 
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
     @Test
     @Ignore
     @DisplayName("Test : NextGen DM image smart crop - select aspect ratio from list.")
@@ -251,6 +255,8 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testNGDMSmartCropDialogImageV3_aspectRatioSelection();
     }
 
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
     @Test
     @Ignore
     @DisplayName("Test : NextGen DM image smart crop - select custom aspect ratio.")
@@ -258,6 +264,8 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testNGDMSmartCropDialogImageV3_customAspectRatio();
     }
 
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
     @Test
     @Ignore
     @DisplayName("Test : NextGen DM image smart crop - flip aspect ratio.")
