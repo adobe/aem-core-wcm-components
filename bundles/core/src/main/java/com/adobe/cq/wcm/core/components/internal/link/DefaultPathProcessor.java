@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -148,13 +146,11 @@ public class DefaultPathProcessor implements PathProcessor {
     public @NotNull String map(@NotNull String path, @NotNull SlingHttpServletRequest request) {
         ResourceResolver resourceResolver = request.getResourceResolver();
         String mappedPath;
-        Map<String, String> placeholders = new HashMap<>();
-        String maskedPath = LinkUtil.mask(path, placeholders);
         try {
             if (vanityConfig == VanityConfig.MAPPING || vanityConfig == VanityConfig.ALWAYS) {
-                mappedPath = LinkUtil.unmask(StringUtils.defaultString(resourceResolver.map(request, getPathOrVanityUrl(maskedPath, resourceResolver))), placeholders);
+                mappedPath = StringUtils.defaultString(resourceResolver.map(request, getPathOrVanityUrl(path, resourceResolver)));
             } else {
-                mappedPath = LinkUtil.unmask(StringUtils.defaultString(resourceResolver.map(request, maskedPath)), placeholders);
+                mappedPath = StringUtils.defaultString(resourceResolver.map(request, path));
             }
         } catch (Exception e) {
             mappedPath = path;

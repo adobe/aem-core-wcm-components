@@ -21,15 +21,13 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import java.util.stream.Collectors;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.lang3.StringUtils;
@@ -43,21 +41,7 @@ public class LinkUtil {
 
     private final static Logger LOG = LoggerFactory.getLogger(LinkUtil.class);
 
-    //RFC 3986 section 2.2 Reserved Characters
-    private static final String[] RESERVED_CHARACTERS_ENCODED = {
-        "%20", "%21", "%22", "%23", "%24", "%25", "%26", "%27", "%28","%29",
-        "%2A", "%2B", "%2C", "%2F", "%3A", "%3B", "%3D", "%3F", "%40", "%5B", "%5D",
-        "%2a", "%2b", "%2c", "%2f", "%3a", "%3b", "%3d", "%3f", "%5b", "%5d"
-    };
-    private final static List<Pattern> PATTERNS = new ArrayList<>();
-
-    static {
-        PATTERNS.add(Pattern.compile("(<%[=@].*?%>)"));
-        PATTERNS.addAll(Arrays.stream(RESERVED_CHARACTERS_ENCODED)
-            .map(encoded -> Pattern.compile("(" + encoded + ")") )
-            .collect(Collectors.toList()));
-    }
-
+    private final static List<Pattern> PATTERNS = Collections.singletonList(Pattern.compile("(<%[=@].*?%>)"));
 
     /**
      * Decodes and encoded or escaped URL taking care to not break Adobe Campaign expressions
@@ -94,10 +78,8 @@ public class LinkUtil {
         final String maskedQueryString = mask(queryString, placeholders);
         String escaped;
         URI parsed;
-        final String maskedPath = LinkUtil.mask(path, placeholders);
-
         try {
-            parsed = new URI(maskedPath, false);
+            parsed = new URI(path, false);
         } catch (URIException e) {
             parsed = null;
             LOG.error(e.getMessage(), e);
@@ -122,7 +104,7 @@ public class LinkUtil {
                                 .toString();
                 }
             }
-
+            
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             StringBuilder sb = new StringBuilder(path);
@@ -150,7 +132,7 @@ public class LinkUtil {
      * @return the masked {@link String}
      * @see LinkUtil#unmask(String, Map)
      */
-    static String mask(final String original, final Map<String, String> placeholders) {
+    private static String mask(final String original, final Map<String, String> placeholders) {
         if (original == null) {
             return null;
         }
@@ -177,7 +159,7 @@ public class LinkUtil {
      * @param placeholders the {@link Map} of placeholders to replace
      * @return the unmasked {@link String}
      */
-    static String unmask(final String masked, final Map<String, String> placeholders) {
+    private static String unmask(final String masked, final Map<String, String> placeholders) {
         if (masked == null) {
             return null;
         }
@@ -226,5 +208,5 @@ public class LinkUtil {
             .replace("%28", "(")
             .replace("%29", ")")
             .replace("%2C", ",");
-    }
+    } 
 }
