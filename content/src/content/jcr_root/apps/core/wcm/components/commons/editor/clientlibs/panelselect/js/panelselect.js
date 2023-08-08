@@ -444,9 +444,9 @@
                 subTitle = item[PN_PANEL_TITLE];
             } else if (item.title) {
                 subTitle = item.title;
-            } else if(item.label && item.label.value) {
+            } else if (item.label && item.label.value) {
                 subTitle = item.label.value;
-            } else if(item.name) {
+            } else if (item.name) {
                 subTitle = item.name;
             }
         }
