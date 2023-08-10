@@ -47,6 +47,7 @@ import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -82,6 +83,18 @@ public class ClientLibrariesImpl implements ClientLibraries {
     Object resourceTypes;
 
     @Inject
+    @Named(OPTION_CATEGORIES)
+    private Object categories;
+
+    // The two fields bellow are injected from request attributes only to be able to detect unintended injections on
+    // the corresponding fields above.
+    @RequestAttribute(name = OPTION_RESOURCE_TYPES)
+    private Object raResourceTypes;
+
+    @RequestAttribute(name = OPTION_CATEGORIES)
+    private Object raCategories;
+
+    @Inject
     @Named(OPTION_FILTER_REGEX)
     String filterRegex;
 
@@ -91,17 +104,11 @@ public class ClientLibrariesImpl implements ClientLibraries {
     boolean inherited;
 
     @Inject
-    @Named(OPTION_CATEGORIES)
-    private Object categories;
-
-    @Inject
     @Named(OPTION_ASYNC)
-    @Nullable
     private boolean async;
 
     @Inject
     @Named(OPTION_DEFER)
-    @Nullable
     private boolean defer;
 
     @Inject
@@ -132,13 +139,19 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @PostConstruct
     protected void initModel() {
         resourceTypeSet = Utils.getStrings(resourceTypes);
+        if (resourceTypeSet.isEmpty()) {
+            resourceTypeSet = Utils.getStrings(raResourceTypes);
+        }
         if (StringUtils.isNotEmpty(filterRegex)) {
             pattern = Pattern.compile(filterRegex);
         }
 
         Set<String> categoriesSet = Utils.getStrings(categories);
         if (categoriesSet.isEmpty()) {
-            categoriesSet = getCategoriesFromComponents();
+            categoriesSet = Utils.getStrings(raCategories);
+            if (categoriesSet.isEmpty()) {
+                categoriesSet = getCategoriesFromComponents();
+            }
         }
 
         categoriesArray = categoriesSet.toArray(new String[0]);
