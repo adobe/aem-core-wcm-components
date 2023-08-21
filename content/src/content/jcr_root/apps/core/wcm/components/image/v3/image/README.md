@@ -119,8 +119,13 @@ The following attributes can be added to the same element to provide options:
 1. `data-cmp-dmimage` - if not `false`, indicates that the image is DM image.
 
 Native lazy loading is enabled by default. It can be disabled from Component Policy Configuration (`./disableLazyLoading`).
-If there are alternative widths (`./allowedRenditionWidths`) defined in the Component Policy Configuration, the `srcset` attribute will be constructed and set to the `<img>`.
-In this way the the browser will figure out based on its native adaptive capabilities which image to load from the `srcset` attribute in relation with the viewport width.
+
+If there are alternative widths (`./allowedRenditionWidths`) defined in the Component Policy Configuration, the `srcset` attribute will 
+be constructed and set to the `<img>`. In this way the the browser will figure out based on its native adaptive capabilities which image to 
+load from the `srcset` attribute in relation with the viewport width.
+
+[**IMPORTANT**] This only supports responsiveness (different image sizes at different 
+breakpoints) of the image component and should not be considered as a base for art direction (different images/crops at different breakpoints).
 
 ## SVG
 SVG MIME-types are supported, but have some specific handling. Alternative smart image widths defined at the component policy dialog are ignored for SVG images, with `Image#getWidths` returning an empty array.
