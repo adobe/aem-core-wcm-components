@@ -42,6 +42,7 @@ Default is set to 0.
 5.  `./enableDmFeatures` - if `true`, Dynamic Media features are enabled.
 6. `./enableAssetDelivery` - If `true`, assets will be delivered through the Asset Delivery system (based on Dynamic Media for AEMaaCS). This will also enable optimizations based on
    [content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation). Currently, this optimization is available only for webp.
+7. `./disableAssetDelivery` - If `true`, assets will no longer be delivered through the Asset Delivery system.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Image component and are expected to be available as `Resource` properties:

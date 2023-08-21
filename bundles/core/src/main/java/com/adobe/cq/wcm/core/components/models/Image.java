@@ -204,6 +204,13 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.25.0
      */
     String PN_DESIGN_ASSET_DELIVERY_ENABLED = "enableAssetDelivery";
+    
+    /**
+     * Name of the configuration policy property that controls whether assets should not be delivered through Dynamic Media.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.29.0
+     */
+    String PN_DESIGN_ASSET_DELIVERY_DISABLED = "disableAssetDelivery";
 
     /**
      * Name of the configuration policy property that will be used for resizing the base images, the ones from {@code src} attribute.

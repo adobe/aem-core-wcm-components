@@ -175,7 +175,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
-        useAssetDelivery = currentStyle.get(PN_DESIGN_ASSET_DELIVERY_ENABLED, false) && assetDelivery != null;
+        useAssetDelivery = (currentStyle.get(PN_DESIGN_ASSET_DELIVERY_ENABLED, false)
+                || !currentStyle.get(PN_DESIGN_ASSET_DELIVERY_DISABLED, false))
+                && assetDelivery != null;
 
         Asset asset = null;
 

@@ -64,8 +64,33 @@
                                         value="{Boolean}true">
                                         <granite:rendercondition
                                             jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryEnabled"/>
+                                            sling:resourceType="granite/ui/components/coral/foundation/renderconditions/and">
+                                            <isDeliveryEnabled
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/components/rendercondition/isAssetDeliveryEnabled"/>
+                                            <not
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/renderconditions/not">
+                                                <defaultDeliveryEnabled
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/renderconditions/featuretoggle"
+                                                    toggleName="OT_SITES-15225"/>
+                                            </not>
+                                        </granite:rendercondition>
                                     </enableAssetDelivery>
+                                    <disableAssetDelivery
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, WebOptimized Image Delivery are disabled."
+                                        name="./disableAssetDelivery"
+                                        text="Disable Web Optimized Images"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true">
+                                        <granite:rendercondition
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/renderconditions/featuretoggle"
+                                            toggleName="OT_SITES-15225"/>
+                                    </disableAssetDelivery>
                                     <enableLazyLoading
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

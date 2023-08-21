@@ -40,7 +40,8 @@ device) is disabled.
 5. `./resizeWidth` - Defines a resize width for resizing the images which are DAM assets, while keeping the original aspect ratio. If the value is bigger than the natural width of the image, it will have no effect. It will also have no effect on SVG images.
 6. `./enableAssetDelivery` - If `true`, assets will be delivered through the Asset Delivery system (based on Dynamic Media for AEMaaCS). This will also enable optimizations based on
    [content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation). Currently, this optimization is available only for webp.
-7`./sizes` - defines the sizes attribute for responsive image loading.
+7. `./disableAssetDelivery` - If `true`, assets will no longer be delivered through the Asset Delivery system.
+8. `./sizes` - defines the sizes attribute for responsive image loading.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Image component and are expected to be available as `Resource` properties:
