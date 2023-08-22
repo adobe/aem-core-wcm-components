@@ -255,6 +255,25 @@ public class ImageImplTest extends AbstractImageTest {
         Image image = getImageUnderTest(IMAGE0_PATH);
         assertEquals(MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true", image.getSrc());
     }
+    
+    @Test
+    void testAlwaysEnableAssetDeliveryWithServiceRegistered() throws Exception {
+        registerAssetDelivery();
+        context.contentPolicyMapping(resourceType,
+            "disableAssetDelivery", false);
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?quality=82&preferwebp=true", image.getSrc());
+    }
+    
+    @Test
+    void testDisableAssetDeliveryWithServiceRegistered() throws Exception {
+        registerAssetDelivery();
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
+        context.contentPolicyMapping(resourceType,
+            "disableAssetDelivery", true);
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
+    }
 
     @Test
     void testAssetDeliveryServiceWithoutFileReference() {
