@@ -50,6 +50,7 @@
                     jcr:lastModified="{Date}2020-11-27T19:42:37.640+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
+                    smartCrop="3:5"
                     sling:resourceType="core/wcm/components/image/v3/image"
                     fileReference="/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png"/>
             </container>

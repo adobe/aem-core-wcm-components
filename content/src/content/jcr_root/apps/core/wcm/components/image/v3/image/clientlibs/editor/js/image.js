@@ -134,7 +134,7 @@
             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
             togglePageImageInherited(imageFromPageImage, isDecorative);
             updateImageThumbnail().then(function() {
-                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit:visible");
+                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit[trackingelement='edit']");
                 if ($cqFileUploadEdit) {
                     fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
                     if (fileReference === "") {
@@ -250,7 +250,7 @@
 
                 // update the alt field
                 altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
-                if (imageFromPageImage.checked) {
+                if (imageFromPageImage && imageFromPageImage.checked) {
                     altFromPageTuple.seedTextValue(altTextFromPage);
                     altFromPageTuple.update();
                 }

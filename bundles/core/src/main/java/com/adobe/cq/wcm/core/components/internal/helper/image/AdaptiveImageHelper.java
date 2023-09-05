@@ -68,7 +68,9 @@ public class AdaptiveImageHelper {
                         .map(Page::getTemplate)
                         .map(template -> ResourceUtil.normalize(template.getPath() + suffixPath))
                         .map(resourceResolver::getResource).orElse(null);
-            } else {
+            }
+
+            if (componentCandidate == null) {
                 // image coming from external resource
                 Resource externalImageResource = resourceResolver.getResource(suffixPath);
                 if (externalImageResource != null && externalImageResource.isResourceType(IMAGE_RESOURCE_TYPE)) {

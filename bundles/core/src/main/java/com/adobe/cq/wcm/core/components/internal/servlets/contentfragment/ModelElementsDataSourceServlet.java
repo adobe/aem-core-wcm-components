@@ -116,6 +116,9 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
                     ValueMap valueMap = elementResource.getValueMap();
                     String valueValue = valueMap.get("name", "");
                     String textValue = valueMap.get("fieldLabel", valueValue);
+                    if (textValue.equals(valueValue)) {
+                        textValue = valueMap.get("cfm-element", valueValue);
+                    }
                     if (isOrderBy && StringUtils.isNotEmpty(valueValue)) {
                         valueValue = "jcr:content/data/master/" + valueValue;
                     }

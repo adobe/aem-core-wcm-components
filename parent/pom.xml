@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.23.1-SNAPSHOT</version>
+    <version>2.23.3-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
@@ -65,7 +65,7 @@
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
         <jackson.version>2.11.4</jackson.version>
-        <aem.selenium.base.it.version>0.2.40</aem.selenium.base.it.version>
+        <aem.selenium.base.it.version>0.2.42</aem.selenium.base.it.version>
         <selenide.version>6.10.1</selenide.version>
         <selenium.version>4.7.1</selenium.version>
     </properties>
@@ -78,7 +78,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.3</version>
                 <configuration>
                     <stylesheet>java</stylesheet>
                     <encoding>${project.build.sourceEncoding}</encoding>

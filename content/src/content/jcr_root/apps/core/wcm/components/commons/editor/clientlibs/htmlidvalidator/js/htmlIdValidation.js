@@ -39,8 +39,8 @@
             });
             var element = $(el);
             var currentVal = element.val();
-            /* Handle dialog re-submission */
-            if (currentVal === preConfiguredVal) {
+            /* Handle empty values or dialog re-submission */
+            if (!currentVal || currentVal === preConfiguredVal) {
                 return;
             }
             var url = pagePath + ".html?wcmmode=disabled";
