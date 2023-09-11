@@ -825,7 +825,7 @@
             <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
-                <version>5.1.0</version>
+                <version>5.1.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
