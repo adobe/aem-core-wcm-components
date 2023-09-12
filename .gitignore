@@ -24,3 +24,6 @@ core.wcm.components.commons.datalayer.*
 **/coverage/**
 node
 **/node_modules/**
+
+# jenv
+.java-version

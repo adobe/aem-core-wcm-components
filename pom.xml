@@ -57,6 +57,8 @@
                         <exclude>**/*.eslintignore</exclude>
                         <!-- Ignore target folders -->
                         <exclude>**/target/**</exclude>
+                        <!-- Ignore .java-version file -->
+                        <exclude>.java-version</exclude>
                     </excludes>
                 </configuration>
             </plugin>
