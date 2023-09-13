@@ -766,9 +766,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient-osgi</artifactId>
-                <version>4.5.13</version>
+                <groupId>com.day.commons.osgi.wrapper</groupId>
+                <artifactId>com.day.commons.osgi.wrapper.commons-httpclient</artifactId>
+                <version>3.1.0.018</version>
                 <scope>provided</scope>
             </dependency>
 
