@@ -55,6 +55,8 @@
                         <exclude>**/*.editorconfig</exclude>
                         <exclude>**/*.stylelintrc.yaml</exclude>
                         <exclude>**/*.eslintignore</exclude>
+                        <!-- Ignore target folders -->
+                        <exclude>**/target/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
