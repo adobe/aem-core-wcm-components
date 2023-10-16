@@ -118,7 +118,7 @@ public class LinkUtil {
                     }
                 } else {
                     escaped = sb.append("#")
-                                .append(replaceEncodedCharacters(URLEncoder.encode(fragment, StandardCharsets.UTF_8.name())))
+                                .append(replaceEncodedCharactersInFragment(URLEncoder.encode(fragment, StandardCharsets.UTF_8.name())))
                                 .toString();
                 }
             }
@@ -212,7 +212,7 @@ public class LinkUtil {
         return placeholderBuilder.toString();
     }
 
-    private static String replaceEncodedCharacters(final String str) {
+    private static String replaceEncodedCharactersInFragment(final String str) {
         return str.replace("%2B", "+")
             .replace("%3D", "=")
             .replace("%7E", "~")
@@ -225,6 +225,8 @@ public class LinkUtil {
             .replace("%27", "'")
             .replace("%28", "(")
             .replace("%29", ")")
-            .replace("%2C", ",");
+            .replace("%2C", ",")
+            .replace("%2F", "/")
+            .replace("%3F", "?");
     }
 }
