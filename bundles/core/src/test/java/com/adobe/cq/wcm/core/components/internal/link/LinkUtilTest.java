@@ -55,4 +55,12 @@ class LinkUtilTest {
         String decodedPath = LinkUtil.decode(encodedPath);
         assertEquals(encodedPath, decodedPath);
     }
+
+    @Test
+    void escape_whenEscapingPathWithFragment_thenFragmentForwardSlashIsNotEncoded() throws UnsupportedEncodingException {
+        String path = "https://google.com";
+        String fragment = "/assets/2/1529/RES176341/report";
+        String escapedPAth = LinkUtil.escape(path, null, fragment);
+        assertEquals(path+ "#" + fragment, escapedPAth);
+    }
 }
