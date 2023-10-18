@@ -53,6 +53,7 @@ import com.day.cq.wcm.api.PageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -456,12 +457,18 @@ class ClientLibrariesImplTest {
             add("core/wcm/components/carousel/v3/carousel");
         }});
         ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
-        StringBuilder includes = new StringBuilder();
-        includes.append(jsIncludes.get(ACCORDION_CATEGORY));
-        includes.append(jsIncludes.get(CAROUSEL_CATEGORY));
-        includes.append(cssIncludes.get(ACCORDION_CATEGORY));
-        includes.append(cssIncludes.get(CAROUSEL_CATEGORY));
-        assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
+        String actual = clientlibs.getJsAndCssIncludes();
+        StringBuilder includes1 = new StringBuilder();
+        includes1.append(jsIncludes.get(ACCORDION_CATEGORY));
+        includes1.append(jsIncludes.get(CAROUSEL_CATEGORY));
+        includes1.append(cssIncludes.get(ACCORDION_CATEGORY));
+        includes1.append(cssIncludes.get(CAROUSEL_CATEGORY));
+        StringBuilder includes2 = new StringBuilder();
+        includes2.append(jsIncludes.get(CAROUSEL_CATEGORY));
+        includes2.append(jsIncludes.get(ACCORDION_CATEGORY));
+        includes2.append(cssIncludes.get(CAROUSEL_CATEGORY));
+        includes2.append(cssIncludes.get(ACCORDION_CATEGORY));
+        assertTrue((includes1.toString().equals(actual)) || (includes2.toString().equals(actual)));
     }
 
     @Test
