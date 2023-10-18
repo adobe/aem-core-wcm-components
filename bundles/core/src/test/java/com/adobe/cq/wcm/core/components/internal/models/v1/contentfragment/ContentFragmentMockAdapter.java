@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -107,7 +108,7 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
             modelAdaptee = model.getChild(JCR_CONTENT);
             // create an element mock for each property on the master node
             Resource master = resource.getChild(PATH_MASTER);
-            for (String name : master.getValueMap().keySet()) {
+            for (String name : master.getValueMap().keySet().stream().sorted().collect(Collectors.toList())) {
                 // skip the primary type and content type properties
                 if (JcrConstants.JCR_PRIMARYTYPE.equals(name) || name.endsWith("@ContentType")) {
                     continue;
