@@ -18,11 +18,15 @@
     "use strict";
     ns.image.v3.actions.smartCrop = function() {
         const editable = this;
-        authorNs.DialogFrame.openDialog(new ns.image.v3.smartCropDialog(editable));
+        if (this.authorNs) {
+            authorNs.DialogFrame.openDialog(new ns.image.v3.smartCropDialog(editable));
+        }
     };
 
     ns.image.v3.actions.smartCrop.condition = function(editable) {
-        return authorNs.pageInfoHelper.canModify() && hasNGDMSmartCropAction(editable) && isNGDMImage(editable);
+        if (this.authorNs) {
+            return authorNs.pageInfoHelper.canModify() && hasNGDMSmartCropAction(editable) && isNGDMImage(editable);
+        }
     };
 
     function hasNGDMSmartCropAction(editable) {
