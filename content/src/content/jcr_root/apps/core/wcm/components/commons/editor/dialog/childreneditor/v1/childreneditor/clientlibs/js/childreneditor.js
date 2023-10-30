@@ -47,12 +47,12 @@
     /**
      * Children Editor
      *
-     * @class CQ.CoreComponents.ChildrenEditor
+     * @class ChildrenEditor
      * @classdesc A Children Editor is a dialog component based on a multifield that allows editing (adding, removing, renaming, re-ordering)
      * the child items of panel container components.
      * @param {ChildrenEditorConfig} config The Children Editor configuration object
      */
-    window.CQ.CoreComponents.ChildrenEditor = function(config) {
+    var ChildrenEditor = function(config) {
         this._config = config;
         this._elements = {};
         this._path = "";
@@ -84,8 +84,6 @@
             }
         });
     };
-
-    var ChildrenEditor = window.CQ.CoreComponents.ChildrenEditor;
 
     ChildrenEditor.prototype = (function() {
 
@@ -220,11 +218,7 @@
                                                 item.dataset["name"] = name;
 
                                                 var input = item.querySelectorAll(selectors.item.input)[0];
-                                                if (input.dataset.titlepropertyname) {
-                                                    input.name = "./" + name + "/" + input.dataset.titlepropertyname;
-                                                } else {
-                                                    input.name = "./" + name + "/" + PN_PANEL_TITLE;
-                                                }
+                                                input.name = "./" + name + "/" + PN_PANEL_TITLE;
                                                 input.placeholder = Granite.I18n.get(componentTitle);
 
                                                 var hiddenItemResourceType = item.querySelectorAll(selectors.item.hiddenItemResourceType)[0];
@@ -302,7 +296,7 @@
         $(event.target).find(selectors.self).each(function() {
             // prevent multiple initialization
             if ($(this).data("childrenEditor") === undefined) {
-                new window.CQ.CoreComponents.ChildrenEditor({
+                new ChildrenEditor({
                     el: this
                 });
             }
