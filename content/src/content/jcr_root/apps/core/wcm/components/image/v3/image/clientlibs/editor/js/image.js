@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
- (function($, Granite) {
+(function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-image__editor";
@@ -539,7 +539,7 @@
                             }
                         }
                     }
-176
+
                     if (mutation.attributeName === "disabled") {
                         if ($(altInputSelector).val()) {
                             if (alertIcon.length) {
