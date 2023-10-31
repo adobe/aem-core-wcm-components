@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import com.adobe.cq.wcm.core.components.internal.services.clientLibraries.ClientLibraryLookupServiceImpl;
+import com.adobe.cq.wcm.core.components.services.clientLibraries.ClientLibraryLookupService;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
@@ -52,6 +54,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.osgi.service.event.Event;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,6 +65,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -93,6 +97,8 @@ class ClientLibrariesImplTest {
     private static final String CSS_FILE_REL_PATH = "/styles/index.css";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
+
+    private ResourceResolverFactory serviceResolverFactory;
 
     private Map<String,ClientLibrary> allLibraries; // a map of (path, library) of all the libraries
     private Map<String,ClientLibrary> librariesMap; // a map of (category, library) of all the libraries
@@ -272,6 +278,9 @@ class ClientLibrariesImplTest {
             fail(String.format("Unable to write include: %s", e.getMessage()));
         }
 
+        this.serviceResolverFactory = spy(Objects.requireNonNull(this.context.getService(ResourceResolverFactory.class)));
+        context.registerService(ClientLibraryLookupService.class, new ClientLibraryLookupServiceImpl(serviceResolverFactory, htmlLibraryManager));
+        context.registerInjectActivateService(ClientLibraryLookupServiceImpl.class);
     }
 
     @Test
@@ -299,11 +308,8 @@ class ClientLibrariesImplTest {
         Page page = pageManager.getPage(ROOT_PAGE);
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, Utils.getPageResourceTypes(page, context.request(), mock(ModelFactory.class)));
+        doThrow(new LoginException()).when(this.serviceResolverFactory).getServiceResourceResolver(anyMap());
         ClientLibrariesImpl clientlibs = Objects.requireNonNull((ClientLibrariesImpl) getClientLibrariesUnderTest(ROOT_PAGE, attributes));
-
-        ResourceResolverFactory factory = mock(ResourceResolverFactory.class);
-        doThrow(new LoginException()).when(factory).getServiceResourceResolver(anyMap());
-        clientlibs.resolverFactory = factory;
         assertEquals(new HashSet<>(), clientlibs.getCategoriesFromComponents());
     }
 
