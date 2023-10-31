@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-(function($, Granite) {
+ (function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-image__editor";
@@ -46,6 +46,7 @@
     var altTextFromPage;
     var altTextFromDAM;
     var altCheckboxSelector = "coral-checkbox[name='./altValueFromDAM']";
+    var altIsDecorativeSelector = 'coral-checkbox[name="./isDecorative"]';
     var altInputSelector = "input[name='./alt']";
     var altInputAlertIconSelector = "input[name='./alt'] + coral-icon[icon='alert']";
     var assetTabSelector = "coral-tab[data-foundation-tracking-event*='asset']";
@@ -65,7 +66,7 @@
         $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
-            isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
+            isDecorative = dialogContent.querySelector(altIsDecorativeSelector);
 
             if ($(pageAltCheckboxSelector).length === 1) {
                 // when the tuple is used in the page dialog to define the featured image
@@ -170,8 +171,15 @@
         validate: function() {
             var seededValue = $(altInputSelector).attr("data-seeded-value");
             var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var isDecorative = $(altIsDecorativeSelector).attr('checked');
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue) {
+
+            // Validate the following:
+            // - the image is not decorative
+            // - alt is not inherited from the DAM
+            // - the alt value is empty.
+            // If all of these are true, return a validation error
+            if (!isDecorative && !isAltCheckboxChecked && !seededValue) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }
@@ -531,7 +539,7 @@
                             }
                         }
                     }
-
+176
                     if (mutation.attributeName === "disabled") {
                         if ($(altInputSelector).val()) {
                             if (alertIcon.length) {
