@@ -547,6 +547,12 @@
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>4.7.2</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>
