@@ -429,11 +429,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.adobe.cq.dam</groupId>
-            <artifactId>cq-dam-cfm-api</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.day.commons.osgi.wrapper</groupId>
             <artifactId>com.day.commons.osgi.wrapper.commons-httpclient</artifactId>
         </dependency>
