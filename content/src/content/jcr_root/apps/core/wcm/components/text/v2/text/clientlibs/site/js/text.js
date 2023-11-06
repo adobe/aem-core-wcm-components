@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/* global gtag */
 (function() {
     "use strict";
 
     var dataLayerEnabled;
     var dataLayer;
+    var dataLayerUseGtag;
+    var dataLayerName;
 
     /**
      * Adds Click Event Listener to the main <div> of the Text Components
@@ -41,13 +44,20 @@
         var componentId = getDataLayerId(element);
 
         if (event.target.tagName === "A") {
-            dataLayer.push({
-                event: "cmp:click",
-                eventInfo: {
+            if (dataLayerUseGtag) {
+                gtag("event", "cmp:click", {
                     path: "component." + componentId,
                     link: event.target.getAttribute("href")
-                }
-            });
+                });
+            } else {
+                dataLayer.push({
+                    event: "cmp:click",
+                    eventInfo: {
+                        path: "component." + componentId,
+                        link: event.target.getAttribute("href")
+                    }
+                });
+            }
         }
 
     }
@@ -72,7 +82,10 @@
 
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerName = document.body.getAttribute("data-cmp-data-layer-name");
+        dataLayerUseGtag = typeof gtag === "function" && document.body.hasAttribute("data-cmp-data-layer-use-gtag");
+        dataLayerName = dataLayerName || "adobeDataLayer";
+        dataLayer = (dataLayerEnabled) ? window[dataLayerName] = window[dataLayerName]  || [] : undefined;
 
         if (dataLayerEnabled) {
             addClickEventListenerToTextComponents();

@@ -156,7 +156,30 @@ public class Utils {
      * @param enabled {@code true} to enable the data layer, {@code false} to disable it
      */
     public static void enableDataLayer(AemContext context, boolean enabled) {
-        configureDataLayer(context, enabled, false);
+        configureDataLayer(context, enabled, false, "adobeDataLayer", false);
+    }
+
+    /**
+     * Sets the data layer context aware configuration of the AEM test context to enable the data layer, including a configured name.
+     *
+     * @param context The AEM test context
+     * @param enabled {@code true} to enable the data layer, {@code false} to disable it
+     * @param name a configured name for the data layer
+     */
+    public static void enableDataLayer(AemContext context, boolean enabled, String name) {
+        configureDataLayer(context, enabled, false, name, false);
+    }
+
+    /**
+     * Sets the data layer context aware configuration of the AEM test context to enable the data layer, including a configured name and choice of push function.
+     *
+     * @param context The AEM test context
+     * @param enabled {@code true} to enable the data layer, {@code false} to disable it
+     * @param name a configured name for the data layer
+     * @param useGtag {@code true} to push to the datalayer using gtag(), {@code false} to use push()
+     */
+    public static void enableDataLayer(AemContext context, boolean enabled, String name, boolean useGtag) {
+        configureDataLayer(context, enabled, false, name, useGtag);
     }
 
     /**
@@ -166,14 +189,27 @@ public class Utils {
      * @param skip {@code true} to not include the data layer clientlib, {@code false} to include it
      */
     public static void skipDataLayerInclude(AemContext context, boolean skip) {
-        configureDataLayer(context, true, skip);
+        configureDataLayer(context, true, skip, "adobeDataLayer", false);
     }
 
-    private static void configureDataLayer(AemContext context, boolean enabled, boolean skip) {
+    /**
+     * Sets the data layer context aware configuration of the AEM test context to not include the data layer clientlib, including the option to skip the clientlib includes.
+     *
+     * @param context The AEM test context
+     * @param enabled {@code true} to enable the data layer, {@code false} to disable it
+     * @param skip {@code true} to not include the data layer clientlib, {@code false} to include it
+     */
+    public static void configureDataLayer(AemContext context, boolean enabled, boolean skip) {
+        configureDataLayer(context,enabled,skip,"adobeDataLayer", false);
+    }
+
+    public static void configureDataLayer(AemContext context, boolean enabled, boolean skip, String name, boolean useGtag) {
         ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
         DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
         lenient().when(dataLayerConfig.enabled()).thenReturn(enabled);
         lenient().when(dataLayerConfig.skipClientlibInclude()).thenReturn(skip);
+        lenient().when(dataLayerConfig.name()).thenReturn(name);
+        lenient().when(dataLayerConfig.pushFunctionUseGtag()).thenReturn(useGtag);
         lenient().when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
         context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
     }

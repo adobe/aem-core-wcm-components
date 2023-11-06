@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
-import com.adobe.cq.wcm.core.components.models.datalayer.EmbeddableData;
 
 /**
  * Data layer field value supplier.

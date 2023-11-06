@@ -24,6 +24,8 @@ import org.apache.sling.caconfig.annotation.Property;
 @Configuration(label="Data Layer", description="Configure support for Adobe Client Data Layer")
 public @interface DataLayerConfig {
 
+    String DATALAYER_OBJECT_NAME_ADOBE = "adobeDataLayer";
+
     /**
      *
      * @return {@code true} if the data layer is enabled, {@code false} otherwise. It defaults to {@code false}.
@@ -38,5 +40,30 @@ public @interface DataLayerConfig {
      */
     @Property(label="Data Layer client library not included")
     boolean skipClientlibInclude() default false;
+
+    /**
+     *
+     * @return the name of the datalayer
+     * Defaults to adobeDataLayer.
+     */
+    @Property(label = "Data Layer object name")
+    String name() default DATALAYER_OBJECT_NAME_ADOBE;
+
+    /**
+     *
+     * @return the type of push function (push() or gtag()) of the datalayer
+     * Defaults to push.
+     */
+    @Property(label = "Use gtag function to push data")
+    boolean pushFunctionUseGtag() default false;
+
+    /**
+     *
+     * @return ACDL library not included
+     * Defaults to false.
+     */
+    @Property(label = "ACDL library not included")
+    boolean skipAcdlInclude() default false;
+
 
 }

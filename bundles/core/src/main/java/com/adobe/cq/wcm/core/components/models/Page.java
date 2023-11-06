@@ -38,6 +38,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @ConsumerType
 public interface Page extends ContainerExporter, Component {
 
+    String DATALAYER_OBJECT_NAME_ADOBE = "adobeDataLayer";
+
     /**
      * Key used for the regular favicon file.
      *
@@ -467,4 +469,27 @@ public interface Page extends ContainerExporter, Component {
      */
     default boolean isDataLayerClientlibIncluded() {return true;}
 
+    /**
+     * Returns the name of the data layer.
+     *
+     * {@code true} if the data layer client library should be included.
+     * @since om.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default String getDataLayerName() { return DATALAYER_OBJECT_NAME_ADOBE; }
+
+    /**
+     * Checks if gtag() should be used to push to the data layer.
+     *
+     * {@code true} if gtag() should be used.
+     * @since om.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default boolean isDataLayerUseGtag() { return false; };
+
+    /**
+     * Checks if the ACDL library should be included.
+     *
+     * {@code true} if ACDL library should be used.
+     * @since om.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default boolean isDataLayerSkipAcdlInclude() { return false; };
 }

@@ -15,6 +15,7 @@
  ******************************************************************************/
 /* global
     CQ
+    gtag
  */
 (function() {
     "use strict";
@@ -26,6 +27,8 @@
     }
     var dataLayerEnabled;
     var dataLayer;
+    var dataLayerUseGtag;
+    var dataLayerName;
 
     var NS = "cmp";
     var IS = "tabs";
@@ -315,19 +318,31 @@
                 var activeItem = getDataLayerId(that._elements.tabpanel[index]);
                 var exActiveItem = getDataLayerId(that._elements.tabpanel[exActive]);
 
-                dataLayer.push({
-                    event: "cmp:show",
-                    eventInfo: {
-                        path: "component." + activeItem
-                    }
-                });
+                if (dataLayerUseGtag) {
 
-                dataLayer.push({
-                    event: "cmp:hide",
-                    eventInfo: {
+                    gtag("event", "cmp:show", {
+                        path: "component." + activeItem
+                    });
+                    gtag("event", "cmp:hide", {
                         path: "component." + exActiveItem
-                    }
-                });
+                    });
+
+                } else {
+
+                    dataLayer.push({
+                        event: "cmp:show",
+                        eventInfo: {
+                            path: "component." + activeItem
+                        }
+                    });
+
+                    dataLayer.push({
+                        event: "cmp:hide",
+                        eventInfo: {
+                            path: "component." + exActiveItem
+                        }
+                    });
+                }
 
                 var tabsId = that._elements.self.id;
                 var uploadPayload = { component: {} };
@@ -336,8 +351,15 @@
                 var removePayload = { component: {} };
                 removePayload.component[tabsId] = { shownItems: undefined };
 
-                dataLayer.push(removePayload);
-                dataLayer.push(uploadPayload);
+                if (dataLayerUseGtag) {
+                    if (dataLayerUseGtag) {
+                        gtag("set", removePayload);
+                        gtag("set", uploadPayload);
+                    } else {
+                        dataLayer.push(removePayload);
+                        dataLayer.push(uploadPayload);
+                    }
+                }
             }
         }
     }
@@ -399,7 +421,10 @@
      */
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerName = document.body.getAttribute("data-cmp-data-layer-name");
+        dataLayerUseGtag = typeof gtag === "function" && document.body.hasAttribute("data-cmp-data-layer-use-gtag");
+        dataLayerName = dataLayerName || "adobeDataLayer";
+        dataLayer = (dataLayerEnabled) ? window[dataLayerName] = window[dataLayerName]  || [] : undefined;
 
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {

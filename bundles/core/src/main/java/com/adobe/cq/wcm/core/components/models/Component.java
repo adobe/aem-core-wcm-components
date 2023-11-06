@@ -64,7 +64,7 @@ public interface Component extends ComponentExporter {
     default ComponentData getData() {
         return null;
     }
-    
+
     /**
      * Returns the style system information associated with the component
      *

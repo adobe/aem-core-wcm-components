@@ -13,16 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/* global gtag */
 (function() {
     "use strict";
 
     var dataLayerEnabled;
+    var dataLayerName;
+    var dataLayerUseGtag;
     var dataLayer;
 
     function addComponentToDataLayer(component) {
-        dataLayer.push({
-            component: getComponentObject(component)
-        });
+        if (dataLayerUseGtag) {
+            gtag("set", { component: getComponentObject(component) });
+        } else {
+            dataLayer.push({
+                component: getComponentObject(component)
+            });
+        }
     }
 
     function attachClickEventListener(element) {
@@ -47,12 +54,18 @@
         var element = event.currentTarget;
         var componentId = getClickId(element);
 
-        dataLayer.push({
-            event: "cmp:click",
-            eventInfo: {
+        if (dataLayerUseGtag) {
+            gtag("event", "cmp:click", {
                 path: "component." + componentId
-            }
-        });
+            });
+        } else {
+            dataLayer.push({
+                event: "cmp:click",
+                eventInfo: {
+                    path: "component." + componentId
+                }
+            });
+        }
     }
 
     function getComponentData(element) {
@@ -76,7 +89,10 @@
 
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer        = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerName = document.body.getAttribute("data-cmp-data-layer-name");
+        dataLayerUseGtag = typeof gtag === "function" && document.body.hasAttribute("data-cmp-data-layer-use-gtag");
+        dataLayerName = dataLayerName || "adobeDataLayer";
+        dataLayer = (dataLayerEnabled) ? window[dataLayerName] = window[dataLayerName]  || [] : undefined;
 
         if (dataLayerEnabled) {
 
@@ -91,9 +107,13 @@
                 attachClickEventListener(element);
             });
 
-            dataLayer.push({
-                event: "cmp:loaded"
-            });
+            if (dataLayerUseGtag) {
+                gtag("event", "cmp:loaded");
+            } else {
+                dataLayer.push({
+                    event: "cmp:loaded"
+                });
+            }
         }
     }
 

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/* global gtag */
 (function() {
     "use strict";
 
@@ -23,6 +24,8 @@
     }
     var dataLayerEnabled;
     var dataLayer;
+    var dataLayerName;
+    var dataLayerUseGtag;
 
     var NS = "cmp";
     var IS = "carousel";
@@ -251,12 +254,18 @@
                     var index = getPreviousIndex();
                     navigate(index);
                     if (dataLayerEnabled) {
-                        dataLayer.push({
-                            event: "cmp:show",
-                            eventInfo: {
+                        if (dataLayerUseGtag) {
+                            gtag("event", "cmp:show", {
                                 path: "component." + getDataLayerId(that._elements.item[index])
-                            }
-                        });
+                            });
+                        } else {
+                            dataLayer.push({
+                                event: "cmp:show",
+                                eventInfo: {
+                                    path: "component." + getDataLayerId(that._elements.item[index])
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -266,12 +275,18 @@
                     var index = getNextIndex();
                     navigate(index);
                     if (dataLayerEnabled) {
-                        dataLayer.push({
-                            event: "cmp:show",
-                            eventInfo: {
+                        if (dataLayerUseGtag) {
+                            gtag("event", "cmp:show", {
                                 path: "component." + getDataLayerId(that._elements.item[index])
-                            }
-                        });
+                            });
+                        } else {
+                            dataLayer.push({
+                                event: "cmp:show",
+                                eventInfo: {
+                                    path: "component." + getDataLayerId(that._elements.item[index])
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -566,8 +581,13 @@
                 var removePayload = { component: {} };
                 removePayload.component[carouselId] = { shownItems: undefined };
 
-                dataLayer.push(removePayload);
-                dataLayer.push(updatePayload);
+                if (dataLayerUseGtag) {
+                    gtag("set", removePayload);
+                    gtag("set", updatePayload);
+                } else {
+                    dataLayer.push(removePayload);
+                    dataLayer.push(updatePayload);
+                }
             }
 
             // reset the autoplay transition interval following navigation, if not already hovering the carousel
@@ -590,12 +610,18 @@
             focusWithoutScroll(that._elements["indicator"][index]);
 
             if (dataLayerEnabled) {
-                dataLayer.push({
-                    event: "cmp:show",
-                    eventInfo: {
+                if (dataLayerUseGtag) {
+                    gtag("event", "cmp:show", {
                         path: "component." + getDataLayerId(that._elements.item[index])
-                    }
-                });
+                    });
+                } else {
+                    dataLayer.push({
+                        event: "cmp:show",
+                        eventInfo: {
+                            path: "component." + getDataLayerId(that._elements.item[index])
+                        }
+                    });
+                }
             }
         }
 
@@ -679,7 +705,10 @@
      */
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerName = document.body.getAttribute("data-cmp-data-layer-name");
+        dataLayerUseGtag = typeof gtag === "function" && document.body.hasAttribute("data-cmp-data-layer-use-gtag");
+        dataLayerName = dataLayerName || "adobeDataLayer";
+        dataLayer = window[dataLayerName];
 
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {

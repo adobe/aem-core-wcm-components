@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.Exporter;
@@ -64,5 +65,34 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
         return new RedirectItemImpl(redirectTarget, request, linkManager);
     }
+
+    @Override
+    @JsonIgnore
+    public String getDataLayerName() {
+        String name = getDataLayerConfig().map(DataLayerConfig::name)
+            .orElse("");
+        return StringUtils.isEmpty(name) ? DataLayerConfig.DATALAYER_OBJECT_NAME_ADOBE : name;
+    }
+
+
+    private Optional<DataLayerConfig> getDataLayerConfig() {
+        return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
+            .map(builder -> builder.as(DataLayerConfig.class));
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isDataLayerUseGtag() {
+        return getDataLayerConfig().map(config -> config.pushFunctionUseGtag())
+            .orElse(false);
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isDataLayerSkipAcdlInclude() {
+        return getDataLayerConfig().map(config -> config.skipAcdlInclude())
+            .orElse(false);
+    }
+
 
 }

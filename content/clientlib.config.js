@@ -32,6 +32,18 @@ module.exports = {
                     "src/scripts/datalayer/v1/datalayer.js"
                 ]
             }
+        },
+        {
+            name: "core.wcm.components.commons.datalayer.generic.v1",
+            serializationFormat: "xml",
+            allowProxy: true,
+            jsProcessor: ["default:none", "min:gcc;compilationLevel=whitespace"],
+            assets: {
+                js: [
+                    "src/scripts/datalayer/v1/polyfill.js",
+                    "src/scripts/datalayer/v1/datalayer.js"
+                ]
+            }
         }
     ]
 };
