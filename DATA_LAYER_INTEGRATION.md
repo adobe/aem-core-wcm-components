@@ -16,29 +16,61 @@ limitations under the License.
 
 # Data Layer Integration with the Core Components
 
-The Core Components provide an out-of-the-box integration with the [Adobe Client Data Layer](https://github.com/adobe/adobe-client-data-layer), which for convenience is called data layer in this page.
+The Core Components provide an out-of-the-box integration with:
+- The [Adobe Client Data Layer](https://github.com/adobe/adobe-client-data-layer), which for convenience is called the ACDL in this page.
+- The [Google Data Layer](https://developers.google.com/tag-platform/tag-manager/datalayer), which is called the GDL in this page.
 
 ## Enabling the Data Layer
 
-The data layer is disabled by default. 
+The data layer is disabled by default.
 
-To enable the data layer for your site:
+To enable the ACDL for your site:
 1. Create the following structure below the `/conf` node:
     `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
-1. Add the `enabled` boolean property and set it to `true`.
-1. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+2. Add the `enabled` boolean property and set it to `true`. This will add the ACDL library and supporting clientlibs to your page.
+3. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
 
-## Preventing the Data Layer client library from being included
+To enable the GDL for your site:
+1. Add the appropriate Google code to your page (normally either Google Tag Manager or the Google Tag (GTag)).
+   Unlike the ACDL integration this code is not included in Core Components.
+2. Create the following structure below the `/conf` node:
+   `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
+3. Add the `enabled` boolean property and set it to `true`. This will add the *ACDL* library and supporting clientlibs to your page.
+4. Add the `skipAcdlInclude` boolean property and set it to `true`. This keeps the data layer support but prevents the ACDL library from loading.
+5. Rename the data layer array/object by adding a string property `name`, normally `dataLayer`.
+6. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
 
-The data layer client library is included by default by the Page component. As there are other ways to include this library (e.g. through Adobe Launch), it might be needed to prevent its inclusion through the Page component.
+
+## Preventing the Data Layer client library and/or the ACDL library from being included
 
 To prevent the data layer client library from being included by the Page component:
 1. Create the following structure below the `/conf` node:
    `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
-1. Add the `skipClientlibInclude` boolean property and set it to `true`.
-1. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+2. Add the `skipClientlibInclude` boolean property and set it to `true`.
+3. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
 
-## Data Layer State Structure
+To retain the data layer client library but exclude the ACDL library (for example when using a GDL):
+1. Create the following structure below the `/conf` node:
+   `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
+2. Ensure that
+3. Add the `skipAcdlInclude` boolean property and set it to `true` (remove `skipClientlibInclude` property if present, or set it to `false`).
+4. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+
+## Choosing the Google push function
+
+When Google Tag Manager is used to implement tracking, a push to the data layer is normally done using the push() method.
+This is the default function for the data layer integration and the code is identical to that used for the ACDL.
+If native Google Analytics code is used (gtag library), gtag() is normally used instead of push().
+
+To push to the data layer using gtag():
+
+1. Follow the configurative steps above to set-up the basic Google configuration
+2. Add the `pushFunctionUseGtag` boolean property to the `DataLayerConfig` node described above and set it to `true`.
+
+> Note: the data layer integration logic checks that the gtag function is available before calling it.  If not available the code will fall back to the push() method.
+If you load the gtag code too late in the page load, gtag will not be available during page load and the fallback will be used.
+
+## ACDL State Structure
 
 When the data layer is enabled, the javascript `adobeDataLayer` object is available on the page and is populated with the components and their properties that are used on the page.
 
@@ -122,6 +154,17 @@ Calling `adobeDataLayer.getState()` in the browser console will return e.g.:
   }
 }
 ```
+
+## Google State Structure
+
+The GDL does not include a getState method, so to view the contents of the data layer, simply type `dataLayer` in the the browser console.
+While this is not the *computed state* is is sufficient for debugging in most cases.
+
+## Google Data Structure
+
+If Google Tag Manager is used then the data will be in the same format in the data layer as the ACDL snippets above.
+
+If Gtag is used the events will be in an array rather than object format.  Both of these structures can be seen on [Google's Enhance e-Commerce demo](https://ga-dev-tools.google/ga4/enhanced-ecommerce/) site.
 
 ## Components supporting the Data Layer
 
@@ -355,6 +398,11 @@ Run the following code in your browser console:
 ```
 adobeDataLayer.getState()
 ```
+or, if a Google Data Layer is used, view the entire data layer object by typing:
+```
+dataLayer
+```
+
 The `HelloWorld` component does not yet write to the data layer.
 
 #### Add HelloWorld data to the data layer
@@ -394,6 +442,11 @@ Deploy the changes to AEM (model and HTL script). Refresh the page and in your b
 ```
 adobeDataLayer.getState()
 ```
+or, if a Google Data Layer is used, view the entire data layer object by typing:
+```
+dataLayer
+```
+
 
 It displays something like:
 ```
