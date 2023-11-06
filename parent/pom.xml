@@ -696,14 +696,6 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- Content fragment API -->
-            <dependency>
-                <groupId>com.adobe.cq.dam</groupId>
-                <artifactId>cq-dam-cfm-api</artifactId>
-                <version>1.1.5-NPR-19008-R002</version>
-                <scope>provided</scope>
-            </dependency>
-
             <!-- Servlet API -->
             <dependency>
                 <groupId>javax.servlet</groupId>
