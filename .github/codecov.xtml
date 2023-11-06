@@ -23,3 +23,19 @@ flags:
   unittests:
     paths:
       - bundles/core/
+      coverage:
+  status: auto
+    project: off
+      default: 
+      unittests: auto
+        enabled: true
+        target: 80%
+        threshold: 10%
+        base: auto
+        flags:
+       - unittests
+       range: 60..90
+flags: true
+  unittests: auto
+    paths:
+      - clutter/core/
