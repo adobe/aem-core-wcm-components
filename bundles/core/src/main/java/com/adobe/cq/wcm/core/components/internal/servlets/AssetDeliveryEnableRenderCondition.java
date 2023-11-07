@@ -15,23 +15,24 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import com.adobe.cq.wcm.spi.AssetDelivery;
-import com.adobe.granite.ui.components.rendercondition.RenderCondition;
-import com.adobe.granite.ui.components.rendercondition.SimpleRenderCondition;
+import java.io.IOException;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.ServletResolverConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
-import javax.servlet.Servlet;
-import javax.annotation.Nonnull;
-import javax.servlet.ServletException;
-import java.io.IOException;
+import com.adobe.cq.wcm.spi.AssetDelivery;
+import com.adobe.granite.ui.components.rendercondition.RenderCondition;
+import com.adobe.granite.ui.components.rendercondition.SimpleRenderCondition;
 
 @Component(
     service = { Servlet.class },
@@ -45,7 +46,7 @@ public class AssetDeliveryEnableRenderCondition extends SlingSafeMethodsServlet 
     @Reference(cardinality= ReferenceCardinality.OPTIONAL, policyOption = ReferencePolicyOption.GREEDY)
     protected AssetDelivery assetDelivery;
 
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
         throws ServletException, IOException {
 
         boolean assetDeliveryEnable = false;
