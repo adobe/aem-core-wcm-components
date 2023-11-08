@@ -75,6 +75,8 @@
                             javax.annotation.meta;resolution:=optional,
                             com.day.cq.dam.api;version="[1.24,2.0)",
                             com.day.cq.dam.api.handler;version="[2,3)",
+                            com.adobe.cq.dam.cfm.content;version="[1.1,2)",
+                            com.adobe.cq.dam.cfm.converter;version="[1,2)",
                             *
                         </Import-Package>
                     </instructions>
