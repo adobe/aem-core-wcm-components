@@ -28,11 +28,13 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.services.embed.PinterestUrlProcessor;
 import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 import com.adobe.cq.wcm.core.components.testing.Utils;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 public class EmbedUrlProcessorServletTest {
@@ -74,9 +76,9 @@ public class EmbedUrlProcessorServletTest {
         servlet.doGet(context.request(), context.response());
         assertEquals(HttpServletResponse.SC_OK, context.response().getStatus(), "Expected the 200 status code.");
         assertEquals("application/json;charset=utf-8", context.response().getContentType(), "Expected the JSON content type.");
-        String expectedOutput1 = "{\"processor\":\"pinterest\",\"options\":{\"pinId\":\"99360735500167749\"}}";
-        String expectedOutput2 = "{\"options\":{\"pinId\":\"99360735500167749\"},\"processor\":\"pinterest\"}";
-        String actualOutput = context.response().getOutputAsString();
-        assertTrue(expectedOutput1.equals(actualOutput) || expectedOutput2.equals(actualOutput), "Does not match the expected response output.");
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode expected = mapper.readTree("{\"processor\":\"pinterest\",\"options\":{\"pinId\":\"99360735500167749\"}}");
+        JsonNode actual = mapper.readTree(context.response().getOutputAsString());
+        assertEquals(expected, actual, "Does not match the expected response output.");
     }
 }
