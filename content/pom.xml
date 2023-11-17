@@ -167,6 +167,7 @@
                         <exclude>**/node_modules/**</exclude>
                         <!-- Ignore generated datalayer clientlib -->
                         <exclude>**/core.wcm.components.commons.datalayer.v1/**</exclude>
+                        <exclude>**/core.wcm.components.commons.datalayer.acdl/**</exclude>
                         <!-- Ignore karma -->
                         <exclude>**/coverage/**</exclude>
                     </excludes>
