@@ -28,8 +28,18 @@ module.exports = {
             assets: {
                 js: [
                     "src/scripts/datalayer/v1/polyfill.js",
-                    "node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js",
                     "src/scripts/datalayer/v1/datalayer.js"
+                ]
+            }
+        },
+        {
+            name: "core.wcm.components.commons.datalayer.acdl",
+            serializationFormat: "xml",
+            allowProxy: true,
+            jsProcessor: ["default:none", "min:gcc;compilationLevel=whitespace"],
+            assets: {
+                js: [
+                    "node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js"
                 ]
             }
         }
