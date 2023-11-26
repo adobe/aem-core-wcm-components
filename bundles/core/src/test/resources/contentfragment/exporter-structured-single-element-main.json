@@ -1,5 +1,6 @@
 {
     "id": "contentfragment-693827d63c",
+    "remainingInBetweenContent":[],
     "description": "This is a test content fragment.",
     "paragraphs": [
         "<p>Main content</p>"

@@ -1,5 +1,6 @@
 {
     "id": "contentfragment-a8af0bfdae",
+    "remainingInBetweenContent":[],
     "title": "Test Content Fragment",
     "description": "This is a test content fragment.",
     "model": "global/models/test",

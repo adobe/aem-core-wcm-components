@@ -118,4 +118,15 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
     default String[] getParagraphs() {
         return null;
     }
+
+    /**
+     * Returns the remaining unused par# for in-between-content.
+     *
+     * @return an array containing par# labels
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
+     */
+    @Nullable
+    default Integer[] getRemainingInBetweenContent() {
+        return null;
+    }
 }

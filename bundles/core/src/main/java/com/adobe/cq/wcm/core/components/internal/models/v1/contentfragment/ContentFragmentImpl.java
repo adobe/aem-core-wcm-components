@@ -15,43 +15,34 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.models.annotations.Exporter;
-import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
-import org.apache.sling.models.factory.ModelFactory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
-import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Exporter;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.*;
+import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
@@ -71,6 +62,7 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
      * The resource type of the component associated with this Sling model.
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/contentfragment";
+    public static final String PAR = "par";
 
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
@@ -108,6 +100,9 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
     private DAMContentFragment damContentFragment = new EmptyContentFragment();
 
+    private String[] paragraphs;
+    private Integer[] remainingInBetweenContent;
+
     @PostConstruct
     private void initModel() {
         if (StringUtils.isNotEmpty(fragmentPath)) {
@@ -116,6 +111,8 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
                 damContentFragment = new DAMContentFragmentImpl(fragmentResource, contentTypeConverter, variationName, elementNames);
             }
         }
+        paragraphs = computeParagraphs();
+        remainingInBetweenContent = computeRemainingInBetweenContent();
     }
 
     @Nullable
@@ -199,18 +196,28 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @Nullable
     @Override
     public String[] getParagraphs() {
+        return paragraphs != null ? paragraphs.clone() : null;
+    }
+
+    @Override
+    public @Nullable Integer[] getRemainingInBetweenContent() {
+        return remainingInBetweenContent != null ? remainingInBetweenContent.clone() : null;
+    }
+
+
+    private @Nullable String[] computeParagraphs() {
         if (!"singleText".equals(displayMode)) {
             return null;
         }
 
-        if (damContentFragment.getElements() == null || damContentFragment.getElements().isEmpty()) {
+        if (damContentFragment == null || damContentFragment.getElements() == null || damContentFragment.getElements().isEmpty()) {
             return null;
         }
 
         DAMContentElement damContentElement = damContentFragment.getElements().get(0);
 
         // restrict this method to text elements
-        if (!damContentElement.isMultiLine()) {
+        if (damContentElement != null && !damContentElement.isMultiLine()) {
             return null;
         }
 
@@ -222,6 +229,24 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
         // split into paragraphs
         return content.split("(?=(<p>|<h1>|<h2>|<h3>|<h4>|<h5>|<h6>))");
+    }
+
+    public @Nullable Integer[] computeRemainingInBetweenContent() {
+        ArrayList<Integer> list = new ArrayList<>();
+        if (paragraphs != null) {
+            int lastVisibleParIndex = paragraphs.length;
+            Iterator<Resource> childIterator = resource.listChildren();
+            while (childIterator.hasNext()) {
+                String label = childIterator.next().getName();
+                if (label.startsWith(PAR)) {
+                    int parIndex = Integer.parseInt(label.substring(3));
+                    if (parIndex >= lastVisibleParIndex) {
+                        list.add(parIndex);
+                    }
+                }
+            }
+        }
+        return list.stream().sorted().collect(Collectors.toList()).toArray(new Integer[0]);
     }
 
     @Override

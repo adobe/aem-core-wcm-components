@@ -110,6 +110,22 @@
                         "elementNames"      : ["main"],
                         "displayMode"       : "singleText"
                     },
+                    "structured-single-element-main-remaining-in-between"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured",
+                        "elementNames"      : ["main"],
+                        "displayMode"       : "singleText",
+                        "par6": {
+                            "jcr:primaryType"   : "nt:unstructured"
+                        },
+                        "par8": {
+                            "jcr:primaryType"   : "nt:unstructured"
+                        },
+                        "par3": {
+                            "jcr:primaryType"   : "nt:unstructured"
+                        }
+                    },
                     "structured-multiple-elements"         : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",

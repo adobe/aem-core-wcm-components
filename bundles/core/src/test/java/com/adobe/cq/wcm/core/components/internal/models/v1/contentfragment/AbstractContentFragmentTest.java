@@ -59,6 +59,7 @@ public abstract class AbstractContentFragmentTest<T> {
     static final String CF_STRUCTURED_NESTED_MODEL = "structured-nested-model";
     static final String CF_STRUCTURED_SINGLE_ELEMENT = "structured-single-element";
     static final String CF_STRUCTURED_SINGLE_ELEMENT_MAIN = "structured-single-element-main";
+    static final String CF_STRUCTURED_SINGLE_ELEMENT_MAIN_REMAINING_IN_BETWEEN_CONTENT = "structured-single-element-main-remaining-in-between";
     static final String CF_STRUCTURED_MULTIPLE_ELEMENTS = "structured-multiple-elements";
 
     /* contents of the text-only and structured content fragments referenced by the above components */
