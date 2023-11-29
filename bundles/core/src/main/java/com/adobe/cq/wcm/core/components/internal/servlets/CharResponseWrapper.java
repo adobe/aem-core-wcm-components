@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.CharArrayWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -27,6 +28,7 @@ import java.io.PrintWriter;
  */
 public class CharResponseWrapper extends HttpServletResponseWrapper {
     private CharArrayWriter writer;
+    private HttpServletResponse wrapped;
 
     /**
      * Creates a wrapper around the original response object of the HTTP request by overriding the
@@ -37,6 +39,8 @@ public class CharResponseWrapper extends HttpServletResponseWrapper {
     public CharResponseWrapper(HttpServletResponse response) {
         super(response);
         writer = new CharArrayWriter();
+        wrapped = response;
+
     }
 
     /**
@@ -44,7 +48,12 @@ public class CharResponseWrapper extends HttpServletResponseWrapper {
      * @return - newly created {@link PrintWriter}
      */
     @Override
-    public PrintWriter getWriter() {
+    public PrintWriter getWriter() throws IOException {
+        // call getWriter() on the original response, as this is used to initialise the Sling Rewriter Pipeline
+        // if not called this way, the TableOfContentsFilter would call getWriter() on the upstream response first in the context of a
+        // cq:Page resource, and hence the resourceType condition to select the processor configuration does not work
+        wrapped.getWriter();
+        // get the writer
         return new PrintWriter(writer);
     }
 

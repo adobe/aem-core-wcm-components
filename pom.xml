@@ -71,6 +71,7 @@
         <module>testing/it/http</module>
         <module>testing/it/e2e-selenium-utils</module>
         <module>testing/it/e2e-selenium</module>
+        <module>testing/it/it.core</module>
         <module>testing/it/it.ui.apps</module>
         <module>testing/it/it.ui.content</module>
         <module>content</module>
