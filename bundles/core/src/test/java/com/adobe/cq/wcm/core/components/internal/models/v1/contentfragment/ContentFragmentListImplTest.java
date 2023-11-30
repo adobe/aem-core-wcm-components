@@ -17,15 +17,19 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.jcr.Session;
 
+import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.tagging.TagConstants;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import com.adobe.cq.wcm.core.components.Utils;
@@ -39,6 +43,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -88,7 +93,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         when(iterator.next()).thenReturn(resource);
         when(resource.getResourceResolver()).thenReturn(leakingResourceResolverMock);
         when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class)))
-                .thenReturn(query);
+            .thenReturn(query);
     }
 
     @Test
@@ -145,8 +150,11 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         expectedPredicates.put("path", ImmutableMap.of("path", ContentFragmentListImpl.DEFAULT_DAM_PARENT_PATH));
         expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
         expectedPredicates.put("1_property", ImmutableMap.of(
-                "property", "jcr:content/data/cq:model",
-                "value", "foobar"));
+            "property", "jcr:content/data/cq:model",
+            "value", "foobar"));
+        expectedPredicates.put("orderby", ImmutableMap.of(
+            "orderby", "@" + JcrConstants.JCR_CREATED,
+            "sort", Predicate.SORT_ASCENDING));
 
         // WHEN
         getModelInstanceUnderTest(NON_EXISTING_MODEL);
@@ -163,11 +171,11 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         expectedPredicates.put("path", ImmutableMap.of("path", ContentFragmentListImpl.DEFAULT_DAM_PARENT_PATH));
         expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
         expectedPredicates.put("1_property", ImmutableMap.of(
-                "property", "jcr:content/data/cq:model",
-                "value", "foobar"));
+            "property", "jcr:content/data/cq:model",
+            "value", "foobar"));
         expectedPredicates.put("orderby", ImmutableMap.of(
-                "orderby", "@main",
-                "sort", "desc"));
+            "orderby", "@main",
+            "sort", "desc"));
 
 
         // WHEN
@@ -195,11 +203,17 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         expectedPredicates.put("path", ImmutableMap.of("path", "/content/dam/some-other-parent-path"));
         expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
         expectedPredicates.put("1_property", ImmutableMap.of(
-                "property", "jcr:content/data/cq:model",
-                "value", "foobar"));
+            "property", "jcr:content/data/cq:model",
+            "value", "foobar"));
+        expectedPredicates.put("2_property", ImmutableMap.of(
+            "property", "jcr:content/metadata/jcr:mixinTypes",
+            "value", TagConstants.NT_TAGGABLE));
         expectedPredicates.put("tagid", ImmutableMap.of(
-                "property", "jcr:content/metadata/cq:tags",
-                "1_value", "quux"));
+            "property", "jcr:content/metadata/cq:tags",
+            "1_value", "quux"));
+        expectedPredicates.put("orderby", ImmutableMap.of(
+            "orderby", "@" + JcrConstants.JCR_CREATED,
+            "sort", Predicate.SORT_ASCENDING));
 
         // WHEN
         getModelInstanceUnderTest(NON_EXISTING_MODEL_WITH_PATH_AND_TAGS);
@@ -216,8 +230,11 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         expectedPredicates.put("path", ImmutableMap.of("path", ContentFragmentListImpl.DEFAULT_DAM_PARENT_PATH));
         expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
         expectedPredicates.put("1_property", ImmutableMap.of(
-                "property", "jcr:content/data/cq:model",
-                "value", "foobar"));
+            "property", "jcr:content/data/cq:model",
+            "value", "foobar"));
+        expectedPredicates.put("orderby", ImmutableMap.of(
+            "orderby", "@" + JcrConstants.JCR_CREATED,
+            "sort", Predicate.SORT_ASCENDING));
 
         //Expected Max Limit
         String expectedLimit = "20";
@@ -234,26 +251,38 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
      * {@link com.day.cq.search.QueryBuilder#createQuery(PredicateGroup, Session)} call.
      */
     private void verifyPredicateGroup(final Map<String, Map<String, String>> expectedPredicates, String expectedLimit) {
-        Mockito.verify(queryBuilderMock).createQuery(ArgumentMatchers.argThat(argument -> {
+        ArgumentCaptor<PredicateGroup> captor = ArgumentCaptor.forClass(PredicateGroup.class);
+        Mockito.verify(queryBuilderMock, times(1)).createQuery(captor.capture(), Mockito.any(Session.class));
 
-            //Check the result limit
-            String actualLimit = argument.get(PredicateGroup.PARAM_LIMIT);
-            if (actualLimit == null || !actualLimit.equals(expectedLimit)) {
-                return false;
-            }
+        PredicateGroup capturedPredicateGroup = captor.getValue();
 
-            for (String predicateName : expectedPredicates.keySet()) {
-                Predicate predicate = argument.getByName(predicateName);
-                for (String predicateParameterName : expectedPredicates.get(predicateName).keySet()) {
-                    String predicateParameterValue = predicate.getParameters().get(predicateParameterName);
-                    String expectedPredicateParameterValue =
-                            expectedPredicates.get(predicateName).get(predicateParameterName);
-                    if (!predicateParameterValue.equals(expectedPredicateParameterValue)) {
-                        return false;
-                    }
-                }
+        //Check the result limit
+        String actualLimit = capturedPredicateGroup.get(PredicateGroup.PARAM_LIMIT);
+        assertNotNull(actualLimit, "Expected predicate group limit to be non-null.");
+        assertEquals(expectedLimit, actualLimit, "Predicate group limit is not the expected value.");
+
+        // check all expected predicates exist
+        for (String predicateName : expectedPredicates.keySet()) {
+            Predicate predicate = capturedPredicateGroup.getByName(predicateName);
+            assertNotNull(predicate, "The captured predicate group does not include the predicate \"" + predicateName + "\"");
+
+            for (String predicateParameterName : expectedPredicates.get(predicateName).keySet()) {
+                String predicateParameterValue = predicate.getParameters().get(predicateParameterName);
+                assertNotNull(predicateParameterValue, "The predicate \"" + predicateName + "\" does not include the parameter \"" + predicateParameterName);
+
+                String expectedPredicateParameterValue = expectedPredicates.get(predicateName).get(predicateParameterName);
+                assertEquals(expectedPredicateParameterValue, predicateParameterValue, "predicate parameter is incorrect for \"" + predicateName + "[" + predicateParameterName + "]\"");
             }
-            return true;
-        }), Mockito.any(Session.class));
+        }
+
+        // check for any unexpected predicates
+        List<String> extraPredicates = capturedPredicateGroup.subList(0, capturedPredicateGroup.size()).stream()
+            .map(Predicate::getName)
+            .filter(p -> !expectedPredicates.containsKey(p))
+            .collect(Collectors.toList());
+        assertEquals(
+            0,
+            extraPredicates.size(),
+            "The following predicates were found, but were not expected: [" + String.join(", ", extraPredicates) + "]");
     }
 }

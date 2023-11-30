@@ -15,7 +15,7 @@ limitations under the License.
 -->
 Content Fragment List (v2)
 ====
-Content Fragment List component written in HTL that renders a list of Content Fragments. Useful for authoring headless content that can be easily consumed by applications. 
+Content Fragment List component written in HTL that renders a list of Content Fragments. Useful for authoring headless content that can be easily consumed by applications.
 
 ## Features
 * Displays a list of a Content Fragment assets based on a Content Fragment model
@@ -33,11 +33,12 @@ The following properties are written to JCR for the Content Fragment List compon
 1. `./modelPath` - path to the Content Fragment Model on which the list is based.
 2. `./parentPath` - parent path from which the list should be built.
 3. `./tagNames` - tag names for filtering the list.
-4. `./orderBy` - an element or property to order the list by.
-5. `./sortOrder` - sort order ascending or descending.
-6. `./maxItems` - defines the maximum number of items rendered by the list. If not defined, all fragments matching the query criteria are returned.
-7. `./elementNames` - element names for limiting the model data displayed in the result.
-8. `./id` - defines the component HTML ID attribute.
+4. `./tagsMatch` - defines if the results of the tag search have to match all tags or just some of them.
+5. `./orderBy` - an element or property to order the list by.
+6. `./sortOrder` - sort order ascending or descending.
+7. `./maxItems` - defines the maximum number of items rendered by the list. If not defined, all fragments matching the query criteria are returned.
+8. `./elementNames` - element names for limiting the model data displayed in the result.
+9. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component reuses the `core.wcm.components.contentfragmentlist.v1.editor` editor client library category that includes JavaScript

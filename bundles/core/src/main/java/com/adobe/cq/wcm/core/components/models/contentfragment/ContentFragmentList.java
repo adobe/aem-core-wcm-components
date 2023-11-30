@@ -62,6 +62,14 @@ public interface ContentFragmentList  extends Component {
     String PN_TAG_NAMES = "tagNames";
 
     /**
+     * Name of the resource property indicating if the matching against tags can accept any tag from the tag list. The accepted value is
+     * <code>any</code>.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
+     */
+    String PN_TAGS_MATCH = "tagsMatch";
+
+    /**
      * Name of the optional resource property that stores the parent path of the content fragments.
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0

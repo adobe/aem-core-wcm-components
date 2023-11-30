@@ -15,7 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -25,15 +33,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.models.annotations.Default;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,62 +69,60 @@ import static com.day.cq.dam.api.DamConstants.NT_DAM_ASSET;
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ContentFragmentListImpl extends AbstractComponentImpl implements ContentFragmentList {
 
+    /**
+     * The default logger.
+     */
     private static final Logger LOG = LoggerFactory.getLogger(ContentFragmentListImpl.class);
 
+    /**
+     * Resource type for V1 component.
+     */
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
+
+    /**
+     * Resource type for V2 component.
+     */
     public static final String RESOURCE_TYPE_V2 = "core/wcm/components/contentfragmentlist/v2/contentfragmentlist";
 
+    /**
+     * Root path of the DAM.
+     */
     public static final String DEFAULT_DAM_PARENT_PATH = "/content/dam";
 
+    /**
+     * Default maximum number of items to return (-1 means all).
+     */
     public static final int DEFAULT_MAX_ITEMS = -1;
 
+    /**
+     * Default tag match requirement.
+     */
+    private static final String TAGS_MATCH_ANY_VALUE = "any";
+
+    /**
+     * The request.
+     */
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
 
+    /**
+     * Content type converter service.
+     */
     @Inject
     private ContentTypeConverter contentTypeConverter;
 
-    @SlingObject
-    private ResourceResolver resourceResolver;
-
-    @ValueMapValue(name = ContentFragmentList.PN_MODEL_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private String modelPath;
-
-    @ValueMapValue(name = ContentFragmentList.PN_ELEMENT_NAMES, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private String[] elementNames;
-
-    @ValueMapValue(name = ContentFragmentList.PN_TAG_NAMES, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private String[] tagNames;
-
-    @ValueMapValue(name = ContentFragmentList.PN_PARENT_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private String parentPath;
-
-    @ValueMapValue(name = ContentFragmentList.PN_MAX_ITEMS, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Default(intValues = DEFAULT_MAX_ITEMS)
-    private int maxItems;
-
-    @ValueMapValue(name = ContentFragmentList.PN_ORDER_BY, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Default(values = JcrConstants.JCR_CREATED)
-    private String orderBy;
-
-    @ValueMapValue(name = ContentFragmentList.PN_SORT_ORDER, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Default(values = Predicate.SORT_ASCENDING)
-    private String sortOrder;
-
+    /**
+     * List of content fragment items.
+     */
     private final List<DAMContentFragment> items = new ArrayList<>();
 
     @PostConstruct
     private void initModel() {
-        // Default path limits search to DAM
-        if (StringUtils.isEmpty(parentPath)) {
-            parentPath = DEFAULT_DAM_PARENT_PATH;
-        }
+        ResourceResolver resourceResolver = this.request.getResourceResolver();
+        ValueMap properties = this.request.getResource().getValueMap();
 
-        if (StringUtils.isEmpty(modelPath)) {
+        String modelPath = properties.get(ContentFragmentList.PN_MODEL_PATH, String.class);
+        if (StringUtils.isBlank(modelPath)) {
             LOG.warn("Please provide a model path");
             return;
         }
@@ -137,30 +140,33 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
         }
 
         Map<String, String> queryParameterMap = new HashMap<>();
-        queryParameterMap.put("path", parentPath);
+        queryParameterMap.put("path", Optional.ofNullable(properties.get(ContentFragmentList.PN_PARENT_PATH, String.class))
+            .filter(StringUtils::isNotEmpty)
+            .orElse(DEFAULT_DAM_PARENT_PATH));
         queryParameterMap.put("type", NT_DAM_ASSET);
-        queryParameterMap.put("p.limit", Integer.toString(maxItems));
+        queryParameterMap.put("p.limit", Integer.toString(properties.get(ContentFragmentList.PN_MAX_ITEMS, DEFAULT_MAX_ITEMS)));
         queryParameterMap.put("1_property", JcrConstants.JCR_CONTENT + "/data/cq:model");
         queryParameterMap.put("1_property.value", modelPath);
 
-        if (StringUtils.isNotEmpty(orderBy)) {
-            queryParameterMap.put("orderby", "@" + orderBy);
-            if (StringUtils.isNotEmpty(sortOrder)) {
-                queryParameterMap.put("orderby.sort", sortOrder);
-            }
-        }
+        queryParameterMap.put("orderby", "@" + Optional.ofNullable(properties.get(ContentFragmentList.PN_ORDER_BY, String.class))
+            .filter(StringUtils::isNotBlank)
+            .orElse(JcrConstants.JCR_CREATED));
+        queryParameterMap.put("orderby.sort", Optional.ofNullable(properties.get(ContentFragmentList.PN_SORT_ORDER, String.class))
+            .filter(StringUtils::isNotBlank)
+            .orElse(Predicate.SORT_ASCENDING));
 
-        ArrayList<String> allTags = new ArrayList<>();
-        if (tagNames != null && tagNames.length > 0) {
-            allTags.addAll(Arrays.asList(tagNames));
-        }
+
+        List<String> allTags = Optional.ofNullable(properties.get(ContentFragmentList.PN_TAG_NAMES, String[].class))
+            .filter(array -> array.length > 0)
+            .map(Arrays::asList)
+            .orElseGet(Collections::emptyList);
 
         if (!allTags.isEmpty()) {
             // Check for the taggable mixin
             queryParameterMap.put("2_property", JcrConstants.JCR_CONTENT + "/metadata/" + JcrConstants.JCR_MIXINTYPES);
             queryParameterMap.put("2_property.value", TagConstants.NT_TAGGABLE);
-            // Check for the actual tags (by default, tag are or'ed)
             queryParameterMap.put("tagid.property", JcrConstants.JCR_CONTENT + "/metadata/cq:tags");
+            queryParameterMap.put("tagid.and", Boolean.toString(!properties.get(PN_TAGS_MATCH, TAGS_MATCH_ANY_VALUE).equals(TAGS_MATCH_ANY_VALUE)));
             for (int i = 0; i < allTags.size(); i++) {
                 queryParameterMap.put(String.format("tagid.%d_value", i + 1), allTags.get(i));
             }
@@ -176,6 +182,9 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
         // Query builder has a leaking resource resolver, so the following work around is required.
         ResourceResolver leakingResourceResolver = null;
         try {
+
+            String[] elementNames = properties.get(ContentFragmentList.PN_ELEMENT_NAMES, String[].class);
+
             // Iterate over the hits if you need special information
             Iterator<Resource> resourceIterator = searchResult.getResources();
             while (resourceIterator.hasNext()) {
@@ -185,10 +194,14 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
                     leakingResourceResolver = resource.getResourceResolver();
                 }
 
-                DAMContentFragment contentFragmentModel = new DAMContentFragmentImpl(
-                        resource, contentTypeConverter, null, elementNames);
 
-                items.add(contentFragmentModel);
+                // re-resolve the resource so that no references to the leaking resource resolver are retained
+                Resource currentSessionResource = resourceResolver.getResource(resource.getPath());
+                if (currentSessionResource != null) {
+                    DAMContentFragment contentFragmentModel = new DAMContentFragmentImpl(
+                        resource, contentTypeConverter, null, elementNames);
+                    items.add(contentFragmentModel);
+                }
             }
         } finally {
             if (leakingResourceResolver != null) {
