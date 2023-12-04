@@ -528,12 +528,6 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.adobe.granite.bundles</groupId>
-            <artifactId>json</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
