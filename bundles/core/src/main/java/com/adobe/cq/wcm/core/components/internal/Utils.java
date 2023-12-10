@@ -345,10 +345,10 @@ public class Utils {
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         Resource fileResource = resource.getChild(DownloadResource.NN_FILE);
         boolean imageFromPageImage = properties.get(PN_IMAGE_FROM_PAGE_IMAGE, StringUtils.isEmpty(fileReference) && fileResource == null);
-        boolean disblePageImageInheritance = currentStyle != null ? currentStyle.get(Image.PN_PAGE_IMAGE_INHERITANCE_DISABLED, false)  : false;
+        boolean disablePageImageInheritance = currentStyle != null ? currentStyle.get(Image.PN_PAGE_IMAGE_INHERITANCE_DISABLED, false)  : false;
         boolean altValueFromPageImage = properties.get(PN_ALT_VALUE_FROM_PAGE_IMAGE, imageFromPageImage);
 
-        if (!disblePageImageInheritance && imageFromPageImage) {
+        if (!disablePageImageInheritance && imageFromPageImage) {
             Resource inheritedResource = null;
             String linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
             boolean actionsEnabled = (currentStyle != null) ?
