@@ -32,7 +32,6 @@ import org.junit.jupiter.api.Test;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v2.Image;
-import com.google.common.collect.ImmutableMap;
 
 @Tag("group2")
 public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.image.v2.ImageIT {
@@ -216,6 +215,31 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @DisplayName("Test (6.5): set page featured image with linked page")
     public void testPageImageWithLinkedPage65() throws TimeoutException, InterruptedException, ClientException {
         imageTests.testPageImageWithLinkedPage(true);
+    }
+
+    /**
+     * Test: set page featured image with featured image disabled
+     */
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test (6.5): set page featured image with featured image disabled")
+    public void testPageImageWithFeaturedImageDisabled65() throws TimeoutException, InterruptedException, ClientException {
+        testPageImageWithFeaturedImageDisabled(true);
+    }
+
+    /**
+     * Test: set page featured image with featured image disabled
+     */
+    @Test
+    @DisplayName("Test: set page featured image with featured image disabled")
+    public void testPageImageWithFeaturedImageDisabledSdk() throws TimeoutException, InterruptedException, ClientException {
+        testPageImageWithFeaturedImageDisabled(false);
+    }
+
+    private void testPageImageWithFeaturedImageDisabled(boolean aem65) throws ClientException, TimeoutException, InterruptedException {
+        String policyPath = createComponentPolicy("/image-v3", new HashMap<String, String>() {{ put("disablePageImageInheritance", "true"); }} );
+        imageTests.testPageImageWithFeaturedImageDisabled(aem65);
+        deleteComponentPolicy("/image-v3", policyPath);
     }
 
     /**
