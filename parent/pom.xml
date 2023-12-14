@@ -515,6 +515,11 @@
                     <url>https://repo.adobe.com/nexus/content/groups/public/</url>
                     <layout>default</layout>
                 </repository>
+                <repository>
+                    <id>central</id>
+                    <name>Maven Repository Switchboard</name>
+                    <url>http://repo1.maven.org/maven2</url>
+                </repository>
             </repositories>
 
             <pluginRepositories>
@@ -741,6 +746,13 @@
                 <groupId>com.adobe.cq.wcm</groupId>
                 <artifactId>com.adobe.aem.wcm.seo</artifactId>
                 <version>1.0.10</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.adobe.granite.bundles</groupId>
+                <artifactId>json</artifactId>
+                <version>20230618_2</version>
                 <scope>provided</scope>
             </dependency>
 
