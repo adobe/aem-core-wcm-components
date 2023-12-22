@@ -517,8 +517,9 @@
                 </repository>
                 <repository>
                     <id>central</id>
-                    <name>Maven Repository Switchboard</name>
-                    <url>http://repo1.maven.org/maven2</url>
+                    <name>Central Repository</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <layout>default</layout>
                 </repository>
             </repositories>
 
@@ -527,6 +528,12 @@
                     <id>adobe-public-releases</id>
                     <name>Adobe Public Repository</name>
                     <url>https://repo.adobe.com/nexus/content/groups/public/</url>
+                    <layout>default</layout>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>Central Repository</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
                     <layout>default</layout>
                 </pluginRepository>
             </pluginRepositories>
