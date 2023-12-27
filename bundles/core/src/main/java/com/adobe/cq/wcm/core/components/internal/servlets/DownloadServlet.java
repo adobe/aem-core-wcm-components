@@ -67,6 +67,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
     public static final String INLINE_SELECTOR = "inline";
 
     private static final String CONTENT_DISPOSITION_HEADER = "Content-Disposition";
+    private static final String CSP_HEADER = "Content-Security-Policy";
     private static final String RFC_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
     @Override
@@ -191,7 +192,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         }
         if (inline) {
             response.setHeader(CONTENT_DISPOSITION_HEADER, "inline");
-            response.setHeader("Content-Security-Policy", "sandbox");
+            response.setHeader(CSP_HEADER, "sandbox");
         } else {
             response.setHeader(CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" + filename + "\"");
         }
