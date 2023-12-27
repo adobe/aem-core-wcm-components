@@ -515,6 +515,12 @@
                     <url>https://repo.adobe.com/nexus/content/groups/public/</url>
                     <layout>default</layout>
                 </repository>
+                <repository>
+                    <id>central</id>
+                    <name>Central Repository</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <layout>default</layout>
+                </repository>
             </repositories>
 
             <pluginRepositories>
@@ -522,6 +528,12 @@
                     <id>adobe-public-releases</id>
                     <name>Adobe Public Repository</name>
                     <url>https://repo.adobe.com/nexus/content/groups/public/</url>
+                    <layout>default</layout>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>Central Repository</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
                     <layout>default</layout>
                 </pluginRepository>
             </pluginRepositories>
@@ -741,6 +753,13 @@
                 <groupId>com.adobe.cq.wcm</groupId>
                 <artifactId>com.adobe.aem.wcm.seo</artifactId>
                 <version>1.0.10</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.adobe.granite.bundles</groupId>
+                <artifactId>json</artifactId>
+                <version>20230618_2</version>
                 <scope>provided</scope>
             </dependency>
 
