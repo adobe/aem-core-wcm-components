@@ -45,9 +45,11 @@
                    name="./${item.name}/cq:panelTitle"
                    value="${item.value}"
                    data-sly-attribute.disabled="${item.isLiveCopy}"
-                   placeholder="${item.title}">
+                   placeholder="${item.title}" required>
         </div>
     </coral-multifield-item>
+    <input type="hidden" name="itemOrder" data-cmp-hook-childreneditor="order">
+    <input type="hidden" name="deletedItems" data-cmp-hook-childreneditor="delete">
     <button data-cmp-hook-childreneditor="add" type="button" is="coral-button">${'Add' @ i18n}</button>
     <template coral-multifield-template="">
         <div class="cmp-childreneditor__item">

@@ -15,12 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -41,20 +38,19 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.internal.Utils.resolveRedirects;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkManagerImpl.VALID_LINK_TARGETS;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_ARIA_LABEL;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TARGET;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkManagerImpl.VALID_LINK_TARGETS;
 
 public class LinkBuilderImpl implements LinkBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LinkBuilderImpl.class);
-
     public static final String HTML_EXTENSION = ".html";
 
     SlingHttpServletRequest request;
@@ -156,9 +152,14 @@ public class LinkBuilderImpl implements LinkBuilder {
     private @NotNull Link buildLink(String path, SlingHttpServletRequest request, Map<String, String> htmlAttributes) {
         if (StringUtils.isNotEmpty(path)) {
             try {
-                path = URLDecoder.decode(path, StandardCharsets.UTF_8.name());
-            } catch (UnsupportedEncodingException e) {
-                LOGGER.warn(e.getMessage());
+                path = LinkUtil.decode(path);
+            } catch (Exception ex) {
+                String message = "Failed to decode url '{}': {}";
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.warn(message, path, ex.getMessage(), ex);
+                } else {
+                    LOGGER.warn(message, path, ex.getMessage());
+                }
             }
             String decodedPath = path;
             return pathProcessors.stream()

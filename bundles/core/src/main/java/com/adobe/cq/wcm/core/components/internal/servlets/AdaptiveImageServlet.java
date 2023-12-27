@@ -23,14 +23,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Optional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,13 +37,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.JcrConstants;
-import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
@@ -70,21 +66,24 @@ import com.day.cq.dam.api.handler.store.AssetStore;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
-import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.designer.Designer;
+import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.commons.WCMUtils;
 import com.day.cq.wcm.foundation.WCMRenditionPicker;
 import com.day.image.Layer;
-import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import com.google.common.net.HttpHeaders;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
+import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper.IMAGE_RESOURCE_TYPE;
+import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper.getComponentCandidate;
+import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper.getRedirectLocation;
+import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper.getRequestLastModifiedSuffix;
 
 /**
  * Servlet for adaptive images, can render images with different widths based on policies and requested width.
@@ -102,7 +101,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     public static final String DEFAULT_SELECTOR = "img";
     public static final String CORE_DEFAULT_SELECTOR = "coreimg";
-    private static final String IMAGE_RESOURCE_TYPE = "core/wcm/components/image";
     static final int DEFAULT_RESIZE_WIDTH = 1280;
     public static final int DEFAULT_JPEG_QUALITY = 82; // similar to what is the default in com.day.image.Layer#write(...)
     public static final int DEFAULT_MAX_SIZE = 3840; // 4K UHD width
@@ -115,10 +113,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     private AdaptiveImageServletMetrics metrics;
 
-    @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient MimeTypeService mimeTypeService;
 
-    @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
     public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics,
@@ -158,37 +154,17 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             Resource component = request.getResource();
             ResourceResolver resourceResolver = request.getResourceResolver();
-            if (!component.isResourceType(IMAGE_RESOURCE_TYPE)) {
-                // image coming from template; need to switch resource
-                Resource componentCandidate = null;
-                PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-                if (pageManager != null) {
-                    Page page = pageManager.getContainingPage(component);
-                    if (page != null) {
-                        Template template = page.getTemplate();
-                        if (template != null) {
-                            if (StringUtils.isNotEmpty(suffix)) {
-                                long lastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
-                                String relativeTemplatePath = lastModifiedSuffix == 0 ?
-                                        // no timestamp info, but extension is valid; get resource name
-                                        suffix.substring(0, suffix.lastIndexOf('.')) :
-                                        // timestamp info, get parent path from suffix
-                                        suffix.substring(0, suffix.lastIndexOf("/" + String.valueOf(lastModifiedSuffix)));
-                                String imagePath = ResourceUtil.normalize(template.getPath() + relativeTemplatePath);
-                                if (StringUtils.isNotEmpty(imagePath) && !template.getPath().equals(imagePath)) {
-                                    componentCandidate = resourceResolver.getResource(imagePath);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (componentCandidate == null) {
+            if (StringUtils.isNotEmpty(suffix)) {
+                // image coming from template or featured image in list; need to switch resource
+                Resource componentCandidate = getComponentCandidate(suffix, component);
+                if (componentCandidate != null) {
+                    component = componentCandidate;
+                } else if (!component.isResourceType(IMAGE_RESOURCE_TYPE)) {
                     LOGGER.error("Unable to retrieve an image from this page's template.");
                     metrics.markImageErrors();
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
-                component = componentCandidate;
             }
 
             LinkManager linkManager = request.adaptTo(LinkManager.class);
@@ -236,6 +212,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
                 if (StringUtils.isNotEmpty(redirectLocation)) {
                     response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+                    if (StringUtils.isNotEmpty(request.getQueryString())) {
+                        redirectLocation = redirectLocation + '?' + request.getQueryString();
+                    }
                     response.setHeader("Location", redirectLocation);
                     return;
                 } else {
@@ -247,7 +226,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
 
-                Map<String, Integer> transformationMap = getTransformationMap(selectorList, component);
+                Map<String, Integer> transformationMap = getTransformationMap(selectorList, component, request);
                 Integer jpegQualityInPercentage = transformationMap.get(SELECTOR_QUALITY_KEY);
                 double quality = jpegQualityInPercentage / 100.0d;
                 int resizeWidth = transformationMap.get(SELECTOR_WIDTH_KEY);
@@ -272,28 +251,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     }
 
-    @Nullable
-    private String getRedirectLocation(SlingHttpServletRequest request, long lastModifiedEpoch) {
-        RequestPathInfo requestPathInfo = request.getRequestPathInfo();
-        if (request.getResource().isResourceType(IMAGE_RESOURCE_TYPE)) {
-            return Joiner.on('.').join(Text.escapePath(request.getContextPath() + requestPathInfo.getResourcePath()),
-                    requestPathInfo.getSelectorString(), requestPathInfo.getExtension() + "/" + lastModifiedEpoch,
-                    requestPathInfo.getExtension());
-        }
-        long lastModifiedSuffix = getRequestLastModifiedSuffix(request.getPathInfo());
-        String resourcePath = lastModifiedSuffix > 0 ? ResourceUtil.getParent(request.getPathInfo()) : request.getPathInfo();
-        String extension = FilenameUtils.getExtension(resourcePath);
-        if (StringUtils.isNotEmpty(resourcePath)) {
-            if (StringUtils.isNotEmpty(extension)) {
-                resourcePath = resourcePath.substring(0, resourcePath.length() - extension.length() - 1);
-            }
-            return request.getContextPath() + Text.escapePath(resourcePath) + "/" + lastModifiedEpoch + "." +
-                    requestPathInfo.getExtension();
-        }
-        return null;
-    }
-
-    @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "Scanning generated code of try-with-resources")
     protected void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality,
                                          Asset asset, String imageType, String imageName) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
@@ -653,7 +610,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param quality the quality to use when converting the rendition
      * @throws IOException
      */
-    @SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "Scanning generated code of try-with-resources")
     private void streamOrConvert(@NotNull SlingHttpServletResponse response, @NotNull EnhancedRendition rendition, @NotNull String imageType,
                                  String imageName, int resizeWidth, double quality) throws IOException {
         Dimension dimension = rendition.getDimension();
@@ -698,7 +654,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         String imageName)
             throws IOException {
         response.setContentType(contentType);
-        response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
+        String extension = mimeTypeService.getExtension(contentType);
+        String disposition = "svg".equalsIgnoreCase(extension) ? "attachment" : "inline";
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, disposition + "; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
         IOUtils.copy(inputStream, response.getOutputStream());
     }
 
@@ -832,28 +790,41 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the content policy bound to the given component.
      *
      * @param imageResource the resource identifying the accessed image component
+     * @param request the request object
      * @return the content policy. May be {@code null} in case no content policy can be found.
      */
-    private ContentPolicy getContentPolicy(@NotNull Resource imageResource) {
-        ResourceResolver resourceResolver = imageResource.getResourceResolver();
+    @Nullable
+    private ContentPolicy getContentPolicy(@NotNull Resource imageResource, @NotNull SlingHttpServletRequest request) {
+        ContentPolicy contentPolicy = null;
+        ResourceResolver resourceResolver = request.getResourceResolver();
+        if (request.getResource().isResourceType(IMAGE_RESOURCE_TYPE)) {
+            imageResource = request.getResource();
+        }
         ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
             ComponentManager componentManager = resourceResolver.adaptTo(ComponentManager.class);
             if (componentManager != null) {
                 com.day.cq.wcm.api.components.Component component = componentManager.getComponentOfResource(imageResource);
                 if (component != null && component.getProperties() != null) {
-                    String delegatingResourceType =
-                            component.getProperties().get(AbstractImageDelegatingModel.IMAGE_DELEGATE, String.class);
+                    String delegatingResourceType = component.getProperties().get(com.adobe.cq.wcm.core.components.models.List.PN_TEASER_DELEGATE, String.class);
+                    if (StringUtils.isNotEmpty(delegatingResourceType)) {
+                        imageResource = new CoreResourceWrapper(imageResource, delegatingResourceType);
+                        Component teaserComponent = componentManager.getComponentOfResource(imageResource);
+                        if (teaserComponent != null) {
+                            component = teaserComponent;
+                        }
+                    }
+                    delegatingResourceType = component.getProperties().get(AbstractImageDelegatingModel.IMAGE_DELEGATE, String.class);
                     if (StringUtils.isNotEmpty(delegatingResourceType)) {
                         imageResource = new CoreResourceWrapper(imageResource, delegatingResourceType);
                     }
                 }
             }
-            return policyManager.getPolicy(imageResource);
+            contentPolicy = policyManager.getPolicy(imageResource, request);
         } else {
             LOGGER.warn("Could not get policy manager from resource resolver!");
         }
-        return null;
+        return contentPolicy;
     }
 
     /**
@@ -892,11 +863,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Creates an image transformation map from the given selector items.
      *
      * @param selectorList to get the parameter from
+     * @param request the request object
      * @return {@link Map} with quality and width transformation parameter
      */
-    private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component) throws IllegalArgumentException {
+    private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component, @NotNull SlingHttpServletRequest request) throws IllegalArgumentException {
         Map<String, Integer> selectorParameterMap = new HashMap<>();
-        int width = this.getResizeWidth(component) > 0 ? this.getResizeWidth(component) : this.defaultResizeWidth;
+        int width = this.getResizeWidth(component, request) > 0 ? this.getResizeWidth(component, request) : this.defaultResizeWidth;
         if (selectorList.size() > 1) {
             String widthString = (selectorList.size() > 2 ? selectorList.get(2) : selectorList.get(1));
             try {
@@ -904,7 +876,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (width <= 0) {
                     throw new IllegalArgumentException();
                 }
-                List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(component);
+                List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(component, request);
                 if (!allowedRenditionWidths.contains(width)) {
                     throw new IllegalArgumentException("The requested width is not allowed in the content policy or no default");
                 }
@@ -922,7 +894,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (qualityPercentage <= 0 || qualityPercentage > 100) {
                     throw new IllegalArgumentException();
                 }
-                Integer allowedJpegQuality = getAllowedJpegQuality(component);
+                Integer allowedJpegQuality = getAllowedJpegQuality(component, request);
                 if (qualityPercentage != allowedJpegQuality) {
                     throw new IllegalArgumentException("The requested quality is not allowed in the content policy or no default");
                 }
@@ -942,11 +914,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * ignored.
      *
      * @param imageResource the resource identifying the accessed image component
+     * @param request the request object
      * @return the list of the allowed widths; the list will be <i>empty</i> if the component doesn't have a content policy
      */
-    List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource) {
+    List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource, @NotNull SlingHttpServletRequest request) {
         List<Integer> list = new ArrayList<>();
-        ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        ContentPolicy contentPolicy = getContentPolicy(imageResource, request);
         ValueMap properties = null;
 
         if (contentPolicy != null) {
@@ -971,7 +944,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         }
         if (list.isEmpty()) {
-            int width = this.getResizeWidth(imageResource) > 0 ? this.getResizeWidth(imageResource) : this.defaultResizeWidth;
+            int width = this.getResizeWidth(imageResource, request) > 0 ? this.getResizeWidth(imageResource, request) : this.defaultResizeWidth;
             list.add(width);
         }
         return list;
@@ -981,11 +954,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the allowed JPEG quality from this component's content policy.
      *
      * @param imageResource the resource identifying the accessed image component
+     * @param request the request object
      * @return the JPEG quality in the range 0..100 or {@link #DEFAULT_JPEG_QUALITY} if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
      */
-    Integer getAllowedJpegQuality(@NotNull Resource imageResource) {
+    Integer getAllowedJpegQuality(@NotNull Resource imageResource, @NotNull SlingHttpServletRequest request) {
         Integer allowedJpegQuality = DEFAULT_JPEG_QUALITY;
-        ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        ContentPolicy contentPolicy = getContentPolicy(imageResource, request);
         if (contentPolicy != null) {
             allowedJpegQuality = contentPolicy.getProperties()
                     .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_JPEG_QUALITY, DEFAULT_JPEG_QUALITY);
@@ -1003,11 +977,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the allowed resize width from this component's content policy.
      *
      * @param imageResource the resource identifying the accessed image component
+     * @param request the request object
      * @return the resize width or 0 if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
      */
-    private int getResizeWidth(@NotNull Resource imageResource){
+    private int getResizeWidth(@NotNull Resource imageResource, @NotNull SlingHttpServletRequest request){
         int allowedResizeWidth = 0;
-        ContentPolicy contentPolicy = getContentPolicy(imageResource);
+        ContentPolicy contentPolicy = getContentPolicy(imageResource, request);
         if (contentPolicy != null) {
             allowedResizeWidth = contentPolicy.getProperties()
                 .get(Image.PN_DESIGN_RESIZE_WIDTH, 0);
@@ -1015,23 +990,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return  allowedResizeWidth;
     }
 
-    private long getRequestLastModifiedSuffix(@Nullable String suffix) {
-        long requestLastModified = 0;
-        if (StringUtils.isNotEmpty(suffix) && suffix.contains(".")) {
-            // check if the 13 digits UTC milliseconds timestamp, preceded by a forward slash is present in the suffix
-            Pattern p = Pattern.compile("\\(|\\)|\\/\\d{13}");
-            Matcher m = p.matcher(suffix);
-            if (!m.find()) {
-                return requestLastModified;
-            }
-            try {
-                requestLastModified = Long.parseLong(ResourceUtil.getName(m.group()));
-            } catch (NumberFormatException e) {
-                // do nothing
-            }
-        }
-        return requestLastModified;
-    }
+
 
     private enum Source {
         ASSET,

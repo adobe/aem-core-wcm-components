@@ -16,7 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +45,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /**
      * The link for this list item.
      */
-    protected Link link;
+    protected Link<Page> link;
 
     /**
      * Construct a list item for a given page.
@@ -56,10 +59,25 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
                             @NotNull final Page page,
                             final String parentId,
                             final Component component) {
+        this(linkManager.get(page).build(), page, parentId, component);
+    }
+
+    /**
+     * Construct a list item for a given page.
+     *
+     * @param link The link.
+     * @param page The current page.
+     * @param parentId The ID of the list containing this item.
+     * @param component The component containing this list item.
+     */
+    public PageListItemImpl(@NotNull final Link link,
+                            @NotNull final Page page,
+                            final String parentId,
+                            final Component component) {
         super(parentId, page.getContentResource(), component);
         this.parentId = parentId;
-        this.link = linkManager.get(page).build();
-        if (this.link.isValid()) {
+        this.link = link;
+        if (this.link.isValid() && (link.getReference() instanceof Page)) {
             this.page = (Page) link.getReference();
         } else {
             this.page = page;
@@ -85,7 +103,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     /**
      * Gets the title of a page list item from a given page.
-     * The list item title is derived from the page by selecting the first non-null value from the
+     * The list item title is derived from the page by selecting the first non-blank value from the
      * following:
      * <ul>
      *     <li>{@link Page#getNavigationTitle()}</li>
@@ -98,17 +116,11 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
      * @return The list item title.
      */
     public static String getTitle(@NotNull final Page page) {
-        String title = page.getNavigationTitle();
-        if (title == null) {
-            title = page.getPageTitle();
-        }
-        if (title == null) {
-            title = page.getTitle();
-        }
-        if (title == null) {
-            title = page.getName();
-        }
-        return title;
+        return Stream.<Supplier<String>>of(page::getNavigationTitle, page::getPageTitle, page::getTitle)
+            .map(Supplier::get)
+            .filter(StringUtils::isNotBlank)
+            .findFirst()
+            .orElseGet(page::getName);
     }
 
     @Override

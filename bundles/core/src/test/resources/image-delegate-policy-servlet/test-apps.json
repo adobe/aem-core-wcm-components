@@ -1,0 +1,40 @@
+{
+  "teaser": {
+    "jcr:primaryType"        : "cq:Component",
+    "imageDelegate"          : "core/wcm/components/image",
+    "jcr:createdBy"          : "admin",
+    "jcr:title"              : "Teaser (v2)",
+    "jcr:description"        : "Displays an image together with a link that can act as a teaser for a site section.",
+    "cq:icon"                : "image",
+    "componentGroup"         : ".core-wcm",
+    "cq:design" : {
+      "jcr:primaryType": "nt:unstructured",
+      "content": {
+        "jcr:primaryType": "nt:unstructured",
+        "items": {
+          "jcr:primaryType": "nt:unstructured",
+          "tabs": {
+            "jcr:primaryType": "nt:unstructured",
+            "items": {
+              "jcr:primaryType": "nt:unstructured",
+              "image" :{
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "core/wcm/components/include/imagedelegate",
+                "path" : "core/wcm/components/image/cq:dialog/content/items/tabs/items/asset"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "image" : {
+    "jcr:primaryType"        : "cq:Component",
+    "jcr:createdBy"          : "admin",
+    "jcr:title"              : "Image (v3)",
+    "sling:resourceSuperType": "core/wcm/components/image",
+    "jcr:description"        : "Smart Adaptive Image",
+    "cq:icon"                : "image",
+    "componentGroup"         : ".core-wcm"
+  }
+}

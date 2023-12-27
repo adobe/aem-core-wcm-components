@@ -31,7 +31,7 @@
                       2000,
                       2500
                     ],
-                    "allowUpload"           : "true",
+                    "allowUpload"           : true,
                     "sling:resourceType"    : "wcm/core/components/policy/policy",
                     "jcr:content"           : {
                       "jcr:primaryType": "nt:unstructured"
@@ -49,7 +49,7 @@
                       "700",
                       "invalid"
                     ],
-                    "allowUpload"           : "true",
+                    "allowUpload"           : true,
                     "sling:resourceType"    : "wcm/core/components/policy/policy",
                     "jcr:content"           : {
                       "jcr:primaryType": "nt:unstructured"
@@ -65,8 +65,8 @@
                     "allowedRenditionWidths": [
                       600
                     ],
-                    "disableLazyLoading"    : "true",
-                    "allowUpload"           : "true",
+                    "disableLazyLoading"    : true,
+                    "allowUpload"           : true,
                     "sling:resourceType"    : "wcm/core/components/policy/policy",
                     "jcr:content"           : {
                       "jcr:primaryType": "nt:unstructured"
@@ -82,8 +82,8 @@
                     "allowedRenditionWidths": [
                       -1
                     ],
-                    "disableLazyLoading"    : "true",
-                    "allowUpload"           : "true",
+                    "disableLazyLoading"    : true,
+                    "allowUpload"           : true,
                     "sling:resourceType"    : "wcm/core/components/policy/policy",
                     "jcr:content"           : {
                       "jcr:primaryType": "nt:unstructured"
@@ -106,8 +106,8 @@
                       1920,
                       2048
                     ],
-                    "disableLazyLoading"    : "false",
-                    "allowUpload"           : "true",
+                    "disableLazyLoading"    : false,
+                    "allowUpload"           : true,
                     "sling:resourceType"    : "wcm/core/components/policy/policy",
                     "jcr:content"           : {
                       "jcr:primaryType": "nt:unstructured"
@@ -128,15 +128,15 @@
                     "jcr:primaryType"       : "nt:unstructured",
                     "jcr:title"             : "mytest",
                     "sling:resourceType"    : "wcm/core/components/policy/policy",
-                    "disableLazyLoading"    : "false",
-                    "allowUpload"           : "true",
-                    "altValueFromDAM"       : "true",
-                    "displayPopupTitle"     : "true",
-                    "enableDmFeatures"      : "true",
-                    "isDecorative"          : "false",
+                    "disableLazyLoading"    : false,
+                    "allowUpload"           : true,
+                    "altValueFromDAM"       : true,
+                    "displayPopupTitle"     : true,
+                    "enableDmFeatures"      : true,
+                    "isDecorative"          : false,
                     "jpegQuality"           : "99",
-                    "titleValueFromDAM"     : "true",
-                    "uuidDisabled"          : "true",
+                    "titleValueFromDAM"     : true,
+                    "uuidDisabled"          : true,
                     "jcr:content"           : {
                       "jcr:primaryType": "nt:unstructured"
                     },
@@ -184,14 +184,14 @@
                   "image_template_page_image1"             : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "sling:resourceType": "core/wcm/components/image/v3/image",
-                    "imageFromPageImage": "true"
+                    "imageFromPageImage": true
                   },
                   "image_template_page_image2"             : {
                     "jcr:primaryType": "nt:unstructured",
                     "jcr:createdBy": "admin",
                     "alt": "alt from page0_image2",
-                    "altValueFromPageImage": "true",
-                    "imageFromPageImage": "true",
+                    "altValueFromPageImage": true,
+                    "imageFromPageImage": true,
                     "linkURL": "/content/test_page4",
                     "sling:resourceType": "core/wcm/components/image/v3/image"
                   }

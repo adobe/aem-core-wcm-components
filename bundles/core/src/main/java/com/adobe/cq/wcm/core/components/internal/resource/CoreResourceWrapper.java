@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.resource;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,25 +32,66 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ExporterConstants;
 
+/**
+ * Resource wrapper allowing for the change of resource type, properties, and children.
+ */
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class CoreResourceWrapper extends ResourceWrapper {
 
-    private ValueMap valueMap;
-    private String overriddenResourceType;
-    private Map<String, Resource> overriddenChildren;
+    /**
+     * The properties for this resource wrapper.
+     */
+    private final ValueMap valueMap;
 
-    public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType) {
+    /**
+     * The resource type for this resource.
+     */
+    private final String overriddenResourceType;
+
+    /**
+     * Additional child resources to add to this resource.
+     */
+    private final Map<String, Resource> overriddenChildren;
+
+    /**
+     * Construct a resource wrapper.
+     *
+     * @param resource The resource to be wrapped.
+     * @param overriddenResourceType The new resource type.
+     */
+    public CoreResourceWrapper(@NotNull final Resource resource, @NotNull final String overriddenResourceType) {
         this(resource, overriddenResourceType, null, null, null);
     }
 
-    public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType,
-                               @Nullable List<String> hiddenProperties, @Nullable Map<String, String> overriddenProperties) {
+    /**
+     * Construct a resource wrapper.
+     *
+     * @param resource The resource to be wrapped.
+     * @param overriddenResourceType The new resource type.
+     * @param hiddenProperties Properties to hide.
+     * @param overriddenProperties Properties to add/override.
+     */
+    public CoreResourceWrapper(@NotNull final Resource resource,
+                               @NotNull final String overriddenResourceType,
+                               @Nullable final List<String> hiddenProperties,
+                               @Nullable final Map<String, Object> overriddenProperties) {
         this(resource, overriddenResourceType, hiddenProperties, overriddenProperties, null);
     }
 
-    public CoreResourceWrapper(@NotNull Resource resource, @NotNull String overriddenResourceType,
-                               @Nullable List<String> hiddenProperties, @Nullable Map<String, String> overriddenProperties,
-                               @Nullable Map<String, Resource> overriddenChildren) {
+    /**
+     * Construct a resource wrapper.
+     *
+     * @param resource The resource to be wrapped.
+     * @param overriddenResourceType The new resource type.
+     * @param hiddenProperties Properties to hide.
+     * @param overriddenProperties Properties to add/override.
+     * @param overriddenChildren Child resources to add/override.
+     */
+    public CoreResourceWrapper(@NotNull final Resource resource,
+                               @NotNull final String overriddenResourceType,
+                               @Nullable final List<String> hiddenProperties,
+                               @Nullable final Map<String, Object> overriddenProperties,
+                               @Nullable final Map<String, Resource> overriddenChildren) {
         super(resource);
         if (StringUtils.isEmpty(overriddenResourceType)) {
             throw new IllegalArgumentException("The " + CoreResourceWrapper.class.getName() + " needs to override the resource type of " +
@@ -57,18 +99,18 @@ public class CoreResourceWrapper extends ResourceWrapper {
         }
         this.overriddenResourceType = overriddenResourceType;
         this.overriddenChildren = overriddenChildren;
-        valueMap = new ValueMapDecorator(new HashMap<>(resource.getValueMap()));
-        valueMap.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, overriddenResourceType);
+        HashMap<String, Object> properties = new HashMap<>(resource.getValueMap());
+        properties.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, overriddenResourceType);
         if (overriddenProperties != null) {
-            for (Map.Entry<String, String> entry : overriddenProperties.entrySet()) {
-                valueMap.put(entry.getKey(), entry.getValue());
-            }
+            properties.putAll(overriddenProperties);
         }
         if (hiddenProperties != null) {
             for (String property : hiddenProperties) {
-                valueMap.remove(property);
+                properties.remove(property);
             }
         }
+        // wrapped to prevent external modification of the underlying map
+        this.valueMap = new ValueMapDecorator(Collections.unmodifiableMap(properties));
     }
 
     @Override

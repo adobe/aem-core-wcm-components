@@ -32,7 +32,7 @@ jobs:
     steps:
       # Check out Git repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Set up environment with Java and Maven
       - name: Setup JDK
@@ -56,3 +56,26 @@ jobs:
       # Run code coverage check
       - name: Run core coverage check
         run: bash <(curl -s https://codecov.io/bash)
+  build-js:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: content
+    strategy:
+      matrix:
+        node-version: [ 14 ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: content/package-lock.json
+      - name: Install dependencies
+        run: npm install
+      - name: Run lint
+        run: npm run eslint
+      - name: Run tests
+        run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI --singleRun=true

@@ -23,6 +23,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +34,7 @@ import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.ListEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.v1.ListEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.list.v1.List;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 
@@ -46,18 +47,18 @@ public class ListIT extends AuthorBaseUITest {
     private static String tag2 = "joel";
     private static String description = "This is a child page";
 
-    private String compPath;
+    protected String compPath;
     private String parentPath;
     private String testPage;
-    private String page1Path;
+    protected String page1Path;
     private String page2Path;
-    private String page21Path;
+    protected String page21Path;
     private String page22Path;
     private String page3Path;
-    private String page4Path;
+    protected String page4Path;
     private String page5Path;
-    private EditorPage editorPage;
-    private List list;
+    protected EditorPage editorPage;
+    protected List list;
     private String tag1Path;
     private String tag2Path;
 
@@ -127,7 +128,16 @@ public class ListIT extends AuthorBaseUITest {
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
 
-        list = new List();
+        list = createList();
+    }
+
+    @NotNull
+    protected List createList() {
+        return new List();
+    }
+
+    public List getList() {
+        return list;
     }
 
     /**

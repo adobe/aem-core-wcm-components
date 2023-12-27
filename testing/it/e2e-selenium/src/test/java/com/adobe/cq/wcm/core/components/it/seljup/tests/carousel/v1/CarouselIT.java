@@ -255,7 +255,7 @@ public class CarouselIT extends AuthorBaseUITest {
     public void testPanelSelect() throws InterruptedException {
         String component = "[data-type='Editable'][data-path='" + cmpPath +"']";
         WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         Commons.openEditableToolbar(cmpPath);
         assertTrue(!Commons.isPanelSelectPresent(), "Panel Select should not be present");
         createItems();
@@ -280,7 +280,7 @@ public class CarouselIT extends AuthorBaseUITest {
         Commons.switchToDefaultContext();
 
         webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(panelSelector.getCssSelector())));
 
         //4.
         panelSelector.reorderItems(0, 2);
@@ -366,7 +366,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
 
         //2.
@@ -423,6 +423,11 @@ public class CarouselIT extends AuthorBaseUITest {
         assertTrue(Commons.isElementVisibleAndInViewport(itemButton2));
         assertTrue(Commons.isElementVisibleAndInViewport(itemContent2));
 
+        // clicking a link referencing the first carousel item displays it and scrolls to it
+        Selenide.$("#link-1a").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemButton1));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+
         // clicking a link referencing a text element within a carousel item expands the item
         // and scrolls to the ID
         Commons.scrollToTop();
@@ -458,4 +463,48 @@ public class CarouselIT extends AuthorBaseUITest {
         assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
     }
 
+    /**
+     * Test: Default Active Item
+     *
+     * 1. create new items with titles
+     * 2. verify that 1st item is active in carousel by default
+     * 3. open the edit dialog
+     * 4. set 2nd item as active
+     * 5. save the edit dialog
+     * 6. verify that 2nd item is active in carousel
+     * 7. open the edit dialog
+     * 8. set 3rd item as active
+     * 9. save the edit dialog
+     * 10. verify that 3rd item is active in carousel
+     */
+    @Test
+    @DisplayName("Test: Default Active Item")
+    public void testDefaultActiveItem() throws InterruptedException {
+        createItems();
+        Commons.switchContext("ContentFrame");
+
+        // 1st item active by default when activeItem not specified
+        assertTrue(carousel.isItemActive(0));
+        assertTrue(carousel.isIndicatorActive(0));
+
+        Commons.switchToDefaultContext();
+        CarouselEditDialog editDialog = carousel.openEditDialog(cmpPath);
+        editDialog.openEditDialogProperties();
+        editDialog.setItemActive("item1");
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(carousel.isItemActive(1));
+        assertTrue(carousel.isIndicatorActive(1));
+
+        Commons.switchToDefaultContext();
+        carousel.openEditDialog(cmpPath);
+        editDialog.openEditDialogProperties();
+        editDialog.setItemActive("item2");
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(carousel.isItemActive(2));
+        assertTrue(carousel.isIndicatorActive(2));
+    }
 }

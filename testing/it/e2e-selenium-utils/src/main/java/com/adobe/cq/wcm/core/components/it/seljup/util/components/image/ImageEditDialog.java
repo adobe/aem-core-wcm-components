@@ -20,6 +20,7 @@ import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.codeborne.selenide.DragAndDropOptions;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
@@ -38,6 +39,7 @@ public class ImageEditDialog extends Dialog {
     private static String title = "input[name='./jcr:title']";
     private static String popUpTitle = "[name='./displayPopupTitle']";
     public static String decorative = "[name='./isDecorative']";
+    public static String disableLazyLoading = "[name='./disableLazyLoading']";
     public static String assetFilter = "[name='assetfilter_image_path']";
     private static SelenideElement assetTab = $(".cq-dialog coral-tab[data-foundation-tracking-event*='asset']");
     private static SelenideElement metadataTab = $("coral-tab[data-foundation-tracking-event*='metadata']");
@@ -48,12 +50,12 @@ public class ImageEditDialog extends Dialog {
     private static String linkTarget = "coral-checkbox[name='./linkTarget']";
 
     public void uploadImageFromSidePanel(String imagePath) {
-        $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(fileUpload);
+        $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(fileUpload, DragAndDropOptions.usingActions());
     }
 
     public void setAltText(String text) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
         content().find(altText).clear();
         content().find(altText).sendKeys(text);
@@ -67,7 +69,7 @@ public class ImageEditDialog extends Dialog {
 
     public void setTitle(String value) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
         content().find(title).clear();
         content().find(title).sendKeys(value);
@@ -80,6 +82,11 @@ public class ImageEditDialog extends Dialog {
 
     public void checkDecorative() {
         CoralCheckbox checkbox = new CoralCheckbox(decorative);
+        checkbox.click();
+    }
+
+    public void checkDisableLazyLoading() {
+        CoralCheckbox checkbox = new CoralCheckbox(disableLazyLoading);
         checkbox.click();
     }
 

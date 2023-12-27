@@ -35,7 +35,7 @@ jobs:
     if: startsWith(github.ref, 'refs/heads/release/')
     steps:
       # Check out Git repository
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Set up environment with Java and Maven
       - name: Set up JDK

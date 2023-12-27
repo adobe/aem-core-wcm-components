@@ -97,7 +97,7 @@ public class LocalizationUtils {
             if (relationshipManager.isSource(resource)) {
                 // the resource is a blueprint
                 RangeIterator liveCopiesIterator = relationshipManager.getLiveRelationships(resource, null, null);
-                if (liveCopiesIterator != null) {
+                if (liveCopiesIterator != null && liveCopiesIterator.hasNext()) {
                     LiveRelationship relationship = (LiveRelationship) liveCopiesIterator.next();
                     LiveCopy liveCopy = relationship.getLiveCopy();
                     if (liveCopy != null) {

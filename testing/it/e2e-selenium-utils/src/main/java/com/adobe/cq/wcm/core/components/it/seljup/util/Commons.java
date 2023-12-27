@@ -105,6 +105,8 @@ public class Commons {
     public static final String RT_LIST_V1 = "core-component/components/list-v1";
     public static final String RT_LIST_V2 = "core-component/components/list-v2";
     public static final String RT_LIST_V3 = "core-component/components/list-v3";
+
+    public static final String RT_LIST_V4 = "core-component/components/list-v4";
     // image component
     public static final String RT_IMAGE_V1 = "core-component/components/image-v1";
     public static final String CLIENTLIBS_IMAGE_V1 = "core.wcm.components.image.v1";
@@ -144,6 +146,11 @@ public class Commons {
     public static final String CLIENTLIBS_TABS_V1 = "core.wcm.components.tabs.v1";
     // content fragment component
     public static final String RT_CONTENTFRAGMENT_V1 = "core-component/components/contentfragment-v1";
+    // pdfviewer component
+    public static final String RT_PDFVIEWER_V1 = "core-component/components/pdfviewer-v1";
+    public static final String CLIENTLIBS_PDFVIEWER_V1 = "core.wcm.components.pdfviewer.v1";
+    // separator component
+    public static final String RT_SEPARATOR_V1 = "core-component/components/separator-v1";
     // content fragment list component
     public static final String RT_CONTENTFRAGMENTLIST_V1 = "core-component/components/contentfragmentlist-v1";
     public static final String RT_CONTENTFRAGMENTLIST_V2 = "core-component/components/contentfragmentlist-v2";
@@ -203,7 +210,7 @@ public class Commons {
             ElementUtils.clickableClick($("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-checkbox"));
         }
         else {
-            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-icon").click();
+            $("[data-foundation-collection-item-id='" + currentPath + "']").$("coral-columnview-item-thumbnail").click();
         }
         $("button.granite-pickerdialog-submit[is='coral-button']").click();
     }
@@ -681,7 +688,7 @@ public class Commons {
     public static void openEditDialog(EditorPage editorPage, String compPath) throws TimeoutException, InterruptedException {
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
         editableToolbar.clickConfigure();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
@@ -698,7 +705,7 @@ public class Commons {
     public static InlineEditor openInlineEditor(EditorPage editorPage, String compPath) throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
         return editableToolbar.clickEdit();
     }
@@ -970,6 +977,10 @@ public class Commons {
         String urlStg = webDriver.getCurrentUrl();
         URL url = new URL(urlStg);
         return url.getRef();
+    }
+
+    public static void setNGDMImage(CQClient client, String componentPath) throws ClientException {
+        client.setPropertyString(componentPath, "fileReference", "/urn:aaid:aem:535c3eba-6242-4474-b2d2-3d1ef333ec45/test.jpg", 200);
     }
 
 }

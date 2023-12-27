@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import com.adobe.cq.wcm.core.components.models.Component;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -37,6 +36,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Heading;
 import com.adobe.cq.wcm.core.components.models.Accordion;
 import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * V1 Accordion model implementation.
@@ -50,7 +50,7 @@ import com.day.cq.wcm.api.designer.Style;
     name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
     extensions = ExporterConstants.SLING_MODEL_EXTENSION
 )
-public class AccordionImpl extends PanelContainerImpl implements Accordion {
+public class AccordionImpl extends AbstractPanelContainerImpl implements Accordion {
 
     /**
      * Resource type.
@@ -131,27 +131,24 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
         return null;
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
     @Override
     public String[] getDataLayerShownItems() {
-        if (expandedItems == null) {
-            return new String[0];
-        }
-
-        if (expandedItemIds == null) {
-            List<String> expandedItemsName = Arrays.asList(expandedItems);
-
-            expandedItemIds = this.getItems().stream()
-                .filter(item -> expandedItemsName.contains(item.getName()))
-                .map(Component::getData)
-                .filter(Objects::nonNull)
-                .map(ComponentData::getId)
+        if (this.expandedItemIds == null) {
+            List<String> expandedItemsName = Arrays.asList(this.getExpandedItems());
+            this.expandedItemIds = this.getChildren().stream()
+                .filter(item -> expandedItemsName.contains(item.getResource().getName()))
+                .map(PanelContainerItemImpl::getId)
                 .toArray(String[]::new);
         }
-
         return Arrays.copyOf(expandedItemIds, expandedItemIds.length);
+    }
+
+    /**
+     * @return always empty as the accordion uses the expanded items
+     */
+    @Override
+    @JsonIgnore
+    public String getActiveItem() {
+        return StringUtils.EMPTY;
     }
 }

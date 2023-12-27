@@ -65,6 +65,8 @@ public class TabsIT extends AuthorBaseUITest {
     private static final String deepLinkPagePath = "/content/core-components/deep-link/tabs/v1.html";
     private static final String itemTitleId1 = "tabs-4e44202276-item-7db3b7c485-tab";
     private static final String itemContentId1 = "text-1";
+    private static final String itemTitleId1a = "tabs-4e44202276-item-0bbe8ef9f2-tab";
+    private static final String itemContentId1a = "text-1a";
     private static final String itemTitleId2 = "tabs-5ec1f408ee-item-2c2b4d5083-tab";
     private static final String itemContentId2 = "text-2";
     private static final String itemTitleId3 = "tabs-fac5c2a775-item-343a3d8a51-tab";
@@ -365,6 +367,7 @@ public class TabsIT extends AuthorBaseUITest {
         assertTrue(Commons.isPanelSelectPresent(), "Panel Select button should be present");
         // open the panel selector and verify it's open
         Commons.openPanelSelect();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         PanelSelector panelSelector = new PanelSelector();
         assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
 
@@ -443,7 +446,7 @@ public class TabsIT extends AuthorBaseUITest {
 
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
 
         //2.
@@ -563,6 +566,8 @@ public class TabsIT extends AuthorBaseUITest {
         page.open();
         SelenideElement itemTitle1 = Selenide.$("#" + itemTitleId1);
         SelenideElement itemContent1 = Selenide.$("#" + itemContentId1);
+        SelenideElement itemTitle1a = Selenide.$("#" + itemTitleId1a);
+        SelenideElement itemContent1a = Selenide.$("#" + itemContentId1a);
         SelenideElement itemTitle2 = Selenide.$("#" + itemTitleId2);
         SelenideElement itemContent2 = Selenide.$("#" + itemContentId2);
         SelenideElement itemTitle3 = Selenide.$("#" + itemTitleId3);
@@ -580,6 +585,11 @@ public class TabsIT extends AuthorBaseUITest {
         Selenide.$("#link-1").click();
         assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
         assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+
+        // clicking a link referencing the first tabs item displays it and scrolls to it
+        Selenide.$("#link-1a").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1a));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1a));
 
         // clicking a link referencing a nested tabs item expands all intermediary items and scrolls to it
         Commons.scrollToTop();

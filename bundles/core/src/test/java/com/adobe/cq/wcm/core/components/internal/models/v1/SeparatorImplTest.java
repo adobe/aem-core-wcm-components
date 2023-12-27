@@ -26,6 +26,8 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 class SeparatorImplTest {
@@ -36,6 +38,7 @@ class SeparatorImplTest {
     private static final String TEST_ROOT_PAGE = "/content/separator";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String SEPARATOR_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/separator-1";
+    private static final String SEPARATOR_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/separator-2";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -45,14 +48,26 @@ class SeparatorImplTest {
     }
 
     @Test
+    void testStandard() {
+        Separator separator = getSeparatorUnderTest(SEPARATOR_1);
+        assertFalse(separator.isDecorative());
+    }
+
+    @Test
+    void testDecorative() {
+        Separator separator = getSeparatorUnderTest(SEPARATOR_2);
+        assertTrue(separator.isDecorative());
+    }
+
+    @Test
     void testExportedType() {
-        Separator separator = getSeparatorUnderTest();
+        Separator separator = getSeparatorUnderTest(SEPARATOR_1);
         assertEquals(SeparatorImpl.RESOURCE_TYPE_V1, ((SeparatorImpl) separator).getExportedType());
         Utils.testJSONExport(separator, Utils.getTestExporterJSONPath(TEST_BASE, "separator1"));
     }
 
-    private Separator getSeparatorUnderTest() {
-        context.currentResource(SeparatorImplTest.SEPARATOR_1);
+    private Separator getSeparatorUnderTest(String path) {
+        context.currentResource(path);
         context.request().setContextPath(CONTEXT_PATH);
         return context.request().adaptTo(Separator.class);
     }

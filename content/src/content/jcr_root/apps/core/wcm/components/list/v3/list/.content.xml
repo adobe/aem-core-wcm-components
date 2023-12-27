@@ -14,10 +14,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     cq:icon="textBulleted"
     jcr:description="Configurable collection of items or content"
     jcr:primaryType="cq:Component"
     jcr:title="List (v3)"
-    teaserDelegate="core/wcm/components/teaser/v2/teaser"
-    componentGroup=".core-wcm"/>
+    sling:resourceSuperType="core/wcm/components/image"
+    componentGroup=".core-wcm"
+    teaserDelegate="core/wcm/components/teaser/v2/teaser"/>
