@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -297,7 +296,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @NotNull
     protected Set<String> getCategoriesFromComponents() {
         try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE))) {
-            Set<String> categories = new HashSet<>();
+            Set<String> categories = new LinkedHashSet<>();
             for (ClientLibrary library : this.getAllClientLibraries(resourceResolver)) {
                 for (String category : library.getCategories()) {
                     if (pattern == null || pattern.matcher(category).matches()) {
