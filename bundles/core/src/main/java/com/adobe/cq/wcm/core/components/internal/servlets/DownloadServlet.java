@@ -191,6 +191,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         }
         if (inline) {
             response.setHeader(CONTENT_DISPOSITION_HEADER, "inline");
+            response.setHeader("Content-Security-Policy", "sandbox");
         } else {
             response.setHeader(CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" + filename + "\"");
         }
