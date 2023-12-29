@@ -355,11 +355,6 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
         </dependency>
-        <!-- javax.inject 1 -->
-        <dependency>
-            <artifactId>geronimo-atinject_1.0_spec</artifactId>
-            <groupId>org.apache.geronimo.specs</groupId>
-        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
