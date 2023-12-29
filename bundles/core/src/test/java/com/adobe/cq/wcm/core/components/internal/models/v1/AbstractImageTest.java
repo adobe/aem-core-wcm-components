@@ -15,7 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import com.adobe.cq.wcm.core.components.testing.MockPublishUtils;
+import com.adobe.cq.wcm.spi.AssetDelivery;
 import com.day.cq.dam.api.s7dam.utils.PublishUtils;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.commons.mime.MimeTypeService;
@@ -75,6 +77,9 @@ public class AbstractImageTest {
     protected static final String IMAGE28_PATH = PAGE + "/jcr:content/root/image28";
     protected static final String IMAGE29_PATH = PAGE + "/jcr:content/root/image29";
     protected static final String IMAGE30_PATH = PAGE + "/jcr:content/root/image30";
+    protected static final String IMAGE45_PATH = PAGE + "/jcr:content/root/image45";
+    protected static final String IMAGE59_PATH = PAGE + "/jcr:content/root/image59";
+    protected static final String LIST01_PATH = PAGE + "/jcr:content/root/list01";
     protected static final String TEMPLATE_PATH = "/conf/coretest/settings/wcm/templates/testtemplate";
     protected static final String TEMPLATE_STRUCTURE_PATH = TEMPLATE_PATH + "/structure";
     protected static final String TEMPLATE_IMAGE_PATH = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template";
@@ -104,6 +109,7 @@ public class AbstractImageTest {
     protected static final String SVG_FILE_PATH = IMAGE24_PATH + "/file";
     protected static final String LARGE_PNG_ASSET_PATH = "/content/dam/core/images/20000x20000.png";
     protected static final String TRANSPARENT_PNG_ASSET_PATH = "/content/dam/core/images/transparent_hd.png";
+    protected static final String ASSET_DELIVERY_TEST_URL="/asset/delivery/test/url";
 
     protected static ContentPolicyManager contentPolicyManager;
     protected static MimeTypeService mockedMimeTypeService;
@@ -152,6 +158,11 @@ public class AbstractImageTest {
         context.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_FILE_PATH, MIME_TYPE_SVG);
         context.load().binaryFile("/image/" + _40MPX_IMAGE_BINARY_NAME, LARGE_PNG_ASSET_PATH + "/jcr:content/renditions/original");
         context.load().binaryFile("/image/" + TRANSPARENT_IMAGE_BINARY_NAME, TRANSPARENT_PNG_ASSET_PATH + "/jcr:content/renditions/original");
+    }
+
+    protected void registerAssetDelivery() {
+        AssetDelivery assetDelivery = new MockAssetDelivery();
+        context.registerService(AssetDelivery.class, assetDelivery);
     }
 
 }

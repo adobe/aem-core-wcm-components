@@ -17,8 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -33,6 +31,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Teaser;
+import com.adobe.cq.wcm.core.components.internal.models.v3.ImageImpl;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -42,11 +41,18 @@ import com.day.cq.wcm.foundation.Image;
 import com.day.text.Text;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import static com.adobe.cq.wcm.core.components.util.ComponentUtils.ID_SEPARATOR;
+
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
+
+    /**
+     * Image ID prefix.
+     */
+    private static final String IMAGE_ID_PREFIX = "image";
 
     /**
      * The title.
@@ -73,6 +79,8 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     protected void initImage() {
         overriddenImageResourceProperties.put(Image.PN_LINK_URL, getTargetPage().map(Page::getPath).orElse(null));
         overriddenImageResourceProperties.put(Teaser.PN_ACTIONS_ENABLED, Boolean.valueOf(actionsEnabled).toString());
+        overriddenImageResourceProperties.put(PN_ID, String.join(ID_SEPARATOR, this.getId(), IMAGE_ID_PREFIX));
+
         if (StringUtils.isNotEmpty(getTitle()) || getTeaserActions().size() > 0) {
             overriddenImageResourceProperties.put(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.TRUE.toString());
         }
@@ -82,13 +90,13 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     @Override
     protected void initLink() {
         // use the target page as the link if it exists
-        link = linkHandler.getLink(resource, Link.PN_LINK_URL);
+        link = linkManager.get(resource).withLinkUrlPropertyName(Link.PN_LINK_URL).build();
     }
 
     @Override
     @Nullable
     public Link getLink() {
-        return link.orElse(null);
+        return link.isValid() ? link : null;
     }
 
     @Override
@@ -155,10 +163,11 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     protected boolean hasImage() {
         // As Teaser v2 supports inheritance from the featured image of the page, the current resource is wrapped and
         // augmented with the inherited properties and child resources of the featured image.
-        Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkHandler, currentStyle, currentPage);
+        Resource wrappedResource = Utils.getWrappedImageResourceWithInheritance(resource, linkManager, currentStyle, currentPage);
         return Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
                 .map(request.getResourceResolver()::getResource)
-                .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null;
+                .orElseGet(() -> wrappedResource.getChild(DownloadResource.NN_FILE)) != null ||
+                Optional.ofNullable(wrappedResource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class)).filter(ImageImpl::isNgdmImageReference).isPresent();
     }
 
     protected Action newAction(Resource actionRes, Component component) {

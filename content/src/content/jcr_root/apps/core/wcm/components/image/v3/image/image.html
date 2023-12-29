@@ -14,23 +14,31 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
+     data-cmp-is="image"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${image.src}"
+     data-cmp-widths="${image.widths}"
      data-cmp-dmimage="${image.dmImage}"
+     data-cmp-smartcroprendition="${image.smartCropRendition}"
+     data-cmp-src="${image.srcUriTemplate ? image.srcUriTemplate : image.src}"
      data-asset-id="${image.uuid}"
+     data-cmp-filereference="${image.fileReference}"
      id="${image.id}"
      data-cmp-data-layer="${image.data.json}"
+     data-cmp-hook-image="imageV3"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
     <a data-sly-unwrap="${!image.imageLink.valid}"
        class="cmp-image__link"
        data-sly-attribute="${image.imageLink.htmlAttributes}"
        data-cmp-clickable="${image.data ? true : false}">
-        <img srcset="${image.srcset}" src="${image.src}"
+        <img src="${image.src}"
+             srcset="${image.srcset}"
              loading="${image.lazyEnabled ? 'lazy' : ''}"
              class="cmp-image__image"
              itemprop="contentUrl"
              width="${image.width}" height="${image.height}"
+             sizes="${image.sizes}"
              alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
     </a>
     <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>

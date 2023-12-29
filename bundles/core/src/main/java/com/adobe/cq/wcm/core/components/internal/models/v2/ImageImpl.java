@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -38,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -46,6 +46,8 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.scene7.api.constants.Scene7AssetType;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.net.UrlEscapers;
 
 /**
  * V2 Image model implementation.
@@ -81,12 +83,17 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     /**
      * The width variable to use when building {@link #srcUriTemplate}.
      */
-    private static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+    static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+
+    /**
+     * The width variable to use when building {@link #srcUriTemplate} for CDN route.
+     */
+    static final String SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "{width}";
 
     /**
      * The smartcrop "auto" constant.
      */
-    private static final String SMART_CROP_AUTO = "SmartCrop:Auto";
+    protected static final String SMART_CROP_AUTO = "SmartCrop:Auto";
 
     /**
      * The path of the delegated content policy.
@@ -149,6 +156,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         boolean isDmFeaturesEnabled = currentStyle.get(PN_DESIGN_DYNAMIC_MEDIA_ENABLED, false);
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
         boolean uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
+        // if content policy delegate path is provided pass it to the image Uri
+        String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
         String dmImageUrl = null;
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
@@ -178,16 +187,22 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     //check DM asset - check for "dam:scene7File" metadata value
                     String dmAssetName = asset.getMetadataValue(Scene7Constants.PN_S7_FILE);
                     if(isDmFeaturesEnabled && (!StringUtils.isEmpty(dmAssetName))){
+                        dmAssetName = UrlEscapers.urlFragmentEscaper().escape(dmAssetName);
                         //image is DM
                         dmImage = true;
+                        useAssetDelivery = false;
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
                         //sets to '/is/image/ or '/is/content' based on dam:scene7Type property
                         String dmServerPath;
-                        if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.ANIMATED_GIF.getValue())) {
-                            dmServerPath = DM_CONTENT_SERVER_PATH;
-                        } else {
+                        // '/is/image' DM url is for optimized image delivery supporting run time transformations.
+                        //  Use '/is/image' url if dam:scene7Type is explicitly set to 'Image' or DM processor does not set dam:scene7Type
+                        if (asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(Scene7AssetType.IMAGE.getValue())
+                            || asset.getMetadataValue(Scene7Constants.PN_S7_TYPE).equals(StringUtils.EMPTY)) {
                             dmServerPath = DM_IMAGE_SERVER_PATH;
+                        } else {
+                        // All other file types should be loaded as content via '/is/content'
+                            dmServerPath = DM_CONTENT_SERVER_PATH;
                         }
                         String dmServerUrl;
                         // for Author
@@ -199,31 +214,41 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                         }
                         dmImageUrl = dmServerUrl + dmAssetName;
                     }
+                    useAssetDelivery = useAssetDelivery && StringUtils.isEmpty(policyDelegatePath);
+
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
                             request.getResource().getPath());
                 }
             } else {
-                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
+                // handle the case where the image is not coming from DAM but from a different source (e.g. NGDM)
+                if (!hasContent) {
+                    LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
+                }
             }
         }
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
-            if(dmImageUrl == null){
-                String staticSelectors = selector;
-                if (smartSizes.length > 0) {
-                    // only include the quality selector in the URL, if there are sizes configured
-                    staticSelectors += DOT + jpegQuality;
+            if (dmImageUrl == null){
+                if (useAssetDelivery) {
+                    srcUriTemplate = AssetDeliveryHelper.getSrcUriTemplate(assetDelivery, resource, imageName, extension,
+                            jpegQuality, SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY);
                 }
-                srcUriTemplate = baseResourcePath + DOT + staticSelectors +
-                        SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-                        (inTemplate ? templateRelativePath : "") +
-                        (lastModifiedDate > 0 ?("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
-                        (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
 
-                // if content policy delegate path is provided pass it to the image Uri
-                String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
+                if (StringUtils.isEmpty(srcUriTemplate)) {
+                    String staticSelectors = selector;
+                    if (smartSizes.length > 0) {
+                        // only include the quality selector in the URL, if there are sizes configured
+                        staticSelectors += DOT + jpegQuality;
+                    }
+                    srcUriTemplate = baseResourcePath + DOT + staticSelectors +
+                        SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
+                        (inTemplate ? templateRelativePath : hasExternalImageResource ? externalImageResourcePath : "") +
+                        (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
+                        (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+                }
+
                 if (StringUtils.isNotBlank(policyDelegatePath)) {
                     srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
                     src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
@@ -269,10 +294,19 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     srcUriTemplate += imageModifiersCommand;
                     src += imageModifiersCommand;
                 }
-                //add "dpr=off" parameter to image source url
-                String dprOffParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=off";
-                srcUriTemplate += dprOffParameter;
-                src += dprOffParameter;
+
+                String dprParameter = "";
+                // If DM is enabled, use smart imaging for smartcrop renditions
+                if (getClass().equals(com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl.class) && isDmFeaturesEnabled && !StringUtils.isBlank(smartCropRendition)) {
+                    dprParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=on,{dpr}";
+                } else {
+                    //add "dpr=off" parameter to image source url
+                    dprParameter = (srcUriTemplate.contains("?") ? '&':'?') + "dpr=off";
+                }
+
+                srcUriTemplate += dprParameter;
+                src += dprParameter;
+
                 if (srcUriTemplate.equals(src)) {
                     srcUriTemplate = null;
                 }
@@ -350,8 +384,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     String href = StringUtils.removeAll(remainingTokens[0], "\"");
                     String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
 
-                    Link link = linkHandler.getLink(href, target).orElse(null);
-                    if (link == null || !link.isValid()) {
+                    Link link = linkManager.get(href).withLinkTarget(target).build();
+                    if (!link.isValid()) {
                         break;
                     }
 
@@ -367,4 +401,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt ) {
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }
+
+
 }

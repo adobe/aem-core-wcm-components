@@ -34,7 +34,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.form.FormHandlerImpl;
-import com.adobe.cq.wcm.core.components.internal.models.v1.form.FormsHelperStubber;
 import com.day.cq.wcm.foundation.forms.ValidationInfo;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.google.common.collect.ImmutableMap;
@@ -82,7 +81,6 @@ class FormActionRpcServletTest {
             }
         });
         underTest = context.registerInjectActivateService(new FormActionRpcServlet());
-        FormsHelperStubber.createStub();
     }
 
     @Test
@@ -123,8 +121,25 @@ class FormActionRpcServletTest {
         assertNotNull(validationInfo);
     }
 
+    @Test
+    void testDoPostWithExtraParameters() throws ServletException {
+        MockSlingHttpServletRequest request = context.request();
+        request.setParameterMap(ImmutableMap.of("text", "hello", "extra", "foobar"));
+        request.setAttribute("cq.form.id", "new_form");
+        Resource resource = context.currentResource("/content/container");
+        ModifiableValueMap modifiableValueMap = resource.adaptTo(ModifiableValueMap.class);
+        modifiableValueMap.put("externalServiceEndPointUrl", "http://localhost:" + wireMockPort + "/form/endpoint");
+        underTest.doPost(context.request(), context.response());
+        assertEquals(302 , context.response().getStatus());
+    }
+
     private void setupStub() {
         wireMockServer.stubFor(post(urlEqualTo("/form/endpoint"))
+                .withRequestBody(equalTo("{}"))
+                .willReturn(aResponse().withHeader("Content-Type", "application/json")
+                        .withStatus(200)));
+        wireMockServer.stubFor(post(urlEqualTo("/form/endpoint"))
+                .withRequestBody(equalTo("{\"text\":\"hello\"}"))
                 .willReturn(aResponse().withHeader("Content-Type", "application/json")
                         .withStatus(200)));
     }

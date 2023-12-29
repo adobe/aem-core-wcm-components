@@ -16,21 +16,10 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.tabs.v1;
 
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
-import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
-import com.adobe.cq.testing.selenium.utils.KeyboardShortCuts;
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.assertion.EditableToolbarAssertion;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.ChildrenEditor;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.PanelSelector;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.TabsEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.v1.Tabs;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.WebDriverRunner;
+import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -43,10 +32,27 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.EditableToolbar;
+import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.adobe.cq.testing.selenium.utils.KeyboardShortCuts;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.assertion.EditableToolbarAssertion;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.ChildrenEditor;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.commons.PanelSelector;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.TabsEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.tabs.v1.Tabs;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("group3")
 public class TabsIT extends AuthorBaseUITest {
@@ -54,7 +60,17 @@ public class TabsIT extends AuthorBaseUITest {
     private static String pageVar = "tabs_page";
     private static String pageDescription = "tabs page description";
     private static String componentName = "tabs";
-    private static final String clientlibs = "core.wcm.components.tabs.v1";
+    private static final String clientlibs = Commons.CLIENTLIBS_TABS_V1;
+
+    private static final String deepLinkPagePath = "/content/core-components/deep-link/tabs/v1.html";
+    private static final String itemTitleId1 = "tabs-4e44202276-item-7db3b7c485-tab";
+    private static final String itemContentId1 = "text-1";
+    private static final String itemTitleId1a = "tabs-4e44202276-item-0bbe8ef9f2-tab";
+    private static final String itemContentId1a = "text-1a";
+    private static final String itemTitleId2 = "tabs-5ec1f408ee-item-2c2b4d5083-tab";
+    private static final String itemContentId2 = "text-2";
+    private static final String itemTitleId3 = "tabs-fac5c2a775-item-343a3d8a51-tab";
+    private static final String itemContentId3 = "text-3";
 
     private String policyPath;
     private String proxyPath;
@@ -79,37 +95,17 @@ public class TabsIT extends AuthorBaseUITest {
      */
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
+        proxyPath = Commons.RT_TABS_V1;
         // 1.
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
         // 2.
-        String policySuffix = "/structure/page/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("clientlibs", clientlibs);
-        String policyPath1 = "/conf/" + label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data, policyPath1);
-
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient, "", data, policyAssignmentPath);
-
-
-        // 4.
-        proxyPath = Commons.createProxyComponent(adminClient, Commons.rtTabs_v1, Commons.proxyPath, null, null);
-
-        // 5.
-        data.clear();
-        data.put("cq:isContainer", "true");
-        Commons.editNodeProperties(adminClient, proxyPath, data);
+        policyPath = createPagePolicy(new HashMap<String, String>() {{
+            put("clientlibs", clientlibs);
+        }});
 
         // 6.
-        cmpPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, componentName, null);
+        cmpPath = Commons.addComponentWithRetry(authorClient, proxyPath, testPage + Commons.relParentCompPath, componentName);
 
         // 7.
         editorPage = new PageEditorPage(testPage);
@@ -131,9 +127,6 @@ public class TabsIT extends AuthorBaseUITest {
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        // 1.
-        Commons.deleteProxyComponent(adminClient, proxyPath);
-
         // 2.
         authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
 
@@ -184,24 +177,23 @@ public class TabsIT extends AuthorBaseUITest {
     }
 
     /**
-     * Create and title a single accordion item
+     * Create and title a single tabs item
      *
      * @param component component path
      * @param parentPath parent component path
      * @param itemName name of the item to be set
-     * 1. add a component to the accordion
+     * 1. add a component to the tabs
      * 2. open the edit dialog
-     * 3. name the accordion item
+     * 3. name the tabs item
      * 4. save the edit dialog
      *
      * @throws ClientException
      * @throws InterruptedException
      */
-
     private String addTabsItem(String component, String parentPath,  String itemName) throws ClientException, InterruptedException {
 
         //1.
-        String cmpPath = Commons.addComponent(adminClient, component, parentPath + "/", null, null);
+        String cmpPath = Commons.addComponentWithRetry(authorClient, component, parentPath + "/", null);
 
         //2.
         TabsEditDialog editDialog = tabs.openEditDialog(parentPath);
@@ -375,6 +367,7 @@ public class TabsIT extends AuthorBaseUITest {
         assertTrue(Commons.isPanelSelectPresent(), "Panel Select button should be present");
         // open the panel selector and verify it's open
         Commons.openPanelSelect();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         PanelSelector panelSelector = new PanelSelector();
         assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
 
@@ -438,28 +431,14 @@ public class TabsIT extends AuthorBaseUITest {
     @Test
     @DisplayName("Test: Allowed components")
     public void testAllowedComponents() throws ClientException, InterruptedException, TimeoutException {
-        String teaserProxyPath = Commons.createProxyComponent(adminClient, Commons.rtTeaser_v1, Commons.proxyPath, null, null);
-        String policySuffix = "/tabs/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.clear();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("components",teaserProxyPath);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(adminClient, policySuffix, data , policyPath1);
-
-        // add a policy for tabs component
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(adminClient,"/tabs",data, policyAssignmentPath, 200, 201);
-
+        String teaserProxyPath = Commons.RT_TEASER_V1;
+        policyPath = createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf("/")), new HashMap<String, String>() {{
+            put("components", teaserProxyPath);
+        }});
 
         String testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        String compPath = Commons.addComponent(adminClient, proxyPath, testPage + Commons.relParentCompPath, "tabs", null);
+        String compPath = Commons.addComponentWithRetry(authorClient, proxyPath, testPage + Commons.relParentCompPath, "tabs");
 
         // open test page in page editor
         editorPage = new PageEditorPage(testPage);
@@ -467,7 +446,7 @@ public class TabsIT extends AuthorBaseUITest {
 
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
 
         //2.
@@ -479,7 +458,6 @@ public class TabsIT extends AuthorBaseUITest {
         editableToolbar.getInsertButton().click();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertTrue(Commons.isComponentPresentInInsertDialog(teaserProxyPath), "teaser component should be present in insert dialog");
-        Commons.deleteProxyComponent(adminClient, teaserProxyPath);
     }
 
     /**
@@ -564,4 +542,108 @@ public class TabsIT extends AuthorBaseUITest {
         assertTrue(tabItems.get(3).getText().contains("Tab 1.2"), "Fourth tab item should be Tab 1.2");
         assertTrue(tabItems.get(4).getText().contains("Tab 1.1.1"), "Fifth tab item should be Tab 1.1.1");
     }
+
+    @Test
+    @DisplayName("Test: Deep Link: clicking tabs items")
+    public void testDeepLink_clickingTabsItem() throws MalformedURLException {
+        Commons.SimplePage page = new Commons.SimplePage(deepLinkPagePath);
+        page.open();
+
+        // clicking a tabs item expands it and modifies the URL fragment
+        SelenideElement itemTitle = Selenide.$("#" + itemTitleId1);
+        itemTitle.click();
+        String fragment = Commons.getUrlFragment();
+        SelenideElement itemContent = Selenide.$("#" + itemContentId1);
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertEquals(itemTitleId1, fragment, "The URL fragment should be updated");
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: clicking links referencing tabs items")
+    public void testDeepLink_clickingLinksReferencingTabsItems() {
+        Commons.SimplePage page = new Commons.SimplePage(deepLinkPagePath);
+        page.open();
+        SelenideElement itemTitle1 = Selenide.$("#" + itemTitleId1);
+        SelenideElement itemContent1 = Selenide.$("#" + itemContentId1);
+        SelenideElement itemTitle1a = Selenide.$("#" + itemTitleId1a);
+        SelenideElement itemContent1a = Selenide.$("#" + itemContentId1a);
+        SelenideElement itemTitle2 = Selenide.$("#" + itemTitleId2);
+        SelenideElement itemContent2 = Selenide.$("#" + itemContentId2);
+        SelenideElement itemTitle3 = Selenide.$("#" + itemTitleId3);
+        SelenideElement itemContent3 = Selenide.$("#" + itemContentId3);
+
+        // make sure tabs items are not displayed before clicking the links
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent1));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle2));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent2));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle3));
+        assertFalse(Commons.isElementVisibleAndInViewport(itemContent3));
+
+        // clicking a link referencing a tabs item displays it and scrolls to it
+        Selenide.$("#link-1").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+
+        // clicking a link referencing the first tabs item displays it and scrolls to it
+        Selenide.$("#link-1a").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1a));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1a));
+
+        // clicking a link referencing a nested tabs item expands all intermediary items and scrolls to it
+        Commons.scrollToTop();
+        Selenide.$("#link-2").click();
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle2));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent2));
+
+        // clicking a link referencing a text element within a nested tabs item expands all intermediary items
+        // and scrolls to the ID
+        Commons.scrollToTop();
+        Selenide.$("#link-3").click();
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle3));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent3));
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: URL fragment referencing a tabs item")
+    public void testDeepLink_UrlFragmentReferencingTabsItem() {
+        String pagePath = deepLinkPagePath + "#" + itemTitleId1;
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
+        page.open();
+        SelenideElement itemTitle = Selenide.$("#" + itemTitleId1);
+        SelenideElement itemContent = Selenide.$("#" + itemContentId1);
+        // when the URL fragment references a tabs item, the tabs item is expanded and scrolled to
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: URL fragment referencing a nested tabs item")
+    public void testDeepLinkFromHash_nestedTabsItem() {
+        String pagePath = deepLinkPagePath + "#" + itemTitleId2;
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
+        page.open();
+        SelenideElement itemTitle = Selenide.$("#" + itemTitleId2);
+        SelenideElement itemContent = Selenide.$("#" + itemContentId2);
+        // when the URL fragment references a nested tabs item, all intermediary tabs items are expanded and
+        // the last item is scrolled to
+        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+    }
+
+    @Test
+    @DisplayName("Test: Deep Link: URL fragment referencing a text element within a nested tabs item")
+    public void testDeepLinkFromHash_IdInNestedTabsItem() {
+        String pagePath = deepLinkPagePath + "#" + itemContentId3;
+        Commons.SimplePage page = new Commons.SimplePage(pagePath);
+        page.open();
+        SelenideElement itemTitle = Selenide.$("#" + itemTitleId3);
+        SelenideElement itemContent = Selenide.$("#" + itemContentId3);
+        // when the URL fragment references an element ID that is part of a nested tabs item, all intermediary
+        // tabs items are expanded and the element ID is scrolled to
+        assertFalse(Commons.isElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+    }
+
 }

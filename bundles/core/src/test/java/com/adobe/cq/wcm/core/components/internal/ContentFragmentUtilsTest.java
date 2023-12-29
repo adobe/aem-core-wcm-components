@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.json.Json;
 import javax.json.JsonReader;
@@ -282,9 +283,8 @@ public class ContentFragmentUtilsTest {
     public void getComponentExport() {
         // GIVEN
         AemContext slingContext = CoreComponentTestContext.newAemContext();
-        slingContext.load().json(this.getClass().getResourceAsStream("foo.json"), "/foo");
-        MockSlingHttpServletRequest slingHttpServletRequest =
-                new MockSlingHttpServletRequest(slingContext.bundleContext());
+        slingContext.load().json(Objects.requireNonNull(this.getClass().getResourceAsStream("foo.json")), "/foo");
+        MockSlingHttpServletRequest slingHttpServletRequest = slingContext.request();
 
         ComponentExporter componentExporter = new TestComponentExporter();
 
@@ -295,8 +295,11 @@ public class ContentFragmentUtilsTest {
 
         // WHEN
         Map<String, ComponentExporter> exporterMap =
-                ContentFragmentUtils.getComponentExporters(slingContext.resourceResolver()
-                        .getResource("/foo").listChildren(), modelFactory, slingHttpServletRequest, null);
+                ContentFragmentUtils.getComponentExporters(
+                    Objects.requireNonNull(slingHttpServletRequest.getResourceResolver().getResource("/foo")).listChildren(),
+                    modelFactory,
+                    slingHttpServletRequest,
+                    null);
 
         // THEN
         Assertions.assertEquals(componentExporter, exporterMap.get("bar"));

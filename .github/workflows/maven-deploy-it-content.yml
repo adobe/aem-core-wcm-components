@@ -13,15 +13,15 @@ on:
     workflow_dispatch:
         inputs:
             source_branch:
-                description: 'Branch to pick it-content from'
+                description: 'Branch to pick it.ui.apps and it.ui.content from'
                 required: false
-                default: 'development'
+                default: 'main'
 jobs:
     build:
         runs-on: ubuntu-latest
         steps:
             # Checkout this project into a sub folder
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
               with:
                   ref:  ${{ github.event.inputs.source_branch }}
                   path: sub

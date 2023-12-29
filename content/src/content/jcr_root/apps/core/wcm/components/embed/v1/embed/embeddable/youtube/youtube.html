@@ -13,13 +13,15 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<iframe data-sly-use.youTube="com.adobe.cq.wcm.core.components.models.embeddable.YouTube"
-        data-sly-test="${!youtube.empty}"
-        data-cmp-data-layer="${youtube.data.json}"
-        width="${youTube.iFrameWidth || '100%' @ context='scriptString'}"
-        height="${youTube.iFrameHeight || 390 @ context='scriptString'}"
-        src="${youTube.iFrameSrc}"
-        frameborder="0"
-        allowfullscreen
-        allow="autoplay; fullscreen"
-        aria-label="${'YouTube Video' @ i18n}"></iframe>
+
+<sly data-sly-use.youTube="com.adobe.cq.wcm.core.components.models.embeddable.YouTube"
+     data-sly-use.fixedTemplate="youtubefixed.html"
+     data-sly-use.responsiveTemplate="youtuberesponsive.html">
+  <sly data-sly-test="${!youtube.empty}">
+    <sly data-sly-test="${!youtube.layout || youtube.layout!='responsive'}"
+         data-sly-call="${fixedTemplate.youtube @ youtube=youtube}"></sly>
+
+    <sly data-sly-test="${youtube.layout=='responsive'}"
+         data-sly-call="${responsiveTemplate.youtube @ youtube=youtube}"></sly>
+  </sly>
+</sly>

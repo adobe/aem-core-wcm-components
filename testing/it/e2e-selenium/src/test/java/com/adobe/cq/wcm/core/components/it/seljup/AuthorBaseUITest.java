@@ -19,36 +19,34 @@ package com.adobe.cq.wcm.core.components.it.seljup;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
-import com.adobe.cq.testing.selenium.junit.annotations.Author;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.NameValuePair;
 import org.apache.sling.testing.clients.ClientException;
-import org.codehaus.jackson.JsonNode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.UIAbstractTest;
-import com.adobe.cq.testing.selenium.pageobject.granite.LoginPage;
-import com.adobe.cq.testing.selenium.utils.DisableTour;
-import com.adobe.cq.testing.selenium.junit.extensions.TestContentExtension;
-import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-
-import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.UIAbstractTest;
+import com.adobe.cq.testing.selenium.junit.annotations.Author;
+import com.adobe.cq.testing.selenium.junit.extensions.TestContentExtension;
+import com.adobe.cq.testing.selenium.pageobject.granite.LoginPage;
+import com.adobe.cq.testing.selenium.utils.DisableTour;
+import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+
 import static com.adobe.cq.testing.selenium.Constants.GROUPID_CONTENT_AUTHORS;
-
-
 import static com.adobe.cq.testing.selenium.Constants.RUNMODE_AUTHOR;
 import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.setAffinityCookie;
 
@@ -73,7 +71,7 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
 
     @BeforeEach
     public void loginBeforeEach(@Author final CQClient adminAuthor, final TestContentBuilder testContentBuilder, final URI baseURI)
-        throws ClientException, InterruptedException, IOException {
+        throws ClientException, InterruptedException, IOException, TimeoutException {
         testContentBuilder.withUser(randomPassword, getUserGroupMembership());
         testContentBuilder.build();
 
@@ -100,35 +98,32 @@ public abstract class AuthorBaseUITest extends UIAbstractTest {
         return Arrays.asList(GROUPID_CONTENT_AUTHORS, "workflow-users");
     }
 
+    public String createPagePolicy(Map<String, String> policyProperties) throws ClientException {
+        return Commons.createPagePolicy(adminClient, defaultPageTemplate, label, policyProperties);
+    }
 
     public String createComponentPolicy(String componentPath, Map<String, String> properties) throws ClientException {
-        String policySuffix = componentPath +  "/new_policy";
-        HashMap<String, String> policyProperties = new HashMap<>();
-        policyProperties.put("jcr:title", "New Policy");
-        policyProperties.put("sling:resourceType", "wcm/core/components/policy/policy");
-        policyProperties.putAll(properties);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        String policyPath = Commons.createPolicy(adminClient, policySuffix, policyProperties, policyPath1);
+        return Commons.createComponentPolicy(adminClient, defaultPageTemplate, label, componentPath, properties);
+    }
 
-        // add a policy for component
-        String policyLocation = "core-component/components";
+    public String createComponentPolicy(String componentPath, List<NameValuePair> properties) throws ClientException {
+        return Commons.createComponentPolicy(adminClient, defaultPageTemplate, label, componentPath, properties);
+    }
+
+    public void deleteComponentPolicy(String componentPath, String policyPath) throws ClientException {
         String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content/root/responsivegrid/core-component/components";
-        HashMap<String, String> mappingProperties = new HashMap<>();
-        mappingProperties.put("cq:policy", policyLocation + policySuffix);
-        mappingProperties.put("sling:resourceType", "wcm/core/components/policies/mapping");
-        Commons.assignPolicy(adminClient, componentPath, mappingProperties, policyAssignmentPath, 200, 201);
-
-        return policyPath;
+        Commons.deletePolicy(adminClient, policyPath, policyAssignmentPath);
+        Commons.deletePolicyAssignment(adminClient, componentPath, policyAssignmentPath);
     }
 
 
     public void addPathtoComponentPolicy(String componenPathtoUpdate, String pathToAdd) throws ClientException {
         String resourcePath = StringUtils.replaceOnce(componenPathtoUpdate, "structure", "policies");
         JsonNode existingPolicyNodePath = authorClient.doGetJson(resourcePath, 1, 200);
-        String existingPolicy = configPath + "/settings/wcm/policies/" + existingPolicyNodePath.get("cq:policy").getValueAsText();
+        String existingPolicy = configPath + "/settings/wcm/policies/" + existingPolicyNodePath.get("cq:policy").asText();
         JsonNode policyNode = authorClient.doGetJson(existingPolicy, 1, 200);
         JSONObject policyNodeJson = new JSONObject(policyNode.toString());
-        JSONArray jsonArray =policyNodeJson.getJSONArray("components");
+        JSONArray jsonArray = policyNodeJson.getJSONArray("components");
         jsonArray.put(pathToAdd);
 
         adminClient.deletePath(existingPolicy, 200);

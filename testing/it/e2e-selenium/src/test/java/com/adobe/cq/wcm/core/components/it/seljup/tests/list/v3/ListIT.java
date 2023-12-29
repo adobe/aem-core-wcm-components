@@ -16,17 +16,18 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.list.v3;
 
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
+
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 
 @Tag("group4")
 public class ListIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2.ListIT {
 
     protected void setComponentResources() {
-        textRT = Commons.rtText_v2;
-        listRT = Commons.rtList_v3;
+        textRT = Commons.RT_TEXT_V2;
+        listRT = Commons.RT_LIST_V3;
     }
 
     @BeforeEach

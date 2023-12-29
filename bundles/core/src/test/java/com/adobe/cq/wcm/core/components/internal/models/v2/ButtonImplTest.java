@@ -32,6 +32,8 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 class ButtonImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ButtonImplTest {
 
     private static final String TEST_BASE = "/button/v2";
+    private static final String BUTTON_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/button-2";
+    private static final String BUTTON_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/button-3";
 
     @BeforeEach
     protected void setUp() {
@@ -44,10 +46,25 @@ class ButtonImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1
     @SuppressWarnings("deprecation")
     @Override
     protected void testGetLink() {
-        Button button = getButtonUnderTest();
+        Button button = getButtonUnderTest(BUTTON_1);
         assertEquals("https://www.adobe.com", button.getLink());
         assertValidLink(button.getButtonLink(), "https://www.adobe.com", "_blank");
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(testBase, "button1"));
+    }
+
+    @Test
+    protected void testGetLink_withOldLinkProp() {
+        Button button = getButtonUnderTest(BUTTON_2);
+        assertEquals("https://www.adobe.com", button.getLink());
+        assertValidLink(button.getButtonLink(), "https://www.adobe.com", "_blank");
+        Utils.testJSONExport(button, Utils.getTestExporterJSONPath(testBase, "button2"));
+    }
+
+    @Test
+    void testLinkWhichIsAlreadyEncoded() {
+        Button button = getButtonUnderTest(BUTTON_3);
+        assertEquals("https://www.adobe.com/content/dam/test/docs/pdfs/test/360/360%20Test%20Test%20Test%20123.pdf.coredownload.inline.pdf", button.getButtonLink().getHtmlAttributes().get("href"));
+        Utils.testJSONExport(button, Utils.getTestExporterJSONPath(testBase, "button3"));
     }
 
 }

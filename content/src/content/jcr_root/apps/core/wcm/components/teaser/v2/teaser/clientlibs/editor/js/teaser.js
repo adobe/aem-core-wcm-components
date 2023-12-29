@@ -22,6 +22,7 @@
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionFromPage"]';
     var descriptionTextfieldSelector = '.cq-RichText-editable[name="./jcr:description"]';
+    var titleTypeSelectElementSelector = "coral-select[name='./titleType']";
     var linkURLSelector = '[name="./linkURL"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var titleTuple;
@@ -36,6 +37,9 @@
         if (dialogContent) {
             var $descriptionTextfield = $(descriptionTextfieldSelector);
             if ($descriptionTextfield.length) {
+                if (!$descriptionTextfield[0].hasAttribute("aria-labelledby")) {
+                    associateDescriptionTextFieldWithLabel($descriptionTextfield[0]);
+                }
                 var rteInstance = $descriptionTextfield.data("rteinstance");
                 // wait for the description textfield rich text editor to signal start before initializing.
                 // Ensures that any state adjustments made here will not be overridden.
@@ -50,6 +54,7 @@
                 // init without description field
                 init(e, $dialog, $dialogContent, dialogContent);
             }
+            manageTitleTypeSelectDropdownFieldVisibility(dialogContent);
         }
     });
 
@@ -131,6 +136,35 @@
                     }
                 });
             }
+        }
+    }
+
+    function associateDescriptionTextFieldWithLabel(descriptionTextfieldElement) {
+        var richTextContainer = document.querySelector(".cq-RichText.richtext-container");
+        if (richTextContainer) {
+            var richTextContainerParent = richTextContainer.parentNode;
+            var descriptionLabel = richTextContainerParent.querySelector("label.coral-Form-fieldlabel");
+            if (descriptionLabel) {
+                descriptionTextfieldElement.setAttribute("aria-labelledby", descriptionLabel.id);
+            }
+        }
+    }
+
+    /**
+     * Hides the title type select dropdown field if there's only one allowed heading element defined in a policy
+     *
+     * @param {HTMLElement} dialogContent The dialog content
+     */
+    function manageTitleTypeSelectDropdownFieldVisibility(dialogContent) {
+        var titleTypeElement = dialogContent.querySelector(titleTypeSelectElementSelector);
+        if (titleTypeElement) {
+            Coral.commons.ready(titleTypeElement, function(element) {
+                var titleTypeElementToggleable = $(element.parentNode).adaptTo("foundation-toggleable");
+                var itemCount = element.items.getAll().length;
+                if (itemCount < 2) {
+                    titleTypeElementToggleable.hide();
+                }
+            });
         }
     }
 })(jQuery, Granite);

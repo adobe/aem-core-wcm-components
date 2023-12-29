@@ -65,6 +65,7 @@ public class PageImageThumbnail {
     private String componentPath;
     private String currentPagePath;
     private String configPath;
+    private String fileReference;
 
     @PostConstruct
     protected void initModel() {
@@ -118,7 +119,7 @@ public class PageImageThumbnail {
                     link = imageModel.getImageLink();
                 }
             }
-            if (link != null) {
+            if (link != null && (link.getReference() instanceof Page)) {
                 targetPage = (Page) link.getReference();
             } else {
                 targetPage = currentPage;
@@ -144,6 +145,7 @@ public class PageImageThumbnail {
 
         this.alt = imageModel.getAlt();
         this.src = imageModel.getSrc();
+        this.fileReference = imageModel.getFileReference();
     }
 
 
@@ -194,4 +196,12 @@ public class PageImageThumbnail {
         return currentPagePath;
     }
 
+    /**
+     * Returns the fileReference of the featured image.
+     *
+     * @return the path of the fileReference in the DAM
+     */
+    public String getFileReference() {
+        return fileReference;
+    }
 }

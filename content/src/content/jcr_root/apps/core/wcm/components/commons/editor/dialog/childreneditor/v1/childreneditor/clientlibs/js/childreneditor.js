@@ -21,14 +21,15 @@
     var PN_PANEL_TITLE = "cq:panelTitle";
     var PN_RESOURCE_TYPE = "sling:resourceType";
     var PN_COPY_FROM = "./@CopyFrom";
-    var POST_SUFFIX = ".container.html";
 
     var selectors = {
         self: "[data-cmp-is='childrenEditor']",
+        order: "[data-cmp-hook-childreneditor='order']",
+        delete: "[data-cmp-hook-childreneditor='delete']",
         add: "[data-cmp-hook-childreneditor='add']",
         insertComponentDialog: {
             self: "coral-dialog.InsertComponentDialog",
-            selectList: "coral-selectlist"
+            selectList: ".InsertComponentDialog-list"
         },
         item: {
             icon: "[data-cmp-hook-childreneditor='itemIcon']",
@@ -71,7 +72,7 @@
                             var component = item.querySelector(selectors.item.icon + " [title]").getAttribute("title");
                             var title = item.querySelector(selectors.item.input);
                             var name = (title && title.name) ? title.name.match(".?/?(.+)/.*")[1] : "";
-                            var description = component + ((title && title.value) ? ": " + title.value : "");
+                            var description = Granite.I18n.get(component) + ((title && title.value) ? ": " + Granite.I18n.get(title.value) : "");
                             items.push({
                                 name: name,
                                 description: description
@@ -96,19 +97,8 @@
              * @returns {Promise} The promise for completion handling
              */
             update: function() {
-                var url = this._path + POST_SUFFIX;
-
                 this._processChildren();
-
-                return $.ajax({
-                    type: "POST",
-                    url: url,
-                    async: false,
-                    data: {
-                        "delete": this._deletedChildren,
-                        "order": this._orderedChildren
-                    }
-                });
+                return $.Deferred().resolve();
             },
 
             /**
@@ -119,6 +109,8 @@
             _init: function() {
                 this._elements.self = this._config.el;
                 this._elements.add = this._elements.self.querySelectorAll(selectors.add)[0];
+                this._elements.order = this._elements.self.querySelectorAll(selectors.order)[0];
+                this._elements.delete = this._elements.self.querySelectorAll(selectors.delete)[0];
                 this._path = this._elements.self.dataset["containerPath"];
 
                 // store a reference to the Children Editor object
@@ -171,6 +163,19 @@
             _bindEvents: function() {
                 var that = this;
 
+                function getSelectListChangeEvent(onCloud) {
+                    return (onCloud ? "click" : "coral-selectlist:change");
+                }
+
+                function getSelectListSelector(onCloud) {
+                    return (onCloud ? "coral-list-item" : null);
+                }
+
+                function getSelectListItems(event, onCloud) {
+                    return (onCloud ? ns.components.find(event.target.closest("coral-list-item").value)
+                        : ns.components.find(event.detail.selection.value));
+                }
+
                 if (ns) {
                     Coral.commons.ready(that._elements.add, function() {
                         that._elements.add.on("click", function() {
@@ -185,18 +190,21 @@
 
                                 var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
                                 var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
+                                var onCloud = selectList.toString() === "Coral.List";
 
                                 // next frame to ensure we remove the default event handler
                                 Coral.commons.nextFrame(function() {
-                                    selectList.off("coral-selectlist:change");
-                                    selectList.on("coral-selectlist:change" + NS, function(event) {
+
+                                    selectList.off(getSelectListChangeEvent(onCloud));
+                                    selectList.on(getSelectListChangeEvent(onCloud) + NS, getSelectListSelector(onCloud), function(event) {
                                         var resourceType = "";
                                         var componentTitle = "";
                                         var templatePath = "";
-
+                                        var components = "";
                                         insertComponentDialog.hide();
 
-                                        var components = ns.components.find(event.detail.selection.value);
+                                        components = getSelectListItems(event, onCloud);
+
                                         if (components.length > 0) {
                                             resourceType = components[0].getResourceType();
                                             componentTitle = components[0].getTitle();
@@ -205,7 +213,6 @@
                                             var item = that._elements.self.items.add(new Coral.Multifield.Item());
 
                                             // next frame to ensure the item template is rendered in the DOM
-
                                             Coral.commons.nextFrame(function() {
                                                 var name = NN_PREFIX + Date.now();
                                                 item.dataset["name"] = name;
@@ -234,7 +241,7 @@
                                 });
                                 // unbind events on dialog close
                                 channel.one("coral-overlay:beforeclose", function() {
-                                    selectList.off("coral-selectlist:change" + NS);
+                                    selectList.off(getSelectListChangeEvent(onCloud) + NS);
                                 });
                             }
                         });
@@ -244,19 +251,21 @@
                     that._elements.add.parentNode.removeChild(that._elements.add);
                 }
 
-                Coral.commons.ready(that._elements.self, function() {
+                Coral.commons.ready(that._elements.self, function(item) {
+                    // coral-collection:remove event is triggered either when the element is removed
+                    // or when the element is moved/reordered (in that case we'll temporarily remove it
+                    // and it will be added back by the subsequent coral-collection:add event)
                     that._elements.self.on("coral-collection:remove", function(event) {
-                        var name = event.detail.item.dataset["name"];
-                        that._deletedChildren.push(name);
+                        const elementToDelete = event.detail.item.dataset["name"];
+                        that._deletedChildren.push(elementToDelete);
                     });
 
+                    // coral-collection:add event is triggered either when the new element is added
+                    // or when the element is moved/reordered (in that case we'll add back the temporarily
+                    // removed element, hence we have to remove that element from the deleted list)
                     that._elements.self.on("coral-collection:add", function(event) {
-                        var name = event.detail.item.dataset["name"];
-                        var index = that._deletedChildren.indexOf(name);
-
-                        if (index > -1) {
-                            that._deletedChildren.splice(index, 1);
-                        }
+                        const elementToAdd = event.detail.item.dataset["name"];
+                        that._deletedChildren = that._deletedChildren.filter(elementToDelete => elementToDelete !== elementToAdd);
                     });
                 });
             },
@@ -274,6 +283,8 @@
                     var name = items[i].dataset["name"];
                     this._orderedChildren.push(name);
                 }
+                this._elements.order.value = this._orderedChildren.join();
+                this._elements.delete.value = this._deletedChildren.join();
             }
         };
     })();
@@ -283,9 +294,12 @@
      */
     channel.on("foundation-contentloaded", function(event) {
         $(event.target).find(selectors.self).each(function() {
-            new ChildrenEditor({
-                el: this
-            });
+            // prevent multiple initialization
+            if ($(this).data("childrenEditor") === undefined) {
+                new ChildrenEditor({
+                    el: this
+                });
+            }
         });
     });
 
@@ -299,13 +313,9 @@
             var el = form.querySelectorAll(selectors.self)[0];
             var childrenEditor = $(el).data("childrenEditor");
             if (childrenEditor) {
-                return {
-                    post: function() {
-                        return childrenEditor.update();
-                    }
-                };
+                return childrenEditor.update();
             } else {
-                return {};
+                return $.Deferred().resolve();
             }
         }
     });

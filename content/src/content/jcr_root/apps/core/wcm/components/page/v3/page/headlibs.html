@@ -20,12 +20,12 @@
         'cq.authoring.page',
         'cq.wcm.foundation-main',
         'cq.shared'
-        ],
-        async=true}"></sly>
+        ]}"></sly>
     <sly data-sly-include="/libs/cq/cloudserviceconfigs/components/servicelibs/servicelibs.jsp"></sly>
     <sly data-sly-test="${hasCloudconfigSupport}" data-sly-resource="${'cloudconfig-header' @ resourceType='cq/cloudconfig/components/scripttags/header'}"></sly>
-    <sly data-sly-test="${clientLibCategoriesJsHead}" data-sly-call="${clientlib.js @ categories=clientLibCategoriesJsHead, async=true}"></sly>
+    <sly data-sly-test="${clientLibCategoriesJsHead}" data-sly-call="${clientlib.js @ categories=clientLibCategoriesJsHead, async=page.isClientlibsAsync}"></sly>
     <sly data-sly-test="${clientLibCategories}" data-sly-call="${clientlib.css @ categories=clientLibCategories}"></sly>
     <link data-sly-test="${staticDesignPath}" href="${staticDesignPath}" rel="stylesheet" type="text/css" />
-    <sly data-sly-test="${page.data}" data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.datalayer.v1', async=true}"></sly>
+    <sly data-sly-test="${page.data}" data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.datalayer.v2', async=true}"/>
+    <sly data-sly-test="${page.data && page.dataLayerClientlibIncluded}" data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.datalayer.acdl', async=true}"/>
 </template>

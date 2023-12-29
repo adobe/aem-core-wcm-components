@@ -65,7 +65,7 @@ public class ModelElementsDataSourceServletTest {
     }
 
     @Test
-    public void verifyDataSourceWhenOrderByIsGiven() {
+    public void verifyDataSourceWhenOrderByIsGivenV1() {
         // GIVEN
         InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
         context.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
@@ -86,7 +86,34 @@ public class ModelElementsDataSourceServletTest {
                 hasItem(resourceWithPropertiesTextAndValue("Created", "jcr:created")),
                 hasItem(resourceWithPropertiesTextAndValue("Last Modified", "jcr:content/jcr:lastModified")),
                 hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "jcr:content/data/master/textField")),
-                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "jcr:content/data/master/multiTextField"))));
+                hasItem(resourceWithPropertiesTextAndValue("Multi Text Field", "jcr:content/data/master/multiTextField"))));
+    }
+
+    @Test
+    public void verifyDataSourceWhenOrderByIsGivenV2() {
+        // GIVEN
+        InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
+        context.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
+        Resource mockResource = Mockito.mock(Resource.class);
+        when(mockResource.isResourceType(ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY_V2)).thenReturn(true);
+        context.request().setResource(mockResource);
+        context.request().setParameterMap(ImmutableMap.of(
+                PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
+
+        // WHEN
+        modelElementsDataSourceServlet.doGet(context.request(), context.response());
+
+        // THEN
+        SimpleDataSource simpleDataSource = (SimpleDataSource) context.request().getAttribute(DataSource.class.getName());
+        List<Resource> resourceList = IteratorUtils.toList(simpleDataSource.iterator());
+        assertThat(resourceList, not(empty()));
+        assertThat(resourceList, allOf(
+                hasItem(resourceWithPropertiesTextAndValue("Created", "jcr:created")),
+                hasItem(resourceWithPropertiesTextAndValue("Last Modified", "jcr:content/jcr:lastModified")),
+                hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "jcr:content/data/master/textField")),
+                hasItem(resourceWithPropertiesTextAndValue("Multi Text Field", "jcr:content/data/master/multiTextField")),
+                hasItem(resourceWithPropertiesTextAndValue("dateAndTimeFieldLabel", "jcr:content/data/master/dateAndTimeField")),
+                hasItem(resourceWithPropertiesTextAndValue("numberFieldLabel", "jcr:content/data/master/numberField"))));
     }
 
     @Test
@@ -108,7 +135,7 @@ public class ModelElementsDataSourceServletTest {
         assertThat(resourceList, allOf(
                 hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "textField")),
                 // Multi text field doesn't have the 'fieldLabel' property, instead label is stored as 'cfm-element':
-                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "multiTextField")),
+                hasItem(resourceWithPropertiesTextAndValue("Multi Text Field", "multiTextField")),
                 hasItem(resourceWithPropertiesTextAndValue("numberFieldLabel", "numberField")),
                 // Boolean field is a checkbox and therefore doesn't have a 'fieldLabel', instead there is a 'text' property
                 hasItem(resourceWithPropertiesTextAndValue("booleanField", "booleanField")),

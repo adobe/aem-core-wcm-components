@@ -16,14 +16,13 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
-import java.util.Optional;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
@@ -32,9 +31,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Resource-backed list item implementation.
  */
+@Deprecated
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
-    protected Optional<Link> link;
+    protected Link link;
     /**
      * The title.
      */
@@ -58,10 +58,13 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
     /**
      * Construct a resource-backed list item.
      *
+     * @param linkManager The link manager.
      * @param resource The resource.
      * @param parentId The ID of the containing component.
+     * @param component The component.
      */
-    public ResourceListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Resource resource,
+    @Deprecated
+    public ResourceListItemImpl(@NotNull LinkManager linkManager, @NotNull Resource resource,
                                 String parentId, Component component) {
         super(parentId, resource, component);
         ValueMap valueMap = resource.getValueMap();
@@ -70,21 +73,27 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
         lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
         path = resource.getPath();
         name = resource.getName();
-        link = linkHandler.getLink(resource);
+        link = linkManager.get(resource).build();
     }
 
+    @NotNull
+    @JsonIgnore
+    @Deprecated
+    public Resource getResource() {
+        return resource;
+    }
 
     @Override
     @NotNull
     @JsonIgnore
     public Link getLink() {
-        return link.orElse(null);
+        return link;
     }
 
     @Override
     @JsonIgnore
     public String getURL() {
-        return link.map(Link::getURL).orElse(null);
+        return link.getURL();
     }
 
     @Override

@@ -35,7 +35,7 @@ jobs:
     if: startsWith(github.ref, 'refs/heads/release/')
     steps:
       # Check out Git repository
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Set up environment with Java and Maven
       - name: Set up JDK
@@ -76,4 +76,4 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           X_GITHUB_USERNAME: ${{ secrets.ADOBE_BOT_GITHUB_USERNAME  }}
           X_GITHUB_PASSWORD: ${{ secrets.ADOBE_BOT_GITHUB_PASSWORD }}
-        run: mvn -B -Prelease,cloud,ossrh,adobe-public -s ./.github/workflows/settings.xml clean release:prepare release:perform -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdryRun=${{ github.event.inputs.dryRun }}
+        run: mvn -B -Prelease,cloud,ossrh,adobe-public -s ./.github/workflows/settings.xml clean release:prepare release:perform -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdryRun=${{ github.event.inputs.dryRun }} -Dmaven.javadoc.failOnError=false

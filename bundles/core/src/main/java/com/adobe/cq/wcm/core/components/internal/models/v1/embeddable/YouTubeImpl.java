@@ -84,6 +84,14 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     @Nullable
     private String iFrameHeight;
 
+    @ValueMapValue(name = PN_ASPECT_RATIO)
+    @Nullable
+    private String iFrameAspectRatio;
+
+    @ValueMapValue(name = PN_LAYOUT)
+    @Nullable
+    private String layout;
+
     @ValueMapValue(name = PN_MUTE)
     @Nullable
     private Boolean isMute;
@@ -104,6 +112,9 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     @Nullable
     private Boolean isPlaysInline;
 
+    @ValueMapValue(name = PN_ACCESSIBILITY_LABEL)
+    private String accessibilityLabel;
+
     @ScriptVariable(injectionStrategy = InjectionStrategy.REQUIRED)
     private Page currentPage;
 
@@ -112,6 +123,11 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
 
     @Self
     private SlingHttpServletRequest request;
+
+    @Override
+    public String getAccessibilityLabel() {
+        return StringUtils.defaultIfEmpty(this.accessibilityLabel, YouTube.super.getAccessibilityLabel());
+    }
 
     @Override
     public boolean isEmpty() {
@@ -126,6 +142,16 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     @Override
     public @Nullable String getIFrameHeight() {
         return iFrameHeight;
+    }
+
+    @Override
+    public @Nullable String getIFrameAspectRatio() {
+        return iFrameAspectRatio;
+    }
+
+    @Override
+    public @Nullable String getLayout() {
+        return layout;
     }
 
     private static @Nullable Resource getWrappedResource(Resource resource) {

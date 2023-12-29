@@ -24,17 +24,19 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_FORMTEXT_V2;
+
 @Tag("group1")
 public class FormTextIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v1.FormTextIT {
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         formTextTests = new FormTextTests();
-        formTextTests.setup(adminClient, Commons.rtFormText_v2, rootPage, defaultPageTemplate, new FormText());
+        formTextTests.setup(authorClient, RT_FORMTEXT_V2, rootPage, defaultPageTemplate, new FormText());
     }
 
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
-        formTextTests.cleanup(adminClient);
+        formTextTests.cleanup(authorClient);
     }
 
 }

@@ -26,7 +26,7 @@ The following configuration properties are used and exposed on the embed compone
 
 1. `./youtubeMuteEnabled` - enables the ability of content authors to configure the [YouTube mute parameter][yt-parameters].
 1. `./youtubeMuteDefaultValue` - the default value of the [YouTube mute parameter][yt-parameters].
-1. `./youtubeAutoPlayEnabled` - enables the ability of content authors to configure the [YouTube Autoplay parameter][yt-parameters]. 
+1. `./youtubeAutoPlayEnabled` - enables the ability of content authors to configure the [YouTube Autoplay parameter][yt-parameters].
 1. `./youtubeAutoPlayDefaultValue` - the default value of the [YouTube Autoplay parameter][yt-parameters]. Be aware that modern browsers restrict the possibilities for autoplay. Further information: [Chrome Autoplay Policy](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes), [Firefox Autoplay Policy](https://support.mozilla.org/en-US/kb/block-autoplay), [MS Edge Autoplay Policy](https://docs.microsoft.com/en-us/microsoft-edge/dev-guide/browser-features/autoplay-policies). In general it is much more likely that autoplay works if combined with `mute`.
 1. `./youtubeLoopEnabled` - enables the ability of content authors to configure the [YouTube loop parameter][yt-parameters].
 1. `./youtubeLoopDefaultValue` - the default value of the [YouTube loop parameter][yt-parameters].
@@ -40,8 +40,10 @@ The following configuration properties are used and exposed on the embed compone
 The following JCR properties are used:
 
 1. `./youtubeVideoId` - defines the YouTube video ID.
+1. `./accessibilityLabel` - defines the `aria-label` of the YouTube video.
 1. `./youtubeWidth` - defines the YouTube video player width.
 1. `./youtubeHeight` - defines the YouTube video player height.
+1. `./youtubeAspectRatio` - defines the YouTube video player aspect ratio.
 1. `./youtubeMute` - the value of the [YouTube mute parameter][yt-parameters].
 1. `./youtubeAutoPlay` - the value of the [YouTube autoplay parameter][yt-parameters]. Be aware that modern browsers restrict the possibilities for autoplay. Further information: [Chrome Autoplay Policy](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes), [Firefox Autoplay Policy](https://support.mozilla.org/en-US/kb/block-autoplay), [MS Edge Autoplay Policy](https://docs.microsoft.com/en-us/microsoft-edge/dev-guide/browser-features/autoplay-policies). In general it is much more likely that autoplay works if combined with `mute`.
 1. `./youtubeLoop` - the value of the [YouTube loop parameter][yt-parameters].

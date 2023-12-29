@@ -22,6 +22,8 @@
     var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     var LAZY_THRESHOLD_DEFAULT = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+    var SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY = "width={width}";
+    var SRC_URI_TEMPLATE_DPR_VAR = "{dpr}";
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
@@ -124,76 +126,29 @@
 
     var devicePixelRatio = window.devicePixelRatio || 1;
 
-    function readData(element) {
-        var data = element.dataset;
-        var options = [];
-        var capitalized = IS;
-        capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
-        var reserved = ["is", "hook" + capitalized];
-
-        for (var key in data) {
-            if (Object.prototype.hasOwnProperty.call(data, key)) {
-                var value = data[key];
-
-                if (key.indexOf(NS) === 0) {
-                    key = key.slice(NS.length);
-                    key = key.charAt(0).toLowerCase() + key.substring(1);
-
-                    if (reserved.indexOf(key) === -1) {
-                        options[key] = value;
-                    }
-                }
-            }
-        }
-
-        return options;
-    }
-
     function Image(config) {
         var that = this;
 
         var smartCrops = {};
 
+        var useAssetDelivery = false;
+        var srcUriTemplateWidthVar = SRC_URI_TEMPLATE_WIDTH_VAR;
+
         function init(config) {
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
 
-            setupProperties(config.options);
+            // check if asset delivery is used
+            if (config.options.src && config.options.src.indexOf(SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY) >= 0) {
+                useAssetDelivery = true;
+                srcUriTemplateWidthVar = SRC_URI_TEMPLATE_WIDTH_VAR_ASSET_DELIVERY;
+            }
+
+            that._properties = CMP.utils.setupProperties(config.options, properties);
             cacheElements(config.element);
             // check image is DM asset; if true try to make req=set
             if (config.options.src && Object.prototype.hasOwnProperty.call(config.options, "dmimage") && (config.options["smartcroprendition"] === "SmartCrop:Auto")) {
-                var request = new XMLHttpRequest();
-                var url = decodeURIComponent(config.options.src).split(SRC_URI_TEMPLATE_WIDTH_VAR)[0] + "?req=set,json";
-
-
-                request.open("GET", url, false);
-                request.onload = function() {
-                    if (request.status >= 200 && request.status < 400) {
-                        // success status
-                        var responseText = request.responseText;
-                        var rePayload = new RegExp(/^(?:\/\*jsonp\*\/)?\s*([^()]+)\(([\s\S]+),\s*"[0-9]*"\);?$/gmi);
-                        var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
-                        var resPayload = rePayload.exec(responseText);
-                        var payload;
-                        if (resPayload) {
-                            var payloadStr = resPayload[2];
-                            if (rePayloadJSON.test(payloadStr)) {
-                                payload = JSON.parse(payloadStr);
-                            }
-
-                        }
-                        // check "relation" - only in case of smartcrop preset
-                        if (payload && payload.set.relation && payload.set.relation.length > 0) {
-                            for (var i = 0; i < payload.set.relation.length; i++) {
-                                smartCrops[parseInt(payload.set.relation[i].userdata.SmartCropWidth)] =
-                                    ":" + payload.set.relation[i].userdata.SmartCropDef;
-                            }
-                        }
-                    } else {
-                        // error status
-                    }
-                };
-                request.send();
+                smartCrops = CMP.image.dynamicMedia.getAutoSmartCrops(config.options.src);
             }
 
             if (!that._elements.noscript) {
@@ -218,6 +173,16 @@
             });
 
             that._elements.image.addEventListener("cmp-image-redraw", that.update);
+
+            that._interSectionObserver = new IntersectionObserver(function(entries, interSectionObserver) {
+                entries.forEach(function(entry) {
+                    if (entry.intersectionRatio > 0) {
+                        that.update();
+                    }
+                });
+            });
+            that._interSectionObserver.observe(that._elements.self);
+
             that.update();
         }
 
@@ -225,19 +190,24 @@
             var hasWidths = (that._properties.widths && that._properties.widths.length > 0) || Object.keys(smartCrops).length > 0;
             var replacement;
             if (Object.keys(smartCrops).length > 0) {
-                var optimalWidth = getOptimalWidth(Object.keys(smartCrops));
+                var optimalWidth = getOptimalWidth(Object.keys(smartCrops), false);
                 replacement = smartCrops[optimalWidth];
             } else {
-                replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths) : "";
+                replacement = hasWidths ? (that._properties.dmimage ? "" : ".") + getOptimalWidth(that._properties.widths, true) : "";
             }
-            var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
+            if (useAssetDelivery) {
+                replacement = replacement !== "" ? ("width=" + replacement.substring(1)) : "";
+            }
+            var url = that._properties.src.replace(srcUriTemplateWidthVar, replacement);
+            url = url.replace(SRC_URI_TEMPLATE_DPR_VAR, devicePixelRatio);
+
             var imgSrcAttribute = that._elements.image.getAttribute("src");
 
             if (url !== imgSrcAttribute) {
                 if (imgSrcAttribute === null || imgSrcAttribute === EMPTY_PIXEL) {
                     that._elements.image.setAttribute("src", url);
                 } else {
-                    var urlTemplateParts = that._properties.src.split(SRC_URI_TEMPLATE_WIDTH_VAR);
+                    var urlTemplateParts = that._properties.src.split(srcUriTemplateWidthVar);
                     // check if image src was dynamically swapped meanwhile (e.g. by Target)
                     var isImageRefSame = imgSrcAttribute.startsWith(urlTemplateParts[0]);
                     if (isImageRefSame && urlTemplateParts.length > 1) {
@@ -254,16 +224,19 @@
             if (that._lazyLoaderShowing) {
                 that._elements.image.addEventListener("load", removeLazyLoader);
             }
+            that._interSectionObserver.unobserve(that._elements.self);
         }
 
-        function getOptimalWidth(widths) {
+        function getOptimalWidth(widths, useDevicePixelRatio) {
             var container = that._elements.self;
             var containerWidth = container.clientWidth;
             while (containerWidth === 0 && container.parentNode) {
                 container = container.parentNode;
                 containerWidth = container.clientWidth;
             }
-            var optimalWidth = containerWidth * devicePixelRatio;
+
+            var dpr = useDevicePixelRatio ? devicePixelRatio : 1;
+            var optimalWidth = containerWidth * dpr;
             var len = widths.length;
             var key = 0;
 
@@ -386,25 +359,6 @@
             }
         }
 
-        function setupProperties(options) {
-            that._properties = {};
-
-            for (var key in properties) {
-                if (Object.prototype.hasOwnProperty.call(properties, key)) {
-                    var property = properties[key];
-                    if (options && options[key] != null) {
-                        if (property && typeof property.transform === "function") {
-                            that._properties[key] = property.transform(options[key]);
-                        } else {
-                            that._properties[key] = options[key];
-                        }
-                    } else {
-                        that._properties[key] = properties[key]["default"];
-                    }
-                }
-            }
-        }
-
         function onWindowResize() {
             that.update();
             resizeAreas();
@@ -432,7 +386,7 @@
     function onDocumentReady() {
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
-            new Image({ element: elements[i], options: readData(elements[i]) });
+            new Image({ element: elements[i], options: CMP.utils.readData(elements[i], IS) });
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -446,7 +400,7 @@
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
                             elementsArray.forEach(function(element) {
-                                new Image({ element: element, options: readData(element) });
+                                new Image({ element: element, options: CMP.utils.readData(element, IS) });
                             });
                         }
                     });
@@ -461,12 +415,11 @@
         });
     }
 
-    if (document.readyState !== "loading") {
-        onDocumentReady();
-    } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady);
-    }
+    var documentReady = document.readyState !== "loading" ? Promise.resolve() : new Promise(function(resolve) {
+        document.addEventListener("DOMContentLoaded", resolve);
+    });
 
+    Promise.all([documentReady]).then(onDocumentReady);
     /*
         on drag & drop of the component into a parsys, noscript's content will be escaped multiple times by the editor which creates
         the DOM for editing; the HTML parser cannot be used here due to the multiple escaping

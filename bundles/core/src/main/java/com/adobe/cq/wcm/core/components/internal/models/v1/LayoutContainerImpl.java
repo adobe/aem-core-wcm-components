@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,15 +23,16 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
+import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 
 /**
  * Layout container model implementation.
@@ -42,12 +44,6 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
      * The resource type.
      */
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/container/v1/container";
-
-    /**
-     * The current resource.
-     */
-    @ScriptVariable
-    private Resource resource;
 
     /**
      * The layout type.
@@ -69,6 +65,16 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     private String roleAttribute;
 
     /**
+     * Map of the child items to be exported wherein the key is the child name, and the value is the child model.
+     */
+    private LinkedHashMap<String, ComponentExporter> itemModels;
+
+    /**
+     * List of items in this container.
+     */
+    private List<ContainerItem> items;
+
+    /**
      * Initialize the model.
      */
     @PostConstruct
@@ -86,10 +92,35 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
 
     @Override
     @NotNull
-    protected List<ResourceListItemImpl> readItems() {
+    @Deprecated
+    protected final List<ResourceListItemImpl> readItems() {
         return getChildren().stream()
-            .map(res -> new ResourceListItemImpl(linkHandler, res, getId(), component))
+            .map(res -> new ResourceListItemImpl(linkManager, res.getResource(), getId(), component))
             .collect(Collectors.toList());
+    }
+
+    @NotNull
+    @Override
+    public final List<ContainerItem> getChildren() {
+        if (this.items == null) {
+            this.items = ComponentUtils.getChildComponents(this.resource, this.request).stream()
+                .map(ContainerItemImpl::new)
+                .collect(Collectors.toList());
+        }
+        return this.items;
+    }
+
+    @Override
+    @NotNull
+    public final LinkedHashMap<String, ? extends ComponentExporter> getExportedItems() {
+        if (this.itemModels == null) {
+            this.itemModels = ComponentUtils.getComponentModels(this.slingModelFilter,
+                this.modelFactory,
+                this.getChildren().stream().map(ContainerItem::getResource).collect(Collectors.toList()),
+                this.request,
+                ComponentExporter.class);
+        }
+        return this.itemModels;
     }
 
     @Override

@@ -17,6 +17,9 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Objects;
 
+import com.adobe.cq.ui.wcm.commons.config.NextGenDynamicMediaConfig;
+import com.adobe.cq.wcm.core.components.models.Component;
+import com.adobe.cq.wcm.core.components.testing.MockNextGenDynamicMediaConfig;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,17 +37,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(AemContextExtension.class)
 public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImplTest {
 
     private static final String TEST_BASE = "/teaser/v2";
     private static final String TEASER_25 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-25";
+    private static final String TEASER_26 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-26";
 
     @BeforeEach
     protected void setUp() {
         testBase = TEST_BASE;
         internalSetup();
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        context.registerInjectActivateService(config);
     }
 
     @Test
@@ -112,6 +121,15 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser20"));
     }
 
+    /**
+     * Asserts that the ID property on the image resource is set to the Teaser ID + `-image`.
+     */
+    @Test
+    protected void testTeaserImageID() {
+        Teaser teaser = getTeaserUnderTest(TEASER_21);
+        assertEquals(teaser.getId() + "-image", teaser.getImageResource().getValueMap().get(Component.PN_ID, String.class));
+    }
+
     @Test
     protected void testImageFromPage_withoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_21);
@@ -173,5 +191,18 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     protected void testTeaserWithExternalLinkFromAction() {
         Teaser teaser = getTeaserUnderTest(TEASER_7);
         assertEquals("http://www.adobe.com", teaser.getActions().get(0).getURL());
+    }
+
+    @Test
+    protected void testTeaserWithNgdmImage() {
+        Teaser teaser = getTeaserUnderTest(TEASER_26);
+        if (teaser.getImageResource() != null) {
+            // let's verify the ValueMap wrapping here
+            testImageResourceValueMap(teaser.getImageResource().getValueMap());
+            testImageResourceValueMap(Objects.requireNonNull(teaser.getImageResource().adaptTo(ValueMap.class)));
+            assertEquals(TEASER_26, teaser.getImageResource().getPath());
+        }
+        assertEquals("Teasers Test", teaser.getTitle());
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser26"));
     }
 }

@@ -16,13 +16,12 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
-import javax.annotation.Nonnull;
+
 import javax.annotation.PostConstruct;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 
-import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,22 +39,23 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
 import com.adobe.cq.wcm.core.components.models.Download;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Download.class, ComponentExporter.class},
@@ -73,7 +73,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
     private SlingHttpServletRequest request;
 
     @Self
-    private LinkHandler linkHandler;
+    private LinkManager linkManager;
 
     @ScriptVariable
     private Resource resource;
@@ -92,7 +92,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
     @SlingObject
     private ResourceResolver resourceResolver;
 
-    private String url;
+    private Link link;
 
     private boolean titleFromAsset = false;
 
@@ -171,11 +171,8 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
                     if (calendar != null) {
                         lastModified = calendar.getTimeInMillis();
                     }
-                    if (StringUtils.isNotEmpty(format)) {
-                        extension = mimeTypeService.getExtension(format);
-                    }
 
-                    url = linkHandler.getLink(getDownloadUrl(file) + "/" + filename, null).map(Link::getURL).orElse(null);
+                    link = linkManager.get(getDownloadUrl(file) + "/" + filename).build();
                     size = FileUtils.byteCountToDisplaySize(getFileSize(fileContent));
                 }
             }
@@ -208,7 +205,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
                         extension = FilenameUtils.getExtension(filename);
                     }
 
-                    url = linkHandler.getLink(getDownloadUrl(downloadResource), null).map(Link::getURL).orElse(null);
+                    link = linkManager.get(getDownloadUrl(downloadResource)).build();
 
                     if (titleFromAsset) {
                         title = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);
@@ -234,7 +231,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
         }
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
@@ -242,7 +239,7 @@ public class DownloadImpl extends AbstractComponentImpl implements Download {
 
     @Override
     public String getUrl() {
-        return url;
+        return (link != null) ? link.getURL() : null;
     }
 
     @Override

@@ -120,62 +120,70 @@
                 that._elements["button"] = Array.isArray(that._elements["button"]) ? that._elements["button"] : [that._elements["button"]];
                 that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
 
-                // Expand the item based on deep-link-id if it matches with any existing accordion item id
-                if (containerUtils) {
-                    var deepLinkItem = containerUtils.getDeepLinkItem(that, "item");
-                    if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
-                        setItemExpanded(deepLinkItem, true);
-                    }
-                }
-
                 if (that._properties.singleExpansion) {
-                    // No deep linking
-                    if (!deepLinkItem) {
-                        var expandedItems = getExpandedItems();
-                        // no expanded item annotated, force the first item to display.
-                        if (expandedItems.length === 0) {
-                            toggle(0);
-                        }
-                        // multiple expanded items annotated, display the last item open.
-                        if (expandedItems.length > 1) {
-                            toggle(expandedItems.length - 1);
-                        }
-                    } else {
-                        // Deep link case
-                        // Collapse the items other than which is deep linked
-                        for (var j = 0; j < that._elements["item"].length; j++) {
-                            if (that._elements["item"][j].id !== deepLinkItem.id &&
-                                that._elements["item"][j].hasAttribute(dataAttributes.item.expanded)) {
-                                setItemExpanded(that._elements["item"][j], false);
-                            }
-                        }
+                    var expandedItems = getExpandedItems();
+                    // multiple expanded items annotated, display the last item open.
+                    if (expandedItems.length > 1) {
+                        toggle(expandedItems.length - 1);
                     }
                 }
 
                 refreshItems();
                 bindEvents();
+                scrollToDeepLinkIdInAccordion();
+            }
+            if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
+                /*
+                 * Editor message handling:
+                 * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
+                 * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
+                 * - if so, route the "navigate" operation to enact a navigation of the Accordion based on index data
+                 */
+                window.CQ.CoreComponents.MESSAGE_CHANNEL = window.CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
+                window.CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                    if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
+                        if (message.data.operation === "navigate") {
+                            // switch to single expansion mode when navigating in edit mode.
+                            var singleExpansion = that._properties.singleExpansion;
+                            that._properties.singleExpansion = true;
+                            toggle(message.data.index);
 
-                if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
-                    /*
-                     * Editor message handling:
-                     * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
-                     * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
-                     * - if so, route the "navigate" operation to enact a navigation of the Accordion based on index data
-                     */
-                    window.CQ.CoreComponents.MESSAGE_CHANNEL = window.CQ.CoreComponents.MESSAGE_CHANNEL || new window.Granite.author.MessageChannel("cqauthor", window);
-                    window.CQ.CoreComponents.MESSAGE_CHANNEL.subscribeRequestMessage("cmp.panelcontainer", function(message) {
-                        if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
-                            if (message.data.operation === "navigate") {
-                                // switch to single expansion mode when navigating in edit mode.
-                                var singleExpansion = that._properties.singleExpansion;
-                                that._properties.singleExpansion = true;
-                                toggle(message.data.index);
+                            // revert to the configured state.
+                            that._properties.singleExpansion = singleExpansion;
+                        }
+                    }
+                });
+            }
+        }
 
-                                // revert to the configured state.
-                                that._properties.singleExpansion = singleExpansion;
+        /**
+         * Displays the panel containing the element that corresponds to the deep link in the URI fragment
+         * and scrolls the browser to this element.
+         */
+        function scrollToDeepLinkIdInAccordion() {
+            if (containerUtils) {
+                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item", "item");
+                if (deepLinkItemIdx > -1) {
+                    var deepLinkItem = that._elements["item"][deepLinkItemIdx];
+                    if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
+                        // if single expansion: close all accordion items
+                        if (that._properties.singleExpansion) {
+                            for (var j = 0; j < that._elements["item"].length; j++) {
+                                if (that._elements["item"][j].hasAttribute(dataAttributes.item.expanded)) {
+                                    setItemExpanded(that._elements["item"][j], false, true);
+                                }
                             }
                         }
-                    });
+                        // expand the accordion item containing the deep link
+                        setItemExpanded(deepLinkItem, true, true);
+                    }
+                    var hashId = window.location.hash.substring(1);
+                    if (hashId) {
+                        var hashItem = document.querySelector("[id='" + hashId + "']");
+                        if (hashItem) {
+                            hashItem.scrollIntoView();
+                        }
+                    }
                 }
             }
         }
@@ -249,6 +257,7 @@
          * @private
          */
         function bindEvents() {
+            window.addEventListener("hashchange", scrollToDeepLinkIdInAccordion, false);
             var buttons = that._elements["button"];
             if (buttons) {
                 for (var i = 0; i < buttons.length; i++) {
@@ -356,10 +365,15 @@
          * @private
          * @param {HTMLElement} item The item to mark as expanded, or not expanded
          * @param {Boolean} expanded true to mark the item expanded, false otherwise
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function setItemExpanded(item, expanded) {
+        function setItemExpanded(item, expanded, keepHash) {
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
+                var index = that._elements["item"].indexOf(item);
+                if (!keepHash && containerUtils) {
+                    containerUtils.updateUrlHash(that, "item", index);
+                }
                 if (dataLayerEnabled) {
                     dataLayer.push({
                         event: "cmp:show",
@@ -371,6 +385,9 @@
 
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
+                if (!keepHash && containerUtils) {
+                    containerUtils.removeUrlHash();
+                }
                 if (dataLayerEnabled) {
                     dataLayer.push({
                         event: "cmp:hide",
@@ -501,23 +518,6 @@
     }
 
     /**
-     * Scrolls the browser when the URI fragment is changed to the item of the container Accordion component that corresponds to the deep link in the URL fragment,
-       and displays its content.
-     */
-    function onHashChange() {
-        if (location.hash && location.hash !== "#") {
-            var anchorLocation = decodeURIComponent(location.hash);
-            var anchorElement = document.querySelector(anchorLocation);
-            if (anchorElement && anchorElement.classList.contains("cmp-accordion__item") && !anchorElement.hasAttribute("data-cmp-expanded")) {
-                var anchorElementButton = document.querySelector(anchorLocation + "-button");
-                if (anchorElementButton) {
-                    anchorElementButton.click();
-                }
-            }
-        }
-    }
-
-    /**
      * Reads options data from the Accordion wrapper element, defined via {@code data-cmp-*} data attributes.
      *
      * @private
@@ -616,6 +616,5 @@
     if (containerUtils) {
         window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }
-    window.addEventListener("hashchange", onHashChange, false);
 
 }());

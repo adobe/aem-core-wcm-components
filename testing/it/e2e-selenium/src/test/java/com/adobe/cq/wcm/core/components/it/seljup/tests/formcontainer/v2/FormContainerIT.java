@@ -21,13 +21,15 @@ import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.*;
+
 @Tag("group1")
 public class FormContainerIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v1.FormContainerIT {
 
     public void setComponentResources() {
-        formContainerRT = Commons.rtFormContainer_v2;
-        formTextRT = Commons.rtFormText_v2;
-        formButtonRT = Commons.rtFormButton_v2;
+        formContainerRT = RT_FORMCONTAINER_V2;
+        formTextRT = RT_FORMTEXT_V2;
+        formButtonRT = RT_FORMBUTTON_V2;
     }
 
     @BeforeEach

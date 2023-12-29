@@ -33,9 +33,7 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.SocialMediaHelper;
 import com.adobe.cq.wcm.core.components.testing.MockCommerceFactory;
-import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.adobe.cq.wcm.core.components.testing.MockXFFactory;
-import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -119,21 +117,21 @@ class SocialMediaHelperImplTest {
         Map<String, String> metadata = socialMediaHelper.getMetadata();
         assertEquals("About Us", metadata.get(SocialMediaHelperImpl.OG_TITLE));
         assertEquals("About Us Page", metadata.get(SocialMediaHelperImpl.OG_DESCRIPTION));
-        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_1 + "." + EXTENSION, metadata.get(SocialMediaHelperImpl
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + BASIC_SHARING_PAGE_1 + "." + EXTENSION, metadata.get(SocialMediaHelperImpl
                 .OG_URL));
         assertEquals("website", metadata.get(SocialMediaHelperImpl.OG_TYPE));
         assertEquals("About Us", metadata.get(SocialMediaHelperImpl.OG_SITE_NAME));
-        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_1 + ".thumb.800.480.png?ck=1495097346",
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + BASIC_SHARING_PAGE_1 + ".thumb.800.480.png?ck=1495097346",
                 metadata.get(SocialMediaHelperImpl.OG_IMAGE));
 
         socialMediaHelper = getSocialMediaHelperUnderTest(BASIC_SHARING_PAGE_2);
         metadata = socialMediaHelper.getMetadata();
-        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_2 + ".thumb.800.480.png?ck=1495097341",
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + BASIC_SHARING_PAGE_2 + ".thumb.800.480.png?ck=1495097341",
                 metadata.get(SocialMediaHelperImpl.OG_IMAGE));
 
         socialMediaHelper = getSocialMediaHelperUnderTest(BASIC_SHARING_PAGE_3);
         metadata = socialMediaHelper.getMetadata();
-        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_3 + ".thumb.800.480.png?ck=1495097341",
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + BASIC_SHARING_PAGE_3 + ".thumb.800.480.png?ck=1495097341",
                 metadata.get(SocialMediaHelperImpl.OG_IMAGE));
     }
 
@@ -149,11 +147,11 @@ class SocialMediaHelperImplTest {
         assertEquals("Eton Short-Sleeve Shirt", metadata.get(SocialMediaHelperImpl.OG_TITLE));
         assertEquals("Express yourself around town or at play with our rugby-inspired Eton shirt.",
                 metadata.get(SocialMediaHelperImpl.OG_DESCRIPTION));
-        assertEquals(MockExternalizerFactory.ROOT + PRODUCT_SHARING_PAGE +"." + EXTENSION, metadata.get(SocialMediaHelperImpl
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + PRODUCT_SHARING_PAGE +"." + EXTENSION, metadata.get(SocialMediaHelperImpl
                 .OG_URL));
         assertEquals("product", metadata.get(SocialMediaHelperImpl.OG_TYPE));
         assertEquals("Eton Short-Sleeve Shirt", metadata.get(SocialMediaHelperImpl.OG_SITE_NAME));
-        assertEquals(MockExternalizerFactory.ROOT + "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg", metadata.get
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg", metadata.get
                 (SocialMediaHelperImpl.OG_IMAGE));
         assertEquals(MockCommerceFactory.UNIVERSAL_PRICE.toBigInteger().toString(),
                 metadata.get(SocialMediaHelperImpl.OG_PRODUCT_PRICE_AMOUNT));
@@ -171,11 +169,11 @@ class SocialMediaHelperImplTest {
         Map<String, String> metadata = socialMediaHelper.getMetadata();
         assertEquals("About Us", metadata.get(SocialMediaHelperImpl.OG_TITLE));
         assertEquals("<p>About Us XF description</p>", metadata.get(SocialMediaHelperImpl.OG_DESCRIPTION));
-        assertEquals(MockExternalizerFactory.ROOT + XF_SHARING_PAGE + "." + EXTENSION, metadata.get(SocialMediaHelperImpl
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + XF_SHARING_PAGE + "." + EXTENSION, metadata.get(SocialMediaHelperImpl
                 .OG_URL));
         assertEquals("website", metadata.get(SocialMediaHelperImpl.OG_TYPE));
         assertEquals("About Us", metadata.get(SocialMediaHelperImpl.OG_SITE_NAME));
-        assertEquals(MockExternalizerFactory.ROOT + "/content/dam/we-retail/en/activities/hiking-camping/trekker-khumbu-valley.jpg",
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + "/content/dam/we-retail/en/activities/hiking-camping/trekker-khumbu-valley.jpg",
                 metadata.get(SocialMediaHelperImpl.OG_IMAGE));
     }
 
@@ -190,11 +188,11 @@ class SocialMediaHelperImplTest {
         Map<String, String> metadata = socialMediaHelper.getMetadata();
         assertEquals("Eton Short-Sleeve Shirt", metadata.get(SocialMediaHelperImpl.OG_TITLE));
         assertEquals("<p>Blue Polo T-Shirt</p>", metadata.get(SocialMediaHelperImpl.OG_DESCRIPTION));
-        assertEquals(MockExternalizerFactory.ROOT + XF_PRODUCT_SHARING_PAGE + "." + EXTENSION, metadata.get(SocialMediaHelperImpl
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + XF_PRODUCT_SHARING_PAGE + "." + EXTENSION, metadata.get(SocialMediaHelperImpl
                 .OG_URL));
         assertEquals("product", metadata.get(SocialMediaHelperImpl.OG_TYPE));
         assertEquals("Eton Short-Sleeve Shirt", metadata.get(SocialMediaHelperImpl.OG_SITE_NAME));
-        assertEquals(MockExternalizerFactory.ROOT + "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
                 metadata.get(SocialMediaHelperImpl.OG_IMAGE));
     }
 

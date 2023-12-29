@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.List;
-
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Accordion;
-import com.adobe.cq.wcm.core.components.models.ListItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -35,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
-class AccordionImplTest {
+class AccordionImplTest extends AbstractPanelTest {
 
     private static final String TEST_BASE = "/accordion";
     private static final String TEST_ROOT_PAGE = "/content";
@@ -64,13 +61,15 @@ class AccordionImplTest {
     void testAccordionWithItems() {
         Accordion accordion = getAccordionUnderTest(ACCORDION_1);
         Object[][] expectedItems = {
-                {"item_1", "Accordion Item 1"},
-                {"item_2", "Accordion Panel 2"},
+                {"item_1", "Accordion Item 1", "accordion-dbb1cb7797-item-abc04b451e", ACCORDION_1 + "/item_1"},
+                {"item_2", "Accordion Panel 2", "accordion-dbb1cb7797-item-2761bc217f", ACCORDION_1 + "/item_2"},
         };
-        verifyAccordionItems(expectedItems, accordion.getItems());
+        verifyContainerListItems(expectedItems, accordion.getItems());
+        verifyContainerItems(expectedItems, accordion.getChildren());
         assertArrayEquals(new String[]{"item_2"}, accordion.getExpandedItems());
         assertFalse(accordion.isSingleExpansion());
         Utils.testJSONExport(accordion, Utils.getTestExporterJSONPath(TEST_BASE, "accordion1"));
+        verifyPanelDataLayer(accordion, TEST_BASE, "accordion1");
     }
 
     @Test
@@ -83,10 +82,10 @@ class AccordionImplTest {
     void testAccordionSingleExpansion() {
         Accordion accordion = getAccordionUnderTest(ACCORDION_3);
         Object[][] expectedItems = {
-                {"item_1", "Accordion Item 1"},
-                {"item_2", "Accordion Panel 2"},
+                {"item_1", "Accordion Item 1", "accordion-96bc1a6527-item-30a13c07d8", ACCORDION_3 + "/item_1"},
+                {"item_2", "Accordion Panel 2", "accordion-96bc1a6527-item-831c5ecd0f", ACCORDION_3 + "/item_2"},
         };
-        verifyAccordionItems(expectedItems, accordion.getItems());
+        verifyContainerListItems(expectedItems, accordion.getItems());
         assertArrayEquals(new String[]{"item_2"}, accordion.getExpandedItems());
         assertTrue(accordion.isSingleExpansion());
         Utils.testJSONExport(accordion, Utils.getTestExporterJSONPath(TEST_BASE, "accordion3"));
@@ -99,15 +98,5 @@ class AccordionImplTest {
             context.contentPolicyMapping(resource.getResourceType(), properties);
         }
         return context.request().adaptTo(Accordion.class);
-    }
-
-    private void verifyAccordionItems(Object[][] expectedItems, List<ListItem> items) {
-        assertEquals(expectedItems.length, items.size(), "The accordion contains a different number of items than expected.");
-        int index = 0;
-        for (ListItem item : items) {
-            assertEquals(expectedItems[index][0], item.getName(), "The accordion item's name is not what was expected.");
-            assertEquals(expectedItems[index][1], item.getTitle(), "The accordion item's title is not what was expected: " + item.getTitle());
-            index++;
-        }
     }
 }

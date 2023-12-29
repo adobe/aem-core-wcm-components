@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -105,7 +106,7 @@ public class OEmbedClientImpl implements OEmbedClient {
             try {
                 String jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
                 return mapper.readValue(getData(jsonURL), OEmbedJSONResponseImpl.class);
-            } catch (IOException ioex) {
+            } catch (IllegalArgumentException | IOException  ioex) {
                 LOGGER.error("Failed to read JSON response", ioex);
             }
         } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
@@ -123,8 +124,8 @@ public class OEmbedClientImpl implements OEmbedClient {
                     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                     return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlSource);
                 }
-            } catch (SAXException | ParserConfigurationException | JAXBException | IOException e) {
-                LOGGER.error("Failed to read JSON response", e);
+            } catch (IllegalArgumentException | SAXException | ParserConfigurationException | JAXBException | IOException e) {
+                LOGGER.error("Failed to read XML response", e);
             }
         }
         return null;
@@ -154,7 +155,7 @@ public class OEmbedClientImpl implements OEmbedClient {
         return null;
     }
 
-    protected InputStream getData(String url) throws IOException {
+    protected InputStream getData(String url) throws IOException, IllegalArgumentException {
         RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
             .build();
         HttpClient httpClient;

@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
+import com.codeborne.selenide.DragAndDropOptions;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -36,6 +37,11 @@ public class TeaserEditDialog {
     private static String actionLinkURL = "[data-cmp-teaser-v1-dialog-edit-hook='actionLink']";
     private static String actionText = "[data-cmp-teaser-v1-dialog-edit-hook='actionTitle']";
     private static String imageFromPageImage = "[name='./imageFromPageImage']";
+    private static String titleTypeSelectDropdown = "coral-select[name='./titleType']";
+    private static String titleTypeSelectDropdownDefaultSelected = "coral-select[name='./titleType'] coral-select-item[selected]";
+    private static String assetWithoutDescriptionErrorMessage = ".cmp-image__editor-alt .coral-Form-errorlabel, " +
+            ".cmp-image__editor-alt coral-tooltip[variant='error'] > coral-tooltip-content";
+    private static String altTextFromAssetDescription = ".cmp-teaser__editor input[name='./altValueFromDAM']";
 
     protected String getActionLinkURLSelector() {
         return actionLinkURL;
@@ -46,7 +52,7 @@ public class TeaserEditDialog {
     }
 
     public void uploadImageFromSidePanel(String imagePath) {
-        $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(assetUpload);
+        $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(assetUpload, DragAndDropOptions.usingActions());
     }
 
     public void setLinkURL(String url) {
@@ -147,6 +153,23 @@ public class TeaserEditDialog {
             CoralCheckbox checkbox = new CoralCheckbox(imageFromPageImage);
             checkbox.click();
         }
+    }
+
+    public Boolean isTitleTypeSelectDropdownDisplayed() {
+        return $(titleTypeSelectDropdown).isDisplayed();
+    }
+
+    public String getTitleTypeSelectDropdownDefaultSelectedText() {
+        return $(titleTypeSelectDropdownDefaultSelected).innerText();
+    }
+
+    public String getAssetWithoutDescriptionErrorMessage() {
+        return $(assetWithoutDescriptionErrorMessage).innerText();
+    }
+
+    public void checkAltTextFromAssetDescription() {
+        CoralCheckbox checkbox = new CoralCheckbox(altTextFromAssetDescription);
+        checkbox.click();
     }
 
 }

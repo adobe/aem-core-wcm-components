@@ -37,6 +37,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,11 +47,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BreadcrumbTests {
 
-
-
     private static final Logger LOG = LoggerFactory.getLogger(BreadcrumbTests.class);
     private List<String> testPages;
-    private String proxyPath;
     private String cmpPath;
     private EditorPage editorPage;
     private BaseBreadcrumbItems breadcrumbItems;
@@ -67,13 +65,13 @@ public class BreadcrumbTests {
         }
     }
 
-    public void setup(CQClient client, String rtBreadcrumb, String rootPage,
+    public void setup(CQClient client, String breadcrumbRT, String rootPage,
                       String defaultPageTemplate, String clientlib, BaseBreadcrumbItems breadcrumbItems) throws ClientException {
         createTestpages(client,rootPage, defaultPageTemplate, 5);
 
-        proxyPath = Commons.createProxyComponent(client, rtBreadcrumb, Commons.proxyPath, null, null);
-
-        cmpPath = Commons.addComponent(client, proxyPath,testPages.get(4) + Commons.relParentCompPath, componentName, null);
+        cmpPath = Commons.addComponentWithRetry(client,breadcrumbRT,testPages.get(4) + Commons.relParentCompPath, componentName, null,
+            RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+            HttpServletResponse.SC_OK, HttpServletResponse.SC_CREATED);
 
         Commons.checkProxiedClientLibrary(client, clientlib);
 
@@ -85,13 +83,12 @@ public class BreadcrumbTests {
 
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
         client.deletePageWithRetry(testPages.get(0), true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        Commons.deleteProxyComponent(client, proxyPath);
     }
 
     private void openConfiguration(String compPath) throws TimeoutException {
         String component = "[data-type='Editable'][data-path='" + compPath +"']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
         EditableToolbar editableToolbar = editorPage.openEditableToolbar(compPath);
         EditableToolbarAssertion editableToolbarAssertion = new EditableToolbarAssertion(editableToolbar,
             "editable toolbar of none style selector enabled component - %s button is not displayed while it should");

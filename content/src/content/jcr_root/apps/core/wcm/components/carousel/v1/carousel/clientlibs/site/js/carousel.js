@@ -16,6 +16,11 @@
 (function() {
     "use strict";
 
+    var containerUtils = window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.container && window.CQ.CoreComponents.container.utils ? window.CQ.CoreComponents.container.utils : undefined;
+    if (!containerUtils) {
+        // eslint-disable-next-line no-console
+        console.warn("Tabs: container utilities at window.CQ.CoreComponents.container.utils are not available. This can lead to missing features. Ensure the core.wcm.components.commons.site.container client library is included on the page.");
+    }
     var dataLayerEnabled;
     var dataLayer;
 
@@ -84,7 +89,7 @@
      *
      * @typedef {Object} CarouselConfig Represents a Carousel configuration
      * @property {HTMLElement} element The HTMLElement representing the Carousel
-     * @property {Object} options The Carousel options
+     * @property {*[]} options The Carousel options
      */
 
     /**
@@ -108,6 +113,8 @@
          * @param {CarouselConfig} config The Carousel configuration
          */
         function init(config) {
+            that._config = config;
+
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
 
@@ -118,10 +125,11 @@
             that._paused = false;
 
             if (that._elements.item) {
-                refreshActive();
+                initializeActive();
                 bindEvents();
                 resetAutoplayInterval();
                 refreshPlayPauseActions();
+                scrollToDeepLinkIdInCarousel();
             }
 
             // TODO: This section is only relevant in edit mode and should move to the editor clientLib
@@ -142,6 +150,31 @@
                         }
                     }
                 });
+            }
+        }
+
+        /**
+         * Displays the slide containing the element that corresponds to the deep link in the URI fragment
+         * and scrolls the browser to this element.
+         */
+        function scrollToDeepLinkIdInCarousel() {
+            if (containerUtils) {
+                var deepLinkItemIdx = containerUtils.getDeepLinkItemIdx(that, "item", "item");
+                if (deepLinkItemIdx > -1) {
+                    var deepLinkItem = that._elements["item"][deepLinkItemIdx];
+                    if (deepLinkItem && that._elements["item"][that._active].id !== deepLinkItem.id) {
+                        navigateAndFocusIndicator(deepLinkItemIdx, true);
+                        // pause the carousel auto-rotation
+                        pause();
+                    }
+                    var hashId = window.location.hash.substring(1);
+                    if (hashId) {
+                        var hashItem = document.querySelector("[id='" + hashId + "']");
+                        if (hashItem) {
+                            hashItem.scrollIntoView();
+                        }
+                    }
+                }
             }
         }
 
@@ -212,6 +245,7 @@
          * @private
          */
         function bindEvents() {
+            window.addEventListener("hashchange", scrollToDeepLinkIdInCarousel, false);
             if (that._elements["previous"]) {
                 that._elements["previous"].addEventListener("click", function() {
                     var index = getPreviousIndex();
@@ -248,6 +282,8 @@
                     (function(index) {
                         indicators[i].addEventListener("click", function(event) {
                             navigateAndFocusIndicator(index);
+                            // pause the carousel auto-rotation
+                            pause();
                         });
                     })(i);
                 }
@@ -422,6 +458,21 @@
         }
 
         /**
+         * Initialize {@code Carousel#_active} based on the active item of the carousel.
+         */
+        function initializeActive() {
+            var items = that._elements["item"];
+            if (items && Array.isArray(items)) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].classList.contains("cmp-carousel__item--active")) {
+                        that._active = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        /**
          * Refreshes the item markup based on the current {@code Carousel#_active} index
          *
          * @private
@@ -492,14 +543,19 @@
          *
          * @private
          * @param {Number} index The index of the item to navigate to
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function navigate(index) {
+        function navigate(index, keepHash) {
             if (index < 0 || index > (that._elements["item"].length - 1)) {
                 return;
             }
 
             that._active = index;
             refreshActive();
+
+            if (!keepHash && containerUtils) {
+                containerUtils.updateUrlHash(that, "item", index);
+            }
 
             if (dataLayerEnabled) {
                 var carouselId = that._elements.self.id;
@@ -527,9 +583,10 @@
          *
          * @private
          * @param {Number} index The index of the item to navigate to
+         * @param {Boolean} keepHash true to keep the hash in the URL, false to update it
          */
-        function navigateAndFocusIndicator(index) {
-            navigate(index);
+        function navigateAndFocusIndicator(index, keepHash) {
+            navigate(index, keepHash);
             focusWithoutScroll(that._elements["indicator"][index]);
 
             if (dataLayerEnabled) {
@@ -559,9 +616,9 @@
                 var indicators = that._elements["indicators"];
                 if (indicators !== document.activeElement && indicators.contains(document.activeElement)) {
                     // if an indicator has focus, ensure we switch focus following navigation
-                    navigateAndFocusIndicator(getNextIndex());
+                    navigateAndFocusIndicator(getNextIndex(), true);
                 } else {
-                    navigate(getNextIndex());
+                    navigate(getNextIndex(), true);
                 }
             }, that._properties.delay);
         }
@@ -598,38 +655,6 @@
     }
 
     /**
-     * Reads options data from the Carousel wrapper element, defined via {@code data-cmp-*} data attributes
-     *
-     * @private
-     * @param {HTMLElement} element The Carousel element to read options data from
-     * @returns {Object} The options read from the component data attributes
-     */
-    function readData(element) {
-        var data = element.dataset;
-        var options = [];
-        var capitalized = IS;
-        capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
-        var reserved = ["is", "hook" + capitalized];
-
-        for (var key in data) {
-            if (Object.prototype.hasOwnProperty.call(data, key)) {
-                var value = data[key];
-
-                if (key.indexOf(NS) === 0) {
-                    key = key.slice(NS.length);
-                    key = key.charAt(0).toLowerCase() + key.substring(1);
-
-                    if (reserved.indexOf(key) === -1) {
-                        options[key] = value;
-                    }
-                }
-            }
-        }
-
-        return options;
-    }
-
-    /**
      * Parses the dataLayer string and returns the ID
      *
      * @private
@@ -658,7 +683,7 @@
 
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
-            new Carousel({ element: elements[i], options: readData(elements[i]) });
+            new Carousel({ element: elements[i], options: CMP.utils.readData(elements[i], IS) });
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -672,7 +697,7 @@
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
                             elementsArray.forEach(function(element) {
-                                new Carousel({ element: element, options: readData(element) });
+                                new Carousel({ element: element, options: CMP.utils.readData(element, IS) });
                             });
                         }
                     });
@@ -687,10 +712,13 @@
         });
     }
 
-    if (document.readyState !== "loading") {
-        onDocumentReady();
-    } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady);
+    var documentReady = document.readyState !== "loading" ? Promise.resolve() : new Promise(function(resolve) {
+        document.addEventListener("DOMContentLoaded", resolve);
+    });
+    Promise.all([documentReady]).then(onDocumentReady);
+
+    if (containerUtils) {
+        window.addEventListener("load", containerUtils.scrollToAnchor, false);
     }
 
 }());

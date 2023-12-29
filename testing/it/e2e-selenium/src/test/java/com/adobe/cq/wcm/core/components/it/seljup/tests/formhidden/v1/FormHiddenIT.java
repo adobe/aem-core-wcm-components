@@ -16,13 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.formhidden.v1;
 
-import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.formhidden.v1.FormHidden;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.formhidden.FormHiddenEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.cq.testing.selenium.pageobject.EditorPage;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterEach;
@@ -31,8 +26,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formhidden.v1.FormHidden;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formhidden.FormHiddenEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.testing.selenium.pageobject.EditorPage;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_FORMHIDDEN_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group1")
@@ -54,23 +56,21 @@ public class FormHiddenIT extends AuthorBaseUITest {
     private FormHidden formHidden;
 
     public void setComponentResources() {
-        formHiddenRT = Commons.rtFormHidden_v1;
+        formHiddenRT = RT_FORMHIDDEN_V1;
     }
 
     protected void setup() throws ClientException {
         // create the test page, store page path in 'testPagePath'
         testPage = authorClient.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        compPathHidden = Commons.createProxyComponent(adminClient, formHiddenRT, Commons.proxyPath, null, null);
-
         // add the core form container component
-        hiddenPath = Commons.addComponent(adminClient, compPathHidden, testPage + Commons.relParentCompPath, "formhidden", null);
+        hiddenPath = Commons.addComponentWithRetry(authorClient, formHiddenRT, testPage + Commons.relParentCompPath, "formhidden");
 
-        formHidden = new FormHidden();
         // open the page in the editor
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
+
+        formHidden = new FormHidden();
     }
 
     @BeforeEach
@@ -83,9 +83,6 @@ public class FormHiddenIT extends AuthorBaseUITest {
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         // delete the test page we created
         authorClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);
-
-        // delete the proxy component created
-        Commons.deleteProxyComponent(adminClient, compPathHidden);
     }
 
 

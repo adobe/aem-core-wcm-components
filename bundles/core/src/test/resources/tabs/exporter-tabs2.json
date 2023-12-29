@@ -124,10 +124,12 @@
                                 },
                                 "item_1_2_2_2": {
                                     "id": "carousel-21953a9100",
+                                    "activeItem": "item_1_2_2_2_1",
                                     "autoplay": true,
                                     "controlsPrepended": false,
                                     "delay": 7000,
                                     "autopauseDisabled": false,
+                                    "accessibilityAutoItemTitles": false,
                                     "dataLayer": {
                                         "carousel-21953a9100": {
                                             "@type": "core/wcm/components/carousel/v1/carousel",

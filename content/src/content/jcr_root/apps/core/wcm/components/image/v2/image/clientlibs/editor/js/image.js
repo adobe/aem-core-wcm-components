@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-(function($) {
+(function($, Granite) {
     "use strict";
 
     var dialogContentSelector = ".cmp-image__editor";
@@ -30,9 +30,14 @@
     var $dynamicMediaGroup;
     var areDMFeaturesEnabled;
     var fileReference;
+    var altInputSelector = 'input[name="./alt"]';
+    var altInputAlertIconSelector = "input[name='./alt'] + coral-icon[icon='alert']";
+    var altCheckboxSelector = 'coral-checkbox[name="./altValueFromDAM"]';
     var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
     var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
     var smartCropRenditionDropDownSelector = ".cmp-image__editor-dynamicmedia-smartcroprendition";
+    var metaDataTabSelector = "coral-tab[data-foundation-tracking-event*='metadata']";
+    var metaDataTabAlertIconSelector = "coral-tab[data-foundation-tracking-event*='metadata'] coral-icon[icon='alert']";
     var imagePropertiesRequest;
     var imagePath;
     var smartCropRenditionFromJcr;
@@ -44,7 +49,7 @@
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
             isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
-            altTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
+            altTuple = new CheckboxTextfieldTuple(dialogContent, altCheckboxSelector, altInputSelector);
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
             $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
@@ -114,11 +119,25 @@
             candidate: ".cmp-image__editor-alt-text",
             exclusion: ".cmp-image__editor-alt-text *"
         });
+
+        improveAltTextValidation();
     });
 
     $(window).on("focus", function() {
         if (fileReference) {
             retrieveDAMInfo(fileReference);
+        }
+    });
+
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: altInputSelector,
+        validate: function() {
+            var seededValue = $(altInputSelector).attr("data-seeded-value");
+            var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
+            if (isAltCheckboxChecked && !seededValue) {
+                return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
+            }
         }
     });
 
@@ -202,7 +221,8 @@
 
     /**
      * Helper function to get core image instance 'smartCropRendition' property
-     * @param filePath
+     * @param {String} filePath url path of the image instance
+     * @returns {Deferred} done after successful request
      */
     function retrieveInstanceInfo(filePath) {
         return $.ajax({
@@ -217,7 +237,7 @@
 
     /**
      * Get the list of available image's smart crop renditions and fill drop-down list
-     * @param imageUrl The link to image asset
+     * @param {String} imageUrl The link to image asset
      */
     function getSmartCropRenditions(imageUrl) {
         if (imagePropertiesRequest) {
@@ -274,6 +294,9 @@
 
     /**
      * Helper function for populating dropdown list
+     * @param {String} label of the dropdown element
+     * @param {String} value of the dropdown element
+     * @param {Boolean} selected if item should be selected
      */
     function addSmartCropDropDownItem(label, value, selected) {
         smartCropRenditionsDropDown.items.add({
@@ -311,7 +334,7 @@
 
     /**
      * Get selected radio option helper
-     * @param component The radio option component
+     * @param {jQuery} component The radio option component
      * @returns {String} Value of the selected radio option
      */
     function getSelectedPresetType(component) {
@@ -326,8 +349,8 @@
 
     /**
      * Select radio option helper
-     * @param component
-     * @param val
+     * @param {jQuery} component The radio option component
+     * @param {String} val The value which should be selected
      */
     function selectPresetType(component, val) {
         var radioComp = component.find('[type="radio"]');
@@ -338,7 +361,7 @@
 
     /**
      * Reset selection field
-     * @param field
+     * @param {jQuery[]} field The array of select fields
      */
     function resetSelectField(field) {
         if (field[0]) {
@@ -346,4 +369,69 @@
         }
     }
 
-})(jQuery);
+    /**
+     * Improve error validation for alternative text inherited from asset's description
+     */
+    function improveAltTextValidation() {
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === "attributes") {
+                    var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+                    var alertIcon = $(altInputAlertIconSelector);
+                    var metaDataTab = $(metaDataTabSelector);
+                    var metaDataTabAlertIcon = $(metaDataTabAlertIconSelector);
+                    if (mutation.attributeName === "data-seeded-value") {
+                        if (isAltCheckboxChecked) {
+                            if ($(altInputSelector).val()) {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).removeClass("is-invalid");
+                                    alertIcon.hide();
+                                    metaDataTab.removeClass("is-invalid");
+                                    metaDataTabAlertIcon.hide();
+                                }
+                            } else {
+                                if (alertIcon.length) {
+                                    $(altInputSelector).addClass("is-invalid");
+                                    alertIcon.show();
+                                    metaDataTab.addClass("is-invalid");
+                                    metaDataTabAlertIcon.show();
+                                }
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "disabled") {
+                        if ($(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).removeClass("is-invalid");
+                                alertIcon.hide();
+                                metaDataTab.removeClass("is-invalid");
+                                metaDataTabAlertIcon.hide();
+                            }
+                        }
+                    }
+
+                    if (mutation.attributeName === "invalid") {
+                        if (!$(altInputSelector).val()) {
+                            if (alertIcon.length) {
+                                $(altInputSelector).addClass("is-invalid");
+                                alertIcon.show();
+                                metaDataTab.addClass("is-invalid");
+                                metaDataTabAlertIcon.show();
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        var altInput = document.querySelector(altInputSelector);
+        if (altInput) {
+            observer.observe(altInput, {
+                attributeFilter: ["data-seeded-value", "disabled", "invalid"]
+            });
+        }
+    }
+
+})(jQuery, Granite);

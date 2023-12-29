@@ -37,7 +37,7 @@
      * which allows selection of panel container items for editing, as well as other operations such as reordering of panels.
      * @param {PanelSelectorConfig} config The Panel Selector configuration object
      */
-    var PanelSelector = ns.util.createClass({
+    window.CQ.CoreComponents.PanelSelector = ns.util.createClass({
 
         /**
          * The Panel Selector configuration Object
@@ -178,7 +178,7 @@
                     items.push({
                         id: child.path,
                         name: child.name,
-                        title: getTitle(child, panelContainerItems[child.name], index + 1)
+                        title: that.getTitle(child, panelContainerItems[child.name], index + 1)
                     });
                 });
 
@@ -379,6 +379,37 @@
                 that._unbindEvents();
                 that._elements.popover.parentNode.removeChild(that._elements.popover);
             }
+        },
+
+        /**
+         * Retrieves a title from item data. If no item data exists, or it doesn't have a title
+         * instead lookup the editable display name of the corresponding [Editable]{@link Granite.author.Editable}.
+         * Prefixes each title with an index.
+         *
+         * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} representing the item
+         * @param {Object} item The item data
+         * @param {Number} index Index of the item
+         * @returns {String} The title
+         */
+        getTitle: function(editable, item, index)  {
+            var title = "<span class='foundation-layout-util-subtletext cmp-panelselector__indexMarker'>" + index + "</span>&nbsp;&nbsp;";
+            var subTitle = "";
+
+            title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
+
+            if (item) {
+                if (item[PN_PANEL_TITLE]) {
+                    subTitle = item[PN_PANEL_TITLE];
+                } else if (item.title) {
+                    subTitle = item.title;
+                }
+            }
+
+            if (subTitle) {
+                title = title + ": <span class='foundation-layout-util-subtletext'>" + subTitle + "</span>";
+            }
+
+            return title;
         }
     });
 
@@ -393,7 +424,7 @@
         order: "before COPY",
         execute: function(editable, param, target) {
             if (!panelSelector || !panelSelector.isOpen()) {
-                panelSelector = new PanelSelector({
+                panelSelector = new window.CQ.CoreComponents.PanelSelector({
                     "editable": editable,
                     "target": target[0]
                 });
@@ -412,7 +443,7 @@
                 children = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(editable);
             }
 
-            return (children.length > 1 && isPanelContainer);
+            return (children.length > 0 && isPanelContainer);
         },
         isNonMulti: true
     });
@@ -422,36 +453,5 @@
             ns.EditorFrame.editableToolbar.registerAction("PANEL_SELECT", panelSelect);
         }
     });
-
-    /**
-     * Retrieves a title from item data. If no item data exists, or it doesn't have a title
-     * instead lookup the editable display name of the corresponding [Editable]{@link Granite.author.Editable}.
-     * Prefixes each title with an index.
-     *
-     * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} representing the item
-     * @param {Object} item The item data
-     * @param {Number} index Index of the item
-     * @returns {String} The title
-     */
-    function getTitle(editable, item, index) {
-        var title = "<span class='foundation-layout-util-subtletext cmp-panelselector__indexMarker'>" + index + "</span>&nbsp;&nbsp;";
-        var subTitle = "";
-
-        title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
-
-        if (item) {
-            if (item[PN_PANEL_TITLE]) {
-                subTitle = item[PN_PANEL_TITLE];
-            } else if (item.title) {
-                subTitle = item.title;
-            }
-        }
-
-        if (subTitle) {
-            title = title + ": <span class='foundation-layout-util-subtletext'>" + subTitle + "</span>";
-        }
-
-        return title;
-    }
 
 }(jQuery, Granite.author, jQuery(document), this));

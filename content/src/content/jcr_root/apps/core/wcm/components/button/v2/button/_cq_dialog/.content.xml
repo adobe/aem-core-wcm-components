@@ -18,6 +18,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Button"
     sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.button.v2.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_button_v2"
     trackingFeature="core-components:button:v2">
     <content
@@ -51,6 +52,16 @@
                                                 fieldDescription="The text to display on the button."
                                                 fieldLabel="Text"
                                                 name="./jcr:title"/>
+                                            <linkv1
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                name="./link">
+                                            </linkv1>
+                                            <linkv1delete
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                name="./link@Delete">
+                                            </linkv1delete>
                                             <link
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/include"
@@ -66,7 +77,8 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>

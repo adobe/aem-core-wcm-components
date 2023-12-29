@@ -450,4 +450,21 @@ public interface Page extends ContainerExporter, Component {
     default List<String> getRobotsTags() {
         return Collections.emptyList();
     }
+
+    /**
+     * Checks if the Javascript libraries should be loaded asynchronously.
+     *
+     * @return {@code true} if the Javascript libraries should be loaded asynchronously
+     * @since om.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default boolean isClientlibsAsync() {return false;}
+
+    /**
+     * Checks if the data layer client library should be included.
+     *
+     * {@code true} if the data layer client library should be included.
+     * @since om.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default boolean isDataLayerClientlibIncluded() {return true;}
+
 }

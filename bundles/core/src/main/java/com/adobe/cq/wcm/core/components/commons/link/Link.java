@@ -43,12 +43,16 @@ public interface Link<T> {
 
     /**
      * Property name for storing link accessibility label.
+     * @deprecated
+     * This property was used with Title v2, but is not used with Title v3 nor with any other components.
      */
     @Deprecated
     String PN_LINK_ACCESSIBILITY_LABEL = "linkAccessibilityLabel";
 
     /**
      * Property name for storing link title attribute.
+     * @deprecated
+     * This property was used with Title v2, but is not used with Title v3 nor with any other components.
      */
     @Deprecated
     String PN_LINK_TITLE_ATTRIBUTE = "linkTitleAttribute";

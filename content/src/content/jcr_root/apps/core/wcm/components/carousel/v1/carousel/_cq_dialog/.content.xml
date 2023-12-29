@@ -25,41 +25,14 @@
     trackingFeature="core-components:carousel:v1">
     <content
         jcr:primaryType="nt:unstructured"
-        sling:resourceType="granite/ui/components/coral/foundation/container"
         granite:class="cmp-carousel__editor">
         <items jcr:primaryType="nt:unstructured">
-            <tabs
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="granite/ui/components/coral/foundation/tabs"
-                maximized="{Boolean}true">
+            <tabs jcr:primaryType="nt:unstructured">
                 <items jcr:primaryType="nt:unstructured">
-                    <items
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Items"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <columns
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
-                                margin="{Boolean}true">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <column
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/container">
-                                        <items jcr:primaryType="nt:unstructured">
-                                            <slides
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="core/wcm/components/commons/editor/dialog/childreneditor/v1/childreneditor"/>
-                                        </items>
-                                    </column>
-                                </items>
-                            </columns>
-                        </items>
-                    </items>
                     <properties
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Properties"
+                        sling:orderBefore="cq:styles"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -72,6 +45,29 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
+                                            <activeItem
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/hidden"
+                                                name="./activeItem">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-carousel-v1-dialog-edit-hook="activeItem"/>
+                                            </activeItem>
+                                            <activeSelect
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="The item that is active by default."
+                                                fieldLabel="Active Item">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-carousel-v1-dialog-edit-hook="activeSelect"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <default
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Default"
+                                                        value=""/>
+                                                </items>
+                                            </activeSelect>
                                             <autoplay
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -133,7 +129,8 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>
@@ -143,6 +140,7 @@
                     <accessibility
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Accessibility"
+                        sling:orderBefore="cq:styles"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -162,6 +160,50 @@
                                                 fieldLabel="Label"
                                                 name="./accessibilityLabel"
                                                 value=""/>
+                                            <accessibilityPrevious
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's previous button label."
+                                                fieldLabel="Previous"
+                                                name="./accessibilityPrevious"
+                                                value=""/>
+                                            <accessibilityNext
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's next button label."
+                                                fieldLabel="Next"
+                                                name="./accessibilityNext"
+                                                value=""/>
+                                            <accessibilityPlay
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's play button label."
+                                                fieldLabel="Play"
+                                                name="./accessibilityPlay"
+                                                value=""/>
+                                            <accessibilityPause
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's pause button label."
+                                                fieldLabel="Pause"
+                                                name="./accessibilityPause"
+                                                value=""/>
+                                            <accessibilityTablist
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Value of an aria-label attribute for the carousel navigation's list of items label."
+                                                fieldLabel="Tablist"
+                                                name="./accessibilityTablist"
+                                                value=""/>
+                                            <accessibilityAutoItemTitles
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="false"
+                                                fieldDescription="If checked, automatically sets carousel items title to its aria-label description."
+                                                name="./accessibilityAutoItemTitles"
+                                                text="Sets carousel item's aria label to its title"
+                                                uncheckedValue="false"
+                                                value="true"/>
                                         </items>
                                     </column>
                                 </items>

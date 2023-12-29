@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
@@ -53,6 +54,13 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_DESIGN_ALLOWED_RENDITION_WIDTHS = "allowedRenditionWidths";
+
+    /**
+     * Name of the configuration policy property that will store the sizes attribute for a responsive image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.26.0
+     */
+    String PN_DESIGN_SIZES = "sizes";
 
     /**
      * Name of the configuration policy property that will store the image quality for an image.
@@ -94,6 +102,13 @@ public interface Image extends Component {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_DISPLAY_POPUP_TITLE = "displayPopupTitle";
+
+    /**
+     * Name of the resource property that will indicate if the image component should render an external image resource.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.27.0
+     */
+    String PN_EXTERNAL_IMAGE_RESOURCE_PATH = "externalImageResourcePath";
 
     /**
      * Name of the JSON property that will store the smart sizes for smart loading.
@@ -182,6 +197,13 @@ public interface Image extends Component {
      * Name of the configuration policy property that controls whether Dynamic Media features are used by Core component.
      */
     String PN_DESIGN_DYNAMIC_MEDIA_ENABLED = "enableDmFeatures";
+
+    /**
+     * Name of the configuration policy property that controls whether assets will be delivered through Dynamic Media.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.25.0
+     */
+    String PN_DESIGN_ASSET_DELIVERY_ENABLED = "enableAssetDelivery";
 
     /**
      * Name of the configuration policy property that will be used for resizing the base images, the ones from {@code src} attribute.
@@ -303,6 +325,18 @@ public interface Image extends Component {
     @NotNull
     default int[] getWidths() {
         return new int[]{};
+    }
+
+    /**
+     * Returns the media condition to indicate which image widths should be used, configured through the {@link #PN_DESIGN_SIZES}
+     * content policy.
+     *
+     * @return the sizes media condition
+     * @since com.adobe.cq.wcm.core.components.models 12.26.0
+     */
+    @Nullable
+    default String getSizes() {
+        return null;
     }
 
     /**

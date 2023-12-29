@@ -23,11 +23,13 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.FormT
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.BaseFormText;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.codeborne.selenide.SelenideElement;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
 import java.util.concurrent.TimeoutException;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FormTextTests {
@@ -54,11 +56,8 @@ public class FormTextTests {
         // create the test page, store page path in 'testPagePath'
         testPage = client.createPage("testPage", "Test Page Title", rootPage, defaultPageTemplate).getSlingPath();
 
-        // create a proxy component
-        compPath = Commons.createProxyComponent(client, formTextRT, Commons.proxyPath, null, null);
-
         // add the core form container component
-        formTextPath = Commons.addComponent(client, compPath, testPage + Commons.relParentCompPath, "formtext", null);
+        formTextPath = Commons.addComponentWithRetry(client, formTextRT, testPage + Commons.relParentCompPath, "formtext");
 
         this.formText = formText;
         // open the page in the editor
@@ -68,7 +67,6 @@ public class FormTextTests {
 
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
         client.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        Commons.deleteProxyComponent(client, compPath);
     }
 
     public void testCheckLabelMandatory() throws InterruptedException, TimeoutException {
@@ -280,5 +278,55 @@ public class FormTextTests {
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(formText.isInputConstraintMessageSet(elemName, requiredMessage), "Constraint message should be set");
+    }
+
+    public void testTextareaAccessibilityWhenHelpMessageIsSet() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("textarea");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        configDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement textareaElement = $("textarea");
+        assertTrue(formText.elementHasExpectedAriaDescribedByAttribute(textareaElement, helpMessage));
+    }
+
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnTextarea() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("textarea");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement textareaElement = $("textarea");
+        assertTrue(formText.elementHasNoAriaDescribedByAttribute(textareaElement));
+    }
+
+    public void testInputAccessibilityWhenHelpMessageIsSet() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("text");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        configDialog.setHelpMessage(helpMessage);
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement inputElement = $("input[type='text']");
+        assertTrue(formText.elementHasExpectedAriaDescribedByAttribute(inputElement, helpMessage));
+    }
+
+    public void testNoAriaDescribedByAttrWhenHelpMessageIsNotSetOnInput() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("text");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement inputElement = $("input[type='text']");
+        assertTrue(formText.elementHasNoAriaDescribedByAttribute(inputElement));
     }
 }

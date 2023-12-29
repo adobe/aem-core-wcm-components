@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.title;
 
+import java.time.Duration;
+
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
@@ -41,6 +43,7 @@ public class TitleEditDialog extends Dialog {
     private static String titleType = "[name='./type']";
     private static String linkUrl = "[name='./linkURL']";
     private static String linkTarget = "coral-checkbox[name='./linkTarget']";
+    private static String titleTypeDropdownDefaultSelected = titleType + " coral-select-item[selected]";
 
     private void openTitleTypeList() throws InterruptedException{
         $( titleType + " > button").click();
@@ -49,7 +52,7 @@ public class TitleEditDialog extends Dialog {
 
     public void setTitle(String value) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s " + Selectors.SELECTOR_CORAL_DIALOG_CONTENT, this.getCssSelector()))));
         content().find(Selectors.SELECTOR_BUTTON_TITLE).click();
         content().find(Selectors.SELECTOR_BUTTON_TITLE).sendKeys(value);
@@ -132,6 +135,10 @@ public class TitleEditDialog extends Dialog {
     public void clickLinkTarget() {
         CoralCheckbox checkbox = new CoralCheckbox(linkTarget);
         checkbox.click();
+    }
+
+    public String getTitleTypeDropdownDefaultSelectedText() {
+        return $(titleTypeDropdownDefaultSelected).innerText();
     }
 
 }

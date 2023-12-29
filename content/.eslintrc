@@ -5,6 +5,11 @@
     },
     "globals": {
         "Coral": false,
-        "Granite": false
+        "Granite": false,
+        "CMP": false,
+        "Promise": false
+    },
+    "parserOptions": {
+      "ecmaVersion": 2020
     }
 }

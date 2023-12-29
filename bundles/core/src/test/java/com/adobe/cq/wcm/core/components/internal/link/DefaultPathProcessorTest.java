@@ -28,6 +28,7 @@ import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static com.adobe.cq.wcm.core.components.internal.link.LinkBuilderImpl.HTML_EXTENSION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -75,6 +76,26 @@ class DefaultPathProcessorTest {
         assertEquals(path, underTest.sanitize(path, request));
         path = "/some space#internal";
         assertEquals("/some%20space#internal", underTest.sanitize(path, request));
+        assertEquals("/content/path/to/page.html?recipient=<%= recipient.id %>",
+                underTest.sanitize("/content/path/to/page.html?recipient=<%= recipient.id %>", request));
+    }
+
+    @Test
+    void testSanitizeExternalLink() {
+        DefaultPathProcessor underTest = context.registerService(new DefaultPathProcessor());
+        MockSlingHttpServletRequest request = context.request();
+        assertEquals("https://test.com?categ=cat1%7Ccat2",
+                underTest.sanitize("https://test.com?categ=cat1|cat2", request));
+        assertEquals("https://test.com?categ=cat1%7Ccat2#top",
+                underTest.sanitize("https://test.com?categ=cat1|cat2#top", request));
+        assertEquals("https://test.com?categ=cat1%7Ccat2#top+level",
+                underTest.sanitize("https://test.com?categ=cat1|cat2#top level", request));
+        assertEquals("https://test.com?recipient=<%= recipient.id %>",
+                underTest.sanitize("https://test.com?recipient=<%= recipient.id %>", request));
+        assertEquals("https://test.com/#/downloads/file.html?name=/content/file.zip",
+                underTest.sanitize("https://test.com/#/downloads/file.html?name=/content/file.zip", request));
+        assertEquals("https://test.com#page=1-._~!$&'()*+,;=:@",
+                underTest.sanitize("https://test.com#page=1-._~!$&'()*+,;=:@", request));
     }
 
     @Test
@@ -83,10 +104,10 @@ class DefaultPathProcessorTest {
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));
         DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", DefaultPathProcessor.VanityConfig.MAPPING.getValue()));
-        assertTrue(underTest.accepts(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
-        assertEquals("/content/links/site1/en.html", underTest.sanitize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
-        assertEquals("/vanity.html", underTest.map(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
-        assertEquals("https://example.org/vanity.html", underTest.externalize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        assertTrue(underTest.accepts(page.getPath() + HTML_EXTENSION, context.request()));
+        assertEquals("/content/links/site1/en.html", underTest.sanitize(page.getPath() + HTML_EXTENSION, context.request()));
+        assertEquals("/vanity.html", underTest.map(page.getPath() + HTML_EXTENSION, context.request()));
+        assertEquals("https://example.org/vanity.html", underTest.externalize(page.getPath() + HTML_EXTENSION, context.request()));
     }
 
     @Test
@@ -95,11 +116,11 @@ class DefaultPathProcessorTest {
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));
         DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", "shouldBeDefault"));
-        assertEquals("/content/site1/en.html", underTest.map(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
-        assertEquals("https://example.org/content/links/site1/en.html", underTest.externalize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        assertEquals("/content/site1/en.html", underTest.map(page.getPath() + HTML_EXTENSION, context.request()));
+        assertEquals("https://example.org/content/links/site1/en.html", underTest.externalize(page.getPath() + HTML_EXTENSION, context.request()));
         context.request().setContextPath("/cp");
         underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
-        assertEquals("/cp/vanity.html", underTest.sanitize(page.getPath() + LinkHandler.HTML_EXTENSION, context.request()));
+        assertEquals("/cp/vanity.html", underTest.sanitize(page.getPath() + HTML_EXTENSION, context.request()));
     }
 }

@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.seljup.util.constant;
 
+import java.time.Duration;
+
 /**
  * This includes the constants used over entire module.
  */
@@ -28,6 +30,11 @@ public class RequestConstants {
      * Timeout for path to exist or for uploading an asset in milliseconds
      */
     public static final int TIMEOUT_TIME_SEC = 20;
+
+    /**
+     * Duration of {@value #TIMEOUT_TIME_SEC}
+     */
+    public static final Duration DURATION_TIMEOUT = Duration.ofSeconds(TIMEOUT_TIME_SEC);
 
     /**
      * Timeout for path to exist or for uploading an asset in milliseconds

@@ -14,7 +14,10 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
+     data-sly-use.separator="com.adobe.cq.wcm.core.components.models.Separator"
      id="${component.id}"
      class="cmp-separator">
-    <hr class="cmp-separator__horizontal-rule"/>
+    <hr class="cmp-separator__horizontal-rule"
+        data-sly-attribute.role="${separator.decorative ? 'none': ''}"
+        data-sly-attribute.aria-hidden="${separator.decorative ? 'true': ''}"/>
 </div>

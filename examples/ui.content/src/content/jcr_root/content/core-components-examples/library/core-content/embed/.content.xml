@@ -165,7 +165,10 @@
                             sling:resourceType="core-components-examples/components/embed"
                             embeddableResourceType="core/wcm/components/embed/v1/embed/embeddable/youtube"
                             type="embeddable"
-                            youtubeVideoId="f7hbWvHKns0"/>
+                            youtubeVideoId="f7hbWvHKns0"
+                            layout="responsive"
+                            youtubeAspectRatio="56.25"
+                            accessibilityLabel="Greenland land of ice"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"

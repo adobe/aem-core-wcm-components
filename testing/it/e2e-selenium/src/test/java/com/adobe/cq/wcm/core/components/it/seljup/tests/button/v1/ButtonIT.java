@@ -24,6 +24,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.codeborne.selenide.WebDriverRunner;
+
 import java.util.concurrent.TimeoutException;
 
 import org.apache.http.HttpStatus;
@@ -38,14 +39,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.WebDriver;
 
+import javax.servlet.http.HttpServletResponse;
+
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_BUTTON_V1;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("group2")
 public class ButtonIT extends AuthorBaseUITest {
 
     private static String componentName = "button";
-
-    private String proxyComponentPath;
 
     protected String testPage;
     protected EditorPage editorPage;
@@ -55,25 +57,20 @@ public class ButtonIT extends AuthorBaseUITest {
     protected String linkPropertyName;
 
     private void setupResources() {
-        buttonRT = Commons.rtButton_v1;
+        buttonRT = RT_BUTTON_V1;
         linkPropertyName = "link";
     }
 
     protected void setup() throws ClientException {
         testPage = authorClient.createPage("testPage", "Test Page", rootPage, defaultPageTemplate, 200, 201).getSlingPath();
-        proxyComponentPath = Commons.creatProxyComponent(adminClient, buttonRT, "Proxy Button", componentName);
-        addPathtoComponentPolicy(responsiveGridPath, proxyComponentPath);
-        cmpPath = Commons.addComponent(adminClient, proxyComponentPath,testPage + Commons.relParentCompPath, componentName, null);
-        editorPage = new PageEditorPage(testPage);
-        button = new Button();
-        editorPage.open();
-    }
 
-    protected ButtonEditDialog getButtonEditDialog() throws TimeoutException {
-        String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
-        final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
-        return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
+        addPathtoComponentPolicy(responsiveGridPath, buttonRT);
+        cmpPath = Commons.addComponentWithRetry(authorClient, buttonRT,testPage + Commons.relParentCompPath, componentName);
+
+        editorPage = new PageEditorPage(testPage);
+        editorPage.open();
+
+        button = new Button();
     }
 
     @BeforeEach
@@ -85,6 +82,13 @@ public class ButtonIT extends AuthorBaseUITest {
     @AfterEach
     public void cleanup() throws ClientException, InterruptedException {
         authorClient.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
+    }
+
+    protected ButtonEditDialog getButtonEditDialog() throws TimeoutException {
+        String component = "[data-type='Editable'][data-path='" + testPage + "/jcr:content/root/responsivegrid/*" +"']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT).until(ExpectedConditions.elementToBeClickable(By.cssSelector(component)));
+        return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
     }
 
     /**

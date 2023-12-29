@@ -16,44 +16,48 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 
-import com.adobe.cq.testing.client.CQClient;
-import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
-import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage;
-import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.codeborne.selenide.SelenideElement;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
+import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
-import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
+import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
+import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
+import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.codeborne.selenide.SelenideElement;
 
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+
+import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest.adminClient;
 import static com.codeborne.selenide.Selenide.$;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ImageTests {
 
-    private static String testAssetsPath         = "/content/dam/core-components";
-    private static String testImagePath          = testAssetsPath + "/core-comp-test-image.jpg";
-    private static String altText                = "Return to Arkham";
-    private static String captionText            = "The Last Guardian";
-    private static String originalDamTitle       = "Beach house";
+    private static String testAssetsPath = "/content/dam/core-components";
+    private static String testImagePath = testAssetsPath + "/core-comp-test-image.jpg";
+    private static String testImageWithoutDescriptionPath = testAssetsPath + "/Adobe_Systems_logo_and_wordmark.png";
+    private static String altText = "Return to Arkham";
+    private static String captionText = "The Last Guardian";
+    private static String originalDamTitle = "Beach house";
     private static String originalDamDescription = "House on a beach with blue sky";
-    private static String logoNodeName           = "Adobe_Systems_logo_and_wordmark.png";
-    private static String logoFileName           = "adobe-systems-logo-and-wordmark.png";
-    private static String imageFileName          = "core-comp-test-image.jpeg";
-    private static String pageImageAlt           = "page image alt";
-    private static String climbingAsset          = "AdobeStock_140634652_climbing.jpeg";
+    private static String logoNodeName = "Adobe_Systems_logo_and_wordmark.png";
+    private static String logoFileName = "adobe-systems-logo-and-wordmark.png";
+    private static String imageFileName = "core-comp-test-image.jpeg";
+    private static String pageImageAlt = "page image alt";
+    private static String climbingAsset = "AdobeStock_140634652_climbing.jpeg";
     private static String climbingAssetFormatted = StringUtils.lowerCase(climbingAsset).replace("_", "-");
-    private static String climbingAssetAltText   = "Rock Climbing and Bouldering above the lake and mountains";
+    private static String climbingAssetAltText = "Rock Climbing and Bouldering above the lake and mountains";
 
     private String testPage;
     private String proxyPath;
@@ -64,6 +68,7 @@ public class ImageTests {
     private String redirectPage;
     private PropertiesPage propertiesPage;
     private String contextPath;
+    private String label;
 
     public String getProxyPath() {
         return proxyPath;
@@ -77,43 +82,32 @@ public class ImageTests {
         propertiesPage = new PropertiesPage(testPage);
 
         // 2.
-        String policySuffix = "/structure/page/new_policy";
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("jcr:title", "New Policy");
-        data.put("sling:resourceType", "wcm/core/components/policy/policy");
-        data.put("clientlibs", clientlibs);
-        String policyPath1 = "/conf/"+ label + "/settings/wcm/policies/core-component/components";
-        policyPath = Commons.createPolicy(client, policySuffix, data , policyPath1);
-
-        // 3.
-        String policyLocation = "core-component/components";
-        String policyAssignmentPath = defaultPageTemplate + "/policies/jcr:content";
-        data.clear();
-        data.put("cq:policy", policyLocation + policySuffix);
-        data.put("sling:resourceType", "wcm/core/components/policies/mappings");
-        Commons.assignPolicy(client,"",data, policyAssignmentPath);
+        policyPath = Commons.createPagePolicy(client, defaultPageTemplate, label, new HashMap<String, String>() {{
+           put("clientlibs", clientlibs);
+        }});
 
         // 4.
-        proxyPath = Commons.createProxyComponent(client, imageRT, Commons.proxyPath, null, null);
+        proxyPath = imageRT;
 
         // 6.
-        compPath = Commons.addComponent(client, proxyPath,testPage + Commons.relParentCompPath, "image", null);
+        compPath = Commons.addComponentWithRetry(client, proxyPath,testPage + Commons.relParentCompPath, "image", null,
+                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+                HttpStatus.SC_OK, HttpStatus.SC_CREATED);
 
         // 7.
         editorPage = new PageEditorPage(testPage);
         editorPage.open();
 
         this.image = image;
-
+        this.label = label;
         this.contextPath = contextPath;
 
     }
 
-
-
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
-        client.deletePageWithRetry(testPage, true,false, RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,  HttpStatus.SC_OK);
-        Commons.deleteProxyComponent(client, proxyPath);
+        client.deletePageWithRetry(testPage, true,false,
+                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+                HttpStatus.SC_OK);
     }
 
     public void setMinimalProps() throws InterruptedException, TimeoutException {
@@ -206,6 +200,29 @@ public class ImageTests {
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
                 + " and title " + captionText);
+    }
+
+    public void testSetAssetWithoutDescription() throws InterruptedException, TimeoutException {
+        Commons.openSidePanel();
+        dragImageWithoutDescription();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.openMetadataTab();
+        Commons.saveConfigureDialog();
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel, " +
+                "coral-tooltip[variant='error'] > coral-tooltip-content";
+        assertEquals("Error: Please provide an asset which has a description that can be used as alt text.", $(assetWithoutDescriptionErrorMessageSelector).innerText());
+    }
+
+    public void testSetAssetWithoutDescriptionV3() throws InterruptedException, TimeoutException {
+        Commons.openSidePanel();
+        dragImageWithoutDescription();
+        Commons.saveConfigureDialog();
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel, " +
+                "coral-tooltip[variant='error'] > coral-tooltip-content";
+        String errorIcon = "input[name='./alt'] + coral-icon[icon='alert']";
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", $(errorIcon));
+        assertEquals("Error: Please provide an asset which has a description that can be used as alt text.", $(assetWithoutDescriptionErrorMessageSelector).innerText());
     }
 
     public void testAddAltTextAndTitleV3() throws TimeoutException, InterruptedException {
@@ -331,6 +348,29 @@ public class ImageTests {
         assertTrue(image.isImageWithLazyLoadingEnabled(), "Image with native lazy loading enabled should be present");
     }
 
+    public void testLazyLoadingDisabled() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.checkDisableLazyLoading();
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertFalse(image.isImageWithLazyLoadingEnabled(), "Image with native lazy loading enabled shouldn't be present");
+    }
+
+    public void testSetSizes() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        dragImage();
+        Commons.saveConfigureDialog();
+        Commons.closeSidePanel();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertTrue(image.isImagePresentWithSizes(testPage, "(min-width: 36em) 33.3vw, 100vw"), "Image with sizes attribute should be " +
+                "present");
+    }
+
     public void testPageImageWithEmptyAltTextFromPageImage(boolean aem65) throws InterruptedException, ClientException {
         setPageImage(aem65);
         editorPage.open();
@@ -428,16 +468,75 @@ public class ImageTests {
         assertTrue(image.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
+    public void testNGDMSmartCropDialogImageV3() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+    }
+
+    public void testNGDMSmartCropDialogImageV3_aspectRatioSelection() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+        image.selectAspectRatioInNGDMSmartCropDialog("5:3");
+        image.validateNGDMSmartCropInImageUrl("5:3");
+        image.saveNGDMSmartCropDialog();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.openNGDMSmartCropDialog(compPath);
+        image.validateNGDMAspectRationSelectorLabel("Wide Landscape");
+        image.validateNGDMSmartCropInImageUrl("5:3");
+    }
+
+    public void testNGDMSmartCropDialogImageV3_customAspectRatio() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+        image.addCustomAspectRatioInNGDMSmartCropDialog("2:7");
+        image.validateNGDMSmartCropInImageUrl("2:7");
+        image.saveNGDMSmartCropDialog();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.openNGDMSmartCropDialog(compPath);
+        image.validateNGDMAspectRationSelectorLabel("Custom");
+        image.validateNGDMSmartCropInImageUrl("2:7");
+    }
+
+    public void testNGDMSmartCropDialogImageV3_aspectRatioFlip() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+        image.selectAspectRatioInNGDMSmartCropDialog("5:3");
+        image.validateNGDMSmartCropInImageUrl("5:3");
+        image.flipNGDMSmartCropDialogAspectRatios();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.validateNGDMAspectRationSelectorLabel("Custom");
+        image.validateNGDMSmartCropInImageUrl("3:5");
+        image.flipNGDMSmartCropDialogAspectRatios();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.validateNGDMSmartCropInImageUrl("5:3");
+        image.validateNGDMAspectRationSelectorLabel("Wide Landscape");
+    }
+
     // ----------------------------------------------------------
     // private stuff
     // ----------------------------------------------------------
 
+    private void setUpNGDMImage() throws InterruptedException, TimeoutException, ClientException {
+        Commons.openSidePanel();
+        dragImage();
+        Commons.setNGDMImage(adminClient, compPath);
+        editorPage.refresh();
+        Commons.webDriverWait(3000);
+    }
     private void dragImage() throws TimeoutException, InterruptedException {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.setAssetFilter(testAssetsPath);
         Commons.openEditDialog(editorPage, compPath);
         editDialog.checkImageFromPageImage();
         editDialog.uploadImageFromSidePanel(testImagePath);
+    }
+
+    private void dragImageWithoutDescription() throws TimeoutException, InterruptedException {
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.setAssetFilter(testAssetsPath);
+        Commons.openEditDialog(editorPage, compPath);
+        editDialog.checkImageFromPageImage();
+        editDialog.uploadImageFromSidePanel(testImageWithoutDescriptionPath);
     }
 
     /**

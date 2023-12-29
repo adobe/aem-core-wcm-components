@@ -19,7 +19,9 @@
                         "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube",
                         "youtubeVideoId": "2R2gb0MKJlo",
                         "youtubeWidth": "300",
-                        "youtubeHeight": "200"
+                        "youtubeHeight": "200",
+                        "youtubeAspectRatio": "56.25",
+                        "layout": "responsive"
                     },
                     "video2": {
                         "jcr:primaryType": "nt:unstructured",
@@ -31,7 +33,8 @@
                         "youtubeMute": "false",
                         "youtubeLoop": "false",
                         "youtubeRel": "false",
-                        "youtubePlaysInline": "false"
+                        "youtubePlaysInline": "false",
+                        "accessibilityLabel": "Test Video"
                     },
                     "video3": {
                         "jcr:primaryType": "nt:unstructured",

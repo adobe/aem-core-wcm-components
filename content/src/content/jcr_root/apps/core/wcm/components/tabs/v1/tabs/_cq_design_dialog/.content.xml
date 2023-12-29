@@ -20,34 +20,4 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Tabs"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    helpPath="https://www.adobe.com/go/aem_cmp_tabs_v1">
-    <content
-        jcr:primaryType="nt:unstructured"
-        sling:resourceType="granite/ui/components/coral/foundation/container">
-        <items jcr:primaryType="nt:unstructured">
-            <tabs
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="granite/ui/components/coral/foundation/tabs"
-                maximized="{Boolean}true">
-                <items jcr:primaryType="nt:unstructured">
-                    <allowedcomponents
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Allowed Components"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <components
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="cq/gui/components/authoring/allowedcomponents"
-                                name="./components"/>
-                        </items>
-                    </allowedcomponents>
-                    <styletab
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/include"
-                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
-                </items>
-            </tabs>
-        </items>
-    </content>
-</jcr:root>
+    helpPath="https://www.adobe.com/go/aem_cmp_tabs_v1"/>
