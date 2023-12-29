@@ -29,7 +29,7 @@
     },
     "overrides": {
         "aemfed": {
-            "pac-proxy-agent": "^7.0.1"
+            "proxy-agent": "^6.3.1"
         }
     }
 }
