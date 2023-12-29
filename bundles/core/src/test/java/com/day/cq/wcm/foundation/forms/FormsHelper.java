@@ -20,7 +20,6 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.commons.json.JSONException;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -183,9 +182,9 @@ public class FormsHelper {
         return null;
     }
 
-    public static void inlineValuesAsJson(SlingHttpServletRequest request, Writer out, String path) throws IOException, RepositoryException, JSONException {}
+    public static void inlineValuesAsJson(SlingHttpServletRequest request, Writer out, String path) throws IOException, RepositoryException {}
 
-    public static void inlineValuesAsJson(SlingHttpServletRequest request, Writer out, String path, int nodeDepth) throws IOException, RepositoryException, JSONException {}
+    public static void inlineValuesAsJson(SlingHttpServletRequest request, Writer out, String path, int nodeDepth) throws IOException, RepositoryException {}
 
     private static void accumulateShowHideExpressions(Node node, Map<String, String> map) throws RepositoryException {}
 

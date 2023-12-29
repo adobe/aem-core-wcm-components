@@ -16,23 +16,21 @@
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.awt.*;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
 import java.util.List;
-import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
+import java.util.Map;
+import java.util.Scanner;
 
-import org.apache.commons.lang3.ArrayUtils;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -40,7 +38,9 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.ui.wcm.commons.config.NextGenDynamicMediaConfig;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.internal.models.v2.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.EnhancedRendition;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -48,7 +48,6 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.dam.api.Asset;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
 import static com.adobe.cq.wcm.core.components.models.Teaser.PN_IMAGE_LINK_HIDDEN;
@@ -64,17 +63,27 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String URI_WIDTH_PLACEHOLDER_ENCODED = "%7B.width%7D";
     private static final String URI_WIDTH_PLACEHOLDER = "{.width}";
     private static final String EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+    static final int DEFAULT_NGDM_ASSET_WIDTH = 640;
+
+    @Inject
+    @Optional
+    private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
 
     private boolean imageLinkHidden = false;
 
     private String srcSet = StringUtils.EMPTY;
     private Map<String, String> srcSetWithMimeType = Collections.EMPTY_MAP;
     private String sizes;
-    
+
     private Dimension dimension;
+
+    private boolean ngdmImage = false;
 
     @PostConstruct
     protected void initModel() {
+        if (isNgdmSupportAvailable()) {
+            initNextGenerationDynamicMedia();
+        }
         super.initModel();
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
@@ -131,10 +140,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     for (int i = 0; i < widthsArray.length; i++) {
                         if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
                             srcsetArray[i] =
-                                    srcUritemplate.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                                srcUritemplate.replace("{.width}", String.format("%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                         } else {
                             srcsetArray[i] =
-                                    srcUritemplate.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
+                                srcUritemplate.replace("{.width}", String.format(".%s", widthsArray[i])) + " " + widthsArray[i] + "w";
                         }
                     }
                     srcSet = StringUtils.join(srcsetArray, ',');
@@ -154,7 +163,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     @Override
     @JsonIgnore
-    public String getHeight () {
+    public String getHeight() {
         int height = getOriginalDimension().height;
         if (height > 0) {
             return String.valueOf(height);
@@ -165,7 +174,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Nullable
     @Override
     @JsonIgnore
-    public String getWidth () {
+    public String getWidth() {
         int width = getOriginalDimension().width;
         if (width > 0) {
             return String.valueOf(width);
@@ -176,6 +185,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     @JsonIgnore
     public String getSrcUriTemplate() {
+        if (ngdmImage) {
+            return prepareNgdmSrcUriTemplate();
+        }
         return super.getSrcUriTemplate();
     }
 
@@ -215,14 +227,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return !disableLazyLoading;
     }
 
-    
+
     private Dimension getOriginalDimension() {
-    	if (this.dimension == null) {
-    		this.dimension = getOriginalDimensionInternal();
-    	}
-    	return this.dimension;
+        if (this.dimension == null) {
+            this.dimension = getOriginalDimensionInternal();
+        }
+        return this.dimension;
     }
-    
+
     private Dimension getOriginalDimensionInternal() {
         ValueMap inheritedResourceProperties = resource.getValueMap();
         String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
@@ -240,7 +252,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     Dimension dimension = original.getDimension();
                     if (dimension != null) {
                         if (resizeWidth != null && Integer.parseInt(resizeWidth) > 0 && Integer.parseInt(resizeWidth) < dimension.getWidth()) {
-                            int calculatedHeight = (int) Math.round(Integer.parseInt(resizeWidth) * (dimension.getHeight() / (float)dimension.getWidth()));
+                            int calculatedHeight = (int) Math.round(Integer.parseInt(resizeWidth) * (dimension.getHeight() / (float) dimension.getWidth()));
                             return new Dimension(Integer.parseInt(resizeWidth), calculatedHeight);
                         }
                         return dimension;
@@ -251,4 +263,39 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return new Dimension(0, 0);
     }
 
+    private boolean isNgdmSupportAvailable() {
+        return nextGenDynamicMediaConfig != null && nextGenDynamicMediaConfig.enabled() &&
+            StringUtils.isNotBlank(nextGenDynamicMediaConfig.getRepositoryId());
+    }
+
+    private void initNextGenerationDynamicMedia() {
+        initResource();
+        properties = resource.getValueMap();
+        String fileReference = properties.get("fileReference", String.class);
+        String smartCrop = properties.get("smartCrop", String.class);
+        if (isNgdmImageReference(fileReference)) {
+            int width = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, DEFAULT_NGDM_ASSET_WIDTH);
+            NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
+                .withPreferWebp(true)
+                .withWidth(width);
+            if(StringUtils.isNotEmpty(smartCrop)) {
+                builder.withSmartCrop(smartCrop);
+            }
+            src = builder.build();
+            ngdmImage = true;
+            hasContent = true;
+        }
+    }
+
+    @NotNull
+    private String prepareNgdmSrcUriTemplate() {
+        // replace the value of the width URL parameter with the placeholder
+        srcUriTemplate = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER_ENCODED);
+        String ret = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER);
+        return ret;
+    }
+
+    public static boolean isNgdmImageReference(String fileReference) {
+        return StringUtils.isNotBlank(fileReference) && fileReference.startsWith("/urn:");
+    }
 }

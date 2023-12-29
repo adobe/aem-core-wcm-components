@@ -93,7 +93,7 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 Core Components | AEM as a Cloud Service | AEM 6.5   | Java SE | Maven
 ----------------|------------------------|-----------|---------|---------
-[2.22.4](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.22.4) | Continual | 6.5.14.0+ | 8, <br/>11 | 3.3.9+
+[2.23.5+](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.23.4) | Continual | 6.5.19.0+ | 8, <br/>11 | 3.3.9+
 
 For the requirements from previous Core Component releases, see [Historical System Requirements](VERSIONS.md).
 
@@ -117,7 +117,7 @@ With AEM as a Cloud Service SDK, use the `cloud` profile as follows to deploy th
 
 Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install
-* `-am/-also-make` options specifies that dependencies should also be built
+* `-am/-also-make` option specifies the dependencies that should also be built
 
 For detailed informations see [BUILDING.md](BUILDING.md).
 

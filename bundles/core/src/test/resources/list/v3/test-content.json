@@ -316,6 +316,53 @@
                     "jcr:title": " ",
                     "cq:lastModified": "2016-09-21T16:12:45.000-07:00"
                 }
+            },
+            "page_7": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content": {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": " ",
+                    "cq:template": "/conf/coretest/settings/wcm/templates/template-1"
+                },
+                "page_7_1": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content": {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title": "Page 7.1",
+                        "cq:featuredimage"    : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+                        }
+                    }
+                },
+                "page_7_2": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content": {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title": "Page 7.2"
+                    }
+                }
+            }
+        }
+    },
+    "dam": {
+        "jcr:primaryType": "sling:Folder",
+        "core": {
+            "jcr:primaryType": "sling:Folder",
+            "images": {
+                "jcr:primaryType": "sling:Folder",
+                "Adobe_Systems_logo_and_wordmark.png": {
+                    "jcr:primaryType": "dam:Asset",
+                    "jcr:content": {
+                        "jcr:primaryType": "dam:AssetContent",
+                        "jcr:title": "Adobe Systems logo and wordmark",
+                        "metadata": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "dc:format": "image/png"
+                        }
+                    }
+                }
             }
         }
     }

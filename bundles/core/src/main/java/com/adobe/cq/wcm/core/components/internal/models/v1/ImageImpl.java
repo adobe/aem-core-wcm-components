@@ -188,7 +188,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 }
             } else {
                 useAssetDelivery = false;
-                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
+                // handle the case where the image is not coming from DAM but from a different source (e.g. NGDM)
+                if (!hasContent) {
+                    LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
+                }
             }
         } else {
             useAssetDelivery = false;
@@ -244,6 +247,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 templateRelativePath = resource.getPath().substring(template.getPath().length());
             } else {
                 baseResourcePath = resource.getPath();
+                if (resource.getResourceResolver().getResource(resource.getPath()) == null) {
+                    // synthetic merged resource, use the current page path as base path
+                    baseResourcePath = currentPage.getPath();
+                }
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
             if (smartSizesSupported()) {
@@ -284,9 +291,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 } else {
                     src += extension;
                 }
-                src += (inTemplate ? Text.escapePath(templateRelativePath) : hasExternalImageResource ? externalImageResourcePath : "") +
-                        (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
-                        (inTemplate || hasExternalImageResource || lastModifiedDate > 0 ? DOT + extension : "");
+                src += inTemplate ? Text.escapePath(templateRelativePath) : hasExternalImageResource ? externalImageResourcePath : "";
+                src += lastModifiedDate > 0 ? "/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") : "";
+                src += inTemplate || hasExternalImageResource || lastModifiedDate > 0 ? DOT + extension : "";
             }
 
             if (!isDecorative) {
@@ -297,7 +304,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             buildJson();
         }
     }
-    
+
     /**
      * Extract the image name from the asset
      * @param asset the asset
