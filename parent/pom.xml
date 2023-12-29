@@ -665,15 +665,6 @@
                 <version>1.0.6</version>
                 <scope>provided</scope>
             </dependency>
-
-            <!-- javax.inject 1 -->
-            <dependency>
-                <artifactId>geronimo-atinject_1.0_spec</artifactId>
-                <version>1.0</version>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <scope>provided</scope>
-            </dependency>
-
             <dependency>
                 <groupId>javax.annotation</groupId>
                 <artifactId>javax.annotation-api</artifactId>
