@@ -23,6 +23,7 @@
     }
     var dataLayerEnabled;
     var dataLayer;
+    var dataLayerName;
     var delay = 100;
 
     var NS = "cmp";
@@ -574,7 +575,9 @@
      */
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        dataLayerName = document.body.getAttribute("data-cmp-data-layer-name");
+        dataLayerName = dataLayerName || "adobeDataLayer";
+        dataLayer = dataLayerEnabled ? window[dataLayerName] = window[dataLayerName] || [] : undefined;
 
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {

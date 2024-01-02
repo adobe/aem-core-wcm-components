@@ -16,33 +16,49 @@ limitations under the License.
 
 # Data Layer Integration with the Core Components
 
-The Core Components provide an out-of-the-box integration with the [Adobe Client Data Layer](https://github.com/adobe/adobe-client-data-layer), which for convenience is called data layer in this page.
+The Core Components provide an out-of-the-box integration with the [Adobe Client Data Layer](https://github.com/adobe/adobe-client-data-layer) and Google Tag Manager Data Layers. For convenience these are referred to in the page as ACDL and GDL.
 
 ## Enabling the Data Layer
 
-The data layer is disabled by default. 
+The data layer is disabled by default.
 
 To enable the data layer for your site:
 1. Create the following structure below the `/conf` node:
     `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
-1. Add the `enabled` boolean property and set it to `true`.
-1. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+2. Add the `enabled` boolean property and set it to `true`.
+3. If a datalayer object name other than `adobeDataLayer` is required (e.g. `dataLayer` for most GDLs), add a string property `name` to the same node, with the required Data Layer object name as the value.
+4. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
 
-## Preventing the Data Layer client library from being included
+## Google Data Layer Creation
 
-The data layer client library is included by default by the Page component. As there are other ways to include this library (e.g. through Adobe Launch), it might be needed to prevent its inclusion through the Page component.
+While Core Components includes the ACDL Library unless explicitly disabled (below), it does not include the GDL library.  The Core Components code will create an appropriately named Data Layer array, but a standard Google Tag Manager code snippet must be included in the page to consume this array and create a full GDL.  This is done according to Google documentation and is not directly related to Core Components.
 
-To prevent the data layer client library from being included by the Page component:
+## Google Global Tag - GTag
+
+Google's GTag code is not currently supported.
+
+## Generic Data Layer Use
+
+The Core Components Data Layer integration supports Data Layer name configuration, and the logic uses the standard JavaScript array push() method.  If the Data Layer is enabled, but the ACDL library is not loaded, and the Data Layer is not consumed by a Google solution, there will still be a plain JavaScript array available with the configured name, and containing Core Components data, although with 'event' entries that are intended for an Event-Driven Data Layer like the ACDL or GDL.  This plain array Data Layer is generic and may be suitable for other Data Layer providers or consumers.
+
+## Preventing the Adobe Data Layer client library from being included
+
+The ACDL library is included by default by the Page component.  If using a GDL, or already including the ACDL library in some other way such as using AEP Data Collection Tags, the ACDL library should not be loaded.
+
+To prevent the ACDL library from being included by the Page component:
+
 1. Create the following structure below the `/conf` node:
    `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
-1. Add the `skipClientlibInclude` boolean property and set it to `true`.
-1. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+2. Add the `skipClientlibInclude` boolean property and set it to `true`.
+3. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
 
 ## Data Layer State Structure
 
-When the data layer is enabled, the javascript `adobeDataLayer` object is available on the page and is populated with the components and their properties that are used on the page.
+When the data layer is enabled, a JavaScript Data Layer object will be available.  By default, the object name is `adobeDataLayer`.  If a name has been defined in the Data Layer configuration (see [Enabling the Data Layer](#enabling-the-data-layer)) the object will be named accordingly.  The Data Layer will be populated with the components and their properties that are used on the page.
 
-The data layer state (returned by calling `adobeDataLayer.getState()`) is an object with two objects (`page` and `component`). All the components are stored below the `component` object as a flat structure. The structure looks as follows:
+### Data Layer State - ACDL
+
+If an ACDL is used the data layer state (returned by calling `adobeDataLayer.getState()`) is an object with two objects (`page` and `component`). All the components are stored below the `component` object as a flat structure. The structure looks as follows:
 ```
 {
   "page": {
@@ -122,6 +138,9 @@ Calling `adobeDataLayer.getState()` in the browser console will return e.g.:
   }
 }
 ```
+### Data Layer State - GDL
+
+Google Data Layers do not have a getState() method which can provide a consolidated _computed state_ of the Data Layer.  To view the raw Data Layer enter the name of the Data Layer in the browser console, e.g. `dataLayer`.  The computed state can be viewed using Google and third party debugging tools.
 
 ## Components supporting the Data Layer
 
