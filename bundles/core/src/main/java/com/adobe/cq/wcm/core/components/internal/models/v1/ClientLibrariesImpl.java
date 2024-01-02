@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +31,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +44,7 @@ import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -78,12 +76,10 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Self
     private SlingHttpServletRequest request;
 
-    @Inject
-    @Named(OPTION_RESOURCE_TYPES)
+    @ScriptVariable(name=OPTION_RESOURCE_TYPES)
     Object resourceTypes;
 
-    @Inject
-    @Named(OPTION_CATEGORIES)
+    @ScriptVariable(name=OPTION_CATEGORIES)
     private Object categories;
 
     // The two fields bellow are injected from request attributes only to be able to detect unintended injections on
@@ -94,35 +90,29 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @RequestAttribute(name = OPTION_CATEGORIES)
     private Object raCategories;
 
-    @Inject
-    @Named(OPTION_FILTER_REGEX)
+    @ScriptVariable(name=OPTION_FILTER_REGEX)
     String filterRegex;
 
-    @Inject
-    @Named(OPTION_INHERITED)
+    @ScriptVariable(name=OPTION_INHERITED)
     @Default(booleanValues = OPTION_INHERITED_DEFAULT)
     boolean inherited;
 
-    @Inject
-    @Named(OPTION_ASYNC)
+    @ScriptVariable(name=OPTION_ASYNC)
+    @Nullable
     private boolean async;
 
-    @Inject
-    @Named(OPTION_DEFER)
+    @ScriptVariable(name=OPTION_DEFER)
     private boolean defer;
 
-    @Inject
-    @Named(OPTION_CROSSORIGIN)
+    @ScriptVariable(name=OPTION_CROSSORIGIN)
     @Nullable
     private String crossorigin;
 
-    @Inject
-    @Named(OPTION_ONLOAD)
+    @ScriptVariable(name=OPTION_ONLOAD)
     @Nullable
     private String onload;
 
-    @Inject
-    @Named(OPTION_MEDIA)
+    @ScriptVariable(name=OPTION_MEDIA)
     @Nullable
     private String media;
 
@@ -297,7 +287,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @NotNull
     protected Set<String> getCategoriesFromComponents() {
         try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE))) {
-            Set<String> categories = new HashSet<>();
+            Set<String> categories = new LinkedHashSet<>();
             for (ClientLibrary library : this.getAllClientLibraries(resourceResolver)) {
                 for (String category : library.getCategories()) {
                     if (pattern == null || pattern.matcher(category).matches()) {
