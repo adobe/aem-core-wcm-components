@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,7 +33,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Wraps link information to be used in models.
@@ -148,7 +148,7 @@ public final class LinkImpl<T> implements Link<T> {
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             attributes.putAll(filteredAttributes);
         }
-        return ImmutableMap.copyOf(attributes);
+        return Collections.unmodifiableMap(attributes);
     }
 
 }

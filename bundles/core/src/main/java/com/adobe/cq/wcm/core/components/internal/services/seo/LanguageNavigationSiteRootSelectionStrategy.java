@@ -16,7 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.services.seo;
 
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
+import java.util.WeakHashMap;
 import java.util.function.Predicate;
 
 import org.apache.sling.api.resource.Resource;
@@ -39,8 +39,6 @@ import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
 /**
  * An implementation of {@link SiteRootSelectionStrategy} that looks for a language navigation component on the given page and uses it's
@@ -79,7 +77,7 @@ public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSele
      * meaning a consumer will call the public methods of this interface close after each other passing the same {@link Page} object to each
      * method call. In this case, we don't need to traverse multiple times.
      */
-    private final Cache<Page, Optional<Resource>> languageNavigationCache = CacheBuilder.newBuilder().weakKeys().build();
+    private final WeakHashMap<Page, Optional<Resource>> languageNavigationCache = new WeakHashMap<>();
 
     @Override
     @Nullable
@@ -98,12 +96,15 @@ public class LanguageNavigationSiteRootSelectionStrategy implements SiteRootSele
     }
 
     private Optional<Resource> findLanguageNavigation(Page page) {
-        try {
-            return languageNavigationCache.get(page, () -> findLanguageNavigation(page.getContentResource(), page));
-        } catch (ExecutionException ex) {
-            LOG.warn("Failed to find language navigation", ex);
-            return Optional.empty();
+        Optional<Resource> resource = languageNavigationCache.get(page);
+        if (resource == null) {
+            resource = findLanguageNavigation(page.getContentResource(), page);
+            if (resource == null || !resource.isPresent()) {
+                resource = Optional.empty();
+            }
+            languageNavigationCache.put(page, resource);
         }
+        return resource;
     }
 
     private Optional<Resource> findLanguageNavigation(Resource contentResource, Page containingPage) {
