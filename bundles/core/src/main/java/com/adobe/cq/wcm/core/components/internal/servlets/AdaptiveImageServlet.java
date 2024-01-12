@@ -851,8 +851,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         ArrayList<String> selectorList = new ArrayList<>();
         for (String s : selector.split("\\.")) {
-            if (!s.isEmpty()) {
-                selectorList.add(s.trim());
+            String trimmed = s.trim();
+            if (!trimmed.isEmpty()) {
+                selectorList.add(trimmed);
             }
         }
         if (selectorList.size() > 3) {
