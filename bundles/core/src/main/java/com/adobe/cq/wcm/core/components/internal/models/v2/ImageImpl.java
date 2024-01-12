@@ -15,17 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.codec.net.URLCodec;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -43,6 +40,7 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
+import com.adobe.cq.wcm.core.components.internal.link.LinkUtil;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
@@ -59,27 +57,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl implements Image {
-
-    //SITES-18137: imitate the exact behavior of com.google.common.net.URL_FRAGMENT_ESCAPER
-    private static final BitSet URL_FRAGMENT_SAFE_CHARS = new BitSet(256);
-
-    static {
-        //alphanumeric characters
-        for(int i = 97; i <= 122; i++) {
-            URL_FRAGMENT_SAFE_CHARS.set(i);
-        }
-        for(int i = 65; i <= 90; i++) {
-            URL_FRAGMENT_SAFE_CHARS.set(i);
-        }
-        for(int i = 48; i <= 57; i++) {
-            URL_FRAGMENT_SAFE_CHARS.set(i);
-        }
-        // safe characters from Guava's URL_FRAGMENT_ESCAPER: -._~!$'()*,;&=@:+/?
-        byte[] nonAlphaNumeric = new byte[] { 45, 46, 95, 126, 33, 36, 39, 40, 41, 42, 44, 59, 38, 61, 64, 58, 43, 47, 63 };
-        for(int i = 0; i < nonAlphaNumeric.length; i++) {
-            URL_FRAGMENT_SAFE_CHARS.set(nonAlphaNumeric[i]);
-        }
-    }
 
     @ValueMapValue(name = "imageModifiers", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
@@ -210,8 +187,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     //check DM asset - check for "dam:scene7File" metadata value
                     String dmAssetName = asset.getMetadataValue(Scene7Constants.PN_S7_FILE);
                     if(isDmFeaturesEnabled && (!StringUtils.isEmpty(dmAssetName))){
-                        //SITES-18137: imitate the exact behavior of com.google.common.net.URL_FRAGMENT_ESCAPER
-                        dmAssetName = new String(URLCodec.encodeUrl(URL_FRAGMENT_SAFE_CHARS, dmAssetName.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+                        dmAssetName = LinkUtil.escapeFragment(dmAssetName);
                         //image is DM
                         dmImage = true;
                         useAssetDelivery = false;
