@@ -76,43 +76,37 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Self
     private SlingHttpServletRequest request;
 
-    @ScriptVariable(name=OPTION_RESOURCE_TYPES)
+    @RequestAttribute(name=OPTION_RESOURCE_TYPES)
+    @Nullable
     Object resourceTypes;
 
-    @ScriptVariable(name=OPTION_CATEGORIES)
+    @RequestAttribute(name=OPTION_CATEGORIES)
+    @Nullable
     private Object categories;
 
-    // The two fields bellow are injected from request attributes only to be able to detect unintended injections on
-    // the corresponding fields above.
-    @RequestAttribute(name = OPTION_RESOURCE_TYPES)
-    private Object raResourceTypes;
-
-    @RequestAttribute(name = OPTION_CATEGORIES)
-    private Object raCategories;
-
-    @ScriptVariable(name=OPTION_FILTER_REGEX)
+    @RequestAttribute(name=OPTION_FILTER_REGEX)
+    @Nullable
     String filterRegex;
 
-    @ScriptVariable(name=OPTION_INHERITED)
+    @RequestAttribute(name=OPTION_INHERITED)
     @Default(booleanValues = OPTION_INHERITED_DEFAULT)
     boolean inherited;
 
-    @ScriptVariable(name=OPTION_ASYNC)
-    @Nullable
+    @RequestAttribute(name=OPTION_ASYNC)
     private boolean async;
 
-    @ScriptVariable(name=OPTION_DEFER)
+    @RequestAttribute(name=OPTION_DEFER)
     private boolean defer;
 
-    @ScriptVariable(name=OPTION_CROSSORIGIN)
+    @RequestAttribute(name=OPTION_CROSSORIGIN)
     @Nullable
     private String crossorigin;
 
-    @ScriptVariable(name=OPTION_ONLOAD)
+    @RequestAttribute(name=OPTION_ONLOAD)
     @Nullable
     private String onload;
 
-    @ScriptVariable(name=OPTION_MEDIA)
+    @RequestAttribute(name=OPTION_MEDIA)
     @Nullable
     private String media;
 
@@ -129,19 +123,13 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @PostConstruct
     protected void initModel() {
         resourceTypeSet = Utils.getStrings(resourceTypes);
-        if (resourceTypeSet.isEmpty()) {
-            resourceTypeSet = Utils.getStrings(raResourceTypes);
-        }
         if (StringUtils.isNotEmpty(filterRegex)) {
             pattern = Pattern.compile(filterRegex);
         }
 
         Set<String> categoriesSet = Utils.getStrings(categories);
         if (categoriesSet.isEmpty()) {
-            categoriesSet = Utils.getStrings(raCategories);
-            if (categoriesSet.isEmpty()) {
-                categoriesSet = getCategoriesFromComponents();
-            }
+            categoriesSet = getCategoriesFromComponents();
         }
 
         categoriesArray = categoriesSet.toArray(new String[0]);
