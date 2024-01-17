@@ -75,9 +75,6 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.commons.WCMUtils;
 import com.day.cq.wcm.foundation.WCMRenditionPicker;
 import com.day.image.Layer;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import com.google.common.net.HttpHeaders;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.getWrappedImageResourceWithInheritance;
 import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper.IMAGE_RESOURCE_TYPE;
@@ -656,7 +653,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         response.setContentType(contentType);
         String extension = mimeTypeService.getExtension(contentType);
         String disposition = "svg".equalsIgnoreCase(extension) ? "attachment" : "inline";
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, disposition + "; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
+        response.setHeader("Content-Disposition", disposition + "; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
         IOUtils.copy(inputStream, response.getOutputStream());
     }
 
@@ -852,7 +849,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if (StringUtils.isEmpty(selector)) {
             throw new IllegalArgumentException("Expected 1, 2 or 3 selectors instead got empty selector");
         }
-        ArrayList<String> selectorList = Lists.newArrayList(Splitter.on('.').omitEmptyStrings().trimResults().split(selector));
+        ArrayList<String> selectorList = new ArrayList<>();
+        for (String s : selector.split("\\.")) {
+            String trimmed = s.trim();
+            if (!trimmed.isEmpty()) {
+                selectorList.add(trimmed);
+            }
+        }
         if (selectorList.size() > 3) {
             throw new IllegalArgumentException("Expected 1, 2 or 3 selectors, instead got: " + selectorList.size());
         }

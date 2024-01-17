@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import java.util.stream.Collectors;
+
+import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.lang3.StringUtils;
@@ -56,6 +59,27 @@ public class LinkUtil {
         PATTERNS.addAll(Arrays.stream(RESERVED_CHARACTERS_ENCODED)
             .map(encoded -> Pattern.compile("(" + encoded + ")") )
             .collect(Collectors.toList()));
+    }
+
+    //SITES-18137: imitate the exact behavior of com.google.common.net.URL_FRAGMENT_ESCAPER
+    private static final BitSet URL_FRAGMENT_SAFE_CHARS = new BitSet(256);
+
+    static {
+        //alphanumeric characters
+        for(int i = 97; i <= 122; i++) {
+            URL_FRAGMENT_SAFE_CHARS.set(i);
+        }
+        for(int i = 65; i <= 90; i++) {
+            URL_FRAGMENT_SAFE_CHARS.set(i);
+        }
+        for(int i = 48; i <= 57; i++) {
+            URL_FRAGMENT_SAFE_CHARS.set(i);
+        }
+        // safe characters from Guava's URL_FRAGMENT_ESCAPER: -._~!$'()*,;&=@:+/?
+        byte[] nonAlphaNumeric = new byte[] { 45, 46, 95, 126, 33, 36, 39, 40, 41, 42, 44, 59, 38, 61, 64, 58, 43, 47, 63 };
+        for(int i = 0; i < nonAlphaNumeric.length; i++) {
+            URL_FRAGMENT_SAFE_CHARS.set(nonAlphaNumeric[i]);
+        }
     }
 
 
@@ -136,6 +160,20 @@ public class LinkUtil {
         }
         final String unmasked = LinkUtil.unmask(escaped, placeholders);
         return unmasked;
+    }
+
+    /**
+     * Escapes an URI fragment, imitating the exact behavior of com.google.common.net.URL_FRAGMENT_ESCAPER.
+     * (SITES-18137)
+     *
+     * @param fragment The URI fragment
+     * @return The escaped fragment
+     */
+    public static String escapeFragment(final String fragment) {
+        if (fragment == null) {
+            return null;
+        }
+        return new String(URLCodec.encodeUrl(URL_FRAGMENT_SAFE_CHARS, fragment.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
     }
 
     /**
