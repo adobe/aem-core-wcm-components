@@ -77,11 +77,9 @@
 
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayerName = document.body.getAttribute("data-cmp-data-layer-name");
-        dataLayerName = dataLayerName || "adobeDataLayer";
-        dataLayer = (dataLayerEnabled) ? window[dataLayerName] = window[dataLayerName]  || [] : undefined;
-
         if (dataLayerEnabled) {
+            dataLayerName = document.body.getAttribute("data-cmp-data-layer-name") || "adobeDataLayer";
+            dataLayer = window[dataLayerName];
 
             var components        = document.querySelectorAll("[data-cmp-data-layer]");
             var clickableElements = document.querySelectorAll("[data-cmp-clickable]");

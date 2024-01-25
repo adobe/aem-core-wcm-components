@@ -680,9 +680,10 @@
      */
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayerName = document.body.getAttribute("data-cmp-data-layer-name");
-        dataLayerName = dataLayerName || "adobeDataLayer";
-        dataLayer = window[dataLayerName];
+        if (dataLayerEnabled) {
+            dataLayerName = document.body.getAttribute("data-cmp-data-layer-name") || "adobeDataLayer";
+            dataLayer = window[dataLayerName];
+        }
 
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
