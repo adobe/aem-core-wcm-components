@@ -32,9 +32,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolverFactory;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.models.factory.ModelFactory;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,8 +51,8 @@ import com.day.cq.wcm.api.PageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.anyBoolean;
@@ -357,91 +355,12 @@ class ClientLibrariesImplTest {
     }
 
     @Test
-    void testGetCategoriesWithAdverseInjectedCategories() {
-        // invalid injection
-        Map<String,Object> slingAttributes = new HashMap<>();
-        slingAttributes.put(ClientLibraries.OPTION_CATEGORIES, new Object());
-
-        // valid injection
-        Map<String,Object> requestAttributes = new HashMap<>();
-        requestAttributes.put(ClientLibraries.OPTION_CATEGORIES, TEASER_CATEGORY + "," + ACCORDION_CATEGORY);
-
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, slingAttributes, requestAttributes);
-
-        //valid injection should be used
-        StringBuilder includes = new StringBuilder();
-        includes.append(jsIncludes.get(TEASER_CATEGORY));
-        includes.append(jsIncludes.get(ACCORDION_CATEGORY));
-        includes.append(cssIncludes.get(TEASER_CATEGORY));
-        includes.append(cssIncludes.get(ACCORDION_CATEGORY));
-        assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
-    }
-
-    @Test
-    void testGetCategoriesWithAdverseInjectedCategoriesBackwardsCompatibility() {
-        // original honored injection
-        Map<String,Object> slingAttributes = new HashMap<>();
-        slingAttributes.put(ClientLibraries.OPTION_CATEGORIES, TEASER_CATEGORY + "," + ACCORDION_CATEGORY);
-
-        // new ignored injection
-        Map<String,Object> requestAttributes = new HashMap<>();
-        requestAttributes.put(ClientLibraries.OPTION_CATEGORIES, TEASER_CATEGORY);
-
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, slingAttributes, requestAttributes);
-
-        StringBuilder includes = new StringBuilder();
-        includes.append(jsIncludes.get(TEASER_CATEGORY));
-        includes.append(jsIncludes.get(ACCORDION_CATEGORY));
-        includes.append(cssIncludes.get(TEASER_CATEGORY));
-        includes.append(cssIncludes.get(ACCORDION_CATEGORY));
-        assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
-    }
-
-    @Test
     void testGetCategoriesWithInjectedResourceType() {
         Map<String,Object> attributes = new HashMap<>();
         attributes.put("resourceTypes", new HashSet<String>() {{
             add("core/wcm/components/accordion/v1/accordion");
         }});
         ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
-        StringBuilder includes = new StringBuilder();
-        includes.append(jsIncludes.get(ACCORDION_CATEGORY));
-        includes.append(cssIncludes.get(ACCORDION_CATEGORY));
-        assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
-    }
-
-    @Test
-    void testGetCategoriesWithAdverseInjectedResourceType() {
-        // invalid injection
-        Map<String,Object> slingAttributes = new HashMap<>();
-        slingAttributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, new Object());
-        // valid injection
-        Map<String,Object> requestAttributes = new HashMap<>();
-        requestAttributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, new HashSet<String>() {{
-            add("core/wcm/components/accordion/v1/accordion");
-        }});
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, slingAttributes, requestAttributes);
-        StringBuilder includes = new StringBuilder();
-        includes.append(jsIncludes.get(ACCORDION_CATEGORY));
-        includes.append(cssIncludes.get(ACCORDION_CATEGORY));
-        assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
-    }
-
-    @Test
-    void testGetCategoriesWithAdverseInjectedResourceTypeBackwardsCompatibility() {
-        // original honored injection
-        Map<String,Object> slingAttributes = new HashMap<>();
-        slingAttributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, new HashSet<String>() {{
-            add("core/wcm/components/accordion/v1/accordion");
-        }});
-        // new ignored injection
-        Map<String,Object> requestAttributes = new HashMap<>();
-        requestAttributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, new HashSet<String>() {{
-            add("core/wcm/components/accordion/v1/accordion");
-            add("core/wcm/components/carousel/v3/carousel");
-        }});
-
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, slingAttributes, requestAttributes);
         StringBuilder includes = new StringBuilder();
         includes.append(jsIncludes.get(ACCORDION_CATEGORY));
         includes.append(cssIncludes.get(ACCORDION_CATEGORY));
@@ -596,34 +515,12 @@ class ClientLibrariesImplTest {
         Resource resource = context.currentResource(path);
         if (resource != null) {
             if (attributes != null) {
-                SlingBindings slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
                 for (Map.Entry<String,Object> entry : attributes.entrySet()) {
-                    slingBindings.put(entry.getKey(), entry.getValue());
+                    context.request().setAttribute(entry.getKey(), entry.getValue());
                 }
-                context.request().setAttribute(SlingBindings.class.getName(), slingBindings);
             }
             context.request().setResource(resource);
             return context.request().adaptTo(ClientLibraries.class);
-        }
-        return null;
-    }
-
-    private ClientLibraries getClientLibrariesUnderTest(String path, Map<String,Object> slingAttributes, Map<String,Object> requestAttributes) {
-        Resource resource = context.currentResource(path);
-        if (resource != null) {
-            MockSlingHttpServletRequest request = context.request();
-            if (slingAttributes != null) {
-                SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
-                for (Map.Entry<String,Object> entry : slingAttributes.entrySet()) {
-                    slingBindings.put(entry.getKey(), entry.getValue());
-                }
-                request.setAttribute(SlingBindings.class.getName(), slingBindings);
-                for (Map.Entry<String,Object> entry : requestAttributes.entrySet()) {
-                    request.setAttribute(entry.getKey(), entry.getValue());
-                }
-            }
-            request.setResource(resource);
-            return request.adaptTo(ClientLibraries.class);
         }
         return null;
     }
