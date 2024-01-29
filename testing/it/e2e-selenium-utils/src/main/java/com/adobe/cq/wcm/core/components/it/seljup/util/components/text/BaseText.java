@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.text;
 
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.WebElementCondition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
@@ -45,11 +46,11 @@ public class BaseText extends BaseComponent {
     }
 
     public void setText(String textContent) {
-        String newTextContent = Selenide.$(text+".cq-Editable-dom[contenteditable]").should(new Condition[]{Condition.exist}).setValue(textContent).getText();
+        String newTextContent = Selenide.$(text+".cq-Editable-dom[contenteditable]").should(new WebElementCondition[]{Condition.exist}).setValue(textContent).getText();
     }
 
     public String getText() {
-        String newTextContent = Selenide.$(text+".cq-Editable-dom[contenteditable]").should(new Condition[]{Condition.exist}).getText();
+        String newTextContent = Selenide.$(text+".cq-Editable-dom[contenteditable]").should(new WebElementCondition[]{Condition.exist}).getText();
         return newTextContent;
     }
 
