@@ -195,7 +195,7 @@ public class Page {
 
     public String[] getRobotsTags() {
         CoralTagList tagList = new CoralTagList(robotsTags);
-        return tagList.getItems().stream().map(SelenideElement::getValue).toArray(String[]::new);
+        return tagList.getItems().asFixedIterable().stream().map(SelenideElement::getValue).toArray(String[]::new);
     }
 
     public void setGenerateSitemap(boolean enabled) {

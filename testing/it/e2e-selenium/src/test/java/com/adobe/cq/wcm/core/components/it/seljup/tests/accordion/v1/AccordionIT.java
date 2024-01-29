@@ -176,7 +176,7 @@ public class AccordionIT extends AuthorBaseUITest {
         assertTrue(items.get(1).getValue().equals("item1"), "Second input item should be item1");
         assertTrue(items.get(2).getValue().equals("item2"), "Third input item should be item2");
 
-        List<String> itemValues = items.stream().map(SelenideElement::getValue).map(String::toString).collect(Collectors.toList());
+        List<String> itemValues = items.asFixedIterable().stream().map(SelenideElement::getValue).map(String::toString).collect(Collectors.toList());
 
         Commons.saveConfigureDialog();
 
@@ -399,7 +399,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //4.
         accordion.openEditDialog(cmpPath);
         editDialog.openItemsTab();
-        List<String> items = childrenEditor.getInputItems().stream()
+        List<String> items = childrenEditor.getInputItems().asFixedIterable().stream()
                 .map(SelenideElement::getValue).map(String::toString)
                 .collect(Collectors.toList());
 
@@ -452,7 +452,7 @@ public class AccordionIT extends AuthorBaseUITest {
         editDialog.openItemsTab();
 
         //6.
-        List<String> items = childrenEditor.getInputItems().stream()
+        List<String> items = childrenEditor.getInputItems().asFixedIterable().stream()
                 .map(SelenideElement::getValue).map(String::toString)
                 .collect(Collectors.toList());
 
