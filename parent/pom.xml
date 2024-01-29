@@ -64,9 +64,9 @@
         <mockitio.version>4.8.1</mockitio.version>
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
-        <aem.selenium.base.it.version>0.2.42</aem.selenium.base.it.version>
-        <selenide.version>6.10.1</selenide.version>
-        <selenium.version>4.7.1</selenium.version>
+        <aem.selenium.base.it.version>0.2.43-SNAPSHOT</aem.selenium.base.it.version>
+		<selenide.version>7.0.5</selenide.version>
+        <selenium.version>4.17.0</selenium.version>
     </properties>
 
     <!-- ======================================================================= -->
