@@ -50,7 +50,9 @@ public class ImageEditDialog extends Dialog {
     private static String linkTarget = "coral-checkbox[name='./linkTarget']";
 
     public void uploadImageFromSidePanel(String imagePath) {
-        $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(fileUpload, DragAndDropOptions.usingActions());
+        DragAndDropOptions.DragAndDropTarget target = new DragAndDropOptions.DragAndDropTarget.CssSelector(fileUpload);
+        DragAndDropOptions options = new DragAndDropOptions(target, DragAndDropOptions.DragAndDropMethod.ACTIONS);
+        $(String.format(imageInSidePanel,imagePath)).dragAndDrop(options);
     }
 
     public void setAltText(String text) {

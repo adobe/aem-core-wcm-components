@@ -52,7 +52,9 @@ public class TeaserEditDialog {
     }
 
     public void uploadImageFromSidePanel(String imagePath) {
-        $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(assetUpload, DragAndDropOptions.usingActions());
+        DragAndDropOptions.DragAndDropTarget target = new DragAndDropOptions.DragAndDropTarget.CssSelector(assetUpload);
+        DragAndDropOptions options = new DragAndDropOptions(target, DragAndDropOptions.DragAndDropMethod.ACTIONS);
+        $(String.format(imageInSidePanel,imagePath)).dragAndDrop(options);
     }
 
     public void setLinkURL(String url) {

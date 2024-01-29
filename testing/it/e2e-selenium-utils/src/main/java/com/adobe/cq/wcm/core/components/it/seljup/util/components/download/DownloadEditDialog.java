@@ -33,6 +33,8 @@ public class DownloadEditDialog extends Dialog {
     }
 
     public void uploadAssetFromSidePanel(String assetPath) {
-        $(String.format(assetInSidePanel,assetPath)).dragAndDropTo(fileUpload, DragAndDropOptions.usingActions());
+        DragAndDropOptions.DragAndDropTarget target = new DragAndDropOptions.DragAndDropTarget.CssSelector(fileUpload);
+        DragAndDropOptions options = new DragAndDropOptions(target, DragAndDropOptions.DragAndDropMethod.ACTIONS);
+        $(String.format(assetInSidePanel,assetPath)).dragAndDrop(options);
     }
 }
