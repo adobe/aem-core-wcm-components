@@ -43,7 +43,7 @@
             linkAccessibilityElement.innerText = linkAccessibilityText;
             document.querySelectorAll("a[target='_blank']").forEach(function(link) {
                 if (!link.querySelector(selectors.linkAccessibility)) {
-                    link.insertAdjacentElement("beforeend", linkAccessibilityElement)
+                    link.insertAdjacentElement("beforeend", linkAccessibilityElement);
                 }
             });
         }
