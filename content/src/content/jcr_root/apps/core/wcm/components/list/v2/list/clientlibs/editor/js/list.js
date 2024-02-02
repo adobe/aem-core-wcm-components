@@ -18,7 +18,7 @@
 
     $(document).on("foundation-contentloaded", function(e) {
         $(".cmp-list__editor coral-select.cq-dialog-dropdown-showhide", e.target).each(function(i, element) {
-            var target = $(element).data("cqDialogDropdownShowhideTarget");
+            var target = $("<div>").text($(element).data("cqDialogDropdownShowhideTarget")).html();
             if (target) {
                 Coral.commons.ready(element, function(component) {
                     showHide(component, target);
@@ -32,7 +32,7 @@
     });
 
     function showHide(component, target) {
-        var value = component.value;
+        var value = $("<div>").text(component.value).html();
         $(target).not(".hide").addClass("hide");
         $(target).filter("[data-showhidetargetvalue='" + value + "']").removeClass("hide");
     }
