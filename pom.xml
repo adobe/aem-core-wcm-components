@@ -23,13 +23,13 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.22.1-SNAPSHOT</version>
+        <version>2.23.5-SNAPSHOT</version>
         <relativePath>parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.reactor</artifactId>
     <packaging>pom</packaging>
-    <version>2.22.1-SNAPSHOT</version>
+    <version>2.23.5-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Reactor</name>
 
@@ -55,6 +55,8 @@
                         <exclude>**/*.editorconfig</exclude>
                         <exclude>**/*.stylelintrc.yaml</exclude>
                         <exclude>**/*.eslintignore</exclude>
+                        <!-- Ignore target folders -->
+                        <exclude>**/target/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -69,6 +71,7 @@
         <module>testing/it/http</module>
         <module>testing/it/e2e-selenium-utils</module>
         <module>testing/it/e2e-selenium</module>
+        <module>testing/it/it.core</module>
         <module>testing/it/it.ui.apps</module>
         <module>testing/it/it.ui.content</module>
         <module>content</module>
