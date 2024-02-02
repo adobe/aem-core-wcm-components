@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.codeborne.selenide.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
@@ -58,11 +59,6 @@ import com.adobe.cq.testing.selenium.utils.ElementUtils;
 import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_RETRY_DELAY;
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_SMALL_SIZE;
@@ -920,6 +916,12 @@ public class Commons {
     public static void makeInlineEditorEditable() {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         ((JavascriptExecutor) webDriver).executeScript("document.getElementsByName('actionUpdate')[0].style.display='inline'");
+    }
+
+    public static void dragSidePanelImageToComponent(String imagePath, String componentPath) {
+        SelenideElement image = $(String.format("coral-card.cq-draggable[data-path=\"%s\"]", imagePath));
+        DragAndDropOptions.DragAndDropTarget.CssSelector targetComp = new DragAndDropOptions.DragAndDropTarget.CssSelector(String.format("[data-type='Editable'][data-path='%s']", componentPath));
+        image.dragAndDrop(new DragAndDropOptions(targetComp, DragAndDropOptions.DragAndDropMethod.ACTIONS));
     }
 
     /**

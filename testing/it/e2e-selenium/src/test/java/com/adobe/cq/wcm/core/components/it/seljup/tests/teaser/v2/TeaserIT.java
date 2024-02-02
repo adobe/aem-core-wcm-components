@@ -546,4 +546,21 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         editorPage.open();
     }
+
+    @Test
+    public void testDropImageToTeaser() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        Commons.dragSidePanelImageToComponent(testImagePath, cmpPath);
+        Commons.closeSidePanel();
+
+        com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.TeaserEditDialog editDialog = teaser.getEditDialog();
+        Commons.openEditDialog(editorPage, cmpPath);
+
+        assertTrue(editDialog.isAltTextFromAssetDescription());
+
+        Commons.closeConfigureDialog();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(teaser.isImagePresentWithAltText(testPage, testImageAltText), "Image should be rendered with alt text: " + testImageAltText);
+    }
 }

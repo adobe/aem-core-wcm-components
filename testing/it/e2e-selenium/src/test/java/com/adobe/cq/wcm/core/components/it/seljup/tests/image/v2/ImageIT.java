@@ -56,6 +56,12 @@ public class ImageIT extends AuthorBaseUITest {
         imageTests.testAddImage();
     }
 
+    @Test
+    @DisplayName("Test: drag image to component")
+    public void testDragImageToComponent() throws TimeoutException, InterruptedException {
+        imageTests.testDragImageToComponent(false);
+    }
+
     /**
      * Test: set Alt Text and Title
      */
