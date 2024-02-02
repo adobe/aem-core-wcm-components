@@ -26,5 +26,10 @@
         "stylelint-config-recommended": "^5.0.0",
         "stylelint-selector-bem-pattern": "^2.1.1",
         "sync-pom-version-to-package": "^1.6.1"
+    },
+    "overrides": {
+        "aemfed": {
+            "proxy-agent": "^6.3.1"
+        }
     }
 }

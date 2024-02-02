@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
@@ -104,9 +105,9 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
             model = resource.getResourceResolver().getResource(data.getValueMap().get(PN_MODEL, String.class));
             // for the 'adaptTo' mock below we use the jcr:content child to mimick the real behavior
             modelAdaptee = model.getChild(JCR_CONTENT);
-            // create an element mock for each property on the master node
+            // create an element mock for each property on the master node sorted by property name
             Resource master = resource.getChild(PATH_MASTER);
-            for (String name : master.getValueMap().keySet()) {
+            for (String name : master.getValueMap().keySet().stream().sorted().collect(Collectors.toList())) {
                 // skip the primary type and content type properties
                 if (JcrConstants.JCR_PRIMARYTYPE.equals(name) || name.endsWith("@ContentType")) {
                     continue;

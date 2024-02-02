@@ -517,8 +517,9 @@
                 </repository>
                 <repository>
                     <id>central</id>
-                    <name>Maven Repository Switchboard</name>
-                    <url>http://repo1.maven.org/maven2</url>
+                    <name>Central Repository</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <layout>default</layout>
                 </repository>
             </repositories>
 
@@ -527,6 +528,12 @@
                     <id>adobe-public-releases</id>
                     <name>Adobe Public Repository</name>
                     <url>https://repo.adobe.com/nexus/content/groups/public/</url>
+                    <layout>default</layout>
+                </pluginRepository>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>Central Repository</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
                     <layout>default</layout>
                 </pluginRepository>
             </pluginRepositories>
@@ -658,15 +665,6 @@
                 <version>1.0.6</version>
                 <scope>provided</scope>
             </dependency>
-
-            <!-- javax.inject 1 -->
-            <dependency>
-                <artifactId>geronimo-atinject_1.0_spec</artifactId>
-                <version>1.0</version>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <scope>provided</scope>
-            </dependency>
-
             <dependency>
                 <groupId>javax.annotation</groupId>
                 <artifactId>javax.annotation-api</artifactId>
@@ -725,6 +723,13 @@
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
                 <version>3.2.2</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.4</version>
                 <scope>provided</scope>
             </dependency>
 
