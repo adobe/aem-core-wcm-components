@@ -26,7 +26,12 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.DragAndDropOptions;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
