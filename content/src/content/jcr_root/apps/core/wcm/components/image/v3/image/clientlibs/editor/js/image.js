@@ -345,7 +345,7 @@
                     $dynamicMediaGroup.hide();
                 } else {
                     $dynamicMediaGroup.show();
-                    getSmartCropRenditions(data["dam:sce©ne7File"]);
+                    getSmartCropRenditions(data["dam:scene7File"]);
                 }
             }
         });
@@ -422,7 +422,6 @@
             }
         };
         imagePropertiesRequest.send();
-    }
 
     /**
      * Helper function for populating dropdown list
