@@ -171,7 +171,8 @@
             var seededValue = $(altInputSelector).attr("data-seeded-value");
             var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue) {
+            var isDecorative = $("coral-checkbox[name='./isDecorative']");
+            if (isAltCheckboxChecked && !seededValue && !isDecorative.prop("checked")) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }
@@ -344,7 +345,7 @@
                     $dynamicMediaGroup.hide();
                 } else {
                     $dynamicMediaGroup.show();
-                    getSmartCropRenditions(data["dam:scene7File"]);
+                    getSmartCropRenditions(data["dam:sce©ne7File"]);
                 }
             }
         });
