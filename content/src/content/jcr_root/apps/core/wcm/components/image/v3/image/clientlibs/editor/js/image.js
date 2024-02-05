@@ -422,6 +422,7 @@
             }
         };
         imagePropertiesRequest.send();
+    }
 
     /**
      * Helper function for populating dropdown list
