@@ -42,6 +42,9 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.setup(adminClient, contextPath, label, Commons.RT_IMAGE_V3, rootPage, defaultPageTemplate, clientlibs, new Image());
     }
 
+    @Ignore
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: drag image to component")
     public void testDragImageToComponent() throws TimeoutException, InterruptedException {

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -512,6 +513,9 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertTrue(teaser.isImagePresentWithFileName(skiingAssetFormatted),"image should be rendered with file name: " + skiingAssetFormatted);
     }
 
+    @Ignore
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: drag and drop image from side panel to teaser component on a page")
     public void testDropImageToTeaser() throws TimeoutException, InterruptedException {

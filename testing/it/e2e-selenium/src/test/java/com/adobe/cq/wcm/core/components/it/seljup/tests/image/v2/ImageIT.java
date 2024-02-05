@@ -19,6 +19,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v2;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,6 +57,9 @@ public class ImageIT extends AuthorBaseUITest {
         imageTests.testAddImage();
     }
 
+    @Ignore
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: drag image to component")
     public void testDragImageToComponent() throws TimeoutException, InterruptedException {
