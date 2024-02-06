@@ -18,7 +18,8 @@
 
     $(document).on("foundation-contentloaded", function(e) {
         $(".cmp-list__editor coral-select.cq-dialog-dropdown-showhide", e.target).each(function(i, element) {
-            var target = $("<div>").text($(element).data("cqDialogDropdownShowhideTarget")).html();
+            var target = window.Granite.UI.Foundation.Utils.sanitizeHtml($(element).data("cqDialogDropdownShowhideTarget"));
+            console.log("Processed target: " + target);
             if (target) {
                 Coral.commons.ready(element, function(component) {
                     showHide(component, target);
@@ -32,7 +33,7 @@
     });
 
     function showHide(component, target) {
-        var value = $("<div>").text(component.value).html();
+        var value = component.value;
         $(target).not(".hide").addClass("hide");
         $(target).filter("[data-showhidetargetvalue='" + value + "']").removeClass("hide");
     }
