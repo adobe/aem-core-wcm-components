@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v3;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.http.NameValuePair;
@@ -32,7 +31,6 @@ import org.junit.jupiter.api.Test;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v2.Image;
-import com.google.common.collect.ImmutableMap;
 
 @Tag("group2")
 public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.image.v2.ImageIT {
@@ -42,6 +40,15 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         clientlibs = Commons.CLIENTLIBS_IMAGE_V3;
         imageTests = new ImageTests();
         imageTests.setup(adminClient, contextPath, label, Commons.RT_IMAGE_V3, rootPage, defaultPageTemplate, clientlibs, new Image());
+    }
+
+    @Ignore
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Test
+    @DisplayName("Test: drag image to component")
+    public void testDragImageToComponent() throws TimeoutException, InterruptedException {
+        imageTests.testDragImageToComponent(true);
     }
 
     /**
