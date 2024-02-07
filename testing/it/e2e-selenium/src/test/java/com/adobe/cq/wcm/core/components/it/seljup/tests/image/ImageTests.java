@@ -186,6 +186,28 @@ public class ImageTests {
                 + " and title " + originalDamTitle);
     }
 
+    public void testDragImageToComponent(boolean imageV3) throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        Commons.dragSidePanelImageToComponent(testImagePath, compPath);
+        Commons.closeSidePanel();
+
+        ImageEditDialog editDialog = image.getEditDialog();
+        Commons.openEditDialog(editorPage, compPath);
+
+        assertTrue(editDialog.isAltFromDAM());
+
+        if (!imageV3) {
+            assertTrue(editDialog.isTitleFromDAM());
+            assertTrue(editDialog.isPopUpTitle());
+        }
+
+        Commons.closeConfigureDialog();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, originalDamDescription, originalDamTitle),
+            "Image should be present with alt text " + originalDamDescription + " and title " + originalDamTitle);
+    }
+
     public void testAddAltTextAndTitle() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();
