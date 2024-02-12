@@ -279,4 +279,13 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     public void testSmartCropDialogOnNGDMImageV3_flipAspectRatio() throws TimeoutException, InterruptedException, ClientException {
         imageTests.testNGDMSmartCropDialogImageV3_aspectRatioFlip();
     }
+
+    /**
+     * Test: set asset from DAM without description as decorative image
+     */
+    @Test
+    @DisplayName("Test: set asset from DAM without description as decorative")
+    public void testSetAssetWithoutDescriptionAsDecorative() throws TimeoutException, InterruptedException {
+        imageTests.testSetAssetWithoutDescriptionAsDecorative(true);
+    }
 }
