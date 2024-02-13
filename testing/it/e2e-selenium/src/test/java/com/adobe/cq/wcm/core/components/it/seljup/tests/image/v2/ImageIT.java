@@ -124,4 +124,13 @@ public class ImageIT extends AuthorBaseUITest {
         imageTests.testSetAssetWithoutDescription();
     }
 
+    /**
+     * Test: set asset from DAM without description as decorative image
+     */
+    @Test
+    @DisplayName("Test: set asset from DAM without description as decorative")
+    public void testSetAssetWithoutDescriptionAsDecorative() throws TimeoutException, InterruptedException {
+        imageTests.testSetAssetWithoutDescriptionAsDecorative(false);
+    }
+
 }
