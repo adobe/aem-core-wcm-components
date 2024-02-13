@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v3;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.http.NameValuePair;
@@ -41,6 +40,15 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         clientlibs = Commons.CLIENTLIBS_IMAGE_V3;
         imageTests = new ImageTests();
         imageTests.setup(adminClient, contextPath, label, Commons.RT_IMAGE_V3, rootPage, defaultPageTemplate, clientlibs, new Image());
+    }
+
+    @Ignore
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Test
+    @DisplayName("Test: drag image to component")
+    public void testDragImageToComponent() throws TimeoutException, InterruptedException {
+        imageTests.testDragImageToComponent(true);
     }
 
     /**
@@ -295,5 +303,14 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @DisplayName("Test : NextGen DM image smart crop - flip aspect ratio.")
     public void testSmartCropDialogOnNGDMImageV3_flipAspectRatio() throws TimeoutException, InterruptedException, ClientException {
         imageTests.testNGDMSmartCropDialogImageV3_aspectRatioFlip();
+    }
+
+    /**
+     * Test: set asset from DAM without description as decorative image
+     */
+    @Test
+    @DisplayName("Test: set asset from DAM without description as decorative")
+    public void testSetAssetWithoutDescriptionAsDecorative() throws TimeoutException, InterruptedException {
+        imageTests.testSetAssetWithoutDescriptionAsDecorative(true);
     }
 }
