@@ -167,7 +167,7 @@ public class LinkBuilderImpl implements LinkBuilder {
                     .findFirst()
                     .map(pathProcessor -> new LinkImpl(
                             pathProcessor.sanitize(decodedPath, request),
-                            pathProcessor.map(decodedPath, request),
+                            LinkManagerImpl.isExternalLink(decodedPath) ? decodedPath : pathProcessor.map(decodedPath, request),
                             pathProcessor.externalize(decodedPath, request),
                             this.reference,
                             pathProcessor.processHtmlAttributes(decodedPath, htmlAttributes)))
