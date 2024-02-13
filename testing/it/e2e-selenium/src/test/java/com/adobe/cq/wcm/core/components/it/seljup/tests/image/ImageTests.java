@@ -233,7 +233,7 @@ public class ImageTests {
         }
         editDialog.checkDecorative();
         Commons.saveConfigureDialog();
-        assertFalse(editDialog.isVisible());
+        assertFalse(editDialog.isVisible(), "Configuration dialog should be closed with no errors.");
     }
 
     public void testSetAssetWithoutDescription() throws InterruptedException, TimeoutException {
