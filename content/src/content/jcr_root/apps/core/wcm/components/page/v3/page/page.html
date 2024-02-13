@@ -24,10 +24,12 @@
           id="${page.id}"
           data-cmp-link-accessibility-enabled
           data-cmp-link-accessibility-text="${'opens in a new tab' @ i18n}"
-          data-cmp-data-layer-enabled="${page.data ? true : false}">
+          data-cmp-data-layer-enabled="${page.data ? true : false}"
+          data-cmp-data-layer-name="${page.dataLayerName @ context='scriptToken'}">
         <script data-sly-test.dataLayerEnabled="${page.data}">
-          window.adobeDataLayer = window.adobeDataLayer || [];
-          adobeDataLayer.push({
+          var dataLayerName = '${page.dataLayerName @ context="scriptToken"}' || 'adobeDataLayer';
+          window[dataLayerName] = window[dataLayerName]  || [];
+          window[dataLayerName].push({
               page: JSON.parse("${page.data.json @ context='scriptString'}"),
               event:'cmp:show',
               eventInfo: {
