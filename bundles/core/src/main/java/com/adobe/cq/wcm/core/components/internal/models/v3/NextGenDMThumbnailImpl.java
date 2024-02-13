@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -25,6 +24,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
@@ -54,7 +54,7 @@ public class NextGenDMThumbnailImpl implements NextGenDMThumbnail {
     @Self
     private SlingHttpServletRequest request;
 
-    @Inject
+    @OSGiService
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
 

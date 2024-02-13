@@ -172,4 +172,8 @@ public class TeaserEditDialog {
         checkbox.click();
     }
 
+    public boolean isAltTextFromAssetDescription() {
+        CoralCheckbox checkbox = new CoralCheckbox(altTextFromAssetDescription);
+        return checkbox.isChecked();
+    }
 }

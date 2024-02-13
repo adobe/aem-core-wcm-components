@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -103,7 +103,7 @@ public class NextGenDMImageURIBuilder {
             imageDeliveryPath = imageDeliveryPath.replace(PATH_PLACEHOLDER_FORMAT, assetExtension);
             String repositoryId = this.config.getRepositoryId();
             StringBuilder uriBuilder = new StringBuilder("https://" + repositoryId + imageDeliveryPath);
-            Map<String, String> params = new HashMap<>();
+            Map<String, String> params = new LinkedHashMap<>();
             if(this.width > 0) {
                 params.put("width", Integer.toString(this.width));
             }

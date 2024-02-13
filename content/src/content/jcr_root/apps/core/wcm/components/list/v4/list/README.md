@@ -54,17 +54,17 @@ The following properties are written to JCR for this List component and are expe
                `linkTarget` - stores the link target,
                `linkText` - stores the link text.
                When `./listFrom` property is set to `static`, the `./maxItems` property is ignored.
-5`./query` - defines the search query, when the `./listFrom` property is set to `search`
-6`./searchIn` - defines where to start the search, when the `./listFrom` property is set to `search`
-7`./tagsSearchRoot` - defines the root path of the tag search, when the `./listFrom` property is set to `tags`
-8`./tags` - defines the tags list to search for, when the `./listFrom` property is set to `tags`
-9`./tagsMatch` - defines if the results of the tag search have to match all tags or just some of them,
+5. `./query` - defines the search query, when the `./listFrom` property is set to `search`
+6. `./searchIn` - defines where to start the search, when the `./listFrom` property is set to `search`
+7. `./tagsSearchRoot` - defines the root path of the tag search, when the `./listFrom` property is set to `tags`
+8. `./tags` - defines the tags list to search for, when the `./listFrom` property is set to `tags`
+9. `./tagsMatch` - defines if the results of the tag search have to match all tags or just some of them,
 when the `./listFrom` property is set to `tags`; possible values: `any` and `all`
 10. `./orderBy` - defines what criterion is used for ordering the list items: the item's title or the
 last modification date of the item; possible values: `title`, `modified`
-11`./sortOrder` - defines the sorting order; possible values: `asc`, `desc`
-12`./maxItems` - defines the maximum number of items rendered by the list
-13`./linkItems` - if set to `true` the list will link all items to the corresponding pages
+11. `./sortOrder` - defines the sorting order; possible values: `asc`, `desc`
+12. `./maxItems` - defines the maximum number of items rendered by the list
+13. `./linkItems` - if set to `true` the list will link all items to the corresponding pages
 14. `./showDescription` - if set to `true` each item's description will be rendered
 15. `./showModificationDate` - if set to `true` each item's last modification date will be rendered
 16. `./displayItemAsTeaser` - if set to `true` the rendering of each list item is delegated to the configured teaser component

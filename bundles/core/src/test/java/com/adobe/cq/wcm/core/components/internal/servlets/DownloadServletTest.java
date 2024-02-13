@@ -86,6 +86,8 @@ class DownloadServletTest {
         downloadServlet.doGet(context.request(), context.response());
         assertTrue(context.response().containsHeader("Content-Disposition"));
         assertEquals("inline", context.response().getHeader("Content-Disposition"));
+        assertTrue(context.response().containsHeader("Content-Security-Policy"));
+        assertEquals("sandbox", context.response().getHeader("Content-Security-Policy"));
         assertEquals(8192, context.response().getBufferSize());
     }
 
