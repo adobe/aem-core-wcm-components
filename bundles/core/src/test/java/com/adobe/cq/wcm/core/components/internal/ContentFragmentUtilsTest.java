@@ -25,6 +25,7 @@ import java.util.Objects;
 import javax.json.Json;
 import javax.json.JsonReader;
 
+import com.adobe.cq.dam.cfm.ElementTemplate;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -52,6 +53,7 @@ import static com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils.PN_
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ContentFragmentUtilsTest {
 
@@ -304,6 +306,25 @@ public class ContentFragmentUtilsTest {
         // THEN
         Assertions.assertEquals(componentExporter, exporterMap.get("bar"));
         Assertions.assertEquals(componentExporter, exporterMap.get("qux"));
+    }
+
+    @Test
+    public void testGetElementMetaType() {
+        ContentElement element = Mockito.mock(ContentElement.class);
+        ElementTemplate elementTemplate = Mockito.mock(ElementTemplate.class);
+        Resource resource = Mockito.mock(Resource.class);
+        ValueMap valueMap = new MockValueMap(resource);
+
+        Mockito.when(element.adaptTo(ElementTemplate.class)).thenReturn(elementTemplate);
+        Mockito.when(elementTemplate.adaptTo(Resource.class)).thenReturn(resource);
+        Mockito.when(resource.getValueMap()).thenReturn(valueMap);
+
+        String metaType = ContentFragmentUtils.getElementMetaType(element);
+        assertNull(metaType);
+
+        valueMap.put("metaType", "testMetaType");
+        metaType = ContentFragmentUtils.getElementMetaType(element);
+        assertEquals("testMetaType", metaType);
     }
 
     /**

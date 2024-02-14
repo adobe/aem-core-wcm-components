@@ -133,9 +133,10 @@
         selector: altInputSelector,
         validate: function() {
             var seededValue = $(altInputSelector).attr("data-seeded-value");
-            var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var isAltCheckboxChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue) {
+            if (isAltCheckboxChecked && !seededValue && !isDecorativeChecked) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }
