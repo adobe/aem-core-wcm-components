@@ -102,7 +102,7 @@
             var that = this;
             var activeIndex = 0;
             if (that._config.el && that._config.panelContainerType) {
-                var items = $(this._config.el).find(that._config.panelContainerType.itemSelector);
+                var items = $(this._config.el).find("> * > " + that._config.panelContainerType.itemSelector);
                 items.each(function(index) {
                     var activeItemSelector = that._config.panelContainerType.itemActiveSelector;
                     if (that._config.el.id) {
