@@ -1,6 +1,6 @@
 {
     "name": "core.wcm.components.extensions.amp-content",
-    "version": "2.22.11-SNAPSHOT",
+    "version": "2.24.1-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components AMP Extension Content Package",
     "license": "Apache-2.0",
     "private": false,
@@ -26,5 +26,10 @@
         "stylelint-config-recommended": "^5.0.0",
         "stylelint-selector-bem-pattern": "^2.1.1",
         "sync-pom-version-to-package": "^1.6.1"
+    },
+    "overrides": {
+        "aemfed": {
+            "proxy-agent": "^6.3.1"
+        }
     }
 }

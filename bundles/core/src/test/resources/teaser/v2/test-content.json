@@ -310,6 +310,13 @@
             "sling:resourceType": "core/wcm/components/teaser/v2/teaser",
             "titleFromPage": true,
             "descriptionFromPage": true
+          },
+          "teaser-26"          : {
+              "jcr:primaryType"   : "nt:unstructured",
+              "fileReference"     : "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png",
+              "sling:resourceType": "core/wcm/components/teaser/v2/teaser",
+              "titleFromPage": true,
+              "descriptionFromPage": true
           }
         }
       }

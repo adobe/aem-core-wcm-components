@@ -17,6 +17,11 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
 import java.util.*;
 
+import com.adobe.cq.dam.cfm.ContentElement;
+import com.adobe.cq.dam.cfm.ContentFragment;
+import com.adobe.cq.dam.cfm.ContentFragmentException;
+import com.adobe.cq.dam.cfm.ContentVariation;
+import com.adobe.cq.dam.cfm.FragmentData;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -26,11 +31,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.dam.cfm.ContentElement;
-import com.adobe.cq.dam.cfm.ContentFragment;
-import com.adobe.cq.dam.cfm.ContentFragmentException;
-import com.adobe.cq.dam.cfm.ContentVariation;
-import com.adobe.cq.dam.cfm.FragmentData;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
@@ -259,8 +259,16 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
             return getData().getContentType();
         }
 
+
         @Override
         public boolean isMultiLine() {
+            String metaType = ContentFragmentUtils.getElementMetaType(element);
+            if ("text-multi".equals(metaType)) {
+                return true;
+            } else if ("text-single".equals(metaType)) {
+                return false;
+            }
+
             String contentType = getContentType();
             // a text element is defined as a single-valued element with a certain content type (e.g. "text/plain",
             // "text/html", "text/x-markdown", potentially others)

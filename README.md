@@ -27,7 +27,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 * **Cloud-Ready:** Whether on [AEM as a Cloud Service](https://docs.adobe.com/content/help/en/experience-manager-cloud-service/landing/home.html), on [Adobe Managed Services](https://github.com/adobe/aem-project-archetype/tree/master/src/main/archetype/dispatcher.ams), or on-premise, they just work.
 * **Versatile:** The components represent generic concepts with which the authors can assemble nearly any layout.
 * **Configurable:** Template-level [content policies](https://docs.adobe.com/content/help/en/experience-manager-65/developing/platform/templates/page-templates-editable.html#content-policies) define which features the page authors are allowed to use or not.
-* **Trackable:** The [Adobe Client Data Layer](DATA_LAYER_INTEGRATION.md) integration allows to track all aspects of the visitor experience.
+* **Trackable:** The [Adobe Client Data Layer and Google Data Layer](DATA_LAYER_INTEGRATION.md) integrations support the tracking of all aspects of the visitor experience.
 * **Accessible:** They comply [WCAG 2.1 standard](https://www.w3.org/TR/WCAG21/), provide ARIA labels, and support keyboard navigation.
 * **SEO-Friendly:** The HTML output is semantic and provides schema.org microdata annotations.
 * **WebApp-Ready:** The [streamlined JSON output](https://docs.adobe.com/content/help/en/experience-manager-learn/foundation/development/develop-sling-model-exporter.html) allows client-side rendering, still with a possibility of [in-context editing](https://docs.adobe.com/content/help/en/experience-manager-learn/sites/spa-editor/spa-editor-framework-feature-video-use.html).
@@ -93,7 +93,7 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 Core Components | AEM as a Cloud Service | AEM 6.5   | Java SE | Maven
 ----------------|------------------------|-----------|---------|---------
-[2.22.10](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.22.10) | Continual | 6.5.14.0+ | 8, <br/>11 | 3.3.9+
+[2.24.0+](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.23.4) | Continual | 6.5.19.0+ | 8, <br/>11 | 3.3.9+
 
 For the requirements from previous Core Component releases, see [Historical System Requirements](VERSIONS.md).
 
@@ -117,7 +117,7 @@ With AEM as a Cloud Service SDK, use the `cloud` profile as follows to deploy th
 
 Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install
-* `-am/-also-make` options specifies that dependencies should also be built
+* `-am/-also-make` option specifies the dependencies that should also be built
 
 For detailed informations see [BUILDING.md](BUILDING.md).
 

@@ -21,13 +21,18 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.util.stream.Collectors;
+
+import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +46,42 @@ public class LinkUtil {
 
     private final static Logger LOG = LoggerFactory.getLogger(LinkUtil.class);
 
-    private final static List<Pattern> PATTERNS = Collections.singletonList(Pattern.compile("(<%[=@].*?%>)"));
+    //RFC 3986 section 2.2 Reserved Characters
+    private static final String[] RESERVED_CHARACTERS_ENCODED = {
+        "%20", "%21", "%22", "%23", "%24", "%25", "%26", "%27", "%28","%29",
+        "%2A", "%2B", "%2C", "%2F", "%3A", "%3B", "%3D", "%3F", "%40", "%5B", "%5D",
+        "%2a", "%2b", "%2c", "%2f", "%3a", "%3b", "%3d", "%3f", "%5b", "%5d"
+    };
+    private final static List<Pattern> PATTERNS = new ArrayList<>();
+
+    static {
+        PATTERNS.add(Pattern.compile("(<%[=@].*?%>)"));
+        PATTERNS.addAll(Arrays.stream(RESERVED_CHARACTERS_ENCODED)
+            .map(encoded -> Pattern.compile("(" + encoded + ")") )
+            .collect(Collectors.toList()));
+    }
+
+    //SITES-18137: imitate the exact behavior of com.google.common.net.URL_FRAGMENT_ESCAPER
+    private static final BitSet URL_FRAGMENT_SAFE_CHARS = new BitSet(256);
+
+    static {
+        //alphanumeric characters
+        for(int i = 97; i <= 122; i++) {
+            URL_FRAGMENT_SAFE_CHARS.set(i);
+        }
+        for(int i = 65; i <= 90; i++) {
+            URL_FRAGMENT_SAFE_CHARS.set(i);
+        }
+        for(int i = 48; i <= 57; i++) {
+            URL_FRAGMENT_SAFE_CHARS.set(i);
+        }
+        // safe characters from Guava's URL_FRAGMENT_ESCAPER: -._~!$'()*,;&=@:+/?
+        byte[] nonAlphaNumeric = new byte[] { 45, 46, 95, 126, 33, 36, 39, 40, 41, 42, 44, 59, 38, 61, 64, 58, 43, 47, 63 };
+        for(int i = 0; i < nonAlphaNumeric.length; i++) {
+            URL_FRAGMENT_SAFE_CHARS.set(nonAlphaNumeric[i]);
+        }
+    }
+
 
     /**
      * Decodes and encoded or escaped URL taking care to not break Adobe Campaign expressions
@@ -78,8 +118,10 @@ public class LinkUtil {
         final String maskedQueryString = mask(queryString, placeholders);
         String escaped;
         URI parsed;
+        final String maskedPath = LinkUtil.mask(path, placeholders);
+
         try {
-            parsed = new URI(path, false);
+            parsed = new URI(maskedPath, false);
         } catch (URIException e) {
             parsed = null;
             LOG.error(e.getMessage(), e);
@@ -99,10 +141,12 @@ public class LinkUtil {
                         escaped = sb.insert(path.indexOf(fragment), "#" + fragment).toString();
                     }
                 } else {
-                    escaped = sb.append("#").append(URLEncoder.encode(fragment, StandardCharsets.UTF_8.name())
-                            .replace("+", "%20")).toString();
+                    escaped = sb.append("#")
+                                .append(replaceEncodedCharactersInFragment(URLEncoder.encode(fragment, StandardCharsets.UTF_8.name())))
+                                .toString();
                 }
             }
+
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             StringBuilder sb = new StringBuilder(path);
@@ -119,6 +163,20 @@ public class LinkUtil {
     }
 
     /**
+     * Escapes an URI fragment, imitating the exact behavior of com.google.common.net.URL_FRAGMENT_ESCAPER.
+     * (SITES-18137)
+     *
+     * @param fragment The URI fragment
+     * @return The escaped fragment
+     */
+    public static String escapeFragment(final String fragment) {
+        if (fragment == null) {
+            return null;
+        }
+        return new String(URLCodec.encodeUrl(URL_FRAGMENT_SAFE_CHARS, fragment.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+    }
+
+    /**
      * Masks a given {@link String} by replacing all occurrences of {@link LinkUtil#PATTERNS} with a placeholder.
      * The generated placeholders are put into the given {@link Map} and can be used to unmask a {@link String} later on.
      * <p>
@@ -130,7 +188,7 @@ public class LinkUtil {
      * @return the masked {@link String}
      * @see LinkUtil#unmask(String, Map)
      */
-    private static String mask(final String original, final Map<String, String> placeholders) {
+    static String mask(final String original, final Map<String, String> placeholders) {
         if (original == null) {
             return null;
         }
@@ -157,7 +215,7 @@ public class LinkUtil {
      * @param placeholders the {@link Map} of placeholders to replace
      * @return the unmasked {@link String}
      */
-    private static String unmask(final String masked, final Map<String, String> placeholders) {
+    static String unmask(final String masked, final Map<String, String> placeholders) {
         if (masked == null) {
             return null;
         }
@@ -190,5 +248,23 @@ public class LinkUtil {
         } while (str.contains(placeholderBuilder));
 
         return placeholderBuilder.toString();
+    }
+
+    private static String replaceEncodedCharactersInFragment(final String str) {
+        return str.replace("%2B", "+")
+            .replace("%3D", "=")
+            .replace("%7E", "~")
+            .replace("%24", "$")
+            .replace("%26", "&")
+            .replace("%3B", ";")
+            .replace("%3A", ":")
+            .replace("%40", "@")
+            .replace("%21", "!")
+            .replace("%27", "'")
+            .replace("%28", "(")
+            .replace("%29", ")")
+            .replace("%2C", ",")
+            .replace("%2F", "/")
+            .replace("%3F", "?");
     }
 }

@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
@@ -28,6 +27,7 @@ import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,7 +82,7 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private boolean dockPageControls;
 
-    @Inject
+    @ScriptVariable
     private Resource resource;
 
     private PdfViewerCaConfig caConfig;

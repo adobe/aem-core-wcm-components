@@ -134,7 +134,7 @@
             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
             togglePageImageInherited(imageFromPageImage, isDecorative);
             updateImageThumbnail().then(function() {
-                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit:visible");
+                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit[trackingelement='edit']");
                 if ($cqFileUploadEdit) {
                     fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
                     if (fileReference === "") {
@@ -169,9 +169,10 @@
         selector: altInputSelector,
         validate: function() {
             var seededValue = $(altInputSelector).attr("data-seeded-value");
-            var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var isAltCheckboxChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue) {
+            if (isAltCheckboxChecked && !seededValue && !isDecorativeChecked) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }
@@ -250,7 +251,7 @@
 
                 // update the alt field
                 altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
-                if (imageFromPageImage.checked) {
+                if (imageFromPageImage && imageFromPageImage.checked) {
                     altFromPageTuple.seedTextValue(altTextFromPage);
                     altFromPageTuple.update();
                 }
