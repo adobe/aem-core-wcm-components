@@ -36,7 +36,7 @@ public class NextGenDMImageURIBuilder {
 
     private NextGenDynamicMediaConfig config;
     private String fileReference;
-    private String smartCropAspectRatio;
+    private String smartCropName;
     private int width = DEFAULT_NGDM_ASSET_WIDTH;
 
     private int height;
@@ -48,11 +48,11 @@ public class NextGenDMImageURIBuilder {
     }
 
     /**
-     * Smart Crop aspect ratio string.
-     * @param smartCropAspectRatio - a string in "width:height" format;
+     * Smart Crop name.
+     * @param smartCropName - a string denoting the name of the smartcrop;
      */
-    public NextGenDMImageURIBuilder withSmartCrop(String smartCropAspectRatio) {
-        this.smartCropAspectRatio = smartCropAspectRatio;
+    public NextGenDMImageURIBuilder withSmartCrop(String smartCropName) {
+        this.smartCropName = smartCropName;
         return this;
     }
 
@@ -113,12 +113,8 @@ public class NextGenDMImageURIBuilder {
             if(this.preferWebp) {
                 params.put("preferwebp", "true");
             }
-            if (StringUtils.isNotEmpty(this.smartCropAspectRatio)) {
-                if (isValidSmartCrop(this.smartCropAspectRatio)) {
-                    params.put("crop", String.format("%s,smart", this.smartCropAspectRatio));
-                } else {
-                    LOGGER.info("Invalid smartCrop value at {}", this.smartCropAspectRatio);
-                }
+            if (StringUtils.isNotEmpty(this.smartCropName)) {
+                params.put("smartcrop", this.smartCropName);
             }
             if(params.size() > 0) {
                 uriBuilder.append("?");
@@ -132,19 +128,5 @@ public class NextGenDMImageURIBuilder {
         }
         LOGGER.info("Invalid fileReference or NGDMConfig. fileReference = {}", this.fileReference);
         return null;
-    }
-
-    private boolean isValidSmartCrop(String smartCropStr) {
-        String[] crops = smartCropStr.split(":");
-        if (crops.length == 2) {
-            try {
-                Integer.parseInt(crops[0]);
-                Integer.parseInt(crops[1]);
-                return true;
-            } catch (NumberFormatException ex) {
-                return false;
-            }
-        }
-        return false;
     }
 }

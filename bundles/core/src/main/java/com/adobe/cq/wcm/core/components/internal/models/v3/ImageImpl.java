@@ -16,13 +16,24 @@
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
+import org.apache.http.util.EntityUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -32,6 +43,8 @@ import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +80,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @OSGiService
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
+    
+    @OSGiService
+    private HttpClientBuilderFactory clientBuilderFactory;
 
     private boolean imageLinkHidden = false;
 
@@ -77,6 +93,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private Dimension dimension;
 
     private boolean ngdmImage = false;
+    private CloseableHttpClient client;
+    private static final String PATH_PLACEHOLDER_ASSET_ID = "{asset-id}";
+    private String metadataDeliveryEndpoint;
 
     @PostConstruct
     protected void initModel() {
@@ -135,6 +154,37 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 // in case of dm image and auto smartcrop the srcset needs to generated client side
                 if (dmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)) {
                     srcSet = EMPTY_PIXEL;
+                } else if (ngdmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)) {
+                    String endPointUrl = "https://" + nextGenDynamicMediaConfig.getRepositoryId() + metadataDeliveryEndpoint;
+                    HttpGet get = new HttpGet(endPointUrl);
+                    get.setHeader("X-Adobe-Accept-Experimental", "1");
+                    try {
+                        HttpResponse response = client.execute(get);
+                        StatusLine statusLine = response.getStatusLine();
+                        int statusCode = statusLine.getStatusCode();
+                        if (statusCode == HttpStatus.SC_OK) {
+                            HttpEntity e = response.getEntity();
+                            String entity = EntityUtils.toString(e);
+                            JSONObject metadata = new JSONObject(entity);
+                            JSONObject repositoryMetadata = metadata.getJSONObject("repositoryMetadata");
+                            JSONObject smartCrops = repositoryMetadata.getJSONObject("smartcrops");
+                            Iterator<String> smartCropsNames = smartCrops.keys();
+                            String[] ngdmSrcsetArray = new String[smartCrops.length()];
+                            int i = 0;
+                            while (smartCropsNames.hasNext()) {
+                                String namedSmartCrop = smartCropsNames.next();
+                                if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
+                                    ngdmSrcsetArray[i] =
+                                        srcUritemplate.replace("width={.width}", String.format("smartcrop=%s", namedSmartCrop)) + " " + ((JSONObject)smartCrops.get(namedSmartCrop)).get("width") + "w";
+                                    i++;
+                                } 
+                            }
+                            srcSet = StringUtils.join(ngdmSrcsetArray, ',');
+                            
+                        }
+                    } catch (IOException | JSONException e) {
+                        LOGGER.warn("Couldn't generate srcset for remote asset");
+                    }
                 } else {
                     for (int i = 0; i < widthsArray.length; i++) {
                         if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
@@ -271,18 +321,24 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         initResource();
         properties = resource.getValueMap();
         String fileReference = properties.get("fileReference", String.class);
-        String smartCrop = properties.get("smartCrop", String.class);
+        String smartCrop = properties.get("smartCropRendition", String.class);
         if (isNgdmImageReference(fileReference)) {
             int width = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, DEFAULT_NGDM_ASSET_WIDTH);
             NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
                 .withPreferWebp(true)
                 .withWidth(width);
-            if(StringUtils.isNotEmpty(smartCrop)) {
+            if(StringUtils.isNotEmpty(smartCrop) && !StringUtils.equals(smartCrop, SMART_CROP_AUTO)) {
                 builder.withSmartCrop(smartCrop);
             }
             src = builder.build();
             ngdmImage = true;
             hasContent = true;
+            client = clientBuilderFactory.newBuilder().build();
+            metadataDeliveryEndpoint = nextGenDynamicMediaConfig.getAssetMetadataPath();
+            Scanner scanner = new Scanner(fileReference);
+            scanner.useDelimiter("/");
+            String assetId = scanner.next();
+            metadataDeliveryEndpoint = metadataDeliveryEndpoint.replace(PATH_PLACEHOLDER_ASSET_ID, assetId);
         }
     }
 
