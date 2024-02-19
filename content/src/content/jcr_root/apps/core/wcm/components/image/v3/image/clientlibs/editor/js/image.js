@@ -57,6 +57,7 @@
     var pageImageThumbnailConfigPathAttribute = "data-thumbnail-config-path";
     var pageImageThumbnailComponentPathAttribute = "data-thumbnail-component-path";
     var pageImageThumbnailCurrentPagePathAttribute = "data-thumbnail-current-page-path";
+    var polarisPickerSelector = ".cq-FileUpload-picker-polaris";
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -100,6 +101,13 @@
                 retrieveInstanceInfo(imagePath);
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
+                    // if it is a remote asset
+                    if (fileReference == undefined) {
+                        var remoteFileReference = $(e.target).find("input[name='./fileReference']").val();
+                        if (remoteFileReference && remoteFileReference != "" && remoteFileReference.includes("urn:aaid:aem")) {
+                            fileReference = remoteFileReference;
+                        }
+                    }
                     retrieveDAMInfo(fileReference).then(
                         function() {
                             if (isDecorative) {
@@ -321,6 +329,19 @@
     }
 
     function retrieveDAMInfo(fileReference) {
+        if (fileReference.startsWith("/urn:aaid:aem")) {
+            return new Promise((resolve, reject) => {
+                $dynamicMediaGroup.show();
+                fileReference = fileReference.substring(0, fileReference.lastIndexOf("/"));
+                var cfg = $(polarisPickerSelector).attr("polaris-config");
+                if (cfg) {
+                    var repositoryId = JSON.parse(cfg).repositoryId;
+                    var imageUrl = `https://${repositoryId}/adobe/assets${fileReference}/metadata`;
+                    getPolarisSmartCropRenditions(imageUrl);
+                    resolve();
+                }
+            });
+        }
         return $.ajax({
             url: fileReference + "/_jcr_content/metadata.json"
         }).done(function(data) {
@@ -365,6 +386,42 @@
                 smartCropRenditionFromJcr = data["smartCropRendition"];
             }
         });
+    }
+    
+    function getPolarisSmartCropRenditions(imageUrl) {
+        if (imagePropertiesRequest) {
+            imagePropertiesRequest.abort();
+        }
+        imagePropertiesRequest = new XMLHttpRequest();
+        imagePropertiesRequest.open("GET", imageUrl, true);
+        imagePropertiesRequest.setRequestHeader('X-Adobe-Accept-Experimental', '1');
+        imagePropertiesRequest.onload = function() {
+            if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
+                var responseText = imagePropertiesRequest.responseText;
+                var smartcrops = JSON.parse(responseText).repositoryMetadata.smartcrops;
+                if (smartcrops != undefined) {
+                    var smartcropnames = Object.keys(smartcrops);
+                    if (smartCropRenditionsDropDown.items) {
+                        smartCropRenditionsDropDown.items.clear();
+                    }
+                    addSmartCropDropDownItem("NONE", "", true);
+                    // "AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
+                    addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
+                    for (var i in smartcropnames) {
+                        smartCropRenditionsDropDown.items.add({
+                            content: {
+                                innerHTML: smartcropnames[i]
+                            },
+                            disabled: false,
+                            selected: (smartCropRenditionFromJcr === smartcropnames[i])
+                        });
+                    }
+                    $dynamicMediaGroup.find(presetTypeSelector).parent().show();
+                }
+            }
+            prepareSmartCropPanel();
+        }
+        imagePropertiesRequest.send();
     }
 
     /**
