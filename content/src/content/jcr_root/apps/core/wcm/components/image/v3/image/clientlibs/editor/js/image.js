@@ -102,9 +102,9 @@
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
                     // if it is a remote asset
-                    if (fileReference == undefined) {
+                    if (fileReference === undefined) {
                         var remoteFileReference = $(e.target).find("input[name='./fileReference']").val();
-                        if (remoteFileReference && remoteFileReference != "" && remoteFileReference.includes("urn:aaid:aem")) {
+                        if (remoteFileReference && remoteFileReference !== "" && remoteFileReference.includes("urn:aaid:aem")) {
                             fileReference = remoteFileReference;
                         }
                     }
@@ -387,19 +387,19 @@
             }
         });
     }
-    
+
     function getPolarisSmartCropRenditions(imageUrl) {
         if (imagePropertiesRequest) {
             imagePropertiesRequest.abort();
         }
         imagePropertiesRequest = new XMLHttpRequest();
         imagePropertiesRequest.open("GET", imageUrl, true);
-        imagePropertiesRequest.setRequestHeader('X-Adobe-Accept-Experimental', '1');
+        imagePropertiesRequest.setRequestHeader("X-Adobe-Accept-Experimental", "1");
         imagePropertiesRequest.onload = function() {
             if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
                 var responseText = imagePropertiesRequest.responseText;
                 var smartcrops = JSON.parse(responseText).repositoryMetadata.smartcrops;
-                if (smartcrops != undefined) {
+                if (smartcrops !== undefined) {
                     var smartcropnames = Object.keys(smartcrops);
                     if (smartCropRenditionsDropDown.items) {
                         smartCropRenditionsDropDown.items.clear();
@@ -420,7 +420,7 @@
                 }
             }
             prepareSmartCropPanel();
-        }
+        };
         imagePropertiesRequest.send();
     }
 
