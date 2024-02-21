@@ -58,6 +58,8 @@
     var pageImageThumbnailComponentPathAttribute = "data-thumbnail-component-path";
     var pageImageThumbnailCurrentPagePathAttribute = "data-thumbnail-current-page-path";
     var polarisPickerSelector = ".cq-FileUpload-picker-polaris";
+    var isPolarisEnabled = false;
+    var polarisRepositoryId;
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -65,6 +67,13 @@
         var $dialog        = e.dialog;
         $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
+        var cfg = $(polarisPickerSelector).attr("polaris-config");
+        if (cfg) {
+            polarisRepositoryId = JSON.parse(cfg).repositoryId;
+            if (polarisRepositoryId) {
+                isPolarisEnabled = true;
+            }
+        }
         if (dialogContent) {
             isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
 
@@ -86,7 +95,7 @@
             $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
             $dynamicMediaGroup.hide();
             areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
-            if (areDMFeaturesEnabled) {
+            if (areDMFeaturesEnabled || isPolarisEnabled) {
                 smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
             }
 
@@ -333,10 +342,8 @@
             return new Promise((resolve, reject) => {
                 $dynamicMediaGroup.show();
                 fileReference = fileReference.substring(0, fileReference.lastIndexOf("/"));
-                var cfg = $(polarisPickerSelector).attr("polaris-config");
-                if (cfg) {
-                    var repositoryId = JSON.parse(cfg).repositoryId;
-                    var imageUrl = `https://${repositoryId}/adobe/assets${fileReference}/metadata`;
+                if (isPolarisEnabled) {
+                    var imageUrl = `https://${polarisRepositoryId}/adobe/assets${fileReference}/metadata`;
                     getPolarisSmartCropRenditions(imageUrl);
                     resolve();
                 }
