@@ -95,7 +95,7 @@
             $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
             $dynamicMediaGroup.hide();
             areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
-            if (areDMFeaturesEnabled || isPolarisEnabled) {
+            if (areDMFeaturesEnabled) {
                 smartCropRenditionsDropDown = $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).get(0);
             }
 
@@ -108,6 +108,13 @@
             if ($cqFileUpload.length) {
                 imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
                 retrieveInstanceInfo(imagePath);
+                // required to show DM features when fileupload dialog is opened
+                if (isPolarisEnabled) {
+                    var remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
+                    if (remoteFileReference && remoteFileReference !== "" && remoteFileReference.includes("urn:aaid:aem")) {
+                        retrieveDAMInfo(remoteFileReference);
+                    }
+                }
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
                     // if it is a remote asset
@@ -423,7 +430,6 @@
                             selected: (smartCropRenditionFromJcr === smartcropnames[i])
                         });
                     }
-                    $dynamicMediaGroup.find(presetTypeSelector).parent().show();
                 }
             }
             prepareSmartCropPanel();
