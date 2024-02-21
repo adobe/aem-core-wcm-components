@@ -82,6 +82,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
     
     @OSGiService
+    @Optional
     private HttpClientBuilderFactory clientBuilderFactory;
 
     private boolean imageLinkHidden = false;
@@ -154,7 +155,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 // in case of dm image and auto smartcrop the srcset needs to generated client side
                 if (dmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)) {
                     srcSet = EMPTY_PIXEL;
-                } else if (ngdmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)) {
+                } else if (ngdmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO) && client != null) {
                     String endPointUrl = "https://" + nextGenDynamicMediaConfig.getRepositoryId() + metadataDeliveryEndpoint;
                     HttpGet get = new HttpGet(endPointUrl);
                     get.setHeader("X-Adobe-Accept-Experimental", "1");
@@ -333,7 +334,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             src = builder.build();
             ngdmImage = true;
             hasContent = true;
-            client = clientBuilderFactory.newBuilder().build();
+            if (clientBuilderFactory != null) {
+                client = clientBuilderFactory.newBuilder().build();
+            }
             metadataDeliveryEndpoint = nextGenDynamicMediaConfig.getAssetMetadataPath();
             Scanner scanner = new Scanner(fileReference);
             scanner.useDelimiter("/");
