@@ -60,6 +60,8 @@
     var polarisPickerSelector = ".cq-FileUpload-picker-polaris";
     var isPolarisEnabled = false;
     var polarisRepositoryId;
+    var imagePresetRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='imagePreset']";
+    var remoteFileReference;
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -67,13 +69,6 @@
         var $dialog        = e.dialog;
         $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
-        var cfg = $(polarisPickerSelector).attr("polaris-config");
-        if (cfg) {
-            polarisRepositoryId = JSON.parse(cfg).repositoryId;
-            if (polarisRepositoryId) {
-                isPolarisEnabled = true;
-            }
-        }
         if (dialogContent) {
             isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
 
@@ -108,21 +103,21 @@
             if ($cqFileUpload.length) {
                 imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
                 retrieveInstanceInfo(imagePath);
-                // required to show DM features when fileupload dialog is opened
-                if (isPolarisEnabled) {
-                    var remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
-                    if (remoteFileReference && remoteFileReference !== "" && remoteFileReference.includes("urn:aaid:aem")) {
-                        retrieveDAMInfo(remoteFileReference);
+
+                var cfg = $(polarisPickerSelector).attr("polaris-config");
+                if (cfg) {
+                    polarisRepositoryId = JSON.parse(cfg).repositoryId;
+                    if (polarisRepositoryId) {
+                        isPolarisEnabled = true;
+                        remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
                     }
                 }
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
                     // if it is a remote asset
-                    if (fileReference === undefined) {
-                        var remoteFileReference = $(e.target).find("input[name='./fileReference']").val();
-                        if (remoteFileReference && remoteFileReference !== "" && remoteFileReference.includes("urn:aaid:aem")) {
-                            fileReference = remoteFileReference;
-                        }
+                    if (fileReference === undefined && remoteFileReference && remoteFileReference !== "" &&
+                        remoteFileReference.includes("urn:aaid:aem")) {
+                        fileReference = remoteFileReference;
                     }
                     retrieveDAMInfo(fileReference).then(
                         function() {
@@ -133,7 +128,7 @@
                             altTuple.reinitCheckbox();
                             captionTuple.reinitCheckbox();
                             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
-                            if (areDMFeaturesEnabled) {
+                            if (areDMFeaturesEnabled && !isPolarisEnabled) {
                                 selectPresetType($(presetTypeSelector), "imagePreset");
                                 resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
                             }
@@ -348,8 +343,9 @@
         if (fileReference.startsWith("/urn:aaid:aem")) {
             return new Promise((resolve, reject) => {
                 $dynamicMediaGroup.show();
+                $(imagePresetRadio).parent().hide();
                 fileReference = fileReference.substring(0, fileReference.lastIndexOf("/"));
-                if (isPolarisEnabled) {
+                if (isPolarisEnabled && areDMFeaturesEnabled) {
                     var imageUrl = `https://${polarisRepositoryId}/adobe/assets${fileReference}/metadata`;
                     getPolarisSmartCropRenditions(imageUrl);
                     resolve();
@@ -398,6 +394,11 @@
             if (data) {
                 // we need to get saved value of 'smartCropRendition' of Core Image component
                 smartCropRenditionFromJcr = data["smartCropRendition"];
+            }
+            // we want to call retrieveDAMInfo after loading the dialog so that saved smartcrop rendition of remote asset
+            // can be shown on initial load.
+            if (remoteFileReference && remoteFileReference !== "" && remoteFileReference.includes("urn:aaid:aem")) {
+                retrieveDAMInfo(remoteFileReference);
             }
         });
     }
