@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -112,8 +114,13 @@ public class DefaultPathProcessor implements PathProcessor {
         if (queryStringMark >= 0 || fragmentMark >= 0) {
             if (queryStringMark >= 0) {
                 if (fragmentMark >= 0) {
-                    queryString = path.substring(queryStringMark + 1, fragmentMark);
-                    fragment = path.substring(fragmentMark + 1);
+                    if (queryStringMark < fragmentMark) {
+                        queryString = path.substring(queryStringMark + 1, fragmentMark);
+                        fragment = path.substring(fragmentMark + 1);
+                    } else {
+                        fragment = path.substring(fragmentMark + 1, queryStringMark);
+                        queryString = path.substring(queryStringMark + 1);
+                    }
                 } else {
                     queryString = path.substring(queryStringMark + 1);
                     fragment = null;
@@ -141,11 +148,13 @@ public class DefaultPathProcessor implements PathProcessor {
     public @NotNull String map(@NotNull String path, @NotNull SlingHttpServletRequest request) {
         ResourceResolver resourceResolver = request.getResourceResolver();
         String mappedPath;
+        Map<String, String> placeholders = new HashMap<>();
+        String maskedPath = LinkUtil.mask(path, placeholders);
         try {
             if (vanityConfig == VanityConfig.MAPPING || vanityConfig == VanityConfig.ALWAYS) {
-                mappedPath = StringUtils.defaultString(resourceResolver.map(request, getPathOrVanityUrl(path, resourceResolver)));
+                mappedPath = LinkUtil.unmask(StringUtils.defaultString(resourceResolver.map(request, getPathOrVanityUrl(maskedPath, resourceResolver))), placeholders);
             } else {
-                mappedPath = StringUtils.defaultString(resourceResolver.map(request, path));
+                mappedPath = LinkUtil.unmask(StringUtils.defaultString(resourceResolver.map(request, maskedPath)), placeholders);
             }
         } catch (Exception e) {
             mappedPath = path;

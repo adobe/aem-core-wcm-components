@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -54,7 +55,6 @@ import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.foundation.AllowedComponentList;
-import com.google.common.collect.ImmutableSet;
 
 import static com.adobe.cq.wcm.core.components.models.Image.PN_ALT_VALUE_FROM_DAM;
 import static com.adobe.cq.wcm.core.components.models.Image.PN_ALT_VALUE_FROM_PAGE_IMAGE;
@@ -65,12 +65,12 @@ public class Utils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
-    private static final Set<String> INTERNAL_PARAMETER = ImmutableSet.of(
-            ":formstart",
-            "_charset_",
-            ":redirect",
-            ":cq_csrf_token"
-    );
+    private static final Set<String> INTERNAL_PARAMETER = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+        ":formstart",
+        "_charset_",
+        ":redirect",
+        ":cq_csrf_token"
+    )));
 
     private Utils() {
     }

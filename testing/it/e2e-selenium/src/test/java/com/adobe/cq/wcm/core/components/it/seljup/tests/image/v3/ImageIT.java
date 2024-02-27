@@ -17,12 +17,12 @@
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v3;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.image.ImageTests;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.v2.Image;
-import com.google.common.collect.ImmutableMap;
 
 @Tag("group2")
 public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.image.v2.ImageIT {
@@ -41,6 +40,15 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         clientlibs = Commons.CLIENTLIBS_IMAGE_V3;
         imageTests = new ImageTests();
         imageTests.setup(adminClient, contextPath, label, Commons.RT_IMAGE_V3, rootPage, defaultPageTemplate, clientlibs, new Image());
+    }
+
+    @Ignore
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Test
+    @DisplayName("Test: drag image to component")
+    public void testDragImageToComponent() throws TimeoutException, InterruptedException {
+        imageTests.testDragImageToComponent(true);
     }
 
     /**
@@ -236,4 +244,48 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testSetAssetWithoutDescriptionV3();
     }
 
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop dialog.")
+    public void testSmartCropDialogOnNGDMImageV3() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3();
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop - select aspect ratio from list.")
+    public void testSmartCropDialogOnNGDMImageV3_aspectRatioSelection() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3_aspectRatioSelection();
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop - select custom aspect ratio.")
+    public void testSmartCropDialogOnNGDMImageV3_customAspectRatio() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3_customAspectRatio();
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Test
+    @Ignore
+    @DisplayName("Test : NextGen DM image smart crop - flip aspect ratio.")
+    public void testSmartCropDialogOnNGDMImageV3_flipAspectRatio() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testNGDMSmartCropDialogImageV3_aspectRatioFlip();
+    }
+
+    /**
+     * Test: set asset from DAM without description as decorative image
+     */
+    @Test
+    @DisplayName("Test: set asset from DAM without description as decorative")
+    public void testSetAssetWithoutDescriptionAsDecorative() throws TimeoutException, InterruptedException {
+        imageTests.testSetAssetWithoutDescriptionAsDecorative(true);
+    }
 }

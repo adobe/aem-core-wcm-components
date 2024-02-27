@@ -54,7 +54,7 @@
                             "valueType": "string",
                             "showEmptyInReadOnly": "true",
                             "metaType": "text-multi",
-                            "cfm-element": "multiTextFieldLabel",
+                            "cfm-element": "Multi Text Field",
                             "name": "multiTextField",
                             "sling:resourceType": "dam/cfm/admin/components/authoring/contenteditor/multieditor",
                             "renderReadOnly": "false"

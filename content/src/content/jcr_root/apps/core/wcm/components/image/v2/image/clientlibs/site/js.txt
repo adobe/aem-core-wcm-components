@@ -17,4 +17,6 @@
 #base=js
 
 polyfills.js
+utils.js
+imageDynamicMedia.js
 image.js

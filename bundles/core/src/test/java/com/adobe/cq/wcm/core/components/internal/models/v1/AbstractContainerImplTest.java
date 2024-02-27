@@ -69,7 +69,8 @@ public class AbstractContainerImplTest {
             {"Teaser 1 description", "item_1", "/content/container/jcr:content/root/responsivegrid/container-1/item_1", "Teaser 1"},
             {"Teaser 2 description", "item_2", "/content/container/jcr:content/root/responsivegrid/container-1/item_2", "Teaser 2"},
         };
-        verifyContainerItems(expectedItems, container.getItems());
+        verifyContainerListItems(expectedItems, container.getItems());
+        verifyContainerContainerItems(expectedItems, container.getChildren());
     }
 
     private Container getContainerUnderTest(String resourcePath) {
@@ -81,7 +82,7 @@ public class AbstractContainerImplTest {
         return context.request().adaptTo(LayoutContainer.class);
     }
 
-    private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {
+    private void verifyContainerListItems(Object[][] expectedItems, List<ListItem> items) {
         assertEquals(expectedItems.length, items.size(), "The container has a different number of items than expected.");
         int index = 0;
         for (ListItem item : items) {
@@ -89,6 +90,16 @@ public class AbstractContainerImplTest {
             assertEquals(expectedItems[index][1], item.getName(), "The container item's name is not what was expected: " + item.getName());
             assertEquals(expectedItems[index][2], item.getPath(), "The container item's path is not what was expected: " + item.getPath());
             assertEquals(expectedItems[index][3], item.getTitle(), "The container item's title is not what was expected: " + item.getTitle());
+            index++;
+        }
+    }
+
+    private void verifyContainerContainerItems(Object[][] expectedItems, List<? extends ContainerItem> items) {
+        assertEquals(expectedItems.length, items.size(), "The container has a different number of items than expected.");
+        int index = 0;
+        for (ContainerItem item : items) {
+            assertEquals(expectedItems[index][1], item.getName(), "The container item's name is not what was expected: " + item.getName());
+            assertEquals(expectedItems[index][2], item.getPath(), "The container item's path is not what was expected: " + item.getPath());
             index++;
         }
     }

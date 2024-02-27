@@ -16,13 +16,13 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
@@ -61,7 +61,7 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
     @ScriptVariable
     private Resource resource;
 
-    @Inject
+    @OSGiService
     private FormStructureHelperFactory formStructureHelperFactory;
 
     private String[] prefillValues;

@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.ArrayUtils;
@@ -40,6 +39,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
@@ -90,10 +90,10 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @JsonIgnore
     protected ResourceResolver resolver;
 
-    @Inject
+    @OSGiService
     private ModelFactory modelFactory;
 
-    @Inject
+    @OSGiService
     private SlingModelFilter slingModelFilter;
 
     @Self

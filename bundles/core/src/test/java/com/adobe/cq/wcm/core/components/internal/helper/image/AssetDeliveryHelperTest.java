@@ -43,6 +43,7 @@ public class AssetDeliveryHelperTest {
 
     private static String TEST_ASSET_RESOURCE_PATH = "/content/dam/test";
     private static String TEST_IMAGE_COMPONENT_PATH = "/content/test/image/resource";
+    private static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.png";
     private static String TEST_SEO_NAME = "test-seo";
     private static String JPEG_EXTENSION = "jpg";
     private static String WIDTH_PLACEHOLDER = "{width}";
@@ -125,7 +126,27 @@ public class AssetDeliveryHelperTest {
         Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, 200, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
-            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 10 + "," + 20 + "," + 90 + "," + 180 + "&" + "preferwebp=true";
+            "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 10.0 + "," + 20.0 + "," + 90.0 + "," + 180.0 + "&" +
+                "preferwebp=true";
+        assertEquals(expectedSrcUrl, src);
+    }
+
+    @Test
+    public void testSrcWithRelativeCropParameter() throws Exception {
+        String TEST_ASSET_RESOURCE_PATH_CROP = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.jpg";
+        String TEST_SEO_NAME_CROP = "Adobe_Systems_logo_and_wordmark";
+        AssetDelivery assetDelivery = new MockAssetDelivery();
+        context.load().json("/image/test-content-dam.json", "/content/dam/core/images");
+        context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME,
+                TEST_ASSET_RESOURCE_PATH_CROP + "/jcr:content/renditions/cq5dam.web.1280.1280.png");
+        Map<String, Object> imageResourceProperties = new HashMap<>();
+        imageResourceProperties.put(DownloadResource.PN_REFERENCE, TEST_ASSET_RESOURCE_PATH_CROP);
+        imageResourceProperties.put(ImageResource.PN_IMAGE_CROP, "10,20,100,200");
+        Resource imageComponentResource = context.create().resource(TEST_IMAGE_COMPONENT_PATH, imageResourceProperties);
+        String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, "Adobe_Systems_logo_and_wordmark", JPEG_EXTENSION, 200, JPEG_QUALITY);
+        String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH_CROP + "." + TEST_SEO_NAME_CROP + "." + JPEG_EXTENSION +
+                "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY + "&" + "c=" + 0.8 + "p," + 1.6 + "p," + 7.0 + "p," + 14.1 + "p&" +
+                "preferwebp=true";
         assertEquals(expectedSrcUrl, src);
     }
 
@@ -200,7 +221,7 @@ public class AssetDeliveryHelperTest {
         String src = AssetDeliveryHelper.getSrc(assetDelivery, imageComponentResource, TEST_SEO_NAME, JPEG_EXTENSION, 200, JPEG_QUALITY);
         String expectedSrcUrl = MockAssetDelivery.BASE_URL + TEST_ASSET_RESOURCE_PATH + "." + TEST_SEO_NAME + "." + JPEG_EXTENSION +
             "?" + "width=" + 200 + "&" + "quality=" + JPEG_QUALITY +
-            "&" + "c=" + 10 + "," + 20 + "," + 90 + "," + 180 +
+            "&" + "c=" + 10.0 + "," + 20.0 + "," + 90.0 + "," + 180.0 +
             "&" + "r=" + 90 +
             "&" + "flip=HORIZONTAL_AND_VERTICAL" +
             "&" + "preferwebp=true";

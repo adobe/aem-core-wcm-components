@@ -17,6 +17,7 @@
     "use strict";
 
     var dataLayerEnabled;
+    var dataLayerName;
     var dataLayer;
 
     function addComponentToDataLayer(component) {
@@ -76,9 +77,9 @@
 
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer        = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
-
         if (dataLayerEnabled) {
+            dataLayerName = document.body.getAttribute("data-cmp-data-layer-name") || "adobeDataLayer";
+            dataLayer = window[dataLayerName];
 
             var components        = document.querySelectorAll("[data-cmp-data-layer]");
             var clickableElements = document.querySelectorAll("[data-cmp-clickable]");
