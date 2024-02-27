@@ -26,6 +26,12 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.DragAndDropOptions;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
@@ -58,11 +64,6 @@ import com.adobe.cq.testing.selenium.utils.ElementUtils;
 import com.adobe.cq.testing.selenium.utils.TestContentBuilder;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.Selectors;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_RETRY_DELAY;
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_SMALL_SIZE;
@@ -922,6 +923,12 @@ public class Commons {
         ((JavascriptExecutor) webDriver).executeScript("document.getElementsByName('actionUpdate')[0].style.display='inline'");
     }
 
+    public static void dragSidePanelImageToComponent(String imagePath, String componentPath) {
+        SelenideElement image = $(String.format("coral-card.cq-draggable[data-path=\"%s\"]", imagePath));
+        DragAndDropOptions.DragAndDropTarget.CssSelector targetComp = new DragAndDropOptions.DragAndDropTarget.CssSelector(String.format("[data-type='Editable'][data-path='%s']", componentPath));
+        image.dragAndDrop(new DragAndDropOptions(targetComp, DragAndDropOptions.DragAndDropMethod.ACTIONS));
+    }
+
     /**
      * Class representing a simple page that can be opened in a Selenium browser.
      */
@@ -977,6 +984,10 @@ public class Commons {
         String urlStg = webDriver.getCurrentUrl();
         URL url = new URL(urlStg);
         return url.getRef();
+    }
+
+    public static void setNGDMImage(CQClient client, String componentPath) throws ClientException {
+        client.setPropertyString(componentPath, "fileReference", "/urn:aaid:aem:535c3eba-6242-4474-b2d2-3d1ef333ec45/test.jpg", 200);
     }
 
 }

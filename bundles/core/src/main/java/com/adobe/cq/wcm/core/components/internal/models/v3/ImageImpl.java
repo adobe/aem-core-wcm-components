@@ -19,10 +19,8 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -31,6 +29,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -63,14 +62,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String URI_WIDTH_PLACEHOLDER_ENCODED = "%7B.width%7D";
     private static final String URI_WIDTH_PLACEHOLDER = "{.width}";
     private static final String EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+    static final int DEFAULT_NGDM_ASSET_WIDTH = 640;
 
-    private static final String PATH_PLACEHOLDER_ASSET_ID = "{asset-id}";
-    private static final String PATH_PLACEHOLDER_SEO_NAME = "{seo-name}";
-    private static final String PATH_PLACEHOLDER_FORMAT = "{format}";
-    private static final String DEFAULT_NGDM_ASSET_EXTENSION = "jpg";
-    private static final int DEFAULT_NGDM_ASSET_WIDTH = 640;
-
-    @Inject
+    @OSGiService
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
 
@@ -277,22 +271,17 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         initResource();
         properties = resource.getValueMap();
         String fileReference = properties.get("fileReference", String.class);
+        String smartCrop = properties.get("smartCrop", String.class);
         if (isNgdmImageReference(fileReference)) {
-            Scanner scanner = new Scanner(fileReference);
-            scanner.useDelimiter("/");
-            String assetId = scanner.next();
-            scanner = new Scanner(scanner.next());
-            scanner.useDelimiter("\\.");
-            String assetName = scanner.hasNext() ? scanner.next() : assetId;
-            String assetExtension = scanner.hasNext() ? scanner.next() : DEFAULT_NGDM_ASSET_EXTENSION;
-            String imageDeliveryBasePath = nextGenDynamicMediaConfig.getImageDeliveryBasePath();
-            String imageDeliveryPath = imageDeliveryBasePath.replace(PATH_PLACEHOLDER_ASSET_ID, assetId);
-            imageDeliveryPath = imageDeliveryPath.replace(PATH_PLACEHOLDER_SEO_NAME, assetName);
-            imageDeliveryPath = imageDeliveryPath.replace(PATH_PLACEHOLDER_FORMAT, assetExtension);
-            ngdmImage = true;
             int width = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, DEFAULT_NGDM_ASSET_WIDTH);
-            String repositoryId = nextGenDynamicMediaConfig.getRepositoryId();
-            src = "https://" + repositoryId  + imageDeliveryPath + "?width=" + width + "&preferwebp=true";
+            NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
+                .withPreferWebp(true)
+                .withWidth(width);
+            if(StringUtils.isNotEmpty(smartCrop)) {
+                builder.withSmartCrop(smartCrop);
+            }
+            src = builder.build();
+            ngdmImage = true;
             hasContent = true;
         }
     }

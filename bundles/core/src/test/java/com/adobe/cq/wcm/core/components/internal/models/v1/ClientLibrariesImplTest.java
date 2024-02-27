@@ -32,7 +32,6 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolverFactory;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.models.factory.ModelFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,8 +51,8 @@ import com.day.cq.wcm.api.PageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.anyBoolean;
@@ -516,11 +515,9 @@ class ClientLibrariesImplTest {
         Resource resource = context.currentResource(path);
         if (resource != null) {
             if (attributes != null) {
-                SlingBindings slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
                 for (Map.Entry<String,Object> entry : attributes.entrySet()) {
-                    slingBindings.put(entry.getKey(), entry.getValue());
+                    context.request().setAttribute(entry.getKey(), entry.getValue());
                 }
-                context.request().setAttribute(SlingBindings.class.getName(), slingBindings);
             }
             context.request().setResource(resource);
             return context.request().adaptTo(ClientLibraries.class);

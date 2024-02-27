@@ -52,6 +52,7 @@ class CarouselImplTest extends AbstractPanelTest {
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-1";
     private static final String CAROUSEL_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-2";
+    private static final String CAROUSEL_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-3";
     private static final String CAROUSEL_EMPTY = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-empty";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
@@ -82,6 +83,17 @@ class CarouselImplTest extends AbstractPanelTest {
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_4" }, };
         verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
+    }
+
+    @Test
+    void testCarouselWithGhostItem() {
+        Carousel carousel = getCarouselUnderTest(CAROUSEL_3);
+        Object[][] expectedItems = {
+            { "item_1", "Teaser 1", "core/wcm/components/carousel/v1/carousel/item",
+                "/content/carousel/jcr:content/root/responsivegrid/carousel-3/item_1" },
+            { "item_3", "Carousel Panel 3", "core/wcm/components/carousel/v1/carousel/item",
+                "/content/carousel/jcr:content/root/responsivegrid/carousel-3/item_3" } };
+        verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
     }
 
     @Test

@@ -234,7 +234,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     protected void testImageWithTwoOrMoreSmartSizes() {
         context.contentPolicyMapping(resourceType,
             "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500},
-                "sizes", new String[]{"(max-width: 600px) 480px", "800px"});
+            "sizes", new String[]{"(max-width: 600px) 480px", "800px"});
         String escapedResourcePath = AbstractImageTest.IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
         assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt());
@@ -306,7 +306,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     protected void testImageWithMoreThanOneSmartSize() {
         context.contentPolicyMapping(resourceType,
             "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500},
-                "sizes", new String[]{"(max-width: 600px) 480px", "800px"});
+            "sizes", new String[]{"(max-width: 600px) 480px", "800px"});
         Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
         assertArrayEquals(new int[]{600, 700, 800, 2000, 2500}, image.getWidths());
         assertTrue(image.isLazyEnabled());
@@ -329,8 +329,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     @Test
     protected void testGetUuid() {
         context.contentPolicyMapping(resourceType,
-                "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500},
-                "sizes", new String[]{"(max-width: 600px) 480px", "800px"});
+            "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500},
+            "sizes", new String[]{"(max-width: 600px) 480px", "800px"});
         Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
         assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE0_PATH));
@@ -652,7 +652,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             "allowedRenditionWidths", new int[]{600, 800});
         Image image = getImageUnderTest(IMAGE0_PATH);
         String expectedSrcSet = MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=600&quality=82&preferwebp=true 600w," +
-                                MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true 800w";
+            MockAssetDelivery.BASE_URL + IMAGE_FILE_REFERENCE + "." + ASSET_NAME  + ".png?width=800&quality=82&preferwebp=true 800w";
         assertEquals(expectedSrcSet , image.getSrcset());
     }
 

@@ -24,8 +24,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.LoginException;
@@ -35,13 +33,14 @@ import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.models.ComponentFiles;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.models.ComponentFiles;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
@@ -56,16 +55,13 @@ public class ComponentFilesImpl implements ComponentFiles {
      */
     public static final String COMPONENTS_SERVICE = "components-service";
 
-    @Inject
-    @Named(OPTION_RESOURCE_TYPES)
+    @ScriptVariable(name=OPTION_RESOURCE_TYPES)
     Object resourceTypes;
 
-    @Inject
-    @Named(OPTION_FILTER_REGEX)
+    @ScriptVariable(name=OPTION_FILTER_REGEX)
     String filterRegex;
 
-    @Inject
-    @Named(OPTION_INHERITED)
+    @ScriptVariable(name=OPTION_INHERITED)
     @Default(booleanValues = OPTION_INHERITED_DEFAULT)
     boolean inherited;
 

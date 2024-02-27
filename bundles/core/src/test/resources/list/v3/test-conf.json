@@ -1,0 +1,36 @@
+{
+    "jcr:primaryType": "sling:Folder",
+    "coretest"       : {
+        "jcr:primaryType": "sling:OrderedFolder",
+        "jcr:title"      : "Core",
+        "settings"       : {
+            "jcr:primaryType": "sling:Folder",
+            "wcm"            : {
+                "jcr:primaryType": "cq:Page",
+                "templates"      : {
+                    "jcr:primaryType": "cq:Page",
+                    "template-1"     : {
+                        "structure": {
+                            "jcr:primaryType": "cq:Page",
+                            "jcr:content"    : {
+                                "jcr:primaryType"  : "cq:PageContent",
+                                "jcr:createdBy"    : "admin",
+                                "cq:template"      : "/conf/coretest/settings/wcm/templates/template-1",
+                                "root"             : {
+                                    "jcr:primaryType"   : "nt:unstructured",
+                                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                                    "list": {
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "sling:resourceType": "core/wcm/components/list/v3/list",
+                                        "listFrom": "children",
+                                        "displayItemAsTeaser": "true"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

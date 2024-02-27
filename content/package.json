@@ -1,6 +1,6 @@
 {
     "name": "com.adobe.cq.core.wcm.components.content",
-    "version": "2.23.1-SNAPSHOT",
+    "version": "2.24.3-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components Content Package",
     "license": "Apache-2.0",
     "private": false,
@@ -39,6 +39,11 @@
         "stylelint-selector-bem-pattern": "^2.1.1",
         "sync-pom-version-to-package": "^1.6.1",
         "watchify": "^4.0.0"
+    },
+    "overrides": {
+        "aemfed": {
+            "proxy-agent": "^6.3.1"
+        }
     },
     "dependencies": {
         "@adobe/adobe-client-data-layer": "2.0.2"

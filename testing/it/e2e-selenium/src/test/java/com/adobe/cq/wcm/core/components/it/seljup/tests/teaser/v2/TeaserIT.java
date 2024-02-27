@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -510,6 +511,27 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         Commons.switchContext("ContentFrame");
         assertTrue(teaser.isImagePresentWithAltText(testPage, alt),"image should be rendered with alt text: " + alt);
         assertTrue(teaser.isImagePresentWithFileName(skiingAssetFormatted),"image should be rendered with file name: " + skiingAssetFormatted);
+    }
+
+    @Ignore
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Test
+    @DisplayName("Test: drag and drop image from side panel to teaser component on a page")
+    public void testDropImageToTeaser() throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        Commons.dragSidePanelImageToComponent(testImagePath, cmpPath);
+        Commons.closeSidePanel();
+
+        com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v1.TeaserEditDialog editDialog = teaser.getEditDialog();
+        Commons.openEditDialog(editorPage, cmpPath);
+
+        assertTrue(editDialog.isAltTextFromAssetDescription());
+
+        Commons.closeConfigureDialog();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(teaser.isImagePresentWithAltText(testPage, testImageAltText), "Image should be rendered with alt text: " + testImageAltText);
     }
 
     // ----------------------------------------------------------

@@ -95,7 +95,10 @@ class LinkBuilderImplTest {
 
         passedDownToPathProcessor = StringUtils.defaultIfEmpty(passedDownToPathProcessor, given);
 
-        verify(pathProcessor).map(eq(passedDownToPathProcessor), any());
+        // external links are not mapped
+        if (!LinkManagerImpl.isExternalLink(passedDownToPathProcessor)) {
+            verify(pathProcessor).map(eq(passedDownToPathProcessor), any());
+        }
         verify(pathProcessor).externalize(eq(passedDownToPathProcessor), any());
         verify(pathProcessor).sanitize(eq(passedDownToPathProcessor), any());
     }
