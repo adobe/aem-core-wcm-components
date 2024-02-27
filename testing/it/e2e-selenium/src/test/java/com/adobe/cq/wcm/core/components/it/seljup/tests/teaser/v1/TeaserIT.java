@@ -47,6 +47,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TeaserIT extends AuthorBaseUITest {
     protected static String  testAssetsPath                   = "/content/dam/core-components";
     protected static String  testImagePath                    = testAssetsPath + "/core-comp-test-image.jpg";
+    protected static String  testImageAltText                 = "House on a beach with blue sky";
     protected static String  preTitle                         = "Teaser PreTitle";
     protected static String  title                            = "Teaser Title";
     protected static String  description                      = "Teaser Description";

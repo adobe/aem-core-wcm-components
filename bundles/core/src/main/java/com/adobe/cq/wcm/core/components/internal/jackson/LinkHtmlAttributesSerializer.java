@@ -17,6 +17,7 @@
 package com.adobe.cq.wcm.core.components.internal.jackson;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,14 +27,13 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.google.common.collect.ImmutableSet;
 
 public class LinkHtmlAttributesSerializer extends StdSerializer<Map<String, String>> {
 
     /**
      * List of the link's ignored html attributes from the Json export.
      */
-    private static final Set<String> IGNORED_HTML_ATTRIBUTES = ImmutableSet.of("href");
+    private static final Set<String> IGNORED_HTML_ATTRIBUTES = Collections.singleton("href");
 
     public LinkHtmlAttributesSerializer() { this(null); }
 
