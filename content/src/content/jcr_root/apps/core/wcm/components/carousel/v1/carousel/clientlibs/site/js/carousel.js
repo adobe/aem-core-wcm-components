@@ -23,6 +23,7 @@
     }
     var dataLayerEnabled;
     var dataLayer;
+    var dataLayerName;
 
     var NS = "cmp";
     var IS = "carousel";
@@ -679,7 +680,10 @@
      */
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+        if (dataLayerEnabled) {
+            dataLayerName = document.body.getAttribute("data-cmp-data-layer-name") || "adobeDataLayer";
+            dataLayer = window[dataLayerName];
+        }
 
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {

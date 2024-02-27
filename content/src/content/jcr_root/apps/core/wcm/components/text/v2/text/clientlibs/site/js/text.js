@@ -18,6 +18,7 @@
 
     var dataLayerEnabled;
     var dataLayer;
+    var dataLayerName;
 
     /**
      * Adds Click Event Listener to the main <div> of the Text Components
@@ -49,7 +50,6 @@
                 }
             });
         }
-
     }
 
     /**
@@ -72,9 +72,10 @@
 
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-        dataLayer = (dataLayerEnabled) ? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
-
         if (dataLayerEnabled) {
+            dataLayerName = document.body.getAttribute("data-cmp-data-layer-name") || "adobeDataLayer";
+            dataLayer = window[dataLayerName];
+
             addClickEventListenerToTextComponents();
         }
     }
