@@ -31,6 +31,7 @@
               readonly="${text.readOnly}"
               required="${text.required}"
               rows="${text.rows}"
+              spellcheck="true"
               data-sly-attribute.aria-describedby="${text.helpMessage ? [text.id, 'helpMessage'] : '' @ join = '-'}">${text.value}</textarea>
     <input data-sly-test="${!useTextarea}"
            class="cmp-form-text__text"
@@ -43,5 +44,6 @@
            value="${text.value}"
            readonly="${text.readOnly}"
            required="${text.required}"
+           spellcheck="true"
            data-sly-attribute.aria-describedby="${text.helpMessage ? [text.id, 'helpMessage'] : '' @ join = '-'}"/>
 </div>

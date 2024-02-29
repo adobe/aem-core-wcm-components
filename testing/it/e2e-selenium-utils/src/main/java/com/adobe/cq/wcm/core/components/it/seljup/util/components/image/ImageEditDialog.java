@@ -133,4 +133,18 @@ public class ImageEditDialog extends Dialog {
         checkbox.click();
     }
 
+    public boolean isTitleFromDAM() {
+        CoralCheckbox checkbox = new CoralCheckbox(titleValueFromDAM);
+        return checkbox.isChecked();
+    }
+
+    public boolean isAltFromDAM() {
+        CoralCheckbox checkbox = new CoralCheckbox(altValueFromDAM);
+        return checkbox.isChecked();
+    }
+
+    public boolean isPopUpTitle() {
+        CoralCheckbox checkbox = new CoralCheckbox(popUpTitle);
+        return checkbox.isChecked();
+    }
 }

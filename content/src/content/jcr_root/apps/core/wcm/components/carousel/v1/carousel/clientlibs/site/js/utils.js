@@ -83,5 +83,4 @@
             setupProperties: setupProperties
         };
     }());
-    document.dispatchEvent(new CustomEvent("core.wcm.components.commons.site.utils.loaded"));
 }(window.document));

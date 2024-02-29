@@ -19,6 +19,7 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.image.v2;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,6 +55,15 @@ public class ImageIT extends AuthorBaseUITest {
     @DisplayName("Test: add image")
     public void testAddImage() throws TimeoutException, InterruptedException {
         imageTests.testAddImage();
+    }
+
+    @Ignore
+    @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Test
+    @DisplayName("Test: drag image to component")
+    public void testDragImageToComponent() throws TimeoutException, InterruptedException {
+        imageTests.testDragImageToComponent(false);
     }
 
     /**
@@ -112,6 +122,15 @@ public class ImageIT extends AuthorBaseUITest {
     @DisplayName("Test: set asset from DAM without description")
     public void testSetAssetWithoutDescription() throws TimeoutException, InterruptedException {
         imageTests.testSetAssetWithoutDescription();
+    }
+
+    /**
+     * Test: set asset from DAM without description as decorative image
+     */
+    @Test
+    @DisplayName("Test: set asset from DAM without description as decorative")
+    public void testSetAssetWithoutDescriptionAsDecorative() throws TimeoutException, InterruptedException {
+        imageTests.testSetAssetWithoutDescriptionAsDecorative(false);
     }
 
 }

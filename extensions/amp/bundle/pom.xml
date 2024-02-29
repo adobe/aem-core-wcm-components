@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.22.1-SNAPSHOT</version>
+        <version>2.24.3-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.extensions.amp</artifactId>
-    <version>2.22.1-SNAPSHOT</version>
+    <version>2.24.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>Adobe Experience Manager Core WCM Components AMP Extension Bundle</name>
@@ -330,11 +330,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <!-- javax.inject 1 -->
-        <dependency>
-            <artifactId>geronimo-atinject_1.0_spec</artifactId>
-            <groupId>org.apache.geronimo.specs</groupId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>

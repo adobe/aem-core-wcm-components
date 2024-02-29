@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -46,20 +44,19 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_ACCESSIBILITY_LABEL;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TARGET;
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_TITLE_ATTRIBUTE;
+import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.internal.Utils.resolveRedirects;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkManagerImpl.VALID_LINK_TARGETS;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_ARIA_LABEL;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TARGET;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.ATTR_TITLE;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkManagerImpl.VALID_LINK_TARGETS;
 
 public class LinkBuilderImpl implements LinkBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LinkBuilderImpl.class);
-    private final static List<Pattern> PATTERNS = Collections.singletonList(Pattern.compile("(<%[=@].*?%>)"));
     public static final String HTML_EXTENSION = ".html";
 
     SlingHttpServletRequest request;
@@ -148,7 +145,7 @@ public class LinkBuilderImpl implements LinkBuilder {
         // resource as well; but try to avoid duplicate resolutions as much as possible.
         Asset asset = null;
         Page page = null;
-        
+
         if (targetAsset != null) {
         	asset = targetAsset;
         } else if (targetPage != null) {
@@ -157,28 +154,28 @@ public class LinkBuilderImpl implements LinkBuilder {
         	asset = getAsset(linkUrl);
         	page = getPage(linkUrl).orElse(null);
         }
-        
-        boolean isExternalUrl = false; 
+
+        boolean isExternalUrl = false;
         if (asset != null) {
             this.reference = asset;
         } else if (page != null) {
             Pair<Page, String> pair = resolvePage(page);
             this.reference = pair.getLeft();
             linkUrl = StringUtils.isNotEmpty(pair.getRight()) ? pair.getRight() : linkUrl;
-            
+
             // resolvePage() can resolve the linkUrl into an external URL; this can happen when
             // there is a redirect from the page to an external URL; in this case
             // the pair is not equivalent
             isExternalUrl = !pair.getLeft().getPath().equals(linkUrl);
         }
-        
+
         String resolvedLinkURL = null;
         if (this.reference != null && page != null && !isExternalUrl) {
         	resolvedLinkURL = getPageLinkURL((Page)this.reference);
         } else if (StringUtils.isNotEmpty(linkUrl)) {
         	resolvedLinkURL = linkUrl;
-        } 
-        
+        }
+
         Map<String, String> htmlAttributes = mapLinkAttributesToHtml();
         return buildLink(resolvedLinkURL, request, htmlAttributes);
     }
@@ -186,12 +183,7 @@ public class LinkBuilderImpl implements LinkBuilder {
     private @NotNull Link buildLink(String path, SlingHttpServletRequest request, Map<String, String> htmlAttributes) {
         if (StringUtils.isNotEmpty(path)) {
             try {
-                // The link contain character sequences that are not well formatted and cannot be decoded, for example
-                // Adobe Campaign expressions like: /content/path/to/page.html?recipient=<%= recipient.id %>
-                Map<String, String> placeholders = new LinkedHashMap<>();
-                String maskedPath = mask(path, placeholders);
-                maskedPath = URLDecoder.decode(maskedPath, StandardCharsets.UTF_8.name());
-                path = unmask(maskedPath, placeholders);
+                path = LinkUtil.decode(path);
             } catch (Exception ex) {
                 String message = "Failed to decode url '{}': {}";
                 if (LOGGER.isDebugEnabled()) {
@@ -206,7 +198,7 @@ public class LinkBuilderImpl implements LinkBuilder {
                     .findFirst()
                     .map(pathProcessor -> new LinkImpl(
                             pathProcessor.sanitize(decodedPath, request),
-                            pathProcessor.map(decodedPath, request),
+                            LinkManagerImpl.isExternalLink(decodedPath) ? decodedPath : pathProcessor.map(decodedPath, request),
                             pathProcessor.externalize(decodedPath, request),
                             this.reference,
                             pathProcessor.processHtmlAttributes(decodedPath, htmlAttributes)))
@@ -304,74 +296,6 @@ public class LinkBuilderImpl implements LinkBuilder {
         }
         Page resolved = Optional.ofNullable(pair.getLeft()).orElse(page);
         return new ImmutablePair<>(resolved, getPageLinkURL(resolved));
-    }
-
-    /**
-     * Masks a given {@link String} by replacing all occurrences of {@link LinkBuilderImpl#PATTERNS} with a placeholder.
-     * The generated placeholders are put into the given {@link Map} and can be used to unmask a {@link String} later on.
-     * <p>
-     * For example the given original {@link String} {@code /path/to/page.html?r=<%= recipient.id %>} will be transformed to
-     * {@code /path/to/page.html?r=_abcd_} and the placeholder with the expression will be put into the given {@link Map}.
-     *
-     * @param original     the original {@link String}
-     * @param placeholders a {@link Map} the generated placeholders will be put in
-     * @return the masked {@link String}
-     * @see LinkBuilderImpl#unmask(String, Map)
-     */
-    private static String mask(String original, Map<String, String> placeholders) {
-        String masked = original;
-        for (Pattern pattern : PATTERNS) {
-            Matcher matcher = pattern.matcher(masked);
-            while (matcher.find()) {
-                String expression = matcher.group(1);
-                String placeholder = newPlaceholder(masked);
-                masked = masked.replaceFirst(Pattern.quote(expression), placeholder);
-                placeholders.put(placeholder, expression);
-            }
-        }
-        return masked;
-    }
-
-    /**
-     * Unmasks the given {@link String} by replacing the given placeholders with their original value.
-     * <p>
-     * For example the given masked {@link String} {@code /path/to/page.html?r=_abcd_} will be transformed to
-     * {@code /path/to/page.html?r=<%= recipient.id %>} by replacing each of the given {@link Map}s keys with the corresponding value.
-     *
-     * @param masked       the masked {@link String}
-     * @param placeholders the {@link Map} of placeholders to replace
-     * @return the unmasked {@link String}
-     */
-    private static String unmask(String masked, Map<String, String> placeholders) {
-        String unmasked = masked;
-        for (Map.Entry<String, String> placeholder : placeholders.entrySet()) {
-            unmasked = unmasked.replaceFirst(placeholder.getKey(), placeholder.getValue());
-        }
-        return unmasked;
-    }
-
-    /**
-     * Generate a new random placeholder that is not conflicting with any character sequence in the given {@link String}.
-     * <p>
-     * For example the given {@link String} {@code "foo"} a new random {@link String} will be returned that is not contained in the
-     * given {@link String}. In this example the following {@link String}s will never be returned "f", "fo", "foo", "o", "oo".
-     *
-     * @param str the given {@link String}
-     * @return the placeholder name
-     */
-    private static String newPlaceholder(String str) {
-        SecureRandom random = new SecureRandom();
-        StringBuilder placeholderBuilder = new StringBuilder(5);
-
-        do {
-            placeholderBuilder.setLength(0);
-            placeholderBuilder
-                .append("_")
-                .append(new BigInteger(16, random).toString(16))
-                .append("_");
-        } while (str.contains(placeholderBuilder));
-
-        return placeholderBuilder.toString();
     }
 
 }

@@ -26,7 +26,7 @@
     $(document).on("foundation-contentloaded", function(e) {
         if ($(e.target).find(ACTION_TYPE_ELEMENT_SELECTOR).length > 0) {
             $(ACTION_TYPE_ELEMENT_SELECTOR, e.target).each(function(i, element) {
-                var target = $(element).data("cqDialogDropdownShowhideTarget");
+                var target = window.Granite.UI.Foundation.Utils.sanitizeHtml($(element).data("cqDialogDropdownShowhideTarget"));
                 if (target) {
                     Coral.commons.ready(element, function(component) {
                         showHide(component, target);
@@ -40,7 +40,7 @@
         }
         if ($(e.target).find(WORKFLOW_SELECT_ELEMENT_SELECTOR).length > 0) {
             $(WORKFLOW_SELECT_ELEMENT_SELECTOR, e.target).each(function(i, element) {
-                var target = $(element).data("cqDialogDropdownShowhideTarget");
+                var target = window.Granite.UI.Foundation.Utils.sanitizeHtml($(element).data("cqDialogDropdownShowhideTarget"));
                 if (target) {
                     Coral.commons.ready(element, function(component) {
                         component.on("change", function() {
@@ -93,7 +93,7 @@
         if (showOptional) {
             if (data === "usesworkflow") {
                 $workflowSelect = $optional.find("coral-select");
-                target = $workflowSelect.data("cqDialogDropdownShowhideTarget");
+                target = window.Granite.UI.Foundation.Utils.sanitizeHtml($workflowSelect.data("cqDialogDropdownShowhideTarget"));
                 showHideWorkflowTitle($workflowSelect[0], target);
             }
             setVisibilityAndHandleFieldValidation($optional, true);

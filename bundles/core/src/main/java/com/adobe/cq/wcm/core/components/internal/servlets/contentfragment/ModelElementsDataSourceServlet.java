@@ -116,11 +116,15 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
                     ValueMap valueMap = elementResource.getValueMap();
                     String valueValue = valueMap.get("name", "");
                     String textValue = valueMap.get("fieldLabel", valueValue);
+                    if (textValue.equals(valueValue)) {
+                        textValue = valueMap.get("cfm-element", valueValue);
+                    }
                     if (isOrderBy && StringUtils.isNotEmpty(valueValue)) {
                         valueValue = "jcr:content/data/master/" + valueValue;
                     }
                     String metaType = valueMap.get("metaType", StringUtils.EMPTY);
-                    if (!isOrderBy || StringUtils.startsWith(metaType, "text-") || StringUtils.equals(metaType, "date")) {
+                    if (!isOrderBy || StringUtils.startsWith(metaType, "text-") || StringUtils.equals(metaType, "date")
+                        || StringUtils.equals(metaType, "number")) {
                         Resource syntheticResource = createResource(resourceResolver, textValue, valueValue);
                         resourceList.add(syntheticResource);
                     }

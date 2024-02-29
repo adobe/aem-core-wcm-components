@@ -418,14 +418,8 @@
     var documentReady = document.readyState !== "loading" ? Promise.resolve() : new Promise(function(resolve) {
         document.addEventListener("DOMContentLoaded", resolve);
     });
-    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(function(resolve) {
-        document.addEventListener("core.wcm.components.commons.site.utils.loaded", resolve);
-    });
-    var dynamicMediaReady = (window.CMP && window.CMP.image && window.CMP.image.dynamicMedia) ? Promise.resolve() : new Promise(function(resolve) {
-        document.addEventListener("core.wcm.components.commons.site.image.dynamic-media.loaded", resolve);
-    });
 
-    Promise.all([documentReady, utilsReady, dynamicMediaReady]).then(onDocumentReady);
+    Promise.all([documentReady]).then(onDocumentReady);
     /*
         on drag & drop of the component into a parsys, noscript's content will be escaped multiple times by the editor which creates
         the DOM for editing; the HTML parser cannot be used here due to the multiple escaping
