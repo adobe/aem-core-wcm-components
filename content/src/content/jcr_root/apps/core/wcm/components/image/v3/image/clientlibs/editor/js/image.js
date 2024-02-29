@@ -61,6 +61,7 @@
     var isPolarisEnabled = false;
     var polarisRepositoryId;
     var imagePresetRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='imagePreset']";
+    var smartCropRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='smartCrop']";
     var remoteFileReference;
 
     $(document).on("dialog-loaded", function(e) {
@@ -102,8 +103,6 @@
 
             if ($cqFileUpload.length) {
                 imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
-                retrieveInstanceInfo(imagePath);
-
                 var cfg = $(polarisPickerSelector).attr("polaris-config");
                 if (cfg) {
                     polarisRepositoryId = JSON.parse(cfg).repositoryId;
@@ -112,12 +111,16 @@
                         remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
                     }
                 }
+
+                retrieveInstanceInfo(imagePath);
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
                     // if it is a remote asset
+                    remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
                     if (fileReference === undefined && remoteFileReference && remoteFileReference !== "" &&
                         remoteFileReference.includes("urn:aaid:aem")) {
                         fileReference = remoteFileReference;
+                        smartCropRenditionFromJcr = "NONE"; // for newly selected asset we clear the smartcrop selection dropdown
                     }
                     retrieveDAMInfo(fileReference).then(
                         function() {
@@ -344,6 +347,7 @@
             return new Promise((resolve, reject) => {
                 $dynamicMediaGroup.show();
                 $(imagePresetRadio).parent().hide();
+                $(smartCropRadio).prop("checked", true);
                 fileReference = fileReference.substring(0, fileReference.lastIndexOf("/"));
                 if (isPolarisEnabled && areDMFeaturesEnabled) {
                     var imageUrl = `https://${polarisRepositoryId}/adobe/assets${fileReference}/metadata`;
