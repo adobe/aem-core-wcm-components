@@ -73,7 +73,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private Collection<ListItem> getStaticListItems() {
         Stream<AbstractListItemImpl> itemStream = getStaticItemResourceStream().map(linkResource -> {
             Link link = linkManager.get(linkResource).build();
-            if (LinkManagerImpl.isExternalLink(link.getURL())) {
+            if (LinkManagerImpl.isExternalLink(link.getURL()) && (link.getReference() == null)) {
                 return new ExternalLinkListItemImpl(link, linkResource, getId(), component);
             } else {
                 Object reference = link.getReference();
