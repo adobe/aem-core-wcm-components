@@ -116,7 +116,6 @@
                                         name="./resizeWidth"
                                         typeHint="Long"
                                         required="{Boolean}false"
-                                        defaultValue="{Long}1280"
                                         min="{Long}1"
                                         max="{Long}3840"/>
                                     <heading
@@ -140,7 +139,6 @@
                                                 <field
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                                    defaultValue="{Long}1280"
                                                     min="{Long}0"
                                                     name="./allowedRenditionWidths"
                                                     required="{Boolean}true"/>
@@ -167,8 +165,7 @@
                                         typeHint="Long"
                                         required="{Boolean}false"
                                         min="{Long}0"
-                                        max="{Long}100"
-                                        defaultValue="{Long}82" />
+                                        max="{Long}100" />
                                 </items>
                                 <granite:data
                                     jcr:primaryType="nt:unstructured"
