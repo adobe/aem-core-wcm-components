@@ -83,7 +83,7 @@ public class NextGenDMThumbnailImplTest {
         assertTrue(nextGenDMThumbnail.getSrc().contains(BASE_URI));
         assertTrue(nextGenDMThumbnail.getSrc().contains("width=260"));
         assertTrue(nextGenDMThumbnail.getSrc().contains("height=260"));
-        assertTrue(nextGenDMThumbnail.getSrc().contains("crop=2:3,smart"));
+        assertTrue(nextGenDMThumbnail.getSrc().contains("smartcrop=Medium"));
     }
 
     @Test

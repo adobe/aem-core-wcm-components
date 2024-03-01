@@ -1,6 +1,7 @@
 {
   "id": "image-042059c802",
   "lazyEnabled": true,
+  "smartCropRendition": "Medium",
   "dataLayer": {
       "image-042059c802": {
       "@type": "core/wcm/components/image/v3/image"
