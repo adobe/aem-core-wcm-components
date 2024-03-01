@@ -26,6 +26,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
+import com.adobe.cq.dam.cfm.ElementTemplate;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -300,5 +301,24 @@ public class ContentFragmentUtils {
         }
 
         return componentExporterMap;
+    }
+
+    /**
+     * Returns the {@code metaType} propery of an element in the content fragment model.
+     *
+     * @param element the content element
+     *
+     * @return the meta type of the element
+     */
+    public static String getElementMetaType(ContentElement element) {
+        ElementTemplate elementTemplate = element.adaptTo(ElementTemplate.class);
+        if (elementTemplate != null) {
+            Resource resource = elementTemplate.adaptTo(Resource.class);
+            if (resource != null) {
+                ValueMap valueMap = resource.getValueMap();
+                return valueMap.get("metaType", String.class);
+            }
+        }
+        return null;
     }
 }
