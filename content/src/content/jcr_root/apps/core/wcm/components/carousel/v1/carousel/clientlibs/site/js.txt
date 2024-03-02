@@ -16,4 +16,5 @@
 
 #base=js
 
+utils.js
 carousel.js

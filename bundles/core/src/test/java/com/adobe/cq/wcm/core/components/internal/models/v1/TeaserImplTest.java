@@ -72,6 +72,8 @@ public class TeaserImplTest {
     protected static final String TEASER_11 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-11";
     protected static final String TEASER_12 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-12";
     protected static final String TEASER_13 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-13";
+    protected static final String TEASER_14 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-14";
+    protected static final String TEASER_15 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-15";
     protected static final String TEASER_20 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-20";
     protected static final String TEASER_21 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-21";
     protected static final String TEASER_22 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-22";
@@ -270,6 +272,24 @@ public class TeaserImplTest {
         List<ListItem> actions = teaser.getActions();
         assertEquals("http://www.adobe.com", actions.get(0).getPath());
         assertEquals("Adobe", actions.get(0).getTitle());
+    }
+
+    @Test
+    void testTeaserWithCTALinkContainingSpecialCharacters() {
+        String ENCODED_LINK_URL = CONTEXT_PATH + "/content/teasers/%C3%A9.html";
+        Teaser teaser = getTeaserUnderTest(TEASER_14);
+        List<ListItem> actions = teaser.getActions();
+        assertEquals(ENCODED_LINK_URL, actions.get(0).getURL());
+        assertEquals(ENCODED_LINK_URL, teaser.getLinkURL());
+    }
+
+    @Test
+    protected void testTeaserWithLinkToAsset() {
+        Teaser teaser = getTeaserUnderTest(TEASER_15);
+        List<ListItem> actions = teaser.getActions();
+        assertEquals(CONTEXT_PATH + "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", teaser.getLinkURL());
+        assertEquals(CONTEXT_PATH + "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", actions.get(0).getLink().getURL());
+        assertEquals(CONTEXT_PATH + "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", actions.get(0).getPath());
     }
 
     protected Teaser getTeaserUnderTest(String resourcePath, Object... properties) {

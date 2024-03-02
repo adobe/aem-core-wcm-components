@@ -648,6 +648,7 @@
                 </container_1589240806>
                 <container_1589240807/> <!-- Commerce components on main library page -->
                 <container_1589240808/> <!-- Forms and Communications Portal components on main library page -->
+                <container_1789240808/> <!-- Adaptive Forms components on main library page -->
             </responsivegrid>
         </root>
         <image/>

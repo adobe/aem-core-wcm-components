@@ -59,9 +59,6 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
 
     @Test
     public void testConfigurationConsumer() throws Exception {
-        AdaptiveImageServletMappingConfigurationConsumer configurationConsumer = new AdaptiveImageServletMappingConfigurationConsumer();
-        context.registerInjectActivateService(configurationConsumer);
-
         context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationFactory(),
             new Hashtable<String, Object>() {{
                 put(Constants.SERVICE_PID, "pid1");
@@ -80,12 +77,20 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
                 put("defaultResizeWidth", AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH);
         }});
 
+        AdaptiveImageServletMappingConfigurationConsumer configurationConsumer = new AdaptiveImageServletMappingConfigurationConsumer();
+        context.registerInjectActivateService(configurationConsumer);
+
         Collection<ServiceReference<Servlet>> servletServiceReferences =
             context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)");
         assertEquals(1, servletServiceReferences.size());
         ServiceReference<Servlet> servletReference = servletServiceReferences.iterator().next();
         Servlet ais = context.bundleContext().getService(servletReference);
         assertTrue(ais instanceof AdaptiveImageServlet);
+
+        // test that servlets are cleared up after deactivation
+        configurationConsumer.deactivate();
+        assertEquals(0, context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)").size());
+        assertEquals(0, context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=d/e/f)").size());
     }
 
     @Test
@@ -102,18 +107,18 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
         }).when(configurationAdmin).listConfigurations(eq("(" + Constants.SERVICE_PID + "=" + AdaptiveImageServlet.class.getName() + ")"));
         this.context.registerService(ConfigurationAdmin.class, configurationAdmin, Constants.SERVICE_RANKING, Integer.MAX_VALUE);
 
-        // register the servlet
-        context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationConsumer());
-
-        // verify that the configAdmin was called once (this is a sanity test to make sure the test is effective)
-        verify(configurationAdmin, times(1)).listConfigurations(eq("(" + Constants.SERVICE_PID + "=" + AdaptiveImageServlet.class.getName() + ")"));
-
         context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationFactory(), new Hashtable<String, Object>() {{
             put("resource.types", new String[]{"a/b/c"});
             put("selectors", new String[]{"a/b/c"});
             put("extensions", new String[]{"jpeg"});
             put("defaultResizeWidth", AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH);
         }});
+
+        // register the servlet
+        context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationConsumer());
+
+        // verify that the configAdmin was called once (this is a sanity test to make sure the test is effective)
+        verify(configurationAdmin, times(1)).listConfigurations(eq("(" + Constants.SERVICE_PID + "=" + AdaptiveImageServlet.class.getName() + ")"));
 
         Collection<ServiceReference<Servlet>> servletServiceReferences =
             context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)");
@@ -125,9 +130,6 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
 
     @Test
     public void testUnbindAdaptiveImageServletConfigurationFactory() throws Exception {
-        AdaptiveImageServletMappingConfigurationConsumer configurationConsumer = new AdaptiveImageServletMappingConfigurationConsumer();
-        context.registerInjectActivateService(configurationConsumer);
-
         AdaptiveImageServletMappingConfigurationFactory configurationFactory = context.registerInjectActivateService(new AdaptiveImageServletMappingConfigurationFactory(),
             new Hashtable<String, Object>() {{
                 put(Constants.SERVICE_PID, "pid1");
@@ -136,6 +138,9 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
                 put("extensions", new String[]{"jpeg"});
                 put("defaultResizeWidth", AdaptiveImageServlet.DEFAULT_RESIZE_WIDTH);
             }});
+
+        AdaptiveImageServletMappingConfigurationConsumer configurationConsumer = new AdaptiveImageServletMappingConfigurationConsumer();
+        context.registerInjectActivateService(configurationConsumer);
 
         Collection<ServiceReference<Servlet>> servletServiceReferences =
             context.bundleContext().getServiceReferences(Servlet.class, "(sling.servlet.resourceTypes=a/b/c)");

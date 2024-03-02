@@ -45,6 +45,29 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
+                                            <activeItem
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/hidden"
+                                                name="./activeItem">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-carousel-v1-dialog-edit-hook="activeItem"/>
+                                            </activeItem>
+                                            <activeSelect
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="The item that is active by default."
+                                                fieldLabel="Active Item">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-carousel-v1-dialog-edit-hook="activeSelect"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <default
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Default"
+                                                        value=""/>
+                                                </items>
+                                            </activeSelect>
                                             <autoplay
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -106,7 +129,8 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>

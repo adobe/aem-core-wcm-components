@@ -55,7 +55,7 @@ public class ImageEditDialog extends Dialog {
 
     public void setAltText(String text) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
         content().find(altText).clear();
         content().find(altText).sendKeys(text);
@@ -69,7 +69,7 @@ public class ImageEditDialog extends Dialog {
 
     public void setTitle(String value) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.TIMEOUT_TIME_SEC)
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
         content().find(title).clear();
         content().find(title).sendKeys(value);
@@ -133,4 +133,18 @@ public class ImageEditDialog extends Dialog {
         checkbox.click();
     }
 
+    public boolean isTitleFromDAM() {
+        CoralCheckbox checkbox = new CoralCheckbox(titleValueFromDAM);
+        return checkbox.isChecked();
+    }
+
+    public boolean isAltFromDAM() {
+        CoralCheckbox checkbox = new CoralCheckbox(altValueFromDAM);
+        return checkbox.isChecked();
+    }
+
+    public boolean isPopUpTitle() {
+        CoralCheckbox checkbox = new CoralCheckbox(popUpTitle);
+        return checkbox.isChecked();
+    }
 }

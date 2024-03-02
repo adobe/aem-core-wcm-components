@@ -65,6 +65,7 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
                                                 class="cq-droptarget"
+                                                enableNextGenDynamicMedia="{Boolean}true"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./fileReference"
                                                 mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
@@ -96,6 +97,7 @@
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="${not empty cqDesign.altValueFromDAM ? cqDesign.altValueFromDAM : true}"
                                                         fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
+                                                        forceIgnoreFreshness="true"
                                                         name="./altValueFromDAM"
                                                         text="Inherit from description of asset"
                                                         uncheckedValue="false"
@@ -111,36 +113,6 @@
                                                 text="Don’t provide an alternative text"
                                                 uncheckedValue="false"
                                                 value="{Boolean}true"/>
-                                            <disableLazyLoading
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="${not empty cqDesign.disableLazyLoading ? cqDesign.disableLazyLoading : false}"
-                                                fieldDescription="When checked, it will preload all images, without using lazy loading."
-                                                name="./disableLazyLoading"
-                                                text="Disable lazy loading"
-                                                uncheckedValue="false"
-                                                value="{Boolean}true"/>
-                                        </items>
-                                    </column>
-                                </items>
-                            </columns>
-                        </items>
-                    </asset>
-                    <metadata
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Metadata"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <columns
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
-                                margin="{Boolean}true">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <column
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/container">
-                                        <items jcr:primaryType="nt:unstructured">
                                             <dynamicmediaGroup
                                                 granite:hide="${!cqDesign.enableDmFeatures}"
                                                 jcr:primaryType="nt:unstructured"
@@ -185,14 +157,14 @@
                                                             jcr:primaryType="nt:unstructured"
                                                             sling:resourceType="dam/components/scene7/common/imagepresetdatasource"/>
                                                     </imagepreset>
-													<smartcroprenditions
-														granite:class="cmp-image__editor-dynamicmedia-smartcroprendition"
-														jcr:primaryType="nt:unstructured"
-														sling:resourceType="granite/ui/components/coral/foundation/form/select"
-														fieldDescription="Select Auto for Dynamic Media to decide the best rendition. Else select a specific smart crop rendition."
-														fieldLabel="Rendition"
-														name="./smartCropRendition">
-													</smartcroprenditions>
+                                                    <smartcroprenditions
+                                                        granite:class="cmp-image__editor-dynamicmedia-smartcroprendition"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                        fieldDescription="Select Auto for Dynamic Media to decide the best rendition. Else select a specific smart crop rendition."
+                                                        fieldLabel="Rendition"
+                                                        name="./smartCropRendition">
+                                                    </smartcroprenditions>
                                                     <imageModifiers
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -201,6 +173,37 @@
                                                         name="./imageModifiers"/>
                                                 </items>
                                             </dynamicmediaGroup>
+                                            <disableLazyLoading
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                granite:hide="${cqDesign.disableLazyLoading}"
+                                                fieldDescription="When checked, image will be loaded eagerly, regardless of if the image is currently visible by the user."
+                                                name="./disableLazyLoading"
+                                                text="Disable lazy loading"
+                                                deleteHint="{Boolean}true"
+                                                value="{Boolean}true"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </asset>
+                    <metadata
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Metadata"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+
                                             <captionGroup
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/well">
@@ -247,7 +250,8 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>

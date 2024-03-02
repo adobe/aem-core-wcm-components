@@ -346,7 +346,8 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </column>
                                 </items>
@@ -355,7 +356,8 @@
                     </text>
                     <image
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        jcr:title="Asset"
+                        sling:resourceType="core/wcm/components/include/imagedelegate"
                         path="core/wcm/components/image/v3/image/cq:dialog/content/items/tabs/items/asset"/>
                     <styletab
                             jcr:primaryType="nt:unstructured"

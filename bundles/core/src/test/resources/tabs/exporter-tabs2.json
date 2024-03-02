@@ -124,6 +124,7 @@
                                 },
                                 "item_1_2_2_2": {
                                     "id": "carousel-21953a9100",
+                                    "activeItem": "item_1_2_2_2_1",
                                     "autoplay": true,
                                     "controlsPrepended": false,
                                     "delay": 7000,

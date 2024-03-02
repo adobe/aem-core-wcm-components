@@ -138,5 +138,6 @@
     </jcr:content>
     <simple-subpage/>
     <simple-page-v3/>
+    <structure-layout-page/>
     <test-page-xf-component/>
 </jcr:root>

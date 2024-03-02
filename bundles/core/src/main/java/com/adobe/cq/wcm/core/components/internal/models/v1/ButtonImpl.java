@@ -16,9 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
 
-import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -36,6 +34,7 @@ import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Button;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.PageManager;
 
@@ -58,8 +57,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
     @ScriptVariable
     private PageManager pageManager;
 
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Named(JcrConstants.JCR_TITLE)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_TITLE)
     @Nullable
     private String text;
 

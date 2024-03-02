@@ -17,7 +17,10 @@ package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.SyntheticResource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.jetbrains.annotations.NotNull;
@@ -46,10 +49,24 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     /**
      * Flag indicating if items should be displayed as teasers.
      */
-    private boolean displayItemAsTeaser;
+    protected boolean displayItemAsTeaser;
 
+    @Override
     protected ListItem newPageListItem(@NotNull LinkManager linkManager, @NotNull Page page, String parentId, Component component) {
-        return new PageListItemImpl(linkManager, page, parentId, component, showDescription, linkItems || displayItemAsTeaser);
+        Resource listResource = getListResource();
+        return new PageListItemImpl(linkManager, page, parentId, component, showDescription, linkItems || displayItemAsTeaser, listResource);
+    }
+
+    protected Resource getListResource() {
+        Resource listResource = resource;
+        String template = currentPage.getProperties().get("cq:template", String.class);
+        if (StringUtils.isNotBlank(template) && listResource.getPath().startsWith(template)) {
+            String containingPagePath = currentPage.getPageManager().getContainingPage(listResource).getPath();
+            String mergedResourcePath = listResource.getPath().replace(containingPagePath, currentPage.getPath());
+            // if the resource comes from the template we need to merge it with the current page
+            listResource = new SyntheticResource(request.getResourceResolver(), mergedResourcePath, listResource.getResourceType());
+        }
+        return listResource;
     }
 
     /**

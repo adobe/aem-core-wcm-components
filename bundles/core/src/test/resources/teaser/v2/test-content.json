@@ -184,6 +184,38 @@
             "sling:resourceType": "core/wcm/components/teaser/v2/teaser",
             "titleType"         : "h4"
           },
+          "teaser-14"          : {
+            "jcr:primaryType"     : "nt:unstructured",
+            "jcr:title"           : "Teaser",
+            "actionsEnabled"      : true,
+            "titleFromPage"       : true,
+            "linkURL"           : "/content/teasers/é",
+            "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+            "sling:resourceType"  : "core/wcm/components/teaser/v2/teaser",
+            "actions" : {
+              "jcr:primaryType" : "nt:unstructured",
+              "item0" : {
+                "jcr:primaryType" : "nt:unstructured",
+                "link": "/content/teasers/é",
+                "text": "CTA with special characters"
+              }
+            }
+          },
+          "teaser-15"          : {
+            "jcr:primaryType"     : "nt:unstructured",
+            "jcr:title"           : "Teaser",
+            "linkURL"           : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+            "actionsEnabled"      : true,
+            "sling:resourceType"  : "core/wcm/components/teaser/v2/teaser",
+            "actions" : {
+              "jcr:primaryType" : "nt:unstructured",
+              "item0" : {
+                "jcr:primaryType" : "nt:unstructured",
+                "link": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                "text": "CTA linking to an asset"
+              }
+            }
+          },
           "teaser-20"          : {
             "jcr:primaryType"   : "nt:unstructured",
             "linkURL"           : "/content/teasers",
@@ -278,9 +310,19 @@
             "sling:resourceType": "core/wcm/components/teaser/v2/teaser",
             "titleFromPage": true,
             "descriptionFromPage": true
+          },
+          "teaser-26"          : {
+              "jcr:primaryType"   : "nt:unstructured",
+              "fileReference"     : "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png",
+              "sling:resourceType": "core/wcm/components/teaser/v2/teaser",
+              "titleFromPage": true,
+              "descriptionFromPage": true
           }
         }
       }
+    },
+    "é": {
+      "jcr:primaryType": "cq:Page"
     }
   },
   "page1": {

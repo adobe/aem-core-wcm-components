@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:primaryType="cq:EditConfig">
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          cq:actions="[EDITANNOTATE,COPYMOVE,DELETE,INSERT]"
+          jcr:primaryType="cq:EditConfig">
     <cq:dropTargets jcr:primaryType="nt:unstructured">
         <image
             jcr:primaryType="cq:DropTargetConfig"
@@ -9,12 +10,22 @@
             propertyName="./fileReference">
             <parameters
                 jcr:primaryType="nt:unstructured"
-                imageFromPageImage="false"
+                dmPresetType=""
                 imageCrop=""
+                imageFromPageImage="false"
                 imageMap=""
                 imageRotate=""
-                dmPresetType=""
                 smartCropRendition=""/>
         </image>
     </cq:dropTargets>
+    <cq:actionConfigs jcr:primaryType="nt:unstructured">
+        <ngdm-smartcrop
+            jcr:primaryType="nt:unstructured"
+            condition="CQ.CoreComponents.image.v3.actions.smartCrop.condition"
+            handler="CQ.CoreComponents.image.v3.actions.smartCrop"
+            icon="cropLightning"
+            order="before CONFIGURE"
+            text="Smart Crop"/>
+    </cq:actionConfigs>
 </jcr:root>
+

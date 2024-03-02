@@ -24,10 +24,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.ArrayUtils;
@@ -39,6 +39,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
@@ -49,11 +50,13 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.internal.LazyValue;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -88,25 +91,25 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @JsonIgnore
     protected ResourceResolver resolver;
 
-    @Inject
+    @OSGiService
     private ModelFactory modelFactory;
 
-    @Inject
+    @OSGiService
     private SlingModelFilter slingModelFilter;
 
     @Self
     protected LinkManager linkManager;
 
-    protected String[] keywords = new String[0];
+    protected LazyValue<String[]> keywords;
     protected String designPath;
     protected String staticDesignPath;
     protected String title;
     protected String description;
-    protected String brandSlug;
+    protected LazyValue<String> brandSlug;
 
     protected String[] clientLibCategories = new String[0];
     protected Calendar lastModifiedDate;
-    protected String templateName;
+    protected LazyValue<String> templateName;
 
     protected static final String DEFAULT_TEMPLATE_EDITOR_CLIENTLIB = "wcm.foundation.components.parsys.allowedcomponents";
     protected static final String PN_CLIENTLIBS = "clientlibs";
@@ -127,26 +130,33 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         if (StringUtils.isBlank(title)) {
             title = currentPage.getName();
         }
-        Tag[] tags = currentPage.getTags();
-        keywords = new String[tags.length];
-        int index = 0;
-        for (Tag tag : tags) {
-            keywords[index++] = tag.getTitle(currentPage.getLanguage(false));
-        }
+        keywords = new LazyValue<>(() -> buildKeywords());
         if (currentDesign != null) {
             String designPath = currentDesign.getPath();
             if (!Designer.DEFAULT_DESIGN_PATH.equals(designPath)) {
                 this.designPath = designPath;
-                if (resolver.getResource(designPath + "/static.css") != null) {
+                final Resource designResource = resolver.getResource(designPath);
+                if (designResource != null && designResource.getChild("static.css") != null) {
                     staticDesignPath = designPath + "/static.css";
                 }
-                loadFavicons(designPath);
+                loadFavicons(designResource);
             }
         }
         populateClientlibCategories();
-        templateName = extractTemplateName();
-        brandSlug = Utils.getInheritedValue(currentPage, PN_BRANDSLUG);
+        templateName = new LazyValue<>(() -> extractTemplateName());
+        brandSlug = new LazyValue<>(() -> Utils.getInheritedValue(currentPage, PN_BRANDSLUG));
     }
+
+	private String[] buildKeywords() {
+		Tag[] tags = currentPage.getTags();
+        String[] keywords = new String[tags.length];
+        int index = 0;
+        Locale language= currentPage.getLanguage(false);
+        for (Tag tag : tags) {
+            keywords[index++] = tag.getTitle(language);
+        }
+        return keywords;
+	}
 
     protected String extractTemplateName() {
         String templateName = null;
@@ -177,7 +187,12 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @Override
     @JsonIgnore
     public String[] getKeywords() {
-        return Arrays.copyOf(keywords, keywords.length);
+    	String[] kw = keywords.get();
+    	if (kw != null) {
+    		return Arrays.copyOf(kw, kw.length);
+    	} else {
+    		return new String[0];
+    	}
     }
 
     @Override
@@ -209,12 +224,12 @@ public class PageImpl extends AbstractComponentImpl implements Page {
 
     @Override
     public String getBrandSlug() {
-		return brandSlug;
+		return brandSlug.get();
 	}
 
 	@Override
     public String getTemplateName() {
-        return templateName;
+        return templateName.get();
     }
 
     @Override
@@ -288,21 +303,20 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         return itemWrappers;
     }
 
-    protected void loadFavicons(String designPath) {
-        favicons.put(PN_FAVICON_ICO, getFaviconPath(designPath, FN_FAVICON_ICO));
-        favicons.put(PN_FAVICON_PNG, getFaviconPath(designPath, FN_FAVICON_PNG));
-        favicons.put(PN_TOUCH_ICON_120, getFaviconPath(designPath, FN_TOUCH_ICON_120));
-        favicons.put(PN_TOUCH_ICON_152, getFaviconPath(designPath, FN_TOUCH_ICON_152));
-        favicons.put(PN_TOUCH_ICON_60, getFaviconPath(designPath, FN_TOUCH_ICON_60));
-        favicons.put(PN_TOUCH_ICON_76, getFaviconPath(designPath, FN_TOUCH_ICON_76));
+    protected void loadFavicons(@Nullable Resource designResource) {
+        favicons.put(PN_FAVICON_ICO, getFaviconPath(designResource, FN_FAVICON_ICO));
+        favicons.put(PN_FAVICON_PNG, getFaviconPath(designResource, FN_FAVICON_PNG));
+        favicons.put(PN_TOUCH_ICON_120, getFaviconPath(designResource, FN_TOUCH_ICON_120));
+        favicons.put(PN_TOUCH_ICON_152, getFaviconPath(designResource, FN_TOUCH_ICON_152));
+        favicons.put(PN_TOUCH_ICON_60, getFaviconPath(designResource, FN_TOUCH_ICON_60));
+        favicons.put(PN_TOUCH_ICON_76, getFaviconPath(designResource, FN_TOUCH_ICON_76));
     }
 
-    protected String getFaviconPath(String designPath, String faviconName) {
-        String path = designPath + "/" + faviconName;
-        if (resolver.getResource(path) == null) {
-            return null;
-        }
-        return path;
+    protected String getFaviconPath(@Nullable Resource designResource, String faviconName) {
+    	if (designResource != null && designResource.getChild(faviconName) != null) {
+    		return designResource.getPath() + "/" + faviconName;
+    	}
+    	return null;
     }
 
     protected void populateClientlibCategories() {
@@ -335,9 +349,18 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     protected final PageData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asPage()
             .withTitle(this::getTitle)
-            .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
+            .withLastModifiedDate(() ->
+                    Optional.ofNullable(this.getLastModifiedDate())
+                            .map(Calendar::getTime)
+                            .orElseGet(() ->
+                                    Optional.ofNullable(pageProperties.get(JcrConstants.JCR_CREATED, Calendar.class))
+                                            .map(Calendar::getTime)
+                                            .orElse(null)))
+            .withTags(() -> getKeywords())
             .withDescription(() -> this.pageProperties.get(NameConstants.PN_DESCRIPTION, String.class))
-            .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
+            .withTemplatePath(() -> Optional.ofNullable(this.currentPage.getTemplate())
+                .map(Template::getPath)
+                .orElse(null))
             .withUrl(() -> linkManager.get(currentPage).build().getURL())
             .withLanguage(this::getLanguage)
             .build();

@@ -22,7 +22,7 @@ Carousel component written in HTL.
 * Allows addition of Carousel item components of varying resource type.
 * Allowed components can be configured through policy configuration.
 * Carousel navigation via next/previous and position indicators.
-* Carousel autoplay with: 
+* Carousel autoplay with:
   * Configurable delay.
   * Ability to disable automatic pause on hover.
   * Pause/play buttons.
@@ -51,6 +51,7 @@ The following properties are written to JCR for this Carousel component and are 
 3. `./autopauseDisabled` - defines whether or not automatic pause when hovering the carousel is disabled.
 4. `./id` - defines the component HTML ID attribute.
 5. `./accessibilityLabel` - defines an accessibility label for the carousel.
+6. `./activeItem` - defines the name of the item that is shown by default in the component.
 
 The edit dialog also allows editing of Carousel items (adding, removing, naming, re-ordering).
 
@@ -85,7 +86,7 @@ The following attributes can be added to the same element to provide options:
 
 1. `data-cmp-autoplay` - if the attribute is present, indicates that the carousel should automatically transition between slides.
 2. `data-cmp-delay` - the delay (in milliseconds) when automatically transitioning between slides.
-3. `data-cmp-autopause-disabled` - if the attribute is present, indicates that automatically pausing the carousel on hover, is disabled. 
+3. `data-cmp-autopause-disabled` - if the attribute is present, indicates that automatically pausing the carousel on hover, is disabled.
 
 A hook attribute from the following should be added to the corresponding element so that the JavaScript is able to target it:
 

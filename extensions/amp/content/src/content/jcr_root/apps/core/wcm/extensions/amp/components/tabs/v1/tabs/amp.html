@@ -14,20 +14,19 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <amp-selector data-sly-use.tabs="com.adobe.cq.wcm.core.components.models.Tabs"
-              data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-              data-sly-test="${tabs.items && tabs.items.size > 0}"
-              data-sly-list.item="${tabs.items}"
+              data-sly-test="${tabs.children && tabs.children.size > 0}"
+              data-sly-list.item="${tabs.children}"
               class="cmp-tabs tabs-with-flex"
               role="tablist">
     <div id="${item.id}-tab"
          class="cmp-tabs__tab"
          option
-         selected="${item.name == tabs.activeItem}"
+         selected="${item.resource.name == tabs.activeItem}"
          role="tab"
          aria-controls="${item.id}">${item.title}</div>
     <div id="${item.id}"
          aria-labelledby="${item.id}-tab"
-         data-sly-resource="${item.name @ decorationTagName='div'}"
+         data-sly-resource="${item.resource @ decorationTagName='div'}"
          role="tabpanel"
          class="cmp-tabs__tabpanel"></div>
 </amp-selector>

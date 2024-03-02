@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.embeddable;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +46,6 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.commons.policy.ContentPolicyStyle;
-import com.google.common.collect.ImmutableMap;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
@@ -112,6 +112,9 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     @Nullable
     private Boolean isPlaysInline;
 
+    @ValueMapValue(name = PN_ACCESSIBILITY_LABEL)
+    private String accessibilityLabel;
+
     @ScriptVariable(injectionStrategy = InjectionStrategy.REQUIRED)
     private Page currentPage;
 
@@ -120,6 +123,11 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
 
     @Self
     private SlingHttpServletRequest request;
+
+    @Override
+    public String getAccessibilityLabel() {
+        return StringUtils.defaultIfEmpty(this.accessibilityLabel, YouTube.super.getAccessibilityLabel());
+    }
 
     @Override
     public boolean isEmpty() {
@@ -194,7 +202,7 @@ public class YouTubeImpl extends AbstractComponentImpl implements YouTube {
     @NotNull
     protected EmbeddableData getComponentData() {
         return DataLayerBuilder.extending(super.getComponentData()).asEmbeddable()
-                .withEmbeddableDetails(() -> ImmutableMap.of(PN_VIDEO_ID, videoId))
+                .withEmbeddableDetails(() -> Collections.singletonMap(PN_VIDEO_ID, videoId))
                 .build();
     }
 

@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -54,7 +55,6 @@ import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.foundation.AllowedComponentList;
-import com.google.common.collect.ImmutableSet;
 
 import static com.adobe.cq.wcm.core.components.models.Image.PN_ALT_VALUE_FROM_DAM;
 import static com.adobe.cq.wcm.core.components.models.Image.PN_ALT_VALUE_FROM_PAGE_IMAGE;
@@ -65,18 +65,12 @@ public class Utils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
-    private static final Set<String> INTERNAL_PARAMETER = ImmutableSet.of(
-            ":formstart",
-            "_charset_",
-            ":redirect",
-            ":cq_csrf_token"
-    );
-
-    /**
-     * Name of the subservice used to authenticate as in order to be able to read details about components and
-     * client libraries.
-     */
-    public static final String COMPONENTS_SERVICE = "components-service";
+    private static final Set<String> INTERNAL_PARAMETER = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+        ":formstart",
+        "_charset_",
+        ":redirect",
+        ":cq_csrf_token"
+    )));
 
     private Utils() {
     }
@@ -364,14 +358,19 @@ public class Utils {
                 // the inherited resource is the featured image of the linked page
                 Optional<Link> link = getOptionalLink(linkManager.get(resource).build());
                 inheritedResource = link
-                        .map(link1 -> (Page) link1.getReference())
+                        .map(link1 -> {
+                            if (link1.getReference() instanceof Page) {
+                                return (Page) link1.getReference();
+                            }
+                            return null;
+                        })
                         .map(ComponentUtils::getFeaturedImage)
                         .orElse(null);
             } else if (actionsEnabled && firstAction != null) {
                 // the inherited resource is the featured image of the first action's page (the resource is assumed to be a teaser)
                 inheritedResource = getOptionalLink(linkManager.get(firstAction).withLinkUrlPropertyName(Teaser.PN_ACTION_LINK).build())
                         .map(link1 -> {
-                            if (getOptionalLink(link1).isPresent()) {
+                            if (getOptionalLink(link1).isPresent() && (link1.getReference() instanceof Page)) {
                                 Page linkedPage = (Page) link1.getReference();
                                 return Optional.ofNullable(linkedPage)
                                         .map(ComponentUtils::getFeaturedImage)
@@ -395,12 +394,12 @@ public class Utils {
                         .orElse(null);
             }
 
-            Map<String, String> overriddenProperties = new HashMap<>();
+            Map<String, Object> overriddenProperties = new HashMap<>();
             Map<String, Resource> overriddenChildren = new HashMap<>();
             String inheritedFileReference = null;
             Resource inheritedFileResource = null;
             String inheritedAlt = null;
-            String inheritedAltValueFromDAM = null;
+            Boolean inheritedAltValueFromDAM = null;
 
             if (inheritedResource != null) {
                 // Define the inherited properties
@@ -408,17 +407,17 @@ public class Utils {
                 inheritedFileReference = inheritedProperties.get(DownloadResource.PN_REFERENCE, String.class);
                 inheritedFileResource = inheritedResource.getChild(DownloadResource.NN_FILE);
                 inheritedAlt = inheritedProperties.get(ImageResource.PN_ALT, String.class);
-                inheritedAltValueFromDAM = inheritedProperties.get(PN_ALT_VALUE_FROM_DAM, String.class);
+                inheritedAltValueFromDAM = inheritedProperties.get(PN_ALT_VALUE_FROM_DAM, Boolean.class);
             }
             overriddenProperties.put(DownloadResource.PN_REFERENCE, inheritedFileReference);
             overriddenChildren.put(DownloadResource.NN_FILE, inheritedFileResource);
             // don't inherit the image title from the page image
-            overriddenProperties.put(PN_TITLE_VALUE_FROM_DAM, "false");
+            overriddenProperties.put(PN_TITLE_VALUE_FROM_DAM, false);
             if (altValueFromPageImage) {
                 overriddenProperties.put(ImageResource.PN_ALT, inheritedAlt);
                 overriddenProperties.put(PN_ALT_VALUE_FROM_DAM, inheritedAltValueFromDAM);
             } else {
-                overriddenProperties.put(PN_ALT_VALUE_FROM_DAM, "false");
+                overriddenProperties.put(PN_ALT_VALUE_FROM_DAM, false);
             }
 
             return new CoreResourceWrapper(resource, resource.getResourceType(), null, overriddenProperties, overriddenChildren);

@@ -48,7 +48,7 @@ public class ListImplTest {
     private static final String CURRENT_PAGE = "/content/list";
     protected static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
-    private static final String TEST_PAGE_CONTENT_ROOT = CURRENT_PAGE + "/jcr:content/root";
+    protected static final String TEST_PAGE_CONTENT_ROOT = CURRENT_PAGE + "/jcr:content/root";
     protected static final String LIST_1 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
     protected static final String LIST_2 = TEST_PAGE_CONTENT_ROOT + "/staticListType";
     protected static final String LIST_3 = TEST_PAGE_CONTENT_ROOT + "/childrenListType";
@@ -66,6 +66,8 @@ public class ListImplTest {
     protected static final String LIST_15 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithNoTitleForOneItem";
     protected static final String LIST_16 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithAccent";
     protected static final String LIST_20 = TEST_PAGE_CONTENT_ROOT + "/listRenderedAsTeaserItems";
+
+    protected static final String LIST_21 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithBlankTitle";
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -208,6 +210,17 @@ public class ListImplTest {
     protected void testOrderByTitleWithNoTitleForOneItem() {
         List list = getListUnderTest(LIST_15);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_4", "/content/list/pages/page_1", "/content/list/pages/page_2" });
+    }
+
+    @Test
+    protected void testOrderByTitleWithBlankTitle() {
+        List list = getListUnderTest(LIST_21);
+        checkListConsistencyByPaths(list, new String[]{
+            "/content/list/pages/page_4",
+            "/content/list/pages/page_6",
+            "/content/list/pages/page_1",
+            "/content/list/pages/page_2"
+        });
     }
 
     @Test

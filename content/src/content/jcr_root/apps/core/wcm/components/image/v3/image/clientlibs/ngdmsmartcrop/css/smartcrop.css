@@ -1,0 +1,64 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2023 Adobe
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.smartcrop-preview-column {
+    width: 290px;
+    height: 290px;
+    background: #e9e9e9;
+    text-align: center;
+    border-radius: .25rem;
+}
+
+.smartcropdialog {
+    padding-top: .9375rem;
+    padding-bottom: .9375rem;
+}
+
+.cq-dialog-floating .cq-dialog-content.smartcropdialog {
+    height: auto;
+}
+
+.cq-dialog-content.smartcropdialog .coral-FixedColumn.smartcrop-dialog-columns .coral-FixedColumn-column.smartcrop-options-column {
+    width: 235px;
+    margin-left: .81rem;
+    margin-right: 0;
+}
+
+.smartcrop-ratio-field {
+    display: inline-block;
+}
+
+.smartcrop-ratio-fields-container {
+    display: inline-flex;
+}
+
+.smartcrop-ratio-fields-container .smartcrop-ratio-field.smartcrop-ratio-left, .smartcrop-ratio-fields-container .smartcrop-ratio-field.smartcrop-ratio-right {
+    width: 5.7rem;
+    display: inline-block;
+}
+
+.smartcrop-ratio-fields-container .smartcrop-ratio-field [is="coral-button"] {
+    display: none;
+}
+
+.smartcrop-ratio-fields-container .smartcrop-ratio-field [is="coral-textfield"] {
+    min-width: 3rem;
+    width: 5.7rem;
+    border-radius: 0;
+}
+
+.smartcrop-ratio-field.smartcrop-ratio-swap {
+    min-width: 3rem;
+}

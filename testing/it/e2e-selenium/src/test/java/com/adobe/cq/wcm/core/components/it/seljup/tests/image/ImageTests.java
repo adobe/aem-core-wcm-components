@@ -16,15 +16,12 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 
 import com.adobe.cq.testing.client.CQClient;
@@ -36,6 +33,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImag
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.codeborne.selenide.SelenideElement;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
@@ -188,6 +186,28 @@ public class ImageTests {
                 + " and title " + originalDamTitle);
     }
 
+    public void testDragImageToComponent(boolean imageV3) throws TimeoutException, InterruptedException {
+        Commons.openSidePanel();
+        Commons.dragSidePanelImageToComponent(testImagePath, compPath);
+        Commons.closeSidePanel();
+
+        ImageEditDialog editDialog = image.getEditDialog();
+        Commons.openEditDialog(editorPage, compPath);
+
+        assertTrue(editDialog.isAltFromDAM());
+
+        if (!imageV3) {
+            assertTrue(editDialog.isTitleFromDAM());
+            assertTrue(editDialog.isPopUpTitle());
+        }
+
+        Commons.closeConfigureDialog();
+        Commons.switchContext("ContentFrame");
+
+        assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, originalDamDescription, originalDamTitle),
+            "Image should be present with alt text " + originalDamDescription + " and title " + originalDamTitle);
+    }
+
     public void testAddAltTextAndTitle() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();
@@ -204,13 +224,26 @@ public class ImageTests {
                 + " and title " + captionText);
     }
 
+    public void testSetAssetWithoutDescriptionAsDecorative(boolean imageV3) throws InterruptedException, TimeoutException {
+        Commons.openSidePanel();
+        dragImageWithoutDescription();
+        ImageEditDialog editDialog = image.getEditDialog();
+        if (!imageV3) {
+            editDialog.openMetadataTab();
+        }
+        editDialog.checkDecorative();
+        Commons.saveConfigureDialog();
+        assertFalse(editDialog.isVisible(), "Configuration dialog should be closed with no errors.");
+    }
+
     public void testSetAssetWithoutDescription() throws InterruptedException, TimeoutException {
         Commons.openSidePanel();
         dragImageWithoutDescription();
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.openMetadataTab();
         Commons.saveConfigureDialog();
-        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel";
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel, " +
+                "coral-tooltip[variant='error'] > coral-tooltip-content";
         assertEquals("Error: Please provide an asset which has a description that can be used as alt text.", $(assetWithoutDescriptionErrorMessageSelector).innerText());
     }
 
@@ -218,7 +251,8 @@ public class ImageTests {
         Commons.openSidePanel();
         dragImageWithoutDescription();
         Commons.saveConfigureDialog();
-        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel";
+        String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel, " +
+                "coral-tooltip[variant='error'] > coral-tooltip-content";
         String errorIcon = "input[name='./alt'] + coral-icon[icon='alert']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", $(errorIcon));
@@ -468,10 +502,61 @@ public class ImageTests {
         assertTrue(image.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
+    public void testNGDMSmartCropDialogImageV3() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+    }
+
+    public void testNGDMSmartCropDialogImageV3_aspectRatioSelection() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+        image.selectAspectRatioInNGDMSmartCropDialog("5:3");
+        image.validateNGDMSmartCropInImageUrl("5:3");
+        image.saveNGDMSmartCropDialog();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.openNGDMSmartCropDialog(compPath);
+        image.validateNGDMAspectRationSelectorLabel("Wide Landscape");
+        image.validateNGDMSmartCropInImageUrl("5:3");
+    }
+
+    public void testNGDMSmartCropDialogImageV3_customAspectRatio() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+        image.addCustomAspectRatioInNGDMSmartCropDialog("2:7");
+        image.validateNGDMSmartCropInImageUrl("2:7");
+        image.saveNGDMSmartCropDialog();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.openNGDMSmartCropDialog(compPath);
+        image.validateNGDMAspectRationSelectorLabel("Custom");
+        image.validateNGDMSmartCropInImageUrl("2:7");
+    }
+
+    public void testNGDMSmartCropDialogImageV3_aspectRatioFlip() throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        image.openNGDMSmartCropDialog(compPath);
+        image.selectAspectRatioInNGDMSmartCropDialog("5:3");
+        image.validateNGDMSmartCropInImageUrl("5:3");
+        image.flipNGDMSmartCropDialogAspectRatios();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.validateNGDMAspectRationSelectorLabel("Custom");
+        image.validateNGDMSmartCropInImageUrl("3:5");
+        image.flipNGDMSmartCropDialogAspectRatios();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        image.validateNGDMSmartCropInImageUrl("5:3");
+        image.validateNGDMAspectRationSelectorLabel("Wide Landscape");
+    }
+
     // ----------------------------------------------------------
     // private stuff
     // ----------------------------------------------------------
 
+    private void setUpNGDMImage() throws InterruptedException, TimeoutException, ClientException {
+        Commons.openSidePanel();
+        dragImage();
+        Commons.setNGDMImage(adminClient, compPath);
+        editorPage.refresh();
+        Commons.webDriverWait(3000);
+    }
     private void dragImage() throws TimeoutException, InterruptedException {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.setAssetFilter(testAssetsPath);

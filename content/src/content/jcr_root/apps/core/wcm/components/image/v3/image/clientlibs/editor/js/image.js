@@ -81,7 +81,7 @@
             $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
             $cqFileUpload = $dialog.find(".cmp-image__editor-file-upload");
-            $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
+
             $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
             $dynamicMediaGroup.hide();
             areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
@@ -130,21 +130,24 @@
                     fileReference = undefined;
                 });
             }
-            if ($cqFileUploadEdit) {
-                fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
-                if (fileReference === "") {
-                    fileReference = undefined;
-                }
-                if (fileReference) {
-                    retrieveDAMInfo(fileReference);
-                } else {
-                    altTuple.hideCheckbox(true);
-                    captionTuple.hideCheckbox(true);
-                }
-            }
+
             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
             togglePageImageInherited(imageFromPageImage, isDecorative);
-            updateImageThumbnail();
+            updateImageThumbnail().then(function() {
+                $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit[trackingelement='edit']");
+                if ($cqFileUploadEdit) {
+                    fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
+                    if (fileReference === "") {
+                        fileReference = undefined;
+                    }
+                    if (fileReference) {
+                        retrieveDAMInfo(fileReference);
+                    } else {
+                        altTuple.hideCheckbox(true);
+                        captionTuple.hideCheckbox(true);
+                    }
+                }
+            });
         }
 
         $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
@@ -166,9 +169,10 @@
         selector: altInputSelector,
         validate: function() {
             var seededValue = $(altInputSelector).attr("data-seeded-value");
-            var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
+            var isAltCheckboxChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue) {
+            if (isAltCheckboxChecked && !seededValue && !isDecorativeChecked) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }
@@ -247,7 +251,7 @@
 
                 // update the alt field
                 altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
-                if (imageFromPageImage.checked) {
+                if (imageFromPageImage && imageFromPageImage.checked) {
                     altFromPageTuple.seedTextValue(altTextFromPage);
                     altFromPageTuple.update();
                 }
@@ -349,7 +353,8 @@
 
     /**
      * Helper function to get core image instance 'smartCropRendition' property
-     * @param filePath
+     * @param {String} filePath url path of the image instance
+     * @returns {Deferred} done after successful request
      */
     function retrieveInstanceInfo(filePath) {
         return $.ajax({
@@ -364,7 +369,7 @@
 
     /**
      * Get the list of available image's smart crop renditions and fill drop-down list
-     * @param imageUrl The link to image asset
+     * @param {String} imageUrl The link to image asset
      */
     function getSmartCropRenditions(imageUrl) {
         if (imagePropertiesRequest) {
@@ -421,6 +426,9 @@
 
     /**
      * Helper function for populating dropdown list
+     * @param {String} label of the dropdown element
+     * @param {String} value of the dropdown element
+     * @param {Boolean} selected if item should be selected
      */
     function addSmartCropDropDownItem(label, value, selected) {
         smartCropRenditionsDropDown.items.add({
@@ -458,7 +466,7 @@
 
     /**
      * Get selected radio option helper
-     * @param component The radio option component
+     * @param {jQuery} component The radio option component
      * @returns {String} Value of the selected radio option
      */
     function getSelectedPresetType(component) {
@@ -473,8 +481,8 @@
 
     /**
      * Select radio option helper
-     * @param component
-     * @param val
+     * @param {jQuery} component The radio option component
+     * @param {String} val The value to be selected
      */
     function selectPresetType(component, val) {
         var radioComp = component.find('[type="radio"]');
@@ -485,7 +493,7 @@
 
     /**
      * Reset selection field
-     * @param field
+     * @param {jQuery[]} field Array of select fields
      */
     function resetSelectField(field) {
         if (field[0]) {

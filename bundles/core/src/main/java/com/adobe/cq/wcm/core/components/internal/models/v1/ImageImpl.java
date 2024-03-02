@@ -15,22 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
+import static com.day.cq.commons.jcr.JcrConstants.JCR_MIMETYPE;
+
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -41,7 +40,6 @@ import org.apache.sling.commons.mime.MimeTypeService;
 import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Source;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -53,9 +51,9 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
-import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
@@ -74,9 +72,6 @@ import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
-import static com.day.cq.commons.jcr.JcrConstants.JCR_MIMETYPE;
-
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageImpl extends AbstractComponentImpl implements Image {
@@ -89,6 +84,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
     protected static final String MIME_TYPE_IMAGE_SVG = "image/svg+xml";
     private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
+    protected static final String SEO_NAME_FILTER_PATTERN = "[\\W|_]";
 
     @ScriptVariable
     protected PageManager pageManager;
@@ -99,8 +95,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     @ScriptVariable
     protected Style currentStyle;
 
-    @Inject
-    @Source("osgi-services")
+    @OSGiService
     protected MimeTypeService mimeTypeService;
 
     @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -113,6 +108,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected String fileReference;
     protected String alt;
     protected String title;
+    protected String externalImageResourcePath;
 
     protected String src;
     protected String[] smartImages = new String[]{};
@@ -126,7 +122,8 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     protected String selector;
     protected String extension;
     protected long lastModifiedDate = 0;
-    protected boolean inTemplate;
+    protected boolean inTemplate = false;
+    protected boolean hasExternalImageResource = false;
     protected String baseResourcePath;
     protected String templateRelativePath;
     protected boolean disableLazyLoading;
@@ -164,6 +161,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
         fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         alt = properties.get(ImageResource.PN_ALT, String.class);
         title = properties.get(JcrConstants.JCR_TITLE, String.class);
+        externalImageResourcePath = properties.get(PN_EXTERNAL_IMAGE_RESOURCE_PATH, String.class);
+        if (StringUtils.isNotEmpty(externalImageResourcePath)) {
+            hasExternalImageResource = true;
+        }
 
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
@@ -179,7 +180,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
-                    imageName = getImageNameFromDam(fileReference);
+                    imageName = getImageNameFromAsset(asset);
                     hasContent = true;
                 } else {
                     useAssetDelivery = false;
@@ -187,7 +188,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 }
             } else {
                 useAssetDelivery = false;
-                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
+                // handle the case where the image is not coming from DAM but from a different source (e.g. NGDM)
+                if (!hasContent) {
+                    LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
+                }
             }
         } else {
             useAssetDelivery = false;
@@ -243,6 +247,10 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 templateRelativePath = resource.getPath().substring(template.getPath().length());
             } else {
                 baseResourcePath = resource.getPath();
+                if (resource.getResourceResolver().getResource(resource.getPath()) == null) {
+                    // synthetic merged resource, use the current page path as base path
+                    baseResourcePath = currentPage.getPath();
+                }
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
             if (smartSizesSupported()) {
@@ -257,9 +265,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     if (StringUtils.isEmpty(smartImage)) {
                         smartImage = baseResourcePath + DOT +
                             selector + DOT + jpegQuality + DOT + width + DOT + extension +
-                            (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                            (inTemplate ? Text.escapePath(templateRelativePath) : hasExternalImageResource ? externalImageResourcePath : "") +
                             (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
-                            (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+                            (inTemplate || hasExternalImageResource || lastModifiedDate > 0 ? DOT + extension : "");
                     }
                     smartImages[index] = smartImage;
                     smartSizes[index] = width;
@@ -283,9 +291,9 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                 } else {
                     src += extension;
                 }
-                src += (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                    (lastModifiedDate > 0 ? ("/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "")) : "") +
-                    (inTemplate || lastModifiedDate > 0 ? DOT + extension : "");
+                src += inTemplate ? Text.escapePath(templateRelativePath) : hasExternalImageResource ? externalImageResourcePath : "";
+                src += lastModifiedDate > 0 ? "/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") : "";
+                src += inTemplate || hasExternalImageResource || lastModifiedDate > 0 ? DOT + extension : "";
             }
 
             if (!isDecorative) {
@@ -298,19 +306,17 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     }
 
     /**
-     * Extracts the image name from the DAM resource
-     *
-     * @return image name from DAM
+     * Extract the image name from the asset
+     * @param asset the asset
+     * @return the image name
      */
-    protected String getImageNameFromDam(String fileReference) {
-        return Optional.ofNullable(fileReference)
-            .map(reference -> request.getResourceResolver().getResource(reference))
-            .map(damResource -> damResource.adaptTo(Asset.class))
-            .map(Asset::getName)
-            .map(StringUtils::trimToNull)
-            .map(FilenameUtils::getBaseName)
-            .map(this::getSeoFriendlyName)
-            .orElse(StringUtils.EMPTY);
+    protected String getImageNameFromAsset(Asset asset) {
+    	return Optional.ofNullable(asset)
+                .map(Asset::getName)
+                .map(StringUtils::trimToNull)
+                .map(FilenameUtils::getBaseName)
+                .map(this::getSeoFriendlyName)
+                .orElse(StringUtils.EMPTY);
     }
 
     /**
@@ -323,16 +329,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      * @return the SEO friendly image name
      */
     protected String getSeoFriendlyName(String imageName) {
-
-        // Google recommends using hyphens (-) instead of underscores (_) for SEO. See
-        // https://support.google.com/webmasters/answer/76329?hl=en
-        String seoFriendlyName = imageName.replaceAll("[\\ _]", "-").toLowerCase();
-        try {
-            seoFriendlyName = URLEncoder.encode(seoFriendlyName, CharEncoding.UTF_8);
-        } catch (UnsupportedEncodingException e) {
-            LOGGER.error("The Character Encoding is not supported.");
-        }
-        return seoFriendlyName;
+        return imageName.replaceAll(SEO_NAME_FILTER_PATTERN, "-").toLowerCase();
     }
 
 

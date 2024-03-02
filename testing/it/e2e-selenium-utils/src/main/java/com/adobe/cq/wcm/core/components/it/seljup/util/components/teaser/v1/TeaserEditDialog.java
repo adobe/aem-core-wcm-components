@@ -39,7 +39,8 @@ public class TeaserEditDialog {
     private static String imageFromPageImage = "[name='./imageFromPageImage']";
     private static String titleTypeSelectDropdown = "coral-select[name='./titleType']";
     private static String titleTypeSelectDropdownDefaultSelected = "coral-select[name='./titleType'] coral-select-item[selected]";
-    private static String assetWithoutDescriptionErrorMessage = ".cmp-image__editor-alt .coral-Form-errorlabel";
+    private static String assetWithoutDescriptionErrorMessage = ".cmp-image__editor-alt .coral-Form-errorlabel, " +
+            ".cmp-image__editor-alt coral-tooltip[variant='error'] > coral-tooltip-content";
     private static String altTextFromAssetDescription = ".cmp-teaser__editor input[name='./altValueFromDAM']";
 
     protected String getActionLinkURLSelector() {
@@ -171,4 +172,8 @@ public class TeaserEditDialog {
         checkbox.click();
     }
 
+    public boolean isAltTextFromAssetDescription() {
+        CoralCheckbox checkbox = new CoralCheckbox(altTextFromAssetDescription);
+        return checkbox.isChecked();
+    }
 }

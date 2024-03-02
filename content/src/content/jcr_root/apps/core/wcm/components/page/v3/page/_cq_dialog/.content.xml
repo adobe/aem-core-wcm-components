@@ -74,7 +74,8 @@
                                                 cq:showOnCreate="true"
                                                 fieldDescription="HTML ID attribute to apply to the component."
                                                 fieldLabel="ID"
-                                                name="./id"/>
+                                                name="./id"
+												validation="html-unique-id-validator"/>
                                         </items>
                                     </htmlid>
                                     <moretitles
@@ -186,7 +187,7 @@
                                                     uploadUrl="will_be_replaced">
                                                     <granite:data
                                                         jcr:primaryType="nt:unstructured"
-                                                        cq-msm-lockable="./image"/>
+                                                        cq-msm-lockable="/image"/>
                                                 </upload>
                                                 <assetpicker
                                                     granite:class="js-browse-activator"
@@ -195,7 +196,7 @@
                                                     text="Select Image">
                                                     <granite:data
                                                         jcr:primaryType="nt:unstructured"
-                                                        cq-msm-lockable="./image"/>
+                                                        cq-msm-lockable="/image"/>
                                                 </assetpicker>
                                                 <preview
                                                     jcr:primaryType="nt:unstructured"

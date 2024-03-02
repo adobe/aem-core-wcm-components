@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +27,7 @@ import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
@@ -73,10 +73,10 @@ public class EmbedImpl extends AbstractComponentImpl implements Embed {
     @Nullable
     private Style currentStyle;
 
-    @Inject @Optional
+    @OSGiService @Optional
     private List<UrlProcessor> urlProcessors;
 
-    @Inject
+    @ScriptVariable
     private Resource resource;
 
     private Type embedType;
@@ -108,12 +108,15 @@ public class EmbedImpl extends AbstractComponentImpl implements Embed {
                 embeddableResourceType = null;
             }
         }
-        if (StringUtils.isNotEmpty(url) && urlProcessors != null) {
-            for (UrlProcessor urlProcessor : urlProcessors) {
-                UrlProcessor.Result result = urlProcessor.process(url);
-                if (result != null) {
-                    this.result = result;
-                    break;
+        if (StringUtils.isNotEmpty(url)) {
+            url = StringUtils.trim(url);
+            if (urlProcessors != null) {
+                for (UrlProcessor urlProcessor : urlProcessors) {
+                    UrlProcessor.Result result = urlProcessor.process(url);
+                    if (result != null) {
+                        this.result = result;
+                        break;
+                    }
                 }
             }
         }
