@@ -125,9 +125,9 @@ class ClientLibrariesImplTest {
         cssIncludes.put(CAROUSEL_CATEGORY, "<link rel=\"stylesheet\" href=\"" + CAROUSEL_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
 
         cssIncludesWithAttributes = new HashMap<>();
-        cssIncludesWithAttributes.put(TEASER_CATEGORY, "<link media=\"print\" onload=\"myFunction()\" rel=\"stylesheet\" href=\"" + TEASER_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
-        cssIncludesWithAttributes.put(ACCORDION_CATEGORY, "<link media=\"print\" onload=\"myFunction()\" rel=\"stylesheet\" href=\"" + ACCORDION_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
-        cssIncludesWithAttributes.put(CAROUSEL_CATEGORY, "<link media=\"print\" onload=\"myFunction()\" rel=\"stylesheet\" href=\"" + CAROUSEL_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
+        cssIncludesWithAttributes.put(TEASER_CATEGORY, "<link media=\"print\" rel=\"stylesheet\" href=\"" + TEASER_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
+        cssIncludesWithAttributes.put(ACCORDION_CATEGORY, "<link media=\"print\" rel=\"stylesheet\" href=\"" + ACCORDION_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
+        cssIncludesWithAttributes.put(CAROUSEL_CATEGORY, "<link media=\"print\" rel=\"stylesheet\" href=\"" + CAROUSEL_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
 
         jsInlines = new HashMap<>();
         jsInlines.put(TEASER_CATEGORY, "console.log('teaser clientlib js');");
