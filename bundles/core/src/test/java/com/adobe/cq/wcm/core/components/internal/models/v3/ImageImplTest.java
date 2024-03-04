@@ -671,6 +671,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
         config.setEnabled(true);
         config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
         context.registerInjectActivateService(config);
 
         Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
@@ -683,6 +684,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
         config.setEnabled(true);
         config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
         context.registerInjectActivateService(config);
         context.contentPolicyMapping(resourceType, PN_DESIGN_RESIZE_WIDTH, 800);
 
