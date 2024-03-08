@@ -17,13 +17,18 @@ package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import javax.annotation.PostConstruct;
+import javax.json.Json;
+import javax.json.JsonException;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -43,8 +48,6 @@ import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,7 +83,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @OSGiService
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
-    
+
     @OSGiService
     @Optional
     private HttpClientBuilderFactory clientBuilderFactory;
@@ -156,36 +159,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 if (dmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)) {
                     srcSet = EMPTY_PIXEL;
                 } else if (ngdmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO) && client != null) {
-                    String endPointUrl = "https://" + nextGenDynamicMediaConfig.getRepositoryId() + metadataDeliveryEndpoint;
-                    HttpGet get = new HttpGet(endPointUrl);
-                    get.setHeader("X-Adobe-Accept-Experimental", "1");
-                    try {
-                        HttpResponse response = client.execute(get);
-                        StatusLine statusLine = response.getStatusLine();
-                        int statusCode = statusLine.getStatusCode();
-                        if (statusCode == HttpStatus.SC_OK) {
-                            HttpEntity e = response.getEntity();
-                            String entity = EntityUtils.toString(e);
-                            JSONObject metadata = new JSONObject(entity);
-                            JSONObject repositoryMetadata = metadata.getJSONObject("repositoryMetadata");
-                            JSONObject smartCrops = repositoryMetadata.getJSONObject("smartcrops");
-                            Iterator<String> smartCropsNames = smartCrops.keys();
-                            String[] ngdmSrcsetArray = new String[smartCrops.length()];
-                            int i = 0;
-                            while (smartCropsNames.hasNext()) {
-                                String namedSmartCrop = smartCropsNames.next();
-                                if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
-                                    ngdmSrcsetArray[i] =
-                                        srcUritemplate.replace("width={.width}", String.format("smartcrop=%s", namedSmartCrop)) + " " + ((JSONObject)smartCrops.get(namedSmartCrop)).get("width") + "w";
-                                    i++;
-                                } 
-                            }
-                            srcSet = StringUtils.join(ngdmSrcsetArray, ',');
-                            
-                        }
-                    } catch (IOException | JSONException e) {
-                        LOGGER.warn("Couldn't generate srcset for remote asset");
-                    }
+                    getRemoteAssetSrcset(srcUritemplate);
                 } else {
                     for (int i = 0; i < widthsArray.length; i++) {
                         if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
@@ -283,6 +257,40 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             this.dimension = getOriginalDimensionInternal();
         }
         return this.dimension;
+    }
+
+    private void getRemoteAssetSrcset(String srcUritemplate) {
+        String endPointUrl = "https://" + nextGenDynamicMediaConfig.getRepositoryId() + metadataDeliveryEndpoint;
+        HttpGet get = new HttpGet(endPointUrl);
+        get.setHeader("X-Adobe-Accept-Experimental", "1");
+        try {
+            HttpResponse response = client.execute(get);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == HttpStatus.SC_OK) {
+                HttpEntity e = response.getEntity();
+                String entity = EntityUtils.toString(e);
+                JsonReader jsonReader = Json.createReader(new StringReader(entity));
+                JsonObject metadata = jsonReader.readObject();
+                jsonReader.close();
+                JsonObject repositoryMetadata = metadata.getJsonObject("repositoryMetadata");
+                JsonObject smartCrops = repositoryMetadata.getJsonObject("smartcrops");
+                String[] ngdmSrcsetArray = new String[smartCrops.size()];
+                int i = 0;
+                for (Map.Entry<String, JsonValue> entry : smartCrops.entrySet()) {
+                    String namedSmartCrop = entry.getKey();
+                    if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
+                        JsonValue smartCropWidth = smartCrops.getJsonObject(namedSmartCrop).get("width");
+                        ngdmSrcsetArray[i] =
+                            srcUritemplate.replace("width={.width}", String.format("smartcrop=%s", namedSmartCrop)) + " " + smartCropWidth.toString().replaceAll("\"", "") + "w";
+                        i++;
+                    }
+                }
+                srcSet = StringUtils.join(ngdmSrcsetArray, ',');
+            }
+        } catch (IOException | JsonException e) {
+            LOGGER.warn("Couldn't generate srcset for remote asset");
+        }
     }
 
     private Dimension getOriginalDimensionInternal() {

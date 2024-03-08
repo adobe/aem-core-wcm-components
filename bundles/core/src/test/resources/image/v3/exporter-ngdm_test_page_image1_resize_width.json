@@ -1,8 +1,7 @@
 {
   "id": "image-042059c802",
-  "src": "https://testrepo/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?width=800&preferwebp=true&smartcrop=Medium",
+  "src": "https://testrepo/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?width=800&preferwebp=true",
   "lazyEnabled": true,
-  "smartCropRendition": "Medium",
   "sizes": "",
   "dataLayer": {
       "image-042059c802": {
