@@ -31,14 +31,10 @@ import javax.json.JsonReader;
 import javax.json.JsonValue;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
-import org.apache.http.util.EntityUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -263,14 +259,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         String endPointUrl = "https://" + nextGenDynamicMediaConfig.getRepositoryId() + metadataDeliveryEndpoint;
         HttpGet get = new HttpGet(endPointUrl);
         get.setHeader("X-Adobe-Accept-Experimental", "1");
+        ResponseHandler<String> responseHandler = new NextGenDMSrcsetBuilderResponseHandler();
         try {
-            HttpResponse response = client.execute(get);
-            StatusLine statusLine = response.getStatusLine();
-            int statusCode = statusLine.getStatusCode();
-            if (statusCode == HttpStatus.SC_OK) {
-                HttpEntity e = response.getEntity();
-                String entity = EntityUtils.toString(e);
-                JsonReader jsonReader = Json.createReader(new StringReader(entity));
+            String response = client.execute(get, responseHandler);
+            if (!StringUtils.isEmpty(response)) {
+                JsonReader jsonReader = Json.createReader(new StringReader(response));
                 JsonObject metadata = jsonReader.readObject();
                 jsonReader.close();
                 JsonObject repositoryMetadata = metadata.getJsonObject("repositoryMetadata");
