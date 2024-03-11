@@ -4,10 +4,15 @@
   "lazyEnabled": true,
   "smartCropRendition": "SmartCrop:Auto",
   "sizes": "",
-  "srcset":"https://testrepo/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?smartcrop=Medium&preferwebp=true 600w,https://testrepo/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?smartcrop=Large&preferwebp=true 800w",
+  "srcset":"https://testrepo/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?smartcrop=Large&preferwebp=true 800w,https://testrepo/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?smartcrop=Medium&preferwebp=true 600w",
+  "imageLink": {
+    "url": "https://www.adobe.com",
+    "valid": true
+  },
   "dataLayer": {
-      "image-64c83ec8bc": {
-      "@type": "core/wcm/components/image/v3/image"
+    "image-64c83ec8bc": {
+      "@type": "core/wcm/components/image/v3/image",
+      "xdm:linkURL": "https://www.adobe.com"
     }
   },
   ":type": "core/wcm/components/image/v3/image"

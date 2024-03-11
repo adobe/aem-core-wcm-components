@@ -970,7 +970,8 @@
                   "jcr:createdBy": "admin",
                   "sling:resourceType": "core/wcm/components/image/v3/image",
                   "fileReference": "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png",
-                  "smartCropRendition": "SmartCrop:Auto"
+                  "smartCropRendition": "SmartCrop:Auto",
+                  "linkURL"           : "https://www.adobe.com"
               }
           }
       }
