@@ -435,6 +435,8 @@
                             selected: (smartCropRenditionFromJcr === smartcropnames[i])
                         });
                     }
+                } else {
+                    $dynamicMediaGroup.hide();
                 }
             }
             prepareSmartCropPanel();
