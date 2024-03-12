@@ -39,7 +39,7 @@ public class ListIT {
 
     @Test
     @Ignore
-    public void test() throws ClientException {
+    public void testTeaserIsVisibleWhenPointingToRedirectingPage() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/list.html", 200).getContent();
         Elements html = Jsoup.parse(content).select("html");
 
