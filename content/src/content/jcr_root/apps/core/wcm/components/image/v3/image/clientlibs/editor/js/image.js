@@ -345,9 +345,6 @@
     function retrieveDAMInfo(fileReference) {
         if (fileReference.startsWith("/urn:aaid:aem")) {
             return new Promise((resolve, reject) => {
-                $dynamicMediaGroup.show();
-                $(imagePresetRadio).parent().hide();
-                $(smartCropRadio).prop("checked", true);
                 fileReference = fileReference.substring(0, fileReference.lastIndexOf("/"));
                 if (isPolarisEnabled && areDMFeaturesEnabled) {
                     var imageUrl = `https://${polarisRepositoryId}/adobe/assets${fileReference}/metadata`;
@@ -416,6 +413,9 @@
         imagePropertiesRequest.setRequestHeader("X-Adobe-Accept-Experimental", "1");
         imagePropertiesRequest.onload = function() {
             if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
+                $dynamicMediaGroup.show();
+                $(imagePresetRadio).parent().hide();
+                $(smartCropRadio).prop("checked", true);
                 var responseText = imagePropertiesRequest.responseText;
                 var smartcrops = JSON.parse(responseText).repositoryMetadata.smartcrops;
                 if (smartcrops !== undefined) {
