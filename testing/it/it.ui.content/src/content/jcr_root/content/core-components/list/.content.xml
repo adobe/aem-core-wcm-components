@@ -125,15 +125,17 @@
                     linkItems="true"
                     showDescription="true"
                     showModificationDate="true"
-                    displayItemAsTeaser="true"
-                    childDepth="1"
-                >
+                    displayItemAsTeaser="true">
                     <static
                         jcr:primaryType="nt:unstructured">
                         <item0
                             jcr:primaryType="nt:unstructured"
-                            linkURL="/content/core-components/redirect"
-                            />
+                            linkURL="/content/core-components/list"/>
+                        <item1
+                            jcr:primaryType="nt:unstructured"
+                            linkURL="/content/core-components/simple-page/simple-redirect"
+                            linkText="lorem ipsum1"
+                            linkTarget="_blank"/>
                     </static>
                 </list_v4_static_internal_pages_containing_external_redirect>
                 <list_v4_static_pages_empty
