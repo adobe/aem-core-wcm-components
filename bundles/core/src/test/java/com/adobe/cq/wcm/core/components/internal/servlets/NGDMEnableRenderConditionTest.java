@@ -46,26 +46,28 @@ public class NGDMEnableRenderConditionTest {
 
     @Test
     void testRenderConditionDisabledWithNotEnabledConfig() throws Exception {
-        ngdmEnableRenderCondition = new NGDMEnableRenderCondition();
-        context.registerInjectActivateService(ngdmEnableRenderCondition);
         MockNextGenDynamicMediaConfig nextGenDynamicMediaConfig = new MockNextGenDynamicMediaConfig();
         nextGenDynamicMediaConfig.setEnabled(false);
         nextGenDynamicMediaConfig.setRepositoryId(REPOSITORY_ID);
         context.registerService(NextGenDynamicMediaConfig.class, nextGenDynamicMediaConfig);
+        ngdmEnableRenderCondition = context.registerInjectActivateService(new NGDMEnableRenderCondition());
+
         ngdmEnableRenderCondition.doGet(context.request(), context.response());
+
         RenderCondition renderCondition = (RenderCondition) context.request().getAttribute(RenderCondition.class.getName());
         assertFalse(renderCondition.check());
     }
 
     @Test
     void testRenderConditionEnabled() throws Exception {
-        ngdmEnableRenderCondition = new NGDMEnableRenderCondition();
-        context.registerInjectActivateService(ngdmEnableRenderCondition);
         MockNextGenDynamicMediaConfig nextGenDynamicMediaConfig = new MockNextGenDynamicMediaConfig();
         nextGenDynamicMediaConfig.setEnabled(true);
         nextGenDynamicMediaConfig.setRepositoryId(REPOSITORY_ID);
         context.registerService(NextGenDynamicMediaConfig.class, nextGenDynamicMediaConfig);
+        ngdmEnableRenderCondition = context.registerInjectActivateService(new NGDMEnableRenderCondition());
+
         ngdmEnableRenderCondition.doGet(context.request(), context.response());
+
         RenderCondition renderCondition = (RenderCondition) context.request().getAttribute(RenderCondition.class.getName());
         assertTrue(renderCondition.check());
     }
