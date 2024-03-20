@@ -51,6 +51,17 @@
                                         text="Enable DM features"
                                         uncheckedValue="false"
                                         value="{Boolean}true">
+                                        <granite:rendercondition
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/renderconditions/or">
+                                            <isDMEnabled
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/renderconditions/feature"
+                                                feature="com.adobe.dam.asset.scene7.feature.flag"/>
+                                            <isNGDMEnabled
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/components/rendercondition/isNGDMEnabled"/>
+                                        </granite:rendercondition>
                                     </enableDmFeatures>
                                     <enableAssetDelivery
                                         jcr:primaryType="nt:unstructured"

@@ -40,6 +40,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
     }
 )
 public class NGDMEnableRenderCondition extends SlingSafeMethodsServlet {
+
     @Reference(cardinality= ReferenceCardinality.OPTIONAL, policyOption = ReferencePolicyOption.GREEDY)
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
 

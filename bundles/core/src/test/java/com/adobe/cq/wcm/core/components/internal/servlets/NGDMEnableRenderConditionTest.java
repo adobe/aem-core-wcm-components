@@ -51,9 +51,7 @@ public class NGDMEnableRenderConditionTest {
         nextGenDynamicMediaConfig.setRepositoryId(REPOSITORY_ID);
         context.registerService(NextGenDynamicMediaConfig.class, nextGenDynamicMediaConfig);
         ngdmEnableRenderCondition = context.registerInjectActivateService(new NGDMEnableRenderCondition());
-
         ngdmEnableRenderCondition.doGet(context.request(), context.response());
-
         RenderCondition renderCondition = (RenderCondition) context.request().getAttribute(RenderCondition.class.getName());
         assertFalse(renderCondition.check());
     }
@@ -65,9 +63,7 @@ public class NGDMEnableRenderConditionTest {
         nextGenDynamicMediaConfig.setRepositoryId(REPOSITORY_ID);
         context.registerService(NextGenDynamicMediaConfig.class, nextGenDynamicMediaConfig);
         ngdmEnableRenderCondition = context.registerInjectActivateService(new NGDMEnableRenderCondition());
-
         ngdmEnableRenderCondition.doGet(context.request(), context.response());
-
         RenderCondition renderCondition = (RenderCondition) context.request().getAttribute(RenderCondition.class.getName());
         assertTrue(renderCondition.check());
     }
