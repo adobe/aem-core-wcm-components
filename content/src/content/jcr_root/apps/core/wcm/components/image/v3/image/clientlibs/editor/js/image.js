@@ -57,6 +57,12 @@
     var pageImageThumbnailConfigPathAttribute = "data-thumbnail-config-path";
     var pageImageThumbnailComponentPathAttribute = "data-thumbnail-component-path";
     var pageImageThumbnailCurrentPagePathAttribute = "data-thumbnail-current-page-path";
+    var polarisPickerSelector = ".cq-FileUpload-picker-polaris";
+    var isPolarisEnabled = false;
+    var polarisRepositoryId;
+    var imagePresetRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='imagePreset']";
+    var smartCropRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='smartCrop']";
+    var remoteFileReference;
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -97,9 +103,25 @@
 
             if ($cqFileUpload.length) {
                 imagePath = $cqFileUpload.data("cqFileuploadTemporaryfilepath").slice(0, $cqFileUpload.data("cqFileuploadTemporaryfilepath").lastIndexOf("/"));
+                var cfg = $(polarisPickerSelector).attr("polaris-config");
+                if (cfg) {
+                    polarisRepositoryId = JSON.parse(cfg).repositoryId;
+                    if (polarisRepositoryId) {
+                        isPolarisEnabled = true;
+                        remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
+                    }
+                }
+
                 retrieveInstanceInfo(imagePath);
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
+                    // if it is a remote asset
+                    remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
+                    if (fileReference === undefined && remoteFileReference && remoteFileReference !== "" &&
+                        remoteFileReference.includes("urn:aaid:aem")) {
+                        fileReference = remoteFileReference;
+                        smartCropRenditionFromJcr = "NONE"; // for newly selected asset we clear the smartcrop selection dropdown
+                    }
                     retrieveDAMInfo(fileReference).then(
                         function() {
                             if (isDecorative) {
@@ -109,7 +131,7 @@
                             altTuple.reinitCheckbox();
                             captionTuple.reinitCheckbox();
                             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
-                            if (areDMFeaturesEnabled) {
+                            if (areDMFeaturesEnabled && !isPolarisEnabled) {
                                 selectPresetType($(presetTypeSelector), "imagePreset");
                                 resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
                             }
@@ -321,6 +343,16 @@
     }
 
     function retrieveDAMInfo(fileReference) {
+        if (fileReference.startsWith("/urn:aaid:aem")) {
+            return new Promise((resolve, reject) => {
+                fileReference = fileReference.substring(0, fileReference.lastIndexOf("/"));
+                if (isPolarisEnabled && areDMFeaturesEnabled) {
+                    var imageUrl = `https://${polarisRepositoryId}/adobe/assets${fileReference}/metadata`;
+                    getPolarisSmartCropRenditions(imageUrl);
+                    resolve();
+                }
+            });
+        }
         return $.ajax({
             url: fileReference + "/_jcr_content/metadata.json"
         }).done(function(data) {
@@ -364,7 +396,52 @@
                 // we need to get saved value of 'smartCropRendition' of Core Image component
                 smartCropRenditionFromJcr = data["smartCropRendition"];
             }
+            // we want to call retrieveDAMInfo after loading the dialog so that saved smartcrop rendition of remote asset
+            // can be shown on initial load.
+            if (remoteFileReference && remoteFileReference !== "" && remoteFileReference.includes("urn:aaid:aem")) {
+                retrieveDAMInfo(remoteFileReference);
+            }
         });
+    }
+
+    function getPolarisSmartCropRenditions(imageUrl) {
+        if (imagePropertiesRequest) {
+            imagePropertiesRequest.abort();
+        }
+        imagePropertiesRequest = new XMLHttpRequest();
+        imagePropertiesRequest.open("GET", imageUrl, true);
+        imagePropertiesRequest.setRequestHeader("X-Adobe-Accept-Experimental", "1");
+        imagePropertiesRequest.onload = function() {
+            if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
+                $dynamicMediaGroup.show();
+                $(imagePresetRadio).parent().hide();
+                $(smartCropRadio).prop("checked", true);
+                var responseText = imagePropertiesRequest.responseText;
+                var smartcrops = JSON.parse(responseText).repositoryMetadata.smartcrops;
+                if (smartcrops !== undefined) {
+                    var smartcropnames = Object.keys(smartcrops);
+                    if (smartCropRenditionsDropDown.items) {
+                        smartCropRenditionsDropDown.items.clear();
+                    }
+                    addSmartCropDropDownItem("NONE", "", true);
+                    // "AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
+                    addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
+                    for (var i in smartcropnames) {
+                        smartCropRenditionsDropDown.items.add({
+                            content: {
+                                innerHTML: smartcropnames[i]
+                            },
+                            disabled: false,
+                            selected: (smartCropRenditionFromJcr === smartcropnames[i])
+                        });
+                    }
+                } else {
+                    $dynamicMediaGroup.hide();
+                }
+            }
+            prepareSmartCropPanel();
+        };
+        imagePropertiesRequest.send();
     }
 
     /**
