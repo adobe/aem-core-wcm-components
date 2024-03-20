@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import com.adobe.cq.ui.wcm.commons.config.NextGenDynamicMediaConfig;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.testing.MockNextGenDynamicMediaConfig;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
@@ -50,7 +51,7 @@ public class NGDMEnableRenderConditionTest {
         MockNextGenDynamicMediaConfig nextGenDynamicMediaConfig = new MockNextGenDynamicMediaConfig();
         nextGenDynamicMediaConfig.setEnabled(false);
         nextGenDynamicMediaConfig.setRepositoryId(REPOSITORY_ID);
-        context.registerInjectActivateService(nextGenDynamicMediaConfig);
+        context.registerService(NextGenDynamicMediaConfig.class, nextGenDynamicMediaConfig);
         ngdmEnableRenderCondition.doGet(context.request(), context.response());
         RenderCondition renderCondition = (RenderCondition) context.request().getAttribute(RenderCondition.class.getName());
         assertFalse(renderCondition.check());
@@ -63,7 +64,7 @@ public class NGDMEnableRenderConditionTest {
         MockNextGenDynamicMediaConfig nextGenDynamicMediaConfig = new MockNextGenDynamicMediaConfig();
         nextGenDynamicMediaConfig.setEnabled(true);
         nextGenDynamicMediaConfig.setRepositoryId(REPOSITORY_ID);
-        context.registerInjectActivateService(nextGenDynamicMediaConfig);
+        context.registerService(NextGenDynamicMediaConfig.class, nextGenDynamicMediaConfig);
         ngdmEnableRenderCondition.doGet(context.request(), context.response());
         RenderCondition renderCondition = (RenderCondition) context.request().getAttribute(RenderCondition.class.getName());
         assertTrue(renderCondition.check());

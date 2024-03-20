@@ -26,10 +26,11 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.ServletResolverConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
-import org.apache.sling.models.annotations.Optional;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 @Component(
     service = { Servlet.class },
@@ -39,8 +40,7 @@ import org.osgi.service.component.annotations.Component;
     }
 )
 public class NGDMEnableRenderCondition extends SlingSafeMethodsServlet {
-    @OSGiService
-    @Optional
+    @Reference(cardinality= ReferenceCardinality.OPTIONAL, policyOption = ReferencePolicyOption.GREEDY)
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
 
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
