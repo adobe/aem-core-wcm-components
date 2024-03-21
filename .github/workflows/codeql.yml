@@ -31,8 +31,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           queries: +security-and-quality
-          paths-ignore:
-              - '**/jcr_root/apps/system/config/**'
+          paths-ignore: '**/jcr_root/apps/system/config/**'
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
