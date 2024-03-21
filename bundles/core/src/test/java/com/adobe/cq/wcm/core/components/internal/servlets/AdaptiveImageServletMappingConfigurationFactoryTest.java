@@ -58,11 +58,20 @@ public class AdaptiveImageServletMappingConfigurationFactoryTest {
             public int maxSize() {
                 return AdaptiveImageServlet.DEFAULT_MAX_SIZE;
             }
+
+            @Override
+            public String[] nonTransformableImageTypes() { return new String[] {"gif", "svg"}; }
+
+            @Override
+            public String[] forcedTransformationImageTypes() { return new String[] { }; }
         });
         testValues(new String[] {"core/image"}, configurationFactory.getResourceTypes());
         testValues(new String[] {"coreimg"}, configurationFactory.getSelectors());
         testValues(new String[] {"jpg", "gif", "png"}, configurationFactory.getExtensions());
-        assertEquals("{resourceTypes: [core/image], selectors: [coreimg], extensions: [jpg, gif, png], defaultResizeWidth: 1280}",
+        testValues(new String[] {"gif", "svg" }, configurationFactory.getNonTransformableImageTypes());
+        testValues(new String[] { }, configurationFactory.getForcedTransformationImageTypes());
+        assertEquals("{resourceTypes: [core/image], selectors: [coreimg], extensions: [jpg, gif, png], defaultResizeWidth: 1280, " +
+                     "nonTransformableImageTypes: [gif, svg], forcedTransformationImageTypes: []}",
                 configurationFactory.toString());
     }
 
