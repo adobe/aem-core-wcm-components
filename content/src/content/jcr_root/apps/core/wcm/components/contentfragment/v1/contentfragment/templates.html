@@ -14,7 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
-<template data-sly-template.contentFragment="${@ fragment='The content fragment', fragmentPath='', wcmmode='WCM mode'}">
+<template data-sly-template.contentFragment="${@ fragment='The content fragment', fragmentPath='', wcmmode='WCM mode', useI18nForElementTitle='Use i18n to translate the element titles'}">
     <article id="${fragment.id}"
              class="cmp-contentfragment cmp-contentfragment--${fragment.name}"
              data-cmp-contentfragment-model="${fragment.type}"
@@ -30,7 +30,7 @@
             <sly data-sly-call="${paragraphs @ fragment=fragment}"></sly>
         </sly>
         <sly data-sly-test="${!isParagraphMode}">
-            <sly data-sly-call="${elements @ fragment=fragment, wcmmode=wcmmode}"></sly>
+            <sly data-sly-call="${elements @ fragment=fragment, wcmmode=wcmmode, useI18nForElementTitle=useI18nForElementTitle}"></sly>
         </sly>
     </article>
 </template>
@@ -46,10 +46,10 @@
     </div>
 </template>
 
-<template data-sly-template.elements="${@ fragment='The content fragment', wcmmode='WCM mode'}">
+<template data-sly-template.elements="${@ fragment='The content fragment', wcmmode='WCM mode', useI18nForElementTitle='Use i18n to translate the element title'}">
     <dl class="cmp-contentfragment__elements${!wcmmode.disabled ? ' cq-dd-contentfragment' : ''}"
         data-sly-list.element="${fragment.elements}"
         data-sly-use.elementTemplate="core/wcm/components/contentfragment/v1/contentfragment/element.html">
-        <sly data-sly-call="${elementTemplate.element @ element=element}"></sly>
+        <sly data-sly-call="${elementTemplate.element @ element=element, useI18nForElementTitle=useI18nForElementTitle}"></sly>
     </dl>
 </template>
