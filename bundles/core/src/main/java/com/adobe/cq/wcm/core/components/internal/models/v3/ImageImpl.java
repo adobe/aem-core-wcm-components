@@ -16,13 +16,25 @@
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.annotation.PostConstruct;
+import javax.json.Json;
+import javax.json.JsonException;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -68,6 +80,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
 
+    @OSGiService
+    @Optional
+    private HttpClientBuilderFactory clientBuilderFactory;
+
     private boolean imageLinkHidden = false;
 
     private String srcSet = StringUtils.EMPTY;
@@ -77,6 +93,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private Dimension dimension;
 
     private boolean ngdmImage = false;
+    private CloseableHttpClient client;
+    private static final String PATH_PLACEHOLDER_ASSET_ID = "{asset-id}";
+    private String metadataDeliveryEndpoint;
 
     @PostConstruct
     protected void initModel() {
@@ -135,6 +154,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 // in case of dm image and auto smartcrop the srcset needs to generated client side
                 if (dmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)) {
                     srcSet = EMPTY_PIXEL;
+                } else if (ngdmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO) && client != null) {
+                    getRemoteAssetSrcset(srcUritemplate);
                 } else {
                     for (int i = 0; i < widthsArray.length; i++) {
                         if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
@@ -234,6 +255,37 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return this.dimension;
     }
 
+    private void getRemoteAssetSrcset(String srcUritemplate) {
+        String endPointUrl = "https://" + nextGenDynamicMediaConfig.getRepositoryId() + metadataDeliveryEndpoint;
+        HttpGet get = new HttpGet(endPointUrl);
+        get.setHeader("X-Adobe-Accept-Experimental", "1");
+        ResponseHandler<String> responseHandler = new NextGenDMSrcsetBuilderResponseHandler();
+        try {
+            String response = client.execute(get, responseHandler);
+            if (!StringUtils.isEmpty(response)) {
+                JsonReader jsonReader = Json.createReader(new StringReader(response));
+                JsonObject metadata = jsonReader.readObject();
+                jsonReader.close();
+                JsonObject repositoryMetadata = metadata.getJsonObject("repositoryMetadata");
+                JsonObject smartCrops = repositoryMetadata.getJsonObject("smartcrops");
+                String[] ngdmSrcsetArray = new String[smartCrops.size()];
+                int i = 0;
+                for (Map.Entry<String, JsonValue> entry : smartCrops.entrySet()) {
+                    String namedSmartCrop = entry.getKey();
+                    if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
+                        JsonValue smartCropWidth = smartCrops.getJsonObject(namedSmartCrop).get("width");
+                        ngdmSrcsetArray[i] =
+                            srcUritemplate.replace("width={.width}", String.format("smartcrop=%s", namedSmartCrop)) + " " + smartCropWidth.toString().replaceAll("\"", "") + "w";
+                        i++;
+                    }
+                }
+                srcSet = StringUtils.join(ngdmSrcsetArray, ',');
+            }
+        } catch (IOException | JsonException e) {
+            LOGGER.warn("Couldn't generate srcset for remote asset");
+        }
+    }
+
     private Dimension getOriginalDimensionInternal() {
         ValueMap inheritedResourceProperties = resource.getValueMap();
         String inheritedFileReference = inheritedResourceProperties.get(DownloadResource.PN_REFERENCE, String.class);
@@ -271,18 +323,26 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         initResource();
         properties = resource.getValueMap();
         String fileReference = properties.get("fileReference", String.class);
-        String smartCrop = properties.get("smartCrop", String.class);
+        String smartCrop = properties.get("smartCropRendition", String.class);
         if (isNgdmImageReference(fileReference)) {
             int width = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, DEFAULT_NGDM_ASSET_WIDTH);
             NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
                 .withPreferWebp(true)
                 .withWidth(width);
-            if(StringUtils.isNotEmpty(smartCrop)) {
+            if(StringUtils.isNotEmpty(smartCrop) && !StringUtils.equals(smartCrop, SMART_CROP_AUTO)) {
                 builder.withSmartCrop(smartCrop);
             }
             src = builder.build();
             ngdmImage = true;
             hasContent = true;
+            if (clientBuilderFactory != null) {
+                client = clientBuilderFactory.newBuilder().build();
+            }
+            metadataDeliveryEndpoint = nextGenDynamicMediaConfig.getAssetMetadataPath();
+            Scanner scanner = new Scanner(fileReference);
+            scanner.useDelimiter("/");
+            String assetId = scanner.next();
+            metadataDeliveryEndpoint = metadataDeliveryEndpoint.replace(PATH_PLACEHOLDER_ASSET_ID, assetId);
         }
     }
 

@@ -85,17 +85,9 @@ public class NextgenDMImageURIBuilderTest {
 
     @Test
     public void testUriWithSmartCrop() {
-        uriBuilder.withSmartCrop("2:3");
+        uriBuilder.withSmartCrop("Medium");
         String uri = uriBuilder.build();
-        assertTrue(uri.contains("crop=2:3,smart"));
-    }
-
-
-    @Test
-    public void testUriWithInvalidSmartCrop() {
-        uriBuilder.withSmartCrop("x:y");
-        String uri = uriBuilder.build();
-        assertEquals(baseUri, uri);
+        assertTrue(uri.contains("smartcrop=Medium"));
     }
 
     @Test

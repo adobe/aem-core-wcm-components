@@ -53,6 +53,7 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
         config.setEnabled(true);
         config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
         context.registerInjectActivateService(config);
     }
 
