@@ -761,7 +761,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
         //3.
         accordion.openEditDialog(accordion1Path);
-        SelenideElement editDialogTitle = Selenide.$(".cq-dialog-header._coral-Dialog-title");
+        SelenideElement editDialogTitle = Selenide.$(".cq-dialog-header");
         assertTrue(editDialogTitle.getText().equals("Accordion"), "It should be the Edit Dialog from the Accordion Component");
         Commons.saveConfigureDialog();
 
@@ -770,7 +770,7 @@ public class AccordionIT extends AuthorBaseUITest {
         PanelSelector panelSelector = new PanelSelector();
         panelSelector.getItems().get(1).click();
         accordion.openEditDialog(textPath);
-        editDialogTitle = Selenide.$(".cq-dialog-header._coral-Dialog-title");
+        editDialogTitle = Selenide.$(".cq-dialog-header");
         assertTrue(editDialogTitle.getText().equals("Text"), "It should be the Edit Dialog from the Text Component");
         Commons.saveConfigureDialog();
 
