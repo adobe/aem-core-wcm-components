@@ -19,7 +19,8 @@
      class="cmp-breadcrumb"
      aria-label="${'Breadcrumb' @ i18n}"
      data-sly-test="${breadcrumb.items.size > 0}"
-     data-cmp-data-layer="${breadcrumb.data.json}">
+     data-cmp-data-layer="${breadcrumb.data.json}"
+     role="navigation">
     <ol class="cmp-breadcrumb__list"
         itemscope itemtype="http://schema.org/BreadcrumbList"
         data-sly-list.navItem="${breadcrumb.items}">
