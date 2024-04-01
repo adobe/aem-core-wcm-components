@@ -25,16 +25,15 @@ import java.util.Objects;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolverFactory;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ComponentFiles;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -181,11 +180,9 @@ public class ComponentFilesImplTest {
         Resource resource = context.currentResource(path);
         if (resource != null) {
             if (attributes != null) {
-                SlingBindings slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
                 for (Map.Entry<String,Object> entry : attributes.entrySet()) {
-                    slingBindings.put(entry.getKey(), entry.getValue());
+                    context.request().setAttribute(entry.getKey(), entry.getValue());
                 }
-                context.request().setAttribute(SlingBindings.class.getName(), slingBindings);
             }
             context.request().setResource(resource);
             return context.request().adaptTo(ComponentFiles.class);
