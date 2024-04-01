@@ -37,7 +37,7 @@
                                                 fieldLabel="Download Asset"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./fileReference"
-                                                mimeTypes="[image/*,video/*,audio/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,application/zip,text/plain]"
+                                                mimeTypes="[image/*,video/*,audio/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,application/zip,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet]"
                                                 name="./file"/>
                                         </items>
                                     </column>
