@@ -39,9 +39,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DownloadIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.download.v1.DownloadIT {
 
-    private static String assetDocumentFilter = "[name='assetfilter_document_path']";
-    private static String testAssetName = "core-comp-test-word.doc";
-    private static String testAssetWordPath = testAssetsPath + "/" + testAssetName;
+    private static final String assetDocumentFilter = "[name='assetfilter_document_path']";
+    private static final String testAssetWordName = "core-comp-test-word.doc";
+    private static final String testAssetWordPath = testAssetsPath + "/" + testAssetWordName;
+    private static final String testAssetXlsxName = "core-comp-test-xlsx.xlsx";
+    private static final String testAssetXlsxPath = testAssetsPath + "/" + testAssetXlsxName;
 
     private void setupResources() {
         downloadRT = RT_DOWNLOAD_V2;
@@ -55,21 +57,32 @@ public class DownloadIT extends com.adobe.cq.wcm.core.components.it.seljup.tests
 
     @Test
     public void downloadWordFile() throws TimeoutException, InterruptedException, ClientException, URISyntaxException {
+        Header[] headers = getDownloadedFileHeaders(testAssetWordPath);
+        assertTrue(headers.length > 0);
+        assertEquals("attachment; filename=\"" + testAssetWordName + "\"", headers[0].getValue());
+    }
+
+    @Test
+    public void downloadXlsxFile() throws TimeoutException, InterruptedException, ClientException, URISyntaxException {
+        Header[] headers = getDownloadedFileHeaders(testAssetXlsxPath);
+        assertTrue(headers.length > 0);
+        assertEquals("attachment; filename=\"" + testAssetXlsxName + "\"", headers[0].getValue());
+    }
+
+    private Header[] getDownloadedFileHeaders (String testAssetPath) throws InterruptedException, TimeoutException, URISyntaxException, ClientException {
         Commons.openSidePanel();
         Commons.useDialogSelect("assetfilter_type_selector", "Documents");
         Commons.selectInAutocomplete(assetDocumentFilter, testAssetsPath);
         Commons.openEditDialog(editorPage, cmpPath);
         DownloadEditDialog downloadEditDialog = download.getEditDialog();
-        downloadEditDialog.uploadAssetFromSidePanel(testAssetWordPath);
+        downloadEditDialog.uploadAssetFromSidePanel(testAssetPath);
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         String url = download.getDownloadTitleLink();
         SlingClient slingClient = new SlingClient(new URI(url), authorClient.getUser(), authorClient.getPassword());
         SlingHttpResponse response = slingClient.doGet(url, Collections.EMPTY_LIST, Collections.EMPTY_LIST, HttpStatus.SC_OK);
-        Header headers[] = response.getHeaders(HttpHeaders.CONTENT_DISPOSITION);
-        assertTrue(headers.length > 0);
-        assertEquals("attachment; filename=\"" + testAssetName + "\"", headers[0].getValue());
+        return response.getHeaders(HttpHeaders.CONTENT_DISPOSITION);
     }
 
 }
