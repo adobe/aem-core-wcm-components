@@ -184,8 +184,8 @@ public class OEmbedClientImpl implements OEmbedClient {
                 .setDefaultRequestConfig(rc)
                 .build();
         }
-
     }
+
     @Deactivate
     protected void deactivate() throws IOException {
         httpClient.close();
@@ -199,6 +199,7 @@ public class OEmbedClientImpl implements OEmbedClient {
         }catch (IOException e) {
             LOGGER.error("GETing data from '{}' failed: {}", url, e.getMessage(), e);
         }
+        return null;
     }
 
     protected String buildURL(String endpoint, String url, String format, Integer maxWidth, Integer maxHeight) throws MalformedURLException {

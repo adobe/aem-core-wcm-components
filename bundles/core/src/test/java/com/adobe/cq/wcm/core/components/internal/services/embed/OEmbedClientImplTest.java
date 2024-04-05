@@ -26,6 +26,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Source;
 
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.form.FormHandlerImpl;
+import com.adobe.cq.wcm.core.components.services.form.FormHandler;
+import io.wcm.testing.mock.aem.junit5.AemContext;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -52,8 +56,14 @@ import static org.mockito.Mockito.when;
 
 class OEmbedClientImplTest {
 
+    public final AemContext context = CoreComponentTestContext.newAemContext();
+    private OEmbedClientImpl client;
+
     private OEmbedClientImpl setupForJson() throws IOException {
-        OEmbedClientImpl client = new OEmbedClientImpl();
+
+        context.registerService(HttpClientBuilderFactory.class, HttpClientBuilder::create);
+        client = context.registerInjectActivateService(new OEmbedClientImpl());
+
         OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
         configurationFactory.configure(
             new OEmbedClientImplConfigurationFactory.Config() {
