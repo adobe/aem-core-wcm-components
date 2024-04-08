@@ -36,7 +36,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.osgi.framework.Constants;
@@ -48,8 +47,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Deactivate;
 
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedClient;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
@@ -79,8 +76,6 @@ public class OEmbedClientImpl implements OEmbedClient {
 
     private ObjectMapper mapper = new ObjectMapper();
     private static JAXBContext jaxbContext;
-
-    private CloseableHttpClient httpClient;
 
     static {
         try {
@@ -160,45 +155,22 @@ public class OEmbedClientImpl implements OEmbedClient {
         return null;
     }
 
-    @Activate
-    protected void activate() {
-        if (connectionTimeout < 0) {
-            throw new IllegalArgumentException("Connection timeout value cannot be less than 0");
-        }
-        if (soTimeout < 0) {
-            throw new IllegalArgumentException("Socket timeout value cannot be less than 0");
-        }
-        RequestConfig rc = RequestConfig.custom()
-            .setConnectTimeout(connectionTimeout)
-            .setConnectionRequestTimeout(connectionTimeout)
-            .setSocketTimeout(soTimeout)
+    protected InputStream getData(String url) throws IOException, IllegalArgumentException {
+        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
             .build();
-
+        HttpClient httpClient;
         if (httpClientBuilderFactory != null
-            && httpClientBuilderFactory.newBuilder() != null) {
+                && httpClientBuilderFactory.newBuilder() != null) {
             httpClient = httpClientBuilderFactory.newBuilder()
-                .setDefaultRequestConfig(rc)
-                .build();
+                    .setDefaultRequestConfig(rc)
+                    .build();
         } else {
             httpClient = HttpClients.custom()
-                .setDefaultRequestConfig(rc)
-                .build();
+                    .setDefaultRequestConfig(rc)
+                    .build();
         }
-
-    }
-    @Deactivate
-    protected void deactivate() throws IOException {
-        httpClient.close();
-    }
-
-    protected InputStream getData(String url) throws IOException, IllegalArgumentException {
-        try {
-            HttpResponse response = httpClient.execute(new HttpGet(url));
-            LOGGER.debug("GETing data from '{}' succeeded: response: {}", url, response);
-            return response.getEntity().getContent();
-        }catch (IOException e) {
-            LOGGER.error("GETing data from '{}' failed: {}", url, e.getMessage(), e);
-        }
+        HttpResponse response = httpClient.execute(new HttpGet(url));
+        return response.getEntity().getContent();
     }
 
     protected String buildURL(String endpoint, String url, String format, Integer maxWidth, Integer maxHeight) throws MalformedURLException {
