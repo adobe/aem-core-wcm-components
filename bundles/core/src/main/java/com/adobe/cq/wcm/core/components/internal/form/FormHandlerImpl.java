@@ -66,7 +66,7 @@ public class FormHandlerImpl implements FormHandler {
                 CHARSET)));
         try  {
             String response = client.execute(post, new BasicResponseHandler());
-            LOG.debug("POSTing form data to '{}' succeeded: response: {}", endPointUrl, response);
+            LOG.info("POSTing form data to '{}' succeeded: response: {}", endPointUrl, response);
             return true;
         } catch (IOException e) {
             // for all status codes != 2xx an HttpResponseException is thrown (http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/BasicResponseHandler.html)
@@ -85,7 +85,7 @@ public class FormHandlerImpl implements FormHandler {
         if (socketTimeout < 0) {
             throw new IllegalArgumentException("Socket timeout value cannot be less than 0");
         }
-        
+
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(connectionTimeout)
                 .setConnectionRequestTimeout(connectionTimeout)
