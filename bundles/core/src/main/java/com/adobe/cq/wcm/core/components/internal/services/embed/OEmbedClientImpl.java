@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -32,11 +31,11 @@ import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.osgi.framework.Constants;
@@ -103,31 +102,12 @@ public class OEmbedClientImpl implements OEmbedClient {
         if (config == null) {
             return null;
         }
-        if (OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
-            try {
-                String jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
-                return mapper.readValue(getData(jsonURL), OEmbedJSONResponseImpl.class);
-            } catch (IllegalArgumentException | IOException  ioex) {
-                LOGGER.error("Failed to read JSON response", ioex);
-            }
-        } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
-            try {
-                String xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
-                try (InputStream xmlStream = getData(xmlURL)) {
-                    //Disable XXE
-                    SAXParserFactory spf = SAXParserFactory.newInstance();
-                    spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-                    spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-                    spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-
-                    //Do unmarshall operation
-                    Source xmlSource = new SAXSource(spf.newSAXParser().getXMLReader(), new InputSource(xmlStream));
-                    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                    return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlSource);
-                }
-            } catch (IllegalArgumentException | SAXException | ParserConfigurationException | JAXBException | IOException e) {
-                LOGGER.error("Failed to read XML response", e);
-            }
+        OEmbedResponse.Format format = OEmbedResponse.Format.fromString(config.format());
+        try {
+            String dataURL = buildURL(config.endpoint(), url, format.getValue(), null, null);
+            return getData(dataURL, format);
+        } catch (IOException | IllegalArgumentException e) {
+            LOGGER.error("Failed to retrieve oEmbed response", e);
         }
         return null;
     }
@@ -156,25 +136,58 @@ public class OEmbedClientImpl implements OEmbedClient {
         return null;
     }
 
-    protected InputStream getData(String url) throws IOException, IllegalArgumentException {
-        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
-            .build();
-        HttpResponse response;
-        if (httpClientBuilderFactory != null
-                && httpClientBuilderFactory.newBuilder() != null) {
-            try (CloseableHttpClient httpClient = httpClientBuilderFactory.newBuilder()
-                    .setDefaultRequestConfig(rc)
-                    .build()){
-                response = httpClient.execute(new HttpGet(url));
+    protected OEmbedResponse readData(InputStream is, OEmbedResponse.Format format) {
+        if (format == OEmbedResponse.Format.JSON) {
+            try {
+                return mapper.readValue(is, OEmbedJSONResponseImpl.class);
+            } catch (IllegalArgumentException | IOException  ioex) {
+                LOGGER.error("Failed to read JSON response", ioex);
             }
-        } else {
-            try (CloseableHttpClient httpClient = HttpClients.custom()
-                    .setDefaultRequestConfig(rc)
-                    .build()){
-                response = httpClient.execute(new HttpGet(url));
+        } else if (jaxbContext != null && OEmbedResponse.Format.XML == format) {
+            try {
+                //Disable XXE
+                SAXParserFactory spf = SAXParserFactory.newInstance();
+                spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+
+                //Do unmarshall operation
+                Source xmlSource = new SAXSource(spf.newSAXParser().getXMLReader(), new InputSource(is));
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlSource);
+            } catch (SAXException | ParserConfigurationException | JAXBException e) {
+                LOGGER.error("Failed to unmarshall XML response", e);
             }
         }
-        return response.getEntity().getContent();
+        return null;
+    }
+
+    protected OEmbedResponse getData(String url, OEmbedResponse.Format format) throws IOException, IllegalArgumentException {
+        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
+            .build();
+        HttpClientBuilder builder;
+        if (httpClientBuilderFactory != null && httpClientBuilderFactory.newBuilder() != null) {
+            builder = httpClientBuilderFactory.newBuilder();
+        } else {
+            builder = HttpClients.custom();
+        }
+        try (CloseableHttpClient httpClient = builder
+                    .setDefaultRequestConfig(rc)
+                    .build()) {
+            return httpClient.execute(new HttpGet(url), getHandler(format));
+        }
+    }
+
+    protected ResponseHandler<OEmbedResponse> getHandler(OEmbedResponse.Format format) {
+        ResponseHandler<OEmbedResponse> responseHandler = response -> {
+            int status = response.getStatusLine().getStatusCode();
+            if (status >= 200 && status < 300) {
+                return readData(response.getEntity().getContent(), format);
+            } else {
+                throw new IOException("Unexpected response status: " + status);
+            }
+        };
+        return responseHandler;
     }
 
     protected String buildURL(String endpoint, String url, String format, Integer maxWidth, Integer maxHeight) throws MalformedURLException {

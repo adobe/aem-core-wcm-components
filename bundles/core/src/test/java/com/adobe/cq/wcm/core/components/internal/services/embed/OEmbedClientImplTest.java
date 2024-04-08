@@ -28,6 +28,7 @@ import javax.xml.transform.Source;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -93,7 +94,7 @@ class OEmbedClientImplTest {
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
         ObjectMapper mapper = mock(ObjectMapper.class);
-        mockHttpClient(client);
+        mockHttpClient(client, OEmbedResponse.Format.JSON);
         when(mapper.readValue(any(InputStream.class), any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
         setField(client.getClass(), "mapper", client, mapper);
 
@@ -162,7 +163,7 @@ class OEmbedClientImplTest {
         setField(client.getClass(), "jaxbContext", client, jaxbContext);
         Unmarshaller unmarshaller = mock(Unmarshaller.class);
         when(jaxbContext.createUnmarshaller()).thenReturn(unmarshaller);
-        mockHttpClient(client);
+        mockHttpClient(client, OEmbedResponse.Format.XML);
         when(unmarshaller.unmarshal(any(Source.class))).thenReturn(new OEmbedXMLResponseImpl());
 
         return client;
@@ -185,7 +186,7 @@ class OEmbedClientImplTest {
         assertNull(client.getResponse("http://test.com/xml "));
     }
 
-    protected void mockHttpClient(OEmbedClient client) throws IOException {
+    protected void mockHttpClient(OEmbedClient client, OEmbedResponse.Format format) throws IOException {
         HttpClientBuilderFactory mockBuilderFactory = mock(HttpClientBuilderFactory.class);
         setField(client.getClass(), "httpClientBuilderFactory", client, mockBuilderFactory);
 
@@ -197,12 +198,17 @@ class OEmbedClientImplTest {
         when(mockBuilder.build()).thenReturn(mockClient);
 
         CloseableHttpResponse mockResponse = mock(CloseableHttpResponse.class);
-        when(mockClient.execute(any(HttpUriRequest.class))).thenReturn(mockResponse);
+        when(mockClient.execute(any(HttpUriRequest.class), any(ResponseHandler.class)))
+                .thenAnswer(invocationOnMock ->
+                        ((OEmbedClientImpl)client).getHandler(format).handleResponse(mockResponse));
 
         HttpEntity mockEntity = mock(HttpEntity.class);
         when(mockResponse.getEntity()).thenReturn(mockEntity);
 
         when(mockEntity.getContent()).thenReturn(mock(InputStream.class));
+
+        when(mockResponse.getStatusLine()).thenReturn(mock(org.apache.http.StatusLine.class));
+        when(mockResponse.getStatusLine().getStatusCode()).thenReturn(200);
     }
 
     public static void setField(@NotNull final Class<?> clazz,
