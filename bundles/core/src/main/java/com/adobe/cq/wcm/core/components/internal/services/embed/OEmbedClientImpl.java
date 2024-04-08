@@ -36,6 +36,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.osgi.framework.Constants;
@@ -158,18 +159,21 @@ public class OEmbedClientImpl implements OEmbedClient {
     protected InputStream getData(String url) throws IOException, IllegalArgumentException {
         RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
             .build();
-        HttpClient httpClient;
+        HttpResponse response;
         if (httpClientBuilderFactory != null
                 && httpClientBuilderFactory.newBuilder() != null) {
-            httpClient = httpClientBuilderFactory.newBuilder()
+            try (CloseableHttpClient httpClient = httpClientBuilderFactory.newBuilder()
                     .setDefaultRequestConfig(rc)
-                    .build();
+                    .build()){
+                response = httpClient.execute(new HttpGet(url));
+            }
         } else {
-            httpClient = HttpClients.custom()
+            try (CloseableHttpClient httpClient = HttpClients.custom()
                     .setDefaultRequestConfig(rc)
-                    .build();
+                    .build()){
+                response = httpClient.execute(new HttpGet(url));
+            }
         }
-        HttpResponse response = httpClient.execute(new HttpGet(url));
         return response.getEntity().getContent();
     }
 
