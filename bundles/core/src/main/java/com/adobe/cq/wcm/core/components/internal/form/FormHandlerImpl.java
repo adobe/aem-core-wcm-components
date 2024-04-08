@@ -66,7 +66,8 @@ public class FormHandlerImpl implements FormHandler {
                 CHARSET)));
         try  {
             String response = client.execute(post, new BasicResponseHandler());
-            LOG.info("POSTing form data to '{}' succeeded: response: {}", endPointUrl, response);
+            LOG.debug("POSTing form data to '{}' succeeded: response: {}", endPointUrl, response);
+            LOG.info("POSTing form data succeeded through FormHandlerImpl");
             return true;
         } catch (IOException e) {
             // for all status codes != 2xx an HttpResponseException is thrown (http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/BasicResponseHandler.html)
