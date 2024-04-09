@@ -94,7 +94,7 @@
                         <jackrabbit-filter>
                             <options>
                                 <validRoots>
-                                    /apps,/apps/core,/apps/core/wcm
+                                    /apps,/apps/core,/apps/core/wcm,/apps/system
                                 </validRoots>
                             </options>
                         </jackrabbit-filter>
