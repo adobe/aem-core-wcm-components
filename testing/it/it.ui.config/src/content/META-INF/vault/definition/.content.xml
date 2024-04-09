@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2021 Adobe
+  ~ Copyright 2024 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<workspaceFilter version="1.0">
-    <!-- Sample content -->
-    <filter root="/apps/core/config" mode="merge"/>
-    <filter root="/apps/core/wcm/tests"/>
-    <filter root="/apps/core-component"/>
-</workspaceFilter>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          jcr:primaryType="vlt:PackageDefinition"
+          providerLink="https://github.com/adobe/aem-core-wcm-components/releases"
+          providerName="Adobe Systems Inc."
+          providerUrl="https://www.adobe.com"
+          testedWith="AEM 6.3, AEM 6.4">
+</jcr:root>
