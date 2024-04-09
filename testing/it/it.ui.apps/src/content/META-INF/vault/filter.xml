@@ -17,6 +17,7 @@
 <workspaceFilter version="1.0">
     <!-- Sample content -->
     <filter root="/apps/core/config" mode="merge"/>
+    <filter root="/apps/system/config" mode="merge"/>
     <filter root="/apps/core/wcm/tests"/>
     <filter root="/apps/core-component"/>
 </workspaceFilter>
