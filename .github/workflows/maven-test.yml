@@ -55,7 +55,7 @@ jobs:
 
       # Run code coverage check
       - name: Run core coverage check
-        run: bash <(cat .github/codecov.yml | curl --data-binary @- https://codecov.io/validate)
+        run: bash <(curl -s https://codecov.io/bash)
   build-js:
     runs-on: ubuntu-latest
     defaults:
