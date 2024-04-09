@@ -57,6 +57,21 @@
                 <extensions>true</extensions>
                 <configuration>
                     <packageType>container</packageType>
+                    <validatorsSettings>
+                        <jackrabbit-filter>
+                            <options>
+                                <validRoots>
+                                    /apps/system
+                                </validRoots>
+                            </options>
+                        </jackrabbit-filter>
+                        <jackrabbit-nodetypes>
+                            <isDisabled>true</isDisabled>
+                        </jackrabbit-nodetypes>
+                        <netcentric-aem-cloud>
+                            <isDisabled>true</isDisabled>
+                        </netcentric-aem-cloud>
+                    </validatorsSettings>
                     <showImportPackageReport>false</showImportPackageReport>
                     <properties>
                         <cloudManagerTarget>none</cloudManagerTarget>
