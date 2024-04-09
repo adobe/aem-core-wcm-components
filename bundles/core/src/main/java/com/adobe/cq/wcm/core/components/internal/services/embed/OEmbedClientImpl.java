@@ -61,16 +61,6 @@ public class OEmbedClientImpl implements OEmbedClient {
     @Reference
     private HttpClientBuilderFactory httpClientBuilderFactory;
 
-    /**
-     * Socket timeout.
-     */
-    private int soTimeout = 60000;
-
-    /**
-     * Connection timeout.
-     */
-    private int connectionTimeout = 5000;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(OEmbedClientImpl.class);
 
     private Map<String, OEmbedClientImplConfigurationFactory.Config> configs = new HashMap<>();
@@ -106,14 +96,14 @@ public class OEmbedClientImpl implements OEmbedClient {
         if (OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 String jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
-                return mapper.readValue(getData(jsonURL), OEmbedJSONResponseImpl.class);
+                return mapper.readValue(getData(jsonURL, config), OEmbedJSONResponseImpl.class);
             } catch (IllegalArgumentException | IOException  ioex) {
                 LOGGER.error("Failed to read JSON response", ioex);
             }
         } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 String xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
-                try (InputStream xmlStream = getData(xmlURL)) {
+                try (InputStream xmlStream = getData(xmlURL, config)) {
                     //Disable XXE
                     SAXParserFactory spf = SAXParserFactory.newInstance();
                     spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
@@ -156,8 +146,10 @@ public class OEmbedClientImpl implements OEmbedClient {
         return null;
     }
 
-    protected InputStream getData(String url) throws IOException, IllegalArgumentException {
-        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
+    protected InputStream getData(String url, OEmbedClientImplConfigurationFactory.Config config) throws IOException, IllegalArgumentException {
+        RequestConfig rc = RequestConfig.custom()
+            .setConnectTimeout(config.connectionTimeout())
+            .setSocketTimeout(config.socketTimeout())
             .build();
         HttpResponse response;
         if (httpClientBuilderFactory != null

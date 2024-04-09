@@ -77,6 +77,18 @@ public class OEmbedClientImplConfigurationFactory {
             description = "Describes whether the provider response HTML is allowed to be displayed in an unsafe context."
         )
         boolean unsafeContext() default false;
+
+        @AttributeDefinition(
+            name = "Socket Timeout",
+            description = "The time waiting for data – after establishing the connection; maximum time of inactivity between two data packets."
+        )
+        int socketTimeout() default 1000;
+
+        @AttributeDefinition(
+            name = "Connection Timeout",
+            description = "The time to establish the connection with the remote host."
+        )
+        int connectionTimeout() default 1000;
     }
 
     @Activate
