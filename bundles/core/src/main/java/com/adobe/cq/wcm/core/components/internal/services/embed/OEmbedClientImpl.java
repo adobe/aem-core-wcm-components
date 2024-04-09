@@ -106,10 +106,12 @@ public class OEmbedClientImpl implements OEmbedClient {
         try (CloseableHttpClient httpClient = getHttpClient()) {
             if (OEmbedResponse.Format.JSON == format) {
                 String jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
-                return mapper.readValue(getData(jsonURL, httpClient), OEmbedJSONResponseImpl.class);
+                try (InputStream jsonStream = getDataStream(jsonURL, httpClient)) {
+                    return mapper.readValue(jsonStream, OEmbedJSONResponseImpl.class);
+                }
             } else if (jaxbContext != null && OEmbedResponse.Format.XML == format) {
                 String xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
-                try (InputStream xmlStream = getData(xmlURL, httpClient)) {
+                try (InputStream xmlStream = getDataStream(xmlURL, httpClient)) {
                     //Disable XXE
                     SAXParserFactory spf = SAXParserFactory.newInstance();
                     spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
@@ -162,7 +164,7 @@ public class OEmbedClientImpl implements OEmbedClient {
         }
     }
 
-    protected InputStream getData(String url, HttpClient httpClient) throws IOException, IllegalArgumentException {
+    protected InputStream getDataStream(String url, HttpClient httpClient) throws IOException, IllegalArgumentException {
         HttpResponse response = httpClient.execute(new HttpGet(url));
         return response.getEntity().getContent();
     }
