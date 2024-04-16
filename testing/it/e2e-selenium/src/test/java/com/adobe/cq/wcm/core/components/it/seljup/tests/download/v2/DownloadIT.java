@@ -45,6 +45,10 @@ public class DownloadIT extends com.adobe.cq.wcm.core.components.it.seljup.tests
     private static final String testAssetXlsxName = "core-comp-test-xlsx.xlsx";
     private static final String testAssetXlsxPath = testAssetsPath + "/" + testAssetXlsxName;
 
+    private static final String testAssetPptxName = "core-comp-test-pptx.pptx";
+
+    private static final String testAssetPptxPath = testAssetsPath + "/" + testAssetPptxName;
+
     private void setupResources() {
         downloadRT = RT_DOWNLOAD_V2;
     }
@@ -67,6 +71,13 @@ public class DownloadIT extends com.adobe.cq.wcm.core.components.it.seljup.tests
         Header[] headers = getDownloadedFileHeaders(testAssetXlsxPath);
         assertTrue(headers.length > 0);
         assertEquals("attachment; filename=\"" + testAssetXlsxName + "\"", headers[0].getValue());
+    }
+
+    @Test
+    public void downloadPptxFile() throws TimeoutException, InterruptedException, ClientException, URISyntaxException {
+        Header[] headers = getDownloadedFileHeaders(testAssetPptxPath);
+        assertTrue(headers.length > 0);
+        assertEquals("attachment; filename=\"" + testAssetPptxName + "\"", headers[0].getValue());
     }
 
     private Header[] getDownloadedFileHeaders (String testAssetPath) throws InterruptedException, TimeoutException, URISyntaxException, ClientException {
