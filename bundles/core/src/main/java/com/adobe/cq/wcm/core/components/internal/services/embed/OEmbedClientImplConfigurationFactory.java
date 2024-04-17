@@ -41,6 +41,7 @@ public class OEmbedClientImplConfigurationFactory {
     public @interface Config {
 
         int defaultConnectionTimeout = 2000, defaultSocketTimeout=5000;
+
         @AttributeDefinition(
                 name = "Provider Name",
                 description = "Name of the oEmbed provider."
