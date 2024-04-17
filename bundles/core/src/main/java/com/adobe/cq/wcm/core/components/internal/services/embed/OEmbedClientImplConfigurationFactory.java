@@ -39,6 +39,8 @@ public class OEmbedClientImplConfigurationFactory {
             description = "Configuration for defining oEmbed endpoints."
     )
     public @interface Config {
+
+        int defaultConnectionTimeout = 2000, defaultSocketTimeout=5000;
         @AttributeDefinition(
                 name = "Provider Name",
                 description = "Name of the oEmbed provider."
@@ -82,13 +84,13 @@ public class OEmbedClientImplConfigurationFactory {
             name = "Socket Timeout",
             description = "The time waiting for data – after establishing the connection; maximum time of inactivity between two data packets."
         )
-        int socketTimeout() default 1000;
+        int socketTimeout() default defaultSocketTimeout;
 
         @AttributeDefinition(
             name = "Connection Timeout",
             description = "The time to establish the connection with the remote host."
         )
-        int connectionTimeout() default 1000;
+        int connectionTimeout() default defaultConnectionTimeout;
     }
 
     @Activate
