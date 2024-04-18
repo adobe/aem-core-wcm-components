@@ -56,6 +56,35 @@
     }
 
     function dcView(component) {
+        console.log("Initializing " + component.id);
+        var element = document.getElementById(component.id + "-content");
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.intersectionRatio > 0) {
+                    // Element is in view
+                    console.log(element.id + " is in view");
+                    // Call mountViewer when div element is in view
+                    mountViewer(component);
+                } else {
+                    // Element is out of view
+                    console.log(element.id + " is out of view");
+                    // Call unmountViewer when div element is out of view
+                    unmountViewer(component);
+                }
+            });
+        });
+
+        observer.observe(element);
+    }
+
+    function mountViewer(component) {
+        var iframe = document.getElementById(component.id + "-content").getElementsByTagName("iframe");
+        if (iframe && iframe[0]) {
+            console.log("Viewer already mounted " + component.id);
+            return;
+        }
+        console.log("Mounting " + component.id);
         var adobeDCView = new window.AdobeDC.View({
             clientId: component.dataset.cmpClientId,
             divId: component.id + "-content",
@@ -65,6 +94,14 @@
             content: { location: { url: component.dataset.cmpDocumentPath } },
             metaData: { fileName: component.dataset.cmpDocumentFileName }
         }, JSON.parse(component.dataset.cmpViewerConfigJson));
+    }
+
+    function unmountViewer(component) {
+        var iframe = document.getElementById(component.id + "-content").getElementsByTagName("iframe");
+        if (iframe && iframe[0]) {
+            console.log("Unmounting " + component.id);
+            iframe[0].parentNode.removeChild(iframe[0]);
+        }
     }
 
     /**
