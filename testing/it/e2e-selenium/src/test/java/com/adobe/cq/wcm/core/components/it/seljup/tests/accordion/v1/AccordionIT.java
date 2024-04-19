@@ -748,25 +748,30 @@ public class AccordionIT extends AuthorBaseUITest {
      */
     @Test
     @DisplayName("Test: Open Config Dialog For Accordion Items")
-    public void testOpenConfigDialog() throws  InterruptedException, ClientException {
+    public void testOpenConfigDialog() throws TimeoutException, InterruptedException, ClientException {
 
         //1.
         String textProxy = RT_TEXT_V2;
         String accordion1Path = addAccordionItem(proxyPath, cmpPath,  "Accordion 1");
-        String textPath = addAccordionItem(textProxy, cmpPath,  "Text 1");
+        accordion.openPanelSelector(cmpPath);
+        String accordion12Path = addAccordionItem(proxyPath, accordion1Path,  "Accordion 1.2");
 
         //2.
-        selectExpandedItem(0);
-        accordion.openEditDialog(accordion1Path);
-        SelenideElement editDialogTitle = Selenide.$(".cq-dialog-header._coral-Dialog-title");
-        assertTrue(editDialogTitle.getText().equals("Accordion"));
-        Commons.saveConfigureDialog();
+        String textPath = addAccordionItem(textProxy, cmpPath,  "Text 1");
 
         //3.
-        selectExpandedItem(1);
+        accordion.openEditDialog(accordion1Path);
+        SelenideElement editDialogTitle = Selenide.$(".cq-dialog-header");
+        assertTrue(editDialogTitle.getText().equals("Accordion"), "It should be the Edit Dialog from the Accordion Component");
+        Commons.saveConfigureDialog();
+
+        //4.
+        accordion.openPanelSelector(cmpPath);
+        PanelSelector panelSelector = new PanelSelector();
+        panelSelector.getItems().get(1).click();
         accordion.openEditDialog(textPath);
-        editDialogTitle = Selenide.$(".cq-dialog-header._coral-Dialog-title");
-        assertTrue(editDialogTitle.getText().equals("Text"));
+        editDialogTitle = Selenide.$(".cq-dialog-header");
+        assertTrue(editDialogTitle.getText().equals("Text"), "It should be the Edit Dialog from the Text Component");
         Commons.saveConfigureDialog();
 
         Commons.switchToDefaultContext();

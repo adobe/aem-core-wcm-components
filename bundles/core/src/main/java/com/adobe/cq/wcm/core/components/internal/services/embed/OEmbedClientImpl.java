@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -36,6 +35,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.osgi.framework.Constants;
@@ -102,17 +102,16 @@ public class OEmbedClientImpl implements OEmbedClient {
         if (config == null) {
             return null;
         }
-        if (OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
-            try {
+        OEmbedResponse.Format format = OEmbedResponse.Format.fromString(config.format());
+        try (CloseableHttpClient httpClient = getHttpClient()) {
+            if (OEmbedResponse.Format.JSON == format) {
                 String jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
-                return mapper.readValue(getData(jsonURL), OEmbedJSONResponseImpl.class);
-            } catch (IllegalArgumentException | IOException  ioex) {
-                LOGGER.error("Failed to read JSON response", ioex);
-            }
-        } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
-            try {
+                try (InputStream jsonStream = getDataStream(jsonURL, httpClient)) {
+                    return mapper.readValue(jsonStream, OEmbedJSONResponseImpl.class);
+                }
+            } else if (jaxbContext != null && OEmbedResponse.Format.XML == format) {
                 String xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
-                try (InputStream xmlStream = getData(xmlURL)) {
+                try (InputStream xmlStream = getDataStream(xmlURL, httpClient)) {
                     //Disable XXE
                     SAXParserFactory spf = SAXParserFactory.newInstance();
                     spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
@@ -124,9 +123,9 @@ public class OEmbedClientImpl implements OEmbedClient {
                     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                     return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlSource);
                 }
-            } catch (IllegalArgumentException | SAXException | ParserConfigurationException | JAXBException | IOException e) {
-                LOGGER.error("Failed to read XML response", e);
             }
+        } catch (IllegalArgumentException | SAXException | ParserConfigurationException | JAXBException | IOException e) {
+            LOGGER.error("Failed to read " + format + " response", e);
         }
         return null;
     }
@@ -155,20 +154,17 @@ public class OEmbedClientImpl implements OEmbedClient {
         return null;
     }
 
-    protected InputStream getData(String url) throws IOException, IllegalArgumentException {
+    protected CloseableHttpClient getHttpClient() {
         RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
-            .build();
-        HttpClient httpClient;
-        if (httpClientBuilderFactory != null
-                && httpClientBuilderFactory.newBuilder() != null) {
-            httpClient = httpClientBuilderFactory.newBuilder()
-                    .setDefaultRequestConfig(rc)
-                    .build();
+                .build();
+        if (httpClientBuilderFactory != null && httpClientBuilderFactory.newBuilder() != null) {
+            return httpClientBuilderFactory.newBuilder().setDefaultRequestConfig(rc).build();
         } else {
-            httpClient = HttpClients.custom()
-                    .setDefaultRequestConfig(rc)
-                    .build();
+            return HttpClients.custom().setDefaultRequestConfig(rc).build();
         }
+    }
+
+    protected InputStream getDataStream(String url, HttpClient httpClient) throws IOException, IllegalArgumentException {
         HttpResponse response = httpClient.execute(new HttpGet(url));
         return response.getEntity().getContent();
     }
