@@ -750,9 +750,6 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         when(mockClient.execute(any(HttpGet.class), any(ResponseHandler.class))).thenReturn(expectedMetadataAPIResponseJSON);
         context.registerService(HttpClientBuilderFactory.class, mockBuilderFactory);
 
-        context.contentPolicyMapping(resourceType, new HashMap<String, Object>() {{
-            put(Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new int[]{600, 800});
-        }});
         Image image = getImageUnderTest(NGDM_SMARTCROP_AUTO_IMAGE_PATH);
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_SMARTCROP_AUTO_IMAGE_PATH));
     }

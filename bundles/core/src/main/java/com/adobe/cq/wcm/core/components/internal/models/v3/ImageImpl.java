@@ -147,6 +147,15 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
         int[] widthsArray = getWidths();
         String srcUritemplate = getSrcUriTemplate();
+
+        // handle srcset creation for auto smartcrop of remote assets
+        if (ngdmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO) && client != null
+            && srcUritemplate != null) {
+            srcUritemplate = StringUtils.replace(srcUriTemplate, URI_WIDTH_PLACEHOLDER_ENCODED, URI_WIDTH_PLACEHOLDER);
+            getRemoteAssetSrcset(srcUritemplate);
+            return srcSet;
+        }
+
         String[] srcsetArray = new String[widthsArray.length];
         if (widthsArray.length > 0 && srcUritemplate != null) {
             srcUritemplate = StringUtils.replace(srcUriTemplate, URI_WIDTH_PLACEHOLDER_ENCODED, URI_WIDTH_PLACEHOLDER);
@@ -154,8 +163,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 // in case of dm image and auto smartcrop the srcset needs to generated client side
                 if (dmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO)) {
                     srcSet = EMPTY_PIXEL;
-                } else if (ngdmImage && StringUtils.equals(smartCropRendition, SMART_CROP_AUTO) && client != null) {
-                    getRemoteAssetSrcset(srcUritemplate);
                 } else {
                     for (int i = 0; i < widthsArray.length; i++) {
                         if (srcUritemplate.contains("=" + URI_WIDTH_PLACEHOLDER)) {
