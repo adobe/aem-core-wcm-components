@@ -142,6 +142,7 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                 checked="${not empty cqDesign.isDecorative ? cqDesign.isDecorative : false}"
                                                 fieldDescription="Check if the image should be ignored by assistive technology and therefore does not require an alternative text. This applies to decorative images only."
+                                                forceIgnoreFreshness="true"
                                                 name="./isDecorative"
                                                 text="Image is decorative"
                                                 uncheckedValue="false"
