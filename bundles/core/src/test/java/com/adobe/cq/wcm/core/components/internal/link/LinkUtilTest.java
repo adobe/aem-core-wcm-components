@@ -63,4 +63,11 @@ class LinkUtilTest {
         String escapedPAth = LinkUtil.escape(path, null, fragment);
         assertEquals(path+ "#" + fragment, escapedPAth);
     }
+
+    @Test
+    void escape_mailToLinkNotThrowException() throws UnsupportedEncodingException {
+        String path = "mailto:mail@example.com";
+        String escapedMailTo = LinkUtil.escape(path, null, null);
+        assertEquals(path, escapedMailTo);
+    }
 }
