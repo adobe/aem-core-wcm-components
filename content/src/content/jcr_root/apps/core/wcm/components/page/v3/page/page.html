@@ -28,8 +28,8 @@
           data-cmp-data-layer-name="${page.dataLayerName @ context='scriptToken'}">
         <script data-sly-test.dataLayerEnabled="${page.data}">
           var dataLayerName = '${page.dataLayerName @ context="scriptToken"}' || 'adobeDataLayer';
-          var dataLayer = window[dataLayerName] = window[dataLayerName] || [];
-          dataLayer.push({
+          window[dataLayerName] = window[dataLayerName] || [];
+          window[dataLayerName].push({
               page: JSON.parse("${page.data.json @ context='scriptString'}"),
               event:'cmp:show',
               eventInfo: {
