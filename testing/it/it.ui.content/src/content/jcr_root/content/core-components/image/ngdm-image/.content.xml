@@ -50,9 +50,9 @@
                     jcr:lastModified="{Date}2020-11-27T19:42:37.640+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    smartCrop="3:5"
+                    smartCropRendition="Large"
                     sling:resourceType="core/wcm/components/image/v3/image"
-                    fileReference="/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png"/>
+                    fileReference="/urn:aaid:aem:18a66ed0-a9ae-4cfd-b7b9-78175bd3336d/cutfruits.png"/>
             </container>
         </root>
     </jcr:content>
