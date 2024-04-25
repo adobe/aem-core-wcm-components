@@ -44,6 +44,7 @@ public class NGDMEnableRenderCondition extends SlingSafeMethodsServlet {
     @Reference(cardinality= ReferenceCardinality.OPTIONAL, policyOption = ReferencePolicyOption.GREEDY)
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
 
+    @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
         throws ServletException, IOException {
 
