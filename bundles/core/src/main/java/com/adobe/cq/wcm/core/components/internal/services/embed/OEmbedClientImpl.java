@@ -60,16 +60,6 @@ public class OEmbedClientImpl implements OEmbedClient {
     @Reference
     private HttpClientBuilderFactory httpClientBuilderFactory;
 
-    /**
-     * Socket timeout.
-     */
-    private int soTimeout = 60000;
-
-    /**
-     * Connection timeout.
-     */
-    private int connectionTimeout = 5000;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(OEmbedClientImpl.class);
 
     private Map<String, OEmbedClientImplConfigurationFactory.Config> configs = new HashMap<>();
@@ -103,7 +93,7 @@ public class OEmbedClientImpl implements OEmbedClient {
             return null;
         }
         OEmbedResponse.Format format = OEmbedResponse.Format.fromString(config.format());
-        try (CloseableHttpClient httpClient = getHttpClient()) {
+        try (CloseableHttpClient httpClient = getHttpClient(config)) {
             if (OEmbedResponse.Format.JSON == format) {
                 String jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
                 try (InputStream jsonStream = getDataStream(jsonURL, httpClient)) {
@@ -112,6 +102,7 @@ public class OEmbedClientImpl implements OEmbedClient {
             } else if (jaxbContext != null && OEmbedResponse.Format.XML == format) {
                 String xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
                 try (InputStream xmlStream = getDataStream(xmlURL, httpClient)) {
+
                     //Disable XXE
                     SAXParserFactory spf = SAXParserFactory.newInstance();
                     spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
@@ -154,8 +145,8 @@ public class OEmbedClientImpl implements OEmbedClient {
         return null;
     }
 
-    protected CloseableHttpClient getHttpClient() {
-        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
+    protected CloseableHttpClient getHttpClient(OEmbedClientImplConfigurationFactory.Config config) {
+        RequestConfig rc = RequestConfig.custom().setConnectTimeout(config.connectionTimeout()).setSocketTimeout(config.socketTimeout())
                 .build();
         if (httpClientBuilderFactory != null && httpClientBuilderFactory.newBuilder() != null) {
             return httpClientBuilderFactory.newBuilder().setDefaultRequestConfig(rc).build();
