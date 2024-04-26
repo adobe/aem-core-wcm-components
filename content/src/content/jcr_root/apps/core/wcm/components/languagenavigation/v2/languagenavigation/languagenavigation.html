@@ -18,9 +18,10 @@
      data-sly-use.groupTemplate="group.html"
      data-sly-call="${groupTemplate.group @ items=languageNavigation.items}"
      data-sly-test.hasContent="${languageNavigation.items.size > 0}"
-	 data-cmp-data-layer="${languageNavigation.data.json}"
+     data-cmp-data-layer="${languageNavigation.data.json}"
      id="${languageNavigation.id}"
      class="cmp-languagenavigation"
-     aria-label="${languageNavigation.accessibilityLabel}">
+     aria-label="${languageNavigation.accessibilityLabel}"
+     role="navigation">
 </nav>
 <sly data-sly-call="${commonsTemplates.placeholder @ isEmpty = !hasContent, classAppend='cmp-languagenavigation'}"></sly>
