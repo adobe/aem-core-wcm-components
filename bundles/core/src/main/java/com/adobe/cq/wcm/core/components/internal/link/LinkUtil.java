@@ -128,7 +128,7 @@ public class LinkUtil {
             LOG.error(e.getMessage(), e);
         }
         try {
-            if (parsed != null && isNotMailToLink(parsed.getScheme())) {
+            if (parsed != null && !isMailToLink(parsed.getScheme())) {
                 escaped = new URI(parsed.getScheme(), parsed.getAuthority(), parsed.getPath(), maskedQueryString, null).toString();
             } else {
                 escaped = new URI(null, null, path, maskedQueryString, null).toString();
@@ -269,11 +269,11 @@ public class LinkUtil {
             .replace("%3F", "?");
     }
 
-    private static boolean isNotMailToLink(String link) {
+    private static boolean isMailToLink(String link) {
         if (link != null) {
-            return !link.startsWith(MAIL_TO_PATTERN);
+            return link.startsWith(MAIL_TO_PATTERN);
         } else {
-            return true;
+            return false;
         }
     }
 }
