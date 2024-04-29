@@ -546,6 +546,16 @@ public class ImageTests {
         image.validateNGDMAspectRationSelectorLabel("Wide Landscape");
     }
 
+    public void testSmartCropOnNGDMImageV3(String cropName) throws TimeoutException, InterruptedException, ClientException {
+        setUpNGDMImage();
+        Commons.openEditDialog(editorPage, compPath);
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.selectSmartCrop(cropName);
+        Commons.saveConfigureDialog();
+        editorPage.enterPreviewMode();
+        assertTrue(image.isImagePresentWithSmartCrop(cropName),"NGDM image should be rendered with a smartcrop");
+    }
+
     // ----------------------------------------------------------
     // private stuff
     // ----------------------------------------------------------

@@ -280,6 +280,12 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
         imageTests.testNGDMSmartCropDialogImageV3_aspectRatioFlip();
     }
 
+    @Test
+    @DisplayName("Test : NextGen DM image smart crop : large crop.")
+    public void testSmartCropOnNGDMImageV3_LargeCrop() throws TimeoutException, InterruptedException, ClientException {
+        imageTests.testSmartCropOnNGDMImageV3("Large");
+    }
+
     /**
      * Test: set asset from DAM without description as decorative image
      */

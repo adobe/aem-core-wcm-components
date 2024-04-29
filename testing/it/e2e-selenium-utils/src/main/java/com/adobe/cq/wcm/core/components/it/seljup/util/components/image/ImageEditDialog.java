@@ -17,6 +17,8 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.image;
 
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
@@ -48,6 +50,7 @@ public class ImageEditDialog extends Dialog {
     private static String imageFromPageImage = "[name='./imageFromPageImage']";
     private static String titleValueFromDAM = "[name='./titleValueFromDAM']";
     private static String linkTarget = "coral-checkbox[name='./linkTarget']";
+    private static String smartCropField = ".cmp-image__editor-dynamicmedia-smartcroprendition[name='./smartCropRendition']";
 
     public void uploadImageFromSidePanel(String imagePath) {
         $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(fileUpload, DragAndDropOptions.usingActions());
@@ -146,5 +149,14 @@ public class ImageEditDialog extends Dialog {
     public boolean isPopUpTitle() {
         CoralCheckbox checkbox = new CoralCheckbox(popUpTitle);
         return checkbox.isChecked();
+    }
+
+    public void selectSmartCrop(String cropName) {
+        CoralSelectList coralSelectList = new CoralSelectList($(smartCropField));
+        if (!coralSelectList.isVisible()) {
+            CoralSelect selectList = new CoralSelect(smartCropField);
+            coralSelectList = selectList.openSelectList();
+        }
+        coralSelectList.selectByValue(cropName);
     }
 }
