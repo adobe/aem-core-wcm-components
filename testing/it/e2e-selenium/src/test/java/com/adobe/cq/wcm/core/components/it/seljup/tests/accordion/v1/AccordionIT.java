@@ -54,8 +54,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 
-import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_ACCORDION_V1;
-import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_TEASER_V1;
+import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -733,6 +732,47 @@ public class AccordionIT extends AuthorBaseUITest {
         assertTrue(accordion.getAccordionItemButton(1).getText().contains("Accordion 1.2"), "Second panel select item should be Accordion 1.2");
         assertTrue(accordion.getAccordionItemButton(2).getText().contains("Accordion 2.1"), "Second panel select item should be Accordion 2.1");
         assertTrue(accordion.getAccordionItemButton(3).getText().contains("Accordion 2.2"), "Second panel select item should be Accordion 2.2");
+
+        Commons.switchToDefaultContext();
+    }
+
+    /**
+     * Test: Open Config Dialog For Accordion Items
+     *
+     * 1. add a nested accordion and a text
+     * 2. check the config dialog for the accordion
+     * 3. check the config dialog for the text
+     *
+     * @throws InterruptedException
+     * @throws ClientException
+     */
+    @Test
+    @DisplayName("Test: Open Config Dialog For Accordion Items")
+    public void testOpenConfigDialog() throws TimeoutException, InterruptedException, ClientException {
+
+        //1.
+        String textProxy = RT_TEXT_V2;
+        String accordion1Path = addAccordionItem(proxyPath, cmpPath,  "Accordion 1");
+        accordion.openPanelSelector(cmpPath);
+        String accordion12Path = addAccordionItem(proxyPath, accordion1Path,  "Accordion 1.2");
+
+        //2.
+        String textPath = addAccordionItem(textProxy, cmpPath,  "Text 1");
+
+        //3.
+        accordion.openEditDialog(accordion1Path);
+        SelenideElement editDialogTitle = Selenide.$(".cq-dialog-header");
+        assertTrue(editDialogTitle.getText().equals("Accordion"), "It should be the Edit Dialog from the Accordion Component");
+        Commons.saveConfigureDialog();
+
+        //4.
+        accordion.openPanelSelector(cmpPath);
+        PanelSelector panelSelector = new PanelSelector();
+        panelSelector.getItems().get(1).click();
+        accordion.openEditDialog(textPath);
+        editDialogTitle = Selenide.$(".cq-dialog-header");
+        assertTrue(editDialogTitle.getText().equals("Text"), "It should be the Edit Dialog from the Text Component");
+        Commons.saveConfigureDialog();
 
         Commons.switchToDefaultContext();
     }

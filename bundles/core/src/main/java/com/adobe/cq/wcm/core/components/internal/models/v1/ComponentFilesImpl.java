@@ -33,7 +33,7 @@ import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -55,13 +55,13 @@ public class ComponentFilesImpl implements ComponentFiles {
      */
     public static final String COMPONENTS_SERVICE = "components-service";
 
-    @ScriptVariable(name=OPTION_RESOURCE_TYPES)
+    @RequestAttribute(name=OPTION_RESOURCE_TYPES)
     Object resourceTypes;
 
-    @ScriptVariable(name=OPTION_FILTER_REGEX)
+    @RequestAttribute(name=OPTION_FILTER_REGEX)
     String filterRegex;
 
-    @ScriptVariable(name=OPTION_INHERITED)
+    @RequestAttribute(name=OPTION_INHERITED)
     @Default(booleanValues = OPTION_INHERITED_DEFAULT)
     boolean inherited;
 

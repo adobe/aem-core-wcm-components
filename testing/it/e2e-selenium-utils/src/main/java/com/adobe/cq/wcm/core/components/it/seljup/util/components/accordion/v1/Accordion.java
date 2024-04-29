@@ -84,6 +84,18 @@ public class Accordion extends BaseComponent {
     }
 
     /**
+     * Open panel selector of component
+     *
+     * @param dataPath datapath of the component to open the panel selector dialog
+     *
+     */
+    public void openPanelSelector(String dataPath) {
+        Commons.openEditableToolbar(dataPath);
+        $(Selectors.SELECTOR_PANEL_BUTTON).click();
+        Helpers.waitForElementAnimationFinished($(Selectors.SELECTOR_PANEL_SELECT));
+    }
+
+    /**
      * Returns cq-overlay
      * @return cq-overlay
      */

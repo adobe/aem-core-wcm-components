@@ -24,7 +24,8 @@
                 selector: ".cmp-carousel",
                 wrapperSelector: '[data-panelcontainer="carousel"]',
                 itemSelector: "[data-cmp-hook-carousel='item']",
-                itemActiveSelector: ".cmp-carousel__item--active"
+                itemActiveSelector: ".cmp-carousel__item--active",
+                itemSelectorWrapper: ".cmp-carousel__content"
             });
         }
     });

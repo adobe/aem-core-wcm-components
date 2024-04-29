@@ -21,7 +21,7 @@ import java.util.List;
 
 import javax.servlet.Servlet;
 
-import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections4.IteratorUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;

@@ -147,7 +147,9 @@ public class ComponentsIT {
             .select(".list.list-v4", 2).expect("list-v4-static-pages-and-links.html")
             .select(".list.list-v4", 3).expect("list-v4-static-pages-linked-description-modified.html")
             .select(".list.list-v4", 4).expect("list-v4-static-pages-linked-description-modifieddate-teaser.html")
-            .select(".list.list-v4", 5).expect("list-v4-static-pages-empty.html");
+            .select(".list.list-v4", 5).expect("list-v4-static-internal-pages-containing-external-redirect.html")
+            .select(".list.list-v4", 6).expect("list-v4-static-pages-empty.html");
+
     }
 
     @Test

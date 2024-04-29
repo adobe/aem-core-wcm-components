@@ -89,6 +89,16 @@ class OEmbedClientImplTest {
                 public boolean unsafeContext() {
                     return false;
                 }
+
+                @Override
+                public int socketTimeout() {
+                    return 1000;
+                }
+
+                @Override
+                public int connectionTimeout() {
+                    return 1000;
+                }
             });
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
@@ -154,6 +164,16 @@ class OEmbedClientImplTest {
             @Override
             public boolean unsafeContext() {
                 return false;
+            }
+
+            @Override
+            public int socketTimeout() {
+                return 1000;
+            }
+
+            @Override
+            public int connectionTimeout() {
+                return 1000;
             }
         });
 
