@@ -54,8 +54,11 @@ jobs:
         run: mvn -B -U clean install ${{ matrix.profile }} -s ./.github/workflows/settings.xml
 
       # Run code coverage check
-      - name: Run core coverage check
-        run: bash <(curl -s https://codecov.io/bash)
+      - name: Run code coverage check
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # required
+          verbose: true # optional (default = false)
   build-js:
     runs-on: ubuntu-latest
     defaults:
