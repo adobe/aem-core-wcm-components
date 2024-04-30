@@ -987,7 +987,7 @@ public class Commons {
     }
 
     public static void setNGDMImage(CQClient client, String componentPath) throws ClientException {
-        client.setPropertyString(componentPath, "fileReference", "/urn:aaid:aem:535c3eba-6242-4474-b2d2-3d1ef333ec45/test.jpg", 200);
+        client.setPropertyString(componentPath, "fileReference", "/urn:aaid:aem:18a66ed0-a9ae-4cfd-b7b9-78175bd3336d/test.jpg", 200);
     }
 
 }

@@ -63,7 +63,6 @@ public class ImageIT {
     }
 
     @Test
-    @Ignore
     public void testNgdmImage() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/image/ngdm-image.html", 200).getContent();
         Elements html = Jsoup.parse(content).select("html");
@@ -72,7 +71,7 @@ public class ImageIT {
         Assert.assertEquals(1, images.size());
         Element img = images.first();
         String imageSource = img.attr("src");
-        Assert.assertEquals("https://testrepository/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?width=640&preferwebp=true&crop=3:5,smart", imageSource);
+        Assert.assertEquals("https://delivery-p132558-e1287654.adobeaemcloud.com/adobe/dynamicmedia/deliver/urn:aaid:aem:18a66ed0-a9ae-4cfd-b7b9-78175bd3336d/cutfruits.png?width=640&preferwebp=true&smartcrop=Large", imageSource);
     }
 
     public void testImages(Elements html) {

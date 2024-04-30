@@ -956,8 +956,22 @@
                   "jcr:primaryType": "nt:unstructured",
                   "jcr:createdBy": "admin",
                   "sling:resourceType": "core/wcm/components/image/v3/image",
+                  "fileReference": "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png"
+              },
+              "ngdm_test_page_smartcrop_image": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "jcr:createdBy": "admin",
+                  "sling:resourceType": "core/wcm/components/image/v3/image",
                   "fileReference": "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png",
-                  "smartCrop": "2:3"
+                  "smartCropRendition": "Medium"
+              },
+              "ngdm_test_page_smartcrop_image_auto": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "jcr:createdBy": "admin",
+                  "sling:resourceType": "core/wcm/components/image/v3/image",
+                  "fileReference": "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png",
+                  "smartCropRendition": "SmartCrop:Auto",
+                  "linkURL"           : "https://www.adobe.com"
               }
           }
       }

@@ -18,14 +18,5 @@
                 smartCropRendition=""/>
         </image>
     </cq:dropTargets>
-    <cq:actionConfigs jcr:primaryType="nt:unstructured">
-        <ngdm-smartcrop
-            jcr:primaryType="nt:unstructured"
-            condition="CQ.CoreComponents.image.v3.actions.smartCrop.condition"
-            handler="CQ.CoreComponents.image.v3.actions.smartCrop"
-            icon="cropLightning"
-            order="before CONFIGURE"
-            text="Smart Crop"/>
-    </cq:actionConfigs>
 </jcr:root>
 
