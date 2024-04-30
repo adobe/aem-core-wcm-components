@@ -207,6 +207,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
         jsAttributes.append(getHtmlAttr(OPTION_ONLOAD, onload));
         StringBuilder cssAttributes = new StringBuilder();
         cssAttributes.append(getHtmlAttr(OPTION_MEDIA, media));
+        cssAttributes.append(getHtmlAttr(OPTION_ONLOAD, onload));
         String updatedHtml = StringUtils.replace(html,"<script ", "<script " + jsAttributes.toString());
         return StringUtils.replace(updatedHtml,"<link ", "<link " + cssAttributes.toString());
     }
