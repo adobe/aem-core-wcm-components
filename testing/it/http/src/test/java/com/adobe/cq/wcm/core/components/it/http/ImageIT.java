@@ -73,7 +73,7 @@ public class ImageIT {
         Assert.assertEquals(1, images.size());
         Element img = images.first();
         String imageSource = img.attr("src");
-        Assert.assertEquals("https://delivery-p132558-e1287654.adobeaemcloud.com/adobe/dynamicmedia/deliver/urn:aaid:aem:18a66ed0-a9ae-4cfd-b7b9-78175bd3336d/cutfruits.png?width=640&preferwebp=true&smartcrop=Large", imageSource);
+        Assert.assertEquals("https://delivery-p132558-e1287654.adobeaemcloud.com/adobe/assets/urn:aaid:aem:18a66ed0-a9ae-4cfd-b7b9-78175bd3336d/as/cutfruits.png?width=640&preferwebp=true&smartcrop=Large", imageSource);
     }
 
     public void testImages(Elements html) {
