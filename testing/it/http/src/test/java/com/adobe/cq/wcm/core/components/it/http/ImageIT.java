@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.http;
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
+import com.adobe.cq.testing.junit.rules.toggles.RunIfToggleEnabled;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.testing.clients.ClientException;
 import org.jsoup.Jsoup;
@@ -63,6 +64,7 @@ public class ImageIT {
     }
 
     @Test
+    @RunIfToggleEnabled("FT_SITES-13466")
     public void testNgdmImage() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/image/ngdm-image.html", 200).getContent();
         Elements html = Jsoup.parse(content).select("html");
