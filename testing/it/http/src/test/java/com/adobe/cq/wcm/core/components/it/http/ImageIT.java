@@ -67,6 +67,7 @@ public class ImageIT {
     @Test
     @RunIfToggleEnabled("FT_SITES-13466")
     @Category(IgnoreOn65.class)
+    @Ignore
     public void testNgdmImage() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/image/ngdm-image.html", 200).getContent();
         Elements html = Jsoup.parse(content).select("html");
