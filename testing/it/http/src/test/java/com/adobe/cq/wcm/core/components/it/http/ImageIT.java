@@ -25,6 +25,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.*;
+import org.junit.experimental.categories.Category;
 import org.junit.rules.ErrorCollector;
 
 import java.util.Arrays;
@@ -65,6 +66,7 @@ public class ImageIT {
 
     @Test
     @RunIfToggleEnabled("FT_SITES-13466")
+    @Category(IgnoreOn65.class)
     public void testNgdmImage() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/image/ngdm-image.html", 200).getContent();
         Elements html = Jsoup.parse(content).select("html");
