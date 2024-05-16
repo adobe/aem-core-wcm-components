@@ -79,7 +79,7 @@ public class LocalizationUtils {
      */
     @Nullable
     public static String getLanguageRoot(@NotNull Resource resource, @NotNull LanguageManager languageManager) {
-        return Optional.ofNullable(languageManager.getLanguageRoot(resource))
+        return Optional.ofNullable(languageManager.getLanguageRoot(resource, true))
             .map(Page::getPath)
             .orElse(null);
     }
