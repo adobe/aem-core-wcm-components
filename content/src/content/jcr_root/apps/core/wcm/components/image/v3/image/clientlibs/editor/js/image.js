@@ -141,6 +141,7 @@
                 $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
                     altTuple.reset();
                     captionTuple.reset();
+                    captionTuple.hideCheckbox(true);
                 });
                 $cqFileUpload.on("coral-fileupload:fileadded", function() {
                     if (isDecorative) {
