@@ -89,6 +89,7 @@
                     altTuple.reset();
                     captionTuple.reset();
                     captionTuple.hideCheckbox(true);
+                    altTuple.hideCheckbox(true);
                 });
                 $cqFileUpload.on("coral-fileupload:fileadded", function() {
                     if (isDecorative) {

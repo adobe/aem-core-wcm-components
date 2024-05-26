@@ -556,6 +556,17 @@ public class ImageTests {
         assertTrue(image.isImagePresentWithSmartCrop(cropName),"NGDM image should be rendered with a smartcrop");
     }
 
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisible() throws InterruptedException, TimeoutException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        assertTrue(editDialog.isTitleFromDAMVisible());
+        assertTrue(editDialog.isAltFromDAMVisible());
+        editDialog.clickClearButton();
+        assertFalse(editDialog.isTitleFromDAMVisible());
+        assertFalse(editDialog.isAltFromDAMVisible());
+    }
+
     // ----------------------------------------------------------
     // private stuff
     // ----------------------------------------------------------

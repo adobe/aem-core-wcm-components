@@ -16,10 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.image;
 
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.adobe.cq.testing.selenium.pagewidgets.coral.*;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.codeborne.selenide.DragAndDropOptions;
@@ -35,6 +32,8 @@ import static com.codeborne.selenide.Selenide.$;
 public class ImageEditDialog extends Dialog {
 
     private static String fileUpload = "coral-fileupload[name='./file']";
+
+    private static String clearButton = "button[class='cq-FileUpload-clear _coral-Button _coral-Button--primary _coral-Button--quiet']";
     private static String imageInSidePanel = "coral-card.cq-draggable[data-path=\"%s\"]";
     private static String altText = "input[name='./alt']";
     private static String linkUrl = "[name='./linkURL']";
@@ -76,6 +75,13 @@ public class ImageEditDialog extends Dialog {
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
         content().find(title).clear();
         content().find(title).sendKeys(value);
+    }
+
+    public void clickClearButton() {
+        final WebDriver webDriver = WebDriverRunner.getWebDriver();
+        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
+        content().find(clearButton).click();
     }
 
     public void checkCaptionAsPopUp() {
@@ -144,6 +150,16 @@ public class ImageEditDialog extends Dialog {
     public boolean isAltFromDAM() {
         CoralCheckbox checkbox = new CoralCheckbox(altValueFromDAM);
         return checkbox.isChecked();
+    }
+
+    public boolean isTitleFromDAMVisible() {
+        CoralCheckbox checkbox = new CoralCheckbox(titleValueFromDAM);
+        return checkbox.isVisible();
+    }
+
+    public boolean isAltFromDAMVisible() {
+        CoralCheckbox checkbox = new CoralCheckbox(altValueFromDAM);
+        return checkbox.isVisible();
     }
 
     public boolean isPopUpTitle() {

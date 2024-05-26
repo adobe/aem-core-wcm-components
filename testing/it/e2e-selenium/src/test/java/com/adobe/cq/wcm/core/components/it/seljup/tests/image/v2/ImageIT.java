@@ -133,4 +133,10 @@ public class ImageIT extends AuthorBaseUITest {
         imageTests.testSetAssetWithoutDescriptionAsDecorative(false);
     }
 
+    @Test
+    @DisplayName("Test: clear asset input field, get Dam info checkboxes become invisible")
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisible() throws InterruptedException, TimeoutException {
+        imageTests.testClearAssetInputGetDamInfoCheckboxesNotVisible();
+    }
+
 }
