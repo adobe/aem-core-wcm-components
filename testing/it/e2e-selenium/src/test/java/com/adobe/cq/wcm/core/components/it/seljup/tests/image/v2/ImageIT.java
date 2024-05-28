@@ -132,11 +132,10 @@ public class ImageIT extends AuthorBaseUITest {
     public void testSetAssetWithoutDescriptionAsDecorative() throws TimeoutException, InterruptedException {
         imageTests.testSetAssetWithoutDescriptionAsDecorative(false);
     }
-
     @Test
-    @DisplayName("Test: clear asset input field, get Dam info checkboxes become invisible")
+    @DisplayName("Test: clear asset input field, get Dam info checkboxes become invisible V2")
     public void testClearAssetInputGetDamInfoCheckboxesNotVisible() throws InterruptedException, TimeoutException {
-        imageTests.testClearAssetInputGetDamInfoCheckboxesNotVisible();
+        imageTests.testClearAssetInputGetDamInfoCheckboxesNotVisibleV2();
     }
 
 }
