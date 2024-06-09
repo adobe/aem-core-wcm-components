@@ -12,12 +12,5 @@
                 "componentGroup": ".core-wcm"
             }
         }
-    },
-    "ngdm-smartcropthumbnail": {
-        "jcr:primaryType": "nt:unstructured",
-        "height": 260,
-        "alt": "Smart crop preview",
-        "width": 260,
-        "sling:resourceType": "core/wcm/components/image/v3/image/nextgendmthumbnail"
     }
 }

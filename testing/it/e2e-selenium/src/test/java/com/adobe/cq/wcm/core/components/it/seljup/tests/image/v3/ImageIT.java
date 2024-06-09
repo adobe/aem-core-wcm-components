@@ -245,42 +245,6 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     }
 
     @Tag("IgnoreOnSDK")
-    @Tag("IgnoreOn65")
-    @Test
-    @Ignore
-    @DisplayName("Test : NextGen DM image smart crop dialog.")
-    public void testSmartCropDialogOnNGDMImageV3() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testNGDMSmartCropDialogImageV3();
-    }
-
-    @Tag("IgnoreOnSDK")
-    @Tag("IgnoreOn65")
-    @Test
-    @Ignore
-    @DisplayName("Test : NextGen DM image smart crop - select aspect ratio from list.")
-    public void testSmartCropDialogOnNGDMImageV3_aspectRatioSelection() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testNGDMSmartCropDialogImageV3_aspectRatioSelection();
-    }
-
-    @Tag("IgnoreOnSDK")
-    @Tag("IgnoreOn65")
-    @Test
-    @Ignore
-    @DisplayName("Test : NextGen DM image smart crop - select custom aspect ratio.")
-    public void testSmartCropDialogOnNGDMImageV3_customAspectRatio() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testNGDMSmartCropDialogImageV3_customAspectRatio();
-    }
-
-    @Tag("IgnoreOnSDK")
-    @Tag("IgnoreOn65")
-    @Test
-    @Ignore
-    @DisplayName("Test : NextGen DM image smart crop - flip aspect ratio.")
-    public void testSmartCropDialogOnNGDMImageV3_flipAspectRatio() throws TimeoutException, InterruptedException, ClientException {
-        imageTests.testNGDMSmartCropDialogImageV3_aspectRatioFlip();
-    }
-
-    @Tag("IgnoreOnSDK")
     @Test
     @DisplayName("Test : NextGen DM image smart crop : large crop.")
     public void testSmartCropOnNGDMImageV3_SmallCrop() throws TimeoutException, InterruptedException, ClientException {

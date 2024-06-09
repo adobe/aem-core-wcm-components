@@ -502,50 +502,6 @@ public class ImageTests {
         assertTrue(image.checkLinkPresentWithTarget(link, target),"Title with link " + link + " and target "+ target + " should be present");
     }
 
-    public void testNGDMSmartCropDialogImageV3() throws TimeoutException, InterruptedException, ClientException {
-        setUpNGDMImage();
-        image.openNGDMSmartCropDialog(compPath);
-    }
-
-    public void testNGDMSmartCropDialogImageV3_aspectRatioSelection() throws TimeoutException, InterruptedException, ClientException {
-        setUpNGDMImage();
-        image.openNGDMSmartCropDialog(compPath);
-        image.selectAspectRatioInNGDMSmartCropDialog("5:3");
-        image.validateNGDMSmartCropInImageUrl("5:3");
-        image.saveNGDMSmartCropDialog();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        image.openNGDMSmartCropDialog(compPath);
-        image.validateNGDMAspectRationSelectorLabel("Wide Landscape");
-        image.validateNGDMSmartCropInImageUrl("5:3");
-    }
-
-    public void testNGDMSmartCropDialogImageV3_customAspectRatio() throws TimeoutException, InterruptedException, ClientException {
-        setUpNGDMImage();
-        image.openNGDMSmartCropDialog(compPath);
-        image.addCustomAspectRatioInNGDMSmartCropDialog("2:7");
-        image.validateNGDMSmartCropInImageUrl("2:7");
-        image.saveNGDMSmartCropDialog();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        image.openNGDMSmartCropDialog(compPath);
-        image.validateNGDMAspectRationSelectorLabel("Custom");
-        image.validateNGDMSmartCropInImageUrl("2:7");
-    }
-
-    public void testNGDMSmartCropDialogImageV3_aspectRatioFlip() throws TimeoutException, InterruptedException, ClientException {
-        setUpNGDMImage();
-        image.openNGDMSmartCropDialog(compPath);
-        image.selectAspectRatioInNGDMSmartCropDialog("5:3");
-        image.validateNGDMSmartCropInImageUrl("5:3");
-        image.flipNGDMSmartCropDialogAspectRatios();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        image.validateNGDMAspectRationSelectorLabel("Custom");
-        image.validateNGDMSmartCropInImageUrl("3:5");
-        image.flipNGDMSmartCropDialogAspectRatios();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        image.validateNGDMSmartCropInImageUrl("5:3");
-        image.validateNGDMAspectRationSelectorLabel("Wide Landscape");
-    }
-
     public void testSmartCropOnNGDMImageV3(String cropName) throws TimeoutException, InterruptedException, ClientException {
         setUpNGDMImage();
         Commons.openEditDialog(editorPage, compPath);
