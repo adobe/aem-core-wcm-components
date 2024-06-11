@@ -398,9 +398,13 @@
                 // we need to get saved value of 'smartCropRendition' of Core Image component
                 smartCropRenditionFromJcr = data["smartCropRendition"];
             }
+            if (filePath.endsWith("/cq:featuredimage")) {
+                remoteFileReference = data["fileReference"];
+            }
             // we want to call retrieveDAMInfo after loading the dialog so that saved smartcrop rendition of remote asset
-            // can be shown on initial load.
-            if (remoteFileReference && remoteFileReference !== "" && remoteFileReference.includes("urn:aaid:aem")) {
+            // can be shown on initial load. Also adding condition filePath.endsWith("/cq:featuredimage") to trigger alt
+            // update for page properties.
+            if (remoteFileReference && remoteFileReference !== "" && (remoteFileReference.includes("urn:aaid:aem") || filePath.endsWith("/cq:featuredimage"))) {
                 retrieveDAMInfo(remoteFileReference);
             }
         });
