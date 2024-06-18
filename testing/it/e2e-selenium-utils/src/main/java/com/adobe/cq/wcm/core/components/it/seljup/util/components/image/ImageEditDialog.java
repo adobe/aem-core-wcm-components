@@ -36,7 +36,9 @@ public class ImageEditDialog extends Dialog {
 
     private static String fileUpload = "coral-fileupload[name='./file']";
 
-    private static String clearButton = "button[class='cq-FileUpload-clear _coral-Button _coral-Button--primary _coral-Button--quiet']";
+    private static String clearButtonSDK = "button[class='cq-FileUpload-clear _coral-Button _coral-Button--primary _coral-Button--quiet']";
+
+    private static String clearButton65 = "button[class='cq-FileUpload-clear coral3-Button coral3-Button--quiet']";
     private static String imageInSidePanel = "coral-card.cq-draggable[data-path=\"%s\"]";
     private static String altText = "input[name='./alt']";
     private static String linkUrl = "[name='./linkURL']";
@@ -53,6 +55,8 @@ public class ImageEditDialog extends Dialog {
     private static String titleValueFromDAM = "[name='./titleValueFromDAM']";
     private static String linkTarget = "coral-checkbox[name='./linkTarget']";
     private static String smartCropField = ".cmp-image__editor-dynamicmedia-smartcroprendition[name='./smartCropRendition']";
+
+    private static final String AEM_SDK = "sdk";
 
     public void uploadImageFromSidePanel(String imagePath) {
         $(String.format(imageInSidePanel,imagePath)).dragAndDropTo(fileUpload, DragAndDropOptions.usingActions());
@@ -80,11 +84,17 @@ public class ImageEditDialog extends Dialog {
         content().find(title).sendKeys(value);
     }
 
-    public void clickClearButton() {
+    public void clickClearButton(String aemVersion) {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
-        new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
-            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
-        content().find(clearButton).click();
+        if (aemVersion.equals(AEM_SDK)) {
+            new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
+            content().find(clearButtonSDK).click();
+        } else {
+            new WebDriverWait(webDriver, RequestConstants.DURATION_TIMEOUT)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(String.format("%s coral-dialog-header", this.getCssSelector()))));
+            content().find(clearButton65).click();
+        }
     }
 
     public void checkCaptionAsPopUp() {

@@ -299,9 +299,17 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     public void testSetAssetWithoutDescriptionAsDecorative() throws TimeoutException, InterruptedException {
         imageTests.testSetAssetWithoutDescriptionAsDecorative(true);
     }
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test: clear asset input field, get Dam info checkboxes become invisible V3")
-    public void testClearAssetInputGetDamInfoCheckboxesNotVisible() throws InterruptedException, TimeoutException {
-        imageTests.testClearAssetInputGetDamInfoCheckboxesNotVisibleV3();
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisibleSDK() throws InterruptedException, TimeoutException {
+        imageTests.testClearAssetInputGetDamInfoCheckboxesNotVisibleV3("sdk");
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test: clear asset input field, get Dam info checkboxes become invisible V3")
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisible65() throws InterruptedException, TimeoutException {
+        imageTests.testClearAssetInputGetDamInfoCheckboxesNotVisibleV3("6.5");
     }
 }

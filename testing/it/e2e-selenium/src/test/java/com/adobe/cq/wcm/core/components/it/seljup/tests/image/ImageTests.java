@@ -555,7 +555,7 @@ public class ImageTests {
         editorPage.enterPreviewMode();
         assertTrue(image.isImagePresentWithSmartCrop(cropName),"NGDM image should be rendered with a smartcrop");
     }
-    public void testClearAssetInputGetDamInfoCheckboxesNotVisibleV3() throws InterruptedException, TimeoutException {
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisibleV3(String aemVersion) throws InterruptedException, TimeoutException {
         Commons.openSidePanel();
         dragImage();
         ImageEditDialog editDialog = image.getEditDialog();
@@ -563,13 +563,13 @@ public class ImageTests {
         editDialog.openMetadataTab();
         assertTrue(editDialog.isTitleFromDAMVisible());
         editDialog.openAssetTab();
-        editDialog.clickClearButton();
+        editDialog.clickClearButton(aemVersion);
         assertFalse(editDialog.isAltFromDAMVisible());
         editDialog.openMetadataTab();
         assertFalse(editDialog.isTitleFromDAMVisible());
     }
 
-    public void testClearAssetInputGetDamInfoCheckboxesNotVisibleV2() throws InterruptedException, TimeoutException {
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisibleV2(String aemVersion) throws InterruptedException, TimeoutException {
         Commons.openSidePanel();
         dragImage();
         ImageEditDialog editDialog = image.getEditDialog();
@@ -577,7 +577,7 @@ public class ImageTests {
         assertTrue(editDialog.isAltFromDAMVisible());
         assertTrue(editDialog.isTitleFromDAMVisible());
         editDialog.openAssetTab();
-        editDialog.clickClearButton();
+        editDialog.clickClearButton(aemVersion);
         editDialog.openMetadataTab();
         assertFalse(editDialog.isAltFromDAMVisible());
         assertFalse(editDialog.isTitleFromDAMVisible());
