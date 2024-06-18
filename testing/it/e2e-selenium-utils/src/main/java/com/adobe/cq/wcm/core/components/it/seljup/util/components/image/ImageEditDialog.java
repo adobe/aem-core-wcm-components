@@ -154,7 +154,7 @@ public class ImageEditDialog extends Dialog {
     public void selectSmartCrop(String cropName) {
         CoralSelectList coralSelectList = new CoralSelectList($(smartCropField));
         if (!coralSelectList.isVisible()) {
-            CoralSelect selectList = new CoralSelect(smartCropField);
+            CoralSelect selectList = new CoralSelect($(smartCropField));
             coralSelectList = selectList.openSelectList();
         }
         coralSelectList.selectByValue(cropName);

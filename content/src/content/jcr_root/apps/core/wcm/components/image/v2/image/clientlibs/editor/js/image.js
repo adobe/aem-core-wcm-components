@@ -20,7 +20,6 @@
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var isDecorative;
     var altTuple;
-    var $altTextField;
     var captionTuple;
     var $altGroup;
     var $linkURLGroup;
@@ -51,7 +50,6 @@
             isDecorative = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
             altTuple = new CheckboxTextfieldTuple(dialogContent, altCheckboxSelector, altInputSelector);
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
-            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
@@ -132,11 +130,15 @@
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: altInputSelector,
         validate: function() {
-            var seededValue = $(altInputSelector).attr("data-seeded-value");
-            var isAltCheckboxChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var hasSeededValue = $(altInputSelector).val().length > 0;
+            var isImageFromPageImageChecked = document.querySelector('coral-checkbox[name="./imageFromPageImage"]').checked;
+            var isAltFromDAMChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var isAltFromPageImageChecked = document.querySelector('coral-checkbox[name="./altValueFromPageImage"]').checked;
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue && !isDecorativeChecked) {
+
+            if ((isImageFromPageImageChecked && !isDecorativeChecked && !isAltFromPageImageChecked && !hasSeededValue) ||
+                (!isImageFromPageImageChecked && !isDecorativeChecked && !isAltFromDAMChecked && !hasSeededValue)) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }
@@ -178,9 +180,6 @@
             }
             if ($linkURLField.length) {
                 $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
-            }
-            if ($altTextField.length) {
-                $altTextField.adaptTo("foundation-field").setRequired(!checkbox.checked);
             }
             altTuple.hideTextfield(checkbox.checked);
             if (fileReference) {

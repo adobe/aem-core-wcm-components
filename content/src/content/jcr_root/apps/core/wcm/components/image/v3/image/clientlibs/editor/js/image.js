@@ -23,7 +23,6 @@
     var altTuple;
     var captionTuple;
     var $altGroup;
-    var $altTextField;
     var $linkURLGroup;
     var $linkURLField;
     var firstCtaLinkFieldSelector = ".cmp-teaser__editor-multifield_actions coral-multifield-item:first foundation-autocomplete";
@@ -82,7 +81,6 @@
             }
 
             $altGroup = $dialogContent.find(".cmp-image__editor-alt");
-            $altTextField = $dialogContent.find(".cmp-image__editor-alt-text");
             $linkURLGroup = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField = $dialogContent.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple = new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
@@ -190,11 +188,15 @@
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: altInputSelector,
         validate: function() {
-            var seededValue = $(altInputSelector).attr("data-seeded-value");
-            var isAltCheckboxChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var hasSeededValue = $(altInputSelector).val().length > 0;
+            var isImageFromPageImageChecked = document.querySelector('coral-checkbox[name="./imageFromPageImage"]').checked;
+            var isAltFromDAMChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var isAltFromPageImageChecked = document.querySelector('coral-checkbox[name="./altValueFromPageImage"]').checked;
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue && !isDecorativeChecked) {
+
+            if ((isImageFromPageImageChecked && !isDecorativeChecked && !isAltFromPageImageChecked && !hasSeededValue) ||
+                (!isImageFromPageImageChecked && !isDecorativeChecked && !isAltFromDAMChecked && !hasSeededValue)) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }
@@ -334,9 +336,6 @@
             var $imageLinkURLField = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
             if ($imageLinkURLField.length) {
                 $imageLinkURLField.adaptTo("foundation-field").setDisabled(isDecorativeCheckbox.checked);
-            }
-            if ($altTextField.length) {
-                $altTextField.adaptTo("foundation-field").setRequired(!isDecorativeCheckbox.checked && $("coral-fileupload.is-filled:not(:hidden)").length !== 0);
             }
         }
         toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox);
