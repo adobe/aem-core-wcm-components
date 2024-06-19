@@ -50,7 +50,7 @@ public class BaseImage extends BaseComponent {
             ".'][sizes='%s']";
     public static String imageWithAltText = ".cmp-image__image[src*='%s/_jcr_content/root/responsivegrid/image.coreimg.'][alt='%s']";
     public static String imageWithFileName = ".cmp-image__image[src*='/%s']";
-    public static String imageWithSmartCrop = ".cmp-image__image[src*='/smartcrop=%s']";
+    public static String imageWithSmartCrop = ".cmp-image__image[src*='smartcrop=%s']";
     private static final String ngdmSmartCropButton = "button.cq-editable-action[data-action='ngdm-smartcrop']";
     private static final String ngdmSmartCropDialog = ".smartcropdialog";
     private static final String ngdmSmartCropAspectRatioSelector = ".image-v3-dialog-smartcrop-select button";
