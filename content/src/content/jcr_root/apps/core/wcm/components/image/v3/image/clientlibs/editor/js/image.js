@@ -62,7 +62,7 @@
     var polarisRepositoryId;
     var imagePresetRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='imagePreset']";
     var smartCropRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='smartCrop']";
-    var remoteFileReference;
+    var remoteFileReferencesArray = [];
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -108,7 +108,7 @@
                     polarisRepositoryId = JSON.parse(cfg).repositoryId;
                     if (polarisRepositoryId) {
                         isPolarisEnabled = true;
-                        remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
+                        remoteFileReferencesArray = $cqFileUpload.find("[data-cq-fileupload-parameter='filereference']");
                     }
                 }
 
@@ -116,27 +116,19 @@
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
                     // if it is a remote asset
-                    remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
-                    if (fileReference === undefined && remoteFileReference && remoteFileReference !== "" &&
-                        remoteFileReference.includes("urn:aaid:aem")) {
-                        fileReference = remoteFileReference;
-                        smartCropRenditionFromJcr = "NONE"; // for newly selected asset we clear the smartcrop selection dropdown
+                    if (fileReference === undefined) {
+                        var $fileReferences = $cqFileUpload.find("[data-cq-fileupload-parameter='filereference']");
+                        $fileReferences.each(function() {
+                            var remoteFileReference = $(this).val();
+                            if (remoteFileReference && remoteFileReference !== "" &&
+                                remoteFileReference.includes("urn:aaid:aem")) {
+                                smartCropRenditionFromJcr = "NONE"; // for newly selected asset we clear the smartcrop selection dropdown
+                                processFileReference(remoteFileReference);
+                            }
+                        });
+                    } else {
+                        processFileReference(fileReference);
                     }
-                    retrieveDAMInfo(fileReference).then(
-                        function() {
-                            if (isDecorative) {
-                                altTuple.hideCheckbox(isDecorative.checked);
-                            }
-                            captionTuple.hideCheckbox(false);
-                            altTuple.reinitCheckbox();
-                            captionTuple.reinitCheckbox();
-                            toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
-                            if (areDMFeaturesEnabled && !isPolarisEnabled) {
-                                selectPresetType($(presetTypeSelector), "imagePreset");
-                                resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
-                            }
-                        }
-                    );
                 });
                 $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
                     altTuple.reset();
@@ -238,6 +230,22 @@
                 break;
         }
     });
+
+    function processFileReference(fileReference) {
+        retrieveDAMInfo(fileReference).then(function() {
+            if (isDecorative) {
+                altTuple.hideCheckbox(isDecorative.checked);
+            }
+            captionTuple.hideCheckbox(false);
+            altTuple.reinitCheckbox();
+            captionTuple.reinitCheckbox();
+            toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
+            if (areDMFeaturesEnabled && !isPolarisEnabled) {
+                selectPresetType($(presetTypeSelector), "imagePreset");
+                resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
+            }
+        });
+    }
 
     function updateImageThumbnail() {
         var linkValue;
@@ -396,15 +404,19 @@
                 // we need to get saved value of 'smartCropRendition' of Core Image component
                 smartCropRenditionFromJcr = data["smartCropRendition"];
             }
-            if (filePath.endsWith("/cq:featuredimage")) {
-                remoteFileReference = data["fileReference"];
-            }
+
             // we want to call retrieveDAMInfo after loading the dialog so that saved smartcrop rendition of remote asset
             // can be shown on initial load. Also adding condition filePath.endsWith("/cq:featuredimage") to trigger alt
             // update for page properties.
-            if (remoteFileReference && remoteFileReference !== "" && (remoteFileReference.includes("urn:aaid:aem") || filePath.endsWith("/cq:featuredimage"))) {
-                retrieveDAMInfo(remoteFileReference);
-            }
+            remoteFileReferencesArray.each(function() {
+                var remoteFileReference = $(this).val();
+                if (filePath.endsWith("/cq:featuredimage")) {
+                    remoteFileReference = data["fileReference"];
+                }
+                if (remoteFileReference && remoteFileReference !== "" && remoteFileReference.includes("urn:aaid:aem") || filePath.endsWith("/cq:featuredimage")) {
+                    retrieveDAMInfo(remoteFileReference);
+                }
+            });
         });
     }
 
