@@ -83,7 +83,7 @@ public class ImageTests {
 
         // 2.
         policyPath = Commons.createPagePolicy(client, defaultPageTemplate, label, new HashMap<String, String>() {{
-           put("clientlibs", clientlibs);
+            put("clientlibs", clientlibs);
         }});
 
         // 4.
@@ -91,8 +91,8 @@ public class ImageTests {
 
         // 6.
         compPath = Commons.addComponentWithRetry(client, proxyPath,testPage + Commons.relParentCompPath, "image", null,
-                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
-                HttpStatus.SC_OK, HttpStatus.SC_CREATED);
+            RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+            HttpStatus.SC_OK, HttpStatus.SC_CREATED);
 
         // 7.
         editorPage = new PageEditorPage(testPage);
@@ -106,8 +106,8 @@ public class ImageTests {
 
     public void cleanup(CQClient client) throws ClientException, InterruptedException {
         client.deletePageWithRetry(testPage, true,false,
-                RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
-                HttpStatus.SC_OK);
+            RequestConstants.TIMEOUT_TIME_MS, RequestConstants.RETRY_TIME_INTERVAL,
+            HttpStatus.SC_OK);
     }
 
     public void setMinimalProps() throws InterruptedException, TimeoutException {
@@ -183,7 +183,7 @@ public class ImageTests {
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, originalDamDescription, originalDamTitle), "Image should be present with alt text " + originalDamDescription
-                + " and title " + originalDamTitle);
+            + " and title " + originalDamTitle);
     }
 
     public void testDragImageToComponent(boolean imageV3) throws TimeoutException, InterruptedException {
@@ -221,7 +221,7 @@ public class ImageTests {
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
-                + " and title " + captionText);
+            + " and title " + captionText);
     }
 
     public void testSetAssetWithoutDescriptionAsDecorative(boolean imageV3) throws InterruptedException, TimeoutException {
@@ -243,7 +243,7 @@ public class ImageTests {
         editDialog.openMetadataTab();
         Commons.saveConfigureDialog();
         String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel, " +
-                "coral-tooltip[variant='error'] > coral-tooltip-content";
+            "coral-tooltip[variant='error'] > coral-tooltip-content";
         assertEquals("Error: Please provide an asset which has a description that can be used as alt text.", $(assetWithoutDescriptionErrorMessageSelector).innerText());
     }
 
@@ -252,7 +252,7 @@ public class ImageTests {
         dragImageWithoutDescription();
         Commons.saveConfigureDialog();
         String assetWithoutDescriptionErrorMessageSelector = ".coral-Form-errorlabel, " +
-                "coral-tooltip[variant='error'] > coral-tooltip-content";
+            "coral-tooltip[variant='error'] > coral-tooltip-content";
         String errorIcon = "input[name='./alt'] + coral-icon[icon='alert']";
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", $(errorIcon));
@@ -272,7 +272,7 @@ public class ImageTests {
         Commons.closeSidePanel();
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImagePresentWithAltTextAndTitle(testPage, altText, captionText), "Image should be present with alt text " + altText
-                + " and title " + captionText);
+            + " and title " + captionText);
     }
 
     public void testDisableCaptionAsPopup() throws TimeoutException, InterruptedException {
@@ -402,7 +402,7 @@ public class ImageTests {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         assertTrue(image.isImagePresentWithSizes(testPage, "(min-width: 36em) 33.3vw, 100vw"), "Image with sizes attribute should be " +
-                "present");
+            "present");
     }
 
     public void testPageImageWithEmptyAltTextFromPageImage(boolean aem65) throws InterruptedException, ClientException {
@@ -554,6 +554,33 @@ public class ImageTests {
         Commons.saveConfigureDialog();
         editorPage.enterPreviewMode();
         assertTrue(image.isImagePresentWithSmartCrop(cropName),"NGDM image should be rendered with a smartcrop");
+    }
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisibleV3(String aemVersion) throws InterruptedException, TimeoutException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        assertTrue(editDialog.isAltFromDAMVisible());
+        editDialog.openMetadataTab();
+        assertTrue(editDialog.isTitleFromDAMVisible());
+        editDialog.openAssetTab();
+        editDialog.clickClearButton(aemVersion);
+        assertFalse(editDialog.isAltFromDAMVisible());
+        editDialog.openMetadataTab();
+        assertFalse(editDialog.isTitleFromDAMVisible());
+    }
+
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisibleV2(String aemVersion) throws InterruptedException, TimeoutException {
+        Commons.openSidePanel();
+        dragImage();
+        ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.openMetadataTab();
+        assertTrue(editDialog.isAltFromDAMVisible());
+        assertTrue(editDialog.isTitleFromDAMVisible());
+        editDialog.openAssetTab();
+        editDialog.clickClearButton(aemVersion);
+        editDialog.openMetadataTab();
+        assertFalse(editDialog.isAltFromDAMVisible());
+        assertFalse(editDialog.isTitleFromDAMVisible());
     }
 
     // ----------------------------------------------------------
