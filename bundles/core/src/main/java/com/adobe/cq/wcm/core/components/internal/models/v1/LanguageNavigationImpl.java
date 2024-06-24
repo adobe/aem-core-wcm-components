@@ -152,7 +152,12 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
         Page localizedPage;
         String path = languageRoot.getPath();
         String relativePath = page.getPath();
-        if (relativePath.startsWith(path)) {
+        int indexOfStart = 0;
+        if (path.length() < relativePath.length()) {
+            indexOfStart = path.length();
+        }
+        if (relativePath.startsWith(path) &&
+            relativePath.charAt(indexOfStart) == '/') {
             localizedPage = page;
         } else {
             String separator = "/";
