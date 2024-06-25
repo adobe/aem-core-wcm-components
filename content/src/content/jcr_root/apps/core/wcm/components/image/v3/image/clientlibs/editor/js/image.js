@@ -116,12 +116,11 @@
                 $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
                     // if it is a remote asset
-                    if (fileReference === undefined) {
+                    if (!fileReference) {
                         var $fileReferences = $cqFileUpload.find("[data-cq-fileupload-parameter='filereference']");
                         $fileReferences.each(function() {
                             var remoteFileReference = $(this).val();
-                            if (remoteFileReference && remoteFileReference !== "" &&
-                                remoteFileReference.includes("urn:aaid:aem")) {
+                            if (remoteFileReference && remoteFileReference.includes("urn:aaid:aem")) {
                                 smartCropRenditionFromJcr = "NONE"; // for newly selected asset we clear the smartcrop selection dropdown
                                 processFileReference(remoteFileReference);
                             }
