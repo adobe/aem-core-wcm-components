@@ -576,7 +576,11 @@
     function onDocumentReady() {
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
         if (dataLayerEnabled) {
-            dataLayerName = document.body.getAttribute("data-cmp-data-layer-name") || "adobeDataLayer";
+            try {
+                dataLayerName = document.body.getAttribute("data-cmp-data-layer-name") || "adobeDataLayer";
+            } catch (e) {
+                dataLayerName = "adobeDataLayer";
+            }
             dataLayer = window[dataLayerName] = window[dataLayerName] || [];
         }
 
