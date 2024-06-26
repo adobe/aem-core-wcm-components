@@ -1,0 +1,48 @@
+{
+    "languagenavigation": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Language Structure",
+            "jcr:created": "Mon Jul 10 2017 20:21:55 GMT+0200"
+        },
+        "ch": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title": "ch",
+                "jcr:created": "Mon Jul 10 2017 20:21:55 GMT+0200",
+                "sling:vanityPath": "/ch-3-vanity",
+                "jcr:language": "ch"
+            }
+        },
+        "ch_zn": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "ch_zn",
+                "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                "sling:vanityPath": "/ch_zn-3-vanity",
+                "root"           : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "languagenavigation-component-1": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/languagenavigation/v1/languagenavigation",
+                        "navigationRoot"    : "/content/countrytest/languagenavigation",
+                        "structureDepth"    : 1
+                    }
+                }
+            }
+        },
+        "en": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title": "en",
+                "jcr:created": "Mon Jul 10 2017 20:21:55 GMT+0200",
+                "sling:vanityPath": "/en-3-vanity",
+                "jcr:language": "en"
+            }
+        }
+    }
+}
