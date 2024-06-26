@@ -190,7 +190,7 @@
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: altInputSelector,
         validate: function() {
-            var seededValue = document.querySelector('input[name="./alt"]').getAttribute("data-seeded-value");
+            var seededValue = document.querySelector(altInputSelector).getAttribute("data-seeded-value");
             var isImageFromPageImageChecked = document.querySelector('coral-checkbox[name="./imageFromPageImage"]').checked;
             var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
             var isAltFromDAMChecked = altFromDAM.checked;
