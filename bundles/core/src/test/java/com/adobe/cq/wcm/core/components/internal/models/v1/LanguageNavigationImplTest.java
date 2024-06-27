@@ -71,7 +71,7 @@ public class LanguageNavigationImplTest {
     private static final Object[][] EXPECTED_COUNTRY_LIST = {
         {"/content/countrytest/languagenavigation/ch", "ch", false, 0, "", "ch",
             "/ch-3-vanity"},
-        {"/content/countrytest/languagenavigation/ch_zn", "ch_zn", true, 0, "US", "en-US",
+        {"/content/countrytest/languagenavigation/ch_zn", "ch_zn", true, 0, "", "ch",
             "/ch_zn-3-vanity"},
         {"/content/countrytest/languagenavigation/en", "en", false, 0, "", "en", "/en-3-vanity"},
     };

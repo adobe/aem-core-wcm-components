@@ -23,6 +23,7 @@
                 "jcr:title"      : "ch_zn",
                 "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
                 "sling:vanityPath": "/ch_zn-3-vanity",
+                "jcr:language"   : "ch",
                 "root"           : {
                     "jcr:primaryType": "nt:unstructured",
                     "languagenavigation-component-1": {
