@@ -134,11 +134,18 @@
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: altInputSelector,
         validate: function() {
-            var seededValue = $(altInputSelector).attr("data-seeded-value");
-            var isAltCheckboxChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var seededValue = document.querySelector(altInputSelector).getAttribute("data-seeded-value");
+            var isImageFromPageImageChecked = document.querySelector('coral-checkbox[name="./imageFromPageImage"]').checked;
+            var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
+            var isAltFromDAMChecked = altFromDAM.checked;
+            var isAltFromDAMDisabled = altFromDAM.disabled;
+            var isAltFromPageImageChecked = document.querySelector('coral-checkbox[name="./altValueFromPageImage"]').checked;
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue && !isDecorativeChecked) {
+
+            if (!isDecorativeChecked && !seededValue &&
+                ((isImageFromPageImageChecked && isAltFromPageImageChecked) ||
+                    (!isImageFromPageImageChecked && isAltFromDAMChecked && !isAltFromDAMDisabled))) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }

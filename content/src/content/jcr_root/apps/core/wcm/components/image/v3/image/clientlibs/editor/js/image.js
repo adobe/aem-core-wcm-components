@@ -183,11 +183,18 @@
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: altInputSelector,
         validate: function() {
-            var seededValue = $(altInputSelector).attr("data-seeded-value");
-            var isAltCheckboxChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var seededValue = document.querySelector(altInputSelector).getAttribute("data-seeded-value");
+            var isImageFromPageImageChecked = document.querySelector('coral-checkbox[name="./imageFromPageImage"]').checked;
+            var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
+            var isAltFromDAMChecked = altFromDAM.checked;
+            var isAltFromDAMDisabled = altFromDAM.disabled;
+            var isAltFromPageImageChecked = document.querySelector('coral-checkbox[name="./altValueFromPageImage"]').checked;
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue && !isDecorativeChecked) {
+
+            if (!isDecorativeChecked && !seededValue &&
+                ((isImageFromPageImageChecked && isAltFromPageImageChecked) ||
+                    (!isImageFromPageImageChecked && isAltFromDAMChecked && !isAltFromDAMDisabled))) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }
@@ -314,12 +321,12 @@
             } else {
                 $altGroup.show();
                 altTuple.hideTextfield(false);
-                altTuple.hideCheckbox(fromPageCheckbox.checked);
+                altTuple.hideCheckbox(fromPageCheckbox.checked || isRemoteFileReference(remoteFileReference));
                 altFromPageTuple.hideCheckbox(!fromPageCheckbox.checked);
                 if (fromPageCheckbox.checked) {
                     altFromPageTuple.seedTextValue(altTextFromPage);
                     altFromPageTuple.update();
-                } else {
+                } else if (!isRemoteFileReference(remoteFileReference)) {
                     altTuple.seedTextValue(altTextFromDAM);
                     altTuple.update();
                 }
@@ -349,6 +356,10 @@
             }
         }
         toggleAlternativeFields(fromPageCheckbox, isDecorativeCheckbox);
+    }
+
+    function isRemoteFileReference(fileReference) {
+        return fileReference && fileReference !== "" && fileReference.includes("urn:aaid:aem");
     }
 
     function retrieveDAMInfo(fileReference) {

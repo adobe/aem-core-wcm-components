@@ -550,9 +550,11 @@ public class ImageTests {
         setUpNGDMImage();
         Commons.openEditDialog(editorPage, compPath);
         ImageEditDialog editDialog = image.getEditDialog();
+        editDialog.checkImageFromPageImage();
         editDialog.selectSmartCrop(cropName);
         Commons.saveConfigureDialog();
         editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
         assertTrue(image.isImagePresentWithSmartCrop(cropName),"NGDM image should be rendered with a smartcrop");
     }
     public void testClearAssetInputGetDamInfoCheckboxesNotVisibleV3(String aemVersion) throws InterruptedException, TimeoutException {
