@@ -63,6 +63,7 @@
     var imagePresetRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='imagePreset']";
     var smartCropRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='smartCrop']";
     var remoteFileReferencesArray = [];
+    var remoteFileReference;
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -119,8 +120,8 @@
                     if (!fileReference) {
                         var $fileReferences = $cqFileUpload.find("[data-cq-fileupload-parameter='filereference']");
                         $fileReferences.each(function() {
-                            var remoteFileReference = $(this).val();
-                            if (remoteFileReference && remoteFileReference.includes("urn:aaid:aem")) {
+                            remoteFileReference = $(this).val();
+                            if (isRemoteFileReference(remoteFileReference)) {
                                 smartCropRenditionFromJcr = "NONE"; // for newly selected asset we clear the smartcrop selection dropdown
                                 processFileReference(remoteFileReference);
                             }
@@ -359,11 +360,11 @@
     }
 
     function isRemoteFileReference(fileReference) {
-        return fileReference && fileReference !== "" && fileReference.includes("urn:aaid:aem");
+        return fileReference && fileReference.includes("urn:aaid:aem");
     }
 
     function retrieveDAMInfo(fileReference) {
-        if (fileReference.startsWith("/urn:aaid:aem")) {
+        if (isRemoteFileReference(fileReference)) {
             return new Promise((resolve, reject) => {
                 fileReference = fileReference.substring(0, fileReference.lastIndexOf("/"));
                 if (isPolarisEnabled && areDMFeaturesEnabled) {
@@ -421,11 +422,11 @@
             // can be shown on initial load. Also adding condition filePath.endsWith("/cq:featuredimage") to trigger alt
             // update for page properties.
             remoteFileReferencesArray.each(function() {
-                var remoteFileReference = $(this).val();
+                remoteFileReference = $(this).val();
                 if (filePath.endsWith("/cq:featuredimage")) {
                     remoteFileReference = data["fileReference"];
                 }
-                if (remoteFileReference && remoteFileReference !== "" && remoteFileReference.includes("urn:aaid:aem") || filePath.endsWith("/cq:featuredimage")) {
+                if (isRemoteFileReference(remoteFileReference) || filePath.endsWith("/cq:featuredimage")) {
                     retrieveDAMInfo(remoteFileReference);
                 }
             });
