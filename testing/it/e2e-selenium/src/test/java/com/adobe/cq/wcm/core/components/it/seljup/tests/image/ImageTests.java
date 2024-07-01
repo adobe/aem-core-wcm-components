@@ -484,6 +484,18 @@ public class ImageTests {
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
     }
 
+    public void testPageImageWithFeaturedImageDisabled(boolean aem65) throws TimeoutException, InterruptedException, ClientException {
+        setPageImage(aem65, testPage, logoNodeName, true);
+        editorPage.open();
+        ImageEditDialog editDialog = image.getEditDialog();
+        Commons.openEditDialog(editorPage, compPath);
+        editDialog.openMetadataTab();
+        Commons.saveConfigureDialog();
+        editorPage.enterPreviewMode();
+        Commons.switchContext("ContentFrame");
+        assertFalse(image.isImagePresentWithFileName(climbingAssetFormatted),"image should not be rendered, page featured image inheritance is disabled");
+    }
+
     public void testSetLinkWithTarget() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();

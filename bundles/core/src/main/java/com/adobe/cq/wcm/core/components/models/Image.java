@@ -41,6 +41,13 @@ public interface Image extends Component {
     String PN_IMAGE_FROM_PAGE_IMAGE = "imageFromPageImage";
 
     /**
+     * Name of the content policy property that will indicate if the image inheritance the featured image of the page is disabled.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.29.0
+     */
+    String PN_PAGE_IMAGE_INHERITANCE_DISABLED = "disablePageImageInheritance";
+
+    /**
      * Name of the resource property that will indicate if the value of the {@code alt} attribute should be inherited
      * from the featured image of the page.
      *
