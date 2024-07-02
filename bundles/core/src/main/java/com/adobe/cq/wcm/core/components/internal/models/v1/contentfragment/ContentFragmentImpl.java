@@ -23,10 +23,13 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragmentList;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -105,6 +108,10 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @ValueMapValue(name = ContentFragment.PN_DISPLAY_MODE, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String displayMode;
+
+    @ValueMapValue(name = ContentFragment.PN_USE_I18N_FOR_ELEMENT_TITLE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(booleanValues = false)
+    private Boolean useI18nForElementTitle;
 
     private DAMContentFragment damContentFragment = new EmptyContentFragment();
 
@@ -241,6 +248,11 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
                 return elementsData.toArray(new ContentFragmentData.ElementData[0]);
             })
             .build();
+    }
+
+    @Override
+    public boolean useI18nForElementTitle() {
+        return BooleanUtils.isTrue(useI18nForElementTitle);
     }
 
     /**
