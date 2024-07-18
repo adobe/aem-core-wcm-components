@@ -74,7 +74,7 @@ class LinkUtilTest {
     @Test
     void escape_telLinkNotThrowException() throws UnsupportedEncodingException {
         String path = "tel:1800";
-        String escapedMailTo = LinkUtil.escape(path, null, null);
-        assertEquals(path, escapedMailTo);
+        String escapedTel = LinkUtil.escape(path, null, null);
+        assertEquals(path, escapedTel);
     }
 }
