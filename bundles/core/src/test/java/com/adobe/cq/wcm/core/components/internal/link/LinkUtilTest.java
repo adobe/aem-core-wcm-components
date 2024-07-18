@@ -70,4 +70,11 @@ class LinkUtilTest {
         String escapedMailTo = LinkUtil.escape(path, null, null);
         assertEquals(path, escapedMailTo);
     }
+
+    @Test
+    void escape_telLinkNotThrowException() throws UnsupportedEncodingException {
+        String path = "tel:1800";
+        String escapedMailTo = LinkUtil.escape(path, null, null);
+        assertEquals(path, escapedMailTo);
+    }
 }
