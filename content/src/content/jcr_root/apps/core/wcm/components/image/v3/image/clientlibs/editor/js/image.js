@@ -139,6 +139,7 @@
                     );
                 });
                 $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
+                    $altTextField.adaptTo("foundation-field").setRequired(false);
                     altTuple.reset();
                     captionTuple.reset();
                     captionTuple.hideCheckbox(true);
@@ -148,6 +149,7 @@
                     if (isDecorative) {
                         altTuple.hideTextfield(isDecorative.checked);
                     }
+                    $altTextField.adaptTo("foundation-field").setRequired(!isDecorative.checked);
                     altTuple.hideCheckbox(true);
                     captionTuple.hideTextfield(false);
                     captionTuple.hideCheckbox(true);
@@ -193,7 +195,13 @@
         selector: altInputSelector,
         validate: function() {
             var seededValue = document.querySelector(altInputSelector).getAttribute("data-seeded-value");
-            var isImageFromPageImageChecked = document.querySelector('coral-checkbox[name="./imageFromPageImage"]').checked;
+            var imageFromPageImage = document.querySelector('coral-checkbox[name="./imageFromPageImage"]');
+            var isImageFromPageImageChecked;
+            if (imageFromPageImage != null) {
+                isImageFromPageImageChecked = imageFromPageImage.checked;
+            } else {
+                isImageFromPageImageChecked = false;
+            }
             var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
             var isAltFromDAMChecked = altFromDAM.checked;
             var isAltFromDAMDisabled = altFromDAM.disabled;
@@ -604,49 +612,12 @@
             mutations.forEach(function(mutation) {
                 if (mutation.type === "attributes") {
                     var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
-                    var alertIcon = $(altInputAlertIconSelector);
-                    var assetTab = $(assetTabSelector);
-                    var assetTabAlertIcon = $(assetTabAlertIconSelector);
-                    if (mutation.attributeName === "data-seeded-value") {
-                        if (isAltCheckboxChecked) {
-                            if ($(altInputSelector).val()) {
-                                if (alertIcon.length) {
-                                    $(altInputSelector).removeClass("is-invalid");
-                                    alertIcon.hide();
-                                    assetTab.removeClass("is-invalid");
-                                    assetTabAlertIcon.hide();
-                                }
-                            } else {
-                                if (alertIcon.length) {
-                                    $(altInputSelector).addClass("is-invalid");
-                                    alertIcon.show();
-                                    assetTab.addClass("is-invalid");
-                                    assetTabAlertIcon.show();
-                                }
-                            }
-                        }
+                    if (mutation.attributeName === "data-seeded-value" && isAltCheckboxChecked) {
+                        toggleAltTextValidity();
                     }
 
-                    if (mutation.attributeName === "disabled") {
-                        if ($(altInputSelector).val()) {
-                            if (alertIcon.length) {
-                                $(altInputSelector).removeClass("is-invalid");
-                                alertIcon.hide();
-                                assetTab.removeClass("is-invalid");
-                                assetTabAlertIcon.hide();
-                            }
-                        }
-                    }
-
-                    if (mutation.attributeName === "invalid") {
-                        if (!$(altInputSelector).val()) {
-                            if (alertIcon.length) {
-                                $(altInputSelector).addClass("is-invalid");
-                                alertIcon.show();
-                                assetTab.addClass("is-invalid");
-                                assetTabAlertIcon.show();
-                            }
-                        }
+                    if (["invalid", "disabled"].includes(mutation.attributeName)) {
+                        toggleAltTextValidity();
                     }
                 }
             });
@@ -657,6 +628,31 @@
             observer.observe(altInput, {
                 attributeFilter: ["data-seeded-value", "disabled", "invalid"]
             });
+        }
+    }
+
+    /**
+     * Toggles alt text validity based on the value of the alt text field
+     */
+    function toggleAltTextValidity() {
+        var alertIcon = $(altInputAlertIconSelector);
+        if (!alertIcon.length) {
+            return;
+        }
+
+        var assetTab = $(assetTabSelector);
+        var assetTabAlertIcon = $(assetTabAlertIconSelector);
+
+        if ($(altInputSelector).val()) {
+            $(altInputSelector).removeClass("is-invalid");
+            alertIcon.hide();
+            assetTab.removeClass("is-invalid");
+            assetTabAlertIcon.hide();
+        } else {
+            $(altInputSelector).addClass("is-invalid");
+            alertIcon.show();
+            assetTab.addClass("is-invalid");
+            assetTabAlertIcon.show();
         }
     }
 
